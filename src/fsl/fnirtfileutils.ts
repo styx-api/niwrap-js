@@ -12,7 +12,7 @@ const FNIRTFILEUTILS_METADATA: Metadata = {
 
 
 interface FnirtfileutilsParameters {
-    "@type": "fsl.fnirtfileutils";
+    "@type"?: "fsl/fnirtfileutils";
     "input_coefs": InputPathType;
     "ref_volume"?: InputPathType | null | undefined;
     "out_field"?: string | null | undefined;
@@ -25,44 +25,11 @@ interface FnirtfileutilsParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
+type FnirtfileutilsParametersTagged = Required<Pick<FnirtfileutilsParameters, '@type'>> & FnirtfileutilsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fnirtfileutils": fnirtfileutils_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fnirtfileutils": fnirtfileutils_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fnirtfileutils(...)`.
+ * Output object returned when calling `FnirtfileutilsParameters(...)`.
  *
  * @interface
  */
@@ -115,9 +82,9 @@ function fnirtfileutils_params(
     with_aff: boolean = false,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): FnirtfileutilsParameters {
+): FnirtfileutilsParametersTagged {
     const params = {
-        "@type": "fsl.fnirtfileutils" as const,
+        "@type": "fsl/fnirtfileutils" as const,
         "input_coefs": input_coefs,
         "with_aff": with_aff,
         "verbose_flag": verbose_flag,
@@ -208,13 +175,13 @@ function fnirtfileutils_cargs(
             (params["jacobian_matrix_output"] ?? null)
         );
     }
-    if ((params["with_aff"] ?? null)) {
+    if ((params["with_aff"] ?? false)) {
         cargs.push("--withaff");
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("--verbose");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -317,7 +284,6 @@ function fnirtfileutils(
 export {
       FNIRTFILEUTILS_METADATA,
       FnirtfileutilsOutputs,
-      FnirtfileutilsParameters,
       fnirtfileutils,
       fnirtfileutils_execute,
       fnirtfileutils_params,

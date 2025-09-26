@@ -12,7 +12,7 @@ const ADJUNCT_AW_TABLEIZE_ROI_INFO_PY_METADATA: Metadata = {
 
 
 interface AdjunctAwTableizeRoiInfoPyParameters {
-    "@type": "afni.adjunct_aw_tableize_roi_info.py";
+    "@type"?: "afni/adjunct_aw_tableize_roi_info.py";
     "output_file": string;
     "warped_atlas": InputPathType;
     "warped_mask": InputPathType;
@@ -20,44 +20,11 @@ interface AdjunctAwTableizeRoiInfoPyParameters {
     "reference_mask": InputPathType;
     "modesmooth_value": number;
 }
+type AdjunctAwTableizeRoiInfoPyParametersTagged = Required<Pick<AdjunctAwTableizeRoiInfoPyParameters, '@type'>> & AdjunctAwTableizeRoiInfoPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.adjunct_aw_tableize_roi_info.py": adjunct_aw_tableize_roi_info_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.adjunct_aw_tableize_roi_info.py": adjunct_aw_tableize_roi_info_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `adjunct_aw_tableize_roi_info_py(...)`.
+ * Output object returned when calling `AdjunctAwTableizeRoiInfoPyParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function adjunct_aw_tableize_roi_info_py_params(
     reference_atlas: InputPathType,
     reference_mask: InputPathType,
     modesmooth_value: number,
-): AdjunctAwTableizeRoiInfoPyParameters {
+): AdjunctAwTableizeRoiInfoPyParametersTagged {
     const params = {
-        "@type": "afni.adjunct_aw_tableize_roi_info.py" as const,
+        "@type": "afni/adjunct_aw_tableize_roi_info.py" as const,
         "output_file": output_file,
         "warped_atlas": warped_atlas,
         "warped_mask": warped_mask,
@@ -214,7 +181,6 @@ function adjunct_aw_tableize_roi_info_py(
 export {
       ADJUNCT_AW_TABLEIZE_ROI_INFO_PY_METADATA,
       AdjunctAwTableizeRoiInfoPyOutputs,
-      AdjunctAwTableizeRoiInfoPyParameters,
       adjunct_aw_tableize_roi_info_py,
       adjunct_aw_tableize_roi_info_py_execute,
       adjunct_aw_tableize_roi_info_py_params,

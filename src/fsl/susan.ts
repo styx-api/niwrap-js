@@ -12,7 +12,7 @@ const SUSAN_METADATA: Metadata = {
 
 
 interface SusanParameters {
-    "@type": "fsl.susan";
+    "@type"?: "fsl/susan";
     "input_file": InputPathType;
     "brightness_threshold": number;
     "spatial_size": number;
@@ -25,44 +25,11 @@ interface SusanParameters {
     "brightness_threshold2"?: number | null | undefined;
     "output_file": string;
 }
+type SusanParametersTagged = Required<Pick<SusanParameters, '@type'>> & SusanParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.susan": susan_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.susan": susan_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `susan(...)`.
+ * Output object returned when calling `SusanParameters(...)`.
  *
  * @interface
  */
@@ -107,9 +74,9 @@ function susan_params(
     brightness_threshold1: number | null = null,
     usan2: InputPathType | null = null,
     brightness_threshold2: number | null = null,
-): SusanParameters {
+): SusanParametersTagged {
     const params = {
-        "@type": "fsl.susan" as const,
+        "@type": "fsl/susan" as const,
         "input_file": input_file,
         "brightness_threshold": brightness_threshold,
         "spatial_size": spatial_size,
@@ -265,7 +232,6 @@ function susan(
 export {
       SUSAN_METADATA,
       SusanOutputs,
-      SusanParameters,
       susan,
       susan_execute,
       susan_params,

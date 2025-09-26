@@ -12,48 +12,15 @@ const MKIMA_INDEX_TCL_METADATA: Metadata = {
 
 
 interface MkimaIndexTclParameters {
-    "@type": "freesurfer.mkima_index.tcl";
+    "@type"?: "freesurfer/mkima_index.tcl";
     "input_file": InputPathType;
     "output_flag": boolean;
 }
+type MkimaIndexTclParametersTagged = Required<Pick<MkimaIndexTclParameters, '@type'>> & MkimaIndexTclParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mkima_index.tcl": mkima_index_tcl_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mkima_index.tcl": mkima_index_tcl_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mkima_index_tcl(...)`.
+ * Output object returned when calling `MkimaIndexTclParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface MkimaIndexTclOutputs {
 function mkima_index_tcl_params(
     input_file: InputPathType,
     output_flag: boolean = false,
-): MkimaIndexTclParameters {
+): MkimaIndexTclParametersTagged {
     const params = {
-        "@type": "freesurfer.mkima_index.tcl" as const,
+        "@type": "freesurfer/mkima_index.tcl" as const,
         "input_file": input_file,
         "output_flag": output_flag,
     };
@@ -105,7 +72,7 @@ function mkima_index_tcl_cargs(
     const cargs: string[] = [];
     cargs.push("mkima_index.tcl");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
-    if ((params["output_flag"] ?? null)) {
+    if ((params["output_flag"] ?? false)) {
         cargs.push("-o");
     }
     return cargs;
@@ -188,7 +155,6 @@ function mkima_index_tcl(
 export {
       MKIMA_INDEX_TCL_METADATA,
       MkimaIndexTclOutputs,
-      MkimaIndexTclParameters,
       mkima_index_tcl,
       mkima_index_tcl_execute,
       mkima_index_tcl_params,

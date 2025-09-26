@@ -12,21 +12,23 @@ const DWIGRADCHECK_METADATA: Metadata = {
 
 
 interface DwigradcheckFslgradParameters {
-    "@type": "mrtrix.dwigradcheck.fslgrad";
+    "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
+type DwigradcheckFslgradParametersTagged = Required<Pick<DwigradcheckFslgradParameters, '@type'>> & DwigradcheckFslgradParameters;
 
 
 interface DwigradcheckExportGradFslParameters {
-    "@type": "mrtrix.dwigradcheck.export_grad_fsl";
+    "@type"?: "export_grad_fsl";
     "bvecs_path": string;
     "bvals_path": string;
 }
+type DwigradcheckExportGradFslParametersTagged = Required<Pick<DwigradcheckExportGradFslParameters, '@type'>> & DwigradcheckExportGradFslParameters;
 
 
 interface DwigradcheckParameters {
-    "@type": "mrtrix.dwigradcheck";
+    "@type"?: "mrtrix/dwigradcheck";
     "input_image": InputPathType;
     "grad"?: InputPathType | null | undefined;
     "fslgrad"?: DwigradcheckFslgradParameters | null | undefined;
@@ -46,43 +48,7 @@ interface DwigradcheckParameters {
     "help": boolean;
     "version": boolean;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.dwigradcheck": dwigradcheck_cargs,
-        "mrtrix.dwigradcheck.fslgrad": dwigradcheck_fslgrad_cargs,
-        "mrtrix.dwigradcheck.export_grad_fsl": dwigradcheck_export_grad_fsl_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.dwigradcheck": dwigradcheck_outputs,
-        "mrtrix.dwigradcheck.export_grad_fsl": dwigradcheck_export_grad_fsl_outputs,
-    };
-    return outputsFuncs[t];
-}
+type DwigradcheckParametersTagged = Required<Pick<DwigradcheckParameters, '@type'>> & DwigradcheckParameters;
 
 
 /**
@@ -96,9 +62,9 @@ function dynOutputs(
 function dwigradcheck_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
-): DwigradcheckFslgradParameters {
+): DwigradcheckFslgradParametersTagged {
     const params = {
-        "@type": "mrtrix.dwigradcheck.fslgrad" as const,
+        "@type": "fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -158,9 +124,9 @@ interface DwigradcheckExportGradFslOutputs {
 function dwigradcheck_export_grad_fsl_params(
     bvecs_path: string,
     bvals_path: string,
-): DwigradcheckExportGradFslParameters {
+): DwigradcheckExportGradFslParametersTagged {
     const params = {
-        "@type": "mrtrix.dwigradcheck.export_grad_fsl" as const,
+        "@type": "export_grad_fsl" as const,
         "bvecs_path": bvecs_path,
         "bvals_path": bvals_path,
     };
@@ -210,7 +176,7 @@ function dwigradcheck_export_grad_fsl_outputs(
 
 
 /**
- * Output object returned when calling `dwigradcheck(...)`.
+ * Output object returned when calling `DwigradcheckParameters(...)`.
  *
  * @interface
  */
@@ -277,9 +243,9 @@ function dwigradcheck_params(
     config: Array<string> | null = null,
     help: boolean = false,
     version: boolean = false,
-): DwigradcheckParameters {
+): DwigradcheckParametersTagged {
     const params = {
-        "@type": "mrtrix.dwigradcheck" as const,
+        "@type": "mrtrix/dwigradcheck" as const,
         "input_image": input_image,
         "nocleanup": nocleanup,
         "info": info,
@@ -345,7 +311,7 @@ function dwigradcheck_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
+        cargs.push(...dwigradcheck_fslgrad_cargs((params["fslgrad"] ?? null), execution));
     }
     if ((params["mask_image"] ?? null) !== null) {
         cargs.push(
@@ -366,9 +332,9 @@ function dwigradcheck_cargs(
         );
     }
     if ((params["export_grad_fsl"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["export_grad_fsl"] ?? null)["@type"])((params["export_grad_fsl"] ?? null), execution));
+        cargs.push(...dwigradcheck_export_grad_fsl_cargs((params["export_grad_fsl"] ?? null), execution));
     }
-    if ((params["nocleanup"] ?? null)) {
+    if ((params["nocleanup"] ?? false)) {
         cargs.push("-nocleanup");
     }
     if ((params["scratch_dir"] ?? null) !== null) {
@@ -383,16 +349,16 @@ function dwigradcheck_cargs(
             ...(params["continue_scratch_dir"] ?? null).map(f => execution.inputFile(f))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -407,10 +373,10 @@ function dwigradcheck_cargs(
             ...(params["config"] ?? null)
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     return cargs;
@@ -433,7 +399,7 @@ function dwigradcheck_outputs(
         root: execution.outputFile("."),
         export_grad_mrtrix: ((params["export_grad_mrtrix"] ?? null) !== null) ? execution.outputFile([(params["export_grad_mrtrix"] ?? null)].join('')) : null,
         export_grad_fsl: ((params["export_grad_mrtrix"] ?? null) !== null) ? execution.outputFile([(params["export_grad_mrtrix"] ?? null)].join('')) : null,
-        export_grad_fsl_: (params["export_grad_fsl"] ?? null) ? (dynOutputs((params["export_grad_fsl"] ?? null)["@type"])?.((params["export_grad_fsl"] ?? null), execution) ?? null) : null,
+        export_grad_fsl_: (params["export_grad_fsl"] ?? null) ? (dwigradcheck_export_grad_fsl_outputs((params["export_grad_fsl"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }
@@ -527,10 +493,7 @@ function dwigradcheck(
 export {
       DWIGRADCHECK_METADATA,
       DwigradcheckExportGradFslOutputs,
-      DwigradcheckExportGradFslParameters,
-      DwigradcheckFslgradParameters,
       DwigradcheckOutputs,
-      DwigradcheckParameters,
       dwigradcheck,
       dwigradcheck_execute,
       dwigradcheck_export_grad_fsl_params,

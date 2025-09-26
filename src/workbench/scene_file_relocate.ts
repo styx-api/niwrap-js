@@ -12,47 +12,15 @@ const SCENE_FILE_RELOCATE_METADATA: Metadata = {
 
 
 interface SceneFileRelocateParameters {
-    "@type": "workbench.scene-file-relocate";
+    "@type"?: "workbench/scene-file-relocate";
     "input_scene": string;
     "output_scene": string;
 }
+type SceneFileRelocateParametersTagged = Required<Pick<SceneFileRelocateParameters, '@type'>> & SceneFileRelocateParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.scene-file-relocate": scene_file_relocate_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `scene_file_relocate(...)`.
+ * Output object returned when calling `SceneFileRelocateParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface SceneFileRelocateOutputs {
 function scene_file_relocate_params(
     input_scene: string,
     output_scene: string,
-): SceneFileRelocateParameters {
+): SceneFileRelocateParametersTagged {
     const params = {
-        "@type": "workbench.scene-file-relocate" as const,
+        "@type": "workbench/scene-file-relocate" as const,
         "input_scene": input_scene,
         "output_scene": output_scene,
     };
@@ -185,7 +153,6 @@ function scene_file_relocate(
 export {
       SCENE_FILE_RELOCATE_METADATA,
       SceneFileRelocateOutputs,
-      SceneFileRelocateParameters,
       scene_file_relocate,
       scene_file_relocate_execute,
       scene_file_relocate_params,

@@ -12,50 +12,17 @@ const SURFACE_SMOOTHING_METADATA: Metadata = {
 
 
 interface SurfaceSmoothingParameters {
-    "@type": "workbench.surface-smoothing";
+    "@type"?: "workbench/surface-smoothing";
     "surface_in": InputPathType;
     "smoothing_strength": number;
     "smoothing_iterations": number;
     "surface_out": string;
 }
+type SurfaceSmoothingParametersTagged = Required<Pick<SurfaceSmoothingParameters, '@type'>> & SurfaceSmoothingParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-smoothing": surface_smoothing_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-smoothing": surface_smoothing_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_smoothing(...)`.
+ * Output object returned when calling `SurfaceSmoothingParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function surface_smoothing_params(
     smoothing_strength: number,
     smoothing_iterations: number,
     surface_out: string,
-): SurfaceSmoothingParameters {
+): SurfaceSmoothingParametersTagged {
     const params = {
-        "@type": "workbench.surface-smoothing" as const,
+        "@type": "workbench/surface-smoothing" as const,
         "surface_in": surface_in,
         "smoothing_strength": smoothing_strength,
         "smoothing_iterations": smoothing_iterations,
@@ -205,7 +172,6 @@ function surface_smoothing(
 export {
       SURFACE_SMOOTHING_METADATA,
       SurfaceSmoothingOutputs,
-      SurfaceSmoothingParameters,
       surface_smoothing,
       surface_smoothing_execute,
       surface_smoothing_params,

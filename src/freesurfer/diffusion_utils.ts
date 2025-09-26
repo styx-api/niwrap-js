@@ -12,46 +12,14 @@ const DIFFUSION_UTILS_METADATA: Metadata = {
 
 
 interface DiffusionUtilsParameters {
-    "@type": "freesurfer.diffusionUtils";
+    "@type"?: "freesurfer/diffusionUtils";
     "dummy_flag": boolean;
 }
+type DiffusionUtilsParametersTagged = Required<Pick<DiffusionUtilsParameters, '@type'>> & DiffusionUtilsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.diffusionUtils": diffusion_utils_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `diffusion_utils(...)`.
+ * Output object returned when calling `DiffusionUtilsParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface DiffusionUtilsOutputs {
  */
 function diffusion_utils_params(
     dummy_flag: boolean = false,
-): DiffusionUtilsParameters {
+): DiffusionUtilsParametersTagged {
     const params = {
-        "@type": "freesurfer.diffusionUtils" as const,
+        "@type": "freesurfer/diffusionUtils" as const,
         "dummy_flag": dummy_flag,
     };
     return params;
@@ -95,7 +63,7 @@ function diffusion_utils_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("diffusionUtils");
-    if ((params["dummy_flag"] ?? null)) {
+    if ((params["dummy_flag"] ?? false)) {
         cargs.push("--dummy");
     }
     return cargs;
@@ -175,7 +143,6 @@ function diffusion_utils(
 export {
       DIFFUSION_UTILS_METADATA,
       DiffusionUtilsOutputs,
-      DiffusionUtilsParameters,
       diffusion_utils,
       diffusion_utils_execute,
       diffusion_utils_params,

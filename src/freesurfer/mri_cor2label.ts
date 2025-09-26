@@ -12,7 +12,7 @@ const MRI_COR2LABEL_METADATA: Metadata = {
 
 
 interface MriCor2labelParameters {
-    "@type": "freesurfer.mri_cor2label";
+    "@type"?: "freesurfer/mri_cor2label";
     "input_file": InputPathType;
     "label_id": number;
     "label_file": string;
@@ -26,44 +26,11 @@ interface MriCor2labelParameters {
     "erode"?: number | null | undefined;
     "help": boolean;
 }
+type MriCor2labelParametersTagged = Required<Pick<MriCor2labelParameters, '@type'>> & MriCor2labelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_cor2label": mri_cor2label_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_cor2label": mri_cor2label_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_cor2label(...)`.
+ * Output object returned when calling `MriCor2labelParameters(...)`.
  *
  * @interface
  */
@@ -114,9 +81,9 @@ function mri_cor2label_params(
     dilate: number | null = null,
     erode: number | null = null,
     help: boolean = false,
-): MriCor2labelParameters {
+): MriCor2labelParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_cor2label" as const,
+        "@type": "freesurfer/mri_cor2label" as const,
         "input_file": input_file,
         "label_id": label_id,
         "label_file": label_file,
@@ -204,7 +171,7 @@ function mri_cor2label_cargs(
             ...(params["optimize"] ?? null)
         );
     }
-    if ((params["remove_holes_islands"] ?? null)) {
+    if ((params["remove_holes_islands"] ?? false)) {
         cargs.push("--remove-holes-islands");
     }
     if ((params["dilate"] ?? null) !== null) {
@@ -219,7 +186,7 @@ function mri_cor2label_cargs(
             String((params["erode"] ?? null))
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -323,7 +290,6 @@ function mri_cor2label(
 export {
       MRI_COR2LABEL_METADATA,
       MriCor2labelOutputs,
-      MriCor2labelParameters,
       mri_cor2label,
       mri_cor2label_execute,
       mri_cor2label_params,

@@ -12,47 +12,15 @@ const FIX_SUBJECT_RH_METADATA: Metadata = {
 
 
 interface FixSubjectRhParameters {
-    "@type": "freesurfer.fix_subject-rh";
+    "@type"?: "freesurfer/fix_subject-rh";
     "input_directory": string;
     "help_flag": boolean;
 }
+type FixSubjectRhParametersTagged = Required<Pick<FixSubjectRhParameters, '@type'>> & FixSubjectRhParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fix_subject-rh": fix_subject_rh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fix_subject_rh(...)`.
+ * Output object returned when calling `FixSubjectRhParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface FixSubjectRhOutputs {
 function fix_subject_rh_params(
     input_directory: string,
     help_flag: boolean = false,
-): FixSubjectRhParameters {
+): FixSubjectRhParametersTagged {
     const params = {
-        "@type": "freesurfer.fix_subject-rh" as const,
+        "@type": "freesurfer/fix_subject-rh" as const,
         "input_directory": input_directory,
         "help_flag": help_flag,
     };
@@ -103,7 +71,7 @@ function fix_subject_rh_cargs(
         "-rh",
         (params["input_directory"] ?? null)
     );
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -185,7 +153,6 @@ function fix_subject_rh(
 export {
       FIX_SUBJECT_RH_METADATA,
       FixSubjectRhOutputs,
-      FixSubjectRhParameters,
       fix_subject_rh,
       fix_subject_rh_execute,
       fix_subject_rh_params,

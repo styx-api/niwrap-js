@@ -12,7 +12,7 @@ const V_3D_ATTRIBUTE_METADATA: Metadata = {
 
 
 interface V3dAttributeParameters {
-    "@type": "afni.3dAttribute";
+    "@type"?: "afni/3dAttribute";
     "all": boolean;
     "name": boolean;
     "center": boolean;
@@ -22,44 +22,11 @@ interface V3dAttributeParameters {
     "aname": string;
     "dset": InputPathType;
 }
+type V3dAttributeParametersTagged = Required<Pick<V3dAttributeParameters, '@type'>> & V3dAttributeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dAttribute": v_3d_attribute_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dAttribute": v_3d_attribute_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_attribute(...)`.
+ * Output object returned when calling `V3dAttributeParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function v_3d_attribute_params(
     ssep: string | null = null,
     sprep: string | null = null,
     quote: boolean = false,
-): V3dAttributeParameters {
+): V3dAttributeParametersTagged {
     const params = {
-        "@type": "afni.3dAttribute" as const,
+        "@type": "afni/3dAttribute" as const,
         "all": all,
         "name": name,
         "center": center,
@@ -132,13 +99,13 @@ function v_3d_attribute_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("3dAttribute");
-    if ((params["all"] ?? null)) {
+    if ((params["all"] ?? false)) {
         cargs.push("-all");
     }
-    if ((params["name"] ?? null)) {
+    if ((params["name"] ?? false)) {
         cargs.push("-name");
     }
-    if ((params["center"] ?? null)) {
+    if ((params["center"] ?? false)) {
         cargs.push("-center");
     }
     if ((params["ssep"] ?? null) !== null) {
@@ -153,7 +120,7 @@ function v_3d_attribute_cargs(
             (params["sprep"] ?? null)
         );
     }
-    if ((params["quote"] ?? null)) {
+    if ((params["quote"] ?? false)) {
         cargs.push("-quote");
     }
     cargs.push((params["aname"] ?? null));
@@ -249,7 +216,6 @@ function v_3d_attribute(
 
 export {
       V3dAttributeOutputs,
-      V3dAttributeParameters,
       V_3D_ATTRIBUTE_METADATA,
       v_3d_attribute,
       v_3d_attribute_execute,

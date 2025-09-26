@@ -12,50 +12,17 @@ const CIFTI_PARCEL_MAPPING_TO_LABEL_METADATA: Metadata = {
 
 
 interface CiftiParcelMappingToLabelParameters {
-    "@type": "workbench.cifti-parcel-mapping-to-label";
+    "@type"?: "workbench/cifti-parcel-mapping-to-label";
     "cifti_in": InputPathType;
     "direction": string;
     "template_cifti": InputPathType;
     "dlabel_out": string;
 }
+type CiftiParcelMappingToLabelParametersTagged = Required<Pick<CiftiParcelMappingToLabelParameters, '@type'>> & CiftiParcelMappingToLabelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-parcel-mapping-to-label": cifti_parcel_mapping_to_label_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-parcel-mapping-to-label": cifti_parcel_mapping_to_label_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `cifti_parcel_mapping_to_label(...)`.
+ * Output object returned when calling `CiftiParcelMappingToLabelParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function cifti_parcel_mapping_to_label_params(
     direction: string,
     template_cifti: InputPathType,
     dlabel_out: string,
-): CiftiParcelMappingToLabelParameters {
+): CiftiParcelMappingToLabelParametersTagged {
     const params = {
-        "@type": "workbench.cifti-parcel-mapping-to-label" as const,
+        "@type": "workbench/cifti-parcel-mapping-to-label" as const,
         "cifti_in": cifti_in,
         "direction": direction,
         "template_cifti": template_cifti,
@@ -209,7 +176,6 @@ function cifti_parcel_mapping_to_label(
 export {
       CIFTI_PARCEL_MAPPING_TO_LABEL_METADATA,
       CiftiParcelMappingToLabelOutputs,
-      CiftiParcelMappingToLabelParameters,
       cifti_parcel_mapping_to_label,
       cifti_parcel_mapping_to_label_execute,
       cifti_parcel_mapping_to_label_params,

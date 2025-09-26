@@ -12,7 +12,7 @@ const V__CLIP_VOLUME_METADATA: Metadata = {
 
 
 interface VClipVolumeParameters {
-    "@type": "afni.@clip_volume";
+    "@type"?: "afni/@clip_volume";
     "input_volume": InputPathType;
     "below_zmm"?: number | null | undefined;
     "above_zmm"?: number | null | undefined;
@@ -32,44 +32,11 @@ interface VClipVolumeParameters {
     "output_prefix"?: string | null | undefined;
     "followers"?: Array<InputPathType> | null | undefined;
 }
+type VClipVolumeParametersTagged = Required<Pick<VClipVolumeParameters, '@type'>> & VClipVolumeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@clip_volume": v__clip_volume_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@clip_volume": v__clip_volume_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__clip_volume(...)`.
+ * Output object returned when calling `VClipVolumeParameters(...)`.
  *
  * @interface
  */
@@ -132,9 +99,9 @@ function v__clip_volume_params(
     crop_npad: number | null = null,
     output_prefix: string | null = null,
     followers: Array<InputPathType> | null = null,
-): VClipVolumeParameters {
+): VClipVolumeParametersTagged {
     const params = {
-        "@type": "afni.@clip_volume" as const,
+        "@type": "afni/@clip_volume" as const,
         "input_volume": input_volume,
         "and_logic": and_logic,
         "or_logic": or_logic,
@@ -243,22 +210,22 @@ function v__clip_volume_cargs(
             ...(params["mask_box"] ?? null).map(String)
         );
     }
-    if ((params["and_logic"] ?? null)) {
+    if ((params["and_logic"] ?? false)) {
         cargs.push("-and");
     }
-    if ((params["or_logic"] ?? null)) {
+    if ((params["or_logic"] ?? false)) {
         cargs.push("-or");
     }
-    if ((params["verbosity"] ?? null)) {
+    if ((params["verbosity"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["crop_allzero"] ?? null)) {
+    if ((params["crop_allzero"] ?? false)) {
         cargs.push("-crop_allzero");
     }
-    if ((params["crop_greedy"] ?? null)) {
+    if ((params["crop_greedy"] ?? false)) {
         cargs.push("-crop_greedy");
     }
-    if ((params["crop"] ?? null)) {
+    if ((params["crop"] ?? false)) {
         cargs.push("-crop");
     }
     if ((params["crop_npad"] ?? null) !== null) {
@@ -391,7 +358,6 @@ function v__clip_volume(
 
 export {
       VClipVolumeOutputs,
-      VClipVolumeParameters,
       V__CLIP_VOLUME_METADATA,
       v__clip_volume,
       v__clip_volume_execute,

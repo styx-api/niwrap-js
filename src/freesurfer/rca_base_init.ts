@@ -12,48 +12,16 @@ const RCA_BASE_INIT_METADATA: Metadata = {
 
 
 interface RcaBaseInitParameters {
-    "@type": "freesurfer.rca-base-init";
+    "@type"?: "freesurfer/rca-base-init";
     "log_file"?: string | null | undefined;
     "status_file"?: string | null | undefined;
     "cmd_file"?: string | null | undefined;
 }
+type RcaBaseInitParametersTagged = Required<Pick<RcaBaseInitParameters, '@type'>> & RcaBaseInitParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.rca-base-init": rca_base_init_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `rca_base_init(...)`.
+ * Output object returned when calling `RcaBaseInitParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function rca_base_init_params(
     log_file: string | null = null,
     status_file: string | null = null,
     cmd_file: string | null = null,
-): RcaBaseInitParameters {
+): RcaBaseInitParametersTagged {
     const params = {
-        "@type": "freesurfer.rca-base-init" as const,
+        "@type": "freesurfer/rca-base-init" as const,
     };
     if (log_file !== null) {
         params["log_file"] = log_file;
@@ -202,7 +170,6 @@ function rca_base_init(
 export {
       RCA_BASE_INIT_METADATA,
       RcaBaseInitOutputs,
-      RcaBaseInitParameters,
       rca_base_init,
       rca_base_init_execute,
       rca_base_init_params,

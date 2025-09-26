@@ -12,7 +12,7 @@ const EPI_REG_METADATA: Metadata = {
 
 
 interface EpiRegParameters {
-    "@type": "fsl.epi_reg";
+    "@type"?: "fsl/epi_reg";
     "epi": InputPathType;
     "t1_head": InputPathType;
     "t1_brain": InputPathType;
@@ -27,44 +27,11 @@ interface EpiRegParameters {
     "weight_image"?: InputPathType | null | undefined;
     "wmseg"?: InputPathType | null | undefined;
 }
+type EpiRegParametersTagged = Required<Pick<EpiRegParameters, '@type'>> & EpiRegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.epi_reg": epi_reg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.epi_reg": epi_reg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `epi_reg(...)`.
+ * Output object returned when calling `EpiRegParameters(...)`.
  *
  * @interface
  */
@@ -165,9 +132,9 @@ function epi_reg_params(
     pedir: "x" | "y" | "z" | "-x" | "-y" | "-z" | null = null,
     weight_image: InputPathType | null = null,
     wmseg: InputPathType | null = null,
-): EpiRegParameters {
+): EpiRegParametersTagged {
     const params = {
-        "@type": "fsl.epi_reg" as const,
+        "@type": "fsl/epi_reg" as const,
         "epi": epi,
         "t1_head": t1_head,
         "t1_brain": t1_brain,
@@ -230,10 +197,10 @@ function epi_reg_cargs(
     if ((params["fmapmagbrain"] ?? null) !== null) {
         cargs.push(["--fmapmagbrain=", execution.inputFile((params["fmapmagbrain"] ?? null))].join(''));
     }
-    if ((params["no_clean"] ?? null)) {
+    if ((params["no_clean"] ?? false)) {
         cargs.push("--noclean");
     }
-    if ((params["no_fmapreg"] ?? null)) {
+    if ((params["no_fmapreg"] ?? false)) {
         cargs.push("--nofmapreg");
     }
     if ((params["pedir"] ?? null) !== null) {
@@ -360,7 +327,6 @@ function epi_reg(
 export {
       EPI_REG_METADATA,
       EpiRegOutputs,
-      EpiRegParameters,
       epi_reg,
       epi_reg_execute,
       epi_reg_params,

@@ -12,7 +12,7 @@ const THRESHOLD_IMAGE_METADATA: Metadata = {
 
 
 interface ThresholdImageParameters {
-    "@type": "ants.ThresholdImage";
+    "@type"?: "ants/ThresholdImage";
     "image_dimension": number;
     "image_in": InputPathType;
     "out_image": string;
@@ -24,44 +24,11 @@ interface ThresholdImageParameters {
     "kmeans_number_of_thresholds"?: number | null | undefined;
     "mask_image"?: InputPathType | null | undefined;
 }
+type ThresholdImageParametersTagged = Required<Pick<ThresholdImageParameters, '@type'>> & ThresholdImageParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.ThresholdImage": threshold_image_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.ThresholdImage": threshold_image_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `threshold_image(...)`.
+ * Output object returned when calling `ThresholdImageParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function threshold_image_params(
     otsu_number_of_thresholds: number | null = null,
     kmeans_number_of_thresholds: number | null = null,
     mask_image: InputPathType | null = null,
-): ThresholdImageParameters {
+): ThresholdImageParametersTagged {
     const params = {
-        "@type": "ants.ThresholdImage" as const,
+        "@type": "ants/ThresholdImage" as const,
         "image_dimension": image_dimension,
         "image_in": image_in,
         "out_image": out_image,
@@ -270,7 +237,6 @@ function threshold_image(
 export {
       THRESHOLD_IMAGE_METADATA,
       ThresholdImageOutputs,
-      ThresholdImageParameters,
       threshold_image,
       threshold_image_execute,
       threshold_image_params,

@@ -12,48 +12,16 @@ const DMRI_GROUP_BY_ENDPOINTS_METADATA: Metadata = {
 
 
 interface DmriGroupByEndpointsParameters {
-    "@type": "freesurfer.dmri_groupByEndpoints";
+    "@type"?: "freesurfer/dmri_groupByEndpoints";
     "streamline_file": InputPathType;
     "image_file": InputPathType;
     "output_directory": string;
 }
+type DmriGroupByEndpointsParametersTagged = Required<Pick<DmriGroupByEndpointsParameters, '@type'>> & DmriGroupByEndpointsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dmri_groupByEndpoints": dmri_group_by_endpoints_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dmri_group_by_endpoints(...)`.
+ * Output object returned when calling `DmriGroupByEndpointsParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function dmri_group_by_endpoints_params(
     streamline_file: InputPathType,
     image_file: InputPathType,
     output_directory: string,
-): DmriGroupByEndpointsParameters {
+): DmriGroupByEndpointsParametersTagged {
     const params = {
-        "@type": "freesurfer.dmri_groupByEndpoints" as const,
+        "@type": "freesurfer/dmri_groupByEndpoints" as const,
         "streamline_file": streamline_file,
         "image_file": image_file,
         "output_directory": output_directory,
@@ -196,7 +164,6 @@ function dmri_group_by_endpoints(
 export {
       DMRI_GROUP_BY_ENDPOINTS_METADATA,
       DmriGroupByEndpointsOutputs,
-      DmriGroupByEndpointsParameters,
       dmri_group_by_endpoints,
       dmri_group_by_endpoints_execute,
       dmri_group_by_endpoints_params,

@@ -12,49 +12,16 @@ const QUOTIZE_METADATA: Metadata = {
 
 
 interface QuotizeParameters {
-    "@type": "afni.quotize";
+    "@type"?: "afni/quotize";
     "name": string;
     "input_file": InputPathType;
     "output_file": string;
 }
+type QuotizeParametersTagged = Required<Pick<QuotizeParameters, '@type'>> & QuotizeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.quotize": quotize_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.quotize": quotize_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `quotize(...)`.
+ * Output object returned when calling `QuotizeParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function quotize_params(
     name: string,
     input_file: InputPathType,
     output_file: string,
-): QuotizeParameters {
+): QuotizeParametersTagged {
     const params = {
-        "@type": "afni.quotize" as const,
+        "@type": "afni/quotize" as const,
         "name": name,
         "input_file": input_file,
         "output_file": output_file,
@@ -193,7 +160,6 @@ function quotize(
 export {
       QUOTIZE_METADATA,
       QuotizeOutputs,
-      QuotizeParameters,
       quotize,
       quotize_execute,
       quotize_params,

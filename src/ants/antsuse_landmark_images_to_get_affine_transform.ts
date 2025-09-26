@@ -12,50 +12,17 @@ const ANTSUSE_LANDMARK_IMAGES_TO_GET_AFFINE_TRANSFORM_METADATA: Metadata = {
 
 
 interface AntsuseLandmarkImagesToGetAffineTransformParameters {
-    "@type": "ants.ANTSUseLandmarkImagesToGetAffineTransform";
+    "@type"?: "ants/ANTSUseLandmarkImagesToGetAffineTransform";
     "fixed_image": InputPathType;
     "moving_image": InputPathType;
     "transform_type": "rigid" | "affine";
     "output_affine": string;
 }
+type AntsuseLandmarkImagesToGetAffineTransformParametersTagged = Required<Pick<AntsuseLandmarkImagesToGetAffineTransformParameters, '@type'>> & AntsuseLandmarkImagesToGetAffineTransformParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.ANTSUseLandmarkImagesToGetAffineTransform": antsuse_landmark_images_to_get_affine_transform_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.ANTSUseLandmarkImagesToGetAffineTransform": antsuse_landmark_images_to_get_affine_transform_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `antsuse_landmark_images_to_get_affine_transform(...)`.
+ * Output object returned when calling `AntsuseLandmarkImagesToGetAffineTransformParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function antsuse_landmark_images_to_get_affine_transform_params(
     moving_image: InputPathType,
     transform_type: "rigid" | "affine",
     output_affine: string,
-): AntsuseLandmarkImagesToGetAffineTransformParameters {
+): AntsuseLandmarkImagesToGetAffineTransformParametersTagged {
     const params = {
-        "@type": "ants.ANTSUseLandmarkImagesToGetAffineTransform" as const,
+        "@type": "ants/ANTSUseLandmarkImagesToGetAffineTransform" as const,
         "fixed_image": fixed_image,
         "moving_image": moving_image,
         "transform_type": transform_type,
@@ -200,7 +167,6 @@ function antsuse_landmark_images_to_get_affine_transform(
 export {
       ANTSUSE_LANDMARK_IMAGES_TO_GET_AFFINE_TRANSFORM_METADATA,
       AntsuseLandmarkImagesToGetAffineTransformOutputs,
-      AntsuseLandmarkImagesToGetAffineTransformParameters,
       antsuse_landmark_images_to_get_affine_transform,
       antsuse_landmark_images_to_get_affine_transform_execute,
       antsuse_landmark_images_to_get_affine_transform_params,

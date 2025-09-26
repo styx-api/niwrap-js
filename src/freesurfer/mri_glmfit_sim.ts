@@ -12,7 +12,7 @@ const MRI_GLMFIT_SIM_METADATA: Metadata = {
 
 
 interface MriGlmfitSimParameters {
-    "@type": "freesurfer.mri_glmfit-sim";
+    "@type"?: "freesurfer/mri_glmfit-sim";
     "glmdir": string;
     "cwp"?: number | null | undefined;
     "mczsim"?: string | null | undefined;
@@ -43,44 +43,11 @@ interface MriGlmfitSimParameters {
     "spatial_sum": boolean;
     "help": boolean;
 }
+type MriGlmfitSimParametersTagged = Required<Pick<MriGlmfitSimParameters, '@type'>> & MriGlmfitSimParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_glmfit-sim": mri_glmfit_sim_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_glmfit-sim": mri_glmfit_sim_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_glmfit_sim(...)`.
+ * Output object returned when calling `MriGlmfitSimParameters(...)`.
  *
  * @interface
  */
@@ -185,9 +152,9 @@ function mri_glmfit_sim_params(
     centroid: boolean = false,
     spatial_sum: boolean = false,
     help: boolean = false,
-): MriGlmfitSimParameters {
+): MriGlmfitSimParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_glmfit-sim" as const,
+        "@type": "freesurfer/mri_glmfit-sim" as const,
         "glmdir": glmdir,
         "perm_resid": perm_resid,
         "perm_signflip": perm_signflip,
@@ -304,10 +271,10 @@ function mri_glmfit_sim_cargs(
             (params["perm"] ?? null)
         );
     }
-    if ((params["perm_resid"] ?? null)) {
+    if ((params["perm_resid"] ?? false)) {
         cargs.push("--perm-resid");
     }
-    if ((params["perm_signflip"] ?? null)) {
+    if ((params["perm_signflip"] ?? false)) {
         cargs.push("--perm-signflip");
     }
     if ((params["grf"] ?? null) !== null) {
@@ -316,13 +283,13 @@ function mri_glmfit_sim_cargs(
             (params["grf"] ?? null)
         );
     }
-    if ((params["spaces_2"] ?? null)) {
+    if ((params["spaces_2"] ?? false)) {
         cargs.push("--2spaces");
     }
-    if ((params["spaces_3"] ?? null)) {
+    if ((params["spaces_3"] ?? false)) {
         cargs.push("--3spaces");
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("--overwrite");
     }
     if ((params["bg"] ?? null) !== null) {
@@ -337,7 +304,7 @@ function mri_glmfit_sim_cargs(
             String((params["sleep"] ?? null))
         );
     }
-    if ((params["a2009s"] ?? null)) {
+    if ((params["a2009s"] ?? false)) {
         cargs.push("--a2009s");
     }
     if ((params["annot"] ?? null) !== null) {
@@ -388,10 +355,10 @@ function mri_glmfit_sim_cargs(
             ...(params["uniform"] ?? null).map(String)
         );
     }
-    if ((params["no_out_annot"] ?? null)) {
+    if ((params["no_out_annot"] ?? false)) {
         cargs.push("--no-out-annot");
     }
-    if ((params["no_cluster_mean"] ?? null)) {
+    if ((params["no_cluster_mean"] ?? false)) {
         cargs.push("--no-cluster-mean");
     }
     if ((params["y_file"] ?? null) !== null) {
@@ -400,13 +367,13 @@ function mri_glmfit_sim_cargs(
             execution.inputFile((params["y_file"] ?? null))
         );
     }
-    if ((params["centroid"] ?? null)) {
+    if ((params["centroid"] ?? false)) {
         cargs.push("--centroid");
     }
-    if ((params["spatial_sum"] ?? null)) {
+    if ((params["spatial_sum"] ?? false)) {
         cargs.push("--spatial-sum");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -549,7 +516,6 @@ function mri_glmfit_sim(
 export {
       MRI_GLMFIT_SIM_METADATA,
       MriGlmfitSimOutputs,
-      MriGlmfitSimParameters,
       mri_glmfit_sim,
       mri_glmfit_sim_execute,
       mri_glmfit_sim_params,

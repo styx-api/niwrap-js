@@ -12,49 +12,16 @@ const MRI_EVALUATE_MORPH_METADATA: Metadata = {
 
 
 interface MriEvaluateMorphParameters {
-    "@type": "freesurfer.mri_evaluate_morph";
+    "@type"?: "freesurfer/mri_evaluate_morph";
     "xform_name": InputPathType;
     "segmentation_files": Array<InputPathType>;
     "output_file": string;
 }
+type MriEvaluateMorphParametersTagged = Required<Pick<MriEvaluateMorphParameters, '@type'>> & MriEvaluateMorphParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_evaluate_morph": mri_evaluate_morph_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_evaluate_morph": mri_evaluate_morph_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_evaluate_morph(...)`.
+ * Output object returned when calling `MriEvaluateMorphParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mri_evaluate_morph_params(
     xform_name: InputPathType,
     segmentation_files: Array<InputPathType>,
     output_file: string,
-): MriEvaluateMorphParameters {
+): MriEvaluateMorphParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_evaluate_morph" as const,
+        "@type": "freesurfer/mri_evaluate_morph" as const,
         "xform_name": xform_name,
         "segmentation_files": segmentation_files,
         "output_file": output_file,
@@ -193,7 +160,6 @@ function mri_evaluate_morph(
 export {
       MRI_EVALUATE_MORPH_METADATA,
       MriEvaluateMorphOutputs,
-      MriEvaluateMorphParameters,
       mri_evaluate_morph,
       mri_evaluate_morph_execute,
       mri_evaluate_morph_params,

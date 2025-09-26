@@ -12,7 +12,7 @@ const V_3D_AUTOMASK_METADATA: Metadata = {
 
 
 interface V3dAutomaskParameters {
-    "@type": "afni.3dAutomask";
+    "@type"?: "afni/3dAutomask";
     "prefix"?: string | null | undefined;
     "apply_prefix"?: string | null | undefined;
     "clfrac"?: number | null | undefined;
@@ -21,44 +21,11 @@ interface V3dAutomaskParameters {
     "outputtype"?: "NIFTI" | "AFNI" | "NIFTI_GZ" | null | undefined;
     "in_file": InputPathType;
 }
+type V3dAutomaskParametersTagged = Required<Pick<V3dAutomaskParameters, '@type'>> & V3dAutomaskParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dAutomask": v_3d_automask_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dAutomask": v_3d_automask_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_automask(...)`.
+ * Output object returned when calling `V3dAutomaskParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +66,9 @@ function v_3d_automask_params(
     dilate: number | null = null,
     erode: number | null = null,
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
-): V3dAutomaskParameters {
+): V3dAutomaskParametersTagged {
     const params = {
-        "@type": "afni.3dAutomask" as const,
+        "@type": "afni/3dAutomask" as const,
         "in_file": in_file,
     };
     if (prefix !== null) {
@@ -264,7 +231,6 @@ function v_3d_automask(
 
 export {
       V3dAutomaskOutputs,
-      V3dAutomaskParameters,
       V_3D_AUTOMASK_METADATA,
       v_3d_automask,
       v_3d_automask_execute,

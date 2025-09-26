@@ -12,21 +12,23 @@ const MESHCONVERT_METADATA: Metadata = {
 
 
 interface MeshconvertTransformParameters {
-    "@type": "mrtrix.meshconvert.transform";
+    "@type"?: "transform";
     "mode": string;
     "image": InputPathType;
 }
+type MeshconvertTransformParametersTagged = Required<Pick<MeshconvertTransformParameters, '@type'>> & MeshconvertTransformParameters;
 
 
 interface MeshconvertConfigParameters {
-    "@type": "mrtrix.meshconvert.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MeshconvertConfigParametersTagged = Required<Pick<MeshconvertConfigParameters, '@type'>> & MeshconvertConfigParameters;
 
 
 interface MeshconvertParameters {
-    "@type": "mrtrix.meshconvert";
+    "@type"?: "mrtrix/meshconvert";
     "binary": boolean;
     "transform"?: MeshconvertTransformParameters | null | undefined;
     "info": boolean;
@@ -40,42 +42,7 @@ interface MeshconvertParameters {
     "input": InputPathType;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.meshconvert": meshconvert_cargs,
-        "mrtrix.meshconvert.transform": meshconvert_transform_cargs,
-        "mrtrix.meshconvert.config": meshconvert_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.meshconvert": meshconvert_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MeshconvertParametersTagged = Required<Pick<MeshconvertParameters, '@type'>> & MeshconvertParameters;
 
 
 /**
@@ -89,9 +56,9 @@ function dynOutputs(
 function meshconvert_transform_params(
     mode: string,
     image: InputPathType,
-): MeshconvertTransformParameters {
+): MeshconvertTransformParametersTagged {
     const params = {
-        "@type": "mrtrix.meshconvert.transform" as const,
+        "@type": "transform" as const,
         "mode": mode,
         "image": image,
     };
@@ -130,9 +97,9 @@ function meshconvert_transform_cargs(
 function meshconvert_config_params(
     key: string,
     value: string,
-): MeshconvertConfigParameters {
+): MeshconvertConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.meshconvert.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -161,7 +128,7 @@ function meshconvert_config_cargs(
 
 
 /**
- * Output object returned when calling `meshconvert(...)`.
+ * Output object returned when calling `MeshconvertParameters(...)`.
  *
  * @interface
  */
@@ -208,9 +175,9 @@ function meshconvert_params(
     config: Array<MeshconvertConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MeshconvertParameters {
+): MeshconvertParametersTagged {
     const params = {
-        "@type": "mrtrix.meshconvert" as const,
+        "@type": "mrtrix/meshconvert" as const,
         "binary": binary,
         "info": info,
         "quiet": quiet,
@@ -248,22 +215,22 @@ function meshconvert_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("meshconvert");
-    if ((params["binary"] ?? null)) {
+    if ((params["binary"] ?? false)) {
         cargs.push("-binary");
     }
     if ((params["transform"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["transform"] ?? null)["@type"])((params["transform"] ?? null), execution));
+        cargs.push(...meshconvert_transform_cargs((params["transform"] ?? null), execution));
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -273,12 +240,12 @@ function meshconvert_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => meshconvert_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -394,10 +361,7 @@ function meshconvert(
 
 export {
       MESHCONVERT_METADATA,
-      MeshconvertConfigParameters,
       MeshconvertOutputs,
-      MeshconvertParameters,
-      MeshconvertTransformParameters,
       meshconvert,
       meshconvert_config_params,
       meshconvert_execute,

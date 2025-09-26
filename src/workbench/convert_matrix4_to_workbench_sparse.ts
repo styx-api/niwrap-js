@@ -12,14 +12,15 @@ const CONVERT_MATRIX4_TO_WORKBENCH_SPARSE_METADATA: Metadata = {
 
 
 interface ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters {
-    "@type": "workbench.convert-matrix4-to-workbench-sparse.volume_seeds";
+    "@type"?: "volume_seeds";
     "cifti_template": InputPathType;
     "direction": string;
 }
+type ConvertMatrix4ToWorkbenchSparseVolumeSeedsParametersTagged = Required<Pick<ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters, '@type'>> & ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters;
 
 
 interface ConvertMatrix4ToWorkbenchSparseParameters {
-    "@type": "workbench.convert-matrix4-to-workbench-sparse";
+    "@type"?: "workbench/convert-matrix4-to-workbench-sparse";
     "matrix4_1": string;
     "matrix4_2": string;
     "matrix4_3": string;
@@ -29,40 +30,7 @@ interface ConvertMatrix4ToWorkbenchSparseParameters {
     "opt_surface_seeds_seed_roi"?: InputPathType | null | undefined;
     "volume_seeds"?: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.convert-matrix4-to-workbench-sparse": convert_matrix4_to_workbench_sparse_cargs,
-        "workbench.convert-matrix4-to-workbench-sparse.volume_seeds": convert_matrix4_to_workbench_sparse_volume_seeds_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type ConvertMatrix4ToWorkbenchSparseParametersTagged = Required<Pick<ConvertMatrix4ToWorkbenchSparseParameters, '@type'>> & ConvertMatrix4ToWorkbenchSparseParameters;
 
 
 /**
@@ -76,9 +44,9 @@ function dynOutputs(
 function convert_matrix4_to_workbench_sparse_volume_seeds_params(
     cifti_template: InputPathType,
     direction: string,
-): ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters {
+): ConvertMatrix4ToWorkbenchSparseVolumeSeedsParametersTagged {
     const params = {
-        "@type": "workbench.convert-matrix4-to-workbench-sparse.volume_seeds" as const,
+        "@type": "volume_seeds" as const,
         "cifti_template": cifti_template,
         "direction": direction,
     };
@@ -107,7 +75,7 @@ function convert_matrix4_to_workbench_sparse_volume_seeds_cargs(
 
 
 /**
- * Output object returned when calling `convert_matrix4_to_workbench_sparse(...)`.
+ * Output object returned when calling `ConvertMatrix4ToWorkbenchSparseParameters(...)`.
  *
  * @interface
  */
@@ -142,9 +110,9 @@ function convert_matrix4_to_workbench_sparse_params(
     wb_sparse_out: string,
     opt_surface_seeds_seed_roi: InputPathType | null = null,
     volume_seeds: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters | null = null,
-): ConvertMatrix4ToWorkbenchSparseParameters {
+): ConvertMatrix4ToWorkbenchSparseParametersTagged {
     const params = {
-        "@type": "workbench.convert-matrix4-to-workbench-sparse" as const,
+        "@type": "workbench/convert-matrix4-to-workbench-sparse" as const,
         "matrix4_1": matrix4_1,
         "matrix4_2": matrix4_2,
         "matrix4_3": matrix4_3,
@@ -190,7 +158,7 @@ function convert_matrix4_to_workbench_sparse_cargs(
         );
     }
     if ((params["volume_seeds"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["volume_seeds"] ?? null)["@type"])((params["volume_seeds"] ?? null), execution));
+        cargs.push(...convert_matrix4_to_workbench_sparse_volume_seeds_cargs((params["volume_seeds"] ?? null), execution));
     }
     return cargs;
 }
@@ -287,8 +255,6 @@ function convert_matrix4_to_workbench_sparse(
 export {
       CONVERT_MATRIX4_TO_WORKBENCH_SPARSE_METADATA,
       ConvertMatrix4ToWorkbenchSparseOutputs,
-      ConvertMatrix4ToWorkbenchSparseParameters,
-      ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters,
       convert_matrix4_to_workbench_sparse,
       convert_matrix4_to_workbench_sparse_execute,
       convert_matrix4_to_workbench_sparse_params,

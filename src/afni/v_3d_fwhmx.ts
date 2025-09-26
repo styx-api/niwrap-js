@@ -12,7 +12,7 @@ const V_3D_FWHMX_METADATA: Metadata = {
 
 
 interface V3dFwhmxParameters {
-    "@type": "afni.3dFWHMx";
+    "@type"?: "afni/3dFWHMx";
     "mask"?: InputPathType | null | undefined;
     "automask": boolean;
     "demed": boolean;
@@ -27,44 +27,11 @@ interface V3dFwhmxParameters {
     "acf"?: string | null | undefined;
     "infile": InputPathType;
 }
+type V3dFwhmxParametersTagged = Required<Pick<V3dFwhmxParameters, '@type'>> & V3dFwhmxParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dFWHMx": v_3d_fwhmx_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dFWHMx": v_3d_fwhmx_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_fwhmx(...)`.
+ * Output object returned when calling `V3dFwhmxParameters(...)`.
  *
  * @interface
  */
@@ -117,9 +84,9 @@ function v_3d_fwhmx_params(
     out: string | null = null,
     compat: boolean = false,
     acf: string | null = null,
-): V3dFwhmxParameters {
+): V3dFwhmxParametersTagged {
     const params = {
-        "@type": "afni.3dFWHMx" as const,
+        "@type": "afni/3dFWHMx" as const,
         "automask": automask,
         "demed": demed,
         "unif": unif,
@@ -168,13 +135,13 @@ function v_3d_fwhmx_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
-    if ((params["demed"] ?? null)) {
+    if ((params["demed"] ?? false)) {
         cargs.push("-demed");
     }
-    if ((params["unif"] ?? null)) {
+    if ((params["unif"] ?? false)) {
         cargs.push("-unif");
     }
     if ((params["detrend"] ?? null) !== null) {
@@ -189,13 +156,13 @@ function v_3d_fwhmx_cargs(
             (params["detprefix"] ?? null)
         );
     }
-    if ((params["geom"] ?? null)) {
+    if ((params["geom"] ?? false)) {
         cargs.push("-geom");
     }
-    if ((params["arith"] ?? null)) {
+    if ((params["arith"] ?? false)) {
         cargs.push("-arith");
     }
-    if ((params["combine"] ?? null)) {
+    if ((params["combine"] ?? false)) {
         cargs.push("-combine");
     }
     if ((params["out"] ?? null) !== null) {
@@ -204,7 +171,7 @@ function v_3d_fwhmx_cargs(
             (params["out"] ?? null)
         );
     }
-    if ((params["compat"] ?? null)) {
+    if ((params["compat"] ?? false)) {
         cargs.push("-compat");
     }
     if ((params["acf"] ?? null) !== null) {
@@ -316,7 +283,6 @@ function v_3d_fwhmx(
 
 export {
       V3dFwhmxOutputs,
-      V3dFwhmxParameters,
       V_3D_FWHMX_METADATA,
       v_3d_fwhmx,
       v_3d_fwhmx_execute,

@@ -12,7 +12,7 @@ const PULSE_METADATA: Metadata = {
 
 
 interface PulseParameters {
-    "@type": "fsl.pulse";
+    "@type"?: "fsl/pulse";
     "input_file": InputPathType;
     "output_base": string;
     "seq"?: string | null | undefined;
@@ -39,44 +39,11 @@ interface PulseParameters {
     "kcoord_flag": boolean;
     "cover"?: number | null | undefined;
 }
+type PulseParametersTagged = Required<Pick<PulseParameters, '@type'>> & PulseParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.pulse": pulse_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.pulse": pulse_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `pulse(...)`.
+ * Output object returned when calling `PulseParameters(...)`.
  *
  * @interface
  */
@@ -149,9 +116,9 @@ function pulse_params(
     verbose_flag: boolean = false,
     kcoord_flag: boolean = false,
     cover: number | null = null,
-): PulseParameters {
+): PulseParametersTagged {
     const params = {
-        "@type": "fsl.pulse" as const,
+        "@type": "fsl/pulse" as const,
         "input_file": input_file,
         "output_base": output_base,
         "verbose_flag": verbose_flag,
@@ -366,10 +333,10 @@ function pulse_cargs(
             (params["readdir"] ?? null)
         );
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["kcoord_flag"] ?? null)) {
+    if ((params["kcoord_flag"] ?? false)) {
         cargs.push("-k");
     }
     if ((params["cover"] ?? null) !== null) {
@@ -504,7 +471,6 @@ function pulse(
 export {
       PULSE_METADATA,
       PulseOutputs,
-      PulseParameters,
       pulse,
       pulse_execute,
       pulse_params,

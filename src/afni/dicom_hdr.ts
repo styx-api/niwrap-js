@@ -12,7 +12,7 @@ const DICOM_HDR_METADATA: Metadata = {
 
 
 interface DicomHdrParameters {
-    "@type": "afni.dicom_hdr";
+    "@type"?: "afni/dicom_hdr";
     "files": Array<InputPathType>;
     "hex": boolean;
     "noname": boolean;
@@ -24,43 +24,11 @@ interface DicomHdrParameters {
     "slice_times_verb": boolean;
     "siemens_csa_data": boolean;
 }
+type DicomHdrParametersTagged = Required<Pick<DicomHdrParameters, '@type'>> & DicomHdrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.dicom_hdr": dicom_hdr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dicom_hdr(...)`.
+ * Output object returned when calling `DicomHdrParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +67,9 @@ function dicom_hdr_params(
     slice_times: boolean = false,
     slice_times_verb: boolean = false,
     siemens_csa_data: boolean = false,
-): DicomHdrParameters {
+): DicomHdrParametersTagged {
     const params = {
-        "@type": "afni.dicom_hdr" as const,
+        "@type": "afni/dicom_hdr" as const,
         "files": files,
         "hex": hex,
         "noname": noname,
@@ -134,16 +102,16 @@ function dicom_hdr_cargs(
     const cargs: string[] = [];
     cargs.push("dicom_hdr");
     cargs.push(...(params["files"] ?? null).map(f => execution.inputFile(f)));
-    if ((params["hex"] ?? null)) {
+    if ((params["hex"] ?? false)) {
         cargs.push("-hex");
     }
-    if ((params["noname"] ?? null)) {
+    if ((params["noname"] ?? false)) {
         cargs.push("-noname");
     }
-    if ((params["sexinfo"] ?? null)) {
+    if ((params["sexinfo"] ?? false)) {
         cargs.push("-sexinfo");
     }
-    if ((params["mulfram"] ?? null)) {
+    if ((params["mulfram"] ?? false)) {
         cargs.push("-mulfram");
     }
     if ((params["v_dump"] ?? null) !== null) {
@@ -152,16 +120,16 @@ function dicom_hdr_cargs(
             String((params["v_dump"] ?? null))
         );
     }
-    if ((params["no_length"] ?? null)) {
+    if ((params["no_length"] ?? false)) {
         cargs.push("-no_length");
     }
-    if ((params["slice_times"] ?? null)) {
+    if ((params["slice_times"] ?? false)) {
         cargs.push("-slice_times");
     }
-    if ((params["slice_times_verb"] ?? null)) {
+    if ((params["slice_times_verb"] ?? false)) {
         cargs.push("-slice_times_verb");
     }
-    if ((params["siemens_csa_data"] ?? null)) {
+    if ((params["siemens_csa_data"] ?? false)) {
         cargs.push("-siemens_csa_data");
     }
     return cargs;
@@ -259,7 +227,6 @@ function dicom_hdr(
 export {
       DICOM_HDR_METADATA,
       DicomHdrOutputs,
-      DicomHdrParameters,
       dicom_hdr,
       dicom_hdr_execute,
       dicom_hdr_params,

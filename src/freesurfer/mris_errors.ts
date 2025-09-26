@@ -12,46 +12,14 @@ const MRIS_ERRORS_METADATA: Metadata = {
 
 
 interface MrisErrorsParameters {
-    "@type": "freesurfer.mris_errors";
+    "@type"?: "freesurfer/mris_errors";
     "input_image_file": InputPathType;
 }
+type MrisErrorsParametersTagged = Required<Pick<MrisErrorsParameters, '@type'>> & MrisErrorsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_errors": mris_errors_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_errors(...)`.
+ * Output object returned when calling `MrisErrorsParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface MrisErrorsOutputs {
  */
 function mris_errors_params(
     input_image_file: InputPathType,
-): MrisErrorsParameters {
+): MrisErrorsParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_errors" as const,
+        "@type": "freesurfer/mris_errors" as const,
         "input_image_file": input_image_file,
     };
     return params;
@@ -173,7 +141,6 @@ function mris_errors(
 export {
       MRIS_ERRORS_METADATA,
       MrisErrorsOutputs,
-      MrisErrorsParameters,
       mris_errors,
       mris_errors_execute,
       mris_errors_params,

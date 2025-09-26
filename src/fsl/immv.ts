@@ -12,47 +12,15 @@ const IMMV_METADATA: Metadata = {
 
 
 interface ImmvParameters {
-    "@type": "fsl.immv";
+    "@type"?: "fsl/immv";
     "source_files": Array<InputPathType>;
     "destination": string;
 }
+type ImmvParametersTagged = Required<Pick<ImmvParameters, '@type'>> & ImmvParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.immv": immv_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `immv(...)`.
+ * Output object returned when calling `ImmvParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface ImmvOutputs {
 function immv_params(
     source_files: Array<InputPathType>,
     destination: string,
-): ImmvParameters {
+): ImmvParametersTagged {
     const params = {
-        "@type": "fsl.immv" as const,
+        "@type": "fsl/immv" as const,
         "source_files": source_files,
         "destination": destination,
     };
@@ -180,7 +148,6 @@ function immv(
 export {
       IMMV_METADATA,
       ImmvOutputs,
-      ImmvParameters,
       immv,
       immv_execute,
       immv_params,

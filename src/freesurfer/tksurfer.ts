@@ -12,49 +12,17 @@ const TKSURFER_METADATA: Metadata = {
 
 
 interface TksurferParameters {
-    "@type": "freesurfer.tksurfer";
+    "@type"?: "freesurfer/tksurfer";
     "subject_id": string;
     "hemisphere": string;
     "surface_name": string;
     "options"?: string | null | undefined;
 }
+type TksurferParametersTagged = Required<Pick<TksurferParameters, '@type'>> & TksurferParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.tksurfer": tksurfer_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tksurfer(...)`.
+ * Output object returned when calling `TksurferParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function tksurfer_params(
     hemisphere: string,
     surface_name: string,
     options: string | null = null,
-): TksurferParameters {
+): TksurferParametersTagged {
     const params = {
-        "@type": "freesurfer.tksurfer" as const,
+        "@type": "freesurfer/tksurfer" as const,
         "subject_id": subject_id,
         "hemisphere": hemisphere,
         "surface_name": surface_name,
@@ -198,7 +166,6 @@ function tksurfer(
 export {
       TKSURFER_METADATA,
       TksurferOutputs,
-      TksurferParameters,
       tksurfer,
       tksurfer_execute,
       tksurfer_params,

@@ -12,7 +12,7 @@ const V_3D_ICC_METADATA: Metadata = {
 
 
 interface V3dIccParameters {
-    "@type": "afni.3dICC";
+    "@type"?: "afni/3dICC";
     "model": string;
     "prefix": string;
     "mask"?: InputPathType | null | undefined;
@@ -28,44 +28,11 @@ interface V3dIccParameters {
     "cio": boolean;
     "rio": boolean;
 }
+type V3dIccParametersTagged = Required<Pick<V3dIccParameters, '@type'>> & V3dIccParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dICC": v_3d_icc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dICC": v_3d_icc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_icc(...)`.
+ * Output object returned when calling `V3dIccParameters(...)`.
  *
  * @interface
  */
@@ -116,9 +83,9 @@ function v_3d_icc_params(
     dbg_args: boolean = false,
     cio: boolean = false,
     rio: boolean = false,
-): V3dIccParameters {
+): V3dIccParametersTagged {
     const params = {
-        "@type": "afni.3dICC" as const,
+        "@type": "afni/3dICC" as const,
         "model": model,
         "prefix": prefix,
         "data_table": data_table,
@@ -225,13 +192,13 @@ function v_3d_icc_cargs(
             (params["tStat"] ?? null)
         );
     }
-    if ((params["dbgArgs"] ?? null)) {
+    if ((params["dbgArgs"] ?? false)) {
         cargs.push("-dbgArgs");
     }
-    if ((params["cio"] ?? null)) {
+    if ((params["cio"] ?? false)) {
         cargs.push("-cio");
     }
-    if ((params["rio"] ?? null)) {
+    if ((params["rio"] ?? false)) {
         cargs.push("-Rio");
     }
     return cargs;
@@ -337,7 +304,6 @@ function v_3d_icc(
 
 export {
       V3dIccOutputs,
-      V3dIccParameters,
       V_3D_ICC_METADATA,
       v_3d_icc,
       v_3d_icc_execute,

@@ -12,7 +12,7 @@ const MRI_JACOBIAN_METADATA: Metadata = {
 
 
 interface MriJacobianParameters {
-    "@type": "freesurfer.mri_jacobian";
+    "@type"?: "freesurfer/mri_jacobian";
     "morph_file": InputPathType;
     "template_vol": InputPathType;
     "output_vol": string;
@@ -28,44 +28,11 @@ interface MriJacobianParameters {
     "debug_voxel"?: Array<number> | null | undefined;
     "remove": boolean;
 }
+type MriJacobianParametersTagged = Required<Pick<MriJacobianParameters, '@type'>> & MriJacobianParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_jacobian": mri_jacobian_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_jacobian": mri_jacobian_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_jacobian(...)`.
+ * Output object returned when calling `MriJacobianParameters(...)`.
  *
  * @interface
  */
@@ -116,9 +83,9 @@ function mri_jacobian_params(
     dt: boolean = false,
     debug_voxel: Array<number> | null = null,
     remove: boolean = false,
-): MriJacobianParameters {
+): MriJacobianParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_jacobian" as const,
+        "@type": "freesurfer/mri_jacobian" as const,
         "morph_file": morph_file,
         "template_vol": template_vol,
         "output_vol": output_vol,
@@ -159,13 +126,13 @@ function mri_jacobian_cargs(
     cargs.push(execution.inputFile((params["morph_file"] ?? null)));
     cargs.push(execution.inputFile((params["template_vol"] ?? null)));
     cargs.push((params["output_vol"] ?? null));
-    if ((params["atlas_coord"] ?? null)) {
+    if ((params["atlas_coord"] ?? false)) {
         cargs.push("-a");
     }
-    if ((params["write_area_vols"] ?? null)) {
+    if ((params["write_area_vols"] ?? false)) {
         cargs.push("-w");
     }
-    if ((params["log_jacobian"] ?? null)) {
+    if ((params["log_jacobian"] ?? false)) {
         cargs.push("-l");
     }
     if ((params["smooth_sigma"] ?? null) !== null) {
@@ -174,19 +141,19 @@ function mri_jacobian_cargs(
             String((params["smooth_sigma"] ?? null))
         );
     }
-    if ((params["zero_mean_log"] ?? null)) {
+    if ((params["zero_mean_log"] ?? false)) {
         cargs.push("-z");
     }
-    if ((params["tm3d"] ?? null)) {
+    if ((params["tm3d"] ?? false)) {
         cargs.push("-tm3d");
     }
-    if ((params["help1"] ?? null)) {
+    if ((params["help1"] ?? false)) {
         cargs.push("-?");
     }
-    if ((params["help2"] ?? null)) {
+    if ((params["help2"] ?? false)) {
         cargs.push("-u");
     }
-    if ((params["dt"] ?? null)) {
+    if ((params["dt"] ?? false)) {
         cargs.push("-dt");
     }
     if ((params["debug_voxel"] ?? null) !== null) {
@@ -195,7 +162,7 @@ function mri_jacobian_cargs(
             ...(params["debug_voxel"] ?? null).map(String)
         );
     }
-    if ((params["remove"] ?? null)) {
+    if ((params["remove"] ?? false)) {
         cargs.push("-remove");
     }
     return cargs;
@@ -302,7 +269,6 @@ function mri_jacobian(
 export {
       MRI_JACOBIAN_METADATA,
       MriJacobianOutputs,
-      MriJacobianParameters,
       mri_jacobian,
       mri_jacobian_execute,
       mri_jacobian_params,

@@ -12,7 +12,7 @@ const MRIS_EXVIVO_SURFACES_METADATA: Metadata = {
 
 
 interface MrisExvivoSurfacesParameters {
-    "@type": "freesurfer.mris_exvivo_surfaces";
+    "@type"?: "freesurfer/mris_exvivo_surfaces";
     "subject_name": string;
     "hemisphere": string;
     "omit_self_intersection": boolean;
@@ -21,44 +21,11 @@ interface MrisExvivoSurfacesParameters {
     "white_only": boolean;
     "formalin"?: number | null | undefined;
 }
+type MrisExvivoSurfacesParametersTagged = Required<Pick<MrisExvivoSurfacesParameters, '@type'>> & MrisExvivoSurfacesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_exvivo_surfaces": mris_exvivo_surfaces_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_exvivo_surfaces": mris_exvivo_surfaces_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_exvivo_surfaces(...)`.
+ * Output object returned when calling `MrisExvivoSurfacesParameters(...)`.
  *
  * @interface
  */
@@ -107,9 +74,9 @@ function mris_exvivo_surfaces_params(
     average_curvature: number | null = null,
     white_only: boolean = false,
     formalin: number | null = null,
-): MrisExvivoSurfacesParameters {
+): MrisExvivoSurfacesParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_exvivo_surfaces" as const,
+        "@type": "freesurfer/mris_exvivo_surfaces" as const,
         "subject_name": subject_name,
         "hemisphere": hemisphere,
         "omit_self_intersection": omit_self_intersection,
@@ -142,10 +109,10 @@ function mris_exvivo_surfaces_cargs(
     cargs.push("mris_exvivo_surfaces");
     cargs.push((params["subject_name"] ?? null));
     cargs.push((params["hemisphere"] ?? null));
-    if ((params["omit_self_intersection"] ?? null)) {
+    if ((params["omit_self_intersection"] ?? false)) {
         cargs.push("-q");
     }
-    if ((params["create_curvature_area"] ?? null)) {
+    if ((params["create_curvature_area"] ?? false)) {
         cargs.push("-c");
     }
     if ((params["average_curvature"] ?? null) !== null) {
@@ -154,7 +121,7 @@ function mris_exvivo_surfaces_cargs(
             String((params["average_curvature"] ?? null))
         );
     }
-    if ((params["white_only"] ?? null)) {
+    if ((params["white_only"] ?? false)) {
         cargs.push("-whiteonly");
     }
     if ((params["formalin"] ?? null) !== null) {
@@ -256,7 +223,6 @@ function mris_exvivo_surfaces(
 export {
       MRIS_EXVIVO_SURFACES_METADATA,
       MrisExvivoSurfacesOutputs,
-      MrisExvivoSurfacesParameters,
       mris_exvivo_surfaces,
       mris_exvivo_surfaces_execute,
       mris_exvivo_surfaces_params,

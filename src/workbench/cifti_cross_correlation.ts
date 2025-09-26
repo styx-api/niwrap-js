@@ -12,7 +12,7 @@ const CIFTI_CROSS_CORRELATION_METADATA: Metadata = {
 
 
 interface CiftiCrossCorrelationParameters {
-    "@type": "workbench.cifti-cross-correlation";
+    "@type"?: "workbench/cifti-cross-correlation";
     "cifti_a": InputPathType;
     "cifti_b": InputPathType;
     "cifti_out": string;
@@ -20,44 +20,11 @@ interface CiftiCrossCorrelationParameters {
     "opt_fisher_z": boolean;
     "opt_mem_limit_limit_gb"?: number | null | undefined;
 }
+type CiftiCrossCorrelationParametersTagged = Required<Pick<CiftiCrossCorrelationParameters, '@type'>> & CiftiCrossCorrelationParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-cross-correlation": cifti_cross_correlation_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-cross-correlation": cifti_cross_correlation_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `cifti_cross_correlation(...)`.
+ * Output object returned when calling `CiftiCrossCorrelationParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function cifti_cross_correlation_params(
     opt_weights_weight_file: string | null = null,
     opt_fisher_z: boolean = false,
     opt_mem_limit_limit_gb: number | null = null,
-): CiftiCrossCorrelationParameters {
+): CiftiCrossCorrelationParametersTagged {
     const params = {
-        "@type": "workbench.cifti-cross-correlation" as const,
+        "@type": "workbench/cifti-cross-correlation" as const,
         "cifti_a": cifti_a,
         "cifti_b": cifti_b,
         "cifti_out": cifti_out,
@@ -134,7 +101,7 @@ function cifti_cross_correlation_cargs(
             (params["opt_weights_weight_file"] ?? null)
         );
     }
-    if ((params["opt_fisher_z"] ?? null)) {
+    if ((params["opt_fisher_z"] ?? false)) {
         cargs.push("-fisher-z");
     }
     if ((params["opt_mem_limit_limit_gb"] ?? null) !== null) {
@@ -243,7 +210,6 @@ function cifti_cross_correlation(
 export {
       CIFTI_CROSS_CORRELATION_METADATA,
       CiftiCrossCorrelationOutputs,
-      CiftiCrossCorrelationParameters,
       cifti_cross_correlation,
       cifti_cross_correlation_execute,
       cifti_cross_correlation_params,

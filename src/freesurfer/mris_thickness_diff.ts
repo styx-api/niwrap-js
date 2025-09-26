@@ -12,7 +12,7 @@ const MRIS_THICKNESS_DIFF_METADATA: Metadata = {
 
 
 interface MrisThicknessDiffParameters {
-    "@type": "freesurfer.mris_thickness_diff";
+    "@type"?: "freesurfer/mris_thickness_diff";
     "src_type"?: string | null | undefined;
     "trg_type"?: string | null | undefined;
     "out_file": string;
@@ -27,44 +27,11 @@ interface MrisThicknessDiffParameters {
     "log_file"?: InputPathType | null | undefined;
     "subject_name"?: string | null | undefined;
 }
+type MrisThicknessDiffParametersTagged = Required<Pick<MrisThicknessDiffParameters, '@type'>> & MrisThicknessDiffParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_thickness_diff": mris_thickness_diff_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_thickness_diff": mris_thickness_diff_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_thickness_diff(...)`.
+ * Output object returned when calling `MrisThicknessDiffParameters(...)`.
  *
  * @interface
  */
@@ -117,9 +84,9 @@ function mris_thickness_diff_params(
     abs: boolean = false,
     log_file: InputPathType | null = null,
     subject_name: string | null = null,
-): MrisThicknessDiffParameters {
+): MrisThicknessDiffParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_thickness_diff" as const,
+        "@type": "freesurfer/mris_thickness_diff" as const,
         "out_file": out_file,
         "register": register,
         "invert": invert,
@@ -198,7 +165,7 @@ function mris_thickness_diff_cargs(
             String((params["nsmooth"] ?? null))
         );
     }
-    if ((params["register"] ?? null)) {
+    if ((params["register"] ?? false)) {
         cargs.push("-register");
     }
     if ((params["xform"] ?? null) !== null) {
@@ -207,7 +174,7 @@ function mris_thickness_diff_cargs(
             execution.inputFile((params["xform"] ?? null))
         );
     }
-    if ((params["invert"] ?? null)) {
+    if ((params["invert"] ?? false)) {
         cargs.push("-invert");
     }
     if ((params["src_volume"] ?? null) !== null) {
@@ -222,7 +189,7 @@ function mris_thickness_diff_cargs(
             execution.inputFile((params["dst_volume"] ?? null))
         );
     }
-    if ((params["abs"] ?? null)) {
+    if ((params["abs"] ?? false)) {
         cargs.push("-abs");
     }
     if ((params["log_file"] ?? null) !== null) {
@@ -340,7 +307,6 @@ function mris_thickness_diff(
 export {
       MRIS_THICKNESS_DIFF_METADATA,
       MrisThicknessDiffOutputs,
-      MrisThicknessDiffParameters,
       mris_thickness_diff,
       mris_thickness_diff_execute,
       mris_thickness_diff_params,

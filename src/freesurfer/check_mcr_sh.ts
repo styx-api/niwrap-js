@@ -12,46 +12,14 @@ const CHECK_MCR_SH_METADATA: Metadata = {
 
 
 interface CheckMcrShParameters {
-    "@type": "freesurfer.checkMCR.sh";
+    "@type"?: "freesurfer/checkMCR.sh";
     "help": boolean;
 }
+type CheckMcrShParametersTagged = Required<Pick<CheckMcrShParameters, '@type'>> & CheckMcrShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.checkMCR.sh": check_mcr_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `check_mcr_sh(...)`.
+ * Output object returned when calling `CheckMcrShParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface CheckMcrShOutputs {
  */
 function check_mcr_sh_params(
     help: boolean = false,
-): CheckMcrShParameters {
+): CheckMcrShParametersTagged {
     const params = {
-        "@type": "freesurfer.checkMCR.sh" as const,
+        "@type": "freesurfer/checkMCR.sh" as const,
         "help": help,
     };
     return params;
@@ -95,7 +63,7 @@ function check_mcr_sh_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("checkMCR.sh");
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -175,7 +143,6 @@ function check_mcr_sh(
 export {
       CHECK_MCR_SH_METADATA,
       CheckMcrShOutputs,
-      CheckMcrShParameters,
       check_mcr_sh,
       check_mcr_sh_execute,
       check_mcr_sh_params,

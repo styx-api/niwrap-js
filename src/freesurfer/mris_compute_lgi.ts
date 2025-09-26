@@ -12,7 +12,7 @@ const MRIS_COMPUTE_LGI_METADATA: Metadata = {
 
 
 interface MrisComputeLgiParameters {
-    "@type": "freesurfer.mris_compute_lgi";
+    "@type"?: "freesurfer/mris_compute_lgi";
     "input_surface": InputPathType;
     "close_sphere_size"?: number | null | undefined;
     "smooth_iters"?: number | null | undefined;
@@ -20,44 +20,11 @@ interface MrisComputeLgiParameters {
     "echo": boolean;
     "dontrun": boolean;
 }
+type MrisComputeLgiParametersTagged = Required<Pick<MrisComputeLgiParameters, '@type'>> & MrisComputeLgiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_compute_lgi": mris_compute_lgi_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_compute_lgi": mris_compute_lgi_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_compute_lgi(...)`.
+ * Output object returned when calling `MrisComputeLgiParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function mris_compute_lgi_params(
     step_size: number | null = null,
     echo: boolean = false,
     dontrun: boolean = false,
-): MrisComputeLgiParameters {
+): MrisComputeLgiParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_compute_lgi" as const,
+        "@type": "freesurfer/mris_compute_lgi" as const,
         "input_surface": input_surface,
         "echo": echo,
         "dontrun": dontrun,
@@ -148,10 +115,10 @@ function mris_compute_lgi_cargs(
             String((params["step_size"] ?? null))
         );
     }
-    if ((params["echo"] ?? null)) {
+    if ((params["echo"] ?? false)) {
         cargs.push("--echo");
     }
-    if ((params["dontrun"] ?? null)) {
+    if ((params["dontrun"] ?? false)) {
         cargs.push("--dontrun");
     }
     return cargs;
@@ -242,7 +209,6 @@ function mris_compute_lgi(
 export {
       MRIS_COMPUTE_LGI_METADATA,
       MrisComputeLgiOutputs,
-      MrisComputeLgiParameters,
       mris_compute_lgi,
       mris_compute_lgi_execute,
       mris_compute_lgi_params,

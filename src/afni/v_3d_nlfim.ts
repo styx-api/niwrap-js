@@ -12,7 +12,7 @@ const V_3D_NLFIM_METADATA: Metadata = {
 
 
 interface V3dNlfimParameters {
-    "@type": "afni.3dNLfim";
+    "@type"?: "afni/3dNLfim";
     "input_file": InputPathType;
     "signal_model": string;
     "noise_model": string;
@@ -51,44 +51,11 @@ interface V3dNlfimParameters {
     "snfit"?: string | null | undefined;
     "jobs"?: number | null | undefined;
 }
+type V3dNlfimParametersTagged = Required<Pick<V3dNlfimParameters, '@type'>> & V3dNlfimParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dNLfim": v_3d_nlfim_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dNLfim": v_3d_nlfim_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_nlfim(...)`.
+ * Output object returned when calling `V3dNlfimParameters(...)`.
  *
  * @interface
  */
@@ -237,9 +204,9 @@ function v_3d_nlfim_params(
     sfit: string | null = null,
     snfit: string | null = null,
     jobs: number | null = null,
-): V3dNlfimParameters {
+): V3dNlfimParametersTagged {
     const params = {
-        "@type": "afni.3dNLfim" as const,
+        "@type": "afni/3dNLfim" as const,
         "input_file": input_file,
         "signal_model": signal_model,
         "noise_model": noise_model,
@@ -406,7 +373,7 @@ function v_3d_nlfim_cargs(
             (params["nconstr"] ?? null)
         );
     }
-    if ((params["nabs"] ?? null)) {
+    if ((params["nabs"] ?? false)) {
         cargs.push("-nabs");
     }
     if ((params["nrand"] ?? null) !== null) {
@@ -439,16 +406,16 @@ function v_3d_nlfim_cargs(
             String((params["progress"] ?? null))
         );
     }
-    if ((params["voxel_count"] ?? null)) {
+    if ((params["voxel_count"] ?? false)) {
         cargs.push("-voxel_count");
     }
-    if ((params["simplex"] ?? null)) {
+    if ((params["simplex"] ?? false)) {
         cargs.push("-SIMPLEX");
     }
-    if ((params["powell"] ?? null)) {
+    if ((params["powell"] ?? false)) {
         cargs.push("-POWELL");
     }
-    if ((params["both"] ?? null)) {
+    if ((params["both"] ?? false)) {
         cargs.push("-BOTH");
     }
     if ((params["freg"] ?? null) !== null) {
@@ -529,7 +496,7 @@ function v_3d_nlfim_cargs(
             (params["brick"] ?? null)
         );
     }
-    if ((params["nofdr"] ?? null)) {
+    if ((params["nofdr"] ?? false)) {
         cargs.push("-noFDR");
     }
     if ((params["sfit"] ?? null) !== null) {
@@ -712,7 +679,6 @@ function v_3d_nlfim(
 
 export {
       V3dNlfimOutputs,
-      V3dNlfimParameters,
       V_3D_NLFIM_METADATA,
       v_3d_nlfim,
       v_3d_nlfim_execute,

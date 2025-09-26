@@ -12,7 +12,7 @@ const LONG_STATS_COMBINE_METADATA: Metadata = {
 
 
 interface LongStatsCombineParameters {
-    "@type": "freesurfer.long_stats_combine";
+    "@type"?: "freesurfer/long_stats_combine";
     "qdec": InputPathType;
     "stats": string;
     "measure": string;
@@ -22,44 +22,11 @@ interface LongStatsCombineParameters {
     "input_stats"?: InputPathType | null | undefined;
     "cross_sectional": boolean;
 }
+type LongStatsCombineParametersTagged = Required<Pick<LongStatsCombineParameters, '@type'>> & LongStatsCombineParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.long_stats_combine": long_stats_combine_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.long_stats_combine": long_stats_combine_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `long_stats_combine(...)`.
+ * Output object returned when calling `LongStatsCombineParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +69,9 @@ function long_stats_combine_params(
     output_stats: string | null = null,
     input_stats: InputPathType | null = null,
     cross_sectional: boolean = false,
-): LongStatsCombineParameters {
+): LongStatsCombineParametersTagged {
     const params = {
-        "@type": "freesurfer.long_stats_combine" as const,
+        "@type": "freesurfer/long_stats_combine" as const,
         "qdec": qdec,
         "stats": stats,
         "measure": measure,
@@ -168,7 +135,7 @@ function long_stats_combine_cargs(
             execution.inputFile((params["input_stats"] ?? null))
         );
     }
-    if ((params["cross_sectional"] ?? null)) {
+    if ((params["cross_sectional"] ?? false)) {
         cargs.push("--cross");
     }
     return cargs;
@@ -264,7 +231,6 @@ function long_stats_combine(
 export {
       LONG_STATS_COMBINE_METADATA,
       LongStatsCombineOutputs,
-      LongStatsCombineParameters,
       long_stats_combine,
       long_stats_combine_execute,
       long_stats_combine_params,

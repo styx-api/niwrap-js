@@ -12,7 +12,7 @@ const SYSTEMNOISE_METADATA: Metadata = {
 
 
 interface SystemnoiseParameters {
-    "@type": "fsl.systemnoise";
+    "@type"?: "fsl/systemnoise";
     "input_signal": InputPathType;
     "output_signal": string;
     "noise_standard_deviation": number;
@@ -20,44 +20,11 @@ interface SystemnoiseParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
+type SystemnoiseParametersTagged = Required<Pick<SystemnoiseParameters, '@type'>> & SystemnoiseParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.systemnoise": systemnoise_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.systemnoise": systemnoise_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `systemnoise(...)`.
+ * Output object returned when calling `SystemnoiseParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function systemnoise_params(
     seed: number | null = null,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): SystemnoiseParameters {
+): SystemnoiseParametersTagged {
     const params = {
-        "@type": "fsl.systemnoise" as const,
+        "@type": "fsl/systemnoise" as const,
         "input_signal": input_signal,
         "output_signal": output_signal,
         "noise_standard_deviation": noise_standard_deviation,
@@ -140,10 +107,10 @@ function systemnoise_cargs(
             String((params["seed"] ?? null))
         );
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("--verbose");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -234,7 +201,6 @@ function systemnoise(
 export {
       SYSTEMNOISE_METADATA,
       SystemnoiseOutputs,
-      SystemnoiseParameters,
       systemnoise,
       systemnoise_execute,
       systemnoise_params,

@@ -12,50 +12,18 @@ const SFIM_METADATA: Metadata = {
 
 
 interface SfimParameters {
-    "@type": "afni.sfim";
+    "@type"?: "afni/sfim";
     "input_images": Array<InputPathType>;
     "sfint_file"?: string | null | undefined;
     "baseline_state"?: string | null | undefined;
     "local_base_option": boolean;
     "output_prefix"?: string | null | undefined;
 }
+type SfimParametersTagged = Required<Pick<SfimParameters, '@type'>> & SfimParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.sfim": sfim_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `sfim(...)`.
+ * Output object returned when calling `SfimParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function sfim_params(
     baseline_state: string | null = null,
     local_base_option: boolean = false,
     output_prefix: string | null = null,
-): SfimParameters {
+): SfimParametersTagged {
     const params = {
-        "@type": "afni.sfim" as const,
+        "@type": "afni/sfim" as const,
         "input_images": input_images,
         "local_base_option": local_base_option,
     };
@@ -130,7 +98,7 @@ function sfim_cargs(
             (params["baseline_state"] ?? null)
         );
     }
-    if ((params["local_base_option"] ?? null)) {
+    if ((params["local_base_option"] ?? false)) {
         cargs.push("-localbase");
     }
     if ((params["output_prefix"] ?? null) !== null) {
@@ -224,7 +192,6 @@ function sfim(
 export {
       SFIM_METADATA,
       SfimOutputs,
-      SfimParameters,
       sfim,
       sfim_execute,
       sfim_params,

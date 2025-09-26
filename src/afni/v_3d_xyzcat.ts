@@ -12,50 +12,17 @@ const V_3D_XYZCAT_METADATA: Metadata = {
 
 
 interface V3dXyzcatParameters {
-    "@type": "afni.3dXYZcat";
+    "@type"?: "afni/3dXYZcat";
     "direction"?: string | null | undefined;
     "prefix"?: string | null | undefined;
     "verbose": boolean;
     "datasets": Array<InputPathType>;
 }
+type V3dXyzcatParametersTagged = Required<Pick<V3dXyzcatParameters, '@type'>> & V3dXyzcatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dXYZcat": v_3d_xyzcat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dXYZcat": v_3d_xyzcat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_xyzcat(...)`.
+ * Output object returned when calling `V3dXyzcatParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +57,9 @@ function v_3d_xyzcat_params(
     direction: string | null = null,
     prefix: string | null = null,
     verbose: boolean = false,
-): V3dXyzcatParameters {
+): V3dXyzcatParametersTagged {
     const params = {
-        "@type": "afni.3dXYZcat" as const,
+        "@type": "afni/3dXYZcat" as const,
         "verbose": verbose,
         "datasets": datasets,
     };
@@ -132,7 +99,7 @@ function v_3d_xyzcat_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
     cargs.push(...(params["datasets"] ?? null).map(f => execution.inputFile(f)));
@@ -220,7 +187,6 @@ function v_3d_xyzcat(
 
 export {
       V3dXyzcatOutputs,
-      V3dXyzcatParameters,
       V_3D_XYZCAT_METADATA,
       v_3d_xyzcat,
       v_3d_xyzcat_execute,

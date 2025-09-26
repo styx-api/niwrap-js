@@ -12,7 +12,7 @@ const BMEDITS2SURF_METADATA: Metadata = {
 
 
 interface Bmedits2surfParameters {
-    "@type": "freesurfer.bmedits2surf";
+    "@type"?: "freesurfer/bmedits2surf";
     "subject": string;
     "self": boolean;
     "overwrite": boolean;
@@ -24,44 +24,11 @@ interface Bmedits2surfParameters {
     "right_hemisphere": boolean;
     "no_surfs": boolean;
 }
+type Bmedits2surfParametersTagged = Required<Pick<Bmedits2surfParameters, '@type'>> & Bmedits2surfParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.bmedits2surf": bmedits2surf_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.bmedits2surf": bmedits2surf_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `bmedits2surf(...)`.
+ * Output object returned when calling `Bmedits2surfParameters(...)`.
  *
  * @interface
  */
@@ -123,9 +90,9 @@ function bmedits2surf_params(
     left_hemisphere: boolean = false,
     right_hemisphere: boolean = false,
     no_surfs: boolean = false,
-): Bmedits2surfParameters {
+): Bmedits2surfParametersTagged {
     const params = {
-        "@type": "freesurfer.bmedits2surf" as const,
+        "@type": "freesurfer/bmedits2surf" as const,
         "subject": subject,
         "self": self,
         "overwrite": overwrite,
@@ -161,10 +128,10 @@ function bmedits2surf_cargs(
         "-s",
         (params["subject"] ?? null)
     );
-    if ((params["self"] ?? null)) {
+    if ((params["self"] ?? false)) {
         cargs.push("--self");
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("--overwrite");
     }
     if ((params["tmp_dir"] ?? null) !== null) {
@@ -173,22 +140,22 @@ function bmedits2surf_cargs(
             (params["tmp_dir"] ?? null)
         );
     }
-    if ((params["cleanup"] ?? null)) {
+    if ((params["cleanup"] ?? false)) {
         cargs.push("--cleanup");
     }
-    if ((params["no_cleanup"] ?? null)) {
+    if ((params["no_cleanup"] ?? false)) {
         cargs.push("--no-cleanup");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["left_hemisphere"] ?? null)) {
+    if ((params["left_hemisphere"] ?? false)) {
         cargs.push("--lh");
     }
-    if ((params["right_hemisphere"] ?? null)) {
+    if ((params["right_hemisphere"] ?? false)) {
         cargs.push("--rh");
     }
-    if ((params["no_surfs"] ?? null)) {
+    if ((params["no_surfs"] ?? false)) {
         cargs.push("--no-surfs");
     }
     return cargs;
@@ -291,7 +258,6 @@ function bmedits2surf(
 export {
       BMEDITS2SURF_METADATA,
       Bmedits2surfOutputs,
-      Bmedits2surfParameters,
       bmedits2surf,
       bmedits2surf_execute,
       bmedits2surf_params,

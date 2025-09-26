@@ -12,7 +12,7 @@ const WMEDITS2SURF_METADATA: Metadata = {
 
 
 interface Wmedits2surfParameters {
-    "@type": "freesurfer.wmedits2surf";
+    "@type"?: "freesurfer/wmedits2surf";
     "subject": string;
     "self": boolean;
     "overwrite": boolean;
@@ -24,44 +24,11 @@ interface Wmedits2surfParameters {
     "rh": boolean;
     "no_surfs": boolean;
 }
+type Wmedits2surfParametersTagged = Required<Pick<Wmedits2surfParameters, '@type'>> & Wmedits2surfParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.wmedits2surf": wmedits2surf_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.wmedits2surf": wmedits2surf_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `wmedits2surf(...)`.
+ * Output object returned when calling `Wmedits2surfParameters(...)`.
  *
  * @interface
  */
@@ -123,9 +90,9 @@ function wmedits2surf_params(
     lh: boolean = false,
     rh: boolean = false,
     no_surfs: boolean = false,
-): Wmedits2surfParameters {
+): Wmedits2surfParametersTagged {
     const params = {
-        "@type": "freesurfer.wmedits2surf" as const,
+        "@type": "freesurfer/wmedits2surf" as const,
         "subject": subject,
         "self": self,
         "overwrite": overwrite,
@@ -161,10 +128,10 @@ function wmedits2surf_cargs(
         "--s",
         (params["subject"] ?? null)
     );
-    if ((params["self"] ?? null)) {
+    if ((params["self"] ?? false)) {
         cargs.push("--self");
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("--overwrite");
     }
     if ((params["tmp_dir"] ?? null) !== null) {
@@ -173,22 +140,22 @@ function wmedits2surf_cargs(
             (params["tmp_dir"] ?? null)
         );
     }
-    if ((params["cleanup"] ?? null)) {
+    if ((params["cleanup"] ?? false)) {
         cargs.push("--cleanup");
     }
-    if ((params["no_cleanup"] ?? null)) {
+    if ((params["no_cleanup"] ?? false)) {
         cargs.push("--no-cleanup");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["lh"] ?? null)) {
+    if ((params["lh"] ?? false)) {
         cargs.push("--lh");
     }
-    if ((params["rh"] ?? null)) {
+    if ((params["rh"] ?? false)) {
         cargs.push("--rh");
     }
-    if ((params["no_surfs"] ?? null)) {
+    if ((params["no_surfs"] ?? false)) {
         cargs.push("--no-surfs");
     }
     return cargs;
@@ -291,7 +258,6 @@ function wmedits2surf(
 export {
       WMEDITS2SURF_METADATA,
       Wmedits2surfOutputs,
-      Wmedits2surfParameters,
       wmedits2surf,
       wmedits2surf_execute,
       wmedits2surf_params,

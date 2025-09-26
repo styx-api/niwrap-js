@@ -12,7 +12,7 @@ const V_3DBUCKET_METADATA: Metadata = {
 
 
 interface V3dbucketParameters {
-    "@type": "afni.3dbucket";
+    "@type"?: "afni/3dbucket";
     "prefix"?: string | null | undefined;
     "output"?: string | null | undefined;
     "session"?: string | null | undefined;
@@ -24,43 +24,11 @@ interface V3dbucketParameters {
     "abuc": boolean;
     "input_files": Array<string>;
 }
+type V3dbucketParametersTagged = Required<Pick<V3dbucketParameters, '@type'>> & V3dbucketParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dbucket": v_3dbucket_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dbucket(...)`.
+ * Output object returned when calling `V3dbucketParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +67,9 @@ function v_3dbucket_params(
     verbose: boolean = false,
     fbuc: boolean = false,
     abuc: boolean = false,
-): V3dbucketParameters {
+): V3dbucketParametersTagged {
     const params = {
-        "@type": "afni.3dbucket" as const,
+        "@type": "afni/3dbucket" as const,
         "dry": dry,
         "verbose": verbose,
         "fbuc": fbuc,
@@ -171,16 +139,16 @@ function v_3dbucket_cargs(
             (params["aglueto"] ?? null)
         );
     }
-    if ((params["dry"] ?? null)) {
+    if ((params["dry"] ?? false)) {
         cargs.push("-dry");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["fbuc"] ?? null)) {
+    if ((params["fbuc"] ?? false)) {
         cargs.push("-fbuc");
     }
-    if ((params["abuc"] ?? null)) {
+    if ((params["abuc"] ?? false)) {
         cargs.push("-abuc");
     }
     cargs.push(...(params["input_files"] ?? null));
@@ -278,7 +246,6 @@ function v_3dbucket(
 
 export {
       V3dbucketOutputs,
-      V3dbucketParameters,
       V_3DBUCKET_METADATA,
       v_3dbucket,
       v_3dbucket_execute,

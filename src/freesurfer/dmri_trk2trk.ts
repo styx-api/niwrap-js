@@ -12,7 +12,7 @@ const DMRI_TRK2TRK_METADATA: Metadata = {
 
 
 interface DmriTrk2trkParameters {
-    "@type": "freesurfer.dmri_trk2trk";
+    "@type"?: "freesurfer/dmri_trk2trk";
     "in_trk": Array<InputPathType>;
     "in_asc"?: Array<InputPathType> | null | undefined;
     "in_dir"?: string | null | undefined;
@@ -41,44 +41,11 @@ interface DmriTrk2trkParameters {
     "debug_flag": boolean;
     "check_opts": boolean;
 }
+type DmriTrk2trkParametersTagged = Required<Pick<DmriTrk2trkParameters, '@type'>> & DmriTrk2trkParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dmri_trk2trk": dmri_trk2trk_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.dmri_trk2trk": dmri_trk2trk_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dmri_trk2trk(...)`.
+ * Output object returned when calling `DmriTrk2trkParameters(...)`.
  *
  * @interface
  */
@@ -163,9 +130,9 @@ function dmri_trk2trk_params(
     smooth_flag: boolean = false,
     debug_flag: boolean = false,
     check_opts: boolean = false,
-): DmriTrk2trkParameters {
+): DmriTrk2trkParametersTagged {
     const params = {
-        "@type": "freesurfer.dmri_trk2trk" as const,
+        "@type": "freesurfer/dmri_trk2trk" as const,
         "in_trk": in_trk,
         "inv_flag": inv_flag,
         "fill_flag": fill_flag,
@@ -314,10 +281,10 @@ function dmri_trk2trk_cargs(
             execution.inputFile((params["regnl_file"] ?? null))
         );
     }
-    if ((params["inv_flag"] ?? null)) {
+    if ((params["inv_flag"] ?? false)) {
         cargs.push("--inv");
     }
-    if ((params["fill_flag"] ?? null)) {
+    if ((params["fill_flag"] ?? false)) {
         cargs.push("--fill");
     }
     if ((params["overlay"] ?? null) !== null) {
@@ -362,10 +329,10 @@ function dmri_trk2trk_cargs(
             String((params["length_max"] ?? null))
         );
     }
-    if ((params["mean_flag"] ?? null)) {
+    if ((params["mean_flag"] ?? false)) {
         cargs.push("--mean");
     }
-    if ((params["nearmean_flag"] ?? null)) {
+    if ((params["nearmean_flag"] ?? false)) {
         cargs.push("--nearmean");
     }
     if ((params["nth_streamline"] ?? null) !== null) {
@@ -380,13 +347,13 @@ function dmri_trk2trk_cargs(
             String((params["every_nth_streamline"] ?? null))
         );
     }
-    if ((params["smooth_flag"] ?? null)) {
+    if ((params["smooth_flag"] ?? false)) {
         cargs.push("--smooth");
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["check_opts"] ?? null)) {
+    if ((params["check_opts"] ?? false)) {
         cargs.push("--checkopts");
     }
     return cargs;
@@ -521,7 +488,6 @@ function dmri_trk2trk(
 export {
       DMRI_TRK2TRK_METADATA,
       DmriTrk2trkOutputs,
-      DmriTrk2trkParameters,
       dmri_trk2trk,
       dmri_trk2trk_execute,
       dmri_trk2trk_params,

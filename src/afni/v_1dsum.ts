@@ -12,7 +12,7 @@ const V_1DSUM_METADATA: Metadata = {
 
 
 interface V1dsumParameters {
-    "@type": "afni.1dsum";
+    "@type"?: "afni/1dsum";
     "input_files": Array<InputPathType>;
     "ignore_rows"?: number | null | undefined;
     "use_rows"?: number | null | undefined;
@@ -20,44 +20,11 @@ interface V1dsumParameters {
     "nocomment_flag": boolean;
     "okempty_flag": boolean;
 }
+type V1dsumParametersTagged = Required<Pick<V1dsumParameters, '@type'>> & V1dsumParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dsum": v_1dsum_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.1dsum": v_1dsum_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1dsum(...)`.
+ * Output object returned when calling `V1dsumParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function v_1dsum_params(
     mean_flag: boolean = false,
     nocomment_flag: boolean = false,
     okempty_flag: boolean = false,
-): V1dsumParameters {
+): V1dsumParametersTagged {
     const params = {
-        "@type": "afni.1dsum" as const,
+        "@type": "afni/1dsum" as const,
         "input_files": input_files,
         "mean_flag": mean_flag,
         "nocomment_flag": nocomment_flag,
@@ -137,13 +104,13 @@ function v_1dsum_cargs(
             String((params["use_rows"] ?? null))
         );
     }
-    if ((params["mean_flag"] ?? null)) {
+    if ((params["mean_flag"] ?? false)) {
         cargs.push("-mean");
     }
-    if ((params["nocomment_flag"] ?? null)) {
+    if ((params["nocomment_flag"] ?? false)) {
         cargs.push("-nocomment");
     }
-    if ((params["okempty_flag"] ?? null)) {
+    if ((params["okempty_flag"] ?? false)) {
         cargs.push("-OKempty");
     }
     return cargs;
@@ -233,7 +200,6 @@ function v_1dsum(
 
 export {
       V1dsumOutputs,
-      V1dsumParameters,
       V_1DSUM_METADATA,
       v_1dsum,
       v_1dsum_execute,

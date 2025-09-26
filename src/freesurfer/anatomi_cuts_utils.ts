@@ -12,46 +12,14 @@ const ANATOMI_CUTS_UTILS_METADATA: Metadata = {
 
 
 interface AnatomiCutsUtilsParameters {
-    "@type": "freesurfer.anatomiCutsUtils";
+    "@type"?: "freesurfer/anatomiCutsUtils";
     "modules"?: Array<string> | null | undefined;
 }
+type AnatomiCutsUtilsParametersTagged = Required<Pick<AnatomiCutsUtilsParameters, '@type'>> & AnatomiCutsUtilsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.anatomiCutsUtils": anatomi_cuts_utils_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `anatomi_cuts_utils(...)`.
+ * Output object returned when calling `AnatomiCutsUtilsParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface AnatomiCutsUtilsOutputs {
  */
 function anatomi_cuts_utils_params(
     modules: Array<string> | null = null,
-): AnatomiCutsUtilsParameters {
+): AnatomiCutsUtilsParametersTagged {
     const params = {
-        "@type": "freesurfer.anatomiCutsUtils" as const,
+        "@type": "freesurfer/anatomiCutsUtils" as const,
     };
     if (modules !== null) {
         params["modules"] = modules;
@@ -177,7 +145,6 @@ function anatomi_cuts_utils(
 export {
       ANATOMI_CUTS_UTILS_METADATA,
       AnatomiCutsUtilsOutputs,
-      AnatomiCutsUtilsParameters,
       anatomi_cuts_utils,
       anatomi_cuts_utils_execute,
       anatomi_cuts_utils_params,

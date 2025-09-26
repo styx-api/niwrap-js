@@ -12,7 +12,7 @@ const PLUGOUT_TTA_METADATA: Metadata = {
 
 
 interface PlugoutTtaParameters {
-    "@type": "afni.plugout_tta";
+    "@type"?: "afni/plugout_tta";
     "host"?: string | null | undefined;
     "port"?: number | null | undefined;
     "verbose": boolean;
@@ -24,43 +24,11 @@ interface PlugoutTtaParameters {
     "num_assigned_ports": boolean;
     "num_assigned_ports_quiet": boolean;
 }
+type PlugoutTtaParametersTagged = Required<Pick<PlugoutTtaParameters, '@type'>> & PlugoutTtaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.plugout_tta": plugout_tta_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `plugout_tta(...)`.
+ * Output object returned when calling `PlugoutTtaParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +67,9 @@ function plugout_tta_params(
     max_port_bloc_quiet: boolean = false,
     num_assigned_ports: boolean = false,
     num_assigned_ports_quiet: boolean = false,
-): PlugoutTtaParameters {
+): PlugoutTtaParametersTagged {
     const params = {
-        "@type": "afni.plugout_tta" as const,
+        "@type": "afni/plugout_tta" as const,
         "verbose": verbose,
         "max_port_bloc": max_port_bloc,
         "max_port_bloc_quiet": max_port_bloc_quiet,
@@ -153,7 +121,7 @@ function plugout_tta_cargs(
             String((params["port"] ?? null))
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
     if ((params["port_offset"] ?? null) !== null) {
@@ -174,16 +142,16 @@ function plugout_tta_cargs(
             String((params["port_offset_bloc"] ?? null))
         );
     }
-    if ((params["max_port_bloc"] ?? null)) {
+    if ((params["max_port_bloc"] ?? false)) {
         cargs.push("-max_port_bloc");
     }
-    if ((params["max_port_bloc_quiet"] ?? null)) {
+    if ((params["max_port_bloc_quiet"] ?? false)) {
         cargs.push("-max_port_bloc_quiet");
     }
-    if ((params["num_assigned_ports"] ?? null)) {
+    if ((params["num_assigned_ports"] ?? false)) {
         cargs.push("-num_assigned_ports");
     }
-    if ((params["num_assigned_ports_quiet"] ?? null)) {
+    if ((params["num_assigned_ports_quiet"] ?? false)) {
         cargs.push("-num_assigned_ports_quiet");
     }
     return cargs;
@@ -281,7 +249,6 @@ function plugout_tta(
 export {
       PLUGOUT_TTA_METADATA,
       PlugoutTtaOutputs,
-      PlugoutTtaParameters,
       plugout_tta,
       plugout_tta_execute,
       plugout_tta_params,

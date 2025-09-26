@@ -12,7 +12,7 @@ const APPLYTOPUP_METADATA: Metadata = {
 
 
 interface ApplytopupParameters {
-    "@type": "fsl.applytopup";
+    "@type"?: "fsl/applytopup";
     "imain": Array<InputPathType>;
     "datain": InputPathType;
     "inindex": Array<string>;
@@ -23,44 +23,11 @@ interface ApplytopupParameters {
     "datatype"?: "char" | "short" | "int" | "float" | "double" | null | undefined;
     "verbose": boolean;
 }
+type ApplytopupParametersTagged = Required<Pick<ApplytopupParameters, '@type'>> & ApplytopupParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.applytopup": applytopup_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.applytopup": applytopup_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `applytopup(...)`.
+ * Output object returned when calling `ApplytopupParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function applytopup_params(
     interp: "trilinear" | "spline" | null = null,
     datatype: "char" | "short" | "int" | "float" | "double" | null = null,
     verbose: boolean = false,
-): ApplytopupParameters {
+): ApplytopupParametersTagged {
     const params = {
-        "@type": "fsl.applytopup" as const,
+        "@type": "fsl/applytopup" as const,
         "imain": imain,
         "datain": datain,
         "inindex": inindex,
@@ -152,7 +119,7 @@ function applytopup_cargs(
     if ((params["datatype"] ?? null) !== null) {
         cargs.push(["--datatype=", (params["datatype"] ?? null)].join(''));
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("--verbose");
     }
     return cargs;
@@ -249,7 +216,6 @@ function applytopup(
 export {
       APPLYTOPUP_METADATA,
       ApplytopupOutputs,
-      ApplytopupParameters,
       applytopup,
       applytopup_execute,
       applytopup_params,

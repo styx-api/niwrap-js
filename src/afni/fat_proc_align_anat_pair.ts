@@ -12,7 +12,7 @@ const FAT_PROC_ALIGN_ANAT_PAIR_METADATA: Metadata = {
 
 
 interface FatProcAlignAnatPairParameters {
-    "@type": "afni.fat_proc_align_anat_pair";
+    "@type"?: "afni/fat_proc_align_anat_pair";
     "input_t1w": InputPathType;
     "input_t2w": InputPathType;
     "output_prefix": string;
@@ -26,44 +26,11 @@ interface FatProcAlignAnatPairParameters {
     "no_cmd_out": boolean;
     "no_clean": boolean;
 }
+type FatProcAlignAnatPairParametersTagged = Required<Pick<FatProcAlignAnatPairParameters, '@type'>> & FatProcAlignAnatPairParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.fat_proc_align_anat_pair": fat_proc_align_anat_pair_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.fat_proc_align_anat_pair": fat_proc_align_anat_pair_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fat_proc_align_anat_pair(...)`.
+ * Output object returned when calling `FatProcAlignAnatPairParameters(...)`.
  *
  * @interface
  */
@@ -118,9 +85,9 @@ function fat_proc_align_anat_pair_params(
     workdir: string | null = null,
     no_cmd_out: boolean = false,
     no_clean: boolean = false,
-): FatProcAlignAnatPairParameters {
+): FatProcAlignAnatPairParametersTagged {
     const params = {
-        "@type": "afni.fat_proc_align_anat_pair" as const,
+        "@type": "afni/fat_proc_align_anat_pair" as const,
         "input_t1w": input_t1w,
         "input_t2w": input_t2w,
         "output_prefix": output_prefix,
@@ -180,7 +147,7 @@ function fat_proc_align_anat_pair_cargs(
             String((params["output_grid"] ?? null))
         );
     }
-    if ((params["out_t2w_grid"] ?? null)) {
+    if ((params["out_t2w_grid"] ?? false)) {
         cargs.push("-out_t2w_grid");
     }
     if ((params["input_t2w_mask"] ?? null) !== null) {
@@ -189,7 +156,7 @@ function fat_proc_align_anat_pair_cargs(
             execution.inputFile((params["input_t2w_mask"] ?? null))
         );
     }
-    if ((params["do_ss_tmp_t1w"] ?? null)) {
+    if ((params["do_ss_tmp_t1w"] ?? false)) {
         cargs.push("-do_ss_tmp_t1w");
     }
     if ((params["warp"] ?? null) !== null) {
@@ -210,10 +177,10 @@ function fat_proc_align_anat_pair_cargs(
             (params["workdir"] ?? null)
         );
     }
-    if ((params["no_cmd_out"] ?? null)) {
+    if ((params["no_cmd_out"] ?? false)) {
         cargs.push("-no_cmd_out");
     }
-    if ((params["no_clean"] ?? null)) {
+    if ((params["no_clean"] ?? false)) {
         cargs.push("-no_clean");
     }
     return cargs;
@@ -318,7 +285,6 @@ function fat_proc_align_anat_pair(
 export {
       FAT_PROC_ALIGN_ANAT_PAIR_METADATA,
       FatProcAlignAnatPairOutputs,
-      FatProcAlignAnatPairParameters,
       fat_proc_align_anat_pair,
       fat_proc_align_anat_pair_execute,
       fat_proc_align_anat_pair_params,

@@ -12,7 +12,7 @@ const MIDTRANS_METADATA: Metadata = {
 
 
 interface MidtransParameters {
-    "@type": "fsl.midtrans";
+    "@type"?: "fsl/midtrans";
     "transforms": Array<InputPathType>;
     "output_matrix"?: string | null | undefined;
     "template_image"?: InputPathType | null | undefined;
@@ -20,43 +20,11 @@ interface MidtransParameters {
     "debug_flag": boolean;
     "verbose_flag": boolean;
 }
+type MidtransParametersTagged = Required<Pick<MidtransParameters, '@type'>> & MidtransParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.midtrans": midtrans_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `midtrans(...)`.
+ * Output object returned when calling `MidtransParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function midtrans_params(
     separate_basename: string | null = null,
     debug_flag: boolean = false,
     verbose_flag: boolean = false,
-): MidtransParameters {
+): MidtransParametersTagged {
     const params = {
-        "@type": "fsl.midtrans" as const,
+        "@type": "fsl/midtrans" as const,
         "transforms": transforms,
         "debug_flag": debug_flag,
         "verbose_flag": verbose_flag,
@@ -140,10 +108,10 @@ function midtrans_cargs(
             (params["separate_basename"] ?? null)
         );
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v, --verbose");
     }
     return cargs;
@@ -233,7 +201,6 @@ function midtrans(
 export {
       MIDTRANS_METADATA,
       MidtransOutputs,
-      MidtransParameters,
       midtrans,
       midtrans_execute,
       midtrans_params,

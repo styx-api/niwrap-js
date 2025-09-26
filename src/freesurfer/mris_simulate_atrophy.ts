@@ -12,7 +12,7 @@ const MRIS_SIMULATE_ATROPHY_METADATA: Metadata = {
 
 
 interface MrisSimulateAtrophyParameters {
-    "@type": "freesurfer.mris_simulate_atrophy";
+    "@type"?: "freesurfer/mris_simulate_atrophy";
     "subject": string;
     "hemi": string;
     "label": string;
@@ -21,44 +21,11 @@ interface MrisSimulateAtrophyParameters {
     "atrophy_percent"?: number | null | undefined;
     "noise_level"?: number | null | undefined;
 }
+type MrisSimulateAtrophyParametersTagged = Required<Pick<MrisSimulateAtrophyParameters, '@type'>> & MrisSimulateAtrophyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_simulate_atrophy": mris_simulate_atrophy_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_simulate_atrophy": mris_simulate_atrophy_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_simulate_atrophy(...)`.
+ * Output object returned when calling `MrisSimulateAtrophyParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function mris_simulate_atrophy_params(
     output_volume: string,
     atrophy_percent: number | null = null,
     noise_level: number | null = null,
-): MrisSimulateAtrophyParameters {
+): MrisSimulateAtrophyParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_simulate_atrophy" as const,
+        "@type": "freesurfer/mris_simulate_atrophy" as const,
         "subject": subject,
         "hemi": hemi,
         "label": label,
@@ -235,7 +202,6 @@ function mris_simulate_atrophy(
 export {
       MRIS_SIMULATE_ATROPHY_METADATA,
       MrisSimulateAtrophyOutputs,
-      MrisSimulateAtrophyParameters,
       mris_simulate_atrophy,
       mris_simulate_atrophy_execute,
       mris_simulate_atrophy_params,

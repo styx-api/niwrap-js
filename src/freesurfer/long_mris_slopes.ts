@@ -12,7 +12,7 @@ const LONG_MRIS_SLOPES_METADATA: Metadata = {
 
 
 interface LongMrisSlopesParameters {
-    "@type": "freesurfer.long_mris_slopes";
+    "@type"?: "freesurfer/long_mris_slopes";
     "qdec": InputPathType;
     "meas": string;
     "hemi": string;
@@ -48,43 +48,11 @@ interface LongMrisSlopesParameters {
     "stack_spc"?: string | null | undefined;
     "stack_resid"?: string | null | undefined;
 }
+type LongMrisSlopesParametersTagged = Required<Pick<LongMrisSlopesParameters, '@type'>> & LongMrisSlopesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.long_mris_slopes": long_mris_slopes_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `long_mris_slopes(...)`.
+ * Output object returned when calling `LongMrisSlopesParameters(...)`.
  *
  * @interface
  */
@@ -171,9 +139,9 @@ function long_mris_slopes_params(
     stack_pc1: string | null = null,
     stack_spc: string | null = null,
     stack_resid: string | null = null,
-): LongMrisSlopesParameters {
+): LongMrisSlopesParametersTagged {
     const params = {
-        "@type": "freesurfer.long_mris_slopes" as const,
+        "@type": "freesurfer/long_mris_slopes" as const,
         "qdec": qdec,
         "meas": meas,
         "hemi": hemi,
@@ -283,25 +251,25 @@ function long_mris_slopes_cargs(
         "--sd",
         (params["sd"] ?? null)
     );
-    if ((params["do_avg"] ?? null)) {
+    if ((params["do_avg"] ?? false)) {
         cargs.push("--do-avg");
     }
-    if ((params["do_rate"] ?? null)) {
+    if ((params["do_rate"] ?? false)) {
         cargs.push("--do-rate");
     }
-    if ((params["do_pc1fit"] ?? null)) {
+    if ((params["do_pc1fit"] ?? false)) {
         cargs.push("--do-pc1fit");
     }
-    if ((params["do_pc1"] ?? null)) {
+    if ((params["do_pc1"] ?? false)) {
         cargs.push("--do-pc1");
     }
-    if ((params["do_spc"] ?? null)) {
+    if ((params["do_spc"] ?? false)) {
         cargs.push("--do-spc");
     }
-    if ((params["do_stack"] ?? null)) {
+    if ((params["do_stack"] ?? false)) {
         cargs.push("--do-stack");
     }
-    if ((params["do_label"] ?? null)) {
+    if ((params["do_label"] ?? false)) {
         cargs.push("--do-label");
     }
     if ((params["qcache"] ?? null) !== null) {
@@ -322,7 +290,7 @@ function long_mris_slopes_cargs(
             (params["fwhm"] ?? null)
         );
     }
-    if ((params["nosmooth"] ?? null)) {
+    if ((params["nosmooth"] ?? false)) {
         cargs.push("--nosmooth");
     }
     if ((params["time"] ?? null) !== null) {
@@ -331,7 +299,7 @@ function long_mris_slopes_cargs(
             (params["time"] ?? null)
         );
     }
-    if ((params["generic_time"] ?? null)) {
+    if ((params["generic_time"] ?? false)) {
         cargs.push("--generic-time");
     }
     if ((params["in_label"] ?? null) !== null) {
@@ -340,7 +308,7 @@ function long_mris_slopes_cargs(
             (params["in_label"] ?? null)
         );
     }
-    if ((params["jac"] ?? null)) {
+    if ((params["jac"] ?? false)) {
         cargs.push("--jac");
     }
     if ((params["name_avg"] ?? null) !== null) {
@@ -576,7 +544,6 @@ function long_mris_slopes(
 export {
       LONG_MRIS_SLOPES_METADATA,
       LongMrisSlopesOutputs,
-      LongMrisSlopesParameters,
       long_mris_slopes,
       long_mris_slopes_execute,
       long_mris_slopes_params,

@@ -12,49 +12,17 @@ const VNO_MATCH_CHECK_METADATA: Metadata = {
 
 
 interface VnoMatchCheckParameters {
-    "@type": "freesurfer.vno_match_check";
+    "@type"?: "freesurfer/vno_match_check";
     "subjid": string;
     "debug": boolean;
     "right_hemi": boolean;
     "left_hemi": boolean;
 }
+type VnoMatchCheckParametersTagged = Required<Pick<VnoMatchCheckParameters, '@type'>> & VnoMatchCheckParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.vno_match_check": vno_match_check_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `vno_match_check(...)`.
+ * Output object returned when calling `VnoMatchCheckParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function vno_match_check_params(
     debug: boolean = false,
     right_hemi: boolean = false,
     left_hemi: boolean = false,
-): VnoMatchCheckParameters {
+): VnoMatchCheckParametersTagged {
     const params = {
-        "@type": "freesurfer.vno_match_check" as const,
+        "@type": "freesurfer/vno_match_check" as const,
         "subjid": subjid,
         "debug": debug,
         "right_hemi": right_hemi,
@@ -108,13 +76,13 @@ function vno_match_check_cargs(
     const cargs: string[] = [];
     cargs.push("vno_match_check");
     cargs.push((params["subjid"] ?? null));
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("debug");
     }
-    if ((params["right_hemi"] ?? null)) {
+    if ((params["right_hemi"] ?? false)) {
         cargs.push("rh");
     }
-    if ((params["left_hemi"] ?? null)) {
+    if ((params["left_hemi"] ?? false)) {
         cargs.push("lh");
     }
     return cargs;
@@ -200,7 +168,6 @@ function vno_match_check(
 export {
       VNO_MATCH_CHECK_METADATA,
       VnoMatchCheckOutputs,
-      VnoMatchCheckParameters,
       vno_match_check,
       vno_match_check_execute,
       vno_match_check_params,

@@ -12,7 +12,7 @@ const DTIFIT_METADATA: Metadata = {
 
 
 interface DtifitParameters {
-    "@type": "fsl.dtifit";
+    "@type"?: "fsl/dtifit";
     "data_file": InputPathType;
     "output_basename": string;
     "mask_file": InputPathType;
@@ -34,44 +34,11 @@ interface DtifitParameters {
     "gradnonlin_file"?: InputPathType | null | undefined;
     "confound_regressors"?: InputPathType | null | undefined;
 }
+type DtifitParametersTagged = Required<Pick<DtifitParameters, '@type'>> & DtifitParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.dtifit": dtifit_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.dtifit": dtifit_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dtifit(...)`.
+ * Output object returned when calling `DtifitParameters(...)`.
  *
  * @interface
  */
@@ -154,9 +121,9 @@ function dtifit_params(
     xmax: number | null = null,
     gradnonlin_file: InputPathType | null = null,
     confound_regressors: InputPathType | null = null,
-): DtifitParameters {
+): DtifitParametersTagged {
     const params = {
-        "@type": "fsl.dtifit" as const,
+        "@type": "fsl/dtifit" as const,
         "data_file": data_file,
         "output_basename": output_basename,
         "mask_file": mask_file,
@@ -232,25 +199,25 @@ function dtifit_cargs(
         "-b",
         execution.inputFile((params["bval_file"] ?? null))
     );
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-V");
     }
-    if ((params["sse_flag"] ?? null)) {
+    if ((params["sse_flag"] ?? false)) {
         cargs.push("--sse");
     }
-    if ((params["wls_flag"] ?? null)) {
+    if ((params["wls_flag"] ?? false)) {
         cargs.push("-w");
     }
-    if ((params["kurt_flag"] ?? null)) {
+    if ((params["kurt_flag"] ?? false)) {
         cargs.push("--kurt");
     }
-    if ((params["kurtdir_flag"] ?? null)) {
+    if ((params["kurtdir_flag"] ?? false)) {
         cargs.push("--kurtdir");
     }
-    if ((params["littlebit_flag"] ?? null)) {
+    if ((params["littlebit_flag"] ?? false)) {
         cargs.push("--littlebit");
     }
-    if ((params["save_tensor_flag"] ?? null)) {
+    if ((params["save_tensor_flag"] ?? false)) {
         cargs.push("--save_tensor");
     }
     if ((params["zmin"] ?? null) !== null) {
@@ -422,7 +389,6 @@ function dtifit(
 export {
       DTIFIT_METADATA,
       DtifitOutputs,
-      DtifitParameters,
       dtifit,
       dtifit_execute,
       dtifit_params,

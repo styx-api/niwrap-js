@@ -12,7 +12,7 @@ const ROI2DATASET_METADATA: Metadata = {
 
 
 interface Roi2datasetParameters {
-    "@type": "afni.ROI2dataset";
+    "@type"?: "afni/ROI2dataset";
     "prefix": string;
     "input_rois": Array<InputPathType>;
     "keep_separate": boolean;
@@ -25,43 +25,11 @@ interface Roi2datasetParameters {
     "pad_to_node"?: number | null | undefined;
     "pad_label"?: number | null | undefined;
 }
+type Roi2datasetParametersTagged = Required<Pick<Roi2datasetParameters, '@type'>> & Roi2datasetParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.ROI2dataset": roi2dataset_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `roi2dataset(...)`.
+ * Output object returned when calling `Roi2datasetParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +70,9 @@ function roi2dataset_params(
     domain_parent_id: string | null = null,
     pad_to_node: number | null = null,
     pad_label: number | null = null,
-): Roi2datasetParameters {
+): Roi2datasetParametersTagged {
     const params = {
-        "@type": "afni.ROI2dataset" as const,
+        "@type": "afni/ROI2dataset" as const,
         "prefix": prefix,
         "input_rois": input_rois,
         "keep_separate": keep_separate,
@@ -154,7 +122,7 @@ function roi2dataset_cargs(
         (params["prefix"] ?? null)
     );
     cargs.push(...(params["input_rois"] ?? null).map(f => execution.inputFile(f)));
-    if ((params["keep_separate"] ?? null)) {
+    if ((params["keep_separate"] ?? false)) {
         cargs.push("-keep_separate");
     }
     if ((params["nodelist"] ?? null) !== null) {
@@ -169,7 +137,7 @@ function roi2dataset_cargs(
             (params["nodelist_nodups"] ?? null)
         );
     }
-    if ((params["nodelist_with_roival"] ?? null)) {
+    if ((params["nodelist_with_roival"] ?? false)) {
         cargs.push("-nodelist_with_ROIval");
     }
     if ((params["label_dset"] ?? null) !== null) {
@@ -299,7 +267,6 @@ function roi2dataset(
 export {
       ROI2DATASET_METADATA,
       Roi2datasetOutputs,
-      Roi2datasetParameters,
       roi2dataset,
       roi2dataset_execute,
       roi2dataset_params,

@@ -12,7 +12,7 @@ const V__MAKE_PLUG_DIFF_METADATA: Metadata = {
 
 
 interface VMakePlugDiffParameters {
-    "@type": "afni.@make_plug_diff";
+    "@type"?: "afni/@make_plug_diff";
     "vtk_dir": string;
     "xm_dir": string;
     "afni_src_dir": string;
@@ -21,43 +21,11 @@ interface VMakePlugDiffParameters {
     "linux": boolean;
     "diff_dir": string;
 }
+type VMakePlugDiffParametersTagged = Required<Pick<VMakePlugDiffParameters, '@type'>> & VMakePlugDiffParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@make_plug_diff": v__make_plug_diff_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__make_plug_diff(...)`.
+ * Output object returned when calling `VMakePlugDiffParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +58,9 @@ function v__make_plug_diff_params(
     diff_dir: string,
     comments: boolean = false,
     linux: boolean = false,
-): VMakePlugDiffParameters {
+): VMakePlugDiffParametersTagged {
     const params = {
-        "@type": "afni.@make_plug_diff" as const,
+        "@type": "afni/@make_plug_diff" as const,
         "vtk_dir": vtk_dir,
         "xm_dir": xm_dir,
         "afni_src_dir": afni_src_dir,
@@ -135,10 +103,10 @@ function v__make_plug_diff_cargs(
         "-abin",
         (params["afni_bin_dir"] ?? null)
     );
-    if ((params["comments"] ?? null)) {
+    if ((params["comments"] ?? false)) {
         cargs.push("-comments");
     }
-    if ((params["linux"] ?? null)) {
+    if ((params["linux"] ?? false)) {
         cargs.push("-linux");
     }
     cargs.push(
@@ -233,7 +201,6 @@ function v__make_plug_diff(
 
 export {
       VMakePlugDiffOutputs,
-      VMakePlugDiffParameters,
       V__MAKE_PLUG_DIFF_METADATA,
       v__make_plug_diff,
       v__make_plug_diff_execute,

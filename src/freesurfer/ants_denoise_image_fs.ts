@@ -12,49 +12,16 @@ const ANTS_DENOISE_IMAGE_FS_METADATA: Metadata = {
 
 
 interface AntsDenoiseImageFsParameters {
-    "@type": "freesurfer.AntsDenoiseImageFs";
+    "@type"?: "freesurfer/AntsDenoiseImageFs";
     "input_image": InputPathType;
     "output_image": string;
     "rician_flag": boolean;
 }
+type AntsDenoiseImageFsParametersTagged = Required<Pick<AntsDenoiseImageFsParameters, '@type'>> & AntsDenoiseImageFsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.AntsDenoiseImageFs": ants_denoise_image_fs_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.AntsDenoiseImageFs": ants_denoise_image_fs_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ants_denoise_image_fs(...)`.
+ * Output object returned when calling `AntsDenoiseImageFsParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function ants_denoise_image_fs_params(
     input_image: InputPathType,
     output_image: string = "output.nii",
     rician_flag: boolean = false,
-): AntsDenoiseImageFsParameters {
+): AntsDenoiseImageFsParametersTagged {
     const params = {
-        "@type": "freesurfer.AntsDenoiseImageFs" as const,
+        "@type": "freesurfer/AntsDenoiseImageFs" as const,
         "input_image": input_image,
         "output_image": output_image,
         "rician_flag": rician_flag,
@@ -114,9 +81,9 @@ function ants_denoise_image_fs_cargs(
     );
     cargs.push(
         "-o",
-        (params["output_image"] ?? null)
+        (params["output_image"] ?? "output.nii")
     );
-    if ((params["rician_flag"] ?? null)) {
+    if ((params["rician_flag"] ?? false)) {
         cargs.push("--rician");
     }
     return cargs;
@@ -137,7 +104,7 @@ function ants_denoise_image_fs_outputs(
 ): AntsDenoiseImageFsOutputs {
     const ret: AntsDenoiseImageFsOutputs = {
         root: execution.outputFile("."),
-        denoised_output: execution.outputFile([(params["output_image"] ?? null)].join('')),
+        denoised_output: execution.outputFile([(params["output_image"] ?? "output.nii")].join('')),
     };
     return ret;
 }
@@ -201,7 +168,6 @@ function ants_denoise_image_fs(
 export {
       ANTS_DENOISE_IMAGE_FS_METADATA,
       AntsDenoiseImageFsOutputs,
-      AntsDenoiseImageFsParameters,
       ants_denoise_image_fs,
       ants_denoise_image_fs_execute,
       ants_denoise_image_fs_params,

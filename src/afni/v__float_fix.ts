@@ -12,46 +12,14 @@ const V__FLOAT_FIX_METADATA: Metadata = {
 
 
 interface VFloatFixParameters {
-    "@type": "afni.@float_fix";
+    "@type"?: "afni/@float_fix";
     "input_files": Array<InputPathType>;
 }
+type VFloatFixParametersTagged = Required<Pick<VFloatFixParameters, '@type'>> & VFloatFixParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@float_fix": v__float_fix_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__float_fix(...)`.
+ * Output object returned when calling `VFloatFixParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface VFloatFixOutputs {
  */
 function v__float_fix_params(
     input_files: Array<InputPathType>,
-): VFloatFixParameters {
+): VFloatFixParametersTagged {
     const params = {
-        "@type": "afni.@float_fix" as const,
+        "@type": "afni/@float_fix" as const,
         "input_files": input_files,
     };
     return params;
@@ -172,7 +140,6 @@ function v__float_fix(
 
 export {
       VFloatFixOutputs,
-      VFloatFixParameters,
       V__FLOAT_FIX_METADATA,
       v__float_fix,
       v__float_fix_execute,

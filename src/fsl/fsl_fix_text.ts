@@ -12,48 +12,15 @@ const FSL_FIX_TEXT_METADATA: Metadata = {
 
 
 interface FslFixTextParameters {
-    "@type": "fsl.fslFixText";
+    "@type"?: "fsl/fslFixText";
     "input_text_file": InputPathType;
     "output_text_file": string;
 }
+type FslFixTextParametersTagged = Required<Pick<FslFixTextParameters, '@type'>> & FslFixTextParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslFixText": fsl_fix_text_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fslFixText": fsl_fix_text_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsl_fix_text(...)`.
+ * Output object returned when calling `FslFixTextParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface FslFixTextOutputs {
 function fsl_fix_text_params(
     input_text_file: InputPathType,
     output_text_file: string,
-): FslFixTextParameters {
+): FslFixTextParametersTagged {
     const params = {
-        "@type": "fsl.fslFixText" as const,
+        "@type": "fsl/fslFixText" as const,
         "input_text_file": input_text_file,
         "output_text_file": output_text_file,
     };
@@ -186,7 +153,6 @@ function fsl_fix_text(
 export {
       FSL_FIX_TEXT_METADATA,
       FslFixTextOutputs,
-      FslFixTextParameters,
       fsl_fix_text,
       fsl_fix_text_execute,
       fsl_fix_text_params,

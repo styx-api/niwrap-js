@@ -12,7 +12,7 @@ const V__SHIFT_VOLUME_METADATA: Metadata = {
 
 
 interface VShiftVolumeParameters {
-    "@type": "afni.@Shift_Volume";
+    "@type"?: "afni/@Shift_Volume";
     "rai_shift_vector"?: Array<number> | null | undefined;
     "mni_anat_to_mni": boolean;
     "mni_to_mni_anat": boolean;
@@ -20,44 +20,11 @@ interface VShiftVolumeParameters {
     "no_cp": boolean;
     "prefix": string;
 }
+type VShiftVolumeParametersTagged = Required<Pick<VShiftVolumeParameters, '@type'>> & VShiftVolumeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@Shift_Volume": v__shift_volume_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@Shift_Volume": v__shift_volume_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__shift_volume(...)`.
+ * Output object returned when calling `VShiftVolumeParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function v__shift_volume_params(
     mni_anat_to_mni: boolean = false,
     mni_to_mni_anat: boolean = false,
     no_cp: boolean = false,
-): VShiftVolumeParameters {
+): VShiftVolumeParametersTagged {
     const params = {
-        "@type": "afni.@Shift_Volume" as const,
+        "@type": "afni/@Shift_Volume" as const,
         "mni_anat_to_mni": mni_anat_to_mni,
         "mni_to_mni_anat": mni_to_mni_anat,
         "dset": dset,
@@ -128,17 +95,17 @@ function v__shift_volume_cargs(
             ...(params["rai_shift_vector"] ?? null).map(String)
         );
     }
-    if ((params["mni_anat_to_mni"] ?? null)) {
+    if ((params["mni_anat_to_mni"] ?? false)) {
         cargs.push("-MNI_Anat_to_MNI");
     }
-    if ((params["mni_to_mni_anat"] ?? null)) {
+    if ((params["mni_to_mni_anat"] ?? false)) {
         cargs.push("-MNI_to_MNI_Anat");
     }
     cargs.push(
         "-dset",
         execution.inputFile((params["dset"] ?? null))
     );
-    if ((params["no_cp"] ?? null)) {
+    if ((params["no_cp"] ?? false)) {
         cargs.push("-no_cp");
     }
     cargs.push(
@@ -232,7 +199,6 @@ function v__shift_volume(
 
 export {
       VShiftVolumeOutputs,
-      VShiftVolumeParameters,
       V__SHIFT_VOLUME_METADATA,
       v__shift_volume,
       v__shift_volume_execute,

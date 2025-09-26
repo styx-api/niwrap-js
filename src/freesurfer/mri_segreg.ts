@@ -12,48 +12,15 @@ const MRI_SEGREG_METADATA: Metadata = {
 
 
 interface MriSegregParameters {
-    "@type": "freesurfer.mri_segreg";
+    "@type"?: "freesurfer/mri_segreg";
     "input_file": InputPathType;
     "output_file": string;
 }
+type MriSegregParametersTagged = Required<Pick<MriSegregParameters, '@type'>> & MriSegregParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_segreg": mri_segreg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_segreg": mri_segreg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_segreg(...)`.
+ * Output object returned when calling `MriSegregParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface MriSegregOutputs {
 function mri_segreg_params(
     input_file: InputPathType,
     output_file: string = "output.mgz",
-): MriSegregParameters {
+): MriSegregParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_segreg" as const,
+        "@type": "freesurfer/mri_segreg" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -105,7 +72,7 @@ function mri_segreg_cargs(
     const cargs: string[] = [];
     cargs.push("mri_segreg");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
-    cargs.push((params["output_file"] ?? null));
+    cargs.push((params["output_file"] ?? "output.mgz"));
     return cargs;
 }
 
@@ -124,7 +91,7 @@ function mri_segreg_outputs(
 ): MriSegregOutputs {
     const ret: MriSegregOutputs = {
         root: execution.outputFile("."),
-        outfile: execution.outputFile([(params["output_file"] ?? null)].join('')),
+        outfile: execution.outputFile([(params["output_file"] ?? "output.mgz")].join('')),
     };
     return ret;
 }
@@ -186,7 +153,6 @@ function mri_segreg(
 export {
       MRI_SEGREG_METADATA,
       MriSegregOutputs,
-      MriSegregParameters,
       mri_segreg,
       mri_segreg_execute,
       mri_segreg_params,

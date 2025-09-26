@@ -12,26 +12,29 @@ const FIXEL2PEAKS_METADATA: Metadata = {
 
 
 interface Fixel2peaksConfigParameters {
-    "@type": "mrtrix.fixel2peaks.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Fixel2peaksConfigParametersTagged = Required<Pick<Fixel2peaksConfigParameters, '@type'>> & Fixel2peaksConfigParameters;
 
 
 interface Fixel2peaksVariousStringParameters {
-    "@type": "mrtrix.fixel2peaks.VariousString";
+    "@type"?: "VariousString";
     "obj": string;
 }
+type Fixel2peaksVariousStringParametersTagged = Required<Pick<Fixel2peaksVariousStringParameters, '@type'>> & Fixel2peaksVariousStringParameters;
 
 
 interface Fixel2peaksVariousFileParameters {
-    "@type": "mrtrix.fixel2peaks.VariousFile";
+    "@type"?: "VariousFile";
     "obj": InputPathType;
 }
+type Fixel2peaksVariousFileParametersTagged = Required<Pick<Fixel2peaksVariousFileParameters, '@type'>> & Fixel2peaksVariousFileParameters;
 
 
 interface Fixel2peaksParameters {
-    "@type": "mrtrix.fixel2peaks";
+    "@type"?: "mrtrix/fixel2peaks";
     "number"?: number | null | undefined;
     "nan": boolean;
     "info": boolean;
@@ -42,9 +45,10 @@ interface Fixel2peaksParameters {
     "config"?: Array<Fixel2peaksConfigParameters> | null | undefined;
     "help": boolean;
     "version": boolean;
-    "in": Fixel2peaksVariousStringParameters | Fixel2peaksVariousFileParameters;
+    "in": Fixel2peaksVariousStringParametersTagged | Fixel2peaksVariousFileParametersTagged;
     "out": string;
 }
+type Fixel2peaksParametersTagged = Required<Pick<Fixel2peaksParameters, '@type'>> & Fixel2peaksParameters;
 
 
 /**
@@ -54,14 +58,12 @@ interface Fixel2peaksParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function fixel2peaks_in_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "mrtrix.fixel2peaks": fixel2peaks_cargs,
-        "mrtrix.fixel2peaks.config": fixel2peaks_config_cargs,
-        "mrtrix.fixel2peaks.VariousString": fixel2peaks_various_string_cargs,
-        "mrtrix.fixel2peaks.VariousFile": fixel2peaks_various_file_cargs,
+        "VariousString": fixel2peaks_various_string_cargs,
+        "VariousFile": fixel2peaks_various_file_cargs,
     };
     return cargsFuncs[t];
 }
@@ -74,11 +76,10 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function fixel2peaks_in_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "mrtrix.fixel2peaks": fixel2peaks_outputs,
     };
     return outputsFuncs[t];
 }
@@ -95,9 +96,9 @@ function dynOutputs(
 function fixel2peaks_config_params(
     key: string,
     value: string,
-): Fixel2peaksConfigParameters {
+): Fixel2peaksConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.fixel2peaks.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -134,9 +135,9 @@ function fixel2peaks_config_cargs(
  */
 function fixel2peaks_various_string_params(
     obj: string,
-): Fixel2peaksVariousStringParameters {
+): Fixel2peaksVariousStringParametersTagged {
     const params = {
-        "@type": "mrtrix.fixel2peaks.VariousString" as const,
+        "@type": "VariousString" as const,
         "obj": obj,
     };
     return params;
@@ -170,9 +171,9 @@ function fixel2peaks_various_string_cargs(
  */
 function fixel2peaks_various_file_params(
     obj: InputPathType,
-): Fixel2peaksVariousFileParameters {
+): Fixel2peaksVariousFileParametersTagged {
     const params = {
-        "@type": "mrtrix.fixel2peaks.VariousFile" as const,
+        "@type": "VariousFile" as const,
         "obj": obj,
     };
     return params;
@@ -198,7 +199,7 @@ function fixel2peaks_various_file_cargs(
 
 
 /**
- * Output object returned when calling `fixel2peaks(...)`.
+ * Output object returned when calling `Fixel2peaksParameters(...)`.
  *
  * @interface
  */
@@ -233,7 +234,7 @@ interface Fixel2peaksOutputs {
  * @returns Parameter dictionary
  */
 function fixel2peaks_params(
-    in_: Fixel2peaksVariousStringParameters | Fixel2peaksVariousFileParameters,
+    in_: Fixel2peaksVariousStringParametersTagged | Fixel2peaksVariousFileParametersTagged,
     out: string,
     number_: number | null = null,
     nan: boolean = false,
@@ -245,9 +246,9 @@ function fixel2peaks_params(
     config: Array<Fixel2peaksConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Fixel2peaksParameters {
+): Fixel2peaksParametersTagged {
     const params = {
-        "@type": "mrtrix.fixel2peaks" as const,
+        "@type": "mrtrix/fixel2peaks" as const,
         "nan": nan,
         "info": info,
         "quiet": quiet,
@@ -291,19 +292,19 @@ function fixel2peaks_cargs(
             String((params["number"] ?? null))
         );
     }
-    if ((params["nan"] ?? null)) {
+    if ((params["nan"] ?? false)) {
         cargs.push("-nan");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -313,15 +314,15 @@ function fixel2peaks_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => fixel2peaks_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
-    cargs.push(...dynCargs((params["in"] ?? null)["@type"])((params["in"] ?? null), execution));
+    cargs.push(...fixel2peaks_in_cargs_dyn_fn((params["in"] ?? null)["@type"])((params["in"] ?? null), execution));
     cargs.push((params["out"] ?? null));
     return cargs;
 }
@@ -413,7 +414,7 @@ function fixel2peaks_execute(
  * @returns NamedTuple of outputs (described in `Fixel2peaksOutputs`).
  */
 function fixel2peaks(
-    in_: Fixel2peaksVariousStringParameters | Fixel2peaksVariousFileParameters,
+    in_: Fixel2peaksVariousStringParametersTagged | Fixel2peaksVariousFileParametersTagged,
     out: string,
     number_: number | null = null,
     nan: boolean = false,
@@ -434,11 +435,7 @@ function fixel2peaks(
 
 export {
       FIXEL2PEAKS_METADATA,
-      Fixel2peaksConfigParameters,
       Fixel2peaksOutputs,
-      Fixel2peaksParameters,
-      Fixel2peaksVariousFileParameters,
-      Fixel2peaksVariousStringParameters,
       fixel2peaks,
       fixel2peaks_config_params,
       fixel2peaks_execute,

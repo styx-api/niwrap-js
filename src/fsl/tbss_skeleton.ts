@@ -12,7 +12,7 @@ const TBSS_SKELETON_METADATA: Metadata = {
 
 
 interface TbssSkeletonParameters {
-    "@type": "fsl.tbss_skeleton";
+    "@type"?: "fsl/tbss_skeleton";
     "input_image": InputPathType;
     "output_image"?: string | null | undefined;
     "skeleton_params"?: Array<string> | null | undefined;
@@ -21,44 +21,11 @@ interface TbssSkeletonParameters {
     "debug_flag": boolean;
     "debug2_flag"?: InputPathType | null | undefined;
 }
+type TbssSkeletonParametersTagged = Required<Pick<TbssSkeletonParameters, '@type'>> & TbssSkeletonParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.tbss_skeleton": tbss_skeleton_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.tbss_skeleton": tbss_skeleton_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tbss_skeleton(...)`.
+ * Output object returned when calling `TbssSkeletonParameters(...)`.
  *
  * @interface
  */
@@ -111,9 +78,9 @@ function tbss_skeleton_params(
     alt_skeleton: InputPathType | null = null,
     debug_flag: boolean = false,
     debug2_flag: InputPathType | null = null,
-): TbssSkeletonParameters {
+): TbssSkeletonParametersTagged {
     const params = {
-        "@type": "fsl.tbss_skeleton" as const,
+        "@type": "fsl/tbss_skeleton" as const,
         "input_image": input_image,
         "debug_flag": debug_flag,
     };
@@ -178,7 +145,7 @@ function tbss_skeleton_cargs(
             execution.inputFile((params["alt_skeleton"] ?? null))
         );
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("-d");
     }
     if ((params["debug2_flag"] ?? null) !== null) {
@@ -281,7 +248,6 @@ function tbss_skeleton(
 export {
       TBSS_SKELETON_METADATA,
       TbssSkeletonOutputs,
-      TbssSkeletonParameters,
       tbss_skeleton,
       tbss_skeleton_execute,
       tbss_skeleton_params,

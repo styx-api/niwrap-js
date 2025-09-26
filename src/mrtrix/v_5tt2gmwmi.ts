@@ -12,14 +12,15 @@ const V_5TT2GMWMI_METADATA: Metadata = {
 
 
 interface V5tt2gmwmiConfigParameters {
-    "@type": "mrtrix.5tt2gmwmi.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type V5tt2gmwmiConfigParametersTagged = Required<Pick<V5tt2gmwmiConfigParameters, '@type'>> & V5tt2gmwmiConfigParameters;
 
 
 interface V5tt2gmwmiParameters {
-    "@type": "mrtrix.5tt2gmwmi";
+    "@type"?: "mrtrix/5tt2gmwmi";
     "mask_in"?: InputPathType | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -32,41 +33,7 @@ interface V5tt2gmwmiParameters {
     "5tt_in": InputPathType;
     "mask_out": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.5tt2gmwmi": v_5tt2gmwmi_cargs,
-        "mrtrix.5tt2gmwmi.config": v_5tt2gmwmi_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.5tt2gmwmi": v_5tt2gmwmi_outputs,
-    };
-    return outputsFuncs[t];
-}
+type V5tt2gmwmiParametersTagged = Required<Pick<V5tt2gmwmiParameters, '@type'>> & V5tt2gmwmiParameters;
 
 
 /**
@@ -80,9 +47,9 @@ function dynOutputs(
 function v_5tt2gmwmi_config_params(
     key: string,
     value: string,
-): V5tt2gmwmiConfigParameters {
+): V5tt2gmwmiConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.5tt2gmwmi.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -111,7 +78,7 @@ function v_5tt2gmwmi_config_cargs(
 
 
 /**
- * Output object returned when calling `v_5tt2gmwmi(...)`.
+ * Output object returned when calling `V5tt2gmwmiParameters(...)`.
  *
  * @interface
  */
@@ -156,9 +123,9 @@ function v_5tt2gmwmi_params(
     config: Array<V5tt2gmwmiConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): V5tt2gmwmiParameters {
+): V5tt2gmwmiParametersTagged {
     const params = {
-        "@type": "mrtrix.5tt2gmwmi" as const,
+        "@type": "mrtrix/5tt2gmwmi" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -201,16 +168,16 @@ function v_5tt2gmwmi_cargs(
             execution.inputFile((params["mask_in"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -220,12 +187,12 @@ function v_5tt2gmwmi_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => v_5tt2gmwmi_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["5tt_in"] ?? null)));
@@ -338,9 +305,7 @@ function v_5tt2gmwmi(
 
 
 export {
-      V5tt2gmwmiConfigParameters,
       V5tt2gmwmiOutputs,
-      V5tt2gmwmiParameters,
       V_5TT2GMWMI_METADATA,
       v_5tt2gmwmi,
       v_5tt2gmwmi_config_params,

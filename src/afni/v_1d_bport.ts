@@ -12,7 +12,7 @@ const V_1D_BPORT_METADATA: Metadata = {
 
 
 interface V1dBportParameters {
-    "@type": "afni.1dBport";
+    "@type"?: "afni/1dBport";
     "band": Array<number>;
     "invert": boolean;
     "nozero": boolean;
@@ -24,44 +24,11 @@ interface V1dBportParameters {
     "tr"?: number | null | undefined;
     "concat"?: InputPathType | null | undefined;
 }
+type V1dBportParametersTagged = Required<Pick<V1dBportParameters, '@type'>> & V1dBportParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dBport": v_1d_bport_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.1dBport": v_1d_bport_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1d_bport(...)`.
+ * Output object returned when calling `V1dBportParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function v_1d_bport_params(
     nodata: Array<number> | null = null,
     tr: number | null = null,
     concat: InputPathType | null = null,
-): V1dBportParameters {
+): V1dBportParametersTagged {
     const params = {
-        "@type": "afni.1dBport" as const,
+        "@type": "afni/1dBport" as const,
         "band": band,
         "invert": invert,
         "nozero": nozero,
@@ -150,16 +117,16 @@ function v_1d_bport_cargs(
         "-band",
         ...(params["band"] ?? null).map(String)
     );
-    if ((params["invert"] ?? null)) {
+    if ((params["invert"] ?? false)) {
         cargs.push("-invert");
     }
-    if ((params["nozero"] ?? null)) {
+    if ((params["nozero"] ?? false)) {
         cargs.push("-nozero");
     }
-    if ((params["noconst"] ?? null)) {
+    if ((params["noconst"] ?? false)) {
         cargs.push("-noconst");
     }
-    if ((params["quad"] ?? null)) {
+    if ((params["quad"] ?? false)) {
         cargs.push("-quad");
     }
     if ((params["input_dataset"] ?? null) !== null) {
@@ -287,7 +254,6 @@ function v_1d_bport(
 
 export {
       V1dBportOutputs,
-      V1dBportParameters,
       V_1D_BPORT_METADATA,
       v_1d_bport,
       v_1d_bport_execute,

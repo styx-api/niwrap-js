@@ -12,7 +12,7 @@ const V_3D_LOCALSTAT_METADATA: Metadata = {
 
 
 interface V3dLocalstatParameters {
-    "@type": "afni.3dLocalstat";
+    "@type"?: "afni/3dLocalstat";
     "dataset": InputPathType;
     "nbhd": string;
     "stat"?: Array<string> | null | undefined;
@@ -34,44 +34,11 @@ interface V3dLocalstatParameters {
     "maskvalue"?: number | null | undefined;
     "maskvalue2"?: number | null | undefined;
 }
+type V3dLocalstatParametersTagged = Required<Pick<V3dLocalstatParameters, '@type'>> & V3dLocalstatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dLocalstat": v_3d_localstat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dLocalstat": v_3d_localstat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_localstat(...)`.
+ * Output object returned when calling `V3dLocalstatParameters(...)`.
  *
  * @interface
  */
@@ -134,9 +101,9 @@ function v_3d_localstat_params(
     unfillvalue: number | null = null,
     maskvalue: number | null = null,
     maskvalue2: number | null = null,
-): V3dLocalstatParameters {
+): V3dLocalstatParametersTagged {
     const params = {
-        "@type": "afni.3dLocalstat" as const,
+        "@type": "afni/3dLocalstat" as const,
         "dataset": dataset,
         "nbhd": nbhd,
         "automask": automask,
@@ -219,10 +186,10 @@ function v_3d_localstat_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
-    if ((params["use_nonmask"] ?? null)) {
+    if ((params["use_nonmask"] ?? false)) {
         cargs.push("-use_nonmask");
     }
     if ((params["prefix"] ?? null) !== null) {
@@ -267,13 +234,13 @@ function v_3d_localstat_cargs(
             (params["grid_rmode"] ?? null)
         );
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["proceed_small_N"] ?? null)) {
+    if ((params["proceed_small_N"] ?? false)) {
         cargs.push("-proceed_small_N");
     }
     if ((params["fillvalue"] ?? null) !== null) {
@@ -415,7 +382,6 @@ function v_3d_localstat(
 
 export {
       V3dLocalstatOutputs,
-      V3dLocalstatParameters,
       V_3D_LOCALSTAT_METADATA,
       v_3d_localstat,
       v_3d_localstat_execute,

@@ -12,14 +12,15 @@ const SHBASIS_METADATA: Metadata = {
 
 
 interface ShbasisConfigParameters {
-    "@type": "mrtrix.shbasis.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type ShbasisConfigParametersTagged = Required<Pick<ShbasisConfigParameters, '@type'>> & ShbasisConfigParameters;
 
 
 interface ShbasisParameters {
-    "@type": "mrtrix.shbasis";
+    "@type"?: "mrtrix/shbasis";
     "convert"?: string | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -31,40 +32,7 @@ interface ShbasisParameters {
     "version": boolean;
     "SH": Array<InputPathType>;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.shbasis": shbasis_cargs,
-        "mrtrix.shbasis.config": shbasis_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type ShbasisParametersTagged = Required<Pick<ShbasisParameters, '@type'>> & ShbasisParameters;
 
 
 /**
@@ -78,9 +46,9 @@ function dynOutputs(
 function shbasis_config_params(
     key: string,
     value: string,
-): ShbasisConfigParameters {
+): ShbasisConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.shbasis.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -109,7 +77,7 @@ function shbasis_config_cargs(
 
 
 /**
- * Output object returned when calling `shbasis(...)`.
+ * Output object returned when calling `ShbasisParameters(...)`.
  *
  * @interface
  */
@@ -148,9 +116,9 @@ function shbasis_params(
     config: Array<ShbasisConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): ShbasisParameters {
+): ShbasisParametersTagged {
     const params = {
-        "@type": "mrtrix.shbasis" as const,
+        "@type": "mrtrix/shbasis" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -192,16 +160,16 @@ function shbasis_cargs(
             (params["convert"] ?? null)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -211,12 +179,12 @@ function shbasis_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => shbasis_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(...(params["SH"] ?? null).map(f => execution.inputFile(f)));
@@ -340,9 +308,7 @@ function shbasis(
 
 export {
       SHBASIS_METADATA,
-      ShbasisConfigParameters,
       ShbasisOutputs,
-      ShbasisParameters,
       shbasis,
       shbasis_config_params,
       shbasis_execute,

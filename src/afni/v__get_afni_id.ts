@@ -12,47 +12,14 @@ const V__GET_AFNI_ID_METADATA: Metadata = {
 
 
 interface VGetAfniIdParameters {
-    "@type": "afni.@GetAfniID";
+    "@type"?: "afni/@GetAfniID";
     "dset": InputPathType;
 }
+type VGetAfniIdParametersTagged = Required<Pick<VGetAfniIdParameters, '@type'>> & VGetAfniIdParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@GetAfniID": v__get_afni_id_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@GetAfniID": v__get_afni_id_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__get_afni_id(...)`.
+ * Output object returned when calling `VGetAfniIdParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface VGetAfniIdOutputs {
  */
 function v__get_afni_id_params(
     dset: InputPathType,
-): VGetAfniIdParameters {
+): VGetAfniIdParametersTagged {
     const params = {
-        "@type": "afni.@GetAfniID" as const,
+        "@type": "afni/@GetAfniID" as const,
         "dset": dset,
     };
     return params;
@@ -178,7 +145,6 @@ function v__get_afni_id(
 
 export {
       VGetAfniIdOutputs,
-      VGetAfniIdParameters,
       V__GET_AFNI_ID_METADATA,
       v__get_afni_id,
       v__get_afni_id_execute,

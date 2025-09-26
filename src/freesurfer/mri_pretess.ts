@@ -12,7 +12,7 @@ const MRI_PRETESS_METADATA: Metadata = {
 
 
 interface MriPretessParameters {
-    "@type": "freesurfer.mri_pretess";
+    "@type"?: "freesurfer/mri_pretess";
     "filledvol": InputPathType;
     "labelstring": string;
     "normvol": InputPathType;
@@ -23,44 +23,11 @@ interface MriPretessParameters {
     "keep": boolean;
     "test": boolean;
 }
+type MriPretessParametersTagged = Required<Pick<MriPretessParameters, '@type'>> & MriPretessParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_pretess": mri_pretess_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_pretess": mri_pretess_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_pretess(...)`.
+ * Output object returned when calling `MriPretessParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function mri_pretess_params(
     write: boolean = false,
     keep: boolean = false,
     test: boolean = false,
-): MriPretessParameters {
+): MriPretessParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_pretess" as const,
+        "@type": "freesurfer/mri_pretess" as const,
         "filledvol": filledvol,
         "labelstring": labelstring,
         "normvol": normvol,
@@ -144,16 +111,16 @@ function mri_pretess_cargs(
             ...(params["debug_voxel"] ?? null).map(String)
         );
     }
-    if ((params["nocorners"] ?? null)) {
+    if ((params["nocorners"] ?? false)) {
         cargs.push("-nocorners");
     }
-    if ((params["write"] ?? null)) {
+    if ((params["write"] ?? false)) {
         cargs.push("-w");
     }
-    if ((params["keep"] ?? null)) {
+    if ((params["keep"] ?? false)) {
         cargs.push("-keep");
     }
-    if ((params["test"] ?? null)) {
+    if ((params["test"] ?? false)) {
         cargs.push("-test");
     }
     return cargs;
@@ -250,7 +217,6 @@ function mri_pretess(
 export {
       MRI_PRETESS_METADATA,
       MriPretessOutputs,
-      MriPretessParameters,
       mri_pretess,
       mri_pretess_execute,
       mri_pretess_params,

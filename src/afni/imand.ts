@@ -12,49 +12,16 @@ const IMAND_METADATA: Metadata = {
 
 
 interface ImandParameters {
-    "@type": "afni.imand";
+    "@type"?: "afni/imand";
     "threshold"?: number | null | undefined;
     "input_images": Array<InputPathType>;
     "output_image": string;
 }
+type ImandParametersTagged = Required<Pick<ImandParameters, '@type'>> & ImandParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.imand": imand_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.imand": imand_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `imand(...)`.
+ * Output object returned when calling `ImandParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function imand_params(
     input_images: Array<InputPathType>,
     output_image: string,
     threshold: number | null = null,
-): ImandParameters {
+): ImandParametersTagged {
     const params = {
-        "@type": "afni.imand" as const,
+        "@type": "afni/imand" as const,
         "input_images": input_images,
         "output_image": output_image,
     };
@@ -200,7 +167,6 @@ function imand(
 export {
       IMAND_METADATA,
       ImandOutputs,
-      ImandParameters,
       imand,
       imand_execute,
       imand_params,

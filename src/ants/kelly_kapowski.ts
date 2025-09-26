@@ -12,7 +12,7 @@ const KELLY_KAPOWSKI_METADATA: Metadata = {
 
 
 interface KellyKapowskiParameters {
-    "@type": "ants.KellyKapowski";
+    "@type"?: "ants/KellyKapowski";
     "image_dimensionality"?: 2 | 3 | null | undefined;
     "segmentation_image"?: InputPathType | null | undefined;
     "gray_matter_probability_image"?: InputPathType | null | undefined;
@@ -32,44 +32,11 @@ interface KellyKapowskiParameters {
     "output": string;
     "verbose"?: 0 | 1 | null | undefined;
 }
+type KellyKapowskiParametersTagged = Required<Pick<KellyKapowskiParameters, '@type'>> & KellyKapowskiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.KellyKapowski": kelly_kapowski_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.KellyKapowski": kelly_kapowski_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `kelly_kapowski(...)`.
+ * Output object returned when calling `KellyKapowskiParameters(...)`.
  *
  * @interface
  */
@@ -128,9 +95,9 @@ function kelly_kapowski_params(
     number_of_integration_points: number | null = null,
     maximum_number_of_invert_displacement_field_iterations: number | null = null,
     verbose: 0 | 1 | null = null,
-): KellyKapowskiParameters {
+): KellyKapowskiParametersTagged {
     const params = {
-        "@type": "ants.KellyKapowski" as const,
+        "@type": "ants/KellyKapowski" as const,
         "output": output,
     };
     if (image_dimensionality !== null) {
@@ -420,7 +387,6 @@ function kelly_kapowski(
 export {
       KELLY_KAPOWSKI_METADATA,
       KellyKapowskiOutputs,
-      KellyKapowskiParameters,
       kelly_kapowski,
       kelly_kapowski_execute,
       kelly_kapowski_params,

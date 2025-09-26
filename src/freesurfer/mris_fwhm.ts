@@ -12,7 +12,7 @@ const MRIS_FWHM_METADATA: Metadata = {
 
 
 interface MrisFwhmParameters {
-    "@type": "freesurfer.mris_fwhm";
+    "@type"?: "freesurfer/mris_fwhm";
     "input_file": InputPathType;
     "subject": string;
     "hemi": string;
@@ -45,43 +45,11 @@ interface MrisFwhmParameters {
     "checkopts_flag": boolean;
     "version_flag": boolean;
 }
+type MrisFwhmParametersTagged = Required<Pick<MrisFwhmParameters, '@type'>> & MrisFwhmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_fwhm": mris_fwhm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_fwhm(...)`.
+ * Output object returned when calling `MrisFwhmParameters(...)`.
  *
  * @interface
  */
@@ -162,9 +130,9 @@ function mris_fwhm_params(
     debug_flag: boolean = false,
     checkopts_flag: boolean = false,
     version_flag: boolean = false,
-): MrisFwhmParameters {
+): MrisFwhmParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_fwhm" as const,
+        "@type": "freesurfer/mris_fwhm" as const,
         "input_file": input_file,
         "subject": subject,
         "hemi": hemi,
@@ -271,7 +239,7 @@ function mris_fwhm_cargs(
             execution.inputFile((params["label_file"] ?? null))
         );
     }
-    if ((params["cortex_flag"] ?? null)) {
+    if ((params["cortex_flag"] ?? false)) {
         cargs.push("--cortex");
     }
     if ((params["mask_file"] ?? null) !== null) {
@@ -292,13 +260,13 @@ function mris_fwhm_cargs(
             String((params["detrend_order"] ?? null))
         );
     }
-    if ((params["smooth_only_flag"] ?? null)) {
+    if ((params["smooth_only_flag"] ?? false)) {
         cargs.push("--smooth-only");
     }
-    if ((params["no_detrend_flag"] ?? null)) {
+    if ((params["no_detrend_flag"] ?? false)) {
         cargs.push("--no-detrend");
     }
-    if ((params["sqr_flag"] ?? null)) {
+    if ((params["sqr_flag"] ?? false)) {
         cargs.push("--sqr");
     }
     if ((params["sum_file"] ?? null) !== null) {
@@ -331,10 +299,10 @@ function mris_fwhm_cargs(
             (params["fwhmmap"] ?? null)
         );
     }
-    if ((params["prune_flag"] ?? null)) {
+    if ((params["prune_flag"] ?? false)) {
         cargs.push("--prune");
     }
-    if ((params["no_prune_flag"] ?? null)) {
+    if ((params["no_prune_flag"] ?? false)) {
         cargs.push("--no-prune");
     }
     if ((params["out_mask"] ?? null) !== null) {
@@ -343,7 +311,7 @@ function mris_fwhm_cargs(
             (params["out_mask"] ?? null)
         );
     }
-    if ((params["varnorm_flag"] ?? null)) {
+    if ((params["varnorm_flag"] ?? false)) {
         cargs.push("--varnorm");
     }
     if ((params["fwhm"] ?? null) !== null) {
@@ -368,7 +336,7 @@ function mris_fwhm_cargs(
             (params["sd"] ?? null)
         );
     }
-    if ((params["synth_flag"] ?? null)) {
+    if ((params["synth_flag"] ?? false)) {
         cargs.push("--synth");
     }
     if ((params["synth_frames"] ?? null) !== null) {
@@ -383,13 +351,13 @@ function mris_fwhm_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["checkopts_flag"] ?? null)) {
+    if ((params["checkopts_flag"] ?? false)) {
         cargs.push("--checkopts");
     }
-    if ((params["version_flag"] ?? null)) {
+    if ((params["version_flag"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -529,7 +497,6 @@ function mris_fwhm(
 export {
       MRIS_FWHM_METADATA,
       MrisFwhmOutputs,
-      MrisFwhmParameters,
       mris_fwhm,
       mris_fwhm_execute,
       mris_fwhm_params,

@@ -12,7 +12,7 @@ const V_3D_MVM_METADATA: Metadata = {
 
 
 interface V3dMvmParameters {
-    "@type": "afni.3dMVM";
+    "@type"?: "afni/3dMVM";
     "dbgArgs"?: string | null | undefined;
     "prefix": string;
     "jobs"?: number | null | undefined;
@@ -29,44 +29,11 @@ interface V3dMvmParameters {
     "glfCode"?: string | null | undefined;
     "dataTable": string;
 }
+type V3dMvmParametersTagged = Required<Pick<V3dMvmParameters, '@type'>> & V3dMvmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dMVM": v_3d_mvm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dMVM": v_3d_mvm_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_mvm(...)`.
+ * Output object returned when calling `V3dMvmParameters(...)`.
  *
  * @interface
  */
@@ -123,9 +90,9 @@ function v_3d_mvm_params(
     num_glf: number | null = null,
     glf_label: string | null = null,
     glf_code: string | null = null,
-): V3dMvmParameters {
+): V3dMvmParametersTagged {
     const params = {
-        "@type": "afni.3dMVM" as const,
+        "@type": "afni/3dMVM" as const,
         "prefix": prefix,
         "bsVars": bs_vars,
         "dataTable": data_table,
@@ -371,7 +338,6 @@ function v_3d_mvm(
 
 export {
       V3dMvmOutputs,
-      V3dMvmParameters,
       V_3D_MVM_METADATA,
       v_3d_mvm,
       v_3d_mvm_execute,

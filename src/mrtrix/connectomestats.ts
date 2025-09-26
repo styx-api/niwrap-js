@@ -12,20 +12,22 @@ const CONNECTOMESTATS_METADATA: Metadata = {
 
 
 interface ConnectomestatsColumnParameters {
-    "@type": "mrtrix.connectomestats.column";
+    "@type"?: "column";
     "path": InputPathType;
 }
+type ConnectomestatsColumnParametersTagged = Required<Pick<ConnectomestatsColumnParameters, '@type'>> & ConnectomestatsColumnParameters;
 
 
 interface ConnectomestatsConfigParameters {
-    "@type": "mrtrix.connectomestats.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type ConnectomestatsConfigParametersTagged = Required<Pick<ConnectomestatsConfigParameters, '@type'>> & ConnectomestatsConfigParameters;
 
 
 interface ConnectomestatsParameters {
-    "@type": "mrtrix.connectomestats";
+    "@type"?: "mrtrix/connectomestats";
     "notest": boolean;
     "errors"?: string | null | undefined;
     "exchange_within"?: InputPathType | null | undefined;
@@ -59,41 +61,7 @@ interface ConnectomestatsParameters {
     "contrast": InputPathType;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.connectomestats": connectomestats_cargs,
-        "mrtrix.connectomestats.column": connectomestats_column_cargs,
-        "mrtrix.connectomestats.config": connectomestats_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type ConnectomestatsParametersTagged = Required<Pick<ConnectomestatsParameters, '@type'>> & ConnectomestatsParameters;
 
 
 /**
@@ -105,9 +73,9 @@ function dynOutputs(
  */
 function connectomestats_column_params(
     path: InputPathType,
-): ConnectomestatsColumnParameters {
+): ConnectomestatsColumnParametersTagged {
     const params = {
-        "@type": "mrtrix.connectomestats.column" as const,
+        "@type": "column" as const,
         "path": path,
     };
     return params;
@@ -144,9 +112,9 @@ function connectomestats_column_cargs(
 function connectomestats_config_params(
     key: string,
     value: string,
-): ConnectomestatsConfigParameters {
+): ConnectomestatsConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.connectomestats.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -175,7 +143,7 @@ function connectomestats_config_cargs(
 
 
 /**
- * Output object returned when calling `connectomestats(...)`.
+ * Output object returned when calling `ConnectomestatsParameters(...)`.
  *
  * @interface
  */
@@ -258,9 +226,9 @@ function connectomestats_params(
     config: Array<ConnectomestatsConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): ConnectomestatsParameters {
+): ConnectomestatsParametersTagged {
     const params = {
-        "@type": "mrtrix.connectomestats" as const,
+        "@type": "mrtrix/connectomestats" as const,
         "notest": notest,
         "strong": strong,
         "nonstationarity": nonstationarity,
@@ -346,7 +314,7 @@ function connectomestats_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("connectomestats");
-    if ((params["notest"] ?? null)) {
+    if ((params["notest"] ?? false)) {
         cargs.push("-notest");
     }
     if ((params["errors"] ?? null) !== null) {
@@ -367,7 +335,7 @@ function connectomestats_cargs(
             execution.inputFile((params["exchange_whole"] ?? null))
         );
     }
-    if ((params["strong"] ?? null)) {
+    if ((params["strong"] ?? false)) {
         cargs.push("-strong");
     }
     if ((params["nshuffles"] ?? null) !== null) {
@@ -382,7 +350,7 @@ function connectomestats_cargs(
             execution.inputFile((params["permutations"] ?? null))
         );
     }
-    if ((params["nonstationarity"] ?? null)) {
+    if ((params["nonstationarity"] ?? false)) {
         cargs.push("-nonstationarity");
     }
     if ((params["skew_nonstationarity"] ?? null) !== null) {
@@ -433,11 +401,11 @@ function connectomestats_cargs(
             execution.inputFile((params["ftests"] ?? null))
         );
     }
-    if ((params["fonly"] ?? null)) {
+    if ((params["fonly"] ?? false)) {
         cargs.push("-fonly");
     }
     if ((params["column"] ?? null) !== null) {
-        cargs.push(...(params["column"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["column"] ?? null).map(s => connectomestats_column_cargs(s, execution)).flat());
     }
     if ((params["threshold"] ?? null) !== null) {
         cargs.push(
@@ -445,16 +413,16 @@ function connectomestats_cargs(
             String((params["threshold"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -464,12 +432,12 @@ function connectomestats_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => connectomestats_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -657,10 +625,7 @@ function connectomestats(
 
 export {
       CONNECTOMESTATS_METADATA,
-      ConnectomestatsColumnParameters,
-      ConnectomestatsConfigParameters,
       ConnectomestatsOutputs,
-      ConnectomestatsParameters,
       connectomestats,
       connectomestats_column_params,
       connectomestats_config_params,

@@ -12,48 +12,16 @@ const V_3D_AFNITO_RAW_METADATA: Metadata = {
 
 
 interface V3dAfnitoRawParameters {
-    "@type": "afni.3dAFNItoRaw";
+    "@type"?: "afni/3dAFNItoRaw";
     "output_file"?: string | null | undefined;
     "force_float": boolean;
     "dataset": string;
 }
+type V3dAfnitoRawParametersTagged = Required<Pick<V3dAfnitoRawParameters, '@type'>> & V3dAfnitoRawParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dAFNItoRaw": v_3d_afnito_raw_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_afnito_raw(...)`.
+ * Output object returned when calling `V3dAfnitoRawParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function v_3d_afnito_raw_params(
     dataset: string,
     output_file: string | null = null,
     force_float: boolean = false,
-): V3dAfnitoRawParameters {
+): V3dAfnitoRawParametersTagged {
     const params = {
-        "@type": "afni.3dAFNItoRaw" as const,
+        "@type": "afni/3dAFNItoRaw" as const,
         "force_float": force_float,
         "dataset": dataset,
     };
@@ -111,7 +79,7 @@ function v_3d_afnito_raw_cargs(
             (params["output_file"] ?? null)
         );
     }
-    if ((params["force_float"] ?? null)) {
+    if ((params["force_float"] ?? false)) {
         cargs.push("-datum float");
     }
     cargs.push((params["dataset"] ?? null));
@@ -195,7 +163,6 @@ function v_3d_afnito_raw(
 
 export {
       V3dAfnitoRawOutputs,
-      V3dAfnitoRawParameters,
       V_3D_AFNITO_RAW_METADATA,
       v_3d_afnito_raw,
       v_3d_afnito_raw_execute,

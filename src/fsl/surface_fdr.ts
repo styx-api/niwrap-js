@@ -12,47 +12,14 @@ const SURFACE_FDR_METADATA: Metadata = {
 
 
 interface SurfaceFdrParameters {
-    "@type": "fsl.surface_fdr";
+    "@type"?: "fsl/surface_fdr";
     "input_vtk": InputPathType;
 }
+type SurfaceFdrParametersTagged = Required<Pick<SurfaceFdrParameters, '@type'>> & SurfaceFdrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.surface_fdr": surface_fdr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.surface_fdr": surface_fdr_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_fdr(...)`.
+ * Output object returned when calling `SurfaceFdrParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +48,9 @@ interface SurfaceFdrOutputs {
  */
 function surface_fdr_params(
     input_vtk: InputPathType,
-): SurfaceFdrParameters {
+): SurfaceFdrParametersTagged {
     const params = {
-        "@type": "fsl.surface_fdr" as const,
+        "@type": "fsl/surface_fdr" as const,
         "input_vtk": input_vtk,
     };
     return params;
@@ -184,7 +151,6 @@ function surface_fdr(
 export {
       SURFACE_FDR_METADATA,
       SurfaceFdrOutputs,
-      SurfaceFdrParameters,
       surface_fdr,
       surface_fdr_execute,
       surface_fdr_params,

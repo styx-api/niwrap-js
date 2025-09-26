@@ -12,42 +12,47 @@ const N4_BIAS_FIELD_CORRECTION_METADATA: Metadata = {
 
 
 interface N4BiasFieldCorrectionConvergenceParameters {
-    "@type": "ants.N4BiasFieldCorrection.convergence";
+    "@type"?: "convergence";
     "convergence": Array<number>;
     "convergence_threshold"?: number | null | undefined;
 }
+type N4BiasFieldCorrectionConvergenceParametersTagged = Required<Pick<N4BiasFieldCorrectionConvergenceParameters, '@type'>> & N4BiasFieldCorrectionConvergenceParameters;
 
 
 interface N4BiasFieldCorrectionBsplineFittingParameters {
-    "@type": "ants.N4BiasFieldCorrection.bspline_fitting";
+    "@type"?: "bspline_fitting";
     "spline_distance": Array<number>;
     "spline_order"?: number | null | undefined;
 }
+type N4BiasFieldCorrectionBsplineFittingParametersTagged = Required<Pick<N4BiasFieldCorrectionBsplineFittingParameters, '@type'>> & N4BiasFieldCorrectionBsplineFittingParameters;
 
 
 interface N4BiasFieldCorrectionHistogramSharpeningParameters {
-    "@type": "ants.N4BiasFieldCorrection.histogram_sharpening";
+    "@type"?: "histogram_sharpening";
     "fwhm"?: number | null | undefined;
     "wiener_noise"?: number | null | undefined;
     "number_of_histogram_bins"?: number | null | undefined;
 }
+type N4BiasFieldCorrectionHistogramSharpeningParametersTagged = Required<Pick<N4BiasFieldCorrectionHistogramSharpeningParameters, '@type'>> & N4BiasFieldCorrectionHistogramSharpeningParameters;
 
 
 interface N4BiasFieldCorrectionCorrectedOutputParameters {
-    "@type": "ants.N4BiasFieldCorrection.correctedOutput";
+    "@type"?: "correctedOutput";
     "correctedOutputFileName": string;
 }
+type N4BiasFieldCorrectionCorrectedOutputParametersTagged = Required<Pick<N4BiasFieldCorrectionCorrectedOutputParameters, '@type'>> & N4BiasFieldCorrectionCorrectedOutputParameters;
 
 
 interface N4BiasFieldCorrectionCorrectedOutputNoiseParameters {
-    "@type": "ants.N4BiasFieldCorrection.correctedOutputNoise";
+    "@type"?: "correctedOutputNoise";
     "correctedOutputFileName": string;
     "biasFile"?: string | null | undefined;
 }
+type N4BiasFieldCorrectionCorrectedOutputNoiseParametersTagged = Required<Pick<N4BiasFieldCorrectionCorrectedOutputNoiseParameters, '@type'>> & N4BiasFieldCorrectionCorrectedOutputNoiseParameters;
 
 
 interface N4BiasFieldCorrectionParameters {
-    "@type": "ants.N4BiasFieldCorrection";
+    "@type"?: "ants/N4BiasFieldCorrection";
     "image_dimensionality"?: 2 | 3 | 4 | null | undefined;
     "shrink_factor"?: number | null | undefined;
     "mask_image"?: InputPathType | null | undefined;
@@ -58,8 +63,9 @@ interface N4BiasFieldCorrectionParameters {
     "histogram_sharpening"?: N4BiasFieldCorrectionHistogramSharpeningParameters | null | undefined;
     "verbose"?: 0 | 1 | null | undefined;
     "input_image": InputPathType;
-    "output": N4BiasFieldCorrectionCorrectedOutputParameters | N4BiasFieldCorrectionCorrectedOutputNoiseParameters;
+    "output": N4BiasFieldCorrectionCorrectedOutputParametersTagged | N4BiasFieldCorrectionCorrectedOutputNoiseParametersTagged;
 }
+type N4BiasFieldCorrectionParametersTagged = Required<Pick<N4BiasFieldCorrectionParameters, '@type'>> & N4BiasFieldCorrectionParameters;
 
 
 /**
@@ -69,16 +75,12 @@ interface N4BiasFieldCorrectionParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function n4_bias_field_correction_output_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "ants.N4BiasFieldCorrection": n4_bias_field_correction_cargs,
-        "ants.N4BiasFieldCorrection.convergence": n4_bias_field_correction_convergence_cargs,
-        "ants.N4BiasFieldCorrection.bspline_fitting": n4_bias_field_correction_bspline_fitting_cargs,
-        "ants.N4BiasFieldCorrection.histogram_sharpening": n4_bias_field_correction_histogram_sharpening_cargs,
-        "ants.N4BiasFieldCorrection.correctedOutput": n4_bias_field_correction_corrected_output_cargs,
-        "ants.N4BiasFieldCorrection.correctedOutputNoise": n4_bias_field_correction_corrected_output_noise_cargs,
+        "correctedOutput": n4_bias_field_correction_corrected_output_cargs,
+        "correctedOutputNoise": n4_bias_field_correction_corrected_output_noise_cargs,
     };
     return cargsFuncs[t];
 }
@@ -91,13 +93,12 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function n4_bias_field_correction_output_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "ants.N4BiasFieldCorrection": n4_bias_field_correction_outputs,
-        "ants.N4BiasFieldCorrection.correctedOutput": n4_bias_field_correction_corrected_output_outputs,
-        "ants.N4BiasFieldCorrection.correctedOutputNoise": n4_bias_field_correction_corrected_output_noise_outputs,
+        "correctedOutput": n4_bias_field_correction_corrected_output_outputs,
+        "correctedOutputNoise": n4_bias_field_correction_corrected_output_noise_outputs,
     };
     return outputsFuncs[t];
 }
@@ -112,9 +113,9 @@ function dynOutputs(
 function n4_bias_field_correction_convergence_params(
     convergence: Array<number>,
     convergence_threshold: number | null = null,
-): N4BiasFieldCorrectionConvergenceParameters {
+): N4BiasFieldCorrectionConvergenceParametersTagged {
     const params = {
-        "@type": "ants.N4BiasFieldCorrection.convergence" as const,
+        "@type": "convergence" as const,
         "convergence": convergence,
     };
     if (convergence_threshold !== null) {
@@ -153,9 +154,9 @@ function n4_bias_field_correction_convergence_cargs(
 function n4_bias_field_correction_bspline_fitting_params(
     spline_distance: Array<number>,
     spline_order: number | null = null,
-): N4BiasFieldCorrectionBsplineFittingParameters {
+): N4BiasFieldCorrectionBsplineFittingParametersTagged {
     const params = {
-        "@type": "ants.N4BiasFieldCorrection.bspline_fitting" as const,
+        "@type": "bspline_fitting" as const,
         "spline_distance": spline_distance,
     };
     if (spline_order !== null) {
@@ -195,9 +196,9 @@ function n4_bias_field_correction_histogram_sharpening_params(
     fwhm: number | null = null,
     wiener_noise: number | null = null,
     number_of_histogram_bins: number | null = null,
-): N4BiasFieldCorrectionHistogramSharpeningParameters {
+): N4BiasFieldCorrectionHistogramSharpeningParametersTagged {
     const params = {
-        "@type": "ants.N4BiasFieldCorrection.histogram_sharpening" as const,
+        "@type": "histogram_sharpening" as const,
     };
     if (fwhm !== null) {
         params["fwhm"] = fwhm;
@@ -258,9 +259,9 @@ interface N4BiasFieldCorrectionCorrectedOutputOutputs {
  */
 function n4_bias_field_correction_corrected_output_params(
     corrected_output_file_name: string,
-): N4BiasFieldCorrectionCorrectedOutputParameters {
+): N4BiasFieldCorrectionCorrectedOutputParametersTagged {
     const params = {
-        "@type": "ants.N4BiasFieldCorrection.correctedOutput" as const,
+        "@type": "correctedOutput" as const,
         "correctedOutputFileName": corrected_output_file_name,
     };
     return params;
@@ -337,9 +338,9 @@ interface N4BiasFieldCorrectionCorrectedOutputNoiseOutputs {
 function n4_bias_field_correction_corrected_output_noise_params(
     corrected_output_file_name: string,
     bias_file: string | null = null,
-): N4BiasFieldCorrectionCorrectedOutputNoiseParameters {
+): N4BiasFieldCorrectionCorrectedOutputNoiseParametersTagged {
     const params = {
-        "@type": "ants.N4BiasFieldCorrection.correctedOutputNoise" as const,
+        "@type": "correctedOutputNoise" as const,
         "correctedOutputFileName": corrected_output_file_name,
     };
     if (bias_file !== null) {
@@ -391,7 +392,7 @@ function n4_bias_field_correction_corrected_output_noise_outputs(
 
 
 /**
- * Output object returned when calling `n4_bias_field_correction(...)`.
+ * Output object returned when calling `N4BiasFieldCorrectionParameters(...)`.
  *
  * @interface
  */
@@ -426,7 +427,7 @@ interface N4BiasFieldCorrectionOutputs {
  */
 function n4_bias_field_correction_params(
     input_image: InputPathType,
-    output: N4BiasFieldCorrectionCorrectedOutputParameters | N4BiasFieldCorrectionCorrectedOutputNoiseParameters,
+    output: N4BiasFieldCorrectionCorrectedOutputParametersTagged | N4BiasFieldCorrectionCorrectedOutputNoiseParametersTagged,
     image_dimensionality: 2 | 3 | 4 | null = null,
     shrink_factor: number | null = null,
     mask_image: InputPathType | null = null,
@@ -436,9 +437,9 @@ function n4_bias_field_correction_params(
     bspline_fitting: N4BiasFieldCorrectionBsplineFittingParameters | null = null,
     histogram_sharpening: N4BiasFieldCorrectionHistogramSharpeningParameters | null = null,
     verbose: 0 | 1 | null = null,
-): N4BiasFieldCorrectionParameters {
+): N4BiasFieldCorrectionParametersTagged {
     const params = {
-        "@type": "ants.N4BiasFieldCorrection" as const,
+        "@type": "ants/N4BiasFieldCorrection" as const,
         "input_image": input_image,
         "output": output,
     };
@@ -520,19 +521,19 @@ function n4_bias_field_correction_cargs(
     if ((params["convergence"] ?? null) !== null) {
         cargs.push(
             "--convergence",
-            ...dynCargs((params["convergence"] ?? null)["@type"])((params["convergence"] ?? null), execution)
+            ...n4_bias_field_correction_convergence_cargs((params["convergence"] ?? null), execution)
         );
     }
     if ((params["bspline_fitting"] ?? null) !== null) {
         cargs.push(
             "--bspline-fitting",
-            ...dynCargs((params["bspline_fitting"] ?? null)["@type"])((params["bspline_fitting"] ?? null), execution)
+            ...n4_bias_field_correction_bspline_fitting_cargs((params["bspline_fitting"] ?? null), execution)
         );
     }
     if ((params["histogram_sharpening"] ?? null) !== null) {
         cargs.push(
             "--histogram-sharpening",
-            ...dynCargs((params["histogram_sharpening"] ?? null)["@type"])((params["histogram_sharpening"] ?? null), execution)
+            ...n4_bias_field_correction_histogram_sharpening_cargs((params["histogram_sharpening"] ?? null), execution)
         );
     }
     if ((params["verbose"] ?? null) !== null) {
@@ -547,7 +548,7 @@ function n4_bias_field_correction_cargs(
     );
     cargs.push(
         "--output",
-        ...dynCargs((params["output"] ?? null)["@type"])((params["output"] ?? null), execution)
+        ...n4_bias_field_correction_output_cargs_dyn_fn((params["output"] ?? null)["@type"])((params["output"] ?? null), execution)
     );
     return cargs;
 }
@@ -567,7 +568,7 @@ function n4_bias_field_correction_outputs(
 ): N4BiasFieldCorrectionOutputs {
     const ret: N4BiasFieldCorrectionOutputs = {
         root: execution.outputFile("."),
-        output: dynOutputs((params["output"] ?? null)["@type"])?.((params["output"] ?? null), execution),
+        output: n4_bias_field_correction_output_outputs_dyn_fn((params["output"] ?? null)["@type"])?.((params["output"] ?? null), execution),
     };
     return ret;
 }
@@ -627,7 +628,7 @@ function n4_bias_field_correction_execute(
  */
 function n4_bias_field_correction(
     input_image: InputPathType,
-    output: N4BiasFieldCorrectionCorrectedOutputParameters | N4BiasFieldCorrectionCorrectedOutputNoiseParameters,
+    output: N4BiasFieldCorrectionCorrectedOutputParametersTagged | N4BiasFieldCorrectionCorrectedOutputNoiseParametersTagged,
     image_dimensionality: 2 | 3 | 4 | null = null,
     shrink_factor: number | null = null,
     mask_image: InputPathType | null = null,
@@ -645,15 +646,9 @@ function n4_bias_field_correction(
 
 
 export {
-      N4BiasFieldCorrectionBsplineFittingParameters,
-      N4BiasFieldCorrectionConvergenceParameters,
       N4BiasFieldCorrectionCorrectedOutputNoiseOutputs,
-      N4BiasFieldCorrectionCorrectedOutputNoiseParameters,
       N4BiasFieldCorrectionCorrectedOutputOutputs,
-      N4BiasFieldCorrectionCorrectedOutputParameters,
-      N4BiasFieldCorrectionHistogramSharpeningParameters,
       N4BiasFieldCorrectionOutputs,
-      N4BiasFieldCorrectionParameters,
       N4_BIAS_FIELD_CORRECTION_METADATA,
       n4_bias_field_correction,
       n4_bias_field_correction_bspline_fitting_params,

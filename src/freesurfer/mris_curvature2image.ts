@@ -12,7 +12,7 @@ const MRIS_CURVATURE2IMAGE_METADATA: Metadata = {
 
 
 interface MrisCurvature2imageParameters {
-    "@type": "freesurfer.mris_curvature2image";
+    "@type"?: "freesurfer/mris_curvature2image";
     "surface": InputPathType;
     "mask": InputPathType;
     "output_overlay": string;
@@ -22,44 +22,11 @@ interface MrisCurvature2imageParameters {
     "invert_flag": boolean;
     "radius": number;
 }
+type MrisCurvature2imageParametersTagged = Required<Pick<MrisCurvature2imageParameters, '@type'>> & MrisCurvature2imageParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_curvature2image": mris_curvature2image_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_curvature2image": mris_curvature2image_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_curvature2image(...)`.
+ * Output object returned when calling `MrisCurvature2imageParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +69,9 @@ function mris_curvature2image_params(
     label: InputPathType,
     radius: number,
     invert_flag: boolean = false,
-): MrisCurvature2imageParameters {
+): MrisCurvature2imageParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_curvature2image" as const,
+        "@type": "freesurfer/mris_curvature2image" as const,
         "surface": surface,
         "mask": mask,
         "output_overlay": output_overlay,
@@ -156,7 +123,7 @@ function mris_curvature2image_cargs(
         "-l",
         execution.inputFile((params["label"] ?? null))
     );
-    if ((params["invert_flag"] ?? null)) {
+    if ((params["invert_flag"] ?? false)) {
         cargs.push("-inv");
     }
     cargs.push(
@@ -256,7 +223,6 @@ function mris_curvature2image(
 export {
       MRIS_CURVATURE2IMAGE_METADATA,
       MrisCurvature2imageOutputs,
-      MrisCurvature2imageParameters,
       mris_curvature2image,
       mris_curvature2image_execute,
       mris_curvature2image_params,

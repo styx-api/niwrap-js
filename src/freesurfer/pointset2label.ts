@@ -12,51 +12,18 @@ const POINTSET2LABEL_METADATA: Metadata = {
 
 
 interface Pointset2labelParameters {
-    "@type": "freesurfer.pointset2label";
+    "@type"?: "freesurfer/pointset2label";
     "waypoint_file": InputPathType;
     "input_volume": InputPathType;
     "label_value": number;
     "output_volume": string;
     "clear_option": boolean;
 }
+type Pointset2labelParametersTagged = Required<Pick<Pointset2labelParameters, '@type'>> & Pointset2labelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.pointset2label": pointset2label_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.pointset2label": pointset2label_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `pointset2label(...)`.
+ * Output object returned when calling `Pointset2labelParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function pointset2label_params(
     label_value: number,
     output_volume: string,
     clear_option: boolean = false,
-): Pointset2labelParameters {
+): Pointset2labelParametersTagged {
     const params = {
-        "@type": "freesurfer.pointset2label" as const,
+        "@type": "freesurfer/pointset2label" as const,
         "waypoint_file": waypoint_file,
         "input_volume": input_volume,
         "label_value": label_value,
@@ -120,7 +87,7 @@ function pointset2label_cargs(
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
     cargs.push(String((params["label_value"] ?? null)));
     cargs.push((params["output_volume"] ?? null));
-    if ((params["clear_option"] ?? null)) {
+    if ((params["clear_option"] ?? false)) {
         cargs.push("-clear");
     }
     return cargs;
@@ -209,7 +176,6 @@ function pointset2label(
 export {
       POINTSET2LABEL_METADATA,
       Pointset2labelOutputs,
-      Pointset2labelParameters,
       pointset2label,
       pointset2label_execute,
       pointset2label_params,

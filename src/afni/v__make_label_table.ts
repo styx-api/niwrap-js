@@ -12,7 +12,7 @@ const V__MAKE_LABEL_TABLE_METADATA: Metadata = {
 
 
 interface VMakeLabelTableParameters {
-    "@type": "afni.@MakeLabelTable";
+    "@type"?: "afni/@MakeLabelTable";
     "labeltable": string;
     "atlas_pointlist"?: string | null | undefined;
     "lab_r"?: Array<string> | null | undefined;
@@ -49,44 +49,11 @@ interface VMakeLabelTableParameters {
     "all_opts": boolean;
     "h_find"?: string | null | undefined;
 }
+type VMakeLabelTableParametersTagged = Required<Pick<VMakeLabelTableParameters, '@type'>> & VMakeLabelTableParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@MakeLabelTable": v__make_label_table_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@MakeLabelTable": v__make_label_table_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__make_label_table(...)`.
+ * Output object returned when calling `VMakeLabelTableParameters(...)`.
  *
  * @interface
  */
@@ -191,9 +158,9 @@ function v__make_label_table_params(
     h_view: boolean = false,
     all_opts: boolean = false,
     h_find: string | null = null,
-): VMakeLabelTableParameters {
+): VMakeLabelTableParametersTagged {
     const params = {
-        "@type": "afni.@MakeLabelTable" as const,
+        "@type": "afni/@MakeLabelTable" as const,
         "labeltable": labeltable,
         "centers": centers,
         "skip_novoxels": skip_novoxels,
@@ -348,7 +315,7 @@ function v__make_label_table_cargs(
             String((params["last_longname_col"] ?? null))
         );
     }
-    if ((params["centers"] ?? null)) {
+    if ((params["centers"] ?? false)) {
         cargs.push("-centers");
     }
     if ((params["centertype"] ?? null) !== null) {
@@ -363,13 +330,13 @@ function v__make_label_table_cargs(
             (params["centermask"] ?? null)
         );
     }
-    if ((params["skip_novoxels"] ?? null)) {
+    if ((params["skip_novoxels"] ?? false)) {
         cargs.push("-skip_novoxels");
     }
-    if ((params["all_labels"] ?? null)) {
+    if ((params["all_labels"] ?? false)) {
         cargs.push("-all_labels");
     }
-    if ((params["all_keys"] ?? null)) {
+    if ((params["all_keys"] ?? false)) {
         cargs.push("-all_keys");
     }
     if ((params["lkeys"] ?? null) !== null) {
@@ -402,10 +369,10 @@ function v__make_label_table_cargs(
             execution.inputFile((params["labeltable_of_dset"] ?? null))
         );
     }
-    if ((params["word_label_match"] ?? null)) {
+    if ((params["word_label_match"] ?? false)) {
         cargs.push("-word_label_match");
     }
-    if ((params["quiet_death"] ?? null)) {
+    if ((params["quiet_death"] ?? false)) {
         cargs.push("-quiet_death");
     }
     if ((params["lt_to_atlas_pl"] ?? null) !== null) {
@@ -450,7 +417,7 @@ function v__make_label_table_cargs(
             (params["atlas_description"] ?? null)
         );
     }
-    if ((params["replace"] ?? null)) {
+    if ((params["replace"] ?? false)) {
         cargs.push("-replace");
     }
     if ((params["add_atlas_dset"] ?? null) !== null) {
@@ -459,13 +426,13 @@ function v__make_label_table_cargs(
             execution.inputFile((params["add_atlas_dset"] ?? null))
         );
     }
-    if ((params["h_web"] ?? null)) {
+    if ((params["h_web"] ?? false)) {
         cargs.push("-h_web");
     }
-    if ((params["h_view"] ?? null)) {
+    if ((params["h_view"] ?? false)) {
         cargs.push("-h_view");
     }
-    if ((params["all_opts"] ?? null)) {
+    if ((params["all_opts"] ?? false)) {
         cargs.push("-all_opts");
     }
     if ((params["h_find"] ?? null) !== null) {
@@ -622,7 +589,6 @@ function v__make_label_table(
 
 export {
       VMakeLabelTableOutputs,
-      VMakeLabelTableParameters,
       V__MAKE_LABEL_TABLE_METADATA,
       v__make_label_table,
       v__make_label_table_execute,

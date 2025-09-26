@@ -12,7 +12,7 @@ const FIM2_METADATA: Metadata = {
 
 
 interface Fim2Parameters {
-    "@type": "afni.fim2";
+    "@type"?: "afni/fim2";
     "image_files": Array<InputPathType>;
     "pcnt"?: number | null | undefined;
     "pcthresh"?: number | null | undefined;
@@ -37,44 +37,11 @@ interface Fim2Parameters {
     "dfspace": boolean;
     "regbase"?: string | null | undefined;
 }
+type Fim2ParametersTagged = Required<Pick<Fim2Parameters, '@type'>> & Fim2Parameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.fim2": fim2_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.fim2": fim2_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fim2(...)`.
+ * Output object returned when calling `Fim2Parameters(...)`.
  *
  * @interface
  */
@@ -163,9 +130,9 @@ function fim2_params(
     q: boolean = false,
     dfspace: boolean = false,
     regbase: string | null = null,
-): Fim2Parameters {
+): Fim2ParametersTagged {
     const params = {
-        "@type": "afni.fim2" as const,
+        "@type": "afni/fim2" as const,
         "image_files": image_files,
         "non": non,
         "corr": corr,
@@ -263,7 +230,7 @@ function fim2_cargs(
             String((params["num"] ?? null))
         );
     }
-    if ((params["non"] ?? null)) {
+    if ((params["non"] ?? false)) {
         cargs.push("-non");
     }
     if ((params["coef"] ?? null) !== null) {
@@ -296,7 +263,7 @@ function fim2_cargs(
             (params["fimfile"] ?? null)
         );
     }
-    if ((params["corr"] ?? null)) {
+    if ((params["corr"] ?? false)) {
         cargs.push("-corr");
     }
     if ((params["corfile"] ?? null) !== null) {
@@ -329,19 +296,19 @@ function fim2_cargs(
             (params["subort"] ?? null)
         );
     }
-    if ((params["flim"] ?? null)) {
+    if ((params["flim"] ?? false)) {
         cargs.push("-flim");
     }
-    if ((params["clean"] ?? null)) {
+    if ((params["clean"] ?? false)) {
         cargs.push("-clean");
     }
-    if ((params["clip"] ?? null)) {
+    if ((params["clip"] ?? false)) {
         cargs.push("-clip");
     }
-    if ((params["q"] ?? null)) {
+    if ((params["q"] ?? false)) {
         cargs.push("-q");
     }
-    if ((params["dfspace"] ?? null)) {
+    if ((params["dfspace"] ?? false)) {
         cargs.push("-dfspace");
     }
     if ((params["regbase"] ?? null) !== null) {
@@ -477,7 +444,6 @@ function fim2(
 export {
       FIM2_METADATA,
       Fim2Outputs,
-      Fim2Parameters,
       fim2,
       fim2_execute,
       fim2_params,

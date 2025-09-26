@@ -12,52 +12,20 @@ const VOLUME_ESTIMATE_FWHM_METADATA: Metadata = {
 
 
 interface VolumeEstimateFwhmWholeFileParameters {
-    "@type": "workbench.volume-estimate-fwhm.whole_file";
+    "@type"?: "whole_file";
     "opt_demean": boolean;
 }
+type VolumeEstimateFwhmWholeFileParametersTagged = Required<Pick<VolumeEstimateFwhmWholeFileParameters, '@type'>> & VolumeEstimateFwhmWholeFileParameters;
 
 
 interface VolumeEstimateFwhmParameters {
-    "@type": "workbench.volume-estimate-fwhm";
+    "@type"?: "workbench/volume-estimate-fwhm";
     "volume": InputPathType;
     "opt_roi_roivol"?: InputPathType | null | undefined;
     "opt_subvolume_subvol"?: string | null | undefined;
     "whole_file"?: VolumeEstimateFwhmWholeFileParameters | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-estimate-fwhm": volume_estimate_fwhm_cargs,
-        "workbench.volume-estimate-fwhm.whole_file": volume_estimate_fwhm_whole_file_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type VolumeEstimateFwhmParametersTagged = Required<Pick<VolumeEstimateFwhmParameters, '@type'>> & VolumeEstimateFwhmParameters;
 
 
 /**
@@ -69,9 +37,9 @@ function dynOutputs(
  */
 function volume_estimate_fwhm_whole_file_params(
     opt_demean: boolean = false,
-): VolumeEstimateFwhmWholeFileParameters {
+): VolumeEstimateFwhmWholeFileParametersTagged {
     const params = {
-        "@type": "workbench.volume-estimate-fwhm.whole_file" as const,
+        "@type": "whole_file" as const,
         "opt_demean": opt_demean,
     };
     return params;
@@ -92,7 +60,7 @@ function volume_estimate_fwhm_whole_file_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("-whole-file");
-    if ((params["opt_demean"] ?? null)) {
+    if ((params["opt_demean"] ?? false)) {
         cargs.push("-demean");
     }
     return cargs;
@@ -100,7 +68,7 @@ function volume_estimate_fwhm_whole_file_cargs(
 
 
 /**
- * Output object returned when calling `volume_estimate_fwhm(...)`.
+ * Output object returned when calling `VolumeEstimateFwhmParameters(...)`.
  *
  * @interface
  */
@@ -127,9 +95,9 @@ function volume_estimate_fwhm_params(
     opt_roi_roivol: InputPathType | null = null,
     opt_subvolume_subvol: string | null = null,
     whole_file: VolumeEstimateFwhmWholeFileParameters | null = null,
-): VolumeEstimateFwhmParameters {
+): VolumeEstimateFwhmParametersTagged {
     const params = {
-        "@type": "workbench.volume-estimate-fwhm" as const,
+        "@type": "workbench/volume-estimate-fwhm" as const,
         "volume": volume,
     };
     if (opt_roi_roivol !== null) {
@@ -174,7 +142,7 @@ function volume_estimate_fwhm_cargs(
         );
     }
     if ((params["whole_file"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["whole_file"] ?? null)["@type"])((params["whole_file"] ?? null), execution));
+        cargs.push(...volume_estimate_fwhm_whole_file_cargs((params["whole_file"] ?? null), execution));
     }
     return cargs;
 }
@@ -263,8 +231,6 @@ function volume_estimate_fwhm(
 export {
       VOLUME_ESTIMATE_FWHM_METADATA,
       VolumeEstimateFwhmOutputs,
-      VolumeEstimateFwhmParameters,
-      VolumeEstimateFwhmWholeFileParameters,
       volume_estimate_fwhm,
       volume_estimate_fwhm_execute,
       volume_estimate_fwhm_params,

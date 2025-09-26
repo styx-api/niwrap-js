@@ -12,7 +12,7 @@ const ZIP_SCENE_FILE_METADATA: Metadata = {
 
 
 interface ZipSceneFileParameters {
-    "@type": "workbench.zip-scene-file";
+    "@type"?: "workbench/zip-scene-file";
     "scene_file": string;
     "extract_folder": string;
     "zip_file": string;
@@ -20,43 +20,11 @@ interface ZipSceneFileParameters {
     "opt_skip_missing": boolean;
     "opt_write_scene_file": boolean;
 }
+type ZipSceneFileParametersTagged = Required<Pick<ZipSceneFileParameters, '@type'>> & ZipSceneFileParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.zip-scene-file": zip_scene_file_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `zip_scene_file(...)`.
+ * Output object returned when calling `ZipSceneFileParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function zip_scene_file_params(
     opt_base_dir_directory: string | null = null,
     opt_skip_missing: boolean = false,
     opt_write_scene_file: boolean = false,
-): ZipSceneFileParameters {
+): ZipSceneFileParametersTagged {
     const params = {
-        "@type": "workbench.zip-scene-file" as const,
+        "@type": "workbench/zip-scene-file" as const,
         "scene_file": scene_file,
         "extract_folder": extract_folder,
         "zip_file": zip_file,
@@ -127,10 +95,10 @@ function zip_scene_file_cargs(
             (params["opt_base_dir_directory"] ?? null)
         );
     }
-    if ((params["opt_skip_missing"] ?? null)) {
+    if ((params["opt_skip_missing"] ?? false)) {
         cargs.push("-skip-missing");
     }
-    if ((params["opt_write_scene_file"] ?? null)) {
+    if ((params["opt_write_scene_file"] ?? false)) {
         cargs.push("-write-scene-file");
     }
     return cargs;
@@ -224,7 +192,6 @@ function zip_scene_file(
 export {
       ZIP_SCENE_FILE_METADATA,
       ZipSceneFileOutputs,
-      ZipSceneFileParameters,
       zip_scene_file,
       zip_scene_file_execute,
       zip_scene_file_params,

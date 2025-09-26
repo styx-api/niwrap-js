@@ -12,7 +12,7 @@ const V_3DKMEANS_METADATA: Metadata = {
 
 
 interface V3dkmeansParameters {
-    "@type": "afni.3dkmeans";
+    "@type"?: "afni/3dkmeans";
     "version": boolean;
     "input": Array<InputPathType>;
     "mask"?: InputPathType | null | undefined;
@@ -33,44 +33,11 @@ interface V3dkmeansParameters {
     "voxdbg"?: Array<number> | null | undefined;
     "seed"?: number | null | undefined;
 }
+type V3dkmeansParametersTagged = Required<Pick<V3dkmeansParameters, '@type'>> & V3dkmeansParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dkmeans": v_3dkmeans_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dkmeans": v_3dkmeans_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dkmeans(...)`.
+ * Output object returned when calling `V3dkmeansParameters(...)`.
  *
  * @interface
  */
@@ -154,9 +121,9 @@ function v_3dkmeans_params(
     write_dists: boolean = false,
     voxdbg: Array<number> | null = null,
     seed: number | null = null,
-): V3dkmeansParameters {
+): V3dkmeansParametersTagged {
     const params = {
-        "@type": "afni.3dkmeans" as const,
+        "@type": "afni/3dkmeans" as const,
         "version": version,
         "input": input,
         "verbose": verbose,
@@ -225,7 +192,7 @@ function v_3dkmeans_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("3dkmeans");
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     cargs.push(
@@ -310,10 +277,10 @@ function v_3dkmeans_cargs(
             execution.inputFile((params["rsigs"] ?? null))
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["write_dists"] ?? null)) {
+    if ((params["write_dists"] ?? false)) {
         cargs.push("-write_dists");
     }
     if ((params["voxdbg"] ?? null) !== null) {
@@ -446,7 +413,6 @@ function v_3dkmeans(
 
 export {
       V3dkmeansOutputs,
-      V3dkmeansParameters,
       V_3DKMEANS_METADATA,
       v_3dkmeans,
       v_3dkmeans_execute,

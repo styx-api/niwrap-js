@@ -12,7 +12,7 @@ const V_3D_TWOTO_COMPLEX_METADATA: Metadata = {
 
 
 interface V3dTwotoComplexParameters {
-    "@type": "afni.3dTwotoComplex";
+    "@type"?: "afni/3dTwotoComplex";
     "dataset1": InputPathType;
     "dataset2"?: InputPathType | null | undefined;
     "prefix"?: string | null | undefined;
@@ -20,44 +20,11 @@ interface V3dTwotoComplexParameters {
     "mp": boolean;
     "mask"?: InputPathType | null | undefined;
 }
+type V3dTwotoComplexParametersTagged = Required<Pick<V3dTwotoComplexParameters, '@type'>> & V3dTwotoComplexParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dTwotoComplex": v_3d_twoto_complex_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dTwotoComplex": v_3d_twoto_complex_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_twoto_complex(...)`.
+ * Output object returned when calling `V3dTwotoComplexParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +63,9 @@ function v_3d_twoto_complex_params(
     ri: boolean = false,
     mp: boolean = false,
     mask: InputPathType | null = null,
-): V3dTwotoComplexParameters {
+): V3dTwotoComplexParametersTagged {
     const params = {
-        "@type": "afni.3dTwotoComplex" as const,
+        "@type": "afni/3dTwotoComplex" as const,
         "dataset1": dataset1,
         "ri": ri,
         "mp": mp,
@@ -140,10 +107,10 @@ function v_3d_twoto_complex_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["ri"] ?? null)) {
+    if ((params["ri"] ?? false)) {
         cargs.push("-RI");
     }
-    if ((params["mp"] ?? null)) {
+    if ((params["mp"] ?? false)) {
         cargs.push("-MP");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -240,7 +207,6 @@ function v_3d_twoto_complex(
 
 export {
       V3dTwotoComplexOutputs,
-      V3dTwotoComplexParameters,
       V_3D_TWOTO_COMPLEX_METADATA,
       v_3d_twoto_complex,
       v_3d_twoto_complex_execute,

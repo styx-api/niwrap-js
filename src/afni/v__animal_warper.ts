@@ -12,7 +12,7 @@ const V__ANIMAL_WARPER_METADATA: Metadata = {
 
 
 interface VAnimalWarperParameters {
-    "@type": "afni.@animal_warper";
+    "@type"?: "afni/@animal_warper";
     "input_file": InputPathType;
     "base_template": InputPathType;
     "output_dir": string;
@@ -48,44 +48,11 @@ interface VAnimalWarperParameters {
     "ok_to_exist": boolean;
     "echo": boolean;
 }
+type VAnimalWarperParametersTagged = Required<Pick<VAnimalWarperParameters, '@type'>> & VAnimalWarperParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@animal_warper": v__animal_warper_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@animal_warper": v__animal_warper_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__animal_warper(...)`.
+ * Output object returned when calling `VAnimalWarperParameters(...)`.
  *
  * @interface
  */
@@ -196,9 +163,9 @@ function v__animal_warper_params(
     version: boolean = false,
     ok_to_exist: boolean = false,
     echo: boolean = false,
-): VAnimalWarperParameters {
+): VAnimalWarperParametersTagged {
     const params = {
-        "@type": "afni.@animal_warper" as const,
+        "@type": "afni/@animal_warper" as const,
         "input_file": input_file,
         "base_template": base_template,
         "output_dir": output_dir,
@@ -408,7 +375,7 @@ function v__animal_warper_cargs(
             String((params["maxlev"] ?? null))
         );
     }
-    if ((params["no_surfaces"] ?? null)) {
+    if ((params["no_surfaces"] ?? false)) {
         cargs.push("-no_surfaces");
     }
     if ((params["feature_size"] ?? null) !== null) {
@@ -417,7 +384,7 @@ function v__animal_warper_cargs(
             String((params["feature_size"] ?? null))
         );
     }
-    if ((params["supersize"] ?? null)) {
+    if ((params["supersize"] ?? false)) {
         cargs.push("-supersize");
     }
     if ((params["init_scale"] ?? null) !== null) {
@@ -432,7 +399,7 @@ function v__animal_warper_cargs(
             String((params["mode_smooth_size"] ?? null))
         );
     }
-    if ((params["mode_smooth_replacement_off"] ?? null)) {
+    if ((params["mode_smooth_replacement_off"] ?? false)) {
         cargs.push("-mode_smooth_replacement_off");
     }
     if ((params["center_out"] ?? null) !== null) {
@@ -453,16 +420,16 @@ function v__animal_warper_cargs(
             (params["extra_qw_opts"] ?? null)
         );
     }
-    if ((params["keep_temp"] ?? null)) {
+    if ((params["keep_temp"] ?? false)) {
         cargs.push("-keep_temp");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-ver");
     }
-    if ((params["ok_to_exist"] ?? null)) {
+    if ((params["ok_to_exist"] ?? false)) {
         cargs.push("-ok_to_exist");
     }
-    if ((params["echo"] ?? null)) {
+    if ((params["echo"] ?? false)) {
         cargs.push("-echo");
     }
     return cargs;
@@ -613,7 +580,6 @@ function v__animal_warper(
 
 export {
       VAnimalWarperOutputs,
-      VAnimalWarperParameters,
       V__ANIMAL_WARPER_METADATA,
       v__animal_warper,
       v__animal_warper_execute,

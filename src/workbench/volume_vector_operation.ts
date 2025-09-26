@@ -12,7 +12,7 @@ const VOLUME_VECTOR_OPERATION_METADATA: Metadata = {
 
 
 interface VolumeVectorOperationParameters {
-    "@type": "workbench.volume-vector-operation";
+    "@type"?: "workbench/volume-vector-operation";
     "vectors_a": InputPathType;
     "vectors_b": InputPathType;
     "operation": string;
@@ -22,44 +22,11 @@ interface VolumeVectorOperationParameters {
     "opt_normalize_output": boolean;
     "opt_magnitude": boolean;
 }
+type VolumeVectorOperationParametersTagged = Required<Pick<VolumeVectorOperationParameters, '@type'>> & VolumeVectorOperationParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-vector-operation": volume_vector_operation_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-vector-operation": volume_vector_operation_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `volume_vector_operation(...)`.
+ * Output object returned when calling `VolumeVectorOperationParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function volume_vector_operation_params(
     opt_normalize_b: boolean = false,
     opt_normalize_output: boolean = false,
     opt_magnitude: boolean = false,
-): VolumeVectorOperationParameters {
+): VolumeVectorOperationParametersTagged {
     const params = {
-        "@type": "workbench.volume-vector-operation" as const,
+        "@type": "workbench/volume-vector-operation" as const,
         "vectors_a": vectors_a,
         "vectors_b": vectors_b,
         "operation": operation,
@@ -133,16 +100,16 @@ function volume_vector_operation_cargs(
     cargs.push(execution.inputFile((params["vectors_b"] ?? null)));
     cargs.push((params["operation"] ?? null));
     cargs.push((params["volume_out"] ?? null));
-    if ((params["opt_normalize_a"] ?? null)) {
+    if ((params["opt_normalize_a"] ?? false)) {
         cargs.push("-normalize-a");
     }
-    if ((params["opt_normalize_b"] ?? null)) {
+    if ((params["opt_normalize_b"] ?? false)) {
         cargs.push("-normalize-b");
     }
-    if ((params["opt_normalize_output"] ?? null)) {
+    if ((params["opt_normalize_output"] ?? false)) {
         cargs.push("-normalize-output");
     }
-    if ((params["opt_magnitude"] ?? null)) {
+    if ((params["opt_magnitude"] ?? false)) {
         cargs.push("-magnitude");
     }
     return cargs;
@@ -251,7 +218,6 @@ function volume_vector_operation(
 export {
       VOLUME_VECTOR_OPERATION_METADATA,
       VolumeVectorOperationOutputs,
-      VolumeVectorOperationParameters,
       volume_vector_operation,
       volume_vector_operation_execute,
       volume_vector_operation_params,

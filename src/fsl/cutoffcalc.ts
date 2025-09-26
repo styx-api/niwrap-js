@@ -12,7 +12,7 @@ const CUTOFFCALC_METADATA: Metadata = {
 
 
 interface CutoffcalcParameters {
-    "@type": "fsl.cutoffcalc";
+    "@type"?: "fsl/cutoffcalc";
     "input_design": InputPathType;
     "threshold"?: number | null | undefined;
     "tr"?: number | null | undefined;
@@ -21,44 +21,11 @@ interface CutoffcalcParameters {
     "verbose_flag": boolean;
     "debug_flag": boolean;
 }
+type CutoffcalcParametersTagged = Required<Pick<CutoffcalcParameters, '@type'>> & CutoffcalcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.cutoffcalc": cutoffcalc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.cutoffcalc": cutoffcalc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `cutoffcalc(...)`.
+ * Output object returned when calling `CutoffcalcParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function cutoffcalc_params(
     example_sigma: number | null = null,
     verbose_flag: boolean = false,
     debug_flag: boolean = false,
-): CutoffcalcParameters {
+): CutoffcalcParametersTagged {
     const params = {
-        "@type": "fsl.cutoffcalc" as const,
+        "@type": "fsl/cutoffcalc" as const,
         "input_design": input_design,
         "verbose_flag": verbose_flag,
         "debug_flag": debug_flag,
@@ -145,10 +112,10 @@ function cutoffcalc_cargs(
     if ((params["example_sigma"] ?? null) !== null) {
         cargs.push(["--example_sig ", String((params["example_sigma"] ?? null))].join(''));
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -241,7 +208,6 @@ function cutoffcalc(
 export {
       CUTOFFCALC_METADATA,
       CutoffcalcOutputs,
-      CutoffcalcParameters,
       cutoffcalc,
       cutoffcalc_execute,
       cutoffcalc_params,

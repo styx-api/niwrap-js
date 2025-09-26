@@ -12,14 +12,15 @@ const TCKSAMPLE_METADATA: Metadata = {
 
 
 interface TcksampleConfigParameters {
-    "@type": "mrtrix.tcksample.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type TcksampleConfigParametersTagged = Required<Pick<TcksampleConfigParameters, '@type'>> & TcksampleConfigParameters;
 
 
 interface TcksampleParameters {
-    "@type": "mrtrix.tcksample";
+    "@type"?: "mrtrix/tcksample";
     "stat_tck"?: string | null | undefined;
     "nointerp": boolean;
     "precise": boolean;
@@ -36,41 +37,7 @@ interface TcksampleParameters {
     "image": InputPathType;
     "values": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.tcksample": tcksample_cargs,
-        "mrtrix.tcksample.config": tcksample_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.tcksample": tcksample_outputs,
-    };
-    return outputsFuncs[t];
-}
+type TcksampleParametersTagged = Required<Pick<TcksampleParameters, '@type'>> & TcksampleParameters;
 
 
 /**
@@ -84,9 +51,9 @@ function dynOutputs(
 function tcksample_config_params(
     key: string,
     value: string,
-): TcksampleConfigParameters {
+): TcksampleConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.tcksample.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -115,7 +82,7 @@ function tcksample_config_cargs(
 
 
 /**
- * Output object returned when calling `tcksample(...)`.
+ * Output object returned when calling `TcksampleParameters(...)`.
  *
  * @interface
  */
@@ -168,9 +135,9 @@ function tcksample_params(
     config: Array<TcksampleConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TcksampleParameters {
+): TcksampleParametersTagged {
     const params = {
-        "@type": "mrtrix.tcksample" as const,
+        "@type": "mrtrix/tcksample" as const,
         "nointerp": nointerp,
         "precise": precise,
         "use_tdi_fraction": use_tdi_fraction,
@@ -217,25 +184,25 @@ function tcksample_cargs(
             (params["stat_tck"] ?? null)
         );
     }
-    if ((params["nointerp"] ?? null)) {
+    if ((params["nointerp"] ?? false)) {
         cargs.push("-nointerp");
     }
-    if ((params["precise"] ?? null)) {
+    if ((params["precise"] ?? false)) {
         cargs.push("-precise");
     }
-    if ((params["use_tdi_fraction"] ?? null)) {
+    if ((params["use_tdi_fraction"] ?? false)) {
         cargs.push("-use_tdi_fraction");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -245,12 +212,12 @@ function tcksample_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => tcksample_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["tracks"] ?? null)));
@@ -373,9 +340,7 @@ function tcksample(
 
 export {
       TCKSAMPLE_METADATA,
-      TcksampleConfigParameters,
       TcksampleOutputs,
-      TcksampleParameters,
       tcksample,
       tcksample_config_params,
       tcksample_execute,

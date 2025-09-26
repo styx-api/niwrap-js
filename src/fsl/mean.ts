@@ -12,7 +12,7 @@ const MEAN_METADATA: Metadata = {
 
 
 interface MeanParameters {
-    "@type": "fsl.mean";
+    "@type"?: "fsl/mean";
     "datafile": InputPathType;
     "maskfile": InputPathType;
     "verbose_flag": boolean;
@@ -33,44 +33,11 @@ interface MeanParameters {
     "prior_std"?: number | null | undefined;
     "help_flag": boolean;
 }
+type MeanParametersTagged = Required<Pick<MeanParameters, '@type'>> & MeanParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.mean": mean_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.mean": mean_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mean(...)`.
+ * Output object returned when calling `MeanParameters(...)`.
  *
  * @interface
  */
@@ -131,9 +98,9 @@ function mean_params(
     prior_mean: number | null = null,
     prior_std: number | null = null,
     help_flag: boolean = false,
-): MeanParameters {
+): MeanParametersTagged {
     const params = {
-        "@type": "fsl.mean" as const,
+        "@type": "fsl/mean" as const,
         "datafile": datafile,
         "maskfile": maskfile,
         "verbose_flag": verbose_flag,
@@ -204,7 +171,7 @@ function mean_cargs(
         "--mask",
         execution.inputFile((params["maskfile"] ?? null))
     );
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("--verbose");
     }
     if ((params["debug_level"] ?? null) !== null) {
@@ -213,7 +180,7 @@ function mean_cargs(
             String((params["debug_level"] ?? null))
         );
     }
-    if ((params["timing_flag"] ?? null)) {
+    if ((params["timing_flag"] ?? false)) {
         cargs.push("--to");
     }
     if ((params["log_dir"] ?? null) !== null) {
@@ -222,7 +189,7 @@ function mean_cargs(
             (params["log_dir"] ?? null)
         );
     }
-    if ((params["forcedir_flag"] ?? null)) {
+    if ((params["forcedir_flag"] ?? false)) {
         cargs.push("--forcedir");
     }
     if ((params["inference_tech"] ?? null) !== null) {
@@ -273,7 +240,7 @@ function mean_cargs(
             String((params["error_precision"] ?? null))
         );
     }
-    if ((params["noamp_flag"] ?? null)) {
+    if ((params["noamp_flag"] ?? false)) {
         cargs.push("--noamp");
     }
     if ((params["prior_mean"] ?? null) !== null) {
@@ -288,7 +255,7 @@ function mean_cargs(
             String((params["prior_std"] ?? null))
         );
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -405,7 +372,6 @@ function mean(
 export {
       MEAN_METADATA,
       MeanOutputs,
-      MeanParameters,
       mean,
       mean_execute,
       mean_params,

@@ -12,7 +12,7 @@ const MRIS_TRANSFORM_METADATA: Metadata = {
 
 
 interface MrisTransformParameters {
-    "@type": "freesurfer.mris_transform";
+    "@type"?: "freesurfer/mris_transform";
     "input_surface": InputPathType;
     "transform": InputPathType;
     "output_surface": string;
@@ -20,44 +20,11 @@ interface MrisTransformParameters {
     "trx_dst"?: InputPathType | null | undefined;
     "is_inverse": boolean;
 }
+type MrisTransformParametersTagged = Required<Pick<MrisTransformParameters, '@type'>> & MrisTransformParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_transform": mris_transform_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_transform": mris_transform_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_transform(...)`.
+ * Output object returned when calling `MrisTransformParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function mris_transform_params(
     trx_src: InputPathType | null = null,
     trx_dst: InputPathType | null = null,
     is_inverse: boolean = false,
-): MrisTransformParameters {
+): MrisTransformParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_transform" as const,
+        "@type": "freesurfer/mris_transform" as const,
         "input_surface": input_surface,
         "transform": transform,
         "output_surface": output_surface,
@@ -139,7 +106,7 @@ function mris_transform_cargs(
             execution.inputFile((params["trx_dst"] ?? null))
         );
     }
-    if ((params["is_inverse"] ?? null)) {
+    if ((params["is_inverse"] ?? false)) {
         cargs.push("--is-inverse");
     }
     return cargs;
@@ -230,7 +197,6 @@ function mris_transform(
 export {
       MRIS_TRANSFORM_METADATA,
       MrisTransformOutputs,
-      MrisTransformParameters,
       mris_transform,
       mris_transform_execute,
       mris_transform_params,

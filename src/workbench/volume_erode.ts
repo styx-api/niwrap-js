@@ -12,51 +12,18 @@ const VOLUME_ERODE_METADATA: Metadata = {
 
 
 interface VolumeErodeParameters {
-    "@type": "workbench.volume-erode";
+    "@type"?: "workbench/volume-erode";
     "volume": InputPathType;
     "distance": number;
     "volume_out": string;
     "opt_roi_roi_volume"?: InputPathType | null | undefined;
     "opt_subvolume_subvol"?: string | null | undefined;
 }
+type VolumeErodeParametersTagged = Required<Pick<VolumeErodeParameters, '@type'>> & VolumeErodeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-erode": volume_erode_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-erode": volume_erode_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `volume_erode(...)`.
+ * Output object returned when calling `VolumeErodeParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function volume_erode_params(
     volume_out: string,
     opt_roi_roi_volume: InputPathType | null = null,
     opt_subvolume_subvol: string | null = null,
-): VolumeErodeParameters {
+): VolumeErodeParametersTagged {
     const params = {
-        "@type": "workbench.volume-erode" as const,
+        "@type": "workbench/volume-erode" as const,
         "volume": volume,
         "distance": distance,
         "volume_out": volume_out,
@@ -226,7 +193,6 @@ function volume_erode(
 export {
       VOLUME_ERODE_METADATA,
       VolumeErodeOutputs,
-      VolumeErodeParameters,
       volume_erode,
       volume_erode_execute,
       volume_erode_params,

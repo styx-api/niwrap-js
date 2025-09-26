@@ -12,49 +12,17 @@ const HIAM_MAKE_TEMPLATE_METADATA: Metadata = {
 
 
 interface HiamMakeTemplateParameters {
-    "@type": "freesurfer.hiam_make_template";
+    "@type"?: "freesurfer/hiam_make_template";
     "hemi": string;
     "surface_name": string;
     "subjects": Array<string>;
     "output_name": string;
 }
+type HiamMakeTemplateParametersTagged = Required<Pick<HiamMakeTemplateParameters, '@type'>> & HiamMakeTemplateParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.hiam_make_template": hiam_make_template_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `hiam_make_template(...)`.
+ * Output object returned when calling `HiamMakeTemplateParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function hiam_make_template_params(
     surface_name: string,
     subjects: Array<string>,
     output_name: string,
-): HiamMakeTemplateParameters {
+): HiamMakeTemplateParametersTagged {
     const params = {
-        "@type": "freesurfer.hiam_make_template" as const,
+        "@type": "freesurfer/hiam_make_template" as const,
         "hemi": hemi,
         "surface_name": surface_name,
         "subjects": subjects,
@@ -194,7 +162,6 @@ function hiam_make_template(
 export {
       HIAM_MAKE_TEMPLATE_METADATA,
       HiamMakeTemplateOutputs,
-      HiamMakeTemplateParameters,
       hiam_make_template,
       hiam_make_template_execute,
       hiam_make_template_params,

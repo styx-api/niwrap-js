@@ -12,50 +12,17 @@ const SURFACE_SPHERE_PROJECT_UNPROJECT_METADATA: Metadata = {
 
 
 interface SurfaceSphereProjectUnprojectParameters {
-    "@type": "workbench.surface-sphere-project-unproject";
+    "@type"?: "workbench/surface-sphere-project-unproject";
     "sphere_in": InputPathType;
     "sphere_project_to": InputPathType;
     "sphere_unproject_from": InputPathType;
     "sphere_out": string;
 }
+type SurfaceSphereProjectUnprojectParametersTagged = Required<Pick<SurfaceSphereProjectUnprojectParameters, '@type'>> & SurfaceSphereProjectUnprojectParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-sphere-project-unproject": surface_sphere_project_unproject_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-sphere-project-unproject": surface_sphere_project_unproject_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_sphere_project_unproject(...)`.
+ * Output object returned when calling `SurfaceSphereProjectUnprojectParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function surface_sphere_project_unproject_params(
     sphere_project_to: InputPathType,
     sphere_unproject_from: InputPathType,
     sphere_out: string,
-): SurfaceSphereProjectUnprojectParameters {
+): SurfaceSphereProjectUnprojectParametersTagged {
     const params = {
-        "@type": "workbench.surface-sphere-project-unproject" as const,
+        "@type": "workbench/surface-sphere-project-unproject" as const,
         "sphere_in": sphere_in,
         "sphere_project_to": sphere_project_to,
         "sphere_unproject_from": sphere_unproject_from,
@@ -229,7 +196,6 @@ function surface_sphere_project_unproject(
 export {
       SURFACE_SPHERE_PROJECT_UNPROJECT_METADATA,
       SurfaceSphereProjectUnprojectOutputs,
-      SurfaceSphereProjectUnprojectParameters,
       surface_sphere_project_unproject,
       surface_sphere_project_unproject_execute,
       surface_sphere_project_unproject_params,

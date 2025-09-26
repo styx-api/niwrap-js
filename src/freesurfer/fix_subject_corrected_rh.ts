@@ -12,47 +12,14 @@ const FIX_SUBJECT_CORRECTED_RH_METADATA: Metadata = {
 
 
 interface FixSubjectCorrectedRhParameters {
-    "@type": "freesurfer.fix_subject_corrected-rh";
+    "@type"?: "freesurfer/fix_subject_corrected-rh";
     "subject_dir": string;
 }
+type FixSubjectCorrectedRhParametersTagged = Required<Pick<FixSubjectCorrectedRhParameters, '@type'>> & FixSubjectCorrectedRhParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fix_subject_corrected-rh": fix_subject_corrected_rh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.fix_subject_corrected-rh": fix_subject_corrected_rh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fix_subject_corrected_rh(...)`.
+ * Output object returned when calling `FixSubjectCorrectedRhParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface FixSubjectCorrectedRhOutputs {
  */
 function fix_subject_corrected_rh_params(
     subject_dir: string,
-): FixSubjectCorrectedRhParameters {
+): FixSubjectCorrectedRhParametersTagged {
     const params = {
-        "@type": "freesurfer.fix_subject_corrected-rh" as const,
+        "@type": "freesurfer/fix_subject_corrected-rh" as const,
         "subject_dir": subject_dir,
     };
     return params;
@@ -182,7 +149,6 @@ function fix_subject_corrected_rh(
 export {
       FIX_SUBJECT_CORRECTED_RH_METADATA,
       FixSubjectCorrectedRhOutputs,
-      FixSubjectCorrectedRhParameters,
       fix_subject_corrected_rh,
       fix_subject_corrected_rh_execute,
       fix_subject_corrected_rh_params,

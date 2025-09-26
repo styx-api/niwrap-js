@@ -12,7 +12,7 @@ const GROUPSTATS_METADATA: Metadata = {
 
 
 interface GroupstatsParameters {
-    "@type": "freesurfer.groupstats";
+    "@type"?: "freesurfer/groupstats";
     "outdir": string;
     "group_fsgd"?: InputPathType | null | undefined;
     "subjectfile"?: InputPathType | null | undefined;
@@ -31,43 +31,11 @@ interface GroupstatsParameters {
     "base": boolean;
     "keep53": boolean;
 }
+type GroupstatsParametersTagged = Required<Pick<GroupstatsParameters, '@type'>> & GroupstatsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.groupstats": groupstats_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `groupstats(...)`.
+ * Output object returned when calling `GroupstatsParameters(...)`.
  *
  * @interface
  */
@@ -120,9 +88,9 @@ function groupstats_params(
     new_: boolean = false,
     base: boolean = false,
     keep53: boolean = false,
-): GroupstatsParameters {
+): GroupstatsParametersTagged {
     const params = {
-        "@type": "freesurfer.groupstats" as const,
+        "@type": "freesurfer/groupstats" as const,
         "outdir": outdir,
         "no_maps": no_maps,
         "lh_only": lh_only,
@@ -211,34 +179,34 @@ function groupstats_cargs(
             (params["srcsurfreg"] ?? null)
         );
     }
-    if ((params["no_maps"] ?? null)) {
+    if ((params["no_maps"] ?? false)) {
         cargs.push("--no-maps");
     }
-    if ((params["lh_only"] ?? null)) {
+    if ((params["lh_only"] ?? false)) {
         cargs.push("--lh");
     }
-    if ((params["rh_only"] ?? null)) {
+    if ((params["rh_only"] ?? false)) {
         cargs.push("--rh");
     }
-    if ((params["no_aparcstats"] ?? null)) {
+    if ((params["no_aparcstats"] ?? false)) {
         cargs.push("--no-aparcstats");
     }
-    if ((params["no_asegstats"] ?? null)) {
+    if ((params["no_asegstats"] ?? false)) {
         cargs.push("--no-asegstats");
     }
-    if ((params["no_wparcstats"] ?? null)) {
+    if ((params["no_wparcstats"] ?? false)) {
         cargs.push("--no-wparcstats");
     }
-    if ((params["no_stats"] ?? null)) {
+    if ((params["no_stats"] ?? false)) {
         cargs.push("--no-stats");
     }
-    if ((params["new"] ?? null)) {
+    if ((params["new"] ?? false)) {
         cargs.push("--new");
     }
-    if ((params["base"] ?? null)) {
+    if ((params["base"] ?? false)) {
         cargs.push("--base");
     }
-    if ((params["keep53"] ?? null)) {
+    if ((params["keep53"] ?? false)) {
         cargs.push("--keep53");
     }
     return cargs;
@@ -350,7 +318,6 @@ function groupstats(
 export {
       GROUPSTATS_METADATA,
       GroupstatsOutputs,
-      GroupstatsParameters,
       groupstats,
       groupstats_execute,
       groupstats_params,

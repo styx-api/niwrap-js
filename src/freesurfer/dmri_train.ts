@@ -12,7 +12,7 @@ const DMRI_TRAIN_METADATA: Metadata = {
 
 
 interface DmriTrainParameters {
-    "@type": "freesurfer.dmri_train";
+    "@type"?: "freesurfer/dmri_train";
     "slist": InputPathType;
     "trk_files": Array<InputPathType>;
     "rois"?: Array<InputPathType> | null | undefined;
@@ -42,43 +42,11 @@ interface DmriTrainParameters {
     "help": boolean;
     "version": boolean;
 }
+type DmriTrainParametersTagged = Required<Pick<DmriTrainParameters, '@type'>> & DmriTrainParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dmri_train": dmri_train_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dmri_train(...)`.
+ * Output object returned when calling `DmriTrainParameters(...)`.
  *
  * @interface
  */
@@ -153,9 +121,9 @@ function dmri_train_params(
     checkopts: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): DmriTrainParameters {
+): DmriTrainParametersTagged {
     const params = {
-        "@type": "freesurfer.dmri_train" as const,
+        "@type": "freesurfer/dmri_train" as const,
         "slist": slist,
         "trk_files": trk_files,
         "seg": seg,
@@ -303,16 +271,16 @@ function dmri_train_cargs(
         "--max",
         String((params["max_streamlines"] ?? null))
     );
-    if ((params["xstr"] ?? null)) {
+    if ((params["xstr"] ?? false)) {
         cargs.push("--xstr");
     }
-    if ((params["aprior"] ?? null)) {
+    if ((params["aprior"] ?? false)) {
         cargs.push("--aprior");
     }
-    if ((params["sprior"] ?? null)) {
+    if ((params["sprior"] ?? false)) {
         cargs.push("--sprior");
     }
-    if ((params["trunc"] ?? null)) {
+    if ((params["trunc"] ?? false)) {
         cargs.push("--trunc");
     }
     cargs.push(
@@ -331,16 +299,16 @@ function dmri_train_cargs(
             (params["cptdir"] ?? null)
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["checkopts"] ?? null)) {
+    if ((params["checkopts"] ?? false)) {
         cargs.push("--checkopts");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -474,7 +442,6 @@ function dmri_train(
 export {
       DMRI_TRAIN_METADATA,
       DmriTrainOutputs,
-      DmriTrainParameters,
       dmri_train,
       dmri_train_execute,
       dmri_train_params,

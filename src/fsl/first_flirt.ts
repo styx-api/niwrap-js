@@ -12,7 +12,7 @@ const FIRST_FLIRT_METADATA: Metadata = {
 
 
 interface FirstFlirtParameters {
-    "@type": "fsl.first_flirt";
+    "@type"?: "fsl/first_flirt";
     "input_image": InputPathType;
     "output_basename": string;
     "already_brain_extracted_flag": boolean;
@@ -22,44 +22,11 @@ interface FirstFlirtParameters {
     "cort_flag": boolean;
     "cost_function"?: string | null | undefined;
 }
+type FirstFlirtParametersTagged = Required<Pick<FirstFlirtParameters, '@type'>> & FirstFlirtParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.first_flirt": first_flirt_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.first_flirt": first_flirt_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `first_flirt(...)`.
+ * Output object returned when calling `FirstFlirtParameters(...)`.
  *
  * @interface
  */
@@ -106,9 +73,9 @@ function first_flirt_params(
     strucweight_mask: InputPathType | null = null,
     cort_flag: boolean = false,
     cost_function: string | null = null,
-): FirstFlirtParameters {
+): FirstFlirtParametersTagged {
     const params = {
-        "@type": "fsl.first_flirt" as const,
+        "@type": "fsl/first_flirt" as const,
         "input_image": input_image,
         "output_basename": output_basename,
         "already_brain_extracted_flag": already_brain_extracted_flag,
@@ -142,13 +109,13 @@ function first_flirt_cargs(
     cargs.push("first_flirt");
     cargs.push(execution.inputFile((params["input_image"] ?? null)));
     cargs.push((params["output_basename"] ?? null));
-    if ((params["already_brain_extracted_flag"] ?? null)) {
+    if ((params["already_brain_extracted_flag"] ?? false)) {
         cargs.push("-b");
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("-d");
     }
-    if ((params["inweight_flag"] ?? null)) {
+    if ((params["inweight_flag"] ?? false)) {
         cargs.push("-inweight");
     }
     if ((params["strucweight_mask"] ?? null) !== null) {
@@ -157,7 +124,7 @@ function first_flirt_cargs(
             execution.inputFile((params["strucweight_mask"] ?? null))
         );
     }
-    if ((params["cort_flag"] ?? null)) {
+    if ((params["cort_flag"] ?? false)) {
         cargs.push("-cort");
     }
     if ((params["cost_function"] ?? null) !== null) {
@@ -260,7 +227,6 @@ function first_flirt(
 export {
       FIRST_FLIRT_METADATA,
       FirstFlirtOutputs,
-      FirstFlirtParameters,
       first_flirt,
       first_flirt_execute,
       first_flirt_params,

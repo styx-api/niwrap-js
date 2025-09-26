@@ -12,53 +12,20 @@ const CIFTI_MERGE_DENSE_METADATA: Metadata = {
 
 
 interface CiftiMergeDenseCiftiParameters {
-    "@type": "workbench.cifti-merge-dense.cifti";
+    "@type"?: "cifti";
     "cifti_in": InputPathType;
 }
+type CiftiMergeDenseCiftiParametersTagged = Required<Pick<CiftiMergeDenseCiftiParameters, '@type'>> & CiftiMergeDenseCiftiParameters;
 
 
 interface CiftiMergeDenseParameters {
-    "@type": "workbench.cifti-merge-dense";
+    "@type"?: "workbench/cifti-merge-dense";
     "direction": string;
     "cifti_out": string;
     "opt_label_collision_action"?: string | null | undefined;
     "cifti"?: Array<CiftiMergeDenseCiftiParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-merge-dense": cifti_merge_dense_cargs,
-        "workbench.cifti-merge-dense.cifti": cifti_merge_dense_cifti_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-merge-dense": cifti_merge_dense_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiMergeDenseParametersTagged = Required<Pick<CiftiMergeDenseParameters, '@type'>> & CiftiMergeDenseParameters;
 
 
 /**
@@ -70,9 +37,9 @@ function dynOutputs(
  */
 function cifti_merge_dense_cifti_params(
     cifti_in: InputPathType,
-): CiftiMergeDenseCiftiParameters {
+): CiftiMergeDenseCiftiParametersTagged {
     const params = {
-        "@type": "workbench.cifti-merge-dense.cifti" as const,
+        "@type": "cifti" as const,
         "cifti_in": cifti_in,
     };
     return params;
@@ -99,7 +66,7 @@ function cifti_merge_dense_cifti_cargs(
 
 
 /**
- * Output object returned when calling `cifti_merge_dense(...)`.
+ * Output object returned when calling `CiftiMergeDenseParameters(...)`.
  *
  * @interface
  */
@@ -130,9 +97,9 @@ function cifti_merge_dense_params(
     cifti_out: string,
     opt_label_collision_action: string | null = null,
     cifti: Array<CiftiMergeDenseCiftiParameters> | null = null,
-): CiftiMergeDenseParameters {
+): CiftiMergeDenseParametersTagged {
     const params = {
-        "@type": "workbench.cifti-merge-dense" as const,
+        "@type": "workbench/cifti-merge-dense" as const,
         "direction": direction,
         "cifti_out": cifti_out,
     };
@@ -170,7 +137,7 @@ function cifti_merge_dense_cargs(
         );
     }
     if ((params["cifti"] ?? null) !== null) {
-        cargs.push(...(params["cifti"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["cifti"] ?? null).map(s => cifti_merge_dense_cifti_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -259,9 +226,7 @@ function cifti_merge_dense(
 
 export {
       CIFTI_MERGE_DENSE_METADATA,
-      CiftiMergeDenseCiftiParameters,
       CiftiMergeDenseOutputs,
-      CiftiMergeDenseParameters,
       cifti_merge_dense,
       cifti_merge_dense_cifti_params,
       cifti_merge_dense_execute,

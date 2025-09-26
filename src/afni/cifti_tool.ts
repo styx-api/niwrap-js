@@ -12,7 +12,7 @@ const CIFTI_TOOL_METADATA: Metadata = {
 
 
 interface CiftiToolParameters {
-    "@type": "afni.cifti_tool";
+    "@type"?: "afni/cifti_tool";
     "input_file": InputPathType;
     "as_cext": boolean;
     "disp_cext": boolean;
@@ -23,44 +23,11 @@ interface CiftiToolParameters {
     "verbose_read_level"?: number | null | undefined;
     "both_verbose_levels"?: number | null | undefined;
 }
+type CiftiToolParametersTagged = Required<Pick<CiftiToolParameters, '@type'>> & CiftiToolParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.cifti_tool": cifti_tool_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.cifti_tool": cifti_tool_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `cifti_tool(...)`.
+ * Output object returned when calling `CiftiToolParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function cifti_tool_params(
     verbose_level: number | null = null,
     verbose_read_level: number | null = null,
     both_verbose_levels: number | null = null,
-): CiftiToolParameters {
+): CiftiToolParametersTagged {
     const params = {
-        "@type": "afni.cifti_tool" as const,
+        "@type": "afni/cifti_tool" as const,
         "input_file": input_file,
         "as_cext": as_cext,
         "disp_cext": disp_cext,
@@ -146,13 +113,13 @@ function cifti_tool_cargs(
         "-input",
         execution.inputFile((params["input_file"] ?? null))
     );
-    if ((params["as_cext"] ?? null)) {
+    if ((params["as_cext"] ?? false)) {
         cargs.push("-as_cext");
     }
-    if ((params["disp_cext"] ?? null)) {
+    if ((params["disp_cext"] ?? false)) {
         cargs.push("-disp_cext");
     }
-    if ((params["eval_cext"] ?? null)) {
+    if ((params["eval_cext"] ?? false)) {
         cargs.push("-eval_cext");
     }
     if ((params["eval_type"] ?? null) !== null) {
@@ -279,7 +246,6 @@ function cifti_tool(
 export {
       CIFTI_TOOL_METADATA,
       CiftiToolOutputs,
-      CiftiToolParameters,
       cifti_tool,
       cifti_tool_execute,
       cifti_tool_params,

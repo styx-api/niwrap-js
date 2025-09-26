@@ -12,7 +12,7 @@ const V_3DINFILL_METADATA: Metadata = {
 
 
 interface V3dinfillParameters {
-    "@type": "afni.3dinfill";
+    "@type"?: "afni/3dinfill";
     "input": InputPathType;
     "prefix"?: string | null | undefined;
     "niter"?: number | null | undefined;
@@ -24,44 +24,11 @@ interface V3dinfillParameters {
     "mrange"?: Array<number> | null | undefined;
     "cmask"?: string | null | undefined;
 }
+type V3dinfillParametersTagged = Required<Pick<V3dinfillParameters, '@type'>> & V3dinfillParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dinfill": v_3dinfill_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dinfill": v_3dinfill_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dinfill(...)`.
+ * Output object returned when calling `V3dinfillParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function v_3dinfill_params(
     mask_range: Array<number> | null = null,
     mrange: Array<number> | null = null,
     cmask: string | null = null,
-): V3dinfillParameters {
+): V3dinfillParametersTagged {
     const params = {
-        "@type": "afni.3dinfill" as const,
+        "@type": "afni/3dinfill" as const,
         "input": input,
     };
     if (prefix !== null) {
@@ -307,7 +274,6 @@ function v_3dinfill(
 
 export {
       V3dinfillOutputs,
-      V3dinfillParameters,
       V_3DINFILL_METADATA,
       v_3dinfill,
       v_3dinfill_execute,

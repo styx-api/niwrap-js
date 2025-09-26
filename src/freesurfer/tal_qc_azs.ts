@@ -12,46 +12,14 @@ const TAL_QC_AZS_METADATA: Metadata = {
 
 
 interface TalQcAzsParameters {
-    "@type": "freesurfer.tal_QC_AZS";
+    "@type"?: "freesurfer/tal_QC_AZS";
     "logfile": InputPathType;
 }
+type TalQcAzsParametersTagged = Required<Pick<TalQcAzsParameters, '@type'>> & TalQcAzsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.tal_QC_AZS": tal_qc_azs_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tal_qc_azs(...)`.
+ * Output object returned when calling `TalQcAzsParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface TalQcAzsOutputs {
  */
 function tal_qc_azs_params(
     logfile: InputPathType,
-): TalQcAzsParameters {
+): TalQcAzsParametersTagged {
     const params = {
-        "@type": "freesurfer.tal_QC_AZS" as const,
+        "@type": "freesurfer/tal_QC_AZS" as const,
         "logfile": logfile,
     };
     return params;
@@ -173,7 +141,6 @@ function tal_qc_azs(
 export {
       TAL_QC_AZS_METADATA,
       TalQcAzsOutputs,
-      TalQcAzsParameters,
       tal_qc_azs,
       tal_qc_azs_execute,
       tal_qc_azs_params,

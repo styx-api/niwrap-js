@@ -12,51 +12,18 @@ const CIFTI_LABEL_TO_ROI_METADATA: Metadata = {
 
 
 interface CiftiLabelToRoiParameters {
-    "@type": "workbench.cifti-label-to-roi";
+    "@type"?: "workbench/cifti-label-to-roi";
     "label_in": InputPathType;
     "scalar_out": string;
     "opt_name_label_name"?: string | null | undefined;
     "opt_key_label_key"?: number | null | undefined;
     "opt_map_map"?: string | null | undefined;
 }
+type CiftiLabelToRoiParametersTagged = Required<Pick<CiftiLabelToRoiParameters, '@type'>> & CiftiLabelToRoiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-label-to-roi": cifti_label_to_roi_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-label-to-roi": cifti_label_to_roi_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `cifti_label_to_roi(...)`.
+ * Output object returned when calling `CiftiLabelToRoiParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function cifti_label_to_roi_params(
     opt_name_label_name: string | null = null,
     opt_key_label_key: number | null = null,
     opt_map_map: string | null = null,
-): CiftiLabelToRoiParameters {
+): CiftiLabelToRoiParametersTagged {
     const params = {
-        "@type": "workbench.cifti-label-to-roi" as const,
+        "@type": "workbench/cifti-label-to-roi" as const,
         "label_in": label_in,
         "scalar_out": scalar_out,
     };
@@ -233,7 +200,6 @@ function cifti_label_to_roi(
 export {
       CIFTI_LABEL_TO_ROI_METADATA,
       CiftiLabelToRoiOutputs,
-      CiftiLabelToRoiParameters,
       cifti_label_to_roi,
       cifti_label_to_roi_execute,
       cifti_label_to_roi_params,

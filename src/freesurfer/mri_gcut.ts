@@ -12,51 +12,18 @@ const MRI_GCUT_METADATA: Metadata = {
 
 
 interface MriGcutParameters {
-    "@type": "freesurfer.mri_gcut";
+    "@type"?: "freesurfer/mri_gcut";
     "wmmask_110": boolean;
     "mult_file"?: InputPathType | null | undefined;
     "threshold_value"?: number | null | undefined;
     "infile": InputPathType;
     "outfile": string;
 }
+type MriGcutParametersTagged = Required<Pick<MriGcutParameters, '@type'>> & MriGcutParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_gcut": mri_gcut_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_gcut": mri_gcut_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_gcut(...)`.
+ * Output object returned when calling `MriGcutParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function mri_gcut_params(
     wmmask_110: boolean = false,
     mult_file: InputPathType | null = null,
     threshold_value: number | null = null,
-): MriGcutParameters {
+): MriGcutParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_gcut" as const,
+        "@type": "freesurfer/mri_gcut" as const,
         "wmmask_110": wmmask_110,
         "infile": infile,
         "outfile": outfile,
@@ -120,7 +87,7 @@ function mri_gcut_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("mri_gcut");
-    if ((params["wmmask_110"] ?? null)) {
+    if ((params["wmmask_110"] ?? false)) {
         cargs.push("-110");
     }
     if ((params["mult_file"] ?? null) !== null) {
@@ -223,7 +190,6 @@ function mri_gcut(
 export {
       MRI_GCUT_METADATA,
       MriGcutOutputs,
-      MriGcutParameters,
       mri_gcut,
       mri_gcut_execute,
       mri_gcut_params,

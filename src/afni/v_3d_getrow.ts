@@ -12,51 +12,18 @@ const V_3D_GETROW_METADATA: Metadata = {
 
 
 interface V3dGetrowParameters {
-    "@type": "afni.3dGetrow";
+    "@type"?: "afni/3dGetrow";
     "xrow"?: Array<number> | null | undefined;
     "yrow"?: Array<number> | null | undefined;
     "zrow"?: Array<number> | null | undefined;
     "input_file"?: InputPathType | null | undefined;
     "output_file"?: string | null | undefined;
 }
+type V3dGetrowParametersTagged = Required<Pick<V3dGetrowParameters, '@type'>> & V3dGetrowParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dGetrow": v_3d_getrow_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dGetrow": v_3d_getrow_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_getrow(...)`.
+ * Output object returned when calling `V3dGetrowParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function v_3d_getrow_params(
     zrow: Array<number> | null = null,
     input_file: InputPathType | null = null,
     output_file: string | null = null,
-): V3dGetrowParameters {
+): V3dGetrowParametersTagged {
     const params = {
-        "@type": "afni.3dGetrow" as const,
+        "@type": "afni/3dGetrow" as const,
     };
     if (xrow !== null) {
         params["xrow"] = xrow;
@@ -241,7 +208,6 @@ function v_3d_getrow(
 
 export {
       V3dGetrowOutputs,
-      V3dGetrowParameters,
       V_3D_GETROW_METADATA,
       v_3d_getrow,
       v_3d_getrow_execute,

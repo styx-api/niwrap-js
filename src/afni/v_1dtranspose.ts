@@ -12,48 +12,15 @@ const V_1DTRANSPOSE_METADATA: Metadata = {
 
 
 interface V1dtransposeParameters {
-    "@type": "afni.1dtranspose";
+    "@type"?: "afni/1dtranspose";
     "infile": InputPathType;
     "outfile"?: string | null | undefined;
 }
+type V1dtransposeParametersTagged = Required<Pick<V1dtransposeParameters, '@type'>> & V1dtransposeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dtranspose": v_1dtranspose_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.1dtranspose": v_1dtranspose_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1dtranspose(...)`.
+ * Output object returned when calling `V1dtransposeParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface V1dtransposeOutputs {
 function v_1dtranspose_params(
     infile: InputPathType,
     outfile: string | null = null,
-): V1dtransposeParameters {
+): V1dtransposeParametersTagged {
     const params = {
-        "@type": "afni.1dtranspose" as const,
+        "@type": "afni/1dtranspose" as const,
         "infile": infile,
     };
     if (outfile !== null) {
@@ -189,7 +156,6 @@ function v_1dtranspose(
 
 export {
       V1dtransposeOutputs,
-      V1dtransposeParameters,
       V_1DTRANSPOSE_METADATA,
       v_1dtranspose,
       v_1dtranspose_execute,

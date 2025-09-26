@@ -12,7 +12,7 @@ const MRIS_SAMPLE_PARC_METADATA: Metadata = {
 
 
 interface MrisSampleParcParameters {
-    "@type": "freesurfer.mris_sample_parc";
+    "@type"?: "freesurfer/mris_sample_parc";
     "subject_name": string;
     "hemisphere": string;
     "parc_name": string;
@@ -37,44 +37,11 @@ interface MrisSampleParcParameters {
     "help": boolean;
     "version": boolean;
 }
+type MrisSampleParcParametersTagged = Required<Pick<MrisSampleParcParameters, '@type'>> & MrisSampleParcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_sample_parc": mris_sample_parc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_sample_parc": mris_sample_parc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_sample_parc(...)`.
+ * Output object returned when calling `MrisSampleParcParameters(...)`.
  *
  * @interface
  */
@@ -143,9 +110,9 @@ function mris_sample_parc_params(
     change_unknown: number | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrisSampleParcParameters {
+): MrisSampleParcParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_sample_parc" as const,
+        "@type": "freesurfer/mris_sample_parc" as const,
         "subject_name": subject_name,
         "hemisphere": hemisphere,
         "parc_name": parc_name,
@@ -328,10 +295,10 @@ function mris_sample_parc_cargs(
             String((params["change_unknown"] ?? null))
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -456,7 +423,6 @@ function mris_sample_parc(
 export {
       MRIS_SAMPLE_PARC_METADATA,
       MrisSampleParcOutputs,
-      MrisSampleParcParameters,
       mris_sample_parc,
       mris_sample_parc_execute,
       mris_sample_parc_params,

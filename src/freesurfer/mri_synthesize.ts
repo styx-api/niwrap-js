@@ -12,7 +12,7 @@ const MRI_SYNTHESIZE_METADATA: Metadata = {
 
 
 interface MriSynthesizeParameters {
-    "@type": "freesurfer.mri_synthesize";
+    "@type"?: "freesurfer/mri_synthesize";
     "tr": number;
     "alpha": number;
     "te": number;
@@ -21,44 +21,11 @@ interface MriSynthesizeParameters {
     "output_volume": string;
     "fixed_weight": boolean;
 }
+type MriSynthesizeParametersTagged = Required<Pick<MriSynthesizeParameters, '@type'>> & MriSynthesizeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_synthesize": mri_synthesize_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_synthesize": mri_synthesize_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_synthesize(...)`.
+ * Output object returned when calling `MriSynthesizeParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function mri_synthesize_params(
     pd_volume: InputPathType,
     output_volume: string,
     fixed_weight: boolean = false,
-): MriSynthesizeParameters {
+): MriSynthesizeParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_synthesize" as const,
+        "@type": "freesurfer/mri_synthesize" as const,
         "tr": tr,
         "alpha": alpha,
         "te": te,
@@ -130,7 +97,7 @@ function mri_synthesize_cargs(
     cargs.push(execution.inputFile((params["t1_volume"] ?? null)));
     cargs.push(execution.inputFile((params["pd_volume"] ?? null)));
     cargs.push((params["output_volume"] ?? null));
-    if ((params["fixed_weight"] ?? null)) {
+    if ((params["fixed_weight"] ?? false)) {
         cargs.push("-w");
     }
     return cargs;
@@ -223,7 +190,6 @@ function mri_synthesize(
 export {
       MRI_SYNTHESIZE_METADATA,
       MriSynthesizeOutputs,
-      MriSynthesizeParameters,
       mri_synthesize,
       mri_synthesize_execute,
       mri_synthesize_params,

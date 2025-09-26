@@ -12,48 +12,16 @@ const V__PURIFY_1_D_METADATA: Metadata = {
 
 
 interface VPurify1DParameters {
-    "@type": "afni.@Purify_1D";
+    "@type"?: "afni/@Purify_1D";
     "sub_brick"?: string | null | undefined;
     "suffix"?: string | null | undefined;
     "input_files": Array<InputPathType>;
 }
+type VPurify1DParametersTagged = Required<Pick<VPurify1DParameters, '@type'>> & VPurify1DParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@Purify_1D": v__purify_1_d_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__purify_1_d(...)`.
+ * Output object returned when calling `VPurify1DParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function v__purify_1_d_params(
     input_files: Array<InputPathType>,
     sub_brick: string | null = null,
     suffix: string | null = null,
-): VPurify1DParameters {
+): VPurify1DParametersTagged {
     const params = {
-        "@type": "afni.@Purify_1D" as const,
+        "@type": "afni/@Purify_1D" as const,
         "input_files": input_files,
     };
     if (sub_brick !== null) {
@@ -200,7 +168,6 @@ function v__purify_1_d(
 
 export {
       VPurify1DOutputs,
-      VPurify1DParameters,
       V__PURIFY_1_D_METADATA,
       v__purify_1_d,
       v__purify_1_d_execute,

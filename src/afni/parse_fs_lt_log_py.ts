@@ -12,50 +12,18 @@ const PARSE_FS_LT_LOG_PY_METADATA: Metadata = {
 
 
 interface ParseFsLtLogPyParameters {
-    "@type": "afni.parse_fs_lt_log.py";
+    "@type"?: "afni/parse_fs_lt_log.py";
     "logfile": InputPathType;
     "labels": Array<string>;
     "show_orig": boolean;
     "show_all_orig": boolean;
     "verbosity"?: number | null | undefined;
 }
+type ParseFsLtLogPyParametersTagged = Required<Pick<ParseFsLtLogPyParameters, '@type'>> & ParseFsLtLogPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.parse_fs_lt_log.py": parse_fs_lt_log_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `parse_fs_lt_log_py(...)`.
+ * Output object returned when calling `ParseFsLtLogPyParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function parse_fs_lt_log_py_params(
     show_orig: boolean = false,
     show_all_orig: boolean = false,
     verbosity: number | null = null,
-): ParseFsLtLogPyParameters {
+): ParseFsLtLogPyParametersTagged {
     const params = {
-        "@type": "afni.parse_fs_lt_log.py" as const,
+        "@type": "afni/parse_fs_lt_log.py" as const,
         "logfile": logfile,
         "labels": labels,
         "show_orig": show_orig,
@@ -121,10 +89,10 @@ function parse_fs_lt_log_py_cargs(
         "-labels",
         ...(params["labels"] ?? null)
     );
-    if ((params["show_orig"] ?? null)) {
+    if ((params["show_orig"] ?? false)) {
         cargs.push("-show_orig");
     }
-    if ((params["show_all_orig"] ?? null)) {
+    if ((params["show_all_orig"] ?? false)) {
         cargs.push("-show_all_orig");
     }
     if ((params["verbosity"] ?? null) !== null) {
@@ -218,7 +186,6 @@ function parse_fs_lt_log_py(
 export {
       PARSE_FS_LT_LOG_PY_METADATA,
       ParseFsLtLogPyOutputs,
-      ParseFsLtLogPyParameters,
       parse_fs_lt_log_py,
       parse_fs_lt_log_py_execute,
       parse_fs_lt_log_py_params,

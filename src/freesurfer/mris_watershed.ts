@@ -12,51 +12,18 @@ const MRIS_WATERSHED_METADATA: Metadata = {
 
 
 interface MrisWatershedParameters {
-    "@type": "freesurfer.mris_watershed";
+    "@type"?: "freesurfer/mris_watershed";
     "input_surface": InputPathType;
     "input_gradient_field": InputPathType;
     "output_annotation": string;
     "max_clusters"?: number | null | undefined;
     "mask_label"?: string | null | undefined;
 }
+type MrisWatershedParametersTagged = Required<Pick<MrisWatershedParameters, '@type'>> & MrisWatershedParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_watershed": mris_watershed_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_watershed": mris_watershed_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_watershed(...)`.
+ * Output object returned when calling `MrisWatershedParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function mris_watershed_params(
     output_annotation: string,
     max_clusters: number | null = null,
     mask_label: string | null = null,
-): MrisWatershedParameters {
+): MrisWatershedParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_watershed" as const,
+        "@type": "freesurfer/mris_watershed" as const,
         "input_surface": input_surface,
         "input_gradient_field": input_gradient_field,
         "output_annotation": output_annotation,
@@ -221,7 +188,6 @@ function mris_watershed(
 export {
       MRIS_WATERSHED_METADATA,
       MrisWatershedOutputs,
-      MrisWatershedParameters,
       mris_watershed,
       mris_watershed_execute,
       mris_watershed_params,

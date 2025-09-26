@@ -12,51 +12,18 @@ const CONVERT_XFM_METADATA: Metadata = {
 
 
 interface ConvertXfmParameters {
-    "@type": "fsl.convert_xfm";
+    "@type"?: "fsl/convert_xfm";
     "out_file"?: string | null | undefined;
     "invert_xfm": boolean;
     "concat_xfm"?: InputPathType | null | undefined;
     "fix_scale_skew"?: InputPathType | null | undefined;
     "in_file": InputPathType;
 }
+type ConvertXfmParametersTagged = Required<Pick<ConvertXfmParameters, '@type'>> & ConvertXfmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.convert_xfm": convert_xfm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.convert_xfm": convert_xfm_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `convert_xfm(...)`.
+ * Output object returned when calling `ConvertXfmParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function convert_xfm_params(
     invert_xfm: boolean = false,
     concat_xfm: InputPathType | null = null,
     fix_scale_skew: InputPathType | null = null,
-): ConvertXfmParameters {
+): ConvertXfmParametersTagged {
     const params = {
-        "@type": "fsl.convert_xfm" as const,
+        "@type": "fsl/convert_xfm" as const,
         "invert_xfm": invert_xfm,
         "in_file": in_file,
     };
@@ -128,7 +95,7 @@ function convert_xfm_cargs(
             (params["out_file"] ?? null)
         );
     }
-    if ((params["invert_xfm"] ?? null)) {
+    if ((params["invert_xfm"] ?? false)) {
         cargs.push("-inverse");
     }
     if ((params["concat_xfm"] ?? null) !== null) {
@@ -230,7 +197,6 @@ function convert_xfm(
 export {
       CONVERT_XFM_METADATA,
       ConvertXfmOutputs,
-      ConvertXfmParameters,
       convert_xfm,
       convert_xfm_execute,
       convert_xfm_params,

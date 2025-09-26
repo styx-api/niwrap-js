@@ -12,14 +12,15 @@ const MRDUMP_METADATA: Metadata = {
 
 
 interface MrdumpConfigParameters {
-    "@type": "mrtrix.mrdump.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MrdumpConfigParametersTagged = Required<Pick<MrdumpConfigParameters, '@type'>> & MrdumpConfigParameters;
 
 
 interface MrdumpParameters {
-    "@type": "mrtrix.mrdump";
+    "@type"?: "mrtrix/mrdump";
     "mask"?: InputPathType | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -32,41 +33,7 @@ interface MrdumpParameters {
     "input": InputPathType;
     "output"?: string | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.mrdump": mrdump_cargs,
-        "mrtrix.mrdump.config": mrdump_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.mrdump": mrdump_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MrdumpParametersTagged = Required<Pick<MrdumpParameters, '@type'>> & MrdumpParameters;
 
 
 /**
@@ -80,9 +47,9 @@ function dynOutputs(
 function mrdump_config_params(
     key: string,
     value: string,
-): MrdumpConfigParameters {
+): MrdumpConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.mrdump.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -111,7 +78,7 @@ function mrdump_config_cargs(
 
 
 /**
- * Output object returned when calling `mrdump(...)`.
+ * Output object returned when calling `MrdumpParameters(...)`.
  *
  * @interface
  */
@@ -156,9 +123,9 @@ function mrdump_params(
     help: boolean = false,
     version: boolean = false,
     output: string | null = null,
-): MrdumpParameters {
+): MrdumpParametersTagged {
     const params = {
-        "@type": "mrtrix.mrdump" as const,
+        "@type": "mrtrix/mrdump" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -203,16 +170,16 @@ function mrdump_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -222,12 +189,12 @@ function mrdump_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => mrdump_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -343,9 +310,7 @@ function mrdump(
 
 export {
       MRDUMP_METADATA,
-      MrdumpConfigParameters,
       MrdumpOutputs,
-      MrdumpParameters,
       mrdump,
       mrdump_config_params,
       mrdump_execute,

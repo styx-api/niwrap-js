@@ -12,7 +12,7 @@ const SAMSEG_METADATA: Metadata = {
 
 
 interface SamsegParameters {
-    "@type": "freesurfer.samseg";
+    "@type"?: "freesurfer/samseg";
     "input_files": Array<InputPathType>;
     "t1w_files"?: Array<InputPathType> | null | undefined;
     "t2w_files"?: Array<InputPathType> | null | undefined;
@@ -58,44 +58,11 @@ interface SamsegParameters {
     "smooth_wm_cortex"?: number | null | undefined;
     "profile_file"?: InputPathType | null | undefined;
 }
+type SamsegParametersTagged = Required<Pick<SamsegParameters, '@type'>> & SamsegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.samseg": samseg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.samseg": samseg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `samseg(...)`.
+ * Output object returned when calling `SamsegParameters(...)`.
  *
  * @interface
  */
@@ -218,9 +185,9 @@ function samseg_params(
     ignore_unknown: boolean = false,
     smooth_wm_cortex: number | null = null,
     profile_file: InputPathType | null = null,
-): SamsegParameters {
+): SamsegParametersTagged {
     const params = {
-        "@type": "freesurfer.samseg" as const,
+        "@type": "freesurfer/samseg" as const,
         "input_files": input_files,
         "output_directory": output_directory,
         "save_history": save_history,
@@ -372,7 +339,7 @@ function samseg_cargs(
             (params["dissection_photo_mode"] ?? null)
         );
     }
-    if ((params["save_history"] ?? null)) {
+    if ((params["save_history"] ?? false)) {
         cargs.push("--history");
     }
     if ((params["subject"] ?? null) !== null) {
@@ -381,19 +348,19 @@ function samseg_cargs(
             (params["subject"] ?? null)
         );
     }
-    if ((params["save_posteriors"] ?? null)) {
+    if ((params["save_posteriors"] ?? false)) {
         cargs.push("--save-posteriors");
     }
-    if ((params["save_probabilities"] ?? null)) {
+    if ((params["save_probabilities"] ?? false)) {
         cargs.push("--save-probabilities");
     }
-    if ((params["no_save_warp"] ?? null)) {
+    if ((params["no_save_warp"] ?? false)) {
         cargs.push("--no-save-warp");
     }
-    if ((params["mrf"] ?? null)) {
+    if ((params["mrf"] ?? false)) {
         cargs.push("--mrf");
     }
-    if ((params["no_mrf"] ?? null)) {
+    if ((params["no_mrf"] ?? false)) {
         cargs.push("--no-mrf");
     }
     if ((params["threads"] ?? null) !== null) {
@@ -414,31 +381,31 @@ function samseg_cargs(
             execution.inputFile((params["gmm_file"] ?? null))
         );
     }
-    if ((params["no_block_coordinate_descent"] ?? null)) {
+    if ((params["no_block_coordinate_descent"] ?? false)) {
         cargs.push("--no-block-coordinate-descent");
     }
-    if ((params["logdomain_costandgradient_calculator"] ?? null)) {
+    if ((params["logdomain_costandgradient_calculator"] ?? false)) {
         cargs.push("--logdomain-costandgradient-calculator");
     }
-    if ((params["no_logdomain_costandgradient_calculator"] ?? null)) {
+    if ((params["no_logdomain_costandgradient_calculator"] ?? false)) {
         cargs.push("--no-logdomain-costandgradient-calculator");
     }
-    if ((params["recon"] ?? null)) {
+    if ((params["recon"] ?? false)) {
         cargs.push("--recon");
     }
-    if ((params["fill"] ?? null)) {
+    if ((params["fill"] ?? false)) {
         cargs.push("--fill");
     }
-    if ((params["normalization2"] ?? null)) {
+    if ((params["normalization2"] ?? false)) {
         cargs.push("--normalization2");
     }
-    if ((params["use_t2w"] ?? null)) {
+    if ((params["use_t2w"] ?? false)) {
         cargs.push("--use-t2w");
     }
-    if ((params["use_flair"] ?? null)) {
+    if ((params["use_flair"] ?? false)) {
         cargs.push("--use-flair");
     }
-    if ((params["hires"] ?? null)) {
+    if ((params["hires"] ?? false)) {
         cargs.push("--hires");
     }
     if ((params["subjects_directory"] ?? null) !== null) {
@@ -447,7 +414,7 @@ function samseg_cargs(
             (params["subjects_directory"] ?? null)
         );
     }
-    if ((params["pallidum_separate"] ?? null)) {
+    if ((params["pallidum_separate"] ?? false)) {
         cargs.push("--pallidum-separate");
     }
     if ((params["stiffness"] ?? null) !== null) {
@@ -456,7 +423,7 @@ function samseg_cargs(
             String((params["stiffness"] ?? null))
         );
     }
-    if ((params["lesion"] ?? null)) {
+    if ((params["lesion"] ?? false)) {
         cargs.push("--lesion");
     }
     if ((params["lesion_mask_pattern"] ?? null) !== null) {
@@ -489,7 +456,7 @@ function samseg_cargs(
             execution.inputFile((params["init_lta"] ?? null))
         );
     }
-    if ((params["reg_only"] ?? null)) {
+    if ((params["reg_only"] ?? false)) {
         cargs.push("--reg-only");
     }
     if ((params["ssdd_directory"] ?? null) !== null) {
@@ -498,7 +465,7 @@ function samseg_cargs(
             (params["ssdd_directory"] ?? null)
         );
     }
-    if ((params["save_mesh"] ?? null)) {
+    if ((params["save_mesh"] ?? false)) {
         cargs.push("--save-mesh");
     }
     if ((params["max_iters"] ?? null) !== null) {
@@ -513,7 +480,7 @@ function samseg_cargs(
             execution.inputFile((params["dice_file"] ?? null))
         );
     }
-    if ((params["ignore_unknown"] ?? null)) {
+    if ((params["ignore_unknown"] ?? false)) {
         cargs.push("--ignore-unknown");
     }
     if ((params["smooth_wm_cortex"] ?? null) !== null) {
@@ -695,7 +662,6 @@ function samseg(
 export {
       SAMSEG_METADATA,
       SamsegOutputs,
-      SamsegParameters,
       samseg,
       samseg_execute,
       samseg_params,

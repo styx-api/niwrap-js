@@ -12,7 +12,7 @@ const XFIBRES_METADATA: Metadata = {
 
 
 interface XfibresParameters {
-    "@type": "fsl.xfibres";
+    "@type"?: "fsl/xfibres";
     "datafile": InputPathType;
     "maskfile": InputPathType;
     "bvecs": InputPathType;
@@ -41,44 +41,11 @@ interface XfibresParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
+type XfibresParametersTagged = Required<Pick<XfibresParameters, '@type'>> & XfibresParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.xfibres": xfibres_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.xfibres": xfibres_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `xfibres(...)`.
+ * Output object returned when calling `XfibresParameters(...)`.
  *
  * @interface
  */
@@ -155,9 +122,9 @@ function xfibres_params(
     rstd: number | null = null,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): XfibresParameters {
+): XfibresParametersTagged {
     const params = {
-        "@type": "fsl.xfibres" as const,
+        "@type": "fsl/xfibres" as const,
         "datafile": datafile,
         "maskfile": maskfile,
         "bvecs": bvecs,
@@ -250,7 +217,7 @@ function xfibres_cargs(
             (params["logdir"] ?? null)
         );
     }
-    if ((params["forcedir"] ?? null)) {
+    if ((params["forcedir"] ?? false)) {
         cargs.push("--forcedir");
     }
     if ((params["max_fibres"] ?? null) !== null) {
@@ -307,28 +274,28 @@ function xfibres_cargs(
             (params["seed"] ?? null)
         );
     }
-    if ((params["noard"] ?? null)) {
+    if ((params["noard"] ?? false)) {
         cargs.push("--noard");
     }
-    if ((params["allard"] ?? null)) {
+    if ((params["allard"] ?? false)) {
         cargs.push("--allard");
     }
-    if ((params["nospat"] ?? null)) {
+    if ((params["nospat"] ?? false)) {
         cargs.push("--nospat");
     }
-    if ((params["nonlinear"] ?? null)) {
+    if ((params["nonlinear"] ?? false)) {
         cargs.push("--nonlinear");
     }
-    if ((params["cnonlinear"] ?? null)) {
+    if ((params["cnonlinear"] ?? false)) {
         cargs.push("--cnonlinear");
     }
-    if ((params["rician"] ?? null)) {
+    if ((params["rician"] ?? false)) {
         cargs.push("--rician");
     }
-    if ((params["add_f0"] ?? null)) {
+    if ((params["add_f0"] ?? false)) {
         cargs.push("--f0");
     }
-    if ((params["ard_f0"] ?? null)) {
+    if ((params["ard_f0"] ?? false)) {
         cargs.push("--ardf0");
     }
     if ((params["rmean"] ?? null) !== null) {
@@ -343,10 +310,10 @@ function xfibres_cargs(
             String((params["rstd"] ?? null))
         );
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-V");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -479,7 +446,6 @@ function xfibres(
 export {
       XFIBRES_METADATA,
       XfibresOutputs,
-      XfibresParameters,
       xfibres,
       xfibres_execute,
       xfibres_params,

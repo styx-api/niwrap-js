@@ -12,51 +12,18 @@ const IMAGE_MATH_METADATA: Metadata = {
 
 
 interface ImageMathParameters {
-    "@type": "ants.ImageMath";
+    "@type"?: "ants/ImageMath";
     "image_dimension": 2 | 3 | 4;
     "output_image": string;
     "operations_and_inputs": string;
     "image1": InputPathType;
     "image2"?: InputPathType | null | undefined;
 }
+type ImageMathParametersTagged = Required<Pick<ImageMathParameters, '@type'>> & ImageMathParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.ImageMath": image_math_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.ImageMath": image_math_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `image_math(...)`.
+ * Output object returned when calling `ImageMathParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function image_math_params(
     operations_and_inputs: string,
     image1: InputPathType,
     image2: InputPathType | null = null,
-): ImageMathParameters {
+): ImageMathParametersTagged {
     const params = {
-        "@type": "ants.ImageMath" as const,
+        "@type": "ants/ImageMath" as const,
         "image_dimension": image_dimension,
         "output_image": output_image,
         "operations_and_inputs": operations_and_inputs,
@@ -211,7 +178,6 @@ function image_math(
 export {
       IMAGE_MATH_METADATA,
       ImageMathOutputs,
-      ImageMathParameters,
       image_math,
       image_math_execute,
       image_math_params,

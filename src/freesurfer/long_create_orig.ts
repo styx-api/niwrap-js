@@ -12,48 +12,15 @@ const LONG_CREATE_ORIG_METADATA: Metadata = {
 
 
 interface LongCreateOrigParameters {
-    "@type": "freesurfer.long_create_orig";
+    "@type"?: "freesurfer/long_create_orig";
     "base_id": string;
     "tp_id"?: string | null | undefined;
 }
+type LongCreateOrigParametersTagged = Required<Pick<LongCreateOrigParameters, '@type'>> & LongCreateOrigParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.long_create_orig": long_create_orig_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.long_create_orig": long_create_orig_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `long_create_orig(...)`.
+ * Output object returned when calling `LongCreateOrigParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface LongCreateOrigOutputs {
 function long_create_orig_params(
     base_id: string,
     tp_id: string | null = null,
-): LongCreateOrigParameters {
+): LongCreateOrigParametersTagged {
     const params = {
-        "@type": "freesurfer.long_create_orig" as const,
+        "@type": "freesurfer/long_create_orig" as const,
         "base_id": base_id,
     };
     if (tp_id !== null) {
@@ -190,7 +157,6 @@ function long_create_orig(
 export {
       LONG_CREATE_ORIG_METADATA,
       LongCreateOrigOutputs,
-      LongCreateOrigParameters,
       long_create_orig,
       long_create_orig_execute,
       long_create_orig_params,

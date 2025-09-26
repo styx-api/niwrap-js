@@ -12,7 +12,7 @@ const V_3D_BLUR_TO_FWHM_METADATA: Metadata = {
 
 
 interface V3dBlurToFwhmParameters {
-    "@type": "afni.3dBlurToFWHM";
+    "@type"?: "afni/3dBlurToFWHM";
     "automask": boolean;
     "blurmaster"?: InputPathType | null | undefined;
     "fwhm"?: number | null | undefined;
@@ -22,44 +22,11 @@ interface V3dBlurToFwhmParameters {
     "outputtype"?: "NIFTI" | "AFNI" | "NIFTI_GZ" | null | undefined;
     "prefix"?: string | null | undefined;
 }
+type V3dBlurToFwhmParametersTagged = Required<Pick<V3dBlurToFwhmParameters, '@type'>> & V3dBlurToFwhmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dBlurToFWHM": v_3d_blur_to_fwhm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dBlurToFWHM": v_3d_blur_to_fwhm_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_blur_to_fwhm(...)`.
+ * Output object returned when calling `V3dBlurToFwhmParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function v_3d_blur_to_fwhm_params(
     mask: InputPathType | null = null,
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     prefix: string | null = null,
-): V3dBlurToFwhmParameters {
+): V3dBlurToFwhmParametersTagged {
     const params = {
-        "@type": "afni.3dBlurToFWHM" as const,
+        "@type": "afni/3dBlurToFWHM" as const,
         "automask": automask,
         "in_file": in_file,
     };
@@ -140,7 +107,7 @@ function v_3d_blur_to_fwhm_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("3dBlurToFWHM");
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     if ((params["blurmaster"] ?? null) !== null) {
@@ -271,7 +238,6 @@ function v_3d_blur_to_fwhm(
 
 export {
       V3dBlurToFwhmOutputs,
-      V3dBlurToFwhmParameters,
       V_3D_BLUR_TO_FWHM_METADATA,
       v_3d_blur_to_fwhm,
       v_3d_blur_to_fwhm_execute,

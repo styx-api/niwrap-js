@@ -12,7 +12,7 @@ const ANTS_SLICE_REGULARIZED_REGISTRATION_METADATA: Metadata = {
 
 
 interface AntsSliceRegularizedRegistrationParameters {
-    "@type": "ants.antsSliceRegularizedRegistration";
+    "@type"?: "ants/antsSliceRegularizedRegistration";
     "polydegree": number;
     "output": string;
     "metric": string;
@@ -24,44 +24,11 @@ interface AntsSliceRegularizedRegistrationParameters {
     "interpolation"?: "Linear" | "NearestNeighbor" | "MultiLabel" | "Gaussian" | "BSpline" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | "GenericLabel" | null | undefined;
     "verbose"?: 0 | null | undefined;
 }
+type AntsSliceRegularizedRegistrationParametersTagged = Required<Pick<AntsSliceRegularizedRegistrationParameters, '@type'>> & AntsSliceRegularizedRegistrationParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.antsSliceRegularizedRegistration": ants_slice_regularized_registration_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.antsSliceRegularizedRegistration": ants_slice_regularized_registration_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ants_slice_regularized_registration(...)`.
+ * Output object returned when calling `AntsSliceRegularizedRegistrationParameters(...)`.
  *
  * @interface
  */
@@ -108,9 +75,9 @@ function ants_slice_regularized_registration_params(
     mask: InputPathType | null = null,
     interpolation: "Linear" | "NearestNeighbor" | "MultiLabel" | "Gaussian" | "BSpline" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | "GenericLabel" | null = null,
     verbose: 0 | null = null,
-): AntsSliceRegularizedRegistrationParameters {
+): AntsSliceRegularizedRegistrationParametersTagged {
     const params = {
-        "@type": "ants.antsSliceRegularizedRegistration" as const,
+        "@type": "ants/antsSliceRegularizedRegistration" as const,
         "polydegree": polydegree,
         "output": output,
         "metric": metric,
@@ -289,7 +256,6 @@ function ants_slice_regularized_registration(
 export {
       ANTS_SLICE_REGULARIZED_REGISTRATION_METADATA,
       AntsSliceRegularizedRegistrationOutputs,
-      AntsSliceRegularizedRegistrationParameters,
       ants_slice_regularized_registration,
       ants_slice_regularized_registration_execute,
       ants_slice_regularized_registration_params,

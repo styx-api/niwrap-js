@@ -12,51 +12,18 @@ const FSLCOMPLEX_METADATA: Metadata = {
 
 
 interface FslcomplexParameters {
-    "@type": "fsl.fslcomplex";
+    "@type"?: "fsl/fslcomplex";
     "input_file": InputPathType;
     "output_file": string;
     "output_type": "-realabs" | "-realphase" | "-realpolar" | "-realcartesian" | "-complex" | "-complexpolar" | "-complexsplit" | "-complexmerge" | "-copyonly";
     "start_vol"?: number | null | undefined;
     "end_vol"?: number | null | undefined;
 }
+type FslcomplexParametersTagged = Required<Pick<FslcomplexParameters, '@type'>> & FslcomplexParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslcomplex": fslcomplex_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fslcomplex": fslcomplex_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslcomplex(...)`.
+ * Output object returned when calling `FslcomplexParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function fslcomplex_params(
     output_type: "-realabs" | "-realphase" | "-realpolar" | "-realcartesian" | "-complex" | "-complexpolar" | "-complexsplit" | "-complexmerge" | "-copyonly",
     start_vol: number | null = null,
     end_vol: number | null = null,
-): FslcomplexParameters {
+): FslcomplexParametersTagged {
     const params = {
-        "@type": "fsl.fslcomplex" as const,
+        "@type": "fsl/fslcomplex" as const,
         "input_file": input_file,
         "output_file": output_file,
         "output_type": output_type,
@@ -215,7 +182,6 @@ function fslcomplex(
 export {
       FSLCOMPLEX_METADATA,
       FslcomplexOutputs,
-      FslcomplexParameters,
       fslcomplex,
       fslcomplex_execute,
       fslcomplex_params,

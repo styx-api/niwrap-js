@@ -12,47 +12,14 @@ const V__GET_AFNI_VERSION_METADATA: Metadata = {
 
 
 interface VGetAfniVersionParameters {
-    "@type": "afni.@get.afni.version";
+    "@type"?: "afni/@get.afni.version";
     "version": string;
 }
+type VGetAfniVersionParametersTagged = Required<Pick<VGetAfniVersionParameters, '@type'>> & VGetAfniVersionParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@get.afni.version": v__get_afni_version_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@get.afni.version": v__get_afni_version_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__get_afni_version(...)`.
+ * Output object returned when calling `VGetAfniVersionParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface VGetAfniVersionOutputs {
  */
 function v__get_afni_version_params(
     version: string,
-): VGetAfniVersionParameters {
+): VGetAfniVersionParametersTagged {
     const params = {
-        "@type": "afni.@get.afni.version" as const,
+        "@type": "afni/@get.afni.version" as const,
         "version": version,
     };
     return params;
@@ -178,7 +145,6 @@ function v__get_afni_version(
 
 export {
       VGetAfniVersionOutputs,
-      VGetAfniVersionParameters,
       V__GET_AFNI_VERSION_METADATA,
       v__get_afni_version,
       v__get_afni_version_execute,

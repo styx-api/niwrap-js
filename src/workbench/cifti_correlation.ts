@@ -12,17 +12,18 @@ const CIFTI_CORRELATION_METADATA: Metadata = {
 
 
 interface CiftiCorrelationRoiOverrideParameters {
-    "@type": "workbench.cifti-correlation.roi_override";
+    "@type"?: "roi_override";
     "opt_left_roi_roi_metric"?: InputPathType | null | undefined;
     "opt_right_roi_roi_metric"?: InputPathType | null | undefined;
     "opt_cerebellum_roi_roi_metric"?: InputPathType | null | undefined;
     "opt_vol_roi_roi_vol"?: InputPathType | null | undefined;
     "opt_cifti_roi_roi_cifti"?: InputPathType | null | undefined;
 }
+type CiftiCorrelationRoiOverrideParametersTagged = Required<Pick<CiftiCorrelationRoiOverrideParameters, '@type'>> & CiftiCorrelationRoiOverrideParameters;
 
 
 interface CiftiCorrelationParameters {
-    "@type": "workbench.cifti-correlation";
+    "@type"?: "workbench/cifti-correlation";
     "cifti": InputPathType;
     "cifti_out": string;
     "roi_override"?: CiftiCorrelationRoiOverrideParameters | null | undefined;
@@ -32,41 +33,7 @@ interface CiftiCorrelationParameters {
     "opt_covariance": boolean;
     "opt_mem_limit_limit_gb"?: number | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-correlation": cifti_correlation_cargs,
-        "workbench.cifti-correlation.roi_override": cifti_correlation_roi_override_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-correlation": cifti_correlation_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiCorrelationParametersTagged = Required<Pick<CiftiCorrelationParameters, '@type'>> & CiftiCorrelationParameters;
 
 
 /**
@@ -86,9 +53,9 @@ function cifti_correlation_roi_override_params(
     opt_cerebellum_roi_roi_metric: InputPathType | null = null,
     opt_vol_roi_roi_vol: InputPathType | null = null,
     opt_cifti_roi_roi_cifti: InputPathType | null = null,
-): CiftiCorrelationRoiOverrideParameters {
+): CiftiCorrelationRoiOverrideParametersTagged {
     const params = {
-        "@type": "workbench.cifti-correlation.roi_override" as const,
+        "@type": "roi_override" as const,
     };
     if (opt_left_roi_roi_metric !== null) {
         params["opt_left_roi_roi_metric"] = opt_left_roi_roi_metric;
@@ -158,7 +125,7 @@ function cifti_correlation_roi_override_cargs(
 
 
 /**
- * Output object returned when calling `cifti_correlation(...)`.
+ * Output object returned when calling `CiftiCorrelationParameters(...)`.
  *
  * @interface
  */
@@ -197,9 +164,9 @@ function cifti_correlation_params(
     opt_no_demean: boolean = false,
     opt_covariance: boolean = false,
     opt_mem_limit_limit_gb: number | null = null,
-): CiftiCorrelationParameters {
+): CiftiCorrelationParametersTagged {
     const params = {
-        "@type": "workbench.cifti-correlation" as const,
+        "@type": "workbench/cifti-correlation" as const,
         "cifti": cifti,
         "cifti_out": cifti_out,
         "opt_fisher_z": opt_fisher_z,
@@ -237,7 +204,7 @@ function cifti_correlation_cargs(
     cargs.push(execution.inputFile((params["cifti"] ?? null)));
     cargs.push((params["cifti_out"] ?? null));
     if ((params["roi_override"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["roi_override"] ?? null)["@type"])((params["roi_override"] ?? null), execution));
+        cargs.push(...cifti_correlation_roi_override_cargs((params["roi_override"] ?? null), execution));
     }
     if ((params["opt_weights_weight_file"] ?? null) !== null) {
         cargs.push(
@@ -245,13 +212,13 @@ function cifti_correlation_cargs(
             (params["opt_weights_weight_file"] ?? null)
         );
     }
-    if ((params["opt_fisher_z"] ?? null)) {
+    if ((params["opt_fisher_z"] ?? false)) {
         cargs.push("-fisher-z");
     }
-    if ((params["opt_no_demean"] ?? null)) {
+    if ((params["opt_no_demean"] ?? false)) {
         cargs.push("-no-demean");
     }
-    if ((params["opt_covariance"] ?? null)) {
+    if ((params["opt_covariance"] ?? false)) {
         cargs.push("-covariance");
     }
     if ((params["opt_mem_limit_limit_gb"] ?? null) !== null) {
@@ -364,8 +331,6 @@ function cifti_correlation(
 export {
       CIFTI_CORRELATION_METADATA,
       CiftiCorrelationOutputs,
-      CiftiCorrelationParameters,
-      CiftiCorrelationRoiOverrideParameters,
       cifti_correlation,
       cifti_correlation_execute,
       cifti_correlation_params,

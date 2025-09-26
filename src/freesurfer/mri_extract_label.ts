@@ -12,7 +12,7 @@ const MRI_EXTRACT_LABEL_METADATA: Metadata = {
 
 
 interface MriExtractLabelParameters {
-    "@type": "freesurfer.mri_extract_label";
+    "@type"?: "freesurfer/mri_extract_label";
     "input_volume": InputPathType;
     "labels": Array<string>;
     "output_name": string;
@@ -22,44 +22,11 @@ interface MriExtractLabelParameters {
     "dilate"?: number | null | undefined;
     "erode"?: number | null | undefined;
 }
+type MriExtractLabelParametersTagged = Required<Pick<MriExtractLabelParameters, '@type'>> & MriExtractLabelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_extract_label": mri_extract_label_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_extract_label": mri_extract_label_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_extract_label(...)`.
+ * Output object returned when calling `MriExtractLabelParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function mri_extract_label_params(
     exit_none_found: boolean = false,
     dilate: number | null = null,
     erode: number | null = null,
-): MriExtractLabelParameters {
+): MriExtractLabelParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_extract_label" as const,
+        "@type": "freesurfer/mri_extract_label" as const,
         "input_volume": input_volume,
         "labels": labels,
         "output_name": output_name,
@@ -151,7 +118,7 @@ function mri_extract_label_cargs(
             execution.inputFile((params["transform_file"] ?? null))
         );
     }
-    if ((params["exit_none_found"] ?? null)) {
+    if ((params["exit_none_found"] ?? false)) {
         cargs.push("-exit_none_found");
     }
     if ((params["dilate"] ?? null) !== null) {
@@ -258,7 +225,6 @@ function mri_extract_label(
 export {
       MRI_EXTRACT_LABEL_METADATA,
       MriExtractLabelOutputs,
-      MriExtractLabelParameters,
       mri_extract_label,
       mri_extract_label_execute,
       mri_extract_label_params,

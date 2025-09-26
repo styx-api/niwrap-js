@@ -12,51 +12,18 @@ const ADJUNCT_TORT_PLOT_DP_ALIGN_METADATA: Metadata = {
 
 
 interface AdjunctTortPlotDpAlignParameters {
-    "@type": "afni.adjunct_tort_plot_dp_align";
+    "@type"?: "afni/adjunct_tort_plot_dp_align";
     "input_file": InputPathType;
     "output_prefix": string;
     "enorm_max"?: number | null | undefined;
     "enorm_hline"?: number | null | undefined;
     "no_svg": boolean;
 }
+type AdjunctTortPlotDpAlignParametersTagged = Required<Pick<AdjunctTortPlotDpAlignParameters, '@type'>> & AdjunctTortPlotDpAlignParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.adjunct_tort_plot_dp_align": adjunct_tort_plot_dp_align_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.adjunct_tort_plot_dp_align": adjunct_tort_plot_dp_align_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `adjunct_tort_plot_dp_align(...)`.
+ * Output object returned when calling `AdjunctTortPlotDpAlignParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function adjunct_tort_plot_dp_align_params(
     enorm_max: number | null = null,
     enorm_hline: number | null = null,
     no_svg: boolean = false,
-): AdjunctTortPlotDpAlignParameters {
+): AdjunctTortPlotDpAlignParametersTagged {
     const params = {
-        "@type": "afni.adjunct_tort_plot_dp_align" as const,
+        "@type": "afni/adjunct_tort_plot_dp_align" as const,
         "input_file": input_file,
         "output_prefix": output_prefix,
         "no_svg": no_svg,
@@ -152,7 +119,7 @@ function adjunct_tort_plot_dp_align_cargs(
             String((params["enorm_hline"] ?? null))
         );
     }
-    if ((params["no_svg"] ?? null)) {
+    if ((params["no_svg"] ?? false)) {
         cargs.push("-no_svg");
     }
     return cargs;
@@ -244,7 +211,6 @@ function adjunct_tort_plot_dp_align(
 export {
       ADJUNCT_TORT_PLOT_DP_ALIGN_METADATA,
       AdjunctTortPlotDpAlignOutputs,
-      AdjunctTortPlotDpAlignParameters,
       adjunct_tort_plot_dp_align,
       adjunct_tort_plot_dp_align_execute,
       adjunct_tort_plot_dp_align_params,

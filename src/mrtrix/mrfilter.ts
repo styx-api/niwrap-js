@@ -12,26 +12,29 @@ const MRFILTER_METADATA: Metadata = {
 
 
 interface MrfilterVariousStringParameters {
-    "@type": "mrtrix.mrfilter.VariousString";
+    "@type"?: "VariousString";
     "obj": string;
 }
+type MrfilterVariousStringParametersTagged = Required<Pick<MrfilterVariousStringParameters, '@type'>> & MrfilterVariousStringParameters;
 
 
 interface MrfilterVariousFileParameters {
-    "@type": "mrtrix.mrfilter.VariousFile";
+    "@type"?: "VariousFile";
     "obj": InputPathType;
 }
+type MrfilterVariousFileParametersTagged = Required<Pick<MrfilterVariousFileParameters, '@type'>> & MrfilterVariousFileParameters;
 
 
 interface MrfilterConfigParameters {
-    "@type": "mrtrix.mrfilter.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MrfilterConfigParametersTagged = Required<Pick<MrfilterConfigParameters, '@type'>> & MrfilterConfigParameters;
 
 
 interface MrfilterParameters {
-    "@type": "mrtrix.mrfilter";
+    "@type"?: "mrtrix/mrfilter";
     "axes"?: Array<number> | null | undefined;
     "inverse": boolean;
     "magnitude": boolean;
@@ -49,7 +52,7 @@ interface MrfilterParameters {
     "bridge"?: number | null | undefined;
     "maskin"?: InputPathType | null | undefined;
     "maskout"?: string | null | undefined;
-    "strides"?: MrfilterVariousStringParameters | MrfilterVariousFileParameters | null | undefined;
+    "strides"?: MrfilterVariousStringParametersTagged | MrfilterVariousFileParametersTagged | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -62,6 +65,7 @@ interface MrfilterParameters {
     "filter": string;
     "output": string;
 }
+type MrfilterParametersTagged = Required<Pick<MrfilterParameters, '@type'>> & MrfilterParameters;
 
 
 /**
@@ -71,14 +75,12 @@ interface MrfilterParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function mrfilter_strides_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "mrtrix.mrfilter": mrfilter_cargs,
-        "mrtrix.mrfilter.VariousString": mrfilter_various_string_cargs,
-        "mrtrix.mrfilter.VariousFile": mrfilter_various_file_cargs,
-        "mrtrix.mrfilter.config": mrfilter_config_cargs,
+        "VariousString": mrfilter_various_string_cargs,
+        "VariousFile": mrfilter_various_file_cargs,
     };
     return cargsFuncs[t];
 }
@@ -91,11 +93,10 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function mrfilter_strides_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "mrtrix.mrfilter": mrfilter_outputs,
     };
     return outputsFuncs[t];
 }
@@ -110,9 +111,9 @@ function dynOutputs(
  */
 function mrfilter_various_string_params(
     obj: string,
-): MrfilterVariousStringParameters {
+): MrfilterVariousStringParametersTagged {
     const params = {
-        "@type": "mrtrix.mrfilter.VariousString" as const,
+        "@type": "VariousString" as const,
         "obj": obj,
     };
     return params;
@@ -146,9 +147,9 @@ function mrfilter_various_string_cargs(
  */
 function mrfilter_various_file_params(
     obj: InputPathType,
-): MrfilterVariousFileParameters {
+): MrfilterVariousFileParametersTagged {
     const params = {
-        "@type": "mrtrix.mrfilter.VariousFile" as const,
+        "@type": "VariousFile" as const,
         "obj": obj,
     };
     return params;
@@ -184,9 +185,9 @@ function mrfilter_various_file_cargs(
 function mrfilter_config_params(
     key: string,
     value: string,
-): MrfilterConfigParameters {
+): MrfilterConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.mrfilter.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -215,7 +216,7 @@ function mrfilter_config_cargs(
 
 
 /**
- * Output object returned when calling `mrfilter(...)`.
+ * Output object returned when calling `MrfilterParameters(...)`.
  *
  * @interface
  */
@@ -291,7 +292,7 @@ function mrfilter_params(
     bridge: number | null = null,
     maskin: InputPathType | null = null,
     maskout: string | null = null,
-    strides: MrfilterVariousStringParameters | MrfilterVariousFileParameters | null = null,
+    strides: MrfilterVariousStringParametersTagged | MrfilterVariousFileParametersTagged | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
@@ -300,9 +301,9 @@ function mrfilter_params(
     config: Array<MrfilterConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrfilterParameters {
+): MrfilterParametersTagged {
     const params = {
-        "@type": "mrtrix.mrfilter" as const,
+        "@type": "mrtrix/mrfilter" as const,
         "inverse": inverse,
         "magnitude": magnitude,
         "centre_zero": centre_zero,
@@ -387,13 +388,13 @@ function mrfilter_cargs(
             ...(params["axes"] ?? null).map(String)
         );
     }
-    if ((params["inverse"] ?? null)) {
+    if ((params["inverse"] ?? false)) {
         cargs.push("-inverse");
     }
-    if ((params["magnitude"] ?? null)) {
+    if ((params["magnitude"] ?? false)) {
         cargs.push("-magnitude");
     }
-    if ((params["centre_zero"] ?? null)) {
+    if ((params["centre_zero"] ?? false)) {
         cargs.push("-centre_zero");
     }
     if ((params["stdev"] ?? null) !== null) {
@@ -402,10 +403,10 @@ function mrfilter_cargs(
             (params["stdev"] ?? null).map(String).join(",")
         );
     }
-    if ((params["magnitude_1"] ?? null)) {
+    if ((params["magnitude_1"] ?? false)) {
         cargs.push("-magnitude");
     }
-    if ((params["scanner"] ?? null)) {
+    if ((params["scanner"] ?? false)) {
         cargs.push("-scanner");
     }
     if ((params["extent"] ?? null) !== null) {
@@ -471,19 +472,19 @@ function mrfilter_cargs(
     if ((params["strides"] ?? null) !== null) {
         cargs.push(
             "-strides",
-            ...dynCargs((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
+            ...mrfilter_strides_cargs_dyn_fn((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -493,12 +494,12 @@ function mrfilter_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => mrfilter_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -640,7 +641,7 @@ function mrfilter(
     bridge: number | null = null,
     maskin: InputPathType | null = null,
     maskout: string | null = null,
-    strides: MrfilterVariousStringParameters | MrfilterVariousFileParameters | null = null,
+    strides: MrfilterVariousStringParametersTagged | MrfilterVariousFileParametersTagged | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
@@ -658,11 +659,7 @@ function mrfilter(
 
 export {
       MRFILTER_METADATA,
-      MrfilterConfigParameters,
       MrfilterOutputs,
-      MrfilterParameters,
-      MrfilterVariousFileParameters,
-      MrfilterVariousStringParameters,
       mrfilter,
       mrfilter_config_params,
       mrfilter_execute,

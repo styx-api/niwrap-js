@@ -12,14 +12,15 @@ const TSFVALIDATE_METADATA: Metadata = {
 
 
 interface TsfvalidateConfigParameters {
-    "@type": "mrtrix.tsfvalidate.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type TsfvalidateConfigParametersTagged = Required<Pick<TsfvalidateConfigParameters, '@type'>> & TsfvalidateConfigParameters;
 
 
 interface TsfvalidateParameters {
-    "@type": "mrtrix.tsfvalidate";
+    "@type"?: "mrtrix/tsfvalidate";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -31,40 +32,7 @@ interface TsfvalidateParameters {
     "tsf": InputPathType;
     "tracks": InputPathType;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.tsfvalidate": tsfvalidate_cargs,
-        "mrtrix.tsfvalidate.config": tsfvalidate_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type TsfvalidateParametersTagged = Required<Pick<TsfvalidateParameters, '@type'>> & TsfvalidateParameters;
 
 
 /**
@@ -78,9 +46,9 @@ function dynOutputs(
 function tsfvalidate_config_params(
     key: string,
     value: string,
-): TsfvalidateConfigParameters {
+): TsfvalidateConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.tsfvalidate.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -109,7 +77,7 @@ function tsfvalidate_config_cargs(
 
 
 /**
- * Output object returned when calling `tsfvalidate(...)`.
+ * Output object returned when calling `TsfvalidateParameters(...)`.
  *
  * @interface
  */
@@ -148,9 +116,9 @@ function tsfvalidate_params(
     config: Array<TsfvalidateConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TsfvalidateParameters {
+): TsfvalidateParametersTagged {
     const params = {
-        "@type": "mrtrix.tsfvalidate" as const,
+        "@type": "mrtrix/tsfvalidate" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -184,16 +152,16 @@ function tsfvalidate_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("tsfvalidate");
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -203,12 +171,12 @@ function tsfvalidate_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => tsfvalidate_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["tsf"] ?? null)));
@@ -319,9 +287,7 @@ function tsfvalidate(
 
 export {
       TSFVALIDATE_METADATA,
-      TsfvalidateConfigParameters,
       TsfvalidateOutputs,
-      TsfvalidateParameters,
       tsfvalidate,
       tsfvalidate_config_params,
       tsfvalidate_execute,

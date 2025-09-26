@@ -12,50 +12,17 @@ const DEFACE_SUBJECT_METADATA: Metadata = {
 
 
 interface DefaceSubjectParameters {
-    "@type": "freesurfer.deface_subject";
+    "@type"?: "freesurfer/deface_subject";
     "subjects_dir": string;
     "subject_id": string;
     "volume_input": InputPathType;
     "volume_output": string;
 }
+type DefaceSubjectParametersTagged = Required<Pick<DefaceSubjectParameters, '@type'>> & DefaceSubjectParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.deface_subject": deface_subject_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.deface_subject": deface_subject_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `deface_subject(...)`.
+ * Output object returned when calling `DefaceSubjectParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function deface_subject_params(
     subject_id: string,
     volume_input: InputPathType,
     volume_output: string,
-): DefaceSubjectParameters {
+): DefaceSubjectParametersTagged {
     const params = {
-        "@type": "freesurfer.deface_subject" as const,
+        "@type": "freesurfer/deface_subject" as const,
         "subjects_dir": subjects_dir,
         "subject_id": subject_id,
         "volume_input": volume_input,
@@ -212,7 +179,6 @@ function deface_subject(
 export {
       DEFACE_SUBJECT_METADATA,
       DefaceSubjectOutputs,
-      DefaceSubjectParameters,
       deface_subject,
       deface_subject_execute,
       deface_subject_params,

@@ -12,7 +12,7 @@ const V_3D_ZEROPAD_METADATA: Metadata = {
 
 
 interface V3dZeropadParameters {
-    "@type": "afni.3dZeropad";
+    "@type"?: "afni/3dZeropad";
     "dataset": InputPathType;
     "I"?: number | null | undefined;
     "S"?: number | null | undefined;
@@ -29,44 +29,11 @@ interface V3dZeropadParameters {
     "master_dataset"?: InputPathType | null | undefined;
     "prefix"?: string | null | undefined;
 }
+type V3dZeropadParametersTagged = Required<Pick<V3dZeropadParameters, '@type'>> & V3dZeropadParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dZeropad": v_3d_zeropad_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dZeropad": v_3d_zeropad_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_zeropad(...)`.
+ * Output object returned when calling `V3dZeropadParameters(...)`.
  *
  * @interface
  */
@@ -123,9 +90,9 @@ function v_3d_zeropad_params(
     mm_flag: boolean = false,
     master_dataset: InputPathType | null = null,
     prefix: string | null = null,
-): V3dZeropadParameters {
+): V3dZeropadParametersTagged {
     const params = {
-        "@type": "afni.3dZeropad" as const,
+        "@type": "afni/3dZeropad" as const,
         "dataset": dataset,
         "pad2even": pad2even,
         "mm_flag": mm_flag,
@@ -245,10 +212,10 @@ function v_3d_zeropad_cargs(
             String((params["IS"] ?? null))
         );
     }
-    if ((params["pad2even"] ?? null)) {
+    if ((params["pad2even"] ?? false)) {
         cargs.push("-pad2evens");
     }
-    if ((params["mm_flag"] ?? null)) {
+    if ((params["mm_flag"] ?? false)) {
         cargs.push("-mm");
     }
     if ((params["master_dataset"] ?? null) !== null) {
@@ -369,7 +336,6 @@ function v_3d_zeropad(
 
 export {
       V3dZeropadOutputs,
-      V3dZeropadParameters,
       V_3D_ZEROPAD_METADATA,
       v_3d_zeropad,
       v_3d_zeropad_execute,

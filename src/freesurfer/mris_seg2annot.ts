@@ -12,7 +12,7 @@ const MRIS_SEG2ANNOT_METADATA: Metadata = {
 
 
 interface MrisSeg2annotParameters {
-    "@type": "freesurfer.mris_seg2annot";
+    "@type"?: "freesurfer/mris_seg2annot";
     "surfseg": InputPathType;
     "colortable"?: InputPathType | null | undefined;
     "auto_ctab"?: string | null | undefined;
@@ -25,44 +25,11 @@ interface MrisSeg2annotParameters {
     "checkopts": boolean;
     "version": boolean;
 }
+type MrisSeg2annotParametersTagged = Required<Pick<MrisSeg2annotParameters, '@type'>> & MrisSeg2annotParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_seg2annot": mris_seg2annot_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_seg2annot": mris_seg2annot_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_seg2annot(...)`.
+ * Output object returned when calling `MrisSeg2annotParameters(...)`.
  *
  * @interface
  */
@@ -107,9 +74,9 @@ function mris_seg2annot_params(
     debug_vertex: number | null = null,
     checkopts: boolean = false,
     version: boolean = false,
-): MrisSeg2annotParameters {
+): MrisSeg2annotParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_seg2annot" as const,
+        "@type": "freesurfer/mris_seg2annot" as const,
         "surfseg": surfseg,
         "subject": subject,
         "hemi": hemi,
@@ -182,7 +149,7 @@ function mris_seg2annot_cargs(
             (params["surf"] ?? null)
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     if ((params["debug_vertex"] ?? null) !== null) {
@@ -191,10 +158,10 @@ function mris_seg2annot_cargs(
             String((params["debug_vertex"] ?? null))
         );
     }
-    if ((params["checkopts"] ?? null)) {
+    if ((params["checkopts"] ?? false)) {
         cargs.push("--checkopts");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -295,7 +262,6 @@ function mris_seg2annot(
 export {
       MRIS_SEG2ANNOT_METADATA,
       MrisSeg2annotOutputs,
-      MrisSeg2annotParameters,
       mris_seg2annot,
       mris_seg2annot_execute,
       mris_seg2annot_params,

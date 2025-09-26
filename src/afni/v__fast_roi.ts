@@ -12,7 +12,7 @@ const V__FAST_ROI_METADATA: Metadata = {
 
 
 interface VFastRoiParameters {
-    "@type": "afni.@fast_roi";
+    "@type"?: "afni/@fast_roi";
     "region": Array<string>;
     "drawn_roi"?: InputPathType | null | undefined;
     "anat": InputPathType;
@@ -24,44 +24,11 @@ interface VFastRoiParameters {
     "twopass": boolean;
     "help": boolean;
 }
+type VFastRoiParametersTagged = Required<Pick<VFastRoiParameters, '@type'>> & VFastRoiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@fast_roi": v__fast_roi_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@fast_roi": v__fast_roi_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__fast_roi(...)`.
+ * Output object returned when calling `VFastRoiParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function v__fast_roi_params(
     time: boolean = false,
     twopass: boolean = false,
     help: boolean = false,
-): VFastRoiParameters {
+): VFastRoiParametersTagged {
     const params = {
-        "@type": "afni.@fast_roi" as const,
+        "@type": "afni/@fast_roi" as const,
         "region": region,
         "anat": anat,
         "base": base,
@@ -172,13 +139,13 @@ function v__fast_roi_cargs(
         "-prefix",
         (params["prefix"] ?? null)
     );
-    if ((params["time"] ?? null)) {
+    if ((params["time"] ?? false)) {
         cargs.push("--time");
     }
-    if ((params["twopass"] ?? null)) {
+    if ((params["twopass"] ?? false)) {
         cargs.push("--twopass");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -276,7 +243,6 @@ function v__fast_roi(
 
 export {
       VFastRoiOutputs,
-      VFastRoiParameters,
       V__FAST_ROI_METADATA,
       v__fast_roi,
       v__fast_roi_execute,

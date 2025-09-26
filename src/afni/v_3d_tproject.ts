@@ -12,7 +12,7 @@ const V_3D_TPROJECT_METADATA: Metadata = {
 
 
 interface V3dTprojectParameters {
-    "@type": "afni.3dTproject";
+    "@type"?: "afni/3dTproject";
     "TR"?: number | null | undefined;
     "automask": boolean;
     "bandpass"?: Array<number> | null | undefined;
@@ -31,44 +31,11 @@ interface V3dTprojectParameters {
     "stopband"?: Array<number> | null | undefined;
     "prefix": string;
 }
+type V3dTprojectParametersTagged = Required<Pick<V3dTprojectParameters, '@type'>> & V3dTprojectParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dTproject": v_3d_tproject_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dTproject": v_3d_tproject_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_tproject(...)`.
+ * Output object returned when calling `V3dTprojectParameters(...)`.
  *
  * @interface
  */
@@ -125,9 +92,9 @@ function v_3d_tproject_params(
     ort: InputPathType | null = null,
     polort: number | null = null,
     stopband: Array<number> | null = null,
-): V3dTprojectParameters {
+): V3dTprojectParametersTagged {
     const params = {
-        "@type": "afni.3dTproject" as const,
+        "@type": "afni/3dTproject" as const,
         "automask": automask,
         "in_file": in_file,
         "noblock": noblock,
@@ -194,7 +161,7 @@ function v_3d_tproject_cargs(
             String((params["TR"] ?? null))
         );
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     if ((params["bandpass"] ?? null) !== null) {
@@ -249,10 +216,10 @@ function v_3d_tproject_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["noblock"] ?? null)) {
+    if ((params["noblock"] ?? false)) {
         cargs.push("-noblock");
     }
-    if ((params["norm"] ?? null)) {
+    if ((params["norm"] ?? false)) {
         cargs.push("-norm");
     }
     if ((params["ort"] ?? null) !== null) {
@@ -386,7 +353,6 @@ function v_3d_tproject(
 
 export {
       V3dTprojectOutputs,
-      V3dTprojectParameters,
       V_3D_TPROJECT_METADATA,
       v_3d_tproject,
       v_3d_tproject_execute,

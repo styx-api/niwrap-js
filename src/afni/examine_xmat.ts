@@ -12,7 +12,7 @@ const EXAMINE_XMAT_METADATA: Metadata = {
 
 
 interface ExamineXmatParameters {
-    "@type": "afni.ExamineXmat";
+    "@type"?: "afni/ExamineXmat";
     "input_file"?: InputPathType | null | undefined;
     "interactive": boolean;
     "prefix"?: string | null | undefined;
@@ -22,44 +22,11 @@ interface ExamineXmatParameters {
     "msg_trace": boolean;
     "verbosity"?: number | null | undefined;
 }
+type ExamineXmatParametersTagged = Required<Pick<ExamineXmatParameters, '@type'>> & ExamineXmatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.ExamineXmat": examine_xmat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.ExamineXmat": examine_xmat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `examine_xmat(...)`.
+ * Output object returned when calling `ExamineXmatParameters(...)`.
  *
  * @interface
  */
@@ -114,9 +81,9 @@ function examine_xmat_params(
     select: string | null = null,
     msg_trace: boolean = false,
     verbosity: number | null = null,
-): ExamineXmatParameters {
+): ExamineXmatParametersTagged {
     const params = {
-        "@type": "afni.ExamineXmat" as const,
+        "@type": "afni/ExamineXmat" as const,
         "interactive": interactive,
         "msg_trace": msg_trace,
     };
@@ -162,7 +129,7 @@ function examine_xmat_cargs(
             execution.inputFile((params["input_file"] ?? null))
         );
     }
-    if ((params["interactive"] ?? null)) {
+    if ((params["interactive"] ?? false)) {
         cargs.push("-interactive");
     }
     if ((params["prefix"] ?? null) !== null) {
@@ -189,7 +156,7 @@ function examine_xmat_cargs(
             (params["select"] ?? null)
         );
     }
-    if ((params["msg_trace"] ?? null)) {
+    if ((params["msg_trace"] ?? false)) {
         cargs.push("-msg.trace");
     }
     if ((params["verbosity"] ?? null) !== null) {
@@ -294,7 +261,6 @@ function examine_xmat(
 export {
       EXAMINE_XMAT_METADATA,
       ExamineXmatOutputs,
-      ExamineXmatParameters,
       examine_xmat,
       examine_xmat_execute,
       examine_xmat_params,

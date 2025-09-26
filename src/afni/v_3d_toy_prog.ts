@@ -12,7 +12,7 @@ const V_3D_TOY_PROG_METADATA: Metadata = {
 
 
 interface V3dToyProgParameters {
-    "@type": "afni.3dToyProg";
+    "@type"?: "afni/3dToyProg";
     "input_dataset": InputPathType;
     "output_prefix"?: string | null | undefined;
     "mask_dataset"?: InputPathType | null | undefined;
@@ -28,43 +28,11 @@ interface V3dToyProgParameters {
     "help_aspx": boolean;
     "help_all_opts": boolean;
 }
+type V3dToyProgParametersTagged = Required<Pick<V3dToyProgParameters, '@type'>> & V3dToyProgParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dToyProg": v_3d_toy_prog_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_toy_prog(...)`.
+ * Output object returned when calling `V3dToyProgParameters(...)`.
  *
  * @interface
  */
@@ -111,9 +79,9 @@ function v_3d_toy_prog_params(
     help_spx: boolean = false,
     help_aspx: boolean = false,
     help_all_opts: boolean = false,
-): V3dToyProgParameters {
+): V3dToyProgParametersTagged {
     const params = {
-        "@type": "afni.3dToyProg" as const,
+        "@type": "afni/3dToyProg" as const,
         "input_dataset": input_dataset,
         "mini_help": mini_help,
         "help": help,
@@ -177,19 +145,19 @@ function v_3d_toy_prog_cargs(
             (params["output_datum"] ?? null)
         );
     }
-    if ((params["mini_help"] ?? null)) {
+    if ((params["mini_help"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["extreme_help"] ?? null)) {
+    if ((params["extreme_help"] ?? false)) {
         cargs.push("-HELP");
     }
-    if ((params["help_view"] ?? null)) {
+    if ((params["help_view"] ?? false)) {
         cargs.push("-h_view");
     }
-    if ((params["help_web"] ?? null)) {
+    if ((params["help_web"] ?? false)) {
         cargs.push("-h_web");
     }
     if ((params["help_find"] ?? null) !== null) {
@@ -198,16 +166,16 @@ function v_3d_toy_prog_cargs(
             (params["help_find"] ?? null)
         );
     }
-    if ((params["help_raw"] ?? null)) {
+    if ((params["help_raw"] ?? false)) {
         cargs.push("-h_raw");
     }
-    if ((params["help_spx"] ?? null)) {
+    if ((params["help_spx"] ?? false)) {
         cargs.push("-h_spx");
     }
-    if ((params["help_aspx"] ?? null)) {
+    if ((params["help_aspx"] ?? false)) {
         cargs.push("-h_aspx");
     }
-    if ((params["help_all_opts"] ?? null)) {
+    if ((params["help_all_opts"] ?? false)) {
         cargs.push("-all_opts");
     }
     return cargs;
@@ -312,7 +280,6 @@ function v_3d_toy_prog(
 
 export {
       V3dToyProgOutputs,
-      V3dToyProgParameters,
       V_3D_TOY_PROG_METADATA,
       v_3d_toy_prog,
       v_3d_toy_prog_execute,

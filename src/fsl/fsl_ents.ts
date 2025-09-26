@@ -12,51 +12,18 @@ const FSL_ENTS_METADATA: Metadata = {
 
 
 interface FslEntsParameters {
-    "@type": "fsl.fsl_ents";
+    "@type"?: "fsl/fsl_ents";
     "icadir": string;
     "components": Array<string>;
     "outfile"?: InputPathType | null | undefined;
     "overwrite": boolean;
     "conffile"?: Array<InputPathType> | null | undefined;
 }
+type FslEntsParametersTagged = Required<Pick<FslEntsParameters, '@type'>> & FslEntsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fsl_ents": fsl_ents_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fsl_ents": fsl_ents_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsl_ents(...)`.
+ * Output object returned when calling `FslEntsParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function fsl_ents_params(
     outfile: InputPathType | null = null,
     overwrite: boolean = false,
     conffile: Array<InputPathType> | null = null,
-): FslEntsParameters {
+): FslEntsParametersTagged {
     const params = {
-        "@type": "fsl.fsl_ents" as const,
+        "@type": "fsl/fsl_ents" as const,
         "icadir": icadir,
         "components": components,
         "overwrite": overwrite,
@@ -128,7 +95,7 @@ function fsl_ents_cargs(
             execution.inputFile((params["outfile"] ?? null))
         );
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("-ow");
     }
     if ((params["conffile"] ?? null) !== null) {
@@ -223,7 +190,6 @@ function fsl_ents(
 export {
       FSL_ENTS_METADATA,
       FslEntsOutputs,
-      FslEntsParameters,
       fsl_ents,
       fsl_ents_execute,
       fsl_ents_params,

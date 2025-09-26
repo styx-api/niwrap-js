@@ -12,7 +12,7 @@ const MKHEADSURF_METADATA: Metadata = {
 
 
 interface MkheadsurfParameters {
-    "@type": "freesurfer.mkheadsurf";
+    "@type"?: "freesurfer/mkheadsurf";
     "input_vol": InputPathType;
     "output_vol": string;
     "output_surf": string;
@@ -41,43 +41,11 @@ interface MkheadsurfParameters {
     "umask"?: number | null | undefined;
     "logfile"?: string | null | undefined;
 }
+type MkheadsurfParametersTagged = Required<Pick<MkheadsurfParameters, '@type'>> & MkheadsurfParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mkheadsurf": mkheadsurf_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mkheadsurf(...)`.
+ * Output object returned when calling `MkheadsurfParameters(...)`.
  *
  * @interface
  */
@@ -150,9 +118,9 @@ function mkheadsurf_params(
     subjects_dir: string | null = null,
     umask: number | null = null,
     logfile: string | null = null,
-): MkheadsurfParameters {
+): MkheadsurfParametersTagged {
     const params = {
-        "@type": "freesurfer.mkheadsurf" as const,
+        "@type": "freesurfer/mkheadsurf" as const,
         "input_vol": input_vol,
         "output_vol": output_vol,
         "output_surf": output_surf,
@@ -257,7 +225,7 @@ function mkheadsurf_cargs(
             String((params["nsmooth"] ?? null))
         );
     }
-    if ((params["noseghead"] ?? null)) {
+    if ((params["noseghead"] ?? false)) {
         cargs.push("-noseghead");
     }
     if ((params["thresh1"] ?? null) !== null) {
@@ -302,10 +270,10 @@ function mkheadsurf_cargs(
             String((params["fhi"] ?? null))
         );
     }
-    if ((params["no_rescale"] ?? null)) {
+    if ((params["no_rescale"] ?? false)) {
         cargs.push("-no-rescale");
     }
-    if ((params["no_fill_holes_islands"] ?? null)) {
+    if ((params["no_fill_holes_islands"] ?? false)) {
         cargs.push("-no-fill-holes-islands");
     }
     if ((params["or_mask"] ?? null) !== null) {
@@ -320,10 +288,10 @@ function mkheadsurf_cargs(
             (params["tessellation_method"] ?? null)
         );
     }
-    if ((params["inflate"] ?? null)) {
+    if ((params["inflate"] ?? false)) {
         cargs.push("-inflate");
     }
-    if ((params["curv"] ?? null)) {
+    if ((params["curv"] ?? false)) {
         cargs.push("-curv");
     }
     if ((params["srcvol"] ?? null) !== null) {
@@ -503,7 +471,6 @@ function mkheadsurf(
 export {
       MKHEADSURF_METADATA,
       MkheadsurfOutputs,
-      MkheadsurfParameters,
       mkheadsurf,
       mkheadsurf_execute,
       mkheadsurf_params,

@@ -12,7 +12,7 @@ const FSL_PREPARE_FIELDMAP_METADATA: Metadata = {
 
 
 interface FslPrepareFieldmapParameters {
-    "@type": "fsl.fsl_prepare_fieldmap";
+    "@type"?: "fsl/fsl_prepare_fieldmap";
     "scanner": string;
     "phase_image": InputPathType;
     "magnitude_image": InputPathType;
@@ -20,44 +20,11 @@ interface FslPrepareFieldmapParameters {
     "delta_te": number;
     "nocheck_flag": boolean;
 }
+type FslPrepareFieldmapParametersTagged = Required<Pick<FslPrepareFieldmapParameters, '@type'>> & FslPrepareFieldmapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fsl_prepare_fieldmap": fsl_prepare_fieldmap_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fsl_prepare_fieldmap": fsl_prepare_fieldmap_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsl_prepare_fieldmap(...)`.
+ * Output object returned when calling `FslPrepareFieldmapParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function fsl_prepare_fieldmap_params(
     out_image: string,
     delta_te: number,
     nocheck_flag: boolean = false,
-): FslPrepareFieldmapParameters {
+): FslPrepareFieldmapParametersTagged {
     const params = {
-        "@type": "fsl.fsl_prepare_fieldmap" as const,
+        "@type": "fsl/fsl_prepare_fieldmap" as const,
         "scanner": scanner,
         "phase_image": phase_image,
         "magnitude_image": magnitude_image,
@@ -125,7 +92,7 @@ function fsl_prepare_fieldmap_cargs(
     cargs.push(execution.inputFile((params["magnitude_image"] ?? null)));
     cargs.push((params["out_image"] ?? null));
     cargs.push(String((params["delta_te"] ?? null)));
-    if ((params["nocheck_flag"] ?? null)) {
+    if ((params["nocheck_flag"] ?? false)) {
         cargs.push("--nocheck");
     }
     return cargs;
@@ -216,7 +183,6 @@ function fsl_prepare_fieldmap(
 export {
       FSL_PREPARE_FIELDMAP_METADATA,
       FslPrepareFieldmapOutputs,
-      FslPrepareFieldmapParameters,
       fsl_prepare_fieldmap,
       fsl_prepare_fieldmap_execute,
       fsl_prepare_fieldmap_params,

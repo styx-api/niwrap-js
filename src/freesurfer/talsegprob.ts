@@ -12,7 +12,7 @@ const TALSEGPROB_METADATA: Metadata = {
 
 
 interface TalsegprobParameters {
-    "@type": "freesurfer.talsegprob";
+    "@type"?: "freesurfer/talsegprob";
     "subjects_list"?: Array<string> | null | undefined;
     "fsgd_file"?: InputPathType | null | undefined;
     "segmentation_number"?: number | null | undefined;
@@ -31,44 +31,11 @@ interface TalsegprobParameters {
     "version_flag": boolean;
     "echo_flag": boolean;
 }
+type TalsegprobParametersTagged = Required<Pick<TalsegprobParameters, '@type'>> & TalsegprobParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.talsegprob": talsegprob_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.talsegprob": talsegprob_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `talsegprob(...)`.
+ * Output object returned when calling `TalsegprobParameters(...)`.
  *
  * @interface
  */
@@ -133,9 +100,9 @@ function talsegprob_params(
     nocleanup_flag: boolean = false,
     version_flag: boolean = false,
     echo_flag: boolean = false,
-): TalsegprobParameters {
+): TalsegprobParametersTagged {
     const params = {
-        "@type": "freesurfer.talsegprob" as const,
+        "@type": "freesurfer/talsegprob" as const,
         "hippo_flag": hippo_flag,
         "left_hippo_flag": left_hippo_flag,
         "right_hippo_flag": right_hippo_flag,
@@ -218,13 +185,13 @@ function talsegprob_cargs(
             String((params["second_segmentation_number"] ?? null))
         );
     }
-    if ((params["hippo_flag"] ?? null)) {
+    if ((params["hippo_flag"] ?? false)) {
         cargs.push("--hippo");
     }
-    if ((params["left_hippo_flag"] ?? null)) {
+    if ((params["left_hippo_flag"] ?? false)) {
         cargs.push("--left-hippo");
     }
-    if ((params["right_hippo_flag"] ?? null)) {
+    if ((params["right_hippo_flag"] ?? false)) {
         cargs.push("--right-hippo");
     }
     if ((params["segmentation_file"] ?? null) !== null) {
@@ -269,13 +236,13 @@ function talsegprob_cargs(
             (params["tmpdir"] ?? null)
         );
     }
-    if ((params["nocleanup_flag"] ?? null)) {
+    if ((params["nocleanup_flag"] ?? false)) {
         cargs.push("--nocleanup");
     }
-    if ((params["version_flag"] ?? null)) {
+    if ((params["version_flag"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["echo_flag"] ?? null)) {
+    if ((params["echo_flag"] ?? false)) {
         cargs.push("--echo");
     }
     return cargs;
@@ -390,7 +357,6 @@ function talsegprob(
 export {
       TALSEGPROB_METADATA,
       TalsegprobOutputs,
-      TalsegprobParameters,
       talsegprob,
       talsegprob_execute,
       talsegprob_params,

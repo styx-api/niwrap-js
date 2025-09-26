@@ -12,51 +12,18 @@ const MNI152REG_METADATA: Metadata = {
 
 
 interface Mni152regParameters {
-    "@type": "freesurfer.mni152reg";
+    "@type"?: "freesurfer/mni152reg";
     "subject": string;
     "register_1mm": boolean;
     "output"?: string | null | undefined;
     "symmetric": boolean;
     "save_volume": boolean;
 }
+type Mni152regParametersTagged = Required<Pick<Mni152regParameters, '@type'>> & Mni152regParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mni152reg": mni152reg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mni152reg": mni152reg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mni152reg(...)`.
+ * Output object returned when calling `Mni152regParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +60,9 @@ function mni152reg_params(
     output: string | null = null,
     symmetric: boolean = false,
     save_volume: boolean = false,
-): Mni152regParameters {
+): Mni152regParametersTagged {
     const params = {
-        "@type": "freesurfer.mni152reg" as const,
+        "@type": "freesurfer/mni152reg" as const,
         "subject": subject,
         "register_1mm": register_1mm,
         "symmetric": symmetric,
@@ -126,7 +93,7 @@ function mni152reg_cargs(
         "-s",
         (params["subject"] ?? null)
     );
-    if ((params["register_1mm"] ?? null)) {
+    if ((params["register_1mm"] ?? false)) {
         cargs.push("--1");
     }
     if ((params["output"] ?? null) !== null) {
@@ -135,10 +102,10 @@ function mni152reg_cargs(
             (params["output"] ?? null)
         );
     }
-    if ((params["symmetric"] ?? null)) {
+    if ((params["symmetric"] ?? false)) {
         cargs.push("--sym");
     }
-    if ((params["save_volume"] ?? null)) {
+    if ((params["save_volume"] ?? false)) {
         cargs.push("--save-vol");
     }
     return cargs;
@@ -228,7 +195,6 @@ function mni152reg(
 export {
       MNI152REG_METADATA,
       Mni152regOutputs,
-      Mni152regParameters,
       mni152reg,
       mni152reg_execute,
       mni152reg_params,

@@ -12,7 +12,7 @@ const FSPALM_METADATA: Metadata = {
 
 
 interface FspalmParameters {
-    "@type": "freesurfer.fspalm";
+    "@type"?: "freesurfer/fspalm";
     "glmdir": string;
     "cft": number;
     "cwp": number;
@@ -28,43 +28,11 @@ interface FspalmParameters {
     "3spaces": boolean;
     "pargs"?: string | null | undefined;
 }
+type FspalmParametersTagged = Required<Pick<FspalmParameters, '@type'>> & FspalmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fspalm": fspalm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fspalm(...)`.
+ * Output object returned when calling `FspalmParameters(...)`.
  *
  * @interface
  */
@@ -111,9 +79,9 @@ function fspalm_params(
     v_2spaces: boolean = false,
     v_3spaces: boolean = false,
     pargs: string | null = null,
-): FspalmParameters {
+): FspalmParametersTagged {
     const params = {
-        "@type": "freesurfer.fspalm" as const,
+        "@type": "freesurfer/fspalm" as const,
         "glmdir": glmdir,
         "cft": cft,
         "cwp": cwp,
@@ -165,10 +133,10 @@ function fspalm_cargs(
         "--cwp",
         String((params["cwp"] ?? null))
     );
-    if ((params["onetail"] ?? null)) {
+    if ((params["onetail"] ?? false)) {
         cargs.push("--onetail");
     }
-    if ((params["twotail"] ?? null)) {
+    if ((params["twotail"] ?? false)) {
         cargs.push("--twotail");
     }
     if ((params["name"] ?? null) !== null) {
@@ -183,22 +151,22 @@ function fspalm_cargs(
             String((params["iters"] ?? null))
         );
     }
-    if ((params["monly"] ?? null)) {
+    if ((params["monly"] ?? false)) {
         cargs.push("--monly");
     }
-    if ((params["pponly"] ?? null)) {
+    if ((params["pponly"] ?? false)) {
         cargs.push("--pponly");
     }
-    if ((params["octave"] ?? null)) {
+    if ((params["octave"] ?? false)) {
         cargs.push("--octave");
     }
-    if ((params["centroid"] ?? null)) {
+    if ((params["centroid"] ?? false)) {
         cargs.push("--centroid");
     }
-    if ((params["2spaces"] ?? null)) {
+    if ((params["2spaces"] ?? false)) {
         cargs.push("--2spaces");
     }
-    if ((params["3spaces"] ?? null)) {
+    if ((params["3spaces"] ?? false)) {
         cargs.push("--3spaces");
     }
     if ((params["pargs"] ?? null) !== null) {
@@ -310,7 +278,6 @@ function fspalm(
 export {
       FSPALM_METADATA,
       FspalmOutputs,
-      FspalmParameters,
       fspalm,
       fspalm_execute,
       fspalm_params,

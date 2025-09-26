@@ -12,47 +12,14 @@ const V__AFNI_REFACER_MAKE_MASTER_METADATA: Metadata = {
 
 
 interface VAfniRefacerMakeMasterParameters {
-    "@type": "afni.@afni_refacer_make_master";
+    "@type"?: "afni/@afni_refacer_make_master";
     "input_datasets": Array<InputPathType>;
 }
+type VAfniRefacerMakeMasterParametersTagged = Required<Pick<VAfniRefacerMakeMasterParameters, '@type'>> & VAfniRefacerMakeMasterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@afni_refacer_make_master": v__afni_refacer_make_master_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@afni_refacer_make_master": v__afni_refacer_make_master_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__afni_refacer_make_master(...)`.
+ * Output object returned when calling `VAfniRefacerMakeMasterParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface VAfniRefacerMakeMasterOutputs {
  */
 function v__afni_refacer_make_master_params(
     input_datasets: Array<InputPathType>,
-): VAfniRefacerMakeMasterParameters {
+): VAfniRefacerMakeMasterParametersTagged {
     const params = {
-        "@type": "afni.@afni_refacer_make_master" as const,
+        "@type": "afni/@afni_refacer_make_master" as const,
         "input_datasets": input_datasets,
     };
     return params;
@@ -178,7 +145,6 @@ function v__afni_refacer_make_master(
 
 export {
       VAfniRefacerMakeMasterOutputs,
-      VAfniRefacerMakeMasterParameters,
       V__AFNI_REFACER_MAKE_MASTER_METADATA,
       v__afni_refacer_make_master,
       v__afni_refacer_make_master_execute,

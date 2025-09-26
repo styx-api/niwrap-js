@@ -12,51 +12,18 @@ const COMPUTE_INTERRATER_VARIABILITY_CSH_METADATA: Metadata = {
 
 
 interface ComputeInterraterVariabilityCshParameters {
-    "@type": "freesurfer.compute_interrater_variability.csh";
+    "@type"?: "freesurfer/compute_interrater_variability.csh";
     "label_vol1": InputPathType;
     "label_vol2": InputPathType;
     "output_prefix": string;
     "version": boolean;
     "help": boolean;
 }
+type ComputeInterraterVariabilityCshParametersTagged = Required<Pick<ComputeInterraterVariabilityCshParameters, '@type'>> & ComputeInterraterVariabilityCshParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.compute_interrater_variability.csh": compute_interrater_variability_csh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.compute_interrater_variability.csh": compute_interrater_variability_csh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `compute_interrater_variability_csh(...)`.
+ * Output object returned when calling `ComputeInterraterVariabilityCshParameters(...)`.
  *
  * @interface
  */
@@ -97,9 +64,9 @@ function compute_interrater_variability_csh_params(
     output_prefix: string,
     version: boolean = false,
     help: boolean = false,
-): ComputeInterraterVariabilityCshParameters {
+): ComputeInterraterVariabilityCshParametersTagged {
     const params = {
-        "@type": "freesurfer.compute_interrater_variability.csh" as const,
+        "@type": "freesurfer/compute_interrater_variability.csh" as const,
         "label_vol1": label_vol1,
         "label_vol2": label_vol2,
         "output_prefix": output_prefix,
@@ -136,10 +103,10 @@ function compute_interrater_variability_csh_cargs(
         "--out",
         (params["output_prefix"] ?? null)
     );
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -230,7 +197,6 @@ function compute_interrater_variability_csh(
 export {
       COMPUTE_INTERRATER_VARIABILITY_CSH_METADATA,
       ComputeInterraterVariabilityCshOutputs,
-      ComputeInterraterVariabilityCshParameters,
       compute_interrater_variability_csh,
       compute_interrater_variability_csh_execute,
       compute_interrater_variability_csh_params,

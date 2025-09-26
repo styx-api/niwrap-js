@@ -12,7 +12,7 @@ const FSLMEANTS_METADATA: Metadata = {
 
 
 interface FslmeantsParameters {
-    "@type": "fsl.fslmeants";
+    "@type"?: "fsl/fslmeants";
     "input_image": InputPathType;
     "output"?: string | null | undefined;
     "mask"?: InputPathType | null | undefined;
@@ -28,44 +28,11 @@ interface FslmeantsParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
+type FslmeantsParametersTagged = Required<Pick<FslmeantsParameters, '@type'>> & FslmeantsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslmeants": fslmeants_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fslmeants": fslmeants_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslmeants(...)`.
+ * Output object returned when calling `FslmeantsParameters(...)`.
  *
  * @interface
  */
@@ -116,9 +83,9 @@ function fslmeants_params(
     weighted_mean_flag: boolean = false,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): FslmeantsParameters {
+): FslmeantsParametersTagged {
     const params = {
-        "@type": "fsl.fslmeants" as const,
+        "@type": "fsl/fslmeants" as const,
         "input_image": input_image,
         "usemm_flag": usemm_flag,
         "showall_flag": showall_flag,
@@ -184,13 +151,13 @@ function fslmeants_cargs(
             ...(params["coordinates"] ?? null).map(String)
         );
     }
-    if ((params["usemm_flag"] ?? null)) {
+    if ((params["usemm_flag"] ?? false)) {
         cargs.push("--usemm");
     }
-    if ((params["showall_flag"] ?? null)) {
+    if ((params["showall_flag"] ?? false)) {
         cargs.push("--showall");
     }
-    if ((params["eigenv_flag"] ?? null)) {
+    if ((params["eigenv_flag"] ?? false)) {
         cargs.push("--eig");
     }
     if ((params["eigenvariates_order"] ?? null) !== null) {
@@ -199,7 +166,7 @@ function fslmeants_cargs(
             String((params["eigenvariates_order"] ?? null))
         );
     }
-    if ((params["no_bin_flag"] ?? null)) {
+    if ((params["no_bin_flag"] ?? false)) {
         cargs.push("--no_bin");
     }
     if ((params["label_image"] ?? null) !== null) {
@@ -208,16 +175,16 @@ function fslmeants_cargs(
             execution.inputFile((params["label_image"] ?? null))
         );
     }
-    if ((params["transpose_flag"] ?? null)) {
+    if ((params["transpose_flag"] ?? false)) {
         cargs.push("--transpose");
     }
-    if ((params["weighted_mean_flag"] ?? null)) {
+    if ((params["weighted_mean_flag"] ?? false)) {
         cargs.push("-w");
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -324,7 +291,6 @@ function fslmeants(
 export {
       FSLMEANTS_METADATA,
       FslmeantsOutputs,
-      FslmeantsParameters,
       fslmeants,
       fslmeants_execute,
       fslmeants_params,

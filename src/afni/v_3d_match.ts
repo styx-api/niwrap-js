@@ -12,7 +12,7 @@ const V_3D_MATCH_METADATA: Metadata = {
 
 
 interface V3dMatchParameters {
-    "@type": "afni.3dMatch";
+    "@type"?: "afni/3dMatch";
     "inset": InputPathType;
     "refset": InputPathType;
     "mask"?: InputPathType | null | undefined;
@@ -23,44 +23,11 @@ interface V3dMatchParameters {
     "prefix": string;
     "only_dice_thr": boolean;
 }
+type V3dMatchParametersTagged = Required<Pick<V3dMatchParameters, '@type'>> & V3dMatchParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dMatch": v_3d_match_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dMatch": v_3d_match_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_match(...)`.
+ * Output object returned when calling `V3dMatchParameters(...)`.
  *
  * @interface
  */
@@ -113,9 +80,9 @@ function v_3d_match_params(
     ref_min: number | null = null,
     ref_max: number | null = null,
     only_dice_thr: boolean = false,
-): V3dMatchParameters {
+): V3dMatchParametersTagged {
     const params = {
-        "@type": "afni.3dMatch" as const,
+        "@type": "afni/3dMatch" as const,
         "inset": inset,
         "refset": refset,
         "prefix": prefix,
@@ -196,7 +163,7 @@ function v_3d_match_cargs(
         "-prefix",
         (params["prefix"] ?? null)
     );
-    if ((params["only_dice_thr"] ?? null)) {
+    if ((params["only_dice_thr"] ?? false)) {
         cargs.push("-only_dice_thr");
     }
     return cargs;
@@ -295,7 +262,6 @@ function v_3d_match(
 
 export {
       V3dMatchOutputs,
-      V3dMatchParameters,
       V_3D_MATCH_METADATA,
       v_3d_match,
       v_3d_match_execute,

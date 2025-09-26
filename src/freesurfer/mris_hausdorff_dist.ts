@@ -12,50 +12,17 @@ const MRIS_HAUSDORFF_DIST_METADATA: Metadata = {
 
 
 interface MrisHausdorffDistParameters {
-    "@type": "freesurfer.mris_hausdorff_dist";
+    "@type"?: "freesurfer/mris_hausdorff_dist";
     "surface": InputPathType;
     "label1": InputPathType;
     "label2": InputPathType;
     "annot_name"?: string | null | undefined;
 }
+type MrisHausdorffDistParametersTagged = Required<Pick<MrisHausdorffDistParameters, '@type'>> & MrisHausdorffDistParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_hausdorff_dist": mris_hausdorff_dist_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_hausdorff_dist": mris_hausdorff_dist_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_hausdorff_dist(...)`.
+ * Output object returned when calling `MrisHausdorffDistParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mris_hausdorff_dist_params(
     label1: InputPathType,
     label2: InputPathType,
     annot_name: string | null = null,
-): MrisHausdorffDistParameters {
+): MrisHausdorffDistParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_hausdorff_dist" as const,
+        "@type": "freesurfer/mris_hausdorff_dist" as const,
         "surface": surface,
         "label1": label1,
         "label2": label2,
@@ -207,7 +174,6 @@ function mris_hausdorff_dist(
 export {
       MRIS_HAUSDORFF_DIST_METADATA,
       MrisHausdorffDistOutputs,
-      MrisHausdorffDistParameters,
       mris_hausdorff_dist,
       mris_hausdorff_dist_execute,
       mris_hausdorff_dist_params,

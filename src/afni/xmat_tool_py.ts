@@ -12,7 +12,7 @@ const XMAT_TOOL_PY_METADATA: Metadata = {
 
 
 interface XmatToolPyParameters {
-    "@type": "afni.xmat_tool.py";
+    "@type"?: "afni/xmat_tool.py";
     "no_gui": boolean;
     "load_xmat"?: InputPathType | null | undefined;
     "load_1d"?: InputPathType | null | undefined;
@@ -35,44 +35,11 @@ interface XmatToolPyParameters {
     "show_1d": boolean;
     "gui_plot_xmat_as_one": boolean;
 }
+type XmatToolPyParametersTagged = Required<Pick<XmatToolPyParameters, '@type'>> & XmatToolPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.xmat_tool.py": xmat_tool_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.xmat_tool.py": xmat_tool_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `xmat_tool_py(...)`.
+ * Output object returned when calling `XmatToolPyParameters(...)`.
  *
  * @interface
  */
@@ -137,9 +104,9 @@ function xmat_tool_py_params(
     show_xmat: boolean = false,
     show_1d: boolean = false,
     gui_plot_xmat_as_one: boolean = false,
-): XmatToolPyParameters {
+): XmatToolPyParametersTagged {
     const params = {
-        "@type": "afni.xmat_tool.py" as const,
+        "@type": "afni/xmat_tool.py" as const,
         "no_gui": no_gui,
         "choose_nonzero_cols": choose_nonzero_cols,
         "chrono": chrono,
@@ -192,7 +159,7 @@ function xmat_tool_py_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("xmat_tool.py");
-    if ((params["no_gui"] ?? null)) {
+    if ((params["no_gui"] ?? false)) {
         cargs.push("-no_gui");
     }
     if ((params["load_xmat"] ?? null) !== null) {
@@ -213,10 +180,10 @@ function xmat_tool_py_cargs(
             (params["choose_cols"] ?? null)
         );
     }
-    if ((params["choose_nonzero_cols"] ?? null)) {
+    if ((params["choose_nonzero_cols"] ?? false)) {
         cargs.push("-choose_nonzero_cols");
     }
-    if ((params["chrono"] ?? null)) {
+    if ((params["chrono"] ?? false)) {
         cargs.push("-chrono");
     }
     if ((params["cormat_cutoff"] ?? null) !== null) {
@@ -231,7 +198,7 @@ function xmat_tool_py_cargs(
             String((params["cosmat_cutoff"] ?? null))
         );
     }
-    if ((params["cosmat_motion"] ?? null)) {
+    if ((params["cosmat_motion"] ?? false)) {
         cargs.push("-cosmat_motion");
     }
     if ((params["verb"] ?? null) !== null) {
@@ -240,37 +207,37 @@ function xmat_tool_py_cargs(
             String((params["verb"] ?? null))
         );
     }
-    if ((params["show_col_types"] ?? null)) {
+    if ((params["show_col_types"] ?? false)) {
         cargs.push("-show_col_types");
     }
-    if ((params["show_conds"] ?? null)) {
+    if ((params["show_conds"] ?? false)) {
         cargs.push("-show_conds");
     }
-    if ((params["show_cormat"] ?? null)) {
+    if ((params["show_cormat"] ?? false)) {
         cargs.push("-show_cormat");
     }
-    if ((params["show_cormat_warnings"] ?? null)) {
+    if ((params["show_cormat_warnings"] ?? false)) {
         cargs.push("-show_cormat_warnings");
     }
-    if ((params["show_cosmat"] ?? null)) {
+    if ((params["show_cosmat"] ?? false)) {
         cargs.push("-show_cosmat");
     }
-    if ((params["show_cosmat_warnings"] ?? null)) {
+    if ((params["show_cosmat_warnings"] ?? false)) {
         cargs.push("-show_cosmat_warnings");
     }
-    if ((params["show_fit_betas"] ?? null)) {
+    if ((params["show_fit_betas"] ?? false)) {
         cargs.push("-show_fit_betas");
     }
-    if ((params["show_fit_ts"] ?? null)) {
+    if ((params["show_fit_ts"] ?? false)) {
         cargs.push("-show_fit_ts");
     }
-    if ((params["show_xmat"] ?? null)) {
+    if ((params["show_xmat"] ?? false)) {
         cargs.push("-show_xmat");
     }
-    if ((params["show_1d"] ?? null)) {
+    if ((params["show_1d"] ?? false)) {
         cargs.push("-show_1D");
     }
-    if ((params["gui_plot_xmat_as_one"] ?? null)) {
+    if ((params["gui_plot_xmat_as_one"] ?? false)) {
         cargs.push("-gui_plot_xmat_as_one");
     }
     return cargs;
@@ -391,7 +358,6 @@ function xmat_tool_py(
 export {
       XMAT_TOOL_PY_METADATA,
       XmatToolPyOutputs,
-      XmatToolPyParameters,
       xmat_tool_py,
       xmat_tool_py_execute,
       xmat_tool_py_params,

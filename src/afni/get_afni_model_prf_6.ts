@@ -12,7 +12,7 @@ const GET_AFNI_MODEL_PRF_6_METADATA: Metadata = {
 
 
 interface GetAfniModelPrf6Parameters {
-    "@type": "afni.get_afni_model_PRF_6";
+    "@type"?: "afni/get_afni_model_PRF_6";
     "NT": number;
     "AMP": number;
     "X": number;
@@ -21,43 +21,11 @@ interface GetAfniModelPrf6Parameters {
     "SIGRAT": number;
     "THETA": number;
 }
+type GetAfniModelPrf6ParametersTagged = Required<Pick<GetAfniModelPrf6Parameters, '@type'>> & GetAfniModelPrf6Parameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.get_afni_model_PRF_6": get_afni_model_prf_6_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `get_afni_model_prf_6(...)`.
+ * Output object returned when calling `GetAfniModelPrf6Parameters(...)`.
  *
  * @interface
  */
@@ -90,9 +58,9 @@ function get_afni_model_prf_6_params(
     sigma: number,
     sigrat: number,
     theta: number,
-): GetAfniModelPrf6Parameters {
+): GetAfniModelPrf6ParametersTagged {
     const params = {
-        "@type": "afni.get_afni_model_PRF_6" as const,
+        "@type": "afni/get_afni_model_PRF_6" as const,
         "NT": nt,
         "AMP": amp,
         "X": x,
@@ -215,7 +183,6 @@ function get_afni_model_prf_6(
 export {
       GET_AFNI_MODEL_PRF_6_METADATA,
       GetAfniModelPrf6Outputs,
-      GetAfniModelPrf6Parameters,
       get_afni_model_prf_6,
       get_afni_model_prf_6_execute,
       get_afni_model_prf_6_params,

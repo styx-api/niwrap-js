@@ -12,46 +12,14 @@ const CHECK_RECONS_SH_METADATA: Metadata = {
 
 
 interface CheckReconsShParameters {
-    "@type": "freesurfer.check_recons.sh";
+    "@type"?: "freesurfer/check_recons.sh";
     "subject_directory"?: string | null | undefined;
 }
+type CheckReconsShParametersTagged = Required<Pick<CheckReconsShParameters, '@type'>> & CheckReconsShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.check_recons.sh": check_recons_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `check_recons_sh(...)`.
+ * Output object returned when calling `CheckReconsShParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface CheckReconsShOutputs {
  */
 function check_recons_sh_params(
     subject_directory: string | null = null,
-): CheckReconsShParameters {
+): CheckReconsShParametersTagged {
     const params = {
-        "@type": "freesurfer.check_recons.sh" as const,
+        "@type": "freesurfer/check_recons.sh" as const,
     };
     if (subject_directory !== null) {
         params["subject_directory"] = subject_directory;
@@ -177,7 +145,6 @@ function check_recons_sh(
 export {
       CHECK_RECONS_SH_METADATA,
       CheckReconsShOutputs,
-      CheckReconsShParameters,
       check_recons_sh,
       check_recons_sh_execute,
       check_recons_sh_params,

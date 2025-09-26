@@ -12,48 +12,15 @@ const ROTCOM_METADATA: Metadata = {
 
 
 interface RotcomParameters {
-    "@type": "afni.rotcom";
+    "@type"?: "afni/rotcom";
     "rotate_ashift": string;
     "dataset"?: InputPathType | null | undefined;
 }
+type RotcomParametersTagged = Required<Pick<RotcomParameters, '@type'>> & RotcomParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.rotcom": rotcom_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.rotcom": rotcom_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `rotcom(...)`.
+ * Output object returned when calling `RotcomParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface RotcomOutputs {
 function rotcom_params(
     rotate_ashift: string,
     dataset: InputPathType | null = null,
-): RotcomParameters {
+): RotcomParametersTagged {
     const params = {
-        "@type": "afni.rotcom" as const,
+        "@type": "afni/rotcom" as const,
         "rotate_ashift": rotate_ashift,
     };
     if (dataset !== null) {
@@ -190,7 +157,6 @@ function rotcom(
 export {
       ROTCOM_METADATA,
       RotcomOutputs,
-      RotcomParameters,
       rotcom,
       rotcom_execute,
       rotcom_params,

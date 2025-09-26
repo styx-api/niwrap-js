@@ -12,7 +12,7 @@ const SURFACE_INFLATION_METADATA: Metadata = {
 
 
 interface SurfaceInflationParameters {
-    "@type": "workbench.surface-inflation";
+    "@type"?: "workbench/surface-inflation";
     "anatomical_surface_in": InputPathType;
     "surface_in": InputPathType;
     "number_of_smoothing_cycles": number;
@@ -21,44 +21,11 @@ interface SurfaceInflationParameters {
     "inflation_factor": number;
     "surface_out": string;
 }
+type SurfaceInflationParametersTagged = Required<Pick<SurfaceInflationParameters, '@type'>> & SurfaceInflationParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-inflation": surface_inflation_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-inflation": surface_inflation_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_inflation(...)`.
+ * Output object returned when calling `SurfaceInflationParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function surface_inflation_params(
     smoothing_iterations: number,
     inflation_factor: number,
     surface_out: string,
-): SurfaceInflationParameters {
+): SurfaceInflationParametersTagged {
     const params = {
-        "@type": "workbench.surface-inflation" as const,
+        "@type": "workbench/surface-inflation" as const,
         "anatomical_surface_in": anatomical_surface_in,
         "surface_in": surface_in,
         "number_of_smoothing_cycles": number_of_smoothing_cycles,
@@ -226,7 +193,6 @@ function surface_inflation(
 export {
       SURFACE_INFLATION_METADATA,
       SurfaceInflationOutputs,
-      SurfaceInflationParameters,
       surface_inflation,
       surface_inflation_execute,
       surface_inflation_params,

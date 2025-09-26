@@ -12,49 +12,16 @@ const V_3DVOLREG_AFNI_METADATA: Metadata = {
 
 
 interface V3dvolregAfniParameters {
-    "@type": "freesurfer.3dvolreg.afni";
+    "@type"?: "freesurfer/3dvolreg.afni";
     "input_file": InputPathType;
     "output_file": string;
     "options"?: string | null | undefined;
 }
+type V3dvolregAfniParametersTagged = Required<Pick<V3dvolregAfniParameters, '@type'>> & V3dvolregAfniParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.3dvolreg.afni": v_3dvolreg_afni_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.3dvolreg.afni": v_3dvolreg_afni_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dvolreg_afni(...)`.
+ * Output object returned when calling `V3dvolregAfniParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function v_3dvolreg_afni_params(
     input_file: InputPathType,
     output_file: string,
     options: string | null = null,
-): V3dvolregAfniParameters {
+): V3dvolregAfniParametersTagged {
     const params = {
-        "@type": "freesurfer.3dvolreg.afni" as const,
+        "@type": "freesurfer/3dvolreg.afni" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -196,7 +163,6 @@ function v_3dvolreg_afni(
 
 export {
       V3dvolregAfniOutputs,
-      V3dvolregAfniParameters,
       V_3DVOLREG_AFNI_METADATA,
       v_3dvolreg_afni,
       v_3dvolreg_afni_execute,

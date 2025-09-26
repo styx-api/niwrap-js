@@ -12,7 +12,7 @@ const MRIS_INTENSITY_PROFILE_METADATA: Metadata = {
 
 
 interface MrisIntensityProfileParameters {
-    "@type": "freesurfer.mris_intensity_profile";
+    "@type"?: "freesurfer/mris_intensity_profile";
     "subject_name": string;
     "hemi": string;
     "volume": InputPathType;
@@ -28,44 +28,11 @@ interface MrisIntensityProfileParameters {
     "dst"?: InputPathType | null | undefined;
     "invert_flag": boolean;
 }
+type MrisIntensityProfileParametersTagged = Required<Pick<MrisIntensityProfileParameters, '@type'>> & MrisIntensityProfileParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_intensity_profile": mris_intensity_profile_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_intensity_profile": mris_intensity_profile_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_intensity_profile(...)`.
+ * Output object returned when calling `MrisIntensityProfileParameters(...)`.
  *
  * @interface
  */
@@ -120,9 +87,9 @@ function mris_intensity_profile_params(
     src: InputPathType | null = null,
     dst: InputPathType | null = null,
     invert_flag: boolean = false,
-): MrisIntensityProfileParameters {
+): MrisIntensityProfileParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_intensity_profile" as const,
+        "@type": "freesurfer/mris_intensity_profile" as const,
         "subject_name": subject_name,
         "hemi": hemi,
         "volume": volume,
@@ -200,7 +167,7 @@ function mris_intensity_profile_cargs(
             (params["pial"] ?? null)
         );
     }
-    if ((params["normalize_flag"] ?? null)) {
+    if ((params["normalize_flag"] ?? false)) {
         cargs.push("-normalize");
     }
     if ((params["mean"] ?? null) !== null) {
@@ -227,7 +194,7 @@ function mris_intensity_profile_cargs(
             execution.inputFile((params["dst"] ?? null))
         );
     }
-    if ((params["invert_flag"] ?? null)) {
+    if ((params["invert_flag"] ?? false)) {
         cargs.push("-invert");
     }
     return cargs;
@@ -335,7 +302,6 @@ function mris_intensity_profile(
 export {
       MRIS_INTENSITY_PROFILE_METADATA,
       MrisIntensityProfileOutputs,
-      MrisIntensityProfileParameters,
       mris_intensity_profile,
       mris_intensity_profile_execute,
       mris_intensity_profile_params,

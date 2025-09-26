@@ -12,48 +12,15 @@ const SURFACE_NORMALS_METADATA: Metadata = {
 
 
 interface SurfaceNormalsParameters {
-    "@type": "workbench.surface-normals";
+    "@type"?: "workbench/surface-normals";
     "surface": InputPathType;
     "metric_out": string;
 }
+type SurfaceNormalsParametersTagged = Required<Pick<SurfaceNormalsParameters, '@type'>> & SurfaceNormalsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-normals": surface_normals_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-normals": surface_normals_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_normals(...)`.
+ * Output object returned when calling `SurfaceNormalsParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface SurfaceNormalsOutputs {
 function surface_normals_params(
     surface: InputPathType,
     metric_out: string,
-): SurfaceNormalsParameters {
+): SurfaceNormalsParametersTagged {
     const params = {
-        "@type": "workbench.surface-normals" as const,
+        "@type": "workbench/surface-normals" as const,
         "surface": surface,
         "metric_out": metric_out,
     };
@@ -191,7 +158,6 @@ function surface_normals(
 export {
       SURFACE_NORMALS_METADATA,
       SurfaceNormalsOutputs,
-      SurfaceNormalsParameters,
       surface_normals,
       surface_normals_execute,
       surface_normals_params,

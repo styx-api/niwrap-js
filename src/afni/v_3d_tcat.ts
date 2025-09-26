@@ -12,7 +12,7 @@ const V_3D_TCAT_METADATA: Metadata = {
 
 
 interface V3dTcatParameters {
-    "@type": "afni.3dTcat";
+    "@type"?: "afni/3dTcat";
     "rlt"?: "" | "+" | "++" | null | undefined;
     "in_files": InputPathType;
     "out_file"?: string | null | undefined;
@@ -20,44 +20,11 @@ interface V3dTcatParameters {
     "num_threads"?: number | null | undefined;
     "verbose": boolean;
 }
+type V3dTcatParametersTagged = Required<Pick<V3dTcatParameters, '@type'>> & V3dTcatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dTcat": v_3d_tcat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dTcat": v_3d_tcat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_tcat(...)`.
+ * Output object returned when calling `V3dTcatParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function v_3d_tcat_params(
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     num_threads: number | null = null,
     verbose: boolean = false,
-): V3dTcatParameters {
+): V3dTcatParametersTagged {
     const params = {
-        "@type": "afni.3dTcat" as const,
+        "@type": "afni/3dTcat" as const,
         "in_files": in_files,
         "verbose": verbose,
     };
@@ -146,7 +113,7 @@ function v_3d_tcat_cargs(
     if ((params["num_threads"] ?? null) !== null) {
         cargs.push(String((params["num_threads"] ?? null)));
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
     return cargs;
@@ -238,7 +205,6 @@ function v_3d_tcat(
 
 export {
       V3dTcatOutputs,
-      V3dTcatParameters,
       V_3D_TCAT_METADATA,
       v_3d_tcat,
       v_3d_tcat_execute,

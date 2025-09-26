@@ -12,7 +12,7 @@ const MRI_CONCATENATE_LTA_METADATA: Metadata = {
 
 
 interface MriConcatenateLtaParameters {
-    "@type": "freesurfer.mri_concatenate_lta";
+    "@type"?: "freesurfer/mri_concatenate_lta";
     "lta_1": InputPathType;
     "lta_2": InputPathType;
     "lta_final": string;
@@ -26,43 +26,11 @@ interface MriConcatenateLtaParameters {
     "rmsdiff_radius"?: number | null | undefined;
     "rmsdiff_outputfile"?: string | null | undefined;
 }
+type MriConcatenateLtaParametersTagged = Required<Pick<MriConcatenateLtaParameters, '@type'>> & MriConcatenateLtaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_concatenate_lta": mri_concatenate_lta_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_concatenate_lta(...)`.
+ * Output object returned when calling `MriConcatenateLtaParameters(...)`.
  *
  * @interface
  */
@@ -105,9 +73,9 @@ function mri_concatenate_lta_params(
     subject: string | null = null,
     rmsdiff_radius: number | null = null,
     rmsdiff_outputfile: string | null = null,
-): MriConcatenateLtaParameters {
+): MriConcatenateLtaParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_concatenate_lta" as const,
+        "@type": "freesurfer/mri_concatenate_lta" as const,
         "lta_1": lta_1,
         "lta_2": lta_2,
         "lta_final": lta_final,
@@ -163,13 +131,13 @@ function mri_concatenate_lta_cargs(
     if ((params["tal_template"] ?? null) !== null) {
         cargs.push(execution.inputFile((params["tal_template"] ?? null)));
     }
-    if ((params["invert1"] ?? null)) {
+    if ((params["invert1"] ?? false)) {
         cargs.push("-invert1");
     }
-    if ((params["invert2"] ?? null)) {
+    if ((params["invert2"] ?? false)) {
         cargs.push("-invert2");
     }
-    if ((params["invertout"] ?? null)) {
+    if ((params["invertout"] ?? false)) {
         cargs.push("-invertout");
     }
     if ((params["out_type"] ?? null) !== null) {
@@ -292,7 +260,6 @@ function mri_concatenate_lta(
 export {
       MRI_CONCATENATE_LTA_METADATA,
       MriConcatenateLtaOutputs,
-      MriConcatenateLtaParameters,
       mri_concatenate_lta,
       mri_concatenate_lta_execute,
       mri_concatenate_lta_params,

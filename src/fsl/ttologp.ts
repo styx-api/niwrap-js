@@ -12,51 +12,18 @@ const TTOLOGP_METADATA: Metadata = {
 
 
 interface TtologpParameters {
-    "@type": "fsl.ttologp";
+    "@type"?: "fsl/ttologp";
     "varsfile": InputPathType;
     "cbsfile": InputPathType;
     "dof": string;
     "outputvol"?: string | null | undefined;
     "help_flag": boolean;
 }
+type TtologpParametersTagged = Required<Pick<TtologpParameters, '@type'>> & TtologpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.ttologp": ttologp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.ttologp": ttologp_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ttologp(...)`.
+ * Output object returned when calling `TtologpParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function ttologp_params(
     dof: string,
     outputvol: string | null = null,
     help_flag: boolean = false,
-): TtologpParameters {
+): TtologpParametersTagged {
     const params = {
-        "@type": "fsl.ttologp" as const,
+        "@type": "fsl/ttologp" as const,
         "varsfile": varsfile,
         "cbsfile": cbsfile,
         "dof": dof,
@@ -127,7 +94,7 @@ function ttologp_cargs(
             (params["outputvol"] ?? null)
         );
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -216,7 +183,6 @@ function ttologp(
 export {
       TTOLOGP_METADATA,
       TtologpOutputs,
-      TtologpParameters,
       ttologp,
       ttologp_execute,
       ttologp_params,

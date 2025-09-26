@@ -12,14 +12,15 @@ const LABELCONVERT_METADATA: Metadata = {
 
 
 interface LabelconvertConfigParameters {
-    "@type": "mrtrix.labelconvert.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type LabelconvertConfigParametersTagged = Required<Pick<LabelconvertConfigParameters, '@type'>> & LabelconvertConfigParameters;
 
 
 interface LabelconvertParameters {
-    "@type": "mrtrix.labelconvert";
+    "@type"?: "mrtrix/labelconvert";
     "spine"?: InputPathType | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -34,41 +35,7 @@ interface LabelconvertParameters {
     "lut_out": InputPathType;
     "image_out": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.labelconvert": labelconvert_cargs,
-        "mrtrix.labelconvert.config": labelconvert_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.labelconvert": labelconvert_outputs,
-    };
-    return outputsFuncs[t];
-}
+type LabelconvertParametersTagged = Required<Pick<LabelconvertParameters, '@type'>> & LabelconvertParameters;
 
 
 /**
@@ -82,9 +49,9 @@ function dynOutputs(
 function labelconvert_config_params(
     key: string,
     value: string,
-): LabelconvertConfigParameters {
+): LabelconvertConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.labelconvert.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -113,7 +80,7 @@ function labelconvert_config_cargs(
 
 
 /**
- * Output object returned when calling `labelconvert(...)`.
+ * Output object returned when calling `LabelconvertParameters(...)`.
  *
  * @interface
  */
@@ -162,9 +129,9 @@ function labelconvert_params(
     config: Array<LabelconvertConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): LabelconvertParameters {
+): LabelconvertParametersTagged {
     const params = {
-        "@type": "mrtrix.labelconvert" as const,
+        "@type": "mrtrix/labelconvert" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -209,16 +176,16 @@ function labelconvert_cargs(
             execution.inputFile((params["spine"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -228,12 +195,12 @@ function labelconvert_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => labelconvert_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["path_in"] ?? null)));
@@ -353,9 +320,7 @@ function labelconvert(
 
 export {
       LABELCONVERT_METADATA,
-      LabelconvertConfigParameters,
       LabelconvertOutputs,
-      LabelconvertParameters,
       labelconvert,
       labelconvert_config_params,
       labelconvert_execute,

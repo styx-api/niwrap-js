@@ -12,48 +12,15 @@ const QUANTIFY_BRAINSTEM_STRUCTURES_SH_METADATA: Metadata = {
 
 
 interface QuantifyBrainstemStructuresShParameters {
-    "@type": "freesurfer.quantifyBrainstemStructures.sh";
+    "@type"?: "freesurfer/quantifyBrainstemStructures.sh";
     "output_file": string;
     "subjects_directory"?: string | null | undefined;
 }
+type QuantifyBrainstemStructuresShParametersTagged = Required<Pick<QuantifyBrainstemStructuresShParameters, '@type'>> & QuantifyBrainstemStructuresShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.quantifyBrainstemStructures.sh": quantify_brainstem_structures_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.quantifyBrainstemStructures.sh": quantify_brainstem_structures_sh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `quantify_brainstem_structures_sh(...)`.
+ * Output object returned when calling `QuantifyBrainstemStructuresShParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface QuantifyBrainstemStructuresShOutputs {
 function quantify_brainstem_structures_sh_params(
     output_file: string,
     subjects_directory: string | null = null,
-): QuantifyBrainstemStructuresShParameters {
+): QuantifyBrainstemStructuresShParametersTagged {
     const params = {
-        "@type": "freesurfer.quantifyBrainstemStructures.sh" as const,
+        "@type": "freesurfer/quantifyBrainstemStructures.sh" as const,
         "output_file": output_file,
     };
     if (subjects_directory !== null) {
@@ -190,7 +157,6 @@ function quantify_brainstem_structures_sh(
 export {
       QUANTIFY_BRAINSTEM_STRUCTURES_SH_METADATA,
       QuantifyBrainstemStructuresShOutputs,
-      QuantifyBrainstemStructuresShParameters,
       quantify_brainstem_structures_sh,
       quantify_brainstem_structures_sh_execute,
       quantify_brainstem_structures_sh_params,

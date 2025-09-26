@@ -12,7 +12,7 @@ const MRIS_MULTIMODAL_SURFACE_PLACEMENT_METADATA: Metadata = {
 
 
 interface MrisMultimodalSurfacePlacementParameters {
-    "@type": "freesurfer.mris_multimodal_surface_placement";
+    "@type"?: "freesurfer/mris_multimodal_surface_placement";
     "input_surface": InputPathType;
     "output_surface": InputPathType;
     "sphere_surface": InputPathType;
@@ -30,43 +30,11 @@ interface MrisMultimodalSurfacePlacementParameters {
     "flair_image": InputPathType;
     "min_max": boolean;
 }
+type MrisMultimodalSurfacePlacementParametersTagged = Required<Pick<MrisMultimodalSurfacePlacementParameters, '@type'>> & MrisMultimodalSurfacePlacementParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_multimodal_surface_placement": mris_multimodal_surface_placement_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_multimodal_surface_placement(...)`.
+ * Output object returned when calling `MrisMultimodalSurfacePlacementParameters(...)`.
  *
  * @interface
  */
@@ -117,9 +85,9 @@ function mris_multimodal_surface_placement_params(
     flair_image: InputPathType,
     debug_vertex: number | null = null,
     min_max: boolean = false,
-): MrisMultimodalSurfacePlacementParameters {
+): MrisMultimodalSurfacePlacementParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_multimodal_surface_placement" as const,
+        "@type": "freesurfer/mris_multimodal_surface_placement" as const,
         "input_surface": input_surface,
         "output_surface": output_surface,
         "sphere_surface": sphere_surface,
@@ -219,7 +187,7 @@ function mris_multimodal_surface_placement_cargs(
         "-flair",
         execution.inputFile((params["flair_image"] ?? null))
     );
-    if ((params["min_max"] ?? null)) {
+    if ((params["min_max"] ?? false)) {
         cargs.push("-min/max");
     }
     return cargs;
@@ -329,7 +297,6 @@ function mris_multimodal_surface_placement(
 export {
       MRIS_MULTIMODAL_SURFACE_PLACEMENT_METADATA,
       MrisMultimodalSurfacePlacementOutputs,
-      MrisMultimodalSurfacePlacementParameters,
       mris_multimodal_surface_placement,
       mris_multimodal_surface_placement_execute,
       mris_multimodal_surface_placement_params,

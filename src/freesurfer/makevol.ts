@@ -12,7 +12,7 @@ const MAKEVOL_METADATA: Metadata = {
 
 
 interface MakevolParameters {
-    "@type": "freesurfer.makevol";
+    "@type"?: "freesurfer/makevol";
     "filename"?: string | null | undefined;
     "width"?: number | null | undefined;
     "height"?: number | null | undefined;
@@ -22,44 +22,11 @@ interface MakevolParameters {
     "sizez"?: number | null | undefined;
     "set_method"?: string | null | undefined;
 }
+type MakevolParametersTagged = Required<Pick<MakevolParameters, '@type'>> & MakevolParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.makevol": makevol_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.makevol": makevol_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `makevol(...)`.
+ * Output object returned when calling `MakevolParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function makevol_params(
     sizey: number | null = null,
     sizez: number | null = null,
     set_method: string | null = null,
-): MakevolParameters {
+): MakevolParametersTagged {
     const params = {
-        "@type": "freesurfer.makevol" as const,
+        "@type": "freesurfer/makevol" as const,
     };
     if (filename !== null) {
         params["filename"] = filename;
@@ -284,7 +251,6 @@ function makevol(
 export {
       MAKEVOL_METADATA,
       MakevolOutputs,
-      MakevolParameters,
       makevol,
       makevol_execute,
       makevol_params,

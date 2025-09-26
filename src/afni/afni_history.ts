@@ -12,7 +12,7 @@ const AFNI_HISTORY_METADATA: Metadata = {
 
 
 interface AfniHistoryParameters {
-    "@type": "afni.afni_history";
+    "@type"?: "afni/afni_history";
     "verb_level"?: number | null | undefined;
     "check_date"?: string | null | undefined;
     "help": boolean;
@@ -35,43 +35,11 @@ interface AfniHistoryParameters {
     "show_field"?: string | null | undefined;
     "show_field_names": boolean;
 }
+type AfniHistoryParametersTagged = Required<Pick<AfniHistoryParameters, '@type'>> & AfniHistoryParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.afni_history": afni_history_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `afni_history(...)`.
+ * Output object returned when calling `AfniHistoryParameters(...)`.
  *
  * @interface
  */
@@ -132,9 +100,9 @@ function afni_history_params(
     reverse: boolean = false,
     show_field: string | null = null,
     show_field_names: boolean = false,
-): AfniHistoryParameters {
+): AfniHistoryParametersTagged {
     const params = {
-        "@type": "afni.afni_history" as const,
+        "@type": "afni/afni_history" as const,
         "help": help,
         "history": history,
         "list_authors": list_authors,
@@ -211,19 +179,19 @@ function afni_history_cargs(
             (params["check_date"] ?? null)
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["history"] ?? null)) {
+    if ((params["history"] ?? false)) {
         cargs.push("-hist");
     }
-    if ((params["list_authors"] ?? null)) {
+    if ((params["list_authors"] ?? false)) {
         cargs.push("-list_authors");
     }
-    if ((params["list_types"] ?? null)) {
+    if ((params["list_types"] ?? false)) {
         cargs.push("-list_types");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-ver");
     }
     if ((params["author"] ?? null) !== null) {
@@ -280,13 +248,13 @@ function afni_history_cargs(
             (params["type"] ?? null)
         );
     }
-    if ((params["html"] ?? null)) {
+    if ((params["html"] ?? false)) {
         cargs.push("-html");
     }
-    if ((params["dline"] ?? null)) {
+    if ((params["dline"] ?? false)) {
         cargs.push("-dline");
     }
-    if ((params["reverse"] ?? null)) {
+    if ((params["reverse"] ?? false)) {
         cargs.push("-reverse");
     }
     if ((params["show_field"] ?? null) !== null) {
@@ -295,7 +263,7 @@ function afni_history_cargs(
             (params["show_field"] ?? null)
         );
     }
-    if ((params["show_field_names"] ?? null)) {
+    if ((params["show_field_names"] ?? false)) {
         cargs.push("-show_field_names");
     }
     return cargs;
@@ -415,7 +383,6 @@ function afni_history(
 export {
       AFNI_HISTORY_METADATA,
       AfniHistoryOutputs,
-      AfniHistoryParameters,
       afni_history,
       afni_history_execute,
       afni_history_params,

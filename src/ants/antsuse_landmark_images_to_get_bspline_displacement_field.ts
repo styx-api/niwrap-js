@@ -12,7 +12,7 @@ const ANTSUSE_LANDMARK_IMAGES_TO_GET_BSPLINE_DISPLACEMENT_FIELD_METADATA: Metada
 
 
 interface AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters {
-    "@type": "ants.ANTSUseLandmarkImagesToGetBSplineDisplacementField";
+    "@type"?: "ants/ANTSUseLandmarkImagesToGetBSplineDisplacementField";
     "fixed_image_with_labeled_landmarks": InputPathType;
     "moving_image_with_labeled_landmarks": InputPathType;
     "output_displacement_field": string;
@@ -22,44 +22,11 @@ interface AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters {
     "enforce_stationary_boundaries"?: number | null | undefined;
     "landmark_weights"?: InputPathType | null | undefined;
 }
+type AntsuseLandmarkImagesToGetBsplineDisplacementFieldParametersTagged = Required<Pick<AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters, '@type'>> & AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.ANTSUseLandmarkImagesToGetBSplineDisplacementField": antsuse_landmark_images_to_get_bspline_displacement_field_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.ANTSUseLandmarkImagesToGetBSplineDisplacementField": antsuse_landmark_images_to_get_bspline_displacement_field_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `antsuse_landmark_images_to_get_bspline_displacement_field(...)`.
+ * Output object returned when calling `AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function antsuse_landmark_images_to_get_bspline_displacement_field_params(
     order: number | null = null,
     enforce_stationary_boundaries: number | null = null,
     landmark_weights: InputPathType | null = null,
-): AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters {
+): AntsuseLandmarkImagesToGetBsplineDisplacementFieldParametersTagged {
     const params = {
-        "@type": "ants.ANTSUseLandmarkImagesToGetBSplineDisplacementField" as const,
+        "@type": "ants/ANTSUseLandmarkImagesToGetBSplineDisplacementField" as const,
         "fixed_image_with_labeled_landmarks": fixed_image_with_labeled_landmarks,
         "moving_image_with_labeled_landmarks": moving_image_with_labeled_landmarks,
         "output_displacement_field": output_displacement_field,
@@ -240,7 +207,6 @@ function antsuse_landmark_images_to_get_bspline_displacement_field(
 export {
       ANTSUSE_LANDMARK_IMAGES_TO_GET_BSPLINE_DISPLACEMENT_FIELD_METADATA,
       AntsuseLandmarkImagesToGetBsplineDisplacementFieldOutputs,
-      AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters,
       antsuse_landmark_images_to_get_bspline_displacement_field,
       antsuse_landmark_images_to_get_bspline_displacement_field_execute,
       antsuse_landmark_images_to_get_bspline_displacement_field_params,

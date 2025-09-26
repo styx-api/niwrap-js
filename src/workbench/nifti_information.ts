@@ -12,59 +12,27 @@ const NIFTI_INFORMATION_METADATA: Metadata = {
 
 
 interface NiftiInformationPrintHeaderParameters {
-    "@type": "workbench.nifti-information.print_header";
+    "@type"?: "print_header";
     "opt_allow_truncated": boolean;
 }
+type NiftiInformationPrintHeaderParametersTagged = Required<Pick<NiftiInformationPrintHeaderParameters, '@type'>> & NiftiInformationPrintHeaderParameters;
 
 
 interface NiftiInformationPrintXmlParameters {
-    "@type": "workbench.nifti-information.print_xml";
+    "@type"?: "print_xml";
     "opt_version_version"?: string | null | undefined;
 }
+type NiftiInformationPrintXmlParametersTagged = Required<Pick<NiftiInformationPrintXmlParameters, '@type'>> & NiftiInformationPrintXmlParameters;
 
 
 interface NiftiInformationParameters {
-    "@type": "workbench.nifti-information";
+    "@type"?: "workbench/nifti-information";
     "nifti_file": string;
     "print_header"?: NiftiInformationPrintHeaderParameters | null | undefined;
     "opt_print_matrix": boolean;
     "print_xml"?: NiftiInformationPrintXmlParameters | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.nifti-information": nifti_information_cargs,
-        "workbench.nifti-information.print_header": nifti_information_print_header_cargs,
-        "workbench.nifti-information.print_xml": nifti_information_print_xml_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type NiftiInformationParametersTagged = Required<Pick<NiftiInformationParameters, '@type'>> & NiftiInformationParameters;
 
 
 /**
@@ -76,9 +44,9 @@ function dynOutputs(
  */
 function nifti_information_print_header_params(
     opt_allow_truncated: boolean = false,
-): NiftiInformationPrintHeaderParameters {
+): NiftiInformationPrintHeaderParametersTagged {
     const params = {
-        "@type": "workbench.nifti-information.print_header" as const,
+        "@type": "print_header" as const,
         "opt_allow_truncated": opt_allow_truncated,
     };
     return params;
@@ -99,7 +67,7 @@ function nifti_information_print_header_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("-print-header");
-    if ((params["opt_allow_truncated"] ?? null)) {
+    if ((params["opt_allow_truncated"] ?? false)) {
         cargs.push("-allow-truncated");
     }
     return cargs;
@@ -115,9 +83,9 @@ function nifti_information_print_header_cargs(
  */
 function nifti_information_print_xml_params(
     opt_version_version: string | null = null,
-): NiftiInformationPrintXmlParameters {
+): NiftiInformationPrintXmlParametersTagged {
     const params = {
-        "@type": "workbench.nifti-information.print_xml" as const,
+        "@type": "print_xml" as const,
     };
     if (opt_version_version !== null) {
         params["opt_version_version"] = opt_version_version;
@@ -151,7 +119,7 @@ function nifti_information_print_xml_cargs(
 
 
 /**
- * Output object returned when calling `nifti_information(...)`.
+ * Output object returned when calling `NiftiInformationParameters(...)`.
  *
  * @interface
  */
@@ -178,9 +146,9 @@ function nifti_information_params(
     print_header: NiftiInformationPrintHeaderParameters | null = null,
     opt_print_matrix: boolean = false,
     print_xml: NiftiInformationPrintXmlParameters | null = null,
-): NiftiInformationParameters {
+): NiftiInformationParametersTagged {
     const params = {
-        "@type": "workbench.nifti-information" as const,
+        "@type": "workbench/nifti-information" as const,
         "nifti_file": nifti_file,
         "opt_print_matrix": opt_print_matrix,
     };
@@ -211,13 +179,13 @@ function nifti_information_cargs(
     cargs.push("-nifti-information");
     cargs.push((params["nifti_file"] ?? null));
     if ((params["print_header"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["print_header"] ?? null)["@type"])((params["print_header"] ?? null), execution));
+        cargs.push(...nifti_information_print_header_cargs((params["print_header"] ?? null), execution));
     }
-    if ((params["opt_print_matrix"] ?? null)) {
+    if ((params["opt_print_matrix"] ?? false)) {
         cargs.push("-print-matrix");
     }
     if ((params["print_xml"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["print_xml"] ?? null)["@type"])((params["print_xml"] ?? null), execution));
+        cargs.push(...nifti_information_print_xml_cargs((params["print_xml"] ?? null), execution));
     }
     return cargs;
 }
@@ -306,9 +274,6 @@ function nifti_information(
 export {
       NIFTI_INFORMATION_METADATA,
       NiftiInformationOutputs,
-      NiftiInformationParameters,
-      NiftiInformationPrintHeaderParameters,
-      NiftiInformationPrintXmlParameters,
       nifti_information,
       nifti_information_execute,
       nifti_information_params,

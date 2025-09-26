@@ -12,7 +12,7 @@ const PARC_ATLAS_JACKKNIFE_TEST_METADATA: Metadata = {
 
 
 interface ParcAtlasJackknifeTestParameters {
-    "@type": "freesurfer.parc_atlas_jackknife_test";
+    "@type"?: "freesurfer/parc_atlas_jackknife_test";
     "register": boolean;
     "reg_dist"?: string | null | undefined;
     "reg_append"?: string | null | undefined;
@@ -26,44 +26,11 @@ interface ParcAtlasJackknifeTestParameters {
     "binaries_path"?: string | null | undefined;
     "dontrun": boolean;
 }
+type ParcAtlasJackknifeTestParametersTagged = Required<Pick<ParcAtlasJackknifeTestParameters, '@type'>> & ParcAtlasJackknifeTestParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.parc_atlas_jackknife_test": parc_atlas_jackknife_test_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.parc_atlas_jackknife_test": parc_atlas_jackknife_test_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `parc_atlas_jackknife_test(...)`.
+ * Output object returned when calling `ParcAtlasJackknifeTestParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function parc_atlas_jackknife_test_params(
     freesurfer_home: string | null = null,
     binaries_path: string | null = null,
     dontrun: boolean = false,
-): ParcAtlasJackknifeTestParameters {
+): ParcAtlasJackknifeTestParametersTagged {
     const params = {
-        "@type": "freesurfer.parc_atlas_jackknife_test" as const,
+        "@type": "freesurfer/parc_atlas_jackknife_test" as const,
         "register": register,
         "train": train,
         "classify": classify,
@@ -156,7 +123,7 @@ function parc_atlas_jackknife_test_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("parc_atlas_jackknife_test");
-    if ((params["register"] ?? null)) {
+    if ((params["register"] ?? false)) {
         cargs.push("-register");
     }
     if ((params["reg_dist"] ?? null) !== null) {
@@ -177,16 +144,16 @@ function parc_atlas_jackknife_test_cargs(
             (params["reg_copy"] ?? null)
         );
     }
-    if ((params["train"] ?? null)) {
+    if ((params["train"] ?? false)) {
         cargs.push("-train");
     }
-    if ((params["classify"] ?? null)) {
+    if ((params["classify"] ?? false)) {
         cargs.push("-classify");
     }
-    if ((params["test"] ?? null)) {
+    if ((params["test"] ?? false)) {
         cargs.push("-test");
     }
-    if ((params["all"] ?? null)) {
+    if ((params["all"] ?? false)) {
         cargs.push("-all");
     }
     if ((params["subjects_dir"] ?? null) !== null) {
@@ -207,7 +174,7 @@ function parc_atlas_jackknife_test_cargs(
             (params["binaries_path"] ?? null)
         );
     }
-    if ((params["dontrun"] ?? null)) {
+    if ((params["dontrun"] ?? false)) {
         cargs.push("-dontrun");
     }
     return cargs;
@@ -310,7 +277,6 @@ function parc_atlas_jackknife_test(
 export {
       PARC_ATLAS_JACKKNIFE_TEST_METADATA,
       ParcAtlasJackknifeTestOutputs,
-      ParcAtlasJackknifeTestParameters,
       parc_atlas_jackknife_test,
       parc_atlas_jackknife_test_execute,
       parc_atlas_jackknife_test_params,

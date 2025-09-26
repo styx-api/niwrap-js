@@ -12,7 +12,7 @@ const ROBUSTFOV_METADATA: Metadata = {
 
 
 interface RobustfovParameters {
-    "@type": "fsl.robustfov";
+    "@type"?: "fsl/robustfov";
     "input_file": InputPathType;
     "output_image"?: string | null | undefined;
     "brain_size"?: number | null | undefined;
@@ -20,44 +20,11 @@ interface RobustfovParameters {
     "debug_flag": boolean;
     "verbose_flag": boolean;
 }
+type RobustfovParametersTagged = Required<Pick<RobustfovParameters, '@type'>> & RobustfovParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.robustfov": robustfov_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.robustfov": robustfov_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `robustfov(...)`.
+ * Output object returned when calling `RobustfovParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +63,9 @@ function robustfov_params(
     matrix_output: string | null = null,
     debug_flag: boolean = false,
     verbose_flag: boolean = false,
-): RobustfovParameters {
+): RobustfovParametersTagged {
     const params = {
-        "@type": "fsl.robustfov" as const,
+        "@type": "fsl/robustfov" as const,
         "input_file": input_file,
         "debug_flag": debug_flag,
         "verbose_flag": verbose_flag,
@@ -152,10 +119,10 @@ function robustfov_cargs(
             (params["matrix_output"] ?? null)
         );
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("--verbose");
     }
     return cargs;
@@ -247,7 +214,6 @@ function robustfov(
 export {
       ROBUSTFOV_METADATA,
       RobustfovOutputs,
-      RobustfovParameters,
       robustfov,
       robustfov_execute,
       robustfov_params,

@@ -12,48 +12,16 @@ const CIFTI_LABEL_EXPORT_TABLE_METADATA: Metadata = {
 
 
 interface CiftiLabelExportTableParameters {
-    "@type": "workbench.cifti-label-export-table";
+    "@type"?: "workbench/cifti-label-export-table";
     "label_in": InputPathType;
     "map": string;
     "table_out": string;
 }
+type CiftiLabelExportTableParametersTagged = Required<Pick<CiftiLabelExportTableParameters, '@type'>> & CiftiLabelExportTableParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-label-export-table": cifti_label_export_table_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `cifti_label_export_table(...)`.
+ * Output object returned when calling `CiftiLabelExportTableParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function cifti_label_export_table_params(
     label_in: InputPathType,
     map: string,
     table_out: string,
-): CiftiLabelExportTableParameters {
+): CiftiLabelExportTableParametersTagged {
     const params = {
-        "@type": "workbench.cifti-label-export-table" as const,
+        "@type": "workbench/cifti-label-export-table" as const,
         "label_in": label_in,
         "map": map,
         "table_out": table_out,
@@ -192,7 +160,6 @@ function cifti_label_export_table(
 export {
       CIFTI_LABEL_EXPORT_TABLE_METADATA,
       CiftiLabelExportTableOutputs,
-      CiftiLabelExportTableParameters,
       cifti_label_export_table,
       cifti_label_export_table_execute,
       cifti_label_export_table_params,

@@ -12,7 +12,7 @@ const MRI_MAKE_UCHAR_METADATA: Metadata = {
 
 
 interface MriMakeUcharParameters {
-    "@type": "freesurfer.mri_make_uchar";
+    "@type"?: "freesurfer/mri_make_uchar";
     "input_volume": InputPathType;
     "talairach_xform": InputPathType;
     "output_volume": string;
@@ -22,44 +22,11 @@ interface MriMakeUcharParameters {
     "cumulative_histo"?: string | null | undefined;
     "vradvol"?: string | null | undefined;
 }
+type MriMakeUcharParametersTagged = Required<Pick<MriMakeUcharParameters, '@type'>> & MriMakeUcharParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_make_uchar": mri_make_uchar_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_make_uchar": mri_make_uchar_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_make_uchar(...)`.
+ * Output object returned when calling `MriMakeUcharParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function mri_make_uchar_params(
     max_radius: number | null = null,
     cumulative_histo: string | null = null,
     vradvol: string | null = null,
-): MriMakeUcharParameters {
+): MriMakeUcharParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_make_uchar" as const,
+        "@type": "freesurfer/mri_make_uchar" as const,
         "input_volume": input_volume,
         "talairach_xform": talairach_xform,
         "output_volume": output_volume,
@@ -263,7 +230,6 @@ function mri_make_uchar(
 export {
       MRI_MAKE_UCHAR_METADATA,
       MriMakeUcharOutputs,
-      MriMakeUcharParameters,
       mri_make_uchar,
       mri_make_uchar_execute,
       mri_make_uchar_params,

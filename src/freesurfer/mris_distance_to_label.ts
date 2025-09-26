@@ -12,47 +12,15 @@ const MRIS_DISTANCE_TO_LABEL_METADATA: Metadata = {
 
 
 interface MrisDistanceToLabelParameters {
-    "@type": "freesurfer.mris_distance_to_label";
+    "@type"?: "freesurfer/mris_distance_to_label";
     "hemisphere": string;
     "subject_1": string;
 }
+type MrisDistanceToLabelParametersTagged = Required<Pick<MrisDistanceToLabelParameters, '@type'>> & MrisDistanceToLabelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_distance_to_label": mris_distance_to_label_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_distance_to_label(...)`.
+ * Output object returned when calling `MrisDistanceToLabelParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface MrisDistanceToLabelOutputs {
 function mris_distance_to_label_params(
     hemisphere: string,
     subject_1: string,
-): MrisDistanceToLabelParameters {
+): MrisDistanceToLabelParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_distance_to_label" as const,
+        "@type": "freesurfer/mris_distance_to_label" as const,
         "hemisphere": hemisphere,
         "subject_1": subject_1,
     };
@@ -180,7 +148,6 @@ function mris_distance_to_label(
 export {
       MRIS_DISTANCE_TO_LABEL_METADATA,
       MrisDistanceToLabelOutputs,
-      MrisDistanceToLabelParameters,
       mris_distance_to_label,
       mris_distance_to_label_execute,
       mris_distance_to_label_params,

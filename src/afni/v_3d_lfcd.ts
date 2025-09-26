@@ -12,7 +12,7 @@ const V_3D_LFCD_METADATA: Metadata = {
 
 
 interface V3dLfcdParameters {
-    "@type": "afni.3dLFCD";
+    "@type"?: "afni/3dLFCD";
     "in_file": InputPathType;
     "autoclip": boolean;
     "automask": boolean;
@@ -23,44 +23,11 @@ interface V3dLfcdParameters {
     "polort"?: number | null | undefined;
     "thresh"?: number | null | undefined;
 }
+type V3dLfcdParametersTagged = Required<Pick<V3dLfcdParameters, '@type'>> & V3dLfcdParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dLFCD": v_3d_lfcd_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dLFCD": v_3d_lfcd_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_lfcd(...)`.
+ * Output object returned when calling `V3dLfcdParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function v_3d_lfcd_params(
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     polort: number | null = null,
     thresh: number | null = null,
-): V3dLfcdParameters {
+): V3dLfcdParametersTagged {
     const params = {
-        "@type": "afni.3dLFCD" as const,
+        "@type": "afni/3dLFCD" as const,
         "in_file": in_file,
         "autoclip": autoclip,
         "automask": automask,
@@ -145,10 +112,10 @@ function v_3d_lfcd_cargs(
     const cargs: string[] = [];
     cargs.push("3dLFCD");
     cargs.push(execution.inputFile((params["in_file"] ?? null)));
-    if ((params["autoclip"] ?? null)) {
+    if ((params["autoclip"] ?? false)) {
         cargs.push("-autoclip");
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -274,7 +241,6 @@ function v_3d_lfcd(
 
 export {
       V3dLfcdOutputs,
-      V3dLfcdParameters,
       V_3D_LFCD_METADATA,
       v_3d_lfcd,
       v_3d_lfcd_execute,

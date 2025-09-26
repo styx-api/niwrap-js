@@ -12,7 +12,7 @@ const EDDY_COMBINE_METADATA: Metadata = {
 
 
 interface EddyCombineParameters {
-    "@type": "fsl.eddy_combine";
+    "@type"?: "fsl/eddy_combine";
     "pos_data": InputPathType;
     "pos_bvals": InputPathType;
     "pos_bvecs": InputPathType;
@@ -24,44 +24,11 @@ interface EddyCombineParameters {
     "output_path": string;
     "only_matched_flag": number;
 }
+type EddyCombineParametersTagged = Required<Pick<EddyCombineParameters, '@type'>> & EddyCombineParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.eddy_combine": eddy_combine_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.eddy_combine": eddy_combine_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `eddy_combine(...)`.
+ * Output object returned when calling `EddyCombineParameters(...)`.
  *
  * @interface
  */
@@ -112,9 +79,9 @@ function eddy_combine_params(
     neg_series_vol: number,
     output_path: string,
     only_matched_flag: number,
-): EddyCombineParameters {
+): EddyCombineParametersTagged {
     const params = {
-        "@type": "fsl.eddy_combine" as const,
+        "@type": "fsl/eddy_combine" as const,
         "pos_data": pos_data,
         "pos_bvals": pos_bvals,
         "pos_bvecs": pos_bvecs,
@@ -252,7 +219,6 @@ function eddy_combine(
 export {
       EDDY_COMBINE_METADATA,
       EddyCombineOutputs,
-      EddyCombineParameters,
       eddy_combine,
       eddy_combine_execute,
       eddy_combine_params,

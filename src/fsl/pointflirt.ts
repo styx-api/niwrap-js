@@ -12,7 +12,7 @@ const POINTFLIRT_METADATA: Metadata = {
 
 
 interface PointflirtParameters {
-    "@type": "fsl.pointflirt";
+    "@type"?: "fsl/pointflirt";
     "invol_coords": InputPathType;
     "refvol_coords": InputPathType;
     "out_matrix"?: string | null | undefined;
@@ -21,44 +21,11 @@ interface PointflirtParameters {
     "vol_ref"?: InputPathType | null | undefined;
     "verbose_flag": boolean;
 }
+type PointflirtParametersTagged = Required<Pick<PointflirtParameters, '@type'>> & PointflirtParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.pointflirt": pointflirt_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.pointflirt": pointflirt_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `pointflirt(...)`.
+ * Output object returned when calling `PointflirtParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function pointflirt_params(
     vol_input: InputPathType | null = null,
     vol_ref: InputPathType | null = null,
     verbose_flag: boolean = false,
-): PointflirtParameters {
+): PointflirtParametersTagged {
     const params = {
-        "@type": "fsl.pointflirt" as const,
+        "@type": "fsl/pointflirt" as const,
         "invol_coords": invol_coords,
         "refvol_coords": refvol_coords,
         "use_vox": use_vox,
@@ -144,7 +111,7 @@ function pointflirt_cargs(
             (params["out_matrix"] ?? null)
         );
     }
-    if ((params["use_vox"] ?? null)) {
+    if ((params["use_vox"] ?? false)) {
         cargs.push("--vox");
     }
     if ((params["vol_input"] ?? null) !== null) {
@@ -159,7 +126,7 @@ function pointflirt_cargs(
             execution.inputFile((params["vol_ref"] ?? null))
         );
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
     return cargs;
@@ -252,7 +219,6 @@ function pointflirt(
 export {
       POINTFLIRT_METADATA,
       PointflirtOutputs,
-      PointflirtParameters,
       pointflirt,
       pointflirt_execute,
       pointflirt_params,

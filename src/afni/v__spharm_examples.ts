@@ -12,7 +12,7 @@ const V__SPHARM_EXAMPLES_METADATA: Metadata = {
 
 
 interface VSpharmExamplesParameters {
-    "@type": "afni.@Spharm.examples";
+    "@type"?: "afni/@Spharm.examples";
     "help_web": boolean;
     "help_web_alias": boolean;
     "help_view": boolean;
@@ -20,43 +20,11 @@ interface VSpharmExamplesParameters {
     "all_opts": boolean;
     "help_find"?: string | null | undefined;
 }
+type VSpharmExamplesParametersTagged = Required<Pick<VSpharmExamplesParameters, '@type'>> & VSpharmExamplesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@Spharm.examples": v__spharm_examples_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__spharm_examples(...)`.
+ * Output object returned when calling `VSpharmExamplesParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function v__spharm_examples_params(
     help_view_alias: boolean = false,
     all_opts: boolean = false,
     help_find: string | null = null,
-): VSpharmExamplesParameters {
+): VSpharmExamplesParametersTagged {
     const params = {
-        "@type": "afni.@Spharm.examples" as const,
+        "@type": "afni/@Spharm.examples" as const,
         "help_web": help_web,
         "help_web_alias": help_web_alias,
         "help_view": help_view,
@@ -117,19 +85,19 @@ function v__spharm_examples_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("@Spharm.examples");
-    if ((params["help_web"] ?? null)) {
+    if ((params["help_web"] ?? false)) {
         cargs.push("-h_web");
     }
-    if ((params["help_web_alias"] ?? null)) {
+    if ((params["help_web_alias"] ?? false)) {
         cargs.push("-hweb");
     }
-    if ((params["help_view"] ?? null)) {
+    if ((params["help_view"] ?? false)) {
         cargs.push("-h_view");
     }
-    if ((params["help_view_alias"] ?? null)) {
+    if ((params["help_view_alias"] ?? false)) {
         cargs.push("-hview");
     }
-    if ((params["all_opts"] ?? null)) {
+    if ((params["all_opts"] ?? false)) {
         cargs.push("-all_opts");
     }
     if ((params["help_find"] ?? null) !== null) {
@@ -224,7 +192,6 @@ function v__spharm_examples(
 
 export {
       VSpharmExamplesOutputs,
-      VSpharmExamplesParameters,
       V__SPHARM_EXAMPLES_METADATA,
       v__spharm_examples,
       v__spharm_examples_execute,

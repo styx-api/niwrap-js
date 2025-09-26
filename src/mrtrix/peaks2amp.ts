@@ -12,14 +12,15 @@ const PEAKS2AMP_METADATA: Metadata = {
 
 
 interface Peaks2ampConfigParameters {
-    "@type": "mrtrix.peaks2amp.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Peaks2ampConfigParametersTagged = Required<Pick<Peaks2ampConfigParameters, '@type'>> & Peaks2ampConfigParameters;
 
 
 interface Peaks2ampParameters {
-    "@type": "mrtrix.peaks2amp";
+    "@type"?: "mrtrix/peaks2amp";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -31,41 +32,7 @@ interface Peaks2ampParameters {
     "directions": InputPathType;
     "amplitudes": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.peaks2amp": peaks2amp_cargs,
-        "mrtrix.peaks2amp.config": peaks2amp_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.peaks2amp": peaks2amp_outputs,
-    };
-    return outputsFuncs[t];
-}
+type Peaks2ampParametersTagged = Required<Pick<Peaks2ampParameters, '@type'>> & Peaks2ampParameters;
 
 
 /**
@@ -79,9 +46,9 @@ function dynOutputs(
 function peaks2amp_config_params(
     key: string,
     value: string,
-): Peaks2ampConfigParameters {
+): Peaks2ampConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.peaks2amp.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -110,7 +77,7 @@ function peaks2amp_config_cargs(
 
 
 /**
- * Output object returned when calling `peaks2amp(...)`.
+ * Output object returned when calling `Peaks2ampParameters(...)`.
  *
  * @interface
  */
@@ -153,9 +120,9 @@ function peaks2amp_params(
     config: Array<Peaks2ampConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Peaks2ampParameters {
+): Peaks2ampParametersTagged {
     const params = {
-        "@type": "mrtrix.peaks2amp" as const,
+        "@type": "mrtrix/peaks2amp" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -189,16 +156,16 @@ function peaks2amp_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("peaks2amp");
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -208,12 +175,12 @@ function peaks2amp_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => peaks2amp_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["directions"] ?? null)));
@@ -325,9 +292,7 @@ function peaks2amp(
 
 export {
       PEAKS2AMP_METADATA,
-      Peaks2ampConfigParameters,
       Peaks2ampOutputs,
-      Peaks2ampParameters,
       peaks2amp,
       peaks2amp_config_params,
       peaks2amp_execute,

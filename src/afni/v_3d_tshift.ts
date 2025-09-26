@@ -12,7 +12,7 @@ const V_3D_TSHIFT_METADATA: Metadata = {
 
 
 interface V3dTshiftParameters {
-    "@type": "afni.3dTshift";
+    "@type"?: "afni/3dTshift";
     "prefix"?: string | null | undefined;
     "ignore"?: number | null | undefined;
     "in_file": InputPathType;
@@ -27,44 +27,11 @@ interface V3dTshiftParameters {
     "tslice"?: number | null | undefined;
     "tzero"?: number | null | undefined;
 }
+type V3dTshiftParametersTagged = Required<Pick<V3dTshiftParameters, '@type'>> & V3dTshiftParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dTshift": v_3d_tshift_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dTshift": v_3d_tshift_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_tshift(...)`.
+ * Output object returned when calling `V3dTshiftParameters(...)`.
  *
  * @interface
  */
@@ -117,9 +84,9 @@ function v_3d_tshift_params(
     tr: number | null = null,
     tslice: number | null = null,
     tzero: number | null = null,
-): V3dTshiftParameters {
+): V3dTshiftParametersTagged {
     const params = {
-        "@type": "afni.3dTshift" as const,
+        "@type": "afni/3dTshift" as const,
         "in_file": in_file,
         "rlt": rlt,
         "rltplus": rltplus,
@@ -197,10 +164,10 @@ function v_3d_tshift_cargs(
     if ((params["outputtype"] ?? null) !== null) {
         cargs.push((params["outputtype"] ?? null));
     }
-    if ((params["rlt"] ?? null)) {
+    if ((params["rlt"] ?? false)) {
         cargs.push("-rlt");
     }
-    if ((params["rltplus"] ?? null)) {
+    if ((params["rltplus"] ?? false)) {
         cargs.push("-rlt+");
     }
     if ((params["slice_encoding_direction"] ?? null) !== null) {
@@ -332,7 +299,6 @@ function v_3d_tshift(
 
 export {
       V3dTshiftOutputs,
-      V3dTshiftParameters,
       V_3D_TSHIFT_METADATA,
       v_3d_tshift,
       v_3d_tshift_execute,

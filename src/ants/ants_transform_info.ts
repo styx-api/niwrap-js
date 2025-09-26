@@ -12,47 +12,14 @@ const ANTS_TRANSFORM_INFO_METADATA: Metadata = {
 
 
 interface AntsTransformInfoParameters {
-    "@type": "ants.antsTransformInfo";
+    "@type"?: "ants/antsTransformInfo";
     "transform_file": InputPathType;
 }
+type AntsTransformInfoParametersTagged = Required<Pick<AntsTransformInfoParameters, '@type'>> & AntsTransformInfoParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.antsTransformInfo": ants_transform_info_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.antsTransformInfo": ants_transform_info_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ants_transform_info(...)`.
+ * Output object returned when calling `AntsTransformInfoParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface AntsTransformInfoOutputs {
  */
 function ants_transform_info_params(
     transform_file: InputPathType,
-): AntsTransformInfoParameters {
+): AntsTransformInfoParametersTagged {
     const params = {
-        "@type": "ants.antsTransformInfo" as const,
+        "@type": "ants/antsTransformInfo" as const,
         "transform_file": transform_file,
     };
     return params;
@@ -182,7 +149,6 @@ function ants_transform_info(
 export {
       ANTS_TRANSFORM_INFO_METADATA,
       AntsTransformInfoOutputs,
-      AntsTransformInfoParameters,
       ants_transform_info,
       ants_transform_info_execute,
       ants_transform_info_params,

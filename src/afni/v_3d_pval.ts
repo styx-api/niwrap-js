@@ -12,7 +12,7 @@ const V_3D_PVAL_METADATA: Metadata = {
 
 
 interface V3dPvalParameters {
-    "@type": "afni.3dPval";
+    "@type"?: "afni/3dPval";
     "input_dataset": InputPathType;
     "zscore": boolean;
     "log2": boolean;
@@ -20,44 +20,11 @@ interface V3dPvalParameters {
     "qval": boolean;
     "prefix"?: string | null | undefined;
 }
+type V3dPvalParametersTagged = Required<Pick<V3dPvalParameters, '@type'>> & V3dPvalParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dPval": v_3d_pval_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dPval": v_3d_pval_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_pval(...)`.
+ * Output object returned when calling `V3dPvalParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function v_3d_pval_params(
     log10: boolean = false,
     qval: boolean = false,
     prefix: string | null = null,
-): V3dPvalParameters {
+): V3dPvalParametersTagged {
     const params = {
-        "@type": "afni.3dPval" as const,
+        "@type": "afni/3dPval" as const,
         "input_dataset": input_dataset,
         "zscore": zscore,
         "log2": log2,
@@ -123,16 +90,16 @@ function v_3d_pval_cargs(
     const cargs: string[] = [];
     cargs.push("3dPval");
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
-    if ((params["zscore"] ?? null)) {
+    if ((params["zscore"] ?? false)) {
         cargs.push("-zscore");
     }
-    if ((params["log2"] ?? null)) {
+    if ((params["log2"] ?? false)) {
         cargs.push("-log2");
     }
-    if ((params["log10"] ?? null)) {
+    if ((params["log10"] ?? false)) {
         cargs.push("-log10");
     }
-    if ((params["qval"] ?? null)) {
+    if ((params["qval"] ?? false)) {
         cargs.push("-qval");
     }
     if ((params["prefix"] ?? null) !== null) {
@@ -228,7 +195,6 @@ function v_3d_pval(
 
 export {
       V3dPvalOutputs,
-      V3dPvalParameters,
       V_3D_PVAL_METADATA,
       v_3d_pval,
       v_3d_pval_execute,

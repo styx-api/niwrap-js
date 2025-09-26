@@ -12,7 +12,7 @@ const N3_BIAS_FIELD_CORRECTION_METADATA: Metadata = {
 
 
 interface N3BiasFieldCorrectionParameters {
-    "@type": "ants.N3BiasFieldCorrection";
+    "@type"?: "ants/N3BiasFieldCorrection";
     "image_dimensionality"?: 2 | 3 | 4 | null | undefined;
     "input_image": InputPathType;
     "mask_image"?: InputPathType | null | undefined;
@@ -25,44 +25,11 @@ interface N3BiasFieldCorrectionParameters {
     "output": string;
     "verbose"?: 0 | 1 | null | undefined;
 }
+type N3BiasFieldCorrectionParametersTagged = Required<Pick<N3BiasFieldCorrectionParameters, '@type'>> & N3BiasFieldCorrectionParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.N3BiasFieldCorrection": n3_bias_field_correction_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.N3BiasFieldCorrection": n3_bias_field_correction_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `n3_bias_field_correction(...)`.
+ * Output object returned when calling `N3BiasFieldCorrectionParameters(...)`.
  *
  * @interface
  */
@@ -111,9 +78,9 @@ function n3_bias_field_correction_params(
     bspline_fitting: string | null = null,
     histogram_sharpening: string | null = null,
     verbose: 0 | 1 | null = null,
-): N3BiasFieldCorrectionParameters {
+): N3BiasFieldCorrectionParametersTagged {
     const params = {
-        "@type": "ants.N3BiasFieldCorrection" as const,
+        "@type": "ants/N3BiasFieldCorrection" as const,
         "input_image": input_image,
         "output": output,
     };
@@ -322,7 +289,6 @@ function n3_bias_field_correction(
 
 export {
       N3BiasFieldCorrectionOutputs,
-      N3BiasFieldCorrectionParameters,
       N3_BIAS_FIELD_CORRECTION_METADATA,
       n3_bias_field_correction,
       n3_bias_field_correction_execute,

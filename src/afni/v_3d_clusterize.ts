@@ -12,7 +12,7 @@ const V_3D_CLUSTERIZE_METADATA: Metadata = {
 
 
 interface V3dClusterizeParameters {
-    "@type": "afni.3dClusterize";
+    "@type"?: "afni/3dClusterize";
     "inset": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "mask_from_hdr": boolean;
@@ -38,44 +38,11 @@ interface V3dClusterizeParameters {
     "abs_table_data": boolean;
     "binary": boolean;
 }
+type V3dClusterizeParametersTagged = Required<Pick<V3dClusterizeParameters, '@type'>> & V3dClusterizeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dClusterize": v_3d_clusterize_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dClusterize": v_3d_clusterize_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_clusterize(...)`.
+ * Output object returned when calling `V3dClusterizeParameters(...)`.
  *
  * @interface
  */
@@ -154,9 +121,9 @@ function v_3d_clusterize_params(
     orient: string | null = null,
     abs_table_data: boolean = false,
     binary: boolean = false,
-): V3dClusterizeParameters {
+): V3dClusterizeParametersTagged {
     const params = {
-        "@type": "afni.3dClusterize" as const,
+        "@type": "afni/3dClusterize" as const,
         "inset": inset,
         "mask_from_hdr": mask_from_hdr,
         "ithr": ithr,
@@ -234,7 +201,7 @@ function v_3d_clusterize_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["mask_from_hdr"] ?? null)) {
+    if ((params["mask_from_hdr"] ?? false)) {
         cargs.push("-mask_from_hdr");
     }
     if ((params["out_mask"] ?? null) !== null) {
@@ -305,22 +272,22 @@ function v_3d_clusterize_cargs(
             (params["pref_dat"] ?? null)
         );
     }
-    if ((params["one_d_format"] ?? null)) {
+    if ((params["one_d_format"] ?? false)) {
         cargs.push("-1Dformat");
     }
-    if ((params["no_one_d_format"] ?? null)) {
+    if ((params["no_one_d_format"] ?? false)) {
         cargs.push("-no_1Dformat");
     }
-    if ((params["summarize"] ?? null)) {
+    if ((params["summarize"] ?? false)) {
         cargs.push("-summarize");
     }
-    if ((params["nosum"] ?? null)) {
+    if ((params["nosum"] ?? false)) {
         cargs.push("-nosum");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["outvol_if_no_clust"] ?? null)) {
+    if ((params["outvol_if_no_clust"] ?? false)) {
         cargs.push("-outvol_if_no_clust");
     }
     if ((params["orient"] ?? null) !== null) {
@@ -329,10 +296,10 @@ function v_3d_clusterize_cargs(
             (params["orient"] ?? null)
         );
     }
-    if ((params["abs_table_data"] ?? null)) {
+    if ((params["abs_table_data"] ?? false)) {
         cargs.push("-abs_table_data");
     }
-    if ((params["binary"] ?? null)) {
+    if ((params["binary"] ?? false)) {
         cargs.push("-binary");
     }
     return cargs;
@@ -460,7 +427,6 @@ function v_3d_clusterize(
 
 export {
       V3dClusterizeOutputs,
-      V3dClusterizeParameters,
       V_3D_CLUSTERIZE_METADATA,
       v_3d_clusterize,
       v_3d_clusterize_execute,

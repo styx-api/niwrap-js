@@ -12,47 +12,15 @@ const FATCAT_MATPLOT_METADATA: Metadata = {
 
 
 interface FatcatMatplotParameters {
-    "@type": "afni.FATCAT_matplot";
+    "@type"?: "afni/FATCAT_matplot";
     "directory": string;
     "shiny_folder": boolean;
 }
+type FatcatMatplotParametersTagged = Required<Pick<FatcatMatplotParameters, '@type'>> & FatcatMatplotParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.FATCAT_matplot": fatcat_matplot_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fatcat_matplot(...)`.
+ * Output object returned when calling `FatcatMatplotParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface FatcatMatplotOutputs {
 function fatcat_matplot_params(
     directory: string,
     shiny_folder: boolean = false,
-): FatcatMatplotParameters {
+): FatcatMatplotParametersTagged {
     const params = {
-        "@type": "afni.FATCAT_matplot" as const,
+        "@type": "afni/FATCAT_matplot" as const,
         "directory": directory,
         "shiny_folder": shiny_folder,
     };
@@ -100,7 +68,7 @@ function fatcat_matplot_cargs(
     const cargs: string[] = [];
     cargs.push("FATCAT_matplot");
     cargs.push((params["directory"] ?? null));
-    if ((params["shiny_folder"] ?? null)) {
+    if ((params["shiny_folder"] ?? false)) {
         cargs.push("-ShinyFolder");
     }
     return cargs;
@@ -182,7 +150,6 @@ function fatcat_matplot(
 export {
       FATCAT_MATPLOT_METADATA,
       FatcatMatplotOutputs,
-      FatcatMatplotParameters,
       fatcat_matplot,
       fatcat_matplot_execute,
       fatcat_matplot_params,

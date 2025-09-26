@@ -12,7 +12,7 @@ const MRI_VOL2VOL_METADATA: Metadata = {
 
 
 interface MriVol2volParameters {
-    "@type": "freesurfer.mri_vol2vol";
+    "@type"?: "freesurfer/mri_vol2vol";
     "movvol": InputPathType;
     "targvol": InputPathType;
     "outvol": InputPathType;
@@ -58,44 +58,11 @@ interface MriVol2volParameters {
     "debug": boolean;
     "version": boolean;
 }
+type MriVol2volParametersTagged = Required<Pick<MriVol2volParameters, '@type'>> & MriVol2volParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_vol2vol": mri_vol2vol_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_vol2vol": mri_vol2vol_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_vol2vol(...)`.
+ * Output object returned when calling `MriVol2volParameters(...)`.
  *
  * @interface
  */
@@ -206,9 +173,9 @@ function mri_vol2vol_params(
     save_reg: boolean = false,
     debug: boolean = false,
     version: boolean = false,
-): MriVol2volParameters {
+): MriVol2volParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_vol2vol" as const,
+        "@type": "freesurfer/mri_vol2vol" as const,
         "movvol": movvol,
         "targvol": targvol,
         "outvol": outvol,
@@ -371,10 +338,10 @@ function mri_vol2vol_cargs(
             execution.inputFile((params["xfm"] ?? null))
         );
     }
-    if ((params["inv"] ?? null)) {
+    if ((params["inv"] ?? false)) {
         cargs.push("--inv");
     }
-    if ((params["tal"] ?? null)) {
+    if ((params["tal"] ?? false)) {
         cargs.push("--tal");
     }
     if ((params["talres"] ?? null) !== null) {
@@ -395,7 +362,7 @@ function mri_vol2vol_cargs(
             execution.inputFile((params["m3z"] ?? null))
         );
     }
-    if ((params["inv_morph"] ?? null)) {
+    if ((params["inv_morph"] ?? false)) {
         cargs.push("--inv-morph");
     }
     if ((params["fstarg"] ?? null) !== null) {
@@ -416,7 +383,7 @@ function mri_vol2vol_cargs(
             ...(params["slice_crop"] ?? null).map(String)
         );
     }
-    if ((params["slice_reverse"] ?? null)) {
+    if ((params["slice_reverse"] ?? false)) {
         cargs.push("--slice-reverse");
     }
     if ((params["slice_bias"] ?? null) !== null) {
@@ -431,10 +398,10 @@ function mri_vol2vol_cargs(
             (params["interp"] ?? null)
         );
     }
-    if ((params["fill_average"] ?? null)) {
+    if ((params["fill_average"] ?? false)) {
         cargs.push("--fill-average");
     }
-    if ((params["fill_conserve"] ?? null)) {
+    if ((params["fill_conserve"] ?? false)) {
         cargs.push("--fill-conserve");
     }
     if ((params["fill_up"] ?? null) !== null) {
@@ -455,13 +422,13 @@ function mri_vol2vol_cargs(
             (params["precision"] ?? null)
         );
     }
-    if ((params["keep_precision"] ?? null)) {
+    if ((params["keep_precision"] ?? false)) {
         cargs.push("--keep-precision");
     }
-    if ((params["kernel"] ?? null)) {
+    if ((params["kernel"] ?? false)) {
         cargs.push("--kernel");
     }
-    if ((params["copy_ctab"] ?? null)) {
+    if ((params["copy_ctab"] ?? false)) {
         cargs.push("--copy-ctab");
     }
     if ((params["gcam"] ?? null) !== null) {
@@ -488,7 +455,7 @@ function mri_vol2vol_cargs(
             (params["map_point_inv_lta"] ?? null)
         );
     }
-    if ((params["no_resample"] ?? null)) {
+    if ((params["no_resample"] ?? false)) {
         cargs.push("--no-resample");
     }
     if ((params["rot"] ?? null) !== null) {
@@ -515,7 +482,7 @@ function mri_vol2vol_cargs(
             execution.inputFile((params["reg_final"] ?? null))
         );
     }
-    if ((params["synth"] ?? null)) {
+    if ((params["synth"] ?? false)) {
         cargs.push("--synth");
     }
     if ((params["seed"] ?? null) !== null) {
@@ -524,13 +491,13 @@ function mri_vol2vol_cargs(
             String((params["seed"] ?? null))
         );
     }
-    if ((params["save_reg"] ?? null)) {
+    if ((params["save_reg"] ?? false)) {
         cargs.push("--save-reg");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -697,7 +664,6 @@ function mri_vol2vol(
 export {
       MRI_VOL2VOL_METADATA,
       MriVol2volOutputs,
-      MriVol2volParameters,
       mri_vol2vol,
       mri_vol2vol_execute,
       mri_vol2vol_params,

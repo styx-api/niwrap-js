@@ -12,7 +12,7 @@ const PAIRREG_METADATA: Metadata = {
 
 
 interface PairregParameters {
-    "@type": "fsl.pairreg";
+    "@type"?: "fsl/pairreg";
     "brain1": InputPathType;
     "brain2": InputPathType;
     "skull1": InputPathType;
@@ -20,44 +20,11 @@ interface PairregParameters {
     "outputmatrix": InputPathType;
     "extra_flirt_args"?: string | null | undefined;
 }
+type PairregParametersTagged = Required<Pick<PairregParameters, '@type'>> & PairregParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.pairreg": pairreg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.pairreg": pairreg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `pairreg(...)`.
+ * Output object returned when calling `PairregParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function pairreg_params(
     skull2: InputPathType,
     outputmatrix: InputPathType,
     extra_flirt_args: string | null = null,
-): PairregParameters {
+): PairregParametersTagged {
     const params = {
-        "@type": "fsl.pairreg" as const,
+        "@type": "fsl/pairreg" as const,
         "brain1": brain1,
         "brain2": brain2,
         "skull1": skull1,
@@ -218,7 +185,6 @@ function pairreg(
 export {
       PAIRREG_METADATA,
       PairregOutputs,
-      PairregParameters,
       pairreg,
       pairreg_execute,
       pairreg_params,

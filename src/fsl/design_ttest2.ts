@@ -12,49 +12,17 @@ const DESIGN_TTEST2_METADATA: Metadata = {
 
 
 interface DesignTtest2Parameters {
-    "@type": "fsl.design_ttest2";
+    "@type"?: "fsl/design_ttest2";
     "design_files_rootname": string;
     "ngroupa": number;
     "ngroupb": number;
     "include_mean_contrasts": boolean;
 }
+type DesignTtest2ParametersTagged = Required<Pick<DesignTtest2Parameters, '@type'>> & DesignTtest2Parameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.design_ttest2": design_ttest2_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `design_ttest2(...)`.
+ * Output object returned when calling `DesignTtest2Parameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function design_ttest2_params(
     ngroupa: number,
     ngroupb: number,
     include_mean_contrasts: boolean = false,
-): DesignTtest2Parameters {
+): DesignTtest2ParametersTagged {
     const params = {
-        "@type": "fsl.design_ttest2" as const,
+        "@type": "fsl/design_ttest2" as const,
         "design_files_rootname": design_files_rootname,
         "ngroupa": ngroupa,
         "ngroupb": ngroupb,
@@ -110,7 +78,7 @@ function design_ttest2_cargs(
     cargs.push((params["design_files_rootname"] ?? null));
     cargs.push(String((params["ngroupa"] ?? null)));
     cargs.push(String((params["ngroupb"] ?? null)));
-    if ((params["include_mean_contrasts"] ?? null)) {
+    if ((params["include_mean_contrasts"] ?? false)) {
         cargs.push("-m");
     }
     return cargs;
@@ -196,7 +164,6 @@ function design_ttest2(
 export {
       DESIGN_TTEST2_METADATA,
       DesignTtest2Outputs,
-      DesignTtest2Parameters,
       design_ttest2,
       design_ttest2_execute,
       design_ttest2_params,

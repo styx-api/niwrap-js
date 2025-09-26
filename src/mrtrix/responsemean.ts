@@ -12,7 +12,7 @@ const RESPONSEMEAN_METADATA: Metadata = {
 
 
 interface ResponsemeanParameters {
-    "@type": "mrtrix.responsemean";
+    "@type"?: "mrtrix/responsemean";
     "input_response": Array<InputPathType>;
     "output_response": string;
     "legacy": boolean;
@@ -28,44 +28,11 @@ interface ResponsemeanParameters {
     "help": boolean;
     "version": boolean;
 }
+type ResponsemeanParametersTagged = Required<Pick<ResponsemeanParameters, '@type'>> & ResponsemeanParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.responsemean": responsemean_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.responsemean": responsemean_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `responsemean(...)`.
+ * Output object returned when calling `ResponsemeanParameters(...)`.
  *
  * @interface
  */
@@ -116,9 +83,9 @@ function responsemean_params(
     config: Array<string> | null = null,
     help: boolean = false,
     version: boolean = false,
-): ResponsemeanParameters {
+): ResponsemeanParametersTagged {
     const params = {
-        "@type": "mrtrix.responsemean" as const,
+        "@type": "mrtrix/responsemean" as const,
         "input_response": input_response,
         "output_response": output_response,
         "legacy": legacy,
@@ -162,10 +129,10 @@ function responsemean_cargs(
     cargs.push("responsemean");
     cargs.push(...(params["input_response"] ?? null).map(f => execution.inputFile(f)));
     cargs.push((params["output_response"] ?? null));
-    if ((params["legacy"] ?? null)) {
+    if ((params["legacy"] ?? false)) {
         cargs.push("-legacy");
     }
-    if ((params["nocleanup"] ?? null)) {
+    if ((params["nocleanup"] ?? false)) {
         cargs.push("-nocleanup");
     }
     if ((params["scratch_dir"] ?? null) !== null) {
@@ -180,16 +147,16 @@ function responsemean_cargs(
             ...(params["continue_scratch_dir"] ?? null).map(f => execution.inputFile(f))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -204,10 +171,10 @@ function responsemean_cargs(
             ...(params["config"] ?? null)
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     return cargs;
@@ -314,7 +281,6 @@ function responsemean(
 export {
       RESPONSEMEAN_METADATA,
       ResponsemeanOutputs,
-      ResponsemeanParameters,
       responsemean,
       responsemean_execute,
       responsemean_params,

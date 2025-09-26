@@ -12,49 +12,16 @@ const SURFACE_CURVATURE_METADATA: Metadata = {
 
 
 interface SurfaceCurvatureParameters {
-    "@type": "workbench.surface-curvature";
+    "@type"?: "workbench/surface-curvature";
     "surface": InputPathType;
     "opt_mean_mean_out"?: string | null | undefined;
     "opt_gauss_gauss_out"?: string | null | undefined;
 }
+type SurfaceCurvatureParametersTagged = Required<Pick<SurfaceCurvatureParameters, '@type'>> & SurfaceCurvatureParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-curvature": surface_curvature_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-curvature": surface_curvature_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_curvature(...)`.
+ * Output object returned when calling `SurfaceCurvatureParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +54,9 @@ function surface_curvature_params(
     surface: InputPathType,
     opt_mean_mean_out: string | null = null,
     opt_gauss_gauss_out: string | null = null,
-): SurfaceCurvatureParameters {
+): SurfaceCurvatureParametersTagged {
     const params = {
-        "@type": "workbench.surface-curvature" as const,
+        "@type": "workbench/surface-curvature" as const,
         "surface": surface,
     };
     if (opt_mean_mean_out !== null) {
@@ -221,7 +188,6 @@ function surface_curvature(
 export {
       SURFACE_CURVATURE_METADATA,
       SurfaceCurvatureOutputs,
-      SurfaceCurvatureParameters,
       surface_curvature,
       surface_curvature_execute,
       surface_curvature_params,

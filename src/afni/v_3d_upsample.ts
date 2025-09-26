@@ -12,7 +12,7 @@ const V_3D_UPSAMPLE_METADATA: Metadata = {
 
 
 interface V3dUpsampleParameters {
-    "@type": "afni.3dUpsample";
+    "@type"?: "afni/3dUpsample";
     "upsample_factor": number;
     "input_dataset": string;
     "linear_interpolation": boolean;
@@ -20,44 +20,11 @@ interface V3dUpsampleParameters {
     "verbose_flag": boolean;
     "datatype"?: string | null | undefined;
 }
+type V3dUpsampleParametersTagged = Required<Pick<V3dUpsampleParameters, '@type'>> & V3dUpsampleParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dUpsample": v_3d_upsample_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dUpsample": v_3d_upsample_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_upsample(...)`.
+ * Output object returned when calling `V3dUpsampleParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +63,9 @@ function v_3d_upsample_params(
     output_prefix: string | null = null,
     verbose_flag: boolean = false,
     datatype: string | null = null,
-): V3dUpsampleParameters {
+): V3dUpsampleParametersTagged {
     const params = {
-        "@type": "afni.3dUpsample" as const,
+        "@type": "afni/3dUpsample" as const,
         "upsample_factor": upsample_factor,
         "input_dataset": input_dataset,
         "linear_interpolation": linear_interpolation,
@@ -136,7 +103,7 @@ function v_3d_upsample_cargs(
         "-input",
         (params["input_dataset"] ?? null)
     );
-    if ((params["linear_interpolation"] ?? null)) {
+    if ((params["linear_interpolation"] ?? false)) {
         cargs.push("-1");
     }
     if ((params["output_prefix"] ?? null) !== null) {
@@ -145,7 +112,7 @@ function v_3d_upsample_cargs(
             (params["output_prefix"] ?? null)
         );
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-verb");
     }
     if ((params["datatype"] ?? null) !== null) {
@@ -242,7 +209,6 @@ function v_3d_upsample(
 
 export {
       V3dUpsampleOutputs,
-      V3dUpsampleParameters,
       V_3D_UPSAMPLE_METADATA,
       v_3d_upsample,
       v_3d_upsample_execute,

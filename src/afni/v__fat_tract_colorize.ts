@@ -12,7 +12,7 @@ const V__FAT_TRACT_COLORIZE_METADATA: Metadata = {
 
 
 interface VFatTractColorizeParameters {
-    "@type": "afni.@fat_tract_colorize";
+    "@type"?: "afni/@fat_tract_colorize";
     "in_fa": InputPathType;
     "in_v1": InputPathType;
     "in_tracts": string;
@@ -21,44 +21,11 @@ interface VFatTractColorizeParameters {
     "no_view": boolean;
     "only_view": boolean;
 }
+type VFatTractColorizeParametersTagged = Required<Pick<VFatTractColorizeParameters, '@type'>> & VFatTractColorizeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@fat_tract_colorize": v__fat_tract_colorize_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@fat_tract_colorize": v__fat_tract_colorize_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__fat_tract_colorize(...)`.
+ * Output object returned when calling `VFatTractColorizeParameters(...)`.
  *
  * @interface
  */
@@ -107,9 +74,9 @@ function v__fat_tract_colorize_params(
     in_ulay: InputPathType | null = null,
     no_view: boolean = false,
     only_view: boolean = false,
-): VFatTractColorizeParameters {
+): VFatTractColorizeParametersTagged {
     const params = {
-        "@type": "afni.@fat_tract_colorize" as const,
+        "@type": "afni/@fat_tract_colorize" as const,
         "in_fa": in_fa,
         "in_v1": in_v1,
         "in_tracts": in_tracts,
@@ -160,10 +127,10 @@ function v__fat_tract_colorize_cargs(
             execution.inputFile((params["in_ulay"] ?? null))
         );
     }
-    if ((params["no_view"] ?? null)) {
+    if ((params["no_view"] ?? false)) {
         cargs.push("-no_view");
     }
-    if ((params["only_view"] ?? null)) {
+    if ((params["only_view"] ?? false)) {
         cargs.push("-only_view");
     }
     return cargs;
@@ -258,7 +225,6 @@ function v__fat_tract_colorize(
 
 export {
       VFatTractColorizeOutputs,
-      VFatTractColorizeParameters,
       V__FAT_TRACT_COLORIZE_METADATA,
       v__fat_tract_colorize,
       v__fat_tract_colorize_execute,

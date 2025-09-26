@@ -12,7 +12,7 @@ const MRIS_LABEL2ANNOT_METADATA: Metadata = {
 
 
 interface MrisLabel2annotParameters {
-    "@type": "freesurfer.mris_label2annot";
+    "@type"?: "freesurfer/mris_label2annot";
     "subject": string;
     "hemi": string;
     "ctabfile": InputPathType;
@@ -28,44 +28,11 @@ interface MrisLabel2annotParameters {
     "surf"?: string | null | undefined;
     "subjects_dir"?: string | null | undefined;
 }
+type MrisLabel2annotParametersTagged = Required<Pick<MrisLabel2annotParameters, '@type'>> & MrisLabel2annotParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_label2annot": mris_label2annot_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_label2annot": mris_label2annot_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_label2annot(...)`.
+ * Output object returned when calling `MrisLabel2annotParameters(...)`.
  *
  * @interface
  */
@@ -116,9 +83,9 @@ function mris_label2annot_params(
     maxstatwinner: boolean = false,
     surf: string | null = null,
     subjects_dir: string | null = null,
-): MrisLabel2annotParameters {
+): MrisLabel2annotParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_label2annot" as const,
+        "@type": "freesurfer/mris_label2annot" as const,
         "subject": subject,
         "hemi": hemi,
         "ctabfile": ctabfile,
@@ -206,10 +173,10 @@ function mris_label2annot_cargs(
             (params["labeldir"] ?? null)
         );
     }
-    if ((params["ldir_default"] ?? null)) {
+    if ((params["ldir_default"] ?? false)) {
         cargs.push("--ldir-default");
     }
-    if ((params["no_unknown"] ?? null)) {
+    if ((params["no_unknown"] ?? false)) {
         cargs.push("--no-unknown");
     }
     if ((params["thresh"] ?? null) !== null) {
@@ -218,7 +185,7 @@ function mris_label2annot_cargs(
             String((params["thresh"] ?? null))
         );
     }
-    if ((params["maxstatwinner"] ?? null)) {
+    if ((params["maxstatwinner"] ?? false)) {
         cargs.push("--maxstatwinner");
     }
     if ((params["surf"] ?? null) !== null) {
@@ -337,7 +304,6 @@ function mris_label2annot(
 export {
       MRIS_LABEL2ANNOT_METADATA,
       MrisLabel2annotOutputs,
-      MrisLabel2annotParameters,
       mris_label2annot,
       mris_label2annot_execute,
       mris_label2annot_params,

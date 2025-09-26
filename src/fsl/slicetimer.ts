@@ -12,7 +12,7 @@ const SLICETIMER_METADATA: Metadata = {
 
 
 interface SlicetimerParameters {
-    "@type": "fsl.slicetimer";
+    "@type"?: "fsl/slicetimer";
     "infile": InputPathType;
     "outfile"?: InputPathType | null | undefined;
     "verbose_flag": boolean;
@@ -24,44 +24,11 @@ interface SlicetimerParameters {
     "tglobal_value"?: number | null | undefined;
     "ocustom_file"?: InputPathType | null | undefined;
 }
+type SlicetimerParametersTagged = Required<Pick<SlicetimerParameters, '@type'>> & SlicetimerParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.slicetimer": slicetimer_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.slicetimer": slicetimer_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `slicetimer(...)`.
+ * Output object returned when calling `SlicetimerParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function slicetimer_params(
     tcustom_file: InputPathType | null = null,
     tglobal_value: number | null = null,
     ocustom_file: InputPathType | null = null,
-): SlicetimerParameters {
+): SlicetimerParametersTagged {
     const params = {
-        "@type": "fsl.slicetimer" as const,
+        "@type": "fsl/slicetimer" as const,
         "infile": infile,
         "verbose_flag": verbose_flag,
         "down_flag": down_flag,
@@ -158,10 +125,10 @@ function slicetimer_cargs(
             execution.inputFile((params["outfile"] ?? null))
         );
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["down_flag"] ?? null)) {
+    if ((params["down_flag"] ?? false)) {
         cargs.push("--down");
     }
     if ((params["tr_value"] ?? null) !== null) {
@@ -176,7 +143,7 @@ function slicetimer_cargs(
             (params["direction"] ?? null)
         );
     }
-    if ((params["odd_flag"] ?? null)) {
+    if ((params["odd_flag"] ?? false)) {
         cargs.push("--odd");
     }
     if ((params["tcustom_file"] ?? null) !== null) {
@@ -293,7 +260,6 @@ function slicetimer(
 export {
       SLICETIMER_METADATA,
       SlicetimerOutputs,
-      SlicetimerParameters,
       slicetimer,
       slicetimer_execute,
       slicetimer_params,

@@ -12,7 +12,7 @@ const DCMDRLE_FS_METADATA: Metadata = {
 
 
 interface DcmdrleFsParameters {
-    "@type": "freesurfer.dcmdrle.fs";
+    "@type"?: "freesurfer/dcmdrle.fs";
     "input_file": InputPathType;
     "output_file": string;
     "help": boolean;
@@ -46,44 +46,11 @@ interface DcmdrleFsParameters {
     "padding_off": boolean;
     "padding_create"?: string | null | undefined;
 }
+type DcmdrleFsParametersTagged = Required<Pick<DcmdrleFsParameters, '@type'>> & DcmdrleFsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dcmdrle.fs": dcmdrle_fs_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.dcmdrle.fs": dcmdrle_fs_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dcmdrle_fs(...)`.
+ * Output object returned when calling `DcmdrleFsParameters(...)`.
  *
  * @interface
  */
@@ -170,9 +137,9 @@ function dcmdrle_fs_params(
     padding_retain: boolean = false,
     padding_off: boolean = false,
     padding_create: string | null = null,
-): DcmdrleFsParameters {
+): DcmdrleFsParametersTagged {
     const params = {
-        "@type": "freesurfer.dcmdrle.fs" as const,
+        "@type": "freesurfer/dcmdrle.fs" as const,
         "input_file": input_file,
         "output_file": output_file,
         "help": help,
@@ -232,22 +199,22 @@ function dcmdrle_fs_cargs(
     cargs.push("dcmdrle.fs");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
     cargs.push((params["output_file"] ?? null));
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["arguments"] ?? null)) {
+    if ((params["arguments"] ?? false)) {
         cargs.push("--arguments");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-q");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-d");
     }
     if ((params["log_level"] ?? null) !== null) {
@@ -262,67 +229,67 @@ function dcmdrle_fs_cargs(
             execution.inputFile((params["log_config"] ?? null))
         );
     }
-    if ((params["read_file"] ?? null)) {
+    if ((params["read_file"] ?? false)) {
         cargs.push("+f");
     }
-    if ((params["read_file_only"] ?? null)) {
+    if ((params["read_file_only"] ?? false)) {
         cargs.push("+fo");
     }
-    if ((params["read_dataset"] ?? null)) {
+    if ((params["read_dataset"] ?? false)) {
         cargs.push("-f");
     }
-    if ((params["uid_default"] ?? null)) {
+    if ((params["uid_default"] ?? false)) {
         cargs.push("+ud");
     }
-    if ((params["uid_always"] ?? null)) {
+    if ((params["uid_always"] ?? false)) {
         cargs.push("+ua");
     }
-    if ((params["byte_order_default"] ?? null)) {
+    if ((params["byte_order_default"] ?? false)) {
         cargs.push("+bd");
     }
-    if ((params["byte_order_reverse"] ?? null)) {
+    if ((params["byte_order_reverse"] ?? false)) {
         cargs.push("+br");
     }
-    if ((params["write_file"] ?? null)) {
+    if ((params["write_file"] ?? false)) {
         cargs.push("+F");
     }
-    if ((params["write_dataset"] ?? null)) {
+    if ((params["write_dataset"] ?? false)) {
         cargs.push("-F");
     }
-    if ((params["write_xfer_little"] ?? null)) {
+    if ((params["write_xfer_little"] ?? false)) {
         cargs.push("+te");
     }
-    if ((params["write_xfer_big"] ?? null)) {
+    if ((params["write_xfer_big"] ?? false)) {
         cargs.push("+tb");
     }
-    if ((params["write_xfer_implicit"] ?? null)) {
+    if ((params["write_xfer_implicit"] ?? false)) {
         cargs.push("+ti");
     }
-    if ((params["enable_new_vr"] ?? null)) {
+    if ((params["enable_new_vr"] ?? false)) {
         cargs.push("+u");
     }
-    if ((params["disable_new_vr"] ?? null)) {
+    if ((params["disable_new_vr"] ?? false)) {
         cargs.push("-u");
     }
-    if ((params["group_length_recalc"] ?? null)) {
+    if ((params["group_length_recalc"] ?? false)) {
         cargs.push("+g=");
     }
-    if ((params["group_length_create"] ?? null)) {
+    if ((params["group_length_create"] ?? false)) {
         cargs.push("+g");
     }
-    if ((params["group_length_remove"] ?? null)) {
+    if ((params["group_length_remove"] ?? false)) {
         cargs.push("-g");
     }
-    if ((params["length_explicit"] ?? null)) {
+    if ((params["length_explicit"] ?? false)) {
         cargs.push("+e");
     }
-    if ((params["length_undefined"] ?? null)) {
+    if ((params["length_undefined"] ?? false)) {
         cargs.push("-e");
     }
-    if ((params["padding_retain"] ?? null)) {
+    if ((params["padding_retain"] ?? false)) {
         cargs.push("-p=");
     }
-    if ((params["padding_off"] ?? null)) {
+    if ((params["padding_off"] ?? false)) {
         cargs.push("-p");
     }
     if ((params["padding_create"] ?? null) !== null) {
@@ -471,7 +438,6 @@ function dcmdrle_fs(
 export {
       DCMDRLE_FS_METADATA,
       DcmdrleFsOutputs,
-      DcmdrleFsParameters,
       dcmdrle_fs,
       dcmdrle_fs_execute,
       dcmdrle_fs_params,

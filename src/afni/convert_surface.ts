@@ -12,7 +12,7 @@ const CONVERT_SURFACE_METADATA: Metadata = {
 
 
 interface ConvertSurfaceParameters {
-    "@type": "afni.ConvertSurface";
+    "@type"?: "afni/ConvertSurface";
     "input_surface": string;
     "output_surface": string;
     "surface_volume"?: string | null | undefined;
@@ -24,44 +24,11 @@ interface ConvertSurfaceParameters {
     "seed"?: string | null | undefined;
     "native": boolean;
 }
+type ConvertSurfaceParametersTagged = Required<Pick<ConvertSurfaceParameters, '@type'>> & ConvertSurfaceParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.ConvertSurface": convert_surface_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.ConvertSurface": convert_surface_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `convert_surface(...)`.
+ * Output object returned when calling `ConvertSurfaceParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function convert_surface_params(
     ixmat_1_d: string | null = null,
     seed: string | null = null,
     native: boolean = false,
-): ConvertSurfaceParameters {
+): ConvertSurfaceParametersTagged {
     const params = {
-        "@type": "afni.ConvertSurface" as const,
+        "@type": "afni/ConvertSurface" as const,
         "input_surface": input_surface,
         "output_surface": output_surface,
         "transform_tlrc": transform_tlrc,
@@ -158,13 +125,13 @@ function convert_surface_cargs(
             (params["surface_volume"] ?? null)
         );
     }
-    if ((params["transform_tlrc"] ?? null)) {
+    if ((params["transform_tlrc"] ?? false)) {
         cargs.push("-tlrc");
     }
-    if ((params["mni_rai"] ?? null)) {
+    if ((params["mni_rai"] ?? false)) {
         cargs.push("-MNI_rai");
     }
-    if ((params["mni_lpi"] ?? null)) {
+    if ((params["mni_lpi"] ?? false)) {
         cargs.push("-MNI_lpi");
     }
     if ((params["xmat_1D"] ?? null) !== null) {
@@ -185,7 +152,7 @@ function convert_surface_cargs(
             (params["seed"] ?? null)
         );
     }
-    if ((params["native"] ?? null)) {
+    if ((params["native"] ?? false)) {
         cargs.push("-native");
     }
     return cargs;
@@ -284,7 +251,6 @@ function convert_surface(
 export {
       CONVERT_SURFACE_METADATA,
       ConvertSurfaceOutputs,
-      ConvertSurfaceParameters,
       convert_surface,
       convert_surface_execute,
       convert_surface_params,

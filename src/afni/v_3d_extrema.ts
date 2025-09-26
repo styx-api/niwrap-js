@@ -12,7 +12,7 @@ const V_3D_EXTREMA_METADATA: Metadata = {
 
 
 interface V3dExtremaParameters {
-    "@type": "afni.3dExtrema";
+    "@type"?: "afni/3dExtrema";
     "input_dataset": InputPathType;
     "output_prefix"?: string | null | undefined;
     "output_session"?: string | null | undefined;
@@ -34,44 +34,11 @@ interface V3dExtremaParameters {
     "average": boolean;
     "weight": boolean;
 }
+type V3dExtremaParametersTagged = Required<Pick<V3dExtremaParameters, '@type'>> & V3dExtremaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dExtrema": v_3d_extrema_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dExtrema": v_3d_extrema_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_extrema(...)`.
+ * Output object returned when calling `V3dExtremaParameters(...)`.
  *
  * @interface
  */
@@ -138,9 +105,9 @@ function v_3d_extrema_params(
     remove: boolean = false,
     average: boolean = false,
     weight: boolean = false,
-): V3dExtremaParameters {
+): V3dExtremaParametersTagged {
     const params = {
-        "@type": "afni.3dExtrema" as const,
+        "@type": "afni/3dExtrema" as const,
         "input_dataset": input_dataset,
         "quiet": quiet,
         "minima": minima,
@@ -207,7 +174,7 @@ function v_3d_extrema_cargs(
             (params["output_session"] ?? null)
         );
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
     if ((params["mask_file"] ?? null) !== null) {
@@ -240,37 +207,37 @@ function v_3d_extrema_cargs(
             String((params["separation_distance"] ?? null))
         );
     }
-    if ((params["minima"] ?? null)) {
+    if ((params["minima"] ?? false)) {
         cargs.push("-minima");
     }
-    if ((params["maxima"] ?? null)) {
+    if ((params["maxima"] ?? false)) {
         cargs.push("-maxima");
     }
-    if ((params["strict"] ?? null)) {
+    if ((params["strict"] ?? false)) {
         cargs.push("-strict");
     }
-    if ((params["partial"] ?? null)) {
+    if ((params["partial"] ?? false)) {
         cargs.push("-partial");
     }
-    if ((params["interior"] ?? null)) {
+    if ((params["interior"] ?? false)) {
         cargs.push("-interior");
     }
-    if ((params["closure"] ?? null)) {
+    if ((params["closure"] ?? false)) {
         cargs.push("-closure");
     }
-    if ((params["slice"] ?? null)) {
+    if ((params["slice"] ?? false)) {
         cargs.push("-slice");
     }
-    if ((params["volume"] ?? null)) {
+    if ((params["volume"] ?? false)) {
         cargs.push("-volume");
     }
-    if ((params["remove"] ?? null)) {
+    if ((params["remove"] ?? false)) {
         cargs.push("-remove");
     }
-    if ((params["average"] ?? null)) {
+    if ((params["average"] ?? false)) {
         cargs.push("-average");
     }
-    if ((params["weight"] ?? null)) {
+    if ((params["weight"] ?? false)) {
         cargs.push("-weight");
     }
     return cargs;
@@ -389,7 +356,6 @@ function v_3d_extrema(
 
 export {
       V3dExtremaOutputs,
-      V3dExtremaParameters,
       V_3D_EXTREMA_METADATA,
       v_3d_extrema,
       v_3d_extrema_execute,

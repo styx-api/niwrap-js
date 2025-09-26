@@ -12,14 +12,15 @@ const CONNECTOME2TCK_METADATA: Metadata = {
 
 
 interface Connectome2tckConfigParameters {
-    "@type": "mrtrix.connectome2tck.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Connectome2tckConfigParametersTagged = Required<Pick<Connectome2tckConfigParameters, '@type'>> & Connectome2tckConfigParameters;
 
 
 interface Connectome2tckParameters {
-    "@type": "mrtrix.connectome2tck";
+    "@type"?: "mrtrix/connectome2tck";
     "nodes"?: Array<number> | null | undefined;
     "exclusive": boolean;
     "files"?: string | null | undefined;
@@ -40,40 +41,7 @@ interface Connectome2tckParameters {
     "assignments_in": InputPathType;
     "prefix_out": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.connectome2tck": connectome2tck_cargs,
-        "mrtrix.connectome2tck.config": connectome2tck_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type Connectome2tckParametersTagged = Required<Pick<Connectome2tckParameters, '@type'>> & Connectome2tckParameters;
 
 
 /**
@@ -87,9 +55,9 @@ function dynOutputs(
 function connectome2tck_config_params(
     key: string,
     value: string,
-): Connectome2tckConfigParameters {
+): Connectome2tckConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.connectome2tck.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -118,7 +86,7 @@ function connectome2tck_config_cargs(
 
 
 /**
- * Output object returned when calling `connectome2tck(...)`.
+ * Output object returned when calling `Connectome2tckParameters(...)`.
  *
  * @interface
  */
@@ -175,9 +143,9 @@ function connectome2tck_params(
     config: Array<Connectome2tckConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Connectome2tckParameters {
+): Connectome2tckParametersTagged {
     const params = {
-        "@type": "mrtrix.connectome2tck" as const,
+        "@type": "mrtrix/connectome2tck" as const,
         "exclusive": exclusive,
         "keep_unassigned": keep_unassigned,
         "keep_self": keep_self,
@@ -236,7 +204,7 @@ function connectome2tck_cargs(
             (params["nodes"] ?? null).map(String).join(",")
         );
     }
-    if ((params["exclusive"] ?? null)) {
+    if ((params["exclusive"] ?? false)) {
         cargs.push("-exclusive");
     }
     if ((params["files"] ?? null) !== null) {
@@ -251,10 +219,10 @@ function connectome2tck_cargs(
             execution.inputFile((params["exemplars"] ?? null))
         );
     }
-    if ((params["keep_unassigned"] ?? null)) {
+    if ((params["keep_unassigned"] ?? false)) {
         cargs.push("-keep_unassigned");
     }
-    if ((params["keep_self"] ?? null)) {
+    if ((params["keep_self"] ?? false)) {
         cargs.push("-keep_self");
     }
     if ((params["tck_weights_in"] ?? null) !== null) {
@@ -269,16 +237,16 @@ function connectome2tck_cargs(
             (params["prefix_tck_weights_out"] ?? null)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -288,12 +256,12 @@ function connectome2tck_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => connectome2tck_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["tracks_in"] ?? null)));
@@ -423,9 +391,7 @@ function connectome2tck(
 
 export {
       CONNECTOME2TCK_METADATA,
-      Connectome2tckConfigParameters,
       Connectome2tckOutputs,
-      Connectome2tckParameters,
       connectome2tck,
       connectome2tck_config_params,
       connectome2tck_execute,

@@ -12,49 +12,16 @@ const MRIS_SEGMENT_METADATA: Metadata = {
 
 
 interface MrisSegmentParameters {
-    "@type": "freesurfer.mris_segment";
+    "@type"?: "freesurfer/mris_segment";
     "subjects": Array<string>;
     "output_subject": string;
     "output_file": string;
 }
+type MrisSegmentParametersTagged = Required<Pick<MrisSegmentParameters, '@type'>> & MrisSegmentParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_segment": mris_segment_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_segment": mris_segment_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_segment(...)`.
+ * Output object returned when calling `MrisSegmentParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mris_segment_params(
     subjects: Array<string>,
     output_subject: string,
     output_file: string,
-): MrisSegmentParameters {
+): MrisSegmentParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_segment" as const,
+        "@type": "freesurfer/mris_segment" as const,
         "subjects": subjects,
         "output_subject": output_subject,
         "output_file": output_file,
@@ -193,7 +160,6 @@ function mris_segment(
 export {
       MRIS_SEGMENT_METADATA,
       MrisSegmentOutputs,
-      MrisSegmentParameters,
       mris_segment,
       mris_segment_execute,
       mris_segment_params,

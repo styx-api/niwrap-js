@@ -12,7 +12,7 @@ const MRI_CA_TRAIN_METADATA: Metadata = {
 
 
 interface MriCaTrainParameters {
-    "@type": "freesurfer.mri_ca_train";
+    "@type"?: "freesurfer/mri_ca_train";
     "subjects": Array<string>;
     "output_gca": string;
     "segmentation": string;
@@ -28,43 +28,11 @@ interface MriCaTrainParameters {
     "threads"?: number | null | undefined;
     "done_file"?: string | null | undefined;
 }
+type MriCaTrainParametersTagged = Required<Pick<MriCaTrainParameters, '@type'>> & MriCaTrainParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_ca_train": mri_ca_train_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_ca_train(...)`.
+ * Output object returned when calling `MriCaTrainParameters(...)`.
  *
  * @interface
  */
@@ -111,9 +79,9 @@ function mri_ca_train_params(
     sanity_check: boolean = false,
     threads: number | null = null,
     done_file: string | null = null,
-): MriCaTrainParameters {
+): MriCaTrainParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_ca_train" as const,
+        "@type": "freesurfer/mri_ca_train" as const,
         "subjects": subjects,
         "output_gca": output_gca,
         "segmentation": segmentation,
@@ -201,7 +169,7 @@ function mri_ca_train_cargs(
             ...(params["input_training"] ?? null)
         );
     }
-    if ((params["symmetrize"] ?? null)) {
+    if ((params["symmetrize"] ?? false)) {
         cargs.push("-sym");
     }
     if ((params["makesym"] ?? null) !== null) {
@@ -216,7 +184,7 @@ function mri_ca_train_cargs(
             ...(params["check_symmetry"] ?? null)
         );
     }
-    if ((params["sanity_check"] ?? null)) {
+    if ((params["sanity_check"] ?? false)) {
         cargs.push("-check");
     }
     if ((params["threads"] ?? null) !== null) {
@@ -334,7 +302,6 @@ function mri_ca_train(
 export {
       MRI_CA_TRAIN_METADATA,
       MriCaTrainOutputs,
-      MriCaTrainParameters,
       mri_ca_train,
       mri_ca_train_execute,
       mri_ca_train_params,

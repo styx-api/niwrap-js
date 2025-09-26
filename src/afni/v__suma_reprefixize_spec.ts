@@ -12,50 +12,18 @@ const V__SUMA_REPREFIXIZE_SPEC_METADATA: Metadata = {
 
 
 interface VSumaReprefixizeSpecParameters {
-    "@type": "afni.@suma_reprefixize_spec";
+    "@type"?: "afni/@suma_reprefixize_spec";
     "input_file": InputPathType;
     "prefix": string;
     "output_dir": string;
     "work_dir": string;
     "no_clean": boolean;
 }
+type VSumaReprefixizeSpecParametersTagged = Required<Pick<VSumaReprefixizeSpecParameters, '@type'>> & VSumaReprefixizeSpecParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@suma_reprefixize_spec": v__suma_reprefixize_spec_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__suma_reprefixize_spec(...)`.
+ * Output object returned when calling `VSumaReprefixizeSpecParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function v__suma_reprefixize_spec_params(
     output_dir: string,
     work_dir: string,
     no_clean: boolean = false,
-): VSumaReprefixizeSpecParameters {
+): VSumaReprefixizeSpecParametersTagged {
     const params = {
-        "@type": "afni.@suma_reprefixize_spec" as const,
+        "@type": "afni/@suma_reprefixize_spec" as const,
         "input_file": input_file,
         "prefix": prefix,
         "output_dir": output_dir,
@@ -127,7 +95,7 @@ function v__suma_reprefixize_spec_cargs(
         "-workdir",
         (params["work_dir"] ?? null)
     );
-    if ((params["no_clean"] ?? null)) {
+    if ((params["no_clean"] ?? false)) {
         cargs.push("-no_clean");
     }
     return cargs;
@@ -214,7 +182,6 @@ function v__suma_reprefixize_spec(
 
 export {
       VSumaReprefixizeSpecOutputs,
-      VSumaReprefixizeSpecParameters,
       V__SUMA_REPREFIXIZE_SPEC_METADATA,
       v__suma_reprefixize_spec,
       v__suma_reprefixize_spec_execute,

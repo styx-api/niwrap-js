@@ -12,51 +12,18 @@ const TALAIRACH_AVI_METADATA: Metadata = {
 
 
 interface TalairachAviParameters {
-    "@type": "freesurfer.talairach_avi";
+    "@type"?: "freesurfer/talairach_avi";
     "input_file": InputPathType;
     "output_xfm": string;
     "atlas"?: string | null | undefined;
     "log"?: string | null | undefined;
     "debug": boolean;
 }
+type TalairachAviParametersTagged = Required<Pick<TalairachAviParameters, '@type'>> & TalairachAviParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.talairach_avi": talairach_avi_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.talairach_avi": talairach_avi_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `talairach_avi(...)`.
+ * Output object returned when calling `TalairachAviParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function talairach_avi_params(
     atlas: string | null = null,
     log: string | null = null,
     debug: boolean = false,
-): TalairachAviParameters {
+): TalairachAviParametersTagged {
     const params = {
-        "@type": "freesurfer.talairach_avi" as const,
+        "@type": "freesurfer/talairach_avi" as const,
         "input_file": input_file,
         "output_xfm": output_xfm,
         "debug": debug,
@@ -140,7 +107,7 @@ function talairach_avi_cargs(
             (params["log"] ?? null)
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -229,7 +196,6 @@ function talairach_avi(
 export {
       TALAIRACH_AVI_METADATA,
       TalairachAviOutputs,
-      TalairachAviParameters,
       talairach_avi,
       talairach_avi_execute,
       talairach_avi_params,

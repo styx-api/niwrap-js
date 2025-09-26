@@ -12,48 +12,16 @@ const FSL_5_0_2_XYZTRANS_SCH_METADATA: Metadata = {
 
 
 interface Fsl502XyztransSchParameters {
-    "@type": "freesurfer.fsl.5.0.2.xyztrans.sch";
+    "@type"?: "freesurfer/fsl.5.0.2.xyztrans.sch";
     "term_option"?: string | null | undefined;
     "version_flag": boolean;
     "no_scrollback_flag": boolean;
 }
+type Fsl502XyztransSchParametersTagged = Required<Pick<Fsl502XyztransSchParameters, '@type'>> & Fsl502XyztransSchParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fsl.5.0.2.xyztrans.sch": fsl_5_0_2_xyztrans_sch_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsl_5_0_2_xyztrans_sch(...)`.
+ * Output object returned when calling `Fsl502XyztransSchParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function fsl_5_0_2_xyztrans_sch_params(
     term_option: string | null = null,
     version_flag: boolean = false,
     no_scrollback_flag: boolean = false,
-): Fsl502XyztransSchParameters {
+): Fsl502XyztransSchParametersTagged {
     const params = {
-        "@type": "freesurfer.fsl.5.0.2.xyztrans.sch" as const,
+        "@type": "freesurfer/fsl.5.0.2.xyztrans.sch" as const,
         "version_flag": version_flag,
         "no_scrollback_flag": no_scrollback_flag,
     };
@@ -111,10 +79,10 @@ function fsl_5_0_2_xyztrans_sch_cargs(
             (params["term_option"] ?? null)
         );
     }
-    if ((params["version_flag"] ?? null)) {
+    if ((params["version_flag"] ?? false)) {
         cargs.push("-V");
     }
-    if ((params["no_scrollback_flag"] ?? null)) {
+    if ((params["no_scrollback_flag"] ?? false)) {
         cargs.push("-x");
     }
     return cargs;
@@ -198,7 +166,6 @@ function fsl_5_0_2_xyztrans_sch(
 export {
       FSL_5_0_2_XYZTRANS_SCH_METADATA,
       Fsl502XyztransSchOutputs,
-      Fsl502XyztransSchParameters,
       fsl_5_0_2_xyztrans_sch,
       fsl_5_0_2_xyztrans_sch_execute,
       fsl_5_0_2_xyztrans_sch_params,

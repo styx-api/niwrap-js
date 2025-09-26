@@ -12,95 +12,108 @@ const GREEDY_METADATA: Metadata = {
 
 
 interface GreedyInputImagesParameters {
-    "@type": "greedy.greedy.input_images";
+    "@type"?: "input_images";
     "fixed": InputPathType;
     "moving": InputPathType;
 }
+type GreedyInputImagesParametersTagged = Required<Pick<GreedyInputImagesParameters, '@type'>> & GreedyInputImagesParameters;
 
 
 interface GreedyInvertParameters {
-    "@type": "greedy.greedy.invert";
+    "@type"?: "invert";
     "inwarp": InputPathType;
     "outwarp": string;
 }
+type GreedyInvertParametersTagged = Required<Pick<GreedyInvertParameters, '@type'>> & GreedyInvertParameters;
 
 
 interface GreedyRootParameters {
-    "@type": "greedy.greedy.root";
+    "@type"?: "root";
     "inwarp": InputPathType;
     "outwarp": string;
     "n": number;
 }
+type GreedyRootParametersTagged = Required<Pick<GreedyRootParameters, '@type'>> & GreedyRootParameters;
 
 
 interface GreedyJacobianParameters {
-    "@type": "greedy.greedy.jacobian";
+    "@type"?: "jacobian";
     "inwarp": InputPathType;
     "outjac": string;
 }
+type GreedyJacobianParametersTagged = Required<Pick<GreedyJacobianParameters, '@type'>> & GreedyJacobianParameters;
 
 
 interface GreedyMetricParameters {
-    "@type": "greedy.greedy.metric";
+    "@type"?: "metric";
     "metric_type": "SSD" | "MI" | "NMI" | "NCC" | "MAHAL";
     "metric_param"?: number | null | undefined;
 }
+type GreedyMetricParametersTagged = Required<Pick<GreedyMetricParameters, '@type'>> & GreedyMetricParameters;
 
 
 interface GreedyTjrParameters {
-    "@type": "greedy.greedy.tjr";
+    "@type"?: "tjr";
     "mesh": InputPathType;
     "weight": number;
 }
+type GreedyTjrParametersTagged = Required<Pick<GreedyTjrParameters, '@type'>> & GreedyTjrParameters;
 
 
 interface GreedySearchParameters {
-    "@type": "greedy.greedy.search";
+    "@type"?: "search";
     "n": number;
     "rot": string;
     "tran": number;
 }
+type GreedySearchParametersTagged = Required<Pick<GreedySearchParameters, '@type'>> & GreedySearchParameters;
 
 
 interface GreedyResliceMovingImageParameters {
-    "@type": "greedy.greedy.reslice_moving_image";
+    "@type"?: "reslice_moving_image";
     "moving": InputPathType;
     "output": string;
 }
+type GreedyResliceMovingImageParametersTagged = Required<Pick<GreedyResliceMovingImageParameters, '@type'>> & GreedyResliceMovingImageParameters;
 
 
 interface GreedyResliceSurfaceParameters {
-    "@type": "greedy.greedy.reslice_surface";
+    "@type"?: "reslice_surface";
     "inmesh": InputPathType;
     "outmesh": string;
 }
+type GreedyResliceSurfaceParametersTagged = Required<Pick<GreedyResliceSurfaceParameters, '@type'>> & GreedyResliceSurfaceParameters;
 
 
 interface GreedyNnParameters {
-    "@type": "greedy.greedy.nn";
+    "@type"?: "nn";
 }
+type GreedyNnParametersTagged = Required<Pick<GreedyNnParameters, '@type'>> & GreedyNnParameters;
 
 
 interface GreedyLinearParameters {
-    "@type": "greedy.greedy.linear";
+    "@type"?: "linear";
 }
+type GreedyLinearParametersTagged = Required<Pick<GreedyLinearParameters, '@type'>> & GreedyLinearParameters;
 
 
 interface GreedyLabelParameters {
-    "@type": "greedy.greedy.label";
+    "@type"?: "label";
     "sigma_spec": string;
 }
+type GreedyLabelParametersTagged = Required<Pick<GreedyLabelParameters, '@type'>> & GreedyLabelParameters;
 
 
 interface GreedyResliceSimplexJacobianParameters {
-    "@type": "greedy.greedy.reslice_simplex_jacobian";
+    "@type"?: "reslice_simplex_jacobian";
     "inmesh": InputPathType;
     "outmesh": string;
 }
+type GreedyResliceSimplexJacobianParametersTagged = Required<Pick<GreedyResliceSimplexJacobianParameters, '@type'>> & GreedyResliceSimplexJacobianParameters;
 
 
 interface GreedyParameters {
-    "@type": "greedy.greedy";
+    "@type"?: "greedy/greedy";
     "dimensions": number;
     "input_images"?: GreedyInputImagesParameters | null | undefined;
     "output"?: string | null | undefined;
@@ -154,7 +167,7 @@ interface GreedyParameters {
     "fixed_reslicing_image"?: InputPathType | null | undefined;
     "reslice_moving_image"?: GreedyResliceMovingImageParameters | null | undefined;
     "reslice_surface"?: GreedyResliceSurfaceParameters | null | undefined;
-    "interpolation"?: GreedyNnParameters | GreedyLinearParameters | GreedyLabelParameters | null | undefined;
+    "interpolation"?: GreedyNnParametersTagged | GreedyLinearParametersTagged | GreedyLabelParametersTagged | null | undefined;
     "reslice_background"?: number | null | undefined;
     "reslice_datatype"?: "auto" | "double" | "float" | "uint" | "int" | "ushort" | "short" | "uchar" | "char" | null | undefined;
     "reslice_composite"?: InputPathType | null | undefined;
@@ -174,6 +187,7 @@ interface GreedyParameters {
     "version": boolean;
     "verbosity"?: 0 | 1 | 2 | null | undefined;
 }
+type GreedyParametersTagged = Required<Pick<GreedyParameters, '@type'>> & GreedyParameters;
 
 
 /**
@@ -183,24 +197,13 @@ interface GreedyParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function greedy_interpolation_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "greedy.greedy": greedy_cargs,
-        "greedy.greedy.input_images": greedy_input_images_cargs,
-        "greedy.greedy.invert": greedy_invert_cargs,
-        "greedy.greedy.root": greedy_root_cargs,
-        "greedy.greedy.jacobian": greedy_jacobian_cargs,
-        "greedy.greedy.metric": greedy_metric_cargs,
-        "greedy.greedy.tjr": greedy_tjr_cargs,
-        "greedy.greedy.search": greedy_search_cargs,
-        "greedy.greedy.reslice_moving_image": greedy_reslice_moving_image_cargs,
-        "greedy.greedy.reslice_surface": greedy_reslice_surface_cargs,
-        "greedy.greedy.nn": greedy_nn_cargs,
-        "greedy.greedy.linear": greedy_linear_cargs,
-        "greedy.greedy.label": greedy_label_cargs,
-        "greedy.greedy.reslice_simplex_jacobian": greedy_reslice_simplex_jacobian_cargs,
+        "nn": greedy_nn_cargs,
+        "linear": greedy_linear_cargs,
+        "label": greedy_label_cargs,
     };
     return cargsFuncs[t];
 }
@@ -213,17 +216,10 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function greedy_interpolation_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "greedy.greedy": greedy_outputs,
-        "greedy.greedy.invert": greedy_invert_outputs,
-        "greedy.greedy.root": greedy_root_outputs,
-        "greedy.greedy.jacobian": greedy_jacobian_outputs,
-        "greedy.greedy.reslice_moving_image": greedy_reslice_moving_image_outputs,
-        "greedy.greedy.reslice_surface": greedy_reslice_surface_outputs,
-        "greedy.greedy.reslice_simplex_jacobian": greedy_reslice_simplex_jacobian_outputs,
     };
     return outputsFuncs[t];
 }
@@ -240,9 +236,9 @@ function dynOutputs(
 function greedy_input_images_params(
     fixed: InputPathType,
     moving: InputPathType,
-): GreedyInputImagesParameters {
+): GreedyInputImagesParametersTagged {
     const params = {
-        "@type": "greedy.greedy.input_images" as const,
+        "@type": "input_images" as const,
         "fixed": fixed,
         "moving": moving,
     };
@@ -297,9 +293,9 @@ interface GreedyInvertOutputs {
 function greedy_invert_params(
     inwarp: InputPathType,
     outwarp: string,
-): GreedyInvertParameters {
+): GreedyInvertParametersTagged {
     const params = {
-        "@type": "greedy.greedy.invert" as const,
+        "@type": "invert" as const,
         "inwarp": inwarp,
         "outwarp": outwarp,
     };
@@ -376,9 +372,9 @@ function greedy_root_params(
     inwarp: InputPathType,
     outwarp: string,
     n: number,
-): GreedyRootParameters {
+): GreedyRootParametersTagged {
     const params = {
-        "@type": "greedy.greedy.root" as const,
+        "@type": "root" as const,
         "inwarp": inwarp,
         "outwarp": outwarp,
         "n": n,
@@ -455,9 +451,9 @@ interface GreedyJacobianOutputs {
 function greedy_jacobian_params(
     inwarp: InputPathType,
     outjac: string,
-): GreedyJacobianParameters {
+): GreedyJacobianParametersTagged {
     const params = {
-        "@type": "greedy.greedy.jacobian" as const,
+        "@type": "jacobian" as const,
         "inwarp": inwarp,
         "outjac": outjac,
     };
@@ -515,9 +511,9 @@ function greedy_jacobian_outputs(
 function greedy_metric_params(
     metric_type: "SSD" | "MI" | "NMI" | "NCC" | "MAHAL",
     metric_param: number | null = null,
-): GreedyMetricParameters {
+): GreedyMetricParametersTagged {
     const params = {
-        "@type": "greedy.greedy.metric" as const,
+        "@type": "metric" as const,
         "metric_type": metric_type,
     };
     if (metric_param !== null) {
@@ -559,9 +555,9 @@ function greedy_metric_cargs(
 function greedy_tjr_params(
     mesh: InputPathType,
     weight: number,
-): GreedyTjrParameters {
+): GreedyTjrParametersTagged {
     const params = {
-        "@type": "greedy.greedy.tjr" as const,
+        "@type": "tjr" as const,
         "mesh": mesh,
         "weight": weight,
     };
@@ -601,9 +597,9 @@ function greedy_search_params(
     n: number,
     rot: string,
     tran: number,
-): GreedySearchParameters {
+): GreedySearchParametersTagged {
     const params = {
-        "@type": "greedy.greedy.search" as const,
+        "@type": "search" as const,
         "n": n,
         "rot": rot,
         "tran": tran,
@@ -660,9 +656,9 @@ interface GreedyResliceMovingImageOutputs {
 function greedy_reslice_moving_image_params(
     moving: InputPathType,
     output: string,
-): GreedyResliceMovingImageParameters {
+): GreedyResliceMovingImageParametersTagged {
     const params = {
-        "@type": "greedy.greedy.reslice_moving_image" as const,
+        "@type": "reslice_moving_image" as const,
         "moving": moving,
         "output": output,
     };
@@ -737,9 +733,9 @@ interface GreedyResliceSurfaceOutputs {
 function greedy_reslice_surface_params(
     inmesh: InputPathType,
     outmesh: string,
-): GreedyResliceSurfaceParameters {
+): GreedyResliceSurfaceParametersTagged {
     const params = {
-        "@type": "greedy.greedy.reslice_surface" as const,
+        "@type": "reslice_surface" as const,
         "inmesh": inmesh,
         "outmesh": outmesh,
     };
@@ -792,9 +788,9 @@ function greedy_reslice_surface_outputs(
  * @returns Parameter dictionary
  */
 function greedy_nn_params(
-): GreedyNnParameters {
+): GreedyNnParametersTagged {
     const params = {
-        "@type": "greedy.greedy.nn" as const,
+        "@type": "nn" as const,
     };
     return params;
 }
@@ -824,9 +820,9 @@ function greedy_nn_cargs(
  * @returns Parameter dictionary
  */
 function greedy_linear_params(
-): GreedyLinearParameters {
+): GreedyLinearParametersTagged {
     const params = {
-        "@type": "greedy.greedy.linear" as const,
+        "@type": "linear" as const,
     };
     return params;
 }
@@ -859,9 +855,9 @@ function greedy_linear_cargs(
  */
 function greedy_label_params(
     sigma_spec: string,
-): GreedyLabelParameters {
+): GreedyLabelParametersTagged {
     const params = {
-        "@type": "greedy.greedy.label" as const,
+        "@type": "label" as const,
         "sigma_spec": sigma_spec,
     };
     return params;
@@ -915,9 +911,9 @@ interface GreedyResliceSimplexJacobianOutputs {
 function greedy_reslice_simplex_jacobian_params(
     inmesh: InputPathType,
     outmesh: string,
-): GreedyResliceSimplexJacobianParameters {
+): GreedyResliceSimplexJacobianParametersTagged {
     const params = {
-        "@type": "greedy.greedy.reslice_simplex_jacobian" as const,
+        "@type": "reslice_simplex_jacobian" as const,
         "inmesh": inmesh,
         "outmesh": outmesh,
     };
@@ -965,7 +961,7 @@ function greedy_reslice_simplex_jacobian_outputs(
 
 
 /**
- * Output object returned when calling `greedy_(...)`.
+ * Output object returned when calling `GreedyParameters(...)`.
  *
  * @interface
  */
@@ -1137,7 +1133,7 @@ function greedy_params(
     fixed_reslicing_image: InputPathType | null = null,
     reslice_moving_image: GreedyResliceMovingImageParameters | null = null,
     reslice_surface: GreedyResliceSurfaceParameters | null = null,
-    interpolation: GreedyNnParameters | GreedyLinearParameters | GreedyLabelParameters | null = null,
+    interpolation: GreedyNnParametersTagged | GreedyLinearParametersTagged | GreedyLabelParametersTagged | null = null,
     reslice_background: number | null = null,
     reslice_datatype: "auto" | "double" | "float" | "uint" | "int" | "ushort" | "short" | "uchar" | "char" | null = null,
     reslice_composite: InputPathType | null = null,
@@ -1156,9 +1152,9 @@ function greedy_params(
     float: boolean = false,
     version: boolean = false,
     verbosity: 0 | 1 | 2 | null = null,
-): GreedyParameters {
+): GreedyParametersTagged {
     const params = {
-        "@type": "greedy.greedy" as const,
+        "@type": "greedy/greedy" as const,
         "dimensions": dimensions,
         "affine": affine,
         "metric_mode": metric_mode,
@@ -1361,7 +1357,7 @@ function greedy_cargs(
     if ((params["input_images"] ?? null) !== null) {
         cargs.push(
             "-i",
-            ...dynCargs((params["input_images"] ?? null)["@type"])((params["input_images"] ?? null), execution)
+            ...greedy_input_images_cargs((params["input_images"] ?? null), execution)
         );
     }
     if ((params["output"] ?? null) !== null) {
@@ -1370,7 +1366,7 @@ function greedy_cargs(
             (params["output"] ?? null)
         );
     }
-    if ((params["affine"] ?? null)) {
+    if ((params["affine"] ?? false)) {
         cargs.push("-a");
     }
     if ((params["brute"] ?? null) !== null) {
@@ -1394,25 +1390,25 @@ function greedy_cargs(
     if ((params["invert"] ?? null) !== null) {
         cargs.push(
             "-iw",
-            ...dynCargs((params["invert"] ?? null)["@type"])((params["invert"] ?? null), execution)
+            ...greedy_invert_cargs((params["invert"] ?? null), execution)
         );
     }
     if ((params["root"] ?? null) !== null) {
         cargs.push(
             "-root",
-            ...dynCargs((params["root"] ?? null)["@type"])((params["root"] ?? null), execution)
+            ...greedy_root_cargs((params["root"] ?? null), execution)
         );
     }
     if ((params["jacobian"] ?? null) !== null) {
         cargs.push(
             "-jac",
-            ...dynCargs((params["jacobian"] ?? null)["@type"])((params["jacobian"] ?? null), execution)
+            ...greedy_jacobian_cargs((params["jacobian"] ?? null), execution)
         );
     }
-    if ((params["metric_mode"] ?? null)) {
+    if ((params["metric_mode"] ?? false)) {
         cargs.push("-metric");
     }
-    if ((params["defopt"] ?? null)) {
+    if ((params["defopt"] ?? false)) {
         cargs.push("-defopt");
     }
     if ((params["weight"] ?? null) !== null) {
@@ -1424,7 +1420,7 @@ function greedy_cargs(
     if ((params["metric"] ?? null) !== null) {
         cargs.push(
             "-m",
-            ...dynCargs((params["metric"] ?? null)["@type"])((params["metric"] ?? null), execution)
+            ...greedy_metric_cargs((params["metric"] ?? null), execution)
         );
     }
     if ((params["step_size"] ?? null) !== null) {
@@ -1463,7 +1459,7 @@ function greedy_cargs(
             execution.inputFile((params["moving_mask"] ?? null))
         );
     }
-    if ((params["wncc_mask_dilate"] ?? null)) {
+    if ((params["wncc_mask_dilate"] ?? false)) {
         cargs.push("-wncc-mask-dilate");
     }
     if ((params["reference_image"] ?? null) !== null) {
@@ -1490,7 +1486,7 @@ function greedy_cargs(
             execution.inputFile((params["input_transform"] ?? null))
         );
     }
-    if ((params["zero_last_dimension"] ?? null)) {
+    if ((params["zero_last_dimension"] ?? false)) {
         cargs.push("-z");
     }
     if ((params["time_step_mode"] ?? null) !== null) {
@@ -1535,13 +1531,13 @@ function greedy_cargs(
             String((params["exponent"] ?? null))
         );
     }
-    if ((params["svf_mode"] ?? null)) {
+    if ((params["svf_mode"] ?? false)) {
         cargs.push("-sv");
     }
-    if ((params["svlb"] ?? null)) {
+    if ((params["svlb"] ?? false)) {
         cargs.push("-svlb");
     }
-    if ((params["sv_incompr"] ?? null)) {
+    if ((params["sv_incompr"] ?? false)) {
         cargs.push("-sv-incompr");
     }
     if ((params["initial_warp"] ?? null) !== null) {
@@ -1553,7 +1549,7 @@ function greedy_cargs(
     if ((params["tjr"] ?? null) !== null) {
         cargs.push(
             "-tjr",
-            ...dynCargs((params["tjr"] ?? null)["@type"])((params["tjr"] ?? null), execution)
+            ...greedy_tjr_cargs((params["tjr"] ?? null), execution)
         );
     }
     if ((params["wr"] ?? null) !== null) {
@@ -1568,13 +1564,13 @@ function greedy_cargs(
             execution.inputFile((params["initial_affine"] ?? null))
         );
     }
-    if ((params["ia_identity"] ?? null)) {
+    if ((params["ia_identity"] ?? false)) {
         cargs.push("-ia-identity");
     }
-    if ((params["ia_voxel_grid"] ?? null)) {
+    if ((params["ia_voxel_grid"] ?? false)) {
         cargs.push("-ia-voxel-grid");
     }
-    if ((params["ia_image_centers"] ?? null)) {
+    if ((params["ia_image_centers"] ?? false)) {
         cargs.push("-ia-image-centers");
     }
     if ((params["ia_image_side"] ?? null) !== null) {
@@ -1604,7 +1600,7 @@ function greedy_cargs(
     if ((params["search"] ?? null) !== null) {
         cargs.push(
             "-search",
-            ...dynCargs((params["search"] ?? null)["@type"])((params["search"] ?? null), execution)
+            ...greedy_search_cargs((params["search"] ?? null), execution)
         );
     }
     if ((params["det"] ?? null) !== null) {
@@ -1613,7 +1609,7 @@ function greedy_cargs(
             String((params["det"] ?? null))
         );
     }
-    if ((params["cov_id"] ?? null)) {
+    if ((params["cov_id"] ?? false)) {
         cargs.push("-cov-id");
     }
     if ((params["fixed_reslicing_image"] ?? null) !== null) {
@@ -1625,19 +1621,19 @@ function greedy_cargs(
     if ((params["reslice_moving_image"] ?? null) !== null) {
         cargs.push(
             "-rm",
-            ...dynCargs((params["reslice_moving_image"] ?? null)["@type"])((params["reslice_moving_image"] ?? null), execution)
+            ...greedy_reslice_moving_image_cargs((params["reslice_moving_image"] ?? null), execution)
         );
     }
     if ((params["reslice_surface"] ?? null) !== null) {
         cargs.push(
             "-rs",
-            ...dynCargs((params["reslice_surface"] ?? null)["@type"])((params["reslice_surface"] ?? null), execution)
+            ...greedy_reslice_surface_cargs((params["reslice_surface"] ?? null), execution)
         );
     }
     if ((params["interpolation"] ?? null) !== null) {
         cargs.push(
             "-ri",
-            ...dynCargs((params["interpolation"] ?? null)["@type"])((params["interpolation"] ?? null), execution)
+            ...greedy_interpolation_cargs_dyn_fn((params["interpolation"] ?? null)["@type"])((params["interpolation"] ?? null), execution)
         );
     }
     if ((params["reslice_background"] ?? null) !== null) {
@@ -1667,7 +1663,7 @@ function greedy_cargs(
     if ((params["reslice_simplex_jacobian"] ?? null) !== null) {
         cargs.push(
             "-rsj",
-            ...dynCargs((params["reslice_simplex_jacobian"] ?? null)["@type"])((params["reslice_simplex_jacobian"] ?? null), execution)
+            ...greedy_reslice_simplex_jacobian_cargs((params["reslice_simplex_jacobian"] ?? null), execution)
         );
     }
     if ((params["reslice_mask"] ?? null) !== null) {
@@ -1682,7 +1678,7 @@ function greedy_cargs(
             execution.inputFile((params["metric_gradient"] ?? null))
         );
     }
-    if ((params["debug_deriv"] ?? null)) {
+    if ((params["debug_deriv"] ?? false)) {
         cargs.push("-debug-deriv");
     }
     if ((params["debug_deriv_eps"] ?? null) !== null) {
@@ -1691,13 +1687,13 @@ function greedy_cargs(
             String((params["debug_deriv_eps"] ?? null))
         );
     }
-    if ((params["debug_aff_obj"] ?? null)) {
+    if ((params["debug_aff_obj"] ?? false)) {
         cargs.push("-debug-aff-obj");
     }
-    if ((params["dump_pyramid"] ?? null)) {
+    if ((params["dump_pyramid"] ?? false)) {
         cargs.push("-dump-pyramid");
     }
-    if ((params["dump_moving"] ?? null)) {
+    if ((params["dump_moving"] ?? false)) {
         cargs.push("-dump-moving");
     }
     if ((params["dump_frequency"] ?? null) !== null) {
@@ -1712,13 +1708,13 @@ function greedy_cargs(
             (params["dump_prefix"] ?? null)
         );
     }
-    if ((params["powell"] ?? null)) {
+    if ((params["powell"] ?? false)) {
         cargs.push("-powell");
     }
-    if ((params["float"] ?? null)) {
+    if ((params["float"] ?? false)) {
         cargs.push("-float");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     if ((params["verbosity"] ?? null) !== null) {
@@ -1746,12 +1742,12 @@ function greedy_outputs(
     const ret: GreedyOutputs = {
         root: execution.outputFile("."),
         output_file: ((params["output"] ?? null) !== null) ? execution.outputFile([(params["output"] ?? null)].join('')) : null,
-        invert: (params["invert"] ?? null) ? (dynOutputs((params["invert"] ?? null)["@type"])?.((params["invert"] ?? null), execution) ?? null) : null,
-        root_: (params["root"] ?? null) ? (dynOutputs((params["root"] ?? null)["@type"])?.((params["root"] ?? null), execution) ?? null) : null,
-        jacobian: (params["jacobian"] ?? null) ? (dynOutputs((params["jacobian"] ?? null)["@type"])?.((params["jacobian"] ?? null), execution) ?? null) : null,
-        reslice_moving_image: (params["reslice_moving_image"] ?? null) ? (dynOutputs((params["reslice_moving_image"] ?? null)["@type"])?.((params["reslice_moving_image"] ?? null), execution) ?? null) : null,
-        reslice_surface: (params["reslice_surface"] ?? null) ? (dynOutputs((params["reslice_surface"] ?? null)["@type"])?.((params["reslice_surface"] ?? null), execution) ?? null) : null,
-        reslice_simplex_jacobian: (params["reslice_simplex_jacobian"] ?? null) ? (dynOutputs((params["reslice_simplex_jacobian"] ?? null)["@type"])?.((params["reslice_simplex_jacobian"] ?? null), execution) ?? null) : null,
+        invert: (params["invert"] ?? null) ? (greedy_invert_outputs((params["invert"] ?? null), execution) ?? null) : null,
+        root_: (params["root"] ?? null) ? (greedy_root_outputs((params["root"] ?? null), execution) ?? null) : null,
+        jacobian: (params["jacobian"] ?? null) ? (greedy_jacobian_outputs((params["jacobian"] ?? null), execution) ?? null) : null,
+        reslice_moving_image: (params["reslice_moving_image"] ?? null) ? (greedy_reslice_moving_image_outputs((params["reslice_moving_image"] ?? null), execution) ?? null) : null,
+        reslice_surface: (params["reslice_surface"] ?? null) ? (greedy_reslice_surface_outputs((params["reslice_surface"] ?? null), execution) ?? null) : null,
+        reslice_simplex_jacobian: (params["reslice_simplex_jacobian"] ?? null) ? (greedy_reslice_simplex_jacobian_outputs((params["reslice_simplex_jacobian"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }
@@ -1924,7 +1920,7 @@ function greedy_(
     fixed_reslicing_image: InputPathType | null = null,
     reslice_moving_image: GreedyResliceMovingImageParameters | null = null,
     reslice_surface: GreedyResliceSurfaceParameters | null = null,
-    interpolation: GreedyNnParameters | GreedyLinearParameters | GreedyLabelParameters | null = null,
+    interpolation: GreedyNnParametersTagged | GreedyLinearParametersTagged | GreedyLabelParametersTagged | null = null,
     reslice_background: number | null = null,
     reslice_datatype: "auto" | "double" | "float" | "uint" | "int" | "ushort" | "short" | "uchar" | "char" | null = null,
     reslice_composite: InputPathType | null = null,
@@ -1952,27 +1948,13 @@ function greedy_(
 
 export {
       GREEDY_METADATA,
-      GreedyInputImagesParameters,
       GreedyInvertOutputs,
-      GreedyInvertParameters,
       GreedyJacobianOutputs,
-      GreedyJacobianParameters,
-      GreedyLabelParameters,
-      GreedyLinearParameters,
-      GreedyMetricParameters,
-      GreedyNnParameters,
       GreedyOutputs,
-      GreedyParameters,
       GreedyResliceMovingImageOutputs,
-      GreedyResliceMovingImageParameters,
       GreedyResliceSimplexJacobianOutputs,
-      GreedyResliceSimplexJacobianParameters,
       GreedyResliceSurfaceOutputs,
-      GreedyResliceSurfaceParameters,
       GreedyRootOutputs,
-      GreedyRootParameters,
-      GreedySearchParameters,
-      GreedyTjrParameters,
       greedy_,
       greedy_execute,
       greedy_input_images_params,

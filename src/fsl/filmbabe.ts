@@ -12,7 +12,7 @@ const FILMBABE_METADATA: Metadata = {
 
 
 interface FilmbabeParameters {
-    "@type": "fsl.filmbabe";
+    "@type"?: "fsl/filmbabe";
     "datafile": InputPathType;
     "datafile_alias": InputPathType;
     "mask": InputPathType;
@@ -47,43 +47,11 @@ interface FilmbabeParameters {
     "num_trace_samples_alias"?: number | null | undefined;
     "temporal_ar_order"?: number | null | undefined;
 }
+type FilmbabeParametersTagged = Required<Pick<FilmbabeParameters, '@type'>> & FilmbabeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.filmbabe": filmbabe_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `filmbabe(...)`.
+ * Output object returned when calling `FilmbabeParameters(...)`.
  *
  * @interface
  */
@@ -168,9 +136,9 @@ function filmbabe_params(
     num_trace_samples: number | null = null,
     num_trace_samples_alias: number | null = null,
     temporal_ar_order: number | null = null,
-): FilmbabeParameters {
+): FilmbabeParametersTagged {
     const params = {
-        "@type": "fsl.filmbabe" as const,
+        "@type": "fsl/filmbabe" as const,
         "datafile": datafile,
         "datafile_alias": datafile_alias,
         "mask": mask,
@@ -289,10 +257,10 @@ function filmbabe_cargs(
         "--frf",
         execution.inputFile((params["frf"] ?? null))
     );
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-V");
     }
-    if ((params["verbose_flag_alias"] ?? null)) {
+    if ((params["verbose_flag_alias"] ?? false)) {
         cargs.push("--verbose");
     }
     if ((params["debug_level"] ?? null) !== null) {
@@ -313,19 +281,19 @@ function filmbabe_cargs(
             (params["debug_level_alias_2"] ?? null)
         );
     }
-    if ((params["timing_on_flag"] ?? null)) {
+    if ((params["timing_on_flag"] ?? false)) {
         cargs.push("--to");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["help_flag_alias"] ?? null)) {
+    if ((params["help_flag_alias"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["flobs_prior_off_flag"] ?? null)) {
+    if ((params["flobs_prior_off_flag"] ?? false)) {
         cargs.push("--fpo");
     }
-    if ((params["flobs_prior_off_alias"] ?? null)) {
+    if ((params["flobs_prior_off_alias"] ?? false)) {
         cargs.push("--flobsprioroff");
     }
     if ((params["flobs_dir"] ?? null) !== null) {
@@ -394,7 +362,7 @@ function filmbabe_cargs(
             String((params["temporal_ar_mrf_prec_alias"] ?? null))
         );
     }
-    if ((params["temporal_ar_flag"] ?? null)) {
+    if ((params["temporal_ar_flag"] ?? false)) {
         cargs.push("--tarard");
     }
     if ((params["num_trace_samples"] ?? null) !== null) {
@@ -556,7 +524,6 @@ function filmbabe(
 export {
       FILMBABE_METADATA,
       FilmbabeOutputs,
-      FilmbabeParameters,
       filmbabe,
       filmbabe_execute,
       filmbabe_params,

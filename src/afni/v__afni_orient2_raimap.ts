@@ -12,46 +12,14 @@ const V__AFNI_ORIENT2_RAIMAP_METADATA: Metadata = {
 
 
 interface VAfniOrient2RaimapParameters {
-    "@type": "afni.@AfniOrient2RAImap";
+    "@type"?: "afni/@AfniOrient2RAImap";
     "orientation_code": string;
 }
+type VAfniOrient2RaimapParametersTagged = Required<Pick<VAfniOrient2RaimapParameters, '@type'>> & VAfniOrient2RaimapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@AfniOrient2RAImap": v__afni_orient2_raimap_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__afni_orient2_raimap(...)`.
+ * Output object returned when calling `VAfniOrient2RaimapParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface VAfniOrient2RaimapOutputs {
  */
 function v__afni_orient2_raimap_params(
     orientation_code: string,
-): VAfniOrient2RaimapParameters {
+): VAfniOrient2RaimapParametersTagged {
     const params = {
-        "@type": "afni.@AfniOrient2RAImap" as const,
+        "@type": "afni/@AfniOrient2RAImap" as const,
         "orientation_code": orientation_code,
     };
     return params;
@@ -172,7 +140,6 @@ function v__afni_orient2_raimap(
 
 export {
       VAfniOrient2RaimapOutputs,
-      VAfniOrient2RaimapParameters,
       V__AFNI_ORIENT2_RAIMAP_METADATA,
       v__afni_orient2_raimap,
       v__afni_orient2_raimap_execute,

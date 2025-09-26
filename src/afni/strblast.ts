@@ -12,7 +12,7 @@ const STRBLAST_METADATA: Metadata = {
 
 
 interface StrblastParameters {
-    "@type": "afni.strblast";
+    "@type"?: "afni/strblast";
     "targetstring": string;
     "input_files": Array<InputPathType>;
     "new_char"?: string | null | undefined;
@@ -21,43 +21,11 @@ interface StrblastParameters {
     "quiet": boolean;
     "help": boolean;
 }
+type StrblastParametersTagged = Required<Pick<StrblastParameters, '@type'>> & StrblastParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.strblast": strblast_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `strblast(...)`.
+ * Output object returned when calling `StrblastParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +58,9 @@ function strblast_params(
     unescape: boolean = false,
     quiet: boolean = false,
     help: boolean = false,
-): StrblastParameters {
+): StrblastParametersTagged {
     const params = {
-        "@type": "afni.strblast" as const,
+        "@type": "afni/strblast" as const,
         "targetstring": targetstring,
         "input_files": input_files,
         "unescape": unescape,
@@ -137,13 +105,13 @@ function strblast_cargs(
             (params["new_string"] ?? null)
         );
     }
-    if ((params["unescape"] ?? null)) {
+    if ((params["unescape"] ?? false)) {
         cargs.push("-unescape");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -235,7 +203,6 @@ function strblast(
 export {
       STRBLAST_METADATA,
       StrblastOutputs,
-      StrblastParameters,
       strblast,
       strblast_execute,
       strblast_params,

@@ -12,7 +12,7 @@ const PVMFIT_METADATA: Metadata = {
 
 
 interface PvmfitParameters {
-    "@type": "fsl.pvmfit";
+    "@type"?: "fsl/pvmfit";
     "data_file": InputPathType;
     "mask_file": InputPathType;
     "bvec_file": InputPathType;
@@ -29,44 +29,11 @@ interface PvmfitParameters {
     "verbose": boolean;
     "help": boolean;
 }
+type PvmfitParametersTagged = Required<Pick<PvmfitParameters, '@type'>> & PvmfitParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.pvmfit": pvmfit_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.pvmfit": pvmfit_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `pvmfit(...)`.
+ * Output object returned when calling `PvmfitParameters(...)`.
  *
  * @interface
  */
@@ -123,9 +90,9 @@ function pvmfit_params(
     save_bic: boolean = false,
     verbose: boolean = false,
     help: boolean = false,
-): PvmfitParameters {
+): PvmfitParametersTagged {
     const params = {
-        "@type": "fsl.pvmfit" as const,
+        "@type": "fsl/pvmfit" as const,
         "data_file": data_file,
         "mask_file": mask_file,
         "bvec_file": bvec_file,
@@ -200,28 +167,28 @@ function pvmfit_cargs(
             String((params["model_type"] ?? null))
         );
     }
-    if ((params["fit_all_models"] ?? null)) {
+    if ((params["fit_all_models"] ?? false)) {
         cargs.push("--all");
     }
-    if ((params["constrained_nonlinear"] ?? null)) {
+    if ((params["constrained_nonlinear"] ?? false)) {
         cargs.push("--cnonlinear");
     }
-    if ((params["constrained_nonlinear_f"] ?? null)) {
+    if ((params["constrained_nonlinear_f"] ?? false)) {
         cargs.push("--cnonlinear_F");
     }
-    if ((params["grid_search"] ?? null)) {
+    if ((params["grid_search"] ?? false)) {
         cargs.push("--gridsearch");
     }
-    if ((params["include_noise_floor"] ?? null)) {
+    if ((params["include_noise_floor"] ?? false)) {
         cargs.push("--f0");
     }
-    if ((params["save_bic"] ?? null)) {
+    if ((params["save_bic"] ?? false)) {
         cargs.push("--BIC");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-V");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -331,7 +298,6 @@ function pvmfit(
 export {
       PVMFIT_METADATA,
       PvmfitOutputs,
-      PvmfitParameters,
       pvmfit,
       pvmfit_execute,
       pvmfit_params,

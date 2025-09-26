@@ -12,14 +12,15 @@ const LABEL2MESH_METADATA: Metadata = {
 
 
 interface Label2meshConfigParameters {
-    "@type": "mrtrix.label2mesh.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Label2meshConfigParametersTagged = Required<Pick<Label2meshConfigParameters, '@type'>> & Label2meshConfigParameters;
 
 
 interface Label2meshParameters {
-    "@type": "mrtrix.label2mesh";
+    "@type"?: "mrtrix/label2mesh";
     "blocky": boolean;
     "info": boolean;
     "quiet": boolean;
@@ -32,41 +33,7 @@ interface Label2meshParameters {
     "nodes_in": InputPathType;
     "mesh_out": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.label2mesh": label2mesh_cargs,
-        "mrtrix.label2mesh.config": label2mesh_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.label2mesh": label2mesh_outputs,
-    };
-    return outputsFuncs[t];
-}
+type Label2meshParametersTagged = Required<Pick<Label2meshParameters, '@type'>> & Label2meshParameters;
 
 
 /**
@@ -80,9 +47,9 @@ function dynOutputs(
 function label2mesh_config_params(
     key: string,
     value: string,
-): Label2meshConfigParameters {
+): Label2meshConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.label2mesh.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -111,7 +78,7 @@ function label2mesh_config_cargs(
 
 
 /**
- * Output object returned when calling `label2mesh(...)`.
+ * Output object returned when calling `Label2meshParameters(...)`.
  *
  * @interface
  */
@@ -156,9 +123,9 @@ function label2mesh_params(
     config: Array<Label2meshConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Label2meshParameters {
+): Label2meshParametersTagged {
     const params = {
-        "@type": "mrtrix.label2mesh" as const,
+        "@type": "mrtrix/label2mesh" as const,
         "blocky": blocky,
         "info": info,
         "quiet": quiet,
@@ -193,19 +160,19 @@ function label2mesh_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("label2mesh");
-    if ((params["blocky"] ?? null)) {
+    if ((params["blocky"] ?? false)) {
         cargs.push("-blocky");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -215,12 +182,12 @@ function label2mesh_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => label2mesh_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["nodes_in"] ?? null)));
@@ -334,9 +301,7 @@ function label2mesh(
 
 export {
       LABEL2MESH_METADATA,
-      Label2meshConfigParameters,
       Label2meshOutputs,
-      Label2meshParameters,
       label2mesh,
       label2mesh_config_params,
       label2mesh_execute,

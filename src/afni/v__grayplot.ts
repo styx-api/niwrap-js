@@ -12,51 +12,18 @@ const V__GRAYPLOT_METADATA: Metadata = {
 
 
 interface VGrayplotParameters {
-    "@type": "afni.@grayplot";
+    "@type"?: "afni/@grayplot";
     "dirname": string;
     "pvorder": boolean;
     "peelorder": boolean;
     "ijkorder": boolean;
     "allorder": boolean;
 }
+type VGrayplotParametersTagged = Required<Pick<VGrayplotParameters, '@type'>> & VGrayplotParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@grayplot": v__grayplot_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@grayplot": v__grayplot_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__grayplot(...)`.
+ * Output object returned when calling `VGrayplotParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function v__grayplot_params(
     peelorder: boolean = false,
     ijkorder: boolean = false,
     allorder: boolean = false,
-): VGrayplotParameters {
+): VGrayplotParametersTagged {
     const params = {
-        "@type": "afni.@grayplot" as const,
+        "@type": "afni/@grayplot" as const,
         "dirname": dirname,
         "pvorder": pvorder,
         "peelorder": peelorder,
@@ -117,16 +84,16 @@ function v__grayplot_cargs(
     const cargs: string[] = [];
     cargs.push("@grayplot");
     cargs.push((params["dirname"] ?? null));
-    if ((params["pvorder"] ?? null)) {
+    if ((params["pvorder"] ?? false)) {
         cargs.push("-pvorder");
     }
-    if ((params["peelorder"] ?? null)) {
+    if ((params["peelorder"] ?? false)) {
         cargs.push("-peelorder");
     }
-    if ((params["ijkorder"] ?? null)) {
+    if ((params["ijkorder"] ?? false)) {
         cargs.push("-ijkorder");
     }
-    if ((params["allorder"] ?? null)) {
+    if ((params["allorder"] ?? false)) {
         cargs.push("-ALLorder");
     }
     return cargs;
@@ -214,7 +181,6 @@ function v__grayplot(
 
 export {
       VGrayplotOutputs,
-      VGrayplotParameters,
       V__GRAYPLOT_METADATA,
       v__grayplot,
       v__grayplot_execute,

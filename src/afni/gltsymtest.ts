@@ -12,48 +12,16 @@ const GLTSYMTEST_METADATA: Metadata = {
 
 
 interface GltsymtestParameters {
-    "@type": "afni.GLTsymtest";
+    "@type"?: "afni/GLTsymtest";
     "badonly": boolean;
     "varlist": string;
     "expr": Array<string>;
 }
+type GltsymtestParametersTagged = Required<Pick<GltsymtestParameters, '@type'>> & GltsymtestParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.GLTsymtest": gltsymtest_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `gltsymtest(...)`.
+ * Output object returned when calling `GltsymtestParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function gltsymtest_params(
     varlist: string,
     expr: Array<string>,
     badonly: boolean = false,
-): GltsymtestParameters {
+): GltsymtestParametersTagged {
     const params = {
-        "@type": "afni.GLTsymtest" as const,
+        "@type": "afni/GLTsymtest" as const,
         "badonly": badonly,
         "varlist": varlist,
         "expr": expr,
@@ -103,7 +71,7 @@ function gltsymtest_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("GLTsymtest");
-    if ((params["badonly"] ?? null)) {
+    if ((params["badonly"] ?? false)) {
         cargs.push("-badonly");
     }
     cargs.push((params["varlist"] ?? null));
@@ -189,7 +157,6 @@ function gltsymtest(
 export {
       GLTSYMTEST_METADATA,
       GltsymtestOutputs,
-      GltsymtestParameters,
       gltsymtest,
       gltsymtest_execute,
       gltsymtest_params,

@@ -12,7 +12,7 @@ const V_3D_AFNITO_NIFTI_METADATA: Metadata = {
 
 
 interface V3dAfnitoNiftiParameters {
-    "@type": "afni.3dAFNItoNIFTI";
+    "@type"?: "afni/3dAFNItoNIFTI";
     "input_dataset": InputPathType;
     "prefix"?: string | null | undefined;
     "verbose": boolean;
@@ -22,44 +22,11 @@ interface V3dAfnitoNiftiParameters {
     "oldid": boolean;
     "newid": boolean;
 }
+type V3dAfnitoNiftiParametersTagged = Required<Pick<V3dAfnitoNiftiParameters, '@type'>> & V3dAfnitoNiftiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dAFNItoNIFTI": v_3d_afnito_nifti_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dAFNItoNIFTI": v_3d_afnito_nifti_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_afnito_nifti(...)`.
+ * Output object returned when calling `V3dAfnitoNiftiParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function v_3d_afnito_nifti_params(
     denote: boolean = false,
     oldid: boolean = false,
     newid: boolean = false,
-): V3dAfnitoNiftiParameters {
+): V3dAfnitoNiftiParametersTagged {
     const params = {
-        "@type": "afni.3dAFNItoNIFTI" as const,
+        "@type": "afni/3dAFNItoNIFTI" as const,
         "input_dataset": input_dataset,
         "verbose": verbose,
         "force_float": force_float,
@@ -137,22 +104,22 @@ function v_3d_afnito_nifti_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["force_float"] ?? null)) {
+    if ((params["force_float"] ?? false)) {
         cargs.push("-float");
     }
-    if ((params["pure"] ?? null)) {
+    if ((params["pure"] ?? false)) {
         cargs.push("-pure");
     }
-    if ((params["denote"] ?? null)) {
+    if ((params["denote"] ?? false)) {
         cargs.push("-denote");
     }
-    if ((params["oldid"] ?? null)) {
+    if ((params["oldid"] ?? false)) {
         cargs.push("-oldid");
     }
-    if ((params["newid"] ?? null)) {
+    if ((params["newid"] ?? false)) {
         cargs.push("-newid");
     }
     return cargs;
@@ -246,7 +213,6 @@ function v_3d_afnito_nifti(
 
 export {
       V3dAfnitoNiftiOutputs,
-      V3dAfnitoNiftiParameters,
       V_3D_AFNITO_NIFTI_METADATA,
       v_3d_afnito_nifti,
       v_3d_afnito_nifti_execute,

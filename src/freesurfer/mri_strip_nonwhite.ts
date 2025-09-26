@@ -12,50 +12,17 @@ const MRI_STRIP_NONWHITE_METADATA: Metadata = {
 
 
 interface MriStripNonwhiteParameters {
-    "@type": "freesurfer.mri_strip_nonwhite";
+    "@type"?: "freesurfer/mri_strip_nonwhite";
     "input_volume": InputPathType;
     "transform": InputPathType;
     "template_volume": InputPathType;
     "output_volume": string;
 }
+type MriStripNonwhiteParametersTagged = Required<Pick<MriStripNonwhiteParameters, '@type'>> & MriStripNonwhiteParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_strip_nonwhite": mri_strip_nonwhite_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_strip_nonwhite": mri_strip_nonwhite_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_strip_nonwhite(...)`.
+ * Output object returned when calling `MriStripNonwhiteParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mri_strip_nonwhite_params(
     transform: InputPathType,
     template_volume: InputPathType,
     output_volume: string,
-): MriStripNonwhiteParameters {
+): MriStripNonwhiteParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_strip_nonwhite" as const,
+        "@type": "freesurfer/mri_strip_nonwhite" as const,
         "input_volume": input_volume,
         "transform": transform,
         "template_volume": template_volume,
@@ -200,7 +167,6 @@ function mri_strip_nonwhite(
 export {
       MRI_STRIP_NONWHITE_METADATA,
       MriStripNonwhiteOutputs,
-      MriStripNonwhiteParameters,
       mri_strip_nonwhite,
       mri_strip_nonwhite_execute,
       mri_strip_nonwhite_params,

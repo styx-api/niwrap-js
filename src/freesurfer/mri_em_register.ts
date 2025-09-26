@@ -12,7 +12,7 @@ const MRI_EM_REGISTER_METADATA: Metadata = {
 
 
 interface MriEmRegisterParameters {
-    "@type": "freesurfer.mri_em_register";
+    "@type"?: "freesurfer/mri_em_register";
     "input_volume": InputPathType;
     "template_gca": InputPathType;
     "output_transform": string;
@@ -70,44 +70,11 @@ interface MriEmRegisterParameters {
     "momentum"?: number | null | undefined;
     "threads"?: number | null | undefined;
 }
+type MriEmRegisterParametersTagged = Required<Pick<MriEmRegisterParameters, '@type'>> & MriEmRegisterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_em_register": mri_em_register_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_em_register": mri_em_register_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_em_register(...)`.
+ * Output object returned when calling `MriEmRegisterParameters(...)`.
  *
  * @interface
  */
@@ -242,9 +209,9 @@ function mri_em_register_params(
     ctl_point_pct: number | null = null,
     momentum: number | null = null,
     threads: number | null = null,
-): MriEmRegisterParameters {
+): MriEmRegisterParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_em_register" as const,
+        "@type": "freesurfer/mri_em_register" as const,
         "input_volume": input_volume,
         "template_gca": template_gca,
         "output_transform": output_transform,
@@ -415,10 +382,10 @@ function mri_em_register_cargs(
             String((params["distance"] ?? null))
         );
     }
-    if ((params["nomap"] ?? null)) {
+    if ((params["nomap"] ?? false)) {
         cargs.push("-nomap");
     }
-    if ((params["flash"] ?? null)) {
+    if ((params["flash"] ?? false)) {
         cargs.push("-flash");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -427,7 +394,7 @@ function mri_em_register_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["skull"] ?? null)) {
+    if ((params["skull"] ?? false)) {
         cargs.push("-skull");
     }
     if ((params["uns"] ?? null) !== null) {
@@ -496,7 +463,7 @@ function mri_em_register_cargs(
             (params["nsamples"] ?? null)
         );
     }
-    if ((params["contrast"] ?? null)) {
+    if ((params["contrast"] ?? false)) {
         cargs.push("-contrast");
     }
     if ((params["flash_parms"] ?? null) !== null) {
@@ -505,7 +472,7 @@ function mri_em_register_cargs(
             execution.inputFile((params["flash_parms"] ?? null))
         );
     }
-    if ((params["transonly"] ?? null)) {
+    if ((params["transonly"] ?? false)) {
         cargs.push("-transonly");
     }
     if ((params["write_mean"] ?? null) !== null) {
@@ -532,7 +499,7 @@ function mri_em_register_cargs(
             String((params["scales"] ?? null))
         );
     }
-    if ((params["novar"] ?? null)) {
+    if ((params["novar"] ?? false)) {
         cargs.push("-novar");
     }
     if ((params["dt"] ?? null) !== null) {
@@ -547,13 +514,13 @@ function mri_em_register_cargs(
             String((params["tol"] ?? null))
         );
     }
-    if ((params["center"] ?? null)) {
+    if ((params["center"] ?? false)) {
         cargs.push("-center");
     }
-    if ((params["noscale"] ?? null)) {
+    if ((params["noscale"] ?? false)) {
         cargs.push("-noscale");
     }
-    if ((params["noiscale"] ?? null)) {
+    if ((params["noiscale"] ?? false)) {
         cargs.push("-noiscale");
     }
     if ((params["num_transforms"] ?? null) !== null) {
@@ -652,7 +619,7 @@ function mri_em_register_cargs(
             String((params["blur"] ?? null))
         );
     }
-    if ((params["diagno"] ?? null)) {
+    if ((params["diagno"] ?? false)) {
         cargs.push("-v");
     }
     if ((params["s"] ?? null) !== null) {
@@ -885,7 +852,6 @@ function mri_em_register(
 export {
       MRI_EM_REGISTER_METADATA,
       MriEmRegisterOutputs,
-      MriEmRegisterParameters,
       mri_em_register,
       mri_em_register_execute,
       mri_em_register_params,

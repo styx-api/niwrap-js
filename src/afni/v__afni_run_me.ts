@@ -12,48 +12,16 @@ const V__AFNI_RUN_ME_METADATA: Metadata = {
 
 
 interface VAfniRunMeParameters {
-    "@type": "afni.@afni.run.me";
+    "@type"?: "afni/@afni.run.me";
     "go": boolean;
     "curl": boolean;
     "help": boolean;
 }
+type VAfniRunMeParametersTagged = Required<Pick<VAfniRunMeParameters, '@type'>> & VAfniRunMeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@afni.run.me": v__afni_run_me_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__afni_run_me(...)`.
+ * Output object returned when calling `VAfniRunMeParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function v__afni_run_me_params(
     go: boolean = false,
     curl: boolean = false,
     help: boolean = false,
-): VAfniRunMeParameters {
+): VAfniRunMeParametersTagged {
     const params = {
-        "@type": "afni.@afni.run.me" as const,
+        "@type": "afni/@afni.run.me" as const,
         "go": go,
         "curl": curl,
         "help": help,
@@ -103,13 +71,13 @@ function v__afni_run_me_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("@afni.run.me");
-    if ((params["go"] ?? null)) {
+    if ((params["go"] ?? false)) {
         cargs.push("-go");
     }
-    if ((params["curl"] ?? null)) {
+    if ((params["curl"] ?? false)) {
         cargs.push("-curl");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -192,7 +160,6 @@ function v__afni_run_me(
 
 export {
       VAfniRunMeOutputs,
-      VAfniRunMeParameters,
       V__AFNI_RUN_ME_METADATA,
       v__afni_run_me,
       v__afni_run_me_execute,

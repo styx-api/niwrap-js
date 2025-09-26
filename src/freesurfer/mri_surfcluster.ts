@@ -12,7 +12,7 @@ const MRI_SURFCLUSTER_METADATA: Metadata = {
 
 
 interface MriSurfclusterParameters {
-    "@type": "freesurfer.mri_surfcluster";
+    "@type"?: "freesurfer/mri_surfcluster";
     "infile": InputPathType;
     "thmin"?: number | null | undefined;
     "sign"?: string | null | undefined;
@@ -55,44 +55,11 @@ interface MriSurfclusterParameters {
     "sd"?: string | null | undefined;
     "thmax"?: number | null | undefined;
 }
+type MriSurfclusterParametersTagged = Required<Pick<MriSurfclusterParameters, '@type'>> & MriSurfclusterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_surfcluster": mri_surfcluster_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_surfcluster": mri_surfcluster_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_surfcluster(...)`.
+ * Output object returned when calling `MriSurfclusterParameters(...)`.
  *
  * @interface
  */
@@ -217,9 +184,9 @@ function mri_surfcluster_params(
     no_fixmni_flag: boolean = false,
     sd: string | null = null,
     thmax: number | null = null,
-): MriSurfclusterParameters {
+): MriSurfclusterParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_surfcluster" as const,
+        "@type": "freesurfer/mri_surfcluster" as const,
         "infile": infile,
         "no_adjust_flag": no_adjust_flag,
         "sig2p_max_flag": sig2p_max_flag,
@@ -362,7 +329,7 @@ function mri_surfcluster_cargs(
             (params["sign"] ?? null)
         );
     }
-    if ((params["no_adjust_flag"] ?? null)) {
+    if ((params["no_adjust_flag"] ?? false)) {
         cargs.push("--no-adjust");
     }
     if ((params["fdr"] ?? null) !== null) {
@@ -437,7 +404,7 @@ function mri_surfcluster_cargs(
             String((params["bonferroni"] ?? null))
         );
     }
-    if ((params["sig2p_max_flag"] ?? null)) {
+    if ((params["sig2p_max_flag"] ?? false)) {
         cargs.push("--sig2p-max");
     }
     if ((params["bonferroni_max"] ?? null) !== null) {
@@ -452,7 +419,7 @@ function mri_surfcluster_cargs(
             (params["csdpdf"] ?? null)
         );
     }
-    if ((params["csdpdf_only_flag"] ?? null)) {
+    if ((params["csdpdf_only_flag"] ?? false)) {
         cargs.push("--csdpdf-only");
     }
     if ((params["csd_out"] ?? null) !== null) {
@@ -485,7 +452,7 @@ function mri_surfcluster_cargs(
             execution.inputFile((params["clabel"] ?? null))
         );
     }
-    if ((params["cortex_flag"] ?? null)) {
+    if ((params["cortex_flag"] ?? false)) {
         cargs.push("--cortex");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -494,10 +461,10 @@ function mri_surfcluster_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["mask_inv_flag"] ?? null)) {
+    if ((params["mask_inv_flag"] ?? false)) {
         cargs.push("--mask-inv");
     }
-    if ((params["centroid_flag"] ?? null)) {
+    if ((params["centroid_flag"] ?? false)) {
         cargs.push("--centroid");
     }
     if ((params["sum"] ?? null) !== null) {
@@ -554,7 +521,7 @@ function mri_surfcluster_cargs(
             execution.inputFile((params["xfm"] ?? null))
         );
     }
-    if ((params["no_fixmni_flag"] ?? null)) {
+    if ((params["no_fixmni_flag"] ?? false)) {
         cargs.push("--nofixmni");
     }
     if ((params["sd"] ?? null) !== null) {
@@ -732,7 +699,6 @@ function mri_surfcluster(
 export {
       MRI_SURFCLUSTER_METADATA,
       MriSurfclusterOutputs,
-      MriSurfclusterParameters,
       mri_surfcluster,
       mri_surfcluster_execute,
       mri_surfcluster_params,

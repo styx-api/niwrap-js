@@ -12,7 +12,7 @@ const V_3DCALC_METADATA: Metadata = {
 
 
 interface V3dcalcParameters {
-    "@type": "afni.3dcalc";
+    "@type"?: "afni/3dcalc";
     "in_file_a": InputPathType;
     "in_file_b"?: InputPathType | null | undefined;
     "in_file_c"?: InputPathType | null | undefined;
@@ -24,44 +24,11 @@ interface V3dcalcParameters {
     "expr": string;
     "prefix"?: string | null | undefined;
 }
+type V3dcalcParametersTagged = Required<Pick<V3dcalcParameters, '@type'>> & V3dcalcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dcalc": v_3dcalc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dcalc": v_3dcalc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dcalc(...)`.
+ * Output object returned when calling `V3dcalcParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function v_3dcalc_params(
     start_idx: number | null = null,
     stop_idx: number | null = null,
     prefix: string | null = null,
-): V3dcalcParameters {
+): V3dcalcParametersTagged {
     const params = {
-        "@type": "afni.3dcalc" as const,
+        "@type": "afni/3dcalc" as const,
         "in_file_a": in_file_a,
         "overwrite": overwrite,
         "expr": expr,
@@ -169,7 +136,7 @@ function v_3dcalc_cargs(
     if ((params["other"] ?? null) !== null) {
         cargs.push(execution.inputFile((params["other"] ?? null)));
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("-overwrite");
     }
     if ((params["single_idx"] ?? null) !== null) {
@@ -286,7 +253,6 @@ function v_3dcalc(
 
 export {
       V3dcalcOutputs,
-      V3dcalcParameters,
       V_3DCALC_METADATA,
       v_3dcalc,
       v_3dcalc_execute,

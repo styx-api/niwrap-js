@@ -12,7 +12,7 @@ const STD2IMGCOORD_METADATA: Metadata = {
 
 
 interface Std2imgcoordParameters {
-    "@type": "fsl.std2imgcoord";
+    "@type"?: "fsl/std2imgcoord";
     "filename_coordinates": InputPathType;
     "standard_image"?: InputPathType | null | undefined;
     "input_image": InputPathType;
@@ -24,43 +24,11 @@ interface Std2imgcoordParameters {
     "verbose": boolean;
     "more_verbose": boolean;
 }
+type Std2imgcoordParametersTagged = Required<Pick<Std2imgcoordParameters, '@type'>> & Std2imgcoordParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.std2imgcoord": std2imgcoord_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `std2imgcoord(...)`.
+ * Output object returned when calling `Std2imgcoordParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +67,9 @@ function std2imgcoord_params(
     output_vox: boolean = false,
     verbose: boolean = false,
     more_verbose: boolean = false,
-): Std2imgcoordParameters {
+): Std2imgcoordParametersTagged {
     const params = {
-        "@type": "fsl.std2imgcoord" as const,
+        "@type": "fsl/std2imgcoord" as const,
         "filename_coordinates": filename_coordinates,
         "input_image": input_image,
         "output_mm": output_mm,
@@ -168,16 +136,16 @@ function std2imgcoord_cargs(
             execution.inputFile((params["prewarp_affine_transform"] ?? null))
         );
     }
-    if ((params["output_mm"] ?? null)) {
+    if ((params["output_mm"] ?? false)) {
         cargs.push("-mm");
     }
-    if ((params["output_vox"] ?? null)) {
+    if ((params["output_vox"] ?? false)) {
         cargs.push("-vox");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["more_verbose"] ?? null)) {
+    if ((params["more_verbose"] ?? false)) {
         cargs.push("-verbose");
     }
     return cargs;
@@ -275,7 +243,6 @@ function std2imgcoord(
 export {
       STD2IMGCOORD_METADATA,
       Std2imgcoordOutputs,
-      Std2imgcoordParameters,
       std2imgcoord,
       std2imgcoord_execute,
       std2imgcoord_params,

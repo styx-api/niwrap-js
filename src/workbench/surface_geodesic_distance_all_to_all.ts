@@ -12,7 +12,7 @@ const SURFACE_GEODESIC_DISTANCE_ALL_TO_ALL_METADATA: Metadata = {
 
 
 interface SurfaceGeodesicDistanceAllToAllParameters {
-    "@type": "workbench.surface-geodesic-distance-all-to-all";
+    "@type"?: "workbench/surface-geodesic-distance-all-to-all";
     "surface": InputPathType;
     "cifti_out": string;
     "opt_roi_roi_metric"?: InputPathType | null | undefined;
@@ -20,44 +20,11 @@ interface SurfaceGeodesicDistanceAllToAllParameters {
     "opt_corrected_areas_area_metric"?: InputPathType | null | undefined;
     "opt_naive": boolean;
 }
+type SurfaceGeodesicDistanceAllToAllParametersTagged = Required<Pick<SurfaceGeodesicDistanceAllToAllParameters, '@type'>> & SurfaceGeodesicDistanceAllToAllParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-geodesic-distance-all-to-all": surface_geodesic_distance_all_to_all_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-geodesic-distance-all-to-all": surface_geodesic_distance_all_to_all_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_geodesic_distance_all_to_all(...)`.
+ * Output object returned when calling `SurfaceGeodesicDistanceAllToAllParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function surface_geodesic_distance_all_to_all_params(
     opt_limit_limit_mm: number | null = null,
     opt_corrected_areas_area_metric: InputPathType | null = null,
     opt_naive: boolean = false,
-): SurfaceGeodesicDistanceAllToAllParameters {
+): SurfaceGeodesicDistanceAllToAllParametersTagged {
     const params = {
-        "@type": "workbench.surface-geodesic-distance-all-to-all" as const,
+        "@type": "workbench/surface-geodesic-distance-all-to-all" as const,
         "surface": surface,
         "cifti_out": cifti_out,
         "opt_naive": opt_naive,
@@ -147,7 +114,7 @@ function surface_geodesic_distance_all_to_all_cargs(
             execution.inputFile((params["opt_corrected_areas_area_metric"] ?? null))
         );
     }
-    if ((params["opt_naive"] ?? null)) {
+    if ((params["opt_naive"] ?? false)) {
         cargs.push("-naive");
     }
     return cargs;
@@ -254,7 +221,6 @@ function surface_geodesic_distance_all_to_all(
 export {
       SURFACE_GEODESIC_DISTANCE_ALL_TO_ALL_METADATA,
       SurfaceGeodesicDistanceAllToAllOutputs,
-      SurfaceGeodesicDistanceAllToAllParameters,
       surface_geodesic_distance_all_to_all,
       surface_geodesic_distance_all_to_all_execute,
       surface_geodesic_distance_all_to_all_params,

@@ -12,14 +12,15 @@ const VOXEL2MESH_METADATA: Metadata = {
 
 
 interface Voxel2meshConfigParameters {
-    "@type": "mrtrix.voxel2mesh.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Voxel2meshConfigParametersTagged = Required<Pick<Voxel2meshConfigParameters, '@type'>> & Voxel2meshConfigParameters;
 
 
 interface Voxel2meshParameters {
-    "@type": "mrtrix.voxel2mesh";
+    "@type"?: "mrtrix/voxel2mesh";
     "blocky": boolean;
     "threshold"?: number | null | undefined;
     "info": boolean;
@@ -33,41 +34,7 @@ interface Voxel2meshParameters {
     "input": InputPathType;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.voxel2mesh": voxel2mesh_cargs,
-        "mrtrix.voxel2mesh.config": voxel2mesh_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.voxel2mesh": voxel2mesh_outputs,
-    };
-    return outputsFuncs[t];
-}
+type Voxel2meshParametersTagged = Required<Pick<Voxel2meshParameters, '@type'>> & Voxel2meshParameters;
 
 
 /**
@@ -81,9 +48,9 @@ function dynOutputs(
 function voxel2mesh_config_params(
     key: string,
     value: string,
-): Voxel2meshConfigParameters {
+): Voxel2meshConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.voxel2mesh.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -112,7 +79,7 @@ function voxel2mesh_config_cargs(
 
 
 /**
- * Output object returned when calling `voxel2mesh(...)`.
+ * Output object returned when calling `Voxel2meshParameters(...)`.
  *
  * @interface
  */
@@ -159,9 +126,9 @@ function voxel2mesh_params(
     config: Array<Voxel2meshConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Voxel2meshParameters {
+): Voxel2meshParametersTagged {
     const params = {
-        "@type": "mrtrix.voxel2mesh" as const,
+        "@type": "mrtrix/voxel2mesh" as const,
         "blocky": blocky,
         "info": info,
         "quiet": quiet,
@@ -199,7 +166,7 @@ function voxel2mesh_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("voxel2mesh");
-    if ((params["blocky"] ?? null)) {
+    if ((params["blocky"] ?? false)) {
         cargs.push("-blocky");
     }
     if ((params["threshold"] ?? null) !== null) {
@@ -208,16 +175,16 @@ function voxel2mesh_cargs(
             String((params["threshold"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -227,12 +194,12 @@ function voxel2mesh_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => voxel2mesh_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -352,9 +319,7 @@ function voxel2mesh(
 
 export {
       VOXEL2MESH_METADATA,
-      Voxel2meshConfigParameters,
       Voxel2meshOutputs,
-      Voxel2meshParameters,
       voxel2mesh,
       voxel2mesh_config_params,
       voxel2mesh_execute,

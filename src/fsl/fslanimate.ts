@@ -12,49 +12,16 @@ const FSLANIMATE_METADATA: Metadata = {
 
 
 interface FslanimateParameters {
-    "@type": "fsl.fslanimate";
+    "@type"?: "fsl/fslanimate";
     "input_file": InputPathType;
     "output_file": string;
     "tmp_dir"?: string | null | undefined;
 }
+type FslanimateParametersTagged = Required<Pick<FslanimateParameters, '@type'>> & FslanimateParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslanimate": fslanimate_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fslanimate": fslanimate_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslanimate(...)`.
+ * Output object returned when calling `FslanimateParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function fslanimate_params(
     input_file: InputPathType,
     output_file: string,
     tmp_dir: string | null = null,
-): FslanimateParameters {
+): FslanimateParametersTagged {
     const params = {
-        "@type": "fsl.fslanimate" as const,
+        "@type": "fsl/fslanimate" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -197,7 +164,6 @@ function fslanimate(
 export {
       FSLANIMATE_METADATA,
       FslanimateOutputs,
-      FslanimateParameters,
       fslanimate,
       fslanimate_execute,
       fslanimate_params,

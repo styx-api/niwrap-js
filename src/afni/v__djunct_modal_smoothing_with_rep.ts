@@ -12,7 +12,7 @@ const V__DJUNCT_MODAL_SMOOTHING_WITH_REP_METADATA: Metadata = {
 
 
 interface VDjunctModalSmoothingWithRepParameters {
-    "@type": "afni.@djunct_modal_smoothing_with_rep";
+    "@type"?: "afni/@djunct_modal_smoothing_with_rep";
     "input_file": InputPathType;
     "output_prefix": string;
     "modesmooth"?: number | null | undefined;
@@ -22,44 +22,11 @@ interface VDjunctModalSmoothingWithRepParameters {
     "overwrite": boolean;
     "no_clean": boolean;
 }
+type VDjunctModalSmoothingWithRepParametersTagged = Required<Pick<VDjunctModalSmoothingWithRepParameters, '@type'>> & VDjunctModalSmoothingWithRepParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@djunct_modal_smoothing_with_rep": v__djunct_modal_smoothing_with_rep_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@djunct_modal_smoothing_with_rep": v__djunct_modal_smoothing_with_rep_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__djunct_modal_smoothing_with_rep(...)`.
+ * Output object returned when calling `VDjunctModalSmoothingWithRepParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +69,9 @@ function v__djunct_modal_smoothing_with_rep_params(
     version: boolean = false,
     overwrite: boolean = false,
     no_clean: boolean = false,
-): VDjunctModalSmoothingWithRepParameters {
+): VDjunctModalSmoothingWithRepParametersTagged {
     const params = {
-        "@type": "afni.@djunct_modal_smoothing_with_rep" as const,
+        "@type": "afni/@djunct_modal_smoothing_with_rep" as const,
         "input_file": input_file,
         "output_prefix": output_prefix,
         "help_view": help_view,
@@ -142,19 +109,19 @@ function v__djunct_modal_smoothing_with_rep_cargs(
             String((params["modesmooth"] ?? null))
         );
     }
-    if ((params["help_view"] ?? null)) {
+    if ((params["help_view"] ?? false)) {
         cargs.push("-hview");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-ver");
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("-overwrite");
     }
-    if ((params["no_clean"] ?? null)) {
+    if ((params["no_clean"] ?? false)) {
         cargs.push("-no_clean");
     }
     return cargs;
@@ -249,7 +216,6 @@ function v__djunct_modal_smoothing_with_rep(
 
 export {
       VDjunctModalSmoothingWithRepOutputs,
-      VDjunctModalSmoothingWithRepParameters,
       V__DJUNCT_MODAL_SMOOTHING_WITH_REP_METADATA,
       v__djunct_modal_smoothing_with_rep,
       v__djunct_modal_smoothing_with_rep_execute,

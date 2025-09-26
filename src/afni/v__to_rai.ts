@@ -12,47 +12,15 @@ const V__TO_RAI_METADATA: Metadata = {
 
 
 interface VToRaiParameters {
-    "@type": "afni.@ToRAI";
+    "@type"?: "afni/@ToRAI";
     "coordinates": Array<number>;
     "orientation": string;
 }
+type VToRaiParametersTagged = Required<Pick<VToRaiParameters, '@type'>> & VToRaiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@ToRAI": v__to_rai_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__to_rai(...)`.
+ * Output object returned when calling `VToRaiParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface VToRaiOutputs {
 function v__to_rai_params(
     coordinates: Array<number>,
     orientation: string,
-): VToRaiParameters {
+): VToRaiParametersTagged {
     const params = {
-        "@type": "afni.@ToRAI" as const,
+        "@type": "afni/@ToRAI" as const,
         "coordinates": coordinates,
         "orientation": orientation,
     };
@@ -185,7 +153,6 @@ function v__to_rai(
 
 export {
       VToRaiOutputs,
-      VToRaiParameters,
       V__TO_RAI_METADATA,
       v__to_rai,
       v__to_rai_execute,

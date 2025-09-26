@@ -12,7 +12,7 @@ const V_1DSVD_METADATA: Metadata = {
 
 
 interface V1dsvdParameters {
-    "@type": "afni.1dsvd";
+    "@type"?: "afni/1dsvd";
     "one": boolean;
     "vmean": boolean;
     "vnorm": boolean;
@@ -25,44 +25,11 @@ interface V1dsvdParameters {
     "num_eigenvectors"?: string | null | undefined;
     "input_files": Array<InputPathType>;
 }
+type V1dsvdParametersTagged = Required<Pick<V1dsvdParameters, '@type'>> & V1dsvdParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dsvd": v_1dsvd_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.1dsvd": v_1dsvd_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1dsvd(...)`.
+ * Output object returned when calling `V1dsvdParameters(...)`.
  *
  * @interface
  */
@@ -107,9 +74,9 @@ function v_1dsvd_params(
     asort: boolean = false,
     left_eigenvectors: boolean = false,
     num_eigenvectors: string | null = null,
-): V1dsvdParameters {
+): V1dsvdParametersTagged {
     const params = {
-        "@type": "afni.1dsvd" as const,
+        "@type": "afni/1dsvd" as const,
         "one": one,
         "vmean": vmean,
         "vnorm": vnorm,
@@ -142,31 +109,31 @@ function v_1dsvd_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("1dsvd");
-    if ((params["one"] ?? null)) {
+    if ((params["one"] ?? false)) {
         cargs.push("-one");
     }
-    if ((params["vmean"] ?? null)) {
+    if ((params["vmean"] ?? false)) {
         cargs.push("-vmean");
     }
-    if ((params["vnorm"] ?? null)) {
+    if ((params["vnorm"] ?? false)) {
         cargs.push("-vnorm");
     }
-    if ((params["cond"] ?? null)) {
+    if ((params["cond"] ?? false)) {
         cargs.push("-cond");
     }
-    if ((params["sing"] ?? null)) {
+    if ((params["sing"] ?? false)) {
         cargs.push("-sing");
     }
-    if ((params["sort"] ?? null)) {
+    if ((params["sort"] ?? false)) {
         cargs.push("-sort");
     }
-    if ((params["nosort"] ?? null)) {
+    if ((params["nosort"] ?? false)) {
         cargs.push("-nosort");
     }
-    if ((params["asort"] ?? null)) {
+    if ((params["asort"] ?? false)) {
         cargs.push("-asort");
     }
-    if ((params["left_eigenvectors"] ?? null)) {
+    if ((params["left_eigenvectors"] ?? false)) {
         cargs.push("-1Dleft");
     }
     if ((params["num_eigenvectors"] ?? null) !== null) {
@@ -273,7 +240,6 @@ function v_1dsvd(
 
 export {
       V1dsvdOutputs,
-      V1dsvdParameters,
       V_1DSVD_METADATA,
       v_1dsvd,
       v_1dsvd_execute,

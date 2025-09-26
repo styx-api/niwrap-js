@@ -12,50 +12,17 @@ const FSLADD_METADATA: Metadata = {
 
 
 interface FsladdParameters {
-    "@type": "fsl.fsladd";
+    "@type"?: "fsl/fsladd";
     "output_file": string;
     "mean_flag": boolean;
     "scale_flag": boolean;
     "volume_list": Array<InputPathType>;
 }
+type FsladdParametersTagged = Required<Pick<FsladdParameters, '@type'>> & FsladdParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fsladd": fsladd_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fsladd": fsladd_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsladd(...)`.
+ * Output object returned when calling `FsladdParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function fsladd_params(
     volume_list: Array<InputPathType>,
     mean_flag: boolean = false,
     scale_flag: boolean = false,
-): FsladdParameters {
+): FsladdParametersTagged {
     const params = {
-        "@type": "fsl.fsladd" as const,
+        "@type": "fsl/fsladd" as const,
         "output_file": output_file,
         "mean_flag": mean_flag,
         "scale_flag": scale_flag,
@@ -113,10 +80,10 @@ function fsladd_cargs(
     const cargs: string[] = [];
     cargs.push("fsladd");
     cargs.push((params["output_file"] ?? null));
-    if ((params["mean_flag"] ?? null)) {
+    if ((params["mean_flag"] ?? false)) {
         cargs.push("-m");
     }
-    if ((params["scale_flag"] ?? null)) {
+    if ((params["scale_flag"] ?? false)) {
         cargs.push("-s");
     }
     cargs.push(...(params["volume_list"] ?? null).map(f => execution.inputFile(f)));
@@ -204,7 +171,6 @@ function fsladd(
 export {
       FSLADD_METADATA,
       FsladdOutputs,
-      FsladdParameters,
       fsladd,
       fsladd_execute,
       fsladd_params,

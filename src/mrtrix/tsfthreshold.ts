@@ -12,14 +12,15 @@ const TSFTHRESHOLD_METADATA: Metadata = {
 
 
 interface TsfthresholdConfigParameters {
-    "@type": "mrtrix.tsfthreshold.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type TsfthresholdConfigParametersTagged = Required<Pick<TsfthresholdConfigParameters, '@type'>> & TsfthresholdConfigParameters;
 
 
 interface TsfthresholdParameters {
-    "@type": "mrtrix.tsfthreshold";
+    "@type"?: "mrtrix/tsfthreshold";
     "invert": boolean;
     "info": boolean;
     "quiet": boolean;
@@ -33,41 +34,7 @@ interface TsfthresholdParameters {
     "T": number;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.tsfthreshold": tsfthreshold_cargs,
-        "mrtrix.tsfthreshold.config": tsfthreshold_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.tsfthreshold": tsfthreshold_outputs,
-    };
-    return outputsFuncs[t];
-}
+type TsfthresholdParametersTagged = Required<Pick<TsfthresholdParameters, '@type'>> & TsfthresholdParameters;
 
 
 /**
@@ -81,9 +48,9 @@ function dynOutputs(
 function tsfthreshold_config_params(
     key: string,
     value: string,
-): TsfthresholdConfigParameters {
+): TsfthresholdConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.tsfthreshold.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -112,7 +79,7 @@ function tsfthreshold_config_cargs(
 
 
 /**
- * Output object returned when calling `tsfthreshold(...)`.
+ * Output object returned when calling `TsfthresholdParameters(...)`.
  *
  * @interface
  */
@@ -159,9 +126,9 @@ function tsfthreshold_params(
     config: Array<TsfthresholdConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TsfthresholdParameters {
+): TsfthresholdParametersTagged {
     const params = {
-        "@type": "mrtrix.tsfthreshold" as const,
+        "@type": "mrtrix/tsfthreshold" as const,
         "invert": invert,
         "info": info,
         "quiet": quiet,
@@ -197,19 +164,19 @@ function tsfthreshold_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("tsfthreshold");
-    if ((params["invert"] ?? null)) {
+    if ((params["invert"] ?? false)) {
         cargs.push("-invert");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -219,12 +186,12 @@ function tsfthreshold_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => tsfthreshold_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -341,9 +308,7 @@ function tsfthreshold(
 
 export {
       TSFTHRESHOLD_METADATA,
-      TsfthresholdConfigParameters,
       TsfthresholdOutputs,
-      TsfthresholdParameters,
       tsfthreshold,
       tsfthreshold_config_params,
       tsfthreshold_execute,

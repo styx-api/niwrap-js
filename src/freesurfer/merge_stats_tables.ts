@@ -12,7 +12,7 @@ const MERGE_STATS_TABLES_METADATA: Metadata = {
 
 
 interface MergeStatsTablesParameters {
-    "@type": "freesurfer.merge_stats_tables";
+    "@type"?: "freesurfer/merge_stats_tables";
     "subjects"?: Array<string> | null | undefined;
     "subject"?: string | null | undefined;
     "subjectsfile"?: InputPathType | null | undefined;
@@ -29,44 +29,11 @@ interface MergeStatsTablesParameters {
     "skip": boolean;
     "debug": boolean;
 }
+type MergeStatsTablesParametersTagged = Required<Pick<MergeStatsTablesParameters, '@type'>> & MergeStatsTablesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.merge_stats_tables": merge_stats_tables_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.merge_stats_tables": merge_stats_tables_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `merge_stats_tables(...)`.
+ * Output object returned when calling `MergeStatsTablesParameters(...)`.
  *
  * @interface
  */
@@ -119,9 +86,9 @@ function merge_stats_tables_params(
     transpose: boolean = false,
     skip: boolean = false,
     debug: boolean = false,
-): MergeStatsTablesParameters {
+): MergeStatsTablesParametersTagged {
     const params = {
-        "@type": "freesurfer.merge_stats_tables" as const,
+        "@type": "freesurfer/merge_stats_tables" as const,
         "outputfile": outputfile,
         "meas": meas,
         "common_segs": common_segs,
@@ -210,10 +177,10 @@ function merge_stats_tables_cargs(
         "-m",
         (params["meas"] ?? null)
     );
-    if ((params["common_segs"] ?? null)) {
+    if ((params["common_segs"] ?? false)) {
         cargs.push("--common-segs");
     }
-    if ((params["all_segs"] ?? null)) {
+    if ((params["all_segs"] ?? false)) {
         cargs.push("--all-segs");
     }
     if ((params["intable"] ?? null) !== null) {
@@ -234,13 +201,13 @@ function merge_stats_tables_cargs(
             (params["delimiter"] ?? null)
         );
     }
-    if ((params["transpose"] ?? null)) {
+    if ((params["transpose"] ?? false)) {
         cargs.push("--transpose");
     }
-    if ((params["skip"] ?? null)) {
+    if ((params["skip"] ?? false)) {
         cargs.push("--skip");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-v");
     }
     return cargs;
@@ -349,7 +316,6 @@ function merge_stats_tables(
 export {
       MERGE_STATS_TABLES_METADATA,
       MergeStatsTablesOutputs,
-      MergeStatsTablesParameters,
       merge_stats_tables,
       merge_stats_tables_execute,
       merge_stats_tables_params,

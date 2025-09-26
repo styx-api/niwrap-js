@@ -12,46 +12,14 @@ const CHECK_SUBJECT_METADATA: Metadata = {
 
 
 interface CheckSubjectParameters {
-    "@type": "freesurfer.check_subject";
+    "@type"?: "freesurfer/check_subject";
     "subject_dir": string;
 }
+type CheckSubjectParametersTagged = Required<Pick<CheckSubjectParameters, '@type'>> & CheckSubjectParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.check_subject": check_subject_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `check_subject(...)`.
+ * Output object returned when calling `CheckSubjectParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface CheckSubjectOutputs {
  */
 function check_subject_params(
     subject_dir: string,
-): CheckSubjectParameters {
+): CheckSubjectParametersTagged {
     const params = {
-        "@type": "freesurfer.check_subject" as const,
+        "@type": "freesurfer/check_subject" as const,
         "subject_dir": subject_dir,
     };
     return params;
@@ -173,7 +141,6 @@ function check_subject(
 export {
       CHECK_SUBJECT_METADATA,
       CheckSubjectOutputs,
-      CheckSubjectParameters,
       check_subject,
       check_subject_execute,
       check_subject_params,

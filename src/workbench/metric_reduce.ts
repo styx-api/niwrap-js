@@ -12,55 +12,22 @@ const METRIC_REDUCE_METADATA: Metadata = {
 
 
 interface MetricReduceExcludeOutliersParameters {
-    "@type": "workbench.metric-reduce.exclude_outliers";
+    "@type"?: "exclude_outliers";
     "sigma_below": number;
     "sigma_above": number;
 }
+type MetricReduceExcludeOutliersParametersTagged = Required<Pick<MetricReduceExcludeOutliersParameters, '@type'>> & MetricReduceExcludeOutliersParameters;
 
 
 interface MetricReduceParameters {
-    "@type": "workbench.metric-reduce";
+    "@type"?: "workbench/metric-reduce";
     "metric_in": InputPathType;
     "operation": string;
     "metric_out": string;
     "exclude_outliers"?: MetricReduceExcludeOutliersParameters | null | undefined;
     "opt_only_numeric": boolean;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-reduce": metric_reduce_cargs,
-        "workbench.metric-reduce.exclude_outliers": metric_reduce_exclude_outliers_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.metric-reduce": metric_reduce_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MetricReduceParametersTagged = Required<Pick<MetricReduceParameters, '@type'>> & MetricReduceParameters;
 
 
 /**
@@ -74,9 +41,9 @@ function dynOutputs(
 function metric_reduce_exclude_outliers_params(
     sigma_below: number,
     sigma_above: number,
-): MetricReduceExcludeOutliersParameters {
+): MetricReduceExcludeOutliersParametersTagged {
     const params = {
-        "@type": "workbench.metric-reduce.exclude_outliers" as const,
+        "@type": "exclude_outliers" as const,
         "sigma_below": sigma_below,
         "sigma_above": sigma_above,
     };
@@ -105,7 +72,7 @@ function metric_reduce_exclude_outliers_cargs(
 
 
 /**
- * Output object returned when calling `metric_reduce(...)`.
+ * Output object returned when calling `MetricReduceParameters(...)`.
  *
  * @interface
  */
@@ -138,9 +105,9 @@ function metric_reduce_params(
     metric_out: string,
     exclude_outliers: MetricReduceExcludeOutliersParameters | null = null,
     opt_only_numeric: boolean = false,
-): MetricReduceParameters {
+): MetricReduceParametersTagged {
     const params = {
-        "@type": "workbench.metric-reduce" as const,
+        "@type": "workbench/metric-reduce" as const,
         "metric_in": metric_in,
         "operation": operation,
         "metric_out": metric_out,
@@ -172,9 +139,9 @@ function metric_reduce_cargs(
     cargs.push((params["operation"] ?? null));
     cargs.push((params["metric_out"] ?? null));
     if ((params["exclude_outliers"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["exclude_outliers"] ?? null)["@type"])((params["exclude_outliers"] ?? null), execution));
+        cargs.push(...metric_reduce_exclude_outliers_cargs((params["exclude_outliers"] ?? null), execution));
     }
-    if ((params["opt_only_numeric"] ?? null)) {
+    if ((params["opt_only_numeric"] ?? false)) {
         cargs.push("-only-numeric");
     }
     return cargs;
@@ -302,9 +269,7 @@ function metric_reduce(
 
 export {
       METRIC_REDUCE_METADATA,
-      MetricReduceExcludeOutliersParameters,
       MetricReduceOutputs,
-      MetricReduceParameters,
       metric_reduce,
       metric_reduce_exclude_outliers_params,
       metric_reduce_execute,

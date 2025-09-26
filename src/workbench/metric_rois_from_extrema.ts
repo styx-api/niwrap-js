@@ -12,7 +12,7 @@ const METRIC_ROIS_FROM_EXTREMA_METADATA: Metadata = {
 
 
 interface MetricRoisFromExtremaParameters {
-    "@type": "workbench.metric-rois-from-extrema";
+    "@type"?: "workbench/metric-rois-from-extrema";
     "surface": InputPathType;
     "metric": InputPathType;
     "limit": number;
@@ -22,44 +22,11 @@ interface MetricRoisFromExtremaParameters {
     "opt_overlap_logic_method"?: string | null | undefined;
     "opt_column_column"?: string | null | undefined;
 }
+type MetricRoisFromExtremaParametersTagged = Required<Pick<MetricRoisFromExtremaParameters, '@type'>> & MetricRoisFromExtremaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-rois-from-extrema": metric_rois_from_extrema_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.metric-rois-from-extrema": metric_rois_from_extrema_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `metric_rois_from_extrema(...)`.
+ * Output object returned when calling `MetricRoisFromExtremaParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function metric_rois_from_extrema_params(
     opt_roi_roi_metric: InputPathType | null = null,
     opt_overlap_logic_method: string | null = null,
     opt_column_column: string | null = null,
-): MetricRoisFromExtremaParameters {
+): MetricRoisFromExtremaParametersTagged {
     const params = {
-        "@type": "workbench.metric-rois-from-extrema" as const,
+        "@type": "workbench/metric-rois-from-extrema" as const,
         "surface": surface,
         "metric": metric,
         "limit": limit,
@@ -261,7 +228,6 @@ function metric_rois_from_extrema(
 export {
       METRIC_ROIS_FROM_EXTREMA_METADATA,
       MetricRoisFromExtremaOutputs,
-      MetricRoisFromExtremaParameters,
       metric_rois_from_extrema,
       metric_rois_from_extrema_execute,
       metric_rois_from_extrema_params,

@@ -12,7 +12,7 @@ const SURF2VOL_METADATA: Metadata = {
 
 
 interface Surf2volParameters {
-    "@type": "freesurfer.surf2vol";
+    "@type"?: "freesurfer/surf2vol";
     "fixed_surface": InputPathType;
     "moving_surface": InputPathType;
     "fixed_mri": InputPathType;
@@ -31,44 +31,11 @@ interface Surf2volParameters {
     "debug_output": boolean;
     "cache_transform"?: string | null | undefined;
 }
+type Surf2volParametersTagged = Required<Pick<Surf2volParameters, '@type'>> & Surf2volParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.surf2vol": surf2vol_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.surf2vol": surf2vol_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surf2vol(...)`.
+ * Output object returned when calling `Surf2volParameters(...)`.
  *
  * @interface
  */
@@ -129,9 +96,9 @@ function surf2vol_params(
     dirty_factor: number | null = null,
     debug_output: boolean = false,
     cache_transform: string | null = null,
-): Surf2volParameters {
+): Surf2volParametersTagged {
     const params = {
-        "@type": "freesurfer.surf2vol" as const,
+        "@type": "freesurfer/surf2vol" as const,
         "fixed_surface": fixed_surface,
         "moving_surface": moving_surface,
         "fixed_mri": fixed_mri,
@@ -274,7 +241,7 @@ function surf2vol_cargs(
             String((params["dirty_factor"] ?? null))
         );
     }
-    if ((params["debug_output"] ?? null)) {
+    if ((params["debug_output"] ?? false)) {
         cargs.push("-dbg_output");
     }
     if ((params["cache_transform"] ?? null) !== null) {
@@ -394,7 +361,6 @@ function surf2vol(
 export {
       SURF2VOL_METADATA,
       Surf2volOutputs,
-      Surf2volParameters,
       surf2vol,
       surf2vol_execute,
       surf2vol_params,

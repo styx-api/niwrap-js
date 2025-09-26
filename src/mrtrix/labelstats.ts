@@ -12,14 +12,15 @@ const LABELSTATS_METADATA: Metadata = {
 
 
 interface LabelstatsConfigParameters {
-    "@type": "mrtrix.labelstats.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type LabelstatsConfigParametersTagged = Required<Pick<LabelstatsConfigParameters, '@type'>> & LabelstatsConfigParameters;
 
 
 interface LabelstatsParameters {
-    "@type": "mrtrix.labelstats";
+    "@type"?: "mrtrix/labelstats";
     "output"?: string | null | undefined;
     "voxelspace": boolean;
     "info": boolean;
@@ -32,40 +33,7 @@ interface LabelstatsParameters {
     "version": boolean;
     "input": InputPathType;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.labelstats": labelstats_cargs,
-        "mrtrix.labelstats.config": labelstats_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type LabelstatsParametersTagged = Required<Pick<LabelstatsParameters, '@type'>> & LabelstatsParameters;
 
 
 /**
@@ -79,9 +47,9 @@ function dynOutputs(
 function labelstats_config_params(
     key: string,
     value: string,
-): LabelstatsConfigParameters {
+): LabelstatsConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.labelstats.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -110,7 +78,7 @@ function labelstats_config_cargs(
 
 
 /**
- * Output object returned when calling `labelstats(...)`.
+ * Output object returned when calling `LabelstatsParameters(...)`.
  *
  * @interface
  */
@@ -151,9 +119,9 @@ function labelstats_params(
     config: Array<LabelstatsConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): LabelstatsParameters {
+): LabelstatsParametersTagged {
     const params = {
-        "@type": "mrtrix.labelstats" as const,
+        "@type": "mrtrix/labelstats" as const,
         "voxelspace": voxelspace,
         "info": info,
         "quiet": quiet,
@@ -196,19 +164,19 @@ function labelstats_cargs(
             (params["output"] ?? null)
         );
     }
-    if ((params["voxelspace"] ?? null)) {
+    if ((params["voxelspace"] ?? false)) {
         cargs.push("-voxelspace");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -218,12 +186,12 @@ function labelstats_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => labelstats_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -335,9 +303,7 @@ function labelstats(
 
 export {
       LABELSTATS_METADATA,
-      LabelstatsConfigParameters,
       LabelstatsOutputs,
-      LabelstatsParameters,
       labelstats,
       labelstats_config_params,
       labelstats_execute,

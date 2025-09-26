@@ -12,20 +12,22 @@ const VOLUME_DILATE_METADATA: Metadata = {
 
 
 interface VolumeDilatePresmoothParameters {
-    "@type": "workbench.volume-dilate.grad_extrapolate.presmooth";
+    "@type"?: "presmooth";
     "kernel": number;
     "opt_fwhm": boolean;
 }
+type VolumeDilatePresmoothParametersTagged = Required<Pick<VolumeDilatePresmoothParameters, '@type'>> & VolumeDilatePresmoothParameters;
 
 
 interface VolumeDilateGradExtrapolateParameters {
-    "@type": "workbench.volume-dilate.grad_extrapolate";
+    "@type"?: "grad_extrapolate";
     "presmooth"?: VolumeDilatePresmoothParameters | null | undefined;
 }
+type VolumeDilateGradExtrapolateParametersTagged = Required<Pick<VolumeDilateGradExtrapolateParameters, '@type'>> & VolumeDilateGradExtrapolateParameters;
 
 
 interface VolumeDilateParameters {
-    "@type": "workbench.volume-dilate";
+    "@type"?: "workbench/volume-dilate";
     "volume": InputPathType;
     "distance": number;
     "method": string;
@@ -37,42 +39,7 @@ interface VolumeDilateParameters {
     "opt_legacy_cutoff": boolean;
     "grad_extrapolate"?: VolumeDilateGradExtrapolateParameters | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-dilate": volume_dilate_cargs,
-        "workbench.volume-dilate.grad_extrapolate": volume_dilate_grad_extrapolate_cargs,
-        "workbench.volume-dilate.grad_extrapolate.presmooth": volume_dilate_presmooth_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-dilate": volume_dilate_outputs,
-    };
-    return outputsFuncs[t];
-}
+type VolumeDilateParametersTagged = Required<Pick<VolumeDilateParameters, '@type'>> & VolumeDilateParameters;
 
 
 /**
@@ -86,9 +53,9 @@ function dynOutputs(
 function volume_dilate_presmooth_params(
     kernel: number,
     opt_fwhm: boolean = false,
-): VolumeDilatePresmoothParameters {
+): VolumeDilatePresmoothParametersTagged {
     const params = {
-        "@type": "workbench.volume-dilate.grad_extrapolate.presmooth" as const,
+        "@type": "presmooth" as const,
         "kernel": kernel,
         "opt_fwhm": opt_fwhm,
     };
@@ -111,7 +78,7 @@ function volume_dilate_presmooth_cargs(
     const cargs: string[] = [];
     cargs.push("-presmooth");
     cargs.push(String((params["kernel"] ?? null)));
-    if ((params["opt_fwhm"] ?? null)) {
+    if ((params["opt_fwhm"] ?? false)) {
         cargs.push("-fwhm");
     }
     return cargs;
@@ -127,9 +94,9 @@ function volume_dilate_presmooth_cargs(
  */
 function volume_dilate_grad_extrapolate_params(
     presmooth: VolumeDilatePresmoothParameters | null = null,
-): VolumeDilateGradExtrapolateParameters {
+): VolumeDilateGradExtrapolateParametersTagged {
     const params = {
-        "@type": "workbench.volume-dilate.grad_extrapolate" as const,
+        "@type": "grad_extrapolate" as const,
     };
     if (presmooth !== null) {
         params["presmooth"] = presmooth;
@@ -153,14 +120,14 @@ function volume_dilate_grad_extrapolate_cargs(
     const cargs: string[] = [];
     cargs.push("-grad-extrapolate");
     if ((params["presmooth"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["presmooth"] ?? null)["@type"])((params["presmooth"] ?? null), execution));
+        cargs.push(...volume_dilate_presmooth_cargs((params["presmooth"] ?? null), execution));
     }
     return cargs;
 }
 
 
 /**
- * Output object returned when calling `volume_dilate(...)`.
+ * Output object returned when calling `VolumeDilateParameters(...)`.
  *
  * @interface
  */
@@ -203,9 +170,9 @@ function volume_dilate_params(
     opt_subvolume_subvol: string | null = null,
     opt_legacy_cutoff: boolean = false,
     grad_extrapolate: VolumeDilateGradExtrapolateParameters | null = null,
-): VolumeDilateParameters {
+): VolumeDilateParametersTagged {
     const params = {
-        "@type": "workbench.volume-dilate" as const,
+        "@type": "workbench/volume-dilate" as const,
         "volume": volume,
         "distance": distance,
         "method": method,
@@ -274,11 +241,11 @@ function volume_dilate_cargs(
             (params["opt_subvolume_subvol"] ?? null)
         );
     }
-    if ((params["opt_legacy_cutoff"] ?? null)) {
+    if ((params["opt_legacy_cutoff"] ?? false)) {
         cargs.push("-legacy-cutoff");
     }
     if ((params["grad_extrapolate"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["grad_extrapolate"] ?? null)["@type"])((params["grad_extrapolate"] ?? null), execution));
+        cargs.push(...volume_dilate_grad_extrapolate_cargs((params["grad_extrapolate"] ?? null), execution));
     }
     return cargs;
 }
@@ -397,10 +364,7 @@ function volume_dilate(
 
 export {
       VOLUME_DILATE_METADATA,
-      VolumeDilateGradExtrapolateParameters,
       VolumeDilateOutputs,
-      VolumeDilateParameters,
-      VolumeDilatePresmoothParameters,
       volume_dilate,
       volume_dilate_execute,
       volume_dilate_grad_extrapolate_params,

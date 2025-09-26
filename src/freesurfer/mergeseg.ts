@@ -12,7 +12,7 @@ const MERGESEG_METADATA: Metadata = {
 
 
 interface MergesegParameters {
-    "@type": "freesurfer.mergeseg";
+    "@type"?: "freesurfer/mergeseg";
     "src_seg": InputPathType;
     "merge_seg": InputPathType;
     "out_seg": string;
@@ -21,44 +21,11 @@ interface MergesegParameters {
     "segid_erode"?: number | null | undefined;
     "ctab"?: InputPathType | null | undefined;
 }
+type MergesegParametersTagged = Required<Pick<MergesegParameters, '@type'>> & MergesegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mergeseg": mergeseg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mergeseg": mergeseg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mergeseg(...)`.
+ * Output object returned when calling `MergesegParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function mergeseg_params(
     segid_only: number | null = null,
     segid_erode: number | null = null,
     ctab: InputPathType | null = null,
-): MergesegParameters {
+): MergesegParametersTagged {
     const params = {
-        "@type": "freesurfer.mergeseg" as const,
+        "@type": "freesurfer/mergeseg" as const,
         "src_seg": src_seg,
         "merge_seg": merge_seg,
         "out_seg": out_seg,
@@ -252,7 +219,6 @@ function mergeseg(
 export {
       MERGESEG_METADATA,
       MergesegOutputs,
-      MergesegParameters,
       mergeseg,
       mergeseg_execute,
       mergeseg_params,

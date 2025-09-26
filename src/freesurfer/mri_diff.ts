@@ -12,7 +12,7 @@ const MRI_DIFF_METADATA: Metadata = {
 
 
 interface MriDiffParameters {
-    "@type": "freesurfer.mri_diff";
+    "@type"?: "freesurfer/mri_diff";
     "vol1file": InputPathType;
     "vol2file": InputPathType;
     "resolution_check": boolean;
@@ -45,44 +45,11 @@ interface MriDiffParameters {
     "verbose_mode": boolean;
     "check_options": boolean;
 }
+type MriDiffParametersTagged = Required<Pick<MriDiffParameters, '@type'>> & MriDiffParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_diff": mri_diff_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_diff": mri_diff_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_diff(...)`.
+ * Output object returned when calling `MriDiffParameters(...)`.
  *
  * @interface
  */
@@ -175,9 +142,9 @@ function mri_diff_params(
     debug_mode: boolean = false,
     verbose_mode: boolean = false,
     check_options: boolean = false,
-): MriDiffParameters {
+): MriDiffParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_diff" as const,
+        "@type": "freesurfer/mri_diff" as const,
         "vol1file": vol1file,
         "vol2file": vol2file,
         "resolution_check": resolution_check,
@@ -246,58 +213,58 @@ function mri_diff_cargs(
     cargs.push("mri_diff");
     cargs.push(execution.inputFile((params["vol1file"] ?? null)));
     cargs.push(execution.inputFile((params["vol2file"] ?? null)));
-    if ((params["resolution_check"] ?? null)) {
+    if ((params["resolution_check"] ?? false)) {
         cargs.push("--notallow-res");
     }
-    if ((params["acquisition_param_check"] ?? null)) {
+    if ((params["acquisition_param_check"] ?? false)) {
         cargs.push("--notallow-acq");
     }
-    if ((params["geometry_check"] ?? null)) {
+    if ((params["geometry_check"] ?? false)) {
         cargs.push("--notallow-geo");
     }
-    if ((params["precision_check"] ?? null)) {
+    if ((params["precision_check"] ?? false)) {
         cargs.push("--notallow-prec");
     }
-    if ((params["pixel_check"] ?? null)) {
+    if ((params["pixel_check"] ?? false)) {
         cargs.push("--notallow-pix");
     }
-    if ((params["orientation_check"] ?? null)) {
+    if ((params["orientation_check"] ?? false)) {
         cargs.push("--notallow-ori");
     }
-    if ((params["file_type_diff_check"] ?? null)) {
+    if ((params["file_type_diff_check"] ?? false)) {
         cargs.push("--notallow-type");
     }
-    if ((params["no_exit_on_diff"] ?? null)) {
+    if ((params["no_exit_on_diff"] ?? false)) {
         cargs.push("--no-exit-on-diff");
     }
-    if ((params["quality_assurance"] ?? null)) {
+    if ((params["quality_assurance"] ?? false)) {
         cargs.push("--qa");
     }
-    if ((params["pixel_only"] ?? null)) {
+    if ((params["pixel_only"] ?? false)) {
         cargs.push("--pix-only");
     }
-    if ((params["abs_difference"] ?? null)) {
+    if ((params["abs_difference"] ?? false)) {
         cargs.push("--absdiff");
     }
-    if ((params["no_abs_difference"] ?? null)) {
+    if ((params["no_abs_difference"] ?? false)) {
         cargs.push("--no-absdiff");
     }
-    if ((params["difference_abs"] ?? null)) {
+    if ((params["difference_abs"] ?? false)) {
         cargs.push("--diffabs");
     }
-    if ((params["percentage_difference"] ?? null)) {
+    if ((params["percentage_difference"] ?? false)) {
         cargs.push("--diffpct");
     }
-    if ((params["rss_save"] ?? null)) {
+    if ((params["rss_save"] ?? false)) {
         cargs.push("--rss");
     }
-    if ((params["ssd_print"] ?? null)) {
+    if ((params["ssd_print"] ?? false)) {
         cargs.push("--ssd");
     }
-    if ((params["rms_print"] ?? null)) {
+    if ((params["rms_print"] ?? false)) {
         cargs.push("--rms");
     }
-    if ((params["count_diff_voxels"] ?? null)) {
+    if ((params["count_diff_voxels"] ?? false)) {
         cargs.push("--count");
     }
     if ((params["pixel_threshold"] ?? null) !== null) {
@@ -348,13 +315,13 @@ function mri_diff_cargs(
             (params["average_difference"] ?? null)
         );
     }
-    if ((params["debug_mode"] ?? null)) {
+    if ((params["debug_mode"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["verbose_mode"] ?? null)) {
+    if ((params["verbose_mode"] ?? false)) {
         cargs.push("--verbose");
     }
-    if ((params["check_options"] ?? null)) {
+    if ((params["check_options"] ?? false)) {
         cargs.push("--checkopts");
     }
     return cargs;
@@ -497,7 +464,6 @@ function mri_diff(
 export {
       MRI_DIFF_METADATA,
       MriDiffOutputs,
-      MriDiffParameters,
       mri_diff,
       mri_diff_execute,
       mri_diff_params,

@@ -12,49 +12,16 @@ const V__DJUNCT_DWI_SELECTOR_TCSH_METADATA: Metadata = {
 
 
 interface VDjunctDwiSelectorTcshParameters {
-    "@type": "afni.@djunct_dwi_selector.tcsh";
+    "@type"?: "afni/@djunct_dwi_selector.tcsh";
     "dwi": InputPathType;
     "png": InputPathType;
     "outfile": string;
 }
+type VDjunctDwiSelectorTcshParametersTagged = Required<Pick<VDjunctDwiSelectorTcshParameters, '@type'>> & VDjunctDwiSelectorTcshParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@djunct_dwi_selector.tcsh": v__djunct_dwi_selector_tcsh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@djunct_dwi_selector.tcsh": v__djunct_dwi_selector_tcsh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__djunct_dwi_selector_tcsh(...)`.
+ * Output object returned when calling `VDjunctDwiSelectorTcshParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function v__djunct_dwi_selector_tcsh_params(
     dwi: InputPathType,
     png: InputPathType,
     outfile: string,
-): VDjunctDwiSelectorTcshParameters {
+): VDjunctDwiSelectorTcshParametersTagged {
     const params = {
-        "@type": "afni.@djunct_dwi_selector.tcsh" as const,
+        "@type": "afni/@djunct_dwi_selector.tcsh" as const,
         "dwi": dwi,
         "png": png,
         "outfile": outfile,
@@ -192,7 +159,6 @@ function v__djunct_dwi_selector_tcsh(
 
 export {
       VDjunctDwiSelectorTcshOutputs,
-      VDjunctDwiSelectorTcshParameters,
       V__DJUNCT_DWI_SELECTOR_TCSH_METADATA,
       v__djunct_dwi_selector_tcsh,
       v__djunct_dwi_selector_tcsh_execute,

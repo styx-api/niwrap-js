@@ -12,7 +12,7 @@ const V__SKULL_STRIP_TOUCH_UP_METADATA: Metadata = {
 
 
 interface VSkullStripTouchUpParameters {
-    "@type": "afni.@SkullStrip_TouchUp";
+    "@type"?: "afni/@SkullStrip_TouchUp";
     "prefix": string;
     "brain_dataset": InputPathType;
     "head_dataset": InputPathType;
@@ -20,44 +20,11 @@ interface VSkullStripTouchUpParameters {
     "orig_dim": boolean;
     "help": boolean;
 }
+type VSkullStripTouchUpParametersTagged = Required<Pick<VSkullStripTouchUpParameters, '@type'>> & VSkullStripTouchUpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@SkullStrip_TouchUp": v__skull_strip_touch_up_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@SkullStrip_TouchUp": v__skull_strip_touch_up_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__skull_strip_touch_up(...)`.
+ * Output object returned when calling `VSkullStripTouchUpParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +63,9 @@ function v__skull_strip_touch_up_params(
     mask_out: boolean = false,
     orig_dim: boolean = false,
     help: boolean = false,
-): VSkullStripTouchUpParameters {
+): VSkullStripTouchUpParametersTagged {
     const params = {
-        "@type": "afni.@SkullStrip_TouchUp" as const,
+        "@type": "afni/@SkullStrip_TouchUp" as const,
         "prefix": prefix,
         "brain_dataset": brain_dataset,
         "head_dataset": head_dataset,
@@ -136,13 +103,13 @@ function v__skull_strip_touch_up_cargs(
         "-head",
         execution.inputFile((params["head_dataset"] ?? null))
     );
-    if ((params["mask_out"] ?? null)) {
+    if ((params["mask_out"] ?? false)) {
         cargs.push("-mask_out");
     }
-    if ((params["orig_dim"] ?? null)) {
+    if ((params["orig_dim"] ?? false)) {
         cargs.push("-orig_dim");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -233,7 +200,6 @@ function v__skull_strip_touch_up(
 
 export {
       VSkullStripTouchUpOutputs,
-      VSkullStripTouchUpParameters,
       V__SKULL_STRIP_TOUCH_UP_METADATA,
       v__skull_strip_touch_up,
       v__skull_strip_touch_up_execute,

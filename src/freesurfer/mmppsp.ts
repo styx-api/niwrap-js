@@ -12,7 +12,7 @@ const MMPPSP_METADATA: Metadata = {
 
 
 interface MmppspParameters {
-    "@type": "freesurfer.mmppsp";
+    "@type"?: "freesurfer/mmppsp";
     "samseg_dir": string;
     "outdir": string;
     "lh_flag": boolean;
@@ -25,44 +25,11 @@ interface MmppspParameters {
     "stop_after"?: string | null | undefined;
     "wexpanddist"?: number | null | undefined;
 }
+type MmppspParametersTagged = Required<Pick<MmppspParameters, '@type'>> & MmppspParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mmppsp": mmppsp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mmppsp": mmppsp_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mmppsp(...)`.
+ * Output object returned when calling `MmppspParameters(...)`.
  *
  * @interface
  */
@@ -107,9 +74,9 @@ function mmppsp_params(
     no_initsphreg_flag: boolean = false,
     stop_after: string | null = null,
     wexpanddist: number | null = null,
-): MmppspParameters {
+): MmppspParametersTagged {
     const params = {
-        "@type": "freesurfer.mmppsp" as const,
+        "@type": "freesurfer/mmppsp" as const,
         "samseg_dir": samseg_dir,
         "outdir": outdir,
         "lh_flag": lh_flag,
@@ -154,19 +121,19 @@ function mmppsp_cargs(
         "--o",
         (params["outdir"] ?? null)
     );
-    if ((params["lh_flag"] ?? null)) {
+    if ((params["lh_flag"] ?? false)) {
         cargs.push("--lh");
     }
-    if ((params["rh_flag"] ?? null)) {
+    if ((params["rh_flag"] ?? false)) {
         cargs.push("--rh");
     }
-    if ((params["likelihood_flag"] ?? null)) {
+    if ((params["likelihood_flag"] ?? false)) {
         cargs.push("--likelihood");
     }
-    if ((params["posterior_flag"] ?? null)) {
+    if ((params["posterior_flag"] ?? false)) {
         cargs.push("--posterior");
     }
-    if ((params["force_update_flag"] ?? null)) {
+    if ((params["force_update_flag"] ?? false)) {
         cargs.push("--force-update");
     }
     if ((params["threads"] ?? null) !== null) {
@@ -175,7 +142,7 @@ function mmppsp_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["no_initsphreg_flag"] ?? null)) {
+    if ((params["no_initsphreg_flag"] ?? false)) {
         cargs.push("--no-initsphreg");
     }
     if ((params["stop_after"] ?? null) !== null) {
@@ -288,7 +255,6 @@ function mmppsp(
 export {
       MMPPSP_METADATA,
       MmppspOutputs,
-      MmppspParameters,
       mmppsp,
       mmppsp_execute,
       mmppsp_params,

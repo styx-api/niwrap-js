@@ -12,7 +12,7 @@ const VOLUME_CAPTURE_PLANE_METADATA: Metadata = {
 
 
 interface VolumeCapturePlaneParameters {
-    "@type": "workbench.volume-capture-plane";
+    "@type"?: "workbench/volume-capture-plane";
     "volume": InputPathType;
     "subvolume": string;
     "interp": string;
@@ -31,43 +31,11 @@ interface VolumeCapturePlaneParameters {
     "top_left_z": number;
     "image": string;
 }
+type VolumeCapturePlaneParametersTagged = Required<Pick<VolumeCapturePlaneParameters, '@type'>> & VolumeCapturePlaneParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-capture-plane": volume_capture_plane_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `volume_capture_plane(...)`.
+ * Output object returned when calling `VolumeCapturePlaneParameters(...)`.
  *
  * @interface
  */
@@ -120,9 +88,9 @@ function volume_capture_plane_params(
     top_left_y: number,
     top_left_z: number,
     image: string,
-): VolumeCapturePlaneParameters {
+): VolumeCapturePlaneParametersTagged {
     const params = {
-        "@type": "workbench.volume-capture-plane" as const,
+        "@type": "workbench/volume-capture-plane" as const,
         "volume": volume,
         "subvolume": subvolume,
         "interp": interp,
@@ -302,7 +270,6 @@ function volume_capture_plane(
 export {
       VOLUME_CAPTURE_PLANE_METADATA,
       VolumeCapturePlaneOutputs,
-      VolumeCapturePlaneParameters,
       volume_capture_plane,
       volume_capture_plane_execute,
       volume_capture_plane_params,

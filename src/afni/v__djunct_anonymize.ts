@@ -12,49 +12,17 @@ const V__DJUNCT_ANONYMIZE_METADATA: Metadata = {
 
 
 interface VDjunctAnonymizeParameters {
-    "@type": "afni.@djunct_anonymize";
+    "@type"?: "afni/@djunct_anonymize";
     "input": InputPathType;
     "add_note"?: string | null | undefined;
     "copy_to"?: InputPathType | null | undefined;
     "overwrite": boolean;
 }
+type VDjunctAnonymizeParametersTagged = Required<Pick<VDjunctAnonymizeParameters, '@type'>> & VDjunctAnonymizeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@djunct_anonymize": v__djunct_anonymize_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__djunct_anonymize(...)`.
+ * Output object returned when calling `VDjunctAnonymizeParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function v__djunct_anonymize_params(
     add_note: string | null = null,
     copy_to: InputPathType | null = null,
     overwrite: boolean = false,
-): VDjunctAnonymizeParameters {
+): VDjunctAnonymizeParametersTagged {
     const params = {
-        "@type": "afni.@djunct_anonymize" as const,
+        "@type": "afni/@djunct_anonymize" as const,
         "input": input,
         "overwrite": overwrite,
     };
@@ -124,7 +92,7 @@ function v__djunct_anonymize_cargs(
             execution.inputFile((params["copy_to"] ?? null))
         );
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("-overwrite");
     }
     return cargs;
@@ -209,7 +177,6 @@ function v__djunct_anonymize(
 
 export {
       VDjunctAnonymizeOutputs,
-      VDjunctAnonymizeParameters,
       V__DJUNCT_ANONYMIZE_METADATA,
       v__djunct_anonymize,
       v__djunct_anonymize_execute,

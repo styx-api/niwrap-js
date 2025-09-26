@@ -12,7 +12,7 @@ const MRI_HAUSDORFF_DIST_METADATA: Metadata = {
 
 
 interface MriHausdorffDistParameters {
-    "@type": "freesurfer.mri_hausdorff_dist";
+    "@type"?: "freesurfer/mri_hausdorff_dist";
     "vol1": InputPathType;
     "vol2": InputPathType;
     "output_text_file": string;
@@ -22,44 +22,11 @@ interface MriHausdorffDistParameters {
     "max_flag": boolean;
     "label_index"?: number | null | undefined;
 }
+type MriHausdorffDistParametersTagged = Required<Pick<MriHausdorffDistParameters, '@type'>> & MriHausdorffDistParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_hausdorff_dist": mri_hausdorff_dist_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_hausdorff_dist": mri_hausdorff_dist_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_hausdorff_dist(...)`.
+ * Output object returned when calling `MriHausdorffDistParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function mri_hausdorff_dist_params(
     blur_sigma: number | null = null,
     max_flag: boolean = false,
     label_index: number | null = null,
-): MriHausdorffDistParameters {
+): MriHausdorffDistParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_hausdorff_dist" as const,
+        "@type": "freesurfer/mri_hausdorff_dist" as const,
         "vol1": vol1,
         "vol2": vol2,
         "output_text_file": output_text_file,
@@ -143,7 +110,7 @@ function mri_hausdorff_dist_cargs(
             String((params["threshold"] ?? null))
         );
     }
-    if ((params["input_file_flag"] ?? null)) {
+    if ((params["input_file_flag"] ?? false)) {
         cargs.push("-F");
     }
     if ((params["blur_sigma"] ?? null) !== null) {
@@ -152,7 +119,7 @@ function mri_hausdorff_dist_cargs(
             String((params["blur_sigma"] ?? null))
         );
     }
-    if ((params["max_flag"] ?? null)) {
+    if ((params["max_flag"] ?? false)) {
         cargs.push("-max");
     }
     if ((params["label_index"] ?? null) !== null) {
@@ -253,7 +220,6 @@ function mri_hausdorff_dist(
 export {
       MRI_HAUSDORFF_DIST_METADATA,
       MriHausdorffDistOutputs,
-      MriHausdorffDistParameters,
       mri_hausdorff_dist,
       mri_hausdorff_dist_execute,
       mri_hausdorff_dist_params,

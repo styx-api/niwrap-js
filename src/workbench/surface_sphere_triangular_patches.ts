@@ -12,48 +12,16 @@ const SURFACE_SPHERE_TRIANGULAR_PATCHES_METADATA: Metadata = {
 
 
 interface SurfaceSphereTriangularPatchesParameters {
-    "@type": "workbench.surface-sphere-triangular-patches";
+    "@type"?: "workbench/surface-sphere-triangular-patches";
     "sphere": InputPathType;
     "divisions": number;
     "text_out": string;
 }
+type SurfaceSphereTriangularPatchesParametersTagged = Required<Pick<SurfaceSphereTriangularPatchesParameters, '@type'>> & SurfaceSphereTriangularPatchesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-sphere-triangular-patches": surface_sphere_triangular_patches_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_sphere_triangular_patches(...)`.
+ * Output object returned when calling `SurfaceSphereTriangularPatchesParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function surface_sphere_triangular_patches_params(
     sphere: InputPathType,
     divisions: number,
     text_out: string,
-): SurfaceSphereTriangularPatchesParameters {
+): SurfaceSphereTriangularPatchesParametersTagged {
     const params = {
-        "@type": "workbench.surface-sphere-triangular-patches" as const,
+        "@type": "workbench/surface-sphere-triangular-patches" as const,
         "sphere": sphere,
         "divisions": divisions,
         "text_out": text_out,
@@ -192,7 +160,6 @@ function surface_sphere_triangular_patches(
 export {
       SURFACE_SPHERE_TRIANGULAR_PATCHES_METADATA,
       SurfaceSphereTriangularPatchesOutputs,
-      SurfaceSphereTriangularPatchesParameters,
       surface_sphere_triangular_patches,
       surface_sphere_triangular_patches_execute,
       surface_sphere_triangular_patches_params,

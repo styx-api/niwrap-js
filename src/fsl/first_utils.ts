@@ -12,7 +12,7 @@ const FIRST_UTILS_METADATA: Metadata = {
 
 
 interface FirstUtilsParameters {
-    "@type": "fsl.first_utils";
+    "@type"?: "fsl/first_utils";
     "input_file": InputPathType;
     "output_name": string;
     "norm_factors"?: InputPathType | null | undefined;
@@ -46,43 +46,11 @@ interface FirstUtilsParameters {
     "debug_mode": boolean;
     "help": boolean;
 }
+type FirstUtilsParametersTagged = Required<Pick<FirstUtilsParameters, '@type'>> & FirstUtilsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.first_utils": first_utils_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `first_utils(...)`.
+ * Output object returned when calling `FirstUtilsParameters(...)`.
  *
  * @interface
  */
@@ -165,9 +133,9 @@ function first_utils_params(
     concat_bvars: boolean = false,
     debug_mode: boolean = false,
     help: boolean = false,
-): FirstUtilsParameters {
+): FirstUtilsParametersTagged {
     const params = {
-        "@type": "fsl.first_utils" as const,
+        "@type": "fsl/first_utils" as const,
         "input_file": input_file,
         "output_name": output_name,
         "use_scale": use_scale,
@@ -271,10 +239,10 @@ function first_utils_cargs(
             execution.inputFile((params["flirt_matrices"] ?? null))
         );
     }
-    if ((params["use_scale"] ?? null)) {
+    if ((params["use_scale"] ?? false)) {
         cargs.push("--useScale");
     }
-    if ((params["dice_overlap"] ?? null)) {
+    if ((params["dice_overlap"] ?? false)) {
         cargs.push("--overlap");
     }
     if ((params["input_mesh"] ?? null) !== null) {
@@ -283,10 +251,10 @@ function first_utils_cargs(
             execution.inputFile((params["input_mesh"] ?? null))
         );
     }
-    if ((params["use_norm"] ?? null)) {
+    if ((params["use_norm"] ?? false)) {
         cargs.push("--useNorm");
     }
-    if ((params["surface_out"] ?? null)) {
+    if ((params["surface_out"] ?? false)) {
         cargs.push("--surfaceout");
     }
     if ((params["threshold"] ?? null) !== null) {
@@ -301,19 +269,19 @@ function first_utils_cargs(
             (params["mesh_label"] ?? null)
         );
     }
-    if ((params["use_bvars"] ?? null)) {
+    if ((params["use_bvars"] ?? false)) {
         cargs.push("--usebvars");
     }
-    if ((params["use_recon_mni"] ?? null)) {
+    if ((params["use_recon_mni"] ?? false)) {
         cargs.push("--useReconMNI");
     }
-    if ((params["vertex_analysis"] ?? null)) {
+    if ((params["vertex_analysis"] ?? false)) {
         cargs.push("--vertexAnalysis");
     }
-    if ((params["use_recon_native"] ?? null)) {
+    if ((params["use_recon_native"] ?? false)) {
         cargs.push("--useReconNative");
     }
-    if ((params["use_rigid_align"] ?? null)) {
+    if ((params["use_rigid_align"] ?? false)) {
         cargs.push("--useRigidAlign");
     }
     if ((params["design_matrix"] ?? null) !== null) {
@@ -322,16 +290,16 @@ function first_utils_cargs(
             execution.inputFile((params["design_matrix"] ?? null))
         );
     }
-    if ((params["recon_mesh_from_bvars"] ?? null)) {
+    if ((params["recon_mesh_from_bvars"] ?? false)) {
         cargs.push("--reconMeshFromBvars");
     }
-    if ((params["read_bvars"] ?? null)) {
+    if ((params["read_bvars"] ?? false)) {
         cargs.push("--readBvars");
     }
-    if ((params["mesh_to_vol"] ?? null)) {
+    if ((params["mesh_to_vol"] ?? false)) {
         cargs.push("--meshToVol");
     }
-    if ((params["centre_origin"] ?? null)) {
+    if ((params["centre_origin"] ?? false)) {
         cargs.push("--centreOrigin");
     }
     if ((params["save_vertices"] ?? null) !== null) {
@@ -340,10 +308,10 @@ function first_utils_cargs(
             execution.inputFile((params["save_vertices"] ?? null))
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["use_pca_filter"] ?? null)) {
+    if ((params["use_pca_filter"] ?? false)) {
         cargs.push("--usePCAfilter");
     }
     if ((params["num_modes"] ?? null) !== null) {
@@ -352,19 +320,19 @@ function first_utils_cargs(
             String((params["num_modes"] ?? null))
         );
     }
-    if ((params["single_boundary_corr"] ?? null)) {
+    if ((params["single_boundary_corr"] ?? false)) {
         cargs.push("--singleBoundaryCorr");
     }
-    if ((params["do_mvglm"] ?? null)) {
+    if ((params["do_mvglm"] ?? false)) {
         cargs.push("--doMVGLM");
     }
-    if ((params["concat_bvars"] ?? null)) {
+    if ((params["concat_bvars"] ?? false)) {
         cargs.push("--concatBvars");
     }
-    if ((params["debug_mode"] ?? null)) {
+    if ((params["debug_mode"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -506,7 +474,6 @@ function first_utils(
 export {
       FIRST_UTILS_METADATA,
       FirstUtilsOutputs,
-      FirstUtilsParameters,
       first_utils,
       first_utils_execute,
       first_utils_params,

@@ -12,47 +12,14 @@ const FIXUP_MNI_PATHS_METADATA: Metadata = {
 
 
 interface FixupMniPathsParameters {
-    "@type": "freesurfer.fixup_mni_paths";
+    "@type"?: "freesurfer/fixup_mni_paths";
     "verbose": boolean;
 }
+type FixupMniPathsParametersTagged = Required<Pick<FixupMniPathsParameters, '@type'>> & FixupMniPathsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fixup_mni_paths": fixup_mni_paths_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.fixup_mni_paths": fixup_mni_paths_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fixup_mni_paths(...)`.
+ * Output object returned when calling `FixupMniPathsParameters(...)`.
  *
  * @interface
  */
@@ -125,9 +92,9 @@ interface FixupMniPathsOutputs {
  */
 function fixup_mni_paths_params(
     verbose: boolean = false,
-): FixupMniPathsParameters {
+): FixupMniPathsParametersTagged {
     const params = {
-        "@type": "freesurfer.fixup_mni_paths" as const,
+        "@type": "freesurfer/fixup_mni_paths" as const,
         "verbose": verbose,
     };
     return params;
@@ -148,7 +115,7 @@ function fixup_mni_paths_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("fixup_mni_paths");
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
     return cargs;
@@ -241,7 +208,6 @@ function fixup_mni_paths(
 export {
       FIXUP_MNI_PATHS_METADATA,
       FixupMniPathsOutputs,
-      FixupMniPathsParameters,
       fixup_mni_paths,
       fixup_mni_paths_execute,
       fixup_mni_paths_params,

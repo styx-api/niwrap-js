@@ -12,48 +12,16 @@ const PROMPT_USER_METADATA: Metadata = {
 
 
 interface PromptUserParameters {
-    "@type": "afni.prompt_user";
+    "@type"?: "afni/prompt_user";
     "pause_message": string;
     "timeout"?: number | null | undefined;
     "timeout_alias"?: number | null | undefined;
 }
+type PromptUserParametersTagged = Required<Pick<PromptUserParameters, '@type'>> & PromptUserParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.prompt_user": prompt_user_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `prompt_user(...)`.
+ * Output object returned when calling `PromptUserParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function prompt_user_params(
     pause_message: string,
     timeout: number | null = null,
     timeout_alias: number | null = null,
-): PromptUserParameters {
+): PromptUserParametersTagged {
     const params = {
-        "@type": "afni.prompt_user" as const,
+        "@type": "afni/prompt_user" as const,
         "pause_message": pause_message,
     };
     if (timeout !== null) {
@@ -204,7 +172,6 @@ function prompt_user(
 export {
       PROMPT_USER_METADATA,
       PromptUserOutputs,
-      PromptUserParameters,
       prompt_user,
       prompt_user_execute,
       prompt_user_params,

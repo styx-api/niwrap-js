@@ -12,47 +12,15 @@ const ADJUNCT_IS_LABEL_PY_METADATA: Metadata = {
 
 
 interface AdjunctIsLabelPyParameters {
-    "@type": "afni.adjunct_is_label.py";
+    "@type"?: "afni/adjunct_is_label.py";
     "infile": InputPathType;
     "label": string;
 }
+type AdjunctIsLabelPyParametersTagged = Required<Pick<AdjunctIsLabelPyParameters, '@type'>> & AdjunctIsLabelPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.adjunct_is_label.py": adjunct_is_label_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `adjunct_is_label_py(...)`.
+ * Output object returned when calling `AdjunctIsLabelPyParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface AdjunctIsLabelPyOutputs {
 function adjunct_is_label_py_params(
     infile: InputPathType,
     label: string,
-): AdjunctIsLabelPyParameters {
+): AdjunctIsLabelPyParametersTagged {
     const params = {
-        "@type": "afni.adjunct_is_label.py" as const,
+        "@type": "afni/adjunct_is_label.py" as const,
         "infile": infile,
         "label": label,
     };
@@ -180,7 +148,6 @@ function adjunct_is_label_py(
 export {
       ADJUNCT_IS_LABEL_PY_METADATA,
       AdjunctIsLabelPyOutputs,
-      AdjunctIsLabelPyParameters,
       adjunct_is_label_py,
       adjunct_is_label_py_execute,
       adjunct_is_label_py_params,

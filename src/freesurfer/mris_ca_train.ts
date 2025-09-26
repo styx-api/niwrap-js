@@ -12,7 +12,7 @@ const MRIS_CA_TRAIN_METADATA: Metadata = {
 
 
 interface MrisCaTrainParameters {
-    "@type": "freesurfer.mris_ca_train";
+    "@type"?: "freesurfer/mris_ca_train";
     "hemi": string;
     "canonsurf": InputPathType;
     "annot_file": InputPathType;
@@ -40,44 +40,11 @@ interface MrisCaTrainParameters {
     "help": boolean;
     "version": boolean;
 }
+type MrisCaTrainParametersTagged = Required<Pick<MrisCaTrainParameters, '@type'>> & MrisCaTrainParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_ca_train": mris_ca_train_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_ca_train": mris_ca_train_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_ca_train(...)`.
+ * Output object returned when calling `MrisCaTrainParameters(...)`.
  *
  * @interface
  */
@@ -152,9 +119,9 @@ function mris_ca_train_params(
     no_fill: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): MrisCaTrainParameters {
+): MrisCaTrainParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_ca_train" as const,
+        "@type": "freesurfer/mris_ca_train" as const,
         "hemi": hemi,
         "canonsurf": canonsurf,
         "annot_file": annot_file,
@@ -249,13 +216,13 @@ function mris_ca_train_cargs(
             execution.inputFile((params["orig"] ?? null))
         );
     }
-    if ((params["norm1"] ?? null)) {
+    if ((params["norm1"] ?? false)) {
         cargs.push("-norm1");
     }
-    if ((params["norm2"] ?? null)) {
+    if ((params["norm2"] ?? false)) {
         cargs.push("-norm2");
     }
-    if ((params["norm3"] ?? null)) {
+    if ((params["norm3"] ?? false)) {
         cargs.push("-norm3");
     }
     if ((params["ic"] ?? null) !== null) {
@@ -264,10 +231,10 @@ function mris_ca_train_cargs(
             (params["ic"] ?? null)
         );
     }
-    if ((params["sulc"] ?? null)) {
+    if ((params["sulc"] ?? false)) {
         cargs.push("-sulc");
     }
-    if ((params["sulconly"] ?? null)) {
+    if ((params["sulconly"] ?? false)) {
         cargs.push("-sulconly");
     }
     if ((params["a"] ?? null) !== null) {
@@ -324,13 +291,13 @@ function mris_ca_train_cargs(
             String((params["nfill"] ?? null))
         );
     }
-    if ((params["no_fill"] ?? null)) {
+    if ((params["no_fill"] ?? false)) {
         cargs.push("-no-fill");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -461,7 +428,6 @@ function mris_ca_train(
 export {
       MRIS_CA_TRAIN_METADATA,
       MrisCaTrainOutputs,
-      MrisCaTrainParameters,
       mris_ca_train,
       mris_ca_train_execute,
       mris_ca_train_params,

@@ -12,46 +12,14 @@ const MORPH_SUBJECT_RH_METADATA: Metadata = {
 
 
 interface MorphSubjectRhParameters {
-    "@type": "freesurfer.morph_subject-rh";
+    "@type"?: "freesurfer/morph_subject-rh";
     "subject_id": string;
 }
+type MorphSubjectRhParametersTagged = Required<Pick<MorphSubjectRhParameters, '@type'>> & MorphSubjectRhParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.morph_subject-rh": morph_subject_rh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `morph_subject_rh(...)`.
+ * Output object returned when calling `MorphSubjectRhParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface MorphSubjectRhOutputs {
  */
 function morph_subject_rh_params(
     subject_id: string,
-): MorphSubjectRhParameters {
+): MorphSubjectRhParametersTagged {
     const params = {
-        "@type": "freesurfer.morph_subject-rh" as const,
+        "@type": "freesurfer/morph_subject-rh" as const,
         "subject_id": subject_id,
     };
     return params;
@@ -176,7 +144,6 @@ function morph_subject_rh(
 export {
       MORPH_SUBJECT_RH_METADATA,
       MorphSubjectRhOutputs,
-      MorphSubjectRhParameters,
       morph_subject_rh,
       morph_subject_rh_execute,
       morph_subject_rh_params,

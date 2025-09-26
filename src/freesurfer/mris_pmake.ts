@@ -12,7 +12,7 @@ const MRIS_PMAKE_METADATA: Metadata = {
 
 
 interface MrisPmakeParameters {
-    "@type": "freesurfer.mris_pmake";
+    "@type"?: "freesurfer/mris_pmake";
     "options_file"?: string | null | undefined;
     "working_dir"?: string | null | undefined;
     "listen_mode": boolean;
@@ -27,43 +27,11 @@ interface MrisPmakeParameters {
     "mpm_prog"?: string | null | undefined;
     "mpm_args"?: string | null | undefined;
 }
+type MrisPmakeParametersTagged = Required<Pick<MrisPmakeParameters, '@type'>> & MrisPmakeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_pmake": mris_pmake_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_pmake(...)`.
+ * Output object returned when calling `MrisPmakeParameters(...)`.
  *
  * @interface
  */
@@ -108,9 +76,9 @@ function mris_pmake_params(
     use_abs_curvs: boolean = false,
     mpm_prog: string | null = null,
     mpm_args: string | null = null,
-): MrisPmakeParameters {
+): MrisPmakeParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_pmake" as const,
+        "@type": "freesurfer/mris_pmake" as const,
         "listen_mode": listen_mode,
         "subject": subject,
         "hemisphere": hemisphere,
@@ -173,7 +141,7 @@ function mris_pmake_cargs(
             (params["working_dir"] ?? null)
         );
     }
-    if ((params["listen_mode"] ?? null)) {
+    if ((params["listen_mode"] ?? false)) {
         cargs.push("--listen");
     }
     if ((params["listen_on_port"] ?? null) !== null) {
@@ -214,7 +182,7 @@ function mris_pmake_cargs(
             (params["curve1"] ?? null)
         );
     }
-    if ((params["use_abs_curvs"] ?? null)) {
+    if ((params["use_abs_curvs"] ?? false)) {
         cargs.push("--useAbsCurvs");
     }
     if ((params["mpm_prog"] ?? null) !== null) {
@@ -330,7 +298,6 @@ function mris_pmake(
 export {
       MRIS_PMAKE_METADATA,
       MrisPmakeOutputs,
-      MrisPmakeParameters,
       mris_pmake,
       mris_pmake_execute,
       mris_pmake_params,

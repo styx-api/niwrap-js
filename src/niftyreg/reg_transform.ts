@@ -12,7 +12,7 @@ const REG_TRANSFORM_METADATA: Metadata = {
 
 
 interface RegTransformParameters {
-    "@type": "niftyreg.reg_transform";
+    "@type"?: "niftyreg/reg_transform";
     "reference_image": InputPathType;
     "cpp2def_input"?: InputPathType | null | undefined;
     "cpp2def_output"?: string | null | undefined;
@@ -42,44 +42,11 @@ interface RegTransformParameters {
     "comp_aff_2nd"?: InputPathType | null | undefined;
     "comp_aff_output"?: string | null | undefined;
 }
+type RegTransformParametersTagged = Required<Pick<RegTransformParameters, '@type'>> & RegTransformParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "niftyreg.reg_transform": reg_transform_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "niftyreg.reg_transform": reg_transform_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `reg_transform(...)`.
+ * Output object returned when calling `RegTransformParameters(...)`.
  *
  * @interface
  */
@@ -194,9 +161,9 @@ function reg_transform_params(
     comp_aff_1st: InputPathType | null = null,
     comp_aff_2nd: InputPathType | null = null,
     comp_aff_output: string | null = null,
-): RegTransformParameters {
+): RegTransformParametersTagged {
     const params = {
-        "@type": "niftyreg.reg_transform" as const,
+        "@type": "niftyreg/reg_transform" as const,
         "reference_image": reference_image,
     };
     if (cpp2def_input !== null) {
@@ -554,7 +521,6 @@ function reg_transform(
 export {
       REG_TRANSFORM_METADATA,
       RegTransformOutputs,
-      RegTransformParameters,
       reg_transform,
       reg_transform_execute,
       reg_transform_params,

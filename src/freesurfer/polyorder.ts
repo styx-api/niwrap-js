@@ -12,48 +12,16 @@ const POLYORDER_METADATA: Metadata = {
 
 
 interface PolyorderParameters {
-    "@type": "freesurfer.polyorder";
+    "@type"?: "freesurfer/polyorder";
     "ntp": number;
     "tr": number;
     "cutoff": number;
 }
+type PolyorderParametersTagged = Required<Pick<PolyorderParameters, '@type'>> & PolyorderParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.polyorder": polyorder_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `polyorder(...)`.
+ * Output object returned when calling `PolyorderParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function polyorder_params(
     ntp: number,
     tr: number,
     cutoff: number,
-): PolyorderParameters {
+): PolyorderParametersTagged {
     const params = {
-        "@type": "freesurfer.polyorder" as const,
+        "@type": "freesurfer/polyorder" as const,
         "ntp": ntp,
         "tr": tr,
         "cutoff": cutoff,
@@ -196,7 +164,6 @@ function polyorder(
 export {
       POLYORDER_METADATA,
       PolyorderOutputs,
-      PolyorderParameters,
       polyorder,
       polyorder_execute,
       polyorder_params,

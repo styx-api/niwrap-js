@@ -12,7 +12,7 @@ const MRI_FIELDSIGN_METADATA: Metadata = {
 
 
 interface MriFieldsignParameters {
-    "@type": "freesurfer.mri_fieldsign";
+    "@type"?: "freesurfer/mri_fieldsign";
     "fieldsign_file": string;
     "eccen_values": Array<number>;
     "polar_values": Array<number>;
@@ -38,43 +38,11 @@ interface MriFieldsignParameters {
     "help_flag": boolean;
     "version_flag": boolean;
 }
+type MriFieldsignParametersTagged = Required<Pick<MriFieldsignParameters, '@type'>> & MriFieldsignParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_fieldsign": mri_fieldsign_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_fieldsign(...)`.
+ * Output object returned when calling `MriFieldsignParameters(...)`.
  *
  * @interface
  */
@@ -141,9 +109,9 @@ function mri_fieldsign_params(
     checkopts_flag: boolean = false,
     help_flag: boolean = false,
     version_flag: boolean = false,
-): MriFieldsignParameters {
+): MriFieldsignParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_fieldsign" as const,
+        "@type": "freesurfer/mri_fieldsign" as const,
         "fieldsign_file": fieldsign_file,
         "eccen_values": eccen_values,
         "polar_values": polar_values,
@@ -233,10 +201,10 @@ function mri_fieldsign_cargs(
             (params["patch_file"] ?? null)
         );
     }
-    if ((params["occip_flag"] ?? null)) {
+    if ((params["occip_flag"] ?? false)) {
         cargs.push("--occip");
     }
-    if ((params["sphere_flag"] ?? null)) {
+    if ((params["sphere_flag"] ?? false)) {
         cargs.push("--sphere");
     }
     if ((params["fwhm"] ?? null) !== null) {
@@ -251,10 +219,10 @@ function mri_fieldsign_cargs(
             String((params["nsmooth"] ?? null))
         );
     }
-    if ((params["reverse_flag"] ?? null)) {
+    if ((params["reverse_flag"] ?? false)) {
         cargs.push("--rev");
     }
-    if ((params["old_flag"] ?? null)) {
+    if ((params["old_flag"] ?? false)) {
         cargs.push("--old");
     }
     if ((params["eccen_rotation"] ?? null) !== null) {
@@ -299,19 +267,19 @@ function mri_fieldsign_cargs(
             (params["sfa_dir"] ?? null)
         );
     }
-    if ((params["sfa_true_flag"] ?? null)) {
+    if ((params["sfa_true_flag"] ?? false)) {
         cargs.push("--sfa-true");
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["checkopts_flag"] ?? null)) {
+    if ((params["checkopts_flag"] ?? false)) {
         cargs.push("--checkopts");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version_flag"] ?? null)) {
+    if ((params["version_flag"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -437,7 +405,6 @@ function mri_fieldsign(
 export {
       MRI_FIELDSIGN_METADATA,
       MriFieldsignOutputs,
-      MriFieldsignParameters,
       mri_fieldsign,
       mri_fieldsign_execute,
       mri_fieldsign_params,

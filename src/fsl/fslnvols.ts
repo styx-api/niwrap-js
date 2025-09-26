@@ -12,46 +12,14 @@ const FSLNVOLS_METADATA: Metadata = {
 
 
 interface FslnvolsParameters {
-    "@type": "fsl.fslnvols";
+    "@type"?: "fsl/fslnvols";
     "infile": InputPathType;
 }
+type FslnvolsParametersTagged = Required<Pick<FslnvolsParameters, '@type'>> & FslnvolsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslnvols": fslnvols_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslnvols(...)`.
+ * Output object returned when calling `FslnvolsParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface FslnvolsOutputs {
  */
 function fslnvols_params(
     infile: InputPathType,
-): FslnvolsParameters {
+): FslnvolsParametersTagged {
     const params = {
-        "@type": "fsl.fslnvols" as const,
+        "@type": "fsl/fslnvols" as const,
         "infile": infile,
     };
     return params;
@@ -173,7 +141,6 @@ function fslnvols(
 export {
       FSLNVOLS_METADATA,
       FslnvolsOutputs,
-      FslnvolsParameters,
       fslnvols,
       fslnvols_execute,
       fslnvols_params,

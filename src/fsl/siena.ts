@@ -12,7 +12,7 @@ const SIENA_METADATA: Metadata = {
 
 
 interface SienaParameters {
-    "@type": "fsl.siena";
+    "@type"?: "fsl/siena";
     "input1": InputPathType;
     "input2": InputPathType;
     "output_dir"?: string | null | undefined;
@@ -27,44 +27,11 @@ interface SienaParameters {
     "ventricle_analysis_flag": boolean;
     "ventricle_mask"?: InputPathType | null | undefined;
 }
+type SienaParametersTagged = Required<Pick<SienaParameters, '@type'>> & SienaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.siena": siena_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.siena": siena_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `siena(...)`.
+ * Output object returned when calling `SienaParameters(...)`.
  *
  * @interface
  */
@@ -117,9 +84,9 @@ function siena_params(
     sienadiff_options: string | null = null,
     ventricle_analysis_flag: boolean = false,
     ventricle_mask: InputPathType | null = null,
-): SienaParameters {
+): SienaParametersTagged {
     const params = {
-        "@type": "fsl.siena" as const,
+        "@type": "fsl/siena" as const,
         "input1": input1,
         "input2": input2,
         "debug_flag": debug_flag,
@@ -172,7 +139,7 @@ function siena_cargs(
             (params["output_dir"] ?? null)
         );
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("-d");
     }
     if ((params["bet_options"] ?? null) !== null) {
@@ -181,13 +148,13 @@ function siena_cargs(
             (params["bet_options"] ?? null)
         );
     }
-    if ((params["two_class_seg_flag"] ?? null)) {
+    if ((params["two_class_seg_flag"] ?? false)) {
         cargs.push("-2");
     }
-    if ((params["t2_weighted_flag"] ?? null)) {
+    if ((params["t2_weighted_flag"] ?? false)) {
         cargs.push("-t2");
     }
-    if ((params["standard_space_mask_flag"] ?? null)) {
+    if ((params["standard_space_mask_flag"] ?? false)) {
         cargs.push("-m");
     }
     if ((params["upper_ignore"] ?? null) !== null) {
@@ -208,7 +175,7 @@ function siena_cargs(
             (params["sienadiff_options"] ?? null)
         );
     }
-    if ((params["ventricle_analysis_flag"] ?? null)) {
+    if ((params["ventricle_analysis_flag"] ?? false)) {
         cargs.push("-V");
     }
     if ((params["ventricle_mask"] ?? null) !== null) {
@@ -320,7 +287,6 @@ function siena(
 export {
       SIENA_METADATA,
       SienaOutputs,
-      SienaParameters,
       siena,
       siena_execute,
       siena_params,

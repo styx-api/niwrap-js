@@ -12,7 +12,7 @@ const GCAPREPONE_METADATA: Metadata = {
 
 
 interface GcapreponeParameters {
-    "@type": "freesurfer.gcaprepone";
+    "@type"?: "freesurfer/gcaprepone";
     "gcadir": string;
     "subject": string;
     "init_subject": boolean;
@@ -20,43 +20,11 @@ interface GcapreponeParameters {
     "done_file": string;
     "no_emreg": boolean;
 }
+type GcapreponeParametersTagged = Required<Pick<GcapreponeParameters, '@type'>> & GcapreponeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.gcaprepone": gcaprepone_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `gcaprepone(...)`.
+ * Output object returned when calling `GcapreponeParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function gcaprepone_params(
     done_file: string,
     init_subject: boolean = false,
     no_emreg: boolean = false,
-): GcapreponeParameters {
+): GcapreponeParametersTagged {
     const params = {
-        "@type": "freesurfer.gcaprepone" as const,
+        "@type": "freesurfer/gcaprepone" as const,
         "gcadir": gcadir,
         "subject": subject,
         "init_subject": init_subject,
@@ -123,7 +91,7 @@ function gcaprepone_cargs(
         "--s",
         (params["subject"] ?? null)
     );
-    if ((params["init_subject"] ?? null)) {
+    if ((params["init_subject"] ?? false)) {
         cargs.push("--init-subject");
     }
     cargs.push(
@@ -134,7 +102,7 @@ function gcaprepone_cargs(
         "--done",
         (params["done_file"] ?? null)
     );
-    if ((params["no_emreg"] ?? null)) {
+    if ((params["no_emreg"] ?? false)) {
         cargs.push("--no-emreg");
     }
     return cargs;
@@ -224,7 +192,6 @@ function gcaprepone(
 export {
       GCAPREPONE_METADATA,
       GcapreponeOutputs,
-      GcapreponeParameters,
       gcaprepone,
       gcaprepone_execute,
       gcaprepone_params,

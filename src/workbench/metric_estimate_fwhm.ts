@@ -12,53 +12,21 @@ const METRIC_ESTIMATE_FWHM_METADATA: Metadata = {
 
 
 interface MetricEstimateFwhmWholeFileParameters {
-    "@type": "workbench.metric-estimate-fwhm.whole_file";
+    "@type"?: "whole_file";
     "opt_demean": boolean;
 }
+type MetricEstimateFwhmWholeFileParametersTagged = Required<Pick<MetricEstimateFwhmWholeFileParameters, '@type'>> & MetricEstimateFwhmWholeFileParameters;
 
 
 interface MetricEstimateFwhmParameters {
-    "@type": "workbench.metric-estimate-fwhm";
+    "@type"?: "workbench/metric-estimate-fwhm";
     "surface": InputPathType;
     "metric_in": InputPathType;
     "opt_roi_roi_metric"?: InputPathType | null | undefined;
     "opt_column_column"?: string | null | undefined;
     "whole_file"?: MetricEstimateFwhmWholeFileParameters | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-estimate-fwhm": metric_estimate_fwhm_cargs,
-        "workbench.metric-estimate-fwhm.whole_file": metric_estimate_fwhm_whole_file_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type MetricEstimateFwhmParametersTagged = Required<Pick<MetricEstimateFwhmParameters, '@type'>> & MetricEstimateFwhmParameters;
 
 
 /**
@@ -70,9 +38,9 @@ function dynOutputs(
  */
 function metric_estimate_fwhm_whole_file_params(
     opt_demean: boolean = false,
-): MetricEstimateFwhmWholeFileParameters {
+): MetricEstimateFwhmWholeFileParametersTagged {
     const params = {
-        "@type": "workbench.metric-estimate-fwhm.whole_file" as const,
+        "@type": "whole_file" as const,
         "opt_demean": opt_demean,
     };
     return params;
@@ -93,7 +61,7 @@ function metric_estimate_fwhm_whole_file_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("-whole-file");
-    if ((params["opt_demean"] ?? null)) {
+    if ((params["opt_demean"] ?? false)) {
         cargs.push("-demean");
     }
     return cargs;
@@ -101,7 +69,7 @@ function metric_estimate_fwhm_whole_file_cargs(
 
 
 /**
- * Output object returned when calling `metric_estimate_fwhm(...)`.
+ * Output object returned when calling `MetricEstimateFwhmParameters(...)`.
  *
  * @interface
  */
@@ -130,9 +98,9 @@ function metric_estimate_fwhm_params(
     opt_roi_roi_metric: InputPathType | null = null,
     opt_column_column: string | null = null,
     whole_file: MetricEstimateFwhmWholeFileParameters | null = null,
-): MetricEstimateFwhmParameters {
+): MetricEstimateFwhmParametersTagged {
     const params = {
-        "@type": "workbench.metric-estimate-fwhm" as const,
+        "@type": "workbench/metric-estimate-fwhm" as const,
         "surface": surface,
         "metric_in": metric_in,
     };
@@ -179,7 +147,7 @@ function metric_estimate_fwhm_cargs(
         );
     }
     if ((params["whole_file"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["whole_file"] ?? null)["@type"])((params["whole_file"] ?? null), execution));
+        cargs.push(...metric_estimate_fwhm_whole_file_cargs((params["whole_file"] ?? null), execution));
     }
     return cargs;
 }
@@ -270,8 +238,6 @@ function metric_estimate_fwhm(
 export {
       METRIC_ESTIMATE_FWHM_METADATA,
       MetricEstimateFwhmOutputs,
-      MetricEstimateFwhmParameters,
-      MetricEstimateFwhmWholeFileParameters,
       metric_estimate_fwhm,
       metric_estimate_fwhm_execute,
       metric_estimate_fwhm_params,

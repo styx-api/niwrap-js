@@ -12,7 +12,7 @@ const MRIS_MEF_SURFACES_METADATA: Metadata = {
 
 
 interface MrisMefSurfacesParameters {
-    "@type": "freesurfer.mris_mef_surfaces";
+    "@type"?: "freesurfer/mris_mef_surfaces";
     "subject_name": string;
     "hemisphere": string;
     "omit_self_intersection": boolean;
@@ -20,43 +20,11 @@ interface MrisMefSurfacesParameters {
     "average_curvature"?: number | null | undefined;
     "white_only": boolean;
 }
+type MrisMefSurfacesParametersTagged = Required<Pick<MrisMefSurfacesParameters, '@type'>> & MrisMefSurfacesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_mef_surfaces": mris_mef_surfaces_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_mef_surfaces(...)`.
+ * Output object returned when calling `MrisMefSurfacesParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function mris_mef_surfaces_params(
     curvature: boolean = false,
     average_curvature: number | null = null,
     white_only: boolean = false,
-): MrisMefSurfacesParameters {
+): MrisMefSurfacesParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_mef_surfaces" as const,
+        "@type": "freesurfer/mris_mef_surfaces" as const,
         "subject_name": subject_name,
         "hemisphere": hemisphere,
         "omit_self_intersection": omit_self_intersection,
@@ -119,10 +87,10 @@ function mris_mef_surfaces_cargs(
     cargs.push("mris_mef_surfaces");
     cargs.push((params["subject_name"] ?? null));
     cargs.push((params["hemisphere"] ?? null));
-    if ((params["omit_self_intersection"] ?? null)) {
+    if ((params["omit_self_intersection"] ?? false)) {
         cargs.push("-q");
     }
-    if ((params["curvature"] ?? null)) {
+    if ((params["curvature"] ?? false)) {
         cargs.push("-c");
     }
     if ((params["average_curvature"] ?? null) !== null) {
@@ -131,7 +99,7 @@ function mris_mef_surfaces_cargs(
             String((params["average_curvature"] ?? null))
         );
     }
-    if ((params["white_only"] ?? null)) {
+    if ((params["white_only"] ?? false)) {
         cargs.push("-whiteonly");
     }
     return cargs;
@@ -221,7 +189,6 @@ function mris_mef_surfaces(
 export {
       MRIS_MEF_SURFACES_METADATA,
       MrisMefSurfacesOutputs,
-      MrisMefSurfacesParameters,
       mris_mef_surfaces,
       mris_mef_surfaces_execute,
       mris_mef_surfaces_params,

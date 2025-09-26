@@ -12,7 +12,7 @@ const V_3D_GROUP_IN_CORR_METADATA: Metadata = {
 
 
 interface V3dGroupInCorrParameters {
-    "@type": "afni.3dGroupInCorr";
+    "@type"?: "afni/3dGroupInCorr";
     "set_a": InputPathType;
     "set_b"?: InputPathType | null | undefined;
     "apair": boolean;
@@ -42,44 +42,11 @@ interface V3dGroupInCorrParameters {
     "debug": boolean;
     "batch"?: string | null | undefined;
 }
+type V3dGroupInCorrParametersTagged = Required<Pick<V3dGroupInCorrParameters, '@type'>> & V3dGroupInCorrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dGroupInCorr": v_3d_group_in_corr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dGroupInCorr": v_3d_group_in_corr_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_group_in_corr(...)`.
+ * Output object returned when calling `V3dGroupInCorrParameters(...)`.
  *
  * @interface
  */
@@ -158,9 +125,9 @@ function v_3d_group_in_corr_params(
     very_verbose: boolean = false,
     debug: boolean = false,
     batch: string | null = null,
-): V3dGroupInCorrParameters {
+): V3dGroupInCorrParametersTagged {
     const params = {
-        "@type": "afni.3dGroupInCorr" as const,
+        "@type": "afni/3dGroupInCorr" as const,
         "set_a": set_a,
         "apair": apair,
         "pooled": pooled,
@@ -242,7 +209,7 @@ function v_3d_group_in_corr_cargs(
             execution.inputFile((params["set_b"] ?? null))
         );
     }
-    if ((params["apair"] ?? null)) {
+    if ((params["apair"] ?? false)) {
         cargs.push("-Apair");
     }
     if ((params["label_a"] ?? null) !== null) {
@@ -257,16 +224,16 @@ function v_3d_group_in_corr_cargs(
             (params["label_b"] ?? null)
         );
     }
-    if ((params["pooled"] ?? null)) {
+    if ((params["pooled"] ?? false)) {
         cargs.push("-pooled");
     }
-    if ((params["unpooled"] ?? null)) {
+    if ((params["unpooled"] ?? false)) {
         cargs.push("-unpooled");
     }
-    if ((params["paired"] ?? null)) {
+    if ((params["paired"] ?? false)) {
         cargs.push("-paired");
     }
-    if ((params["nosix"] ?? null)) {
+    if ((params["nosix"] ?? false)) {
         cargs.push("-nosix");
     }
     if ((params["covariates_file"] ?? null) !== null) {
@@ -287,13 +254,13 @@ function v_3d_group_in_corr_cargs(
             String((params["seed_radius"] ?? null))
         );
     }
-    if ((params["sendall"] ?? null)) {
+    if ((params["sendall"] ?? false)) {
         cargs.push("-sendall");
     }
-    if ((params["donocov"] ?? null)) {
+    if ((params["donocov"] ?? false)) {
         cargs.push("-donocov");
     }
-    if ((params["dospcov"] ?? null)) {
+    if ((params["dospcov"] ?? false)) {
         cargs.push("-dospcov");
     }
     if ((params["cluster"] ?? null) !== null) {
@@ -302,10 +269,10 @@ function v_3d_group_in_corr_cargs(
             (params["cluster"] ?? null)
         );
     }
-    if ((params["read"] ?? null)) {
+    if ((params["read"] ?? false)) {
         cargs.push("-read");
     }
-    if ((params["ztest"] ?? null)) {
+    if ((params["ztest"] ?? false)) {
         cargs.push("-ztest");
     }
     if ((params["ah"] ?? null) !== null) {
@@ -332,19 +299,19 @@ function v_3d_group_in_corr_cargs(
             String((params["port_bloc"] ?? null))
         );
     }
-    if ((params["suma"] ?? null)) {
+    if ((params["suma"] ?? false)) {
         cargs.push("-suma");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["very_verbose"] ?? null)) {
+    if ((params["very_verbose"] ?? false)) {
         cargs.push("-VERB");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
     if ((params["batch"] ?? null) !== null) {
@@ -484,7 +451,6 @@ function v_3d_group_in_corr(
 
 export {
       V3dGroupInCorrOutputs,
-      V3dGroupInCorrParameters,
       V_3D_GROUP_IN_CORR_METADATA,
       v_3d_group_in_corr,
       v_3d_group_in_corr_execute,

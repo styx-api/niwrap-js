@@ -12,47 +12,14 @@ const V__IS_OBLIQUE_METADATA: Metadata = {
 
 
 interface VIsObliqueParameters {
-    "@type": "afni.@isOblique";
+    "@type"?: "afni/@isOblique";
     "infile": InputPathType;
 }
+type VIsObliqueParametersTagged = Required<Pick<VIsObliqueParameters, '@type'>> & VIsObliqueParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@isOblique": v__is_oblique_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@isOblique": v__is_oblique_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__is_oblique(...)`.
+ * Output object returned when calling `VIsObliqueParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface VIsObliqueOutputs {
  */
 function v__is_oblique_params(
     infile: InputPathType,
-): VIsObliqueParameters {
+): VIsObliqueParametersTagged {
     const params = {
-        "@type": "afni.@isOblique" as const,
+        "@type": "afni/@isOblique" as const,
         "infile": infile,
     };
     return params;
@@ -178,7 +145,6 @@ function v__is_oblique(
 
 export {
       VIsObliqueOutputs,
-      VIsObliqueParameters,
       V__IS_OBLIQUE_METADATA,
       v__is_oblique,
       v__is_oblique_execute,

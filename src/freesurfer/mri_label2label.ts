@@ -12,7 +12,7 @@ const MRI_LABEL2LABEL_METADATA: Metadata = {
 
 
 interface MriLabel2labelParameters {
-    "@type": "freesurfer.mri_label2label";
+    "@type"?: "freesurfer/mri_label2label";
     "src_label": InputPathType;
     "trg_label": string;
     "erode"?: number | null | undefined;
@@ -60,43 +60,11 @@ interface MriLabel2labelParameters {
     "to_tkr"?: string | null | undefined;
     "scanner": boolean;
 }
+type MriLabel2labelParametersTagged = Required<Pick<MriLabel2labelParameters, '@type'>> & MriLabel2labelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_label2label": mri_label2label_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_label2label(...)`.
+ * Output object returned when calling `MriLabel2labelParameters(...)`.
  *
  * @interface
  */
@@ -207,9 +175,9 @@ function mri_label2label_params(
     to_scanner: string | null = null,
     to_tkr: string | null = null,
     scanner: boolean = false,
-): MriLabel2labelParameters {
+): MriLabel2labelParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_label2label" as const,
+        "@type": "freesurfer/mri_label2label" as const,
         "src_label": src_label,
         "trg_label": trg_label,
         "usepathfiles": usepathfiles,
@@ -433,7 +401,7 @@ function mri_label2label_cargs(
             (params["regmethod"] ?? null)
         );
     }
-    if ((params["usepathfiles"] ?? null)) {
+    if ((params["usepathfiles"] ?? false)) {
         cargs.push("--usepathfiles");
     }
     if ((params["hemi"] ?? null) !== null) {
@@ -568,7 +536,7 @@ function mri_label2label_cargs(
             (params["reg"] ?? null)
         );
     }
-    if ((params["xfm_invert"] ?? null)) {
+    if ((params["xfm_invert"] ?? false)) {
         cargs.push("--xfm-invert");
     }
     if ((params["projabs"] ?? null) !== null) {
@@ -589,10 +557,10 @@ function mri_label2label_cargs(
             (params["sd"] ?? null)
         );
     }
-    if ((params["nohash"] ?? null)) {
+    if ((params["nohash"] ?? false)) {
         cargs.push("--nohash");
     }
-    if ((params["norevmap"] ?? null)) {
+    if ((params["norevmap"] ?? false)) {
         cargs.push("--norevmap");
     }
     if ((params["to_scanner"] ?? null) !== null) {
@@ -607,7 +575,7 @@ function mri_label2label_cargs(
             (params["to_tkr"] ?? null)
         );
     }
-    if ((params["scanner"] ?? null)) {
+    if ((params["scanner"] ?? false)) {
         cargs.push("--scanner");
     }
     return cargs;
@@ -777,7 +745,6 @@ function mri_label2label(
 export {
       MRI_LABEL2LABEL_METADATA,
       MriLabel2labelOutputs,
-      MriLabel2labelParameters,
       mri_label2label,
       mri_label2label_execute,
       mri_label2label_params,

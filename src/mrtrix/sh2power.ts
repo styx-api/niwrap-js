@@ -12,14 +12,15 @@ const SH2POWER_METADATA: Metadata = {
 
 
 interface Sh2powerConfigParameters {
-    "@type": "mrtrix.sh2power.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Sh2powerConfigParametersTagged = Required<Pick<Sh2powerConfigParameters, '@type'>> & Sh2powerConfigParameters;
 
 
 interface Sh2powerParameters {
-    "@type": "mrtrix.sh2power";
+    "@type"?: "mrtrix/sh2power";
     "spectrum": boolean;
     "info": boolean;
     "quiet": boolean;
@@ -32,41 +33,7 @@ interface Sh2powerParameters {
     "SH": InputPathType;
     "power": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.sh2power": sh2power_cargs,
-        "mrtrix.sh2power.config": sh2power_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.sh2power": sh2power_outputs,
-    };
-    return outputsFuncs[t];
-}
+type Sh2powerParametersTagged = Required<Pick<Sh2powerParameters, '@type'>> & Sh2powerParameters;
 
 
 /**
@@ -80,9 +47,9 @@ function dynOutputs(
 function sh2power_config_params(
     key: string,
     value: string,
-): Sh2powerConfigParameters {
+): Sh2powerConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.sh2power.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -111,7 +78,7 @@ function sh2power_config_cargs(
 
 
 /**
- * Output object returned when calling `sh2power(...)`.
+ * Output object returned when calling `Sh2powerParameters(...)`.
  *
  * @interface
  */
@@ -156,9 +123,9 @@ function sh2power_params(
     config: Array<Sh2powerConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Sh2powerParameters {
+): Sh2powerParametersTagged {
     const params = {
-        "@type": "mrtrix.sh2power" as const,
+        "@type": "mrtrix/sh2power" as const,
         "spectrum": spectrum,
         "info": info,
         "quiet": quiet,
@@ -193,19 +160,19 @@ function sh2power_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("sh2power");
-    if ((params["spectrum"] ?? null)) {
+    if ((params["spectrum"] ?? false)) {
         cargs.push("-spectrum");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -215,12 +182,12 @@ function sh2power_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => sh2power_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["SH"] ?? null)));
@@ -340,9 +307,7 @@ function sh2power(
 
 export {
       SH2POWER_METADATA,
-      Sh2powerConfigParameters,
       Sh2powerOutputs,
-      Sh2powerParameters,
       sh2power,
       sh2power_config_params,
       sh2power_execute,

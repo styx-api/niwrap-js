@@ -12,7 +12,7 @@ const V_3D_THREETO_RGB_METADATA: Metadata = {
 
 
 interface V3dThreetoRgbParameters {
-    "@type": "afni.3dThreetoRGB";
+    "@type"?: "afni/3dThreetoRGB";
     "output_prefix"?: string | null | undefined;
     "scale_factor"?: number | null | undefined;
     "mask_dataset"?: InputPathType | null | undefined;
@@ -22,44 +22,11 @@ interface V3dThreetoRgbParameters {
     "input_dataset2"?: InputPathType | null | undefined;
     "input_dataset3"?: InputPathType | null | undefined;
 }
+type V3dThreetoRgbParametersTagged = Required<Pick<V3dThreetoRgbParameters, '@type'>> & V3dThreetoRgbParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dThreetoRGB": v_3d_threeto_rgb_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dThreetoRGB": v_3d_threeto_rgb_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_threeto_rgb(...)`.
+ * Output object returned when calling `V3dThreetoRgbParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +69,9 @@ function v_3d_threeto_rgb_params(
     anat: boolean = false,
     input_dataset2: InputPathType | null = null,
     input_dataset3: InputPathType | null = null,
-): V3dThreetoRgbParameters {
+): V3dThreetoRgbParametersTagged {
     const params = {
-        "@type": "afni.3dThreetoRGB" as const,
+        "@type": "afni/3dThreetoRGB" as const,
         "fim": fim,
         "anat": anat,
         "input_dataset": input_dataset,
@@ -160,10 +127,10 @@ function v_3d_threeto_rgb_cargs(
             execution.inputFile((params["mask_dataset"] ?? null))
         );
     }
-    if ((params["fim"] ?? null)) {
+    if ((params["fim"] ?? false)) {
         cargs.push("-fim");
     }
-    if ((params["anat"] ?? null)) {
+    if ((params["anat"] ?? false)) {
         cargs.push("-anat");
     }
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
@@ -265,7 +232,6 @@ function v_3d_threeto_rgb(
 
 export {
       V3dThreetoRgbOutputs,
-      V3dThreetoRgbParameters,
       V_3D_THREETO_RGB_METADATA,
       v_3d_threeto_rgb,
       v_3d_threeto_rgb_execute,

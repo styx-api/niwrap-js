@@ -12,7 +12,7 @@ const MRI_AVERAGE_METADATA: Metadata = {
 
 
 interface MriAverageParameters {
-    "@type": "freesurfer.mri_average";
+    "@type"?: "freesurfer/mri_average";
     "input_volumes": Array<InputPathType>;
     "output_volume": string;
     "rigid_alignment": boolean;
@@ -35,44 +35,11 @@ interface MriAverageParameters {
     "binarize"?: number | null | undefined;
     "absolute": boolean;
 }
+type MriAverageParametersTagged = Required<Pick<MriAverageParameters, '@type'>> & MriAverageParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_average": mri_average_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_average": mri_average_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_average(...)`.
+ * Output object returned when calling `MriAverageParameters(...)`.
  *
  * @interface
  */
@@ -137,9 +104,9 @@ function mri_average_params(
     percent: boolean = false,
     binarize: number | null = null,
     absolute: boolean = false,
-): MriAverageParameters {
+): MriAverageParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_average" as const,
+        "@type": "freesurfer/mri_average" as const,
         "input_volumes": input_volumes,
         "output_volume": output_volume,
         "rigid_alignment": rigid_alignment,
@@ -200,10 +167,10 @@ function mri_average_cargs(
     cargs.push("mri_average");
     cargs.push(...(params["input_volumes"] ?? null).map(f => execution.inputFile(f)));
     cargs.push((params["output_volume"] ?? null));
-    if ((params["rigid_alignment"] ?? null)) {
+    if ((params["rigid_alignment"] ?? false)) {
         cargs.push("-a");
     }
-    if ((params["read_from_file"] ?? null)) {
+    if ((params["read_from_file"] ?? false)) {
         cargs.push("-F");
     }
     if ((params["dt"] ?? null) !== null) {
@@ -218,10 +185,10 @@ function mri_average_cargs(
             String((params["tol"] ?? null))
         );
     }
-    if ((params["conform"] ?? null)) {
+    if ((params["conform"] ?? false)) {
         cargs.push("-conform");
     }
-    if ((params["noconform"] ?? null)) {
+    if ((params["noconform"] ?? false)) {
         cargs.push("-noconform");
     }
     if ((params["reduce"] ?? null) !== null) {
@@ -236,10 +203,10 @@ function mri_average_cargs(
             String((params["sinc_interpolation"] ?? null))
         );
     }
-    if ((params["trilinear"] ?? null)) {
+    if ((params["trilinear"] ?? false)) {
         cargs.push("-trilinear");
     }
-    if ((params["window"] ?? null)) {
+    if ((params["window"] ?? false)) {
         cargs.push("-window");
     }
     if ((params["snapshots"] ?? null) !== null) {
@@ -266,13 +233,13 @@ function mri_average_cargs(
             String((params["momentum"] ?? null))
         );
     }
-    if ((params["rms"] ?? null)) {
+    if ((params["rms"] ?? false)) {
         cargs.push("-sqr");
     }
-    if ((params["rms_alt"] ?? null)) {
+    if ((params["rms_alt"] ?? false)) {
         cargs.push("-rms");
     }
-    if ((params["percent"] ?? null)) {
+    if ((params["percent"] ?? false)) {
         cargs.push("-p");
     }
     if ((params["binarize"] ?? null) !== null) {
@@ -281,7 +248,7 @@ function mri_average_cargs(
             String((params["binarize"] ?? null))
         );
     }
-    if ((params["absolute"] ?? null)) {
+    if ((params["absolute"] ?? false)) {
         cargs.push("-abs");
     }
     return cargs;
@@ -402,7 +369,6 @@ function mri_average(
 export {
       MRI_AVERAGE_METADATA,
       MriAverageOutputs,
-      MriAverageParameters,
       mri_average,
       mri_average_execute,
       mri_average_params,

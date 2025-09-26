@@ -12,49 +12,17 @@ const MRI_MI_METADATA: Metadata = {
 
 
 interface MriMiParameters {
-    "@type": "freesurfer.mri_mi";
+    "@type"?: "freesurfer/mri_mi";
     "input_file1": InputPathType;
     "input_file2": InputPathType;
     "bins"?: string | null | undefined;
     "silent": boolean;
 }
+type MriMiParametersTagged = Required<Pick<MriMiParameters, '@type'>> & MriMiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_mi": mri_mi_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_mi(...)`.
+ * Output object returned when calling `MriMiParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function mri_mi_params(
     input_file2: InputPathType,
     bins: string | null = null,
     silent: boolean = false,
-): MriMiParameters {
+): MriMiParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_mi" as const,
+        "@type": "freesurfer/mri_mi" as const,
         "input_file1": input_file1,
         "input_file2": input_file2,
         "silent": silent,
@@ -117,7 +85,7 @@ function mri_mi_cargs(
             (params["bins"] ?? null)
         );
     }
-    if ((params["silent"] ?? null)) {
+    if ((params["silent"] ?? false)) {
         cargs.push("--silent");
     }
     return cargs;
@@ -203,7 +171,6 @@ function mri_mi(
 export {
       MRI_MI_METADATA,
       MriMiOutputs,
-      MriMiParameters,
       mri_mi,
       mri_mi_execute,
       mri_mi_params,

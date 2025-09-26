@@ -12,46 +12,14 @@ const REG2SUBJECT_METADATA: Metadata = {
 
 
 interface Reg2subjectParameters {
-    "@type": "freesurfer.reg2subject";
+    "@type"?: "freesurfer/reg2subject";
     "regfile": InputPathType;
 }
+type Reg2subjectParametersTagged = Required<Pick<Reg2subjectParameters, '@type'>> & Reg2subjectParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.reg2subject": reg2subject_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `reg2subject(...)`.
+ * Output object returned when calling `Reg2subjectParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface Reg2subjectOutputs {
  */
 function reg2subject_params(
     regfile: InputPathType,
-): Reg2subjectParameters {
+): Reg2subjectParametersTagged {
     const params = {
-        "@type": "freesurfer.reg2subject" as const,
+        "@type": "freesurfer/reg2subject" as const,
         "regfile": regfile,
     };
     return params;
@@ -176,7 +144,6 @@ function reg2subject(
 export {
       REG2SUBJECT_METADATA,
       Reg2subjectOutputs,
-      Reg2subjectParameters,
       reg2subject,
       reg2subject_execute,
       reg2subject_params,

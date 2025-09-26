@@ -12,7 +12,7 @@ const MRI_FUNCVITS_METADATA: Metadata = {
 
 
 interface MriFuncvitsParameters {
-    "@type": "freesurfer.mri-funcvits";
+    "@type"?: "freesurfer/mri-funcvits";
     "stem": string;
     "outdir": string;
     "reg"?: string | null | undefined;
@@ -26,43 +26,11 @@ interface MriFuncvitsParameters {
     "mail"?: string | null | undefined;
     "noforce": boolean;
 }
+type MriFuncvitsParametersTagged = Required<Pick<MriFuncvitsParameters, '@type'>> & MriFuncvitsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri-funcvits": mri_funcvits_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_funcvits(...)`.
+ * Output object returned when calling `MriFuncvitsParameters(...)`.
  *
  * @interface
  */
@@ -105,9 +73,9 @@ function mri_funcvits_params(
     umask: string | null = null,
     mail: string | null = null,
     noforce: boolean = false,
-): MriFuncvitsParameters {
+): MriFuncvitsParametersTagged {
     const params = {
-        "@type": "freesurfer.mri-funcvits" as const,
+        "@type": "freesurfer/mri-funcvits" as const,
         "stem": stem,
         "outdir": outdir,
         "noforce": noforce,
@@ -219,7 +187,7 @@ function mri_funcvits_cargs(
             (params["mail"] ?? null)
         );
     }
-    if ((params["noforce"] ?? null)) {
+    if ((params["noforce"] ?? false)) {
         cargs.push("--noforce");
     }
     return cargs;
@@ -321,7 +289,6 @@ function mri_funcvits(
 export {
       MRI_FUNCVITS_METADATA,
       MriFuncvitsOutputs,
-      MriFuncvitsParameters,
       mri_funcvits,
       mri_funcvits_execute,
       mri_funcvits_params,

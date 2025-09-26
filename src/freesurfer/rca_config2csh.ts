@@ -12,46 +12,14 @@ const RCA_CONFIG2CSH_METADATA: Metadata = {
 
 
 interface RcaConfig2cshParameters {
-    "@type": "freesurfer.rca-config2csh";
+    "@type"?: "freesurfer/rca-config2csh";
     "configfile": InputPathType;
 }
+type RcaConfig2cshParametersTagged = Required<Pick<RcaConfig2cshParameters, '@type'>> & RcaConfig2cshParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.rca-config2csh": rca_config2csh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `rca_config2csh(...)`.
+ * Output object returned when calling `RcaConfig2cshParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface RcaConfig2cshOutputs {
  */
 function rca_config2csh_params(
     configfile: InputPathType,
-): RcaConfig2cshParameters {
+): RcaConfig2cshParametersTagged {
     const params = {
-        "@type": "freesurfer.rca-config2csh" as const,
+        "@type": "freesurfer/rca-config2csh" as const,
         "configfile": configfile,
     };
     return params;
@@ -176,7 +144,6 @@ function rca_config2csh(
 export {
       RCA_CONFIG2CSH_METADATA,
       RcaConfig2cshOutputs,
-      RcaConfig2cshParameters,
       rca_config2csh,
       rca_config2csh_execute,
       rca_config2csh_params,

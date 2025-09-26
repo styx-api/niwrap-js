@@ -12,51 +12,18 @@ const SURF_RETINO_MAP_METADATA: Metadata = {
 
 
 interface SurfRetinoMapParameters {
-    "@type": "afni.SurfRetinoMap";
+    "@type"?: "afni/SurfRetinoMap";
     "surface": string;
     "polar": string;
     "eccentricity": string;
     "prefix"?: string | null | undefined;
     "node_debug"?: number | null | undefined;
 }
+type SurfRetinoMapParametersTagged = Required<Pick<SurfRetinoMapParameters, '@type'>> & SurfRetinoMapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.SurfRetinoMap": surf_retino_map_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.SurfRetinoMap": surf_retino_map_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surf_retino_map(...)`.
+ * Output object returned when calling `SurfRetinoMapParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +60,9 @@ function surf_retino_map_params(
     eccentricity: string,
     prefix: string | null = null,
     node_debug: number | null = null,
-): SurfRetinoMapParameters {
+): SurfRetinoMapParametersTagged {
     const params = {
-        "@type": "afni.SurfRetinoMap" as const,
+        "@type": "afni/SurfRetinoMap" as const,
         "surface": surface,
         "polar": polar,
         "eccentricity": eccentricity,
@@ -226,7 +193,6 @@ function surf_retino_map(
 export {
       SURF_RETINO_MAP_METADATA,
       SurfRetinoMapOutputs,
-      SurfRetinoMapParameters,
       surf_retino_map,
       surf_retino_map_execute,
       surf_retino_map_params,

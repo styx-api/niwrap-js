@@ -12,51 +12,18 @@ const MRIS_NUDGE_METADATA: Metadata = {
 
 
 interface MrisNudgeParameters {
-    "@type": "freesurfer.mris_nudge";
+    "@type"?: "freesurfer/mris_nudge";
     "input_surface": InputPathType;
     "input_volume": InputPathType;
     "vertex": number;
     "target_val": number;
     "nbhd": number;
 }
+type MrisNudgeParametersTagged = Required<Pick<MrisNudgeParameters, '@type'>> & MrisNudgeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_nudge": mris_nudge_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_nudge": mris_nudge_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_nudge(...)`.
+ * Output object returned when calling `MrisNudgeParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function mris_nudge_params(
     vertex: number,
     target_val: number,
     nbhd: number,
-): MrisNudgeParameters {
+): MrisNudgeParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_nudge" as const,
+        "@type": "freesurfer/mris_nudge" as const,
         "input_surface": input_surface,
         "input_volume": input_volume,
         "vertex": vertex,
@@ -207,7 +174,6 @@ function mris_nudge(
 export {
       MRIS_NUDGE_METADATA,
       MrisNudgeOutputs,
-      MrisNudgeParameters,
       mris_nudge,
       mris_nudge_execute,
       mris_nudge_params,

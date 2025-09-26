@@ -12,7 +12,7 @@ const MRI_CONCAT_METADATA: Metadata = {
 
 
 interface MriConcatParameters {
-    "@type": "freesurfer.mri_concat";
+    "@type"?: "freesurfer/mri_concat";
     "input_files": Array<InputPathType>;
     "output_file": string;
     "file_list"?: string | null | undefined;
@@ -62,43 +62,11 @@ interface MriConcatParameters {
     "rms": boolean;
     "no_check": boolean;
 }
+type MriConcatParametersTagged = Required<Pick<MriConcatParameters, '@type'>> & MriConcatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_concat": mri_concat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_concat(...)`.
+ * Output object returned when calling `MriConcatParameters(...)`.
  *
  * @interface
  */
@@ -213,9 +181,9 @@ function mri_concat_params(
     mask_file: InputPathType | null = null,
     rms: boolean = false,
     no_check: boolean = false,
-): MriConcatParameters {
+): MriConcatParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_concat" as const,
+        "@type": "freesurfer/mri_concat" as const,
         "input_files": input_files,
         "output_file": output_file,
         "paired_sum": paired_sum,
@@ -318,28 +286,28 @@ function mri_concat_cargs(
             (params["file_list"] ?? null)
         );
     }
-    if ((params["paired_sum"] ?? null)) {
+    if ((params["paired_sum"] ?? false)) {
         cargs.push("--paired-sum");
     }
-    if ((params["paired_avg"] ?? null)) {
+    if ((params["paired_avg"] ?? false)) {
         cargs.push("--paired-avg");
     }
-    if ((params["paired_diff"] ?? null)) {
+    if ((params["paired_diff"] ?? false)) {
         cargs.push("--paired-diff");
     }
-    if ((params["paired_diff_norm"] ?? null)) {
+    if ((params["paired_diff_norm"] ?? false)) {
         cargs.push("--paired-diff-norm");
     }
-    if ((params["paired_diff_norm1"] ?? null)) {
+    if ((params["paired_diff_norm1"] ?? false)) {
         cargs.push("--paired-diff-norm1");
     }
-    if ((params["paired_diff_norm2"] ?? null)) {
+    if ((params["paired_diff_norm2"] ?? false)) {
         cargs.push("--paired-diff-norm2");
     }
-    if ((params["norm_mean"] ?? null)) {
+    if ((params["norm_mean"] ?? false)) {
         cargs.push("--norm-mean");
     }
-    if ((params["norm1"] ?? null)) {
+    if ((params["norm1"] ?? false)) {
         cargs.push("--norm1");
     }
     if ((params["matrix"] ?? null) !== null) {
@@ -354,7 +322,7 @@ function mri_concat_cargs(
             execution.inputFile((params["frame_weight"] ?? null))
         );
     }
-    if ((params["norm_weight"] ?? null)) {
+    if ((params["norm_weight"] ?? false)) {
         cargs.push("--wn");
     }
     if ((params["group_mean"] ?? null) !== null) {
@@ -363,46 +331,46 @@ function mri_concat_cargs(
             String((params["group_mean"] ?? null))
         );
     }
-    if ((params["combine"] ?? null)) {
+    if ((params["combine"] ?? false)) {
         cargs.push("--combine");
     }
-    if ((params["keep_datatype"] ?? null)) {
+    if ((params["keep_datatype"] ?? false)) {
         cargs.push("--keep-datatype");
     }
-    if ((params["abs"] ?? null)) {
+    if ((params["abs"] ?? false)) {
         cargs.push("--abs");
     }
-    if ((params["pos"] ?? null)) {
+    if ((params["pos"] ?? false)) {
         cargs.push("--pos");
     }
-    if ((params["neg"] ?? null)) {
+    if ((params["neg"] ?? false)) {
         cargs.push("--neg");
     }
-    if ((params["mean"] ?? null)) {
+    if ((params["mean"] ?? false)) {
         cargs.push("--mean");
     }
-    if ((params["median"] ?? null)) {
+    if ((params["median"] ?? false)) {
         cargs.push("--median");
     }
-    if ((params["mean_div_n"] ?? null)) {
+    if ((params["mean_div_n"] ?? false)) {
         cargs.push("--mean-div-n");
     }
-    if ((params["sum"] ?? null)) {
+    if ((params["sum"] ?? false)) {
         cargs.push("--sum");
     }
-    if ((params["var"] ?? null)) {
+    if ((params["var"] ?? false)) {
         cargs.push("--var");
     }
-    if ((params["std"] ?? null)) {
+    if ((params["std"] ?? false)) {
         cargs.push("--std");
     }
-    if ((params["max"] ?? null)) {
+    if ((params["max"] ?? false)) {
         cargs.push("--max");
     }
-    if ((params["max_index"] ?? null)) {
+    if ((params["max_index"] ?? false)) {
         cargs.push("--max-index");
     }
-    if ((params["max_index_prune"] ?? null)) {
+    if ((params["max_index_prune"] ?? false)) {
         cargs.push("--max-index-prune");
     }
     if ((params["max_index_add"] ?? null) !== null) {
@@ -411,7 +379,7 @@ function mri_concat_cargs(
             String((params["max_index_add"] ?? null))
         );
     }
-    if ((params["min"] ?? null)) {
+    if ((params["min"] ?? false)) {
         cargs.push("--min");
     }
     if ((params["replicate_times"] ?? null) !== null) {
@@ -420,16 +388,16 @@ function mri_concat_cargs(
             String((params["replicate_times"] ?? null))
         );
     }
-    if ((params["fnorm"] ?? null)) {
+    if ((params["fnorm"] ?? false)) {
         cargs.push("--fnorm");
     }
-    if ((params["conjunction"] ?? null)) {
+    if ((params["conjunction"] ?? false)) {
         cargs.push("--conjunct");
     }
-    if ((params["vote"] ?? null)) {
+    if ((params["vote"] ?? false)) {
         cargs.push("--vote");
     }
-    if ((params["sort"] ?? null)) {
+    if ((params["sort"] ?? false)) {
         cargs.push("--sort");
     }
     if ((params["temporal_ar1"] ?? null) !== null) {
@@ -438,10 +406,10 @@ function mri_concat_cargs(
             String((params["temporal_ar1"] ?? null))
         );
     }
-    if ((params["prune"] ?? null)) {
+    if ((params["prune"] ?? false)) {
         cargs.push("--prune");
     }
-    if ((params["pca"] ?? null)) {
+    if ((params["pca"] ?? false)) {
         cargs.push("--pca");
     }
     if ((params["pca_mask"] ?? null) !== null) {
@@ -450,7 +418,7 @@ function mri_concat_cargs(
             execution.inputFile((params["pca_mask"] ?? null))
         );
     }
-    if ((params["scm"] ?? null)) {
+    if ((params["scm"] ?? false)) {
         cargs.push("--scm");
     }
     if ((params["zconcat"] ?? null) !== null) {
@@ -459,7 +427,7 @@ function mri_concat_cargs(
             (params["zconcat"] ?? null)
         );
     }
-    if ((params["max_bonfcor"] ?? null)) {
+    if ((params["max_bonfcor"] ?? false)) {
         cargs.push("--max-bonfcor");
     }
     if ((params["multiply"] ?? null) !== null) {
@@ -480,10 +448,10 @@ function mri_concat_cargs(
             execution.inputFile((params["mask_file"] ?? null))
         );
     }
-    if ((params["rms"] ?? null)) {
+    if ((params["rms"] ?? false)) {
         cargs.push("--rms");
     }
-    if ((params["no_check"] ?? null)) {
+    if ((params["no_check"] ?? false)) {
         cargs.push("--no-check");
     }
     return cargs;
@@ -657,7 +625,6 @@ function mri_concat(
 export {
       MRI_CONCAT_METADATA,
       MriConcatOutputs,
-      MriConcatParameters,
       mri_concat,
       mri_concat_execute,
       mri_concat_params,

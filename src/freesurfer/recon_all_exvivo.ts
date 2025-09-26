@@ -12,48 +12,16 @@ const RECON_ALL_EXVIVO_METADATA: Metadata = {
 
 
 interface ReconAllExvivoParameters {
-    "@type": "freesurfer.recon-all-exvivo";
+    "@type"?: "freesurfer/recon-all-exvivo";
     "subject_id": string;
     "hemisphere"?: string | null | undefined;
     "nocerebellum": boolean;
 }
+type ReconAllExvivoParametersTagged = Required<Pick<ReconAllExvivoParameters, '@type'>> & ReconAllExvivoParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.recon-all-exvivo": recon_all_exvivo_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `recon_all_exvivo(...)`.
+ * Output object returned when calling `ReconAllExvivoParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function recon_all_exvivo_params(
     subject_id: string,
     hemisphere: string | null = null,
     nocerebellum: boolean = false,
-): ReconAllExvivoParameters {
+): ReconAllExvivoParametersTagged {
     const params = {
-        "@type": "freesurfer.recon-all-exvivo" as const,
+        "@type": "freesurfer/recon-all-exvivo" as const,
         "subject_id": subject_id,
         "nocerebellum": nocerebellum,
     };
@@ -115,7 +83,7 @@ function recon_all_exvivo_cargs(
             (params["hemisphere"] ?? null)
         );
     }
-    if ((params["nocerebellum"] ?? null)) {
+    if ((params["nocerebellum"] ?? false)) {
         cargs.push("-nocerebellum");
     }
     return cargs;
@@ -199,7 +167,6 @@ function recon_all_exvivo(
 export {
       RECON_ALL_EXVIVO_METADATA,
       ReconAllExvivoOutputs,
-      ReconAllExvivoParameters,
       recon_all_exvivo,
       recon_all_exvivo_execute,
       recon_all_exvivo_params,

@@ -12,7 +12,7 @@ const V_1D_CORRELATE_METADATA: Metadata = {
 
 
 interface V1dCorrelateParameters {
-    "@type": "afni.1dCorrelate";
+    "@type"?: "afni/1dCorrelate";
     "ktaub": boolean;
     "nboot"?: number | null | undefined;
     "alpha"?: number | null | undefined;
@@ -23,43 +23,11 @@ interface V1dCorrelateParameters {
     "quadrant": boolean;
     "input_files": Array<InputPathType>;
 }
+type V1dCorrelateParametersTagged = Required<Pick<V1dCorrelateParameters, '@type'>> & V1dCorrelateParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dCorrelate": v_1d_correlate_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1d_correlate(...)`.
+ * Output object returned when calling `V1dCorrelateParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +64,9 @@ function v_1d_correlate_params(
     pearson: boolean = false,
     spearman: boolean = false,
     quadrant: boolean = false,
-): V1dCorrelateParameters {
+): V1dCorrelateParametersTagged {
     const params = {
-        "@type": "afni.1dCorrelate" as const,
+        "@type": "afni/1dCorrelate" as const,
         "ktaub": ktaub,
         "block": block,
         "blk": blk,
@@ -131,7 +99,7 @@ function v_1d_correlate_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("1dCorrelate");
-    if ((params["ktaub"] ?? null)) {
+    if ((params["ktaub"] ?? false)) {
         cargs.push("-Ktaub");
     }
     if ((params["nboot"] ?? null) !== null) {
@@ -146,19 +114,19 @@ function v_1d_correlate_cargs(
             String((params["alpha"] ?? null))
         );
     }
-    if ((params["block"] ?? null)) {
+    if ((params["block"] ?? false)) {
         cargs.push("-block");
     }
-    if ((params["blk"] ?? null)) {
+    if ((params["blk"] ?? false)) {
         cargs.push("-blk");
     }
-    if ((params["pearson"] ?? null)) {
+    if ((params["pearson"] ?? false)) {
         cargs.push("-Pearson");
     }
-    if ((params["spearman"] ?? null)) {
+    if ((params["spearman"] ?? false)) {
         cargs.push("-Spearman");
     }
-    if ((params["quadrant"] ?? null)) {
+    if ((params["quadrant"] ?? false)) {
         cargs.push("-Quadrant");
     }
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
@@ -254,7 +222,6 @@ function v_1d_correlate(
 
 export {
       V1dCorrelateOutputs,
-      V1dCorrelateParameters,
       V_1D_CORRELATE_METADATA,
       v_1d_correlate,
       v_1d_correlate_execute,

@@ -12,14 +12,15 @@ const MRMETRIC_METADATA: Metadata = {
 
 
 interface MrmetricConfigParameters {
-    "@type": "mrtrix.mrmetric.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MrmetricConfigParametersTagged = Required<Pick<MrmetricConfigParameters, '@type'>> & MrmetricConfigParameters;
 
 
 interface MrmetricParameters {
-    "@type": "mrtrix.mrmetric";
+    "@type"?: "mrtrix/mrmetric";
     "space"?: string | null | undefined;
     "interp"?: string | null | undefined;
     "metric"?: string | null | undefined;
@@ -38,40 +39,7 @@ interface MrmetricParameters {
     "image1": InputPathType;
     "image2": InputPathType;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.mrmetric": mrmetric_cargs,
-        "mrtrix.mrmetric.config": mrmetric_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type MrmetricParametersTagged = Required<Pick<MrmetricParameters, '@type'>> & MrmetricParameters;
 
 
 /**
@@ -85,9 +53,9 @@ function dynOutputs(
 function mrmetric_config_params(
     key: string,
     value: string,
-): MrmetricConfigParameters {
+): MrmetricConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.mrmetric.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -116,7 +84,7 @@ function mrmetric_config_cargs(
 
 
 /**
- * Output object returned when calling `mrmetric(...)`.
+ * Output object returned when calling `MrmetricParameters(...)`.
  *
  * @interface
  */
@@ -169,9 +137,9 @@ function mrmetric_params(
     config: Array<MrmetricConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrmetricParameters {
+): MrmetricParametersTagged {
     const params = {
-        "@type": "mrtrix.mrmetric" as const,
+        "@type": "mrtrix/mrmetric" as const,
         "nonormalisation": nonormalisation,
         "overlap": overlap,
         "info": info,
@@ -252,22 +220,22 @@ function mrmetric_cargs(
             execution.inputFile((params["mask2"] ?? null))
         );
     }
-    if ((params["nonormalisation"] ?? null)) {
+    if ((params["nonormalisation"] ?? false)) {
         cargs.push("-nonormalisation");
     }
-    if ((params["overlap"] ?? null)) {
+    if ((params["overlap"] ?? false)) {
         cargs.push("-overlap");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -277,12 +245,12 @@ function mrmetric_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => mrmetric_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["image1"] ?? null)));
@@ -407,9 +375,7 @@ function mrmetric(
 
 export {
       MRMETRIC_METADATA,
-      MrmetricConfigParameters,
       MrmetricOutputs,
-      MrmetricParameters,
       mrmetric,
       mrmetric_config_params,
       mrmetric_execute,

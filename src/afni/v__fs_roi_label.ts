@@ -12,7 +12,7 @@ const V__FS_ROI_LABEL_METADATA: Metadata = {
 
 
 interface VFsRoiLabelParameters {
-    "@type": "afni.@FS_roi_label";
+    "@type"?: "afni/@FS_roi_label";
     "label_int"?: number | null | undefined;
     "lab_flag"?: number | null | undefined;
     "rank_int"?: number | null | undefined;
@@ -23,43 +23,11 @@ interface VFsRoiLabelParameters {
     "slab_int"?: number | null | undefined;
     "sname_name"?: string | null | undefined;
 }
+type VFsRoiLabelParametersTagged = Required<Pick<VFsRoiLabelParameters, '@type'>> & VFsRoiLabelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@FS_roi_label": v__fs_roi_label_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__fs_roi_label(...)`.
+ * Output object returned when calling `VFsRoiLabelParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +64,9 @@ function v__fs_roi_label_params(
     surf_annot_cmap: InputPathType | null = null,
     slab_int: number | null = null,
     sname_name: string | null = null,
-): VFsRoiLabelParameters {
+): VFsRoiLabelParametersTagged {
     const params = {
-        "@type": "afni.@FS_roi_label" as const,
+        "@type": "afni/@FS_roi_label" as const,
     };
     if (label_int !== null) {
         params["label_int"] = label_int;
@@ -288,7 +256,6 @@ function v__fs_roi_label(
 
 export {
       VFsRoiLabelOutputs,
-      VFsRoiLabelParameters,
       V__FS_ROI_LABEL_METADATA,
       v__fs_roi_label,
       v__fs_roi_label_execute,

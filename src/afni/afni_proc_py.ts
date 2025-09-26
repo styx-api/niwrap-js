@@ -12,7 +12,7 @@ const AFNI_PROC_PY_METADATA: Metadata = {
 
 
 interface AfniProcPyParameters {
-    "@type": "afni.afni_proc.py";
+    "@type"?: "afni/afni_proc.py";
     "dsets": Array<InputPathType>;
     "subj_id": string;
     "out_dir"?: string | null | undefined;
@@ -25,44 +25,11 @@ interface AfniProcPyParameters {
     "copy_anat"?: InputPathType | null | undefined;
     "regress_params"?: Array<string> | null | undefined;
 }
+type AfniProcPyParametersTagged = Required<Pick<AfniProcPyParameters, '@type'>> & AfniProcPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.afni_proc.py": afni_proc_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.afni_proc.py": afni_proc_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `afni_proc_py(...)`.
+ * Output object returned when calling `AfniProcPyParameters(...)`.
  *
  * @interface
  */
@@ -107,9 +74,9 @@ function afni_proc_py_params(
     copy_files: Array<InputPathType> | null = null,
     copy_anat: InputPathType | null = null,
     regress_params: Array<string> | null = null,
-): AfniProcPyParameters {
+): AfniProcPyParametersTagged {
     const params = {
-        "@type": "afni.afni_proc.py" as const,
+        "@type": "afni/afni_proc.py" as const,
         "dsets": dsets,
         "subj_id": subj_id,
         "anat": anat,
@@ -284,7 +251,6 @@ function afni_proc_py(
 export {
       AFNI_PROC_PY_METADATA,
       AfniProcPyOutputs,
-      AfniProcPyParameters,
       afni_proc_py,
       afni_proc_py_execute,
       afni_proc_py_params,

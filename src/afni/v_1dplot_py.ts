@@ -12,7 +12,7 @@ const V_1DPLOT_PY_METADATA: Metadata = {
 
 
 interface V1dplotPyParameters {
-    "@type": "afni.1dplot.py";
+    "@type"?: "afni/1dplot.py";
     "infiles": Array<InputPathType>;
     "prefix": string;
     "help": boolean;
@@ -46,44 +46,11 @@ interface V1dplotPyParameters {
     "censor_rgb"?: string | null | undefined;
     "bkgd_color"?: string | null | undefined;
 }
+type V1dplotPyParametersTagged = Required<Pick<V1dplotPyParameters, '@type'>> & V1dplotPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dplot.py": v_1dplot_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.1dplot.py": v_1dplot_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1dplot_py(...)`.
+ * Output object returned when calling `V1dplotPyParameters(...)`.
  *
  * @interface
  */
@@ -170,9 +137,9 @@ function v_1dplot_py_params(
     censor_hline: Array<string> | null = null,
     censor_rgb: string | null = null,
     bkgd_color: string | null = null,
-): V1dplotPyParameters {
+): V1dplotPyParametersTagged {
     const params = {
-        "@type": "afni.1dplot.py" as const,
+        "@type": "afni/1dplot.py" as const,
         "infiles": infiles,
         "prefix": prefix,
         "help": help,
@@ -278,10 +245,10 @@ function v_1dplot_py_cargs(
         "-prefix",
         (params["prefix"] ?? null)
     );
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["boxplot_on"] ?? null)) {
+    if ((params["boxplot_on"] ?? false)) {
         cargs.push("-boxplot_on");
     }
     if ((params["bplot_view"] ?? null) !== null) {
@@ -290,7 +257,7 @@ function v_1dplot_py_cargs(
             (params["bplot_view"] ?? null)
         );
     }
-    if ((params["margin_off"] ?? null)) {
+    if ((params["margin_off"] ?? false)) {
         cargs.push("-margin_off");
     }
     if ((params["scale"] ?? null) !== null) {
@@ -329,7 +296,7 @@ function v_1dplot_py_cargs(
             String((params["ylabels_maxlen"] ?? null))
         );
     }
-    if ((params["legend_on"] ?? null)) {
+    if ((params["legend_on"] ?? false)) {
         cargs.push("-legend_on");
     }
     if ((params["legend_labels"] ?? null) !== null) {
@@ -356,13 +323,13 @@ function v_1dplot_py_cargs(
             (params["title"] ?? null)
         );
     }
-    if ((params["reverse_order"] ?? null)) {
+    if ((params["reverse_order"] ?? false)) {
         cargs.push("-reverse_order");
     }
-    if ((params["sepscl"] ?? null)) {
+    if ((params["sepscl"] ?? false)) {
         cargs.push("-sepscl");
     }
-    if ((params["one_graph"] ?? null)) {
+    if ((params["one_graph"] ?? false)) {
         cargs.push("-one_graph");
     }
     if ((params["dpi"] ?? null) !== null) {
@@ -576,7 +543,6 @@ function v_1dplot_py(
 
 export {
       V1dplotPyOutputs,
-      V1dplotPyParameters,
       V_1DPLOT_PY_METADATA,
       v_1dplot_py,
       v_1dplot_py_execute,

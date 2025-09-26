@@ -12,7 +12,7 @@ const VOLUME_ROIS_FROM_EXTREMA_METADATA: Metadata = {
 
 
 interface VolumeRoisFromExtremaParameters {
-    "@type": "workbench.volume-rois-from-extrema";
+    "@type"?: "workbench/volume-rois-from-extrema";
     "volume_in": InputPathType;
     "limit": number;
     "volume_out": string;
@@ -21,44 +21,11 @@ interface VolumeRoisFromExtremaParameters {
     "opt_overlap_logic_method"?: string | null | undefined;
     "opt_subvolume_subvol"?: string | null | undefined;
 }
+type VolumeRoisFromExtremaParametersTagged = Required<Pick<VolumeRoisFromExtremaParameters, '@type'>> & VolumeRoisFromExtremaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-rois-from-extrema": volume_rois_from_extrema_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-rois-from-extrema": volume_rois_from_extrema_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `volume_rois_from_extrema(...)`.
+ * Output object returned when calling `VolumeRoisFromExtremaParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function volume_rois_from_extrema_params(
     opt_roi_roi_volume: InputPathType | null = null,
     opt_overlap_logic_method: string | null = null,
     opt_subvolume_subvol: string | null = null,
-): VolumeRoisFromExtremaParameters {
+): VolumeRoisFromExtremaParametersTagged {
     const params = {
-        "@type": "workbench.volume-rois-from-extrema" as const,
+        "@type": "workbench/volume-rois-from-extrema" as const,
         "volume_in": volume_in,
         "limit": limit,
         "volume_out": volume_out,
@@ -254,7 +221,6 @@ function volume_rois_from_extrema(
 export {
       VOLUME_ROIS_FROM_EXTREMA_METADATA,
       VolumeRoisFromExtremaOutputs,
-      VolumeRoisFromExtremaParameters,
       volume_rois_from_extrema,
       volume_rois_from_extrema_execute,
       volume_rois_from_extrema_params,

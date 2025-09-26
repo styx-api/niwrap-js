@@ -12,33 +12,37 @@ const MRGRID_METADATA: Metadata = {
 
 
 interface MrgridAxisParameters {
-    "@type": "mrtrix.mrgrid.axis";
+    "@type"?: "axis";
     "index": number;
     "spec": string;
 }
+type MrgridAxisParametersTagged = Required<Pick<MrgridAxisParameters, '@type'>> & MrgridAxisParameters;
 
 
 interface MrgridVariousStringParameters {
-    "@type": "mrtrix.mrgrid.VariousString";
+    "@type"?: "VariousString";
     "obj": string;
 }
+type MrgridVariousStringParametersTagged = Required<Pick<MrgridVariousStringParameters, '@type'>> & MrgridVariousStringParameters;
 
 
 interface MrgridVariousFileParameters {
-    "@type": "mrtrix.mrgrid.VariousFile";
+    "@type"?: "VariousFile";
     "obj": InputPathType;
 }
+type MrgridVariousFileParametersTagged = Required<Pick<MrgridVariousFileParameters, '@type'>> & MrgridVariousFileParameters;
 
 
 interface MrgridConfigParameters {
-    "@type": "mrtrix.mrgrid.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MrgridConfigParametersTagged = Required<Pick<MrgridConfigParameters, '@type'>> & MrgridConfigParameters;
 
 
 interface MrgridParameters {
-    "@type": "mrtrix.mrgrid";
+    "@type"?: "mrtrix/mrgrid";
     "template"?: InputPathType | null | undefined;
     "size"?: Array<number> | null | undefined;
     "voxel"?: Array<number> | null | undefined;
@@ -52,7 +56,7 @@ interface MrgridParameters {
     "axis"?: Array<MrgridAxisParameters> | null | undefined;
     "all_axes": boolean;
     "fill"?: number | null | undefined;
-    "strides"?: MrgridVariousStringParameters | MrgridVariousFileParameters | null | undefined;
+    "strides"?: MrgridVariousStringParametersTagged | MrgridVariousFileParametersTagged | null | undefined;
     "datatype"?: string | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -66,6 +70,7 @@ interface MrgridParameters {
     "operation": string;
     "output": string;
 }
+type MrgridParametersTagged = Required<Pick<MrgridParameters, '@type'>> & MrgridParameters;
 
 
 /**
@@ -75,15 +80,12 @@ interface MrgridParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function mrgrid_strides_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "mrtrix.mrgrid": mrgrid_cargs,
-        "mrtrix.mrgrid.axis": mrgrid_axis_cargs,
-        "mrtrix.mrgrid.VariousString": mrgrid_various_string_cargs,
-        "mrtrix.mrgrid.VariousFile": mrgrid_various_file_cargs,
-        "mrtrix.mrgrid.config": mrgrid_config_cargs,
+        "VariousString": mrgrid_various_string_cargs,
+        "VariousFile": mrgrid_various_file_cargs,
     };
     return cargsFuncs[t];
 }
@@ -96,11 +98,10 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function mrgrid_strides_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "mrtrix.mrgrid": mrgrid_outputs,
     };
     return outputsFuncs[t];
 }
@@ -117,9 +118,9 @@ function dynOutputs(
 function mrgrid_axis_params(
     index: number,
     spec: string,
-): MrgridAxisParameters {
+): MrgridAxisParametersTagged {
     const params = {
-        "@type": "mrtrix.mrgrid.axis" as const,
+        "@type": "axis" as const,
         "index": index,
         "spec": spec,
     };
@@ -156,9 +157,9 @@ function mrgrid_axis_cargs(
  */
 function mrgrid_various_string_params(
     obj: string,
-): MrgridVariousStringParameters {
+): MrgridVariousStringParametersTagged {
     const params = {
-        "@type": "mrtrix.mrgrid.VariousString" as const,
+        "@type": "VariousString" as const,
         "obj": obj,
     };
     return params;
@@ -192,9 +193,9 @@ function mrgrid_various_string_cargs(
  */
 function mrgrid_various_file_params(
     obj: InputPathType,
-): MrgridVariousFileParameters {
+): MrgridVariousFileParametersTagged {
     const params = {
-        "@type": "mrtrix.mrgrid.VariousFile" as const,
+        "@type": "VariousFile" as const,
         "obj": obj,
     };
     return params;
@@ -230,9 +231,9 @@ function mrgrid_various_file_cargs(
 function mrgrid_config_params(
     key: string,
     value: string,
-): MrgridConfigParameters {
+): MrgridConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.mrgrid.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -261,7 +262,7 @@ function mrgrid_config_cargs(
 
 
 /**
- * Output object returned when calling `mrgrid(...)`.
+ * Output object returned when calling `MrgridParameters(...)`.
  *
  * @interface
  */
@@ -326,7 +327,7 @@ function mrgrid_params(
     axis: Array<MrgridAxisParameters> | null = null,
     all_axes: boolean = false,
     fill: number | null = null,
-    strides: MrgridVariousStringParameters | MrgridVariousFileParameters | null = null,
+    strides: MrgridVariousStringParametersTagged | MrgridVariousFileParametersTagged | null = null,
     datatype: string | null = null,
     info: boolean = false,
     quiet: boolean = false,
@@ -336,9 +337,9 @@ function mrgrid_params(
     config: Array<MrgridConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrgridParameters {
+): MrgridParametersTagged {
     const params = {
-        "@type": "mrtrix.mrgrid" as const,
+        "@type": "mrtrix/mrgrid" as const,
         "crop_unbound": crop_unbound,
         "all_axes": all_axes,
         "info": info,
@@ -468,13 +469,13 @@ function mrgrid_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["crop_unbound"] ?? null)) {
+    if ((params["crop_unbound"] ?? false)) {
         cargs.push("-crop_unbound");
     }
     if ((params["axis"] ?? null) !== null) {
-        cargs.push(...(params["axis"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["axis"] ?? null).map(s => mrgrid_axis_cargs(s, execution)).flat());
     }
-    if ((params["all_axes"] ?? null)) {
+    if ((params["all_axes"] ?? false)) {
         cargs.push("-all_axes");
     }
     if ((params["fill"] ?? null) !== null) {
@@ -486,7 +487,7 @@ function mrgrid_cargs(
     if ((params["strides"] ?? null) !== null) {
         cargs.push(
             "-strides",
-            ...dynCargs((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
+            ...mrgrid_strides_cargs_dyn_fn((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
         );
     }
     if ((params["datatype"] ?? null) !== null) {
@@ -495,16 +496,16 @@ function mrgrid_cargs(
             (params["datatype"] ?? null)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -514,12 +515,12 @@ function mrgrid_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => mrgrid_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -657,7 +658,7 @@ function mrgrid(
     axis: Array<MrgridAxisParameters> | null = null,
     all_axes: boolean = false,
     fill: number | null = null,
-    strides: MrgridVariousStringParameters | MrgridVariousFileParameters | null = null,
+    strides: MrgridVariousStringParametersTagged | MrgridVariousFileParametersTagged | null = null,
     datatype: string | null = null,
     info: boolean = false,
     quiet: boolean = false,
@@ -676,12 +677,7 @@ function mrgrid(
 
 export {
       MRGRID_METADATA,
-      MrgridAxisParameters,
-      MrgridConfigParameters,
       MrgridOutputs,
-      MrgridParameters,
-      MrgridVariousFileParameters,
-      MrgridVariousStringParameters,
       mrgrid,
       mrgrid_axis_params,
       mrgrid_config_params,

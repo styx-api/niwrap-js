@@ -12,49 +12,16 @@ const LABELS_UNION_METADATA: Metadata = {
 
 
 interface LabelsUnionParameters {
-    "@type": "freesurfer.labels_union";
+    "@type"?: "freesurfer/labels_union";
     "label1": InputPathType;
     "label2": InputPathType;
     "outputname": string;
 }
+type LabelsUnionParametersTagged = Required<Pick<LabelsUnionParameters, '@type'>> & LabelsUnionParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.labels_union": labels_union_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.labels_union": labels_union_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `labels_union(...)`.
+ * Output object returned when calling `LabelsUnionParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function labels_union_params(
     label1: InputPathType,
     label2: InputPathType,
     outputname: string,
-): LabelsUnionParameters {
+): LabelsUnionParametersTagged {
     const params = {
-        "@type": "freesurfer.labels_union" as const,
+        "@type": "freesurfer/labels_union" as const,
         "label1": label1,
         "label2": label2,
         "outputname": outputname,
@@ -193,7 +160,6 @@ function labels_union(
 export {
       LABELS_UNION_METADATA,
       LabelsUnionOutputs,
-      LabelsUnionParameters,
       labels_union,
       labels_union_execute,
       labels_union_params,

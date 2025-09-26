@@ -12,93 +12,106 @@ const MRCONVERT_METADATA: Metadata = {
 
 
 interface MrconvertCoordParameters {
-    "@type": "mrtrix.mrconvert.coord";
+    "@type"?: "coord";
     "axis": number;
     "selection": Array<number>;
 }
+type MrconvertCoordParametersTagged = Required<Pick<MrconvertCoordParameters, '@type'>> & MrconvertCoordParameters;
 
 
 interface MrconvertClearPropertyParameters {
-    "@type": "mrtrix.mrconvert.clear_property";
+    "@type"?: "clear_property";
     "key": string;
 }
+type MrconvertClearPropertyParametersTagged = Required<Pick<MrconvertClearPropertyParameters, '@type'>> & MrconvertClearPropertyParameters;
 
 
 interface MrconvertSetPropertyParameters {
-    "@type": "mrtrix.mrconvert.set_property";
+    "@type"?: "set_property";
     "key": string;
     "value": string;
 }
+type MrconvertSetPropertyParametersTagged = Required<Pick<MrconvertSetPropertyParameters, '@type'>> & MrconvertSetPropertyParameters;
 
 
 interface MrconvertAppendPropertyParameters {
-    "@type": "mrtrix.mrconvert.append_property";
+    "@type"?: "append_property";
     "key": string;
     "value": string;
 }
+type MrconvertAppendPropertyParametersTagged = Required<Pick<MrconvertAppendPropertyParameters, '@type'>> & MrconvertAppendPropertyParameters;
 
 
 interface MrconvertVariousStringParameters {
-    "@type": "mrtrix.mrconvert.VariousString";
+    "@type"?: "VariousString";
     "obj": string;
 }
+type MrconvertVariousStringParametersTagged = Required<Pick<MrconvertVariousStringParameters, '@type'>> & MrconvertVariousStringParameters;
 
 
 interface MrconvertVariousFileParameters {
-    "@type": "mrtrix.mrconvert.VariousFile";
+    "@type"?: "VariousFile";
     "obj": InputPathType;
 }
+type MrconvertVariousFileParametersTagged = Required<Pick<MrconvertVariousFileParameters, '@type'>> & MrconvertVariousFileParameters;
 
 
 interface MrconvertVariousString1Parameters {
-    "@type": "mrtrix.mrconvert.VariousString";
+    "@type"?: "VariousString_1";
     "obj": string;
 }
+type MrconvertVariousString1ParametersTagged = Required<Pick<MrconvertVariousString1Parameters, '@type'>> & MrconvertVariousString1Parameters;
 
 
 interface MrconvertVariousFile1Parameters {
-    "@type": "mrtrix.mrconvert.VariousFile";
+    "@type"?: "VariousFile_1";
     "obj": InputPathType;
 }
+type MrconvertVariousFile1ParametersTagged = Required<Pick<MrconvertVariousFile1Parameters, '@type'>> & MrconvertVariousFile1Parameters;
 
 
 interface MrconvertFslgradParameters {
-    "@type": "mrtrix.mrconvert.fslgrad";
+    "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
+type MrconvertFslgradParametersTagged = Required<Pick<MrconvertFslgradParameters, '@type'>> & MrconvertFslgradParameters;
 
 
 interface MrconvertExportGradFslParameters {
-    "@type": "mrtrix.mrconvert.export_grad_fsl";
+    "@type"?: "export_grad_fsl";
     "bvecs_path": string;
     "bvals_path": string;
 }
+type MrconvertExportGradFslParametersTagged = Required<Pick<MrconvertExportGradFslParameters, '@type'>> & MrconvertExportGradFslParameters;
 
 
 interface MrconvertImportPeEddyParameters {
-    "@type": "mrtrix.mrconvert.import_pe_eddy";
+    "@type"?: "import_pe_eddy";
     "config": InputPathType;
     "indices": InputPathType;
 }
+type MrconvertImportPeEddyParametersTagged = Required<Pick<MrconvertImportPeEddyParameters, '@type'>> & MrconvertImportPeEddyParameters;
 
 
 interface MrconvertExportPeEddyParameters {
-    "@type": "mrtrix.mrconvert.export_pe_eddy";
+    "@type"?: "export_pe_eddy";
     "config": string;
     "indices": string;
 }
+type MrconvertExportPeEddyParametersTagged = Required<Pick<MrconvertExportPeEddyParameters, '@type'>> & MrconvertExportPeEddyParameters;
 
 
 interface MrconvertConfigParameters {
-    "@type": "mrtrix.mrconvert.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MrconvertConfigParametersTagged = Required<Pick<MrconvertConfigParameters, '@type'>> & MrconvertConfigParameters;
 
 
 interface MrconvertParameters {
-    "@type": "mrtrix.mrconvert";
+    "@type"?: "mrtrix/mrconvert";
     "coord"?: Array<MrconvertCoordParameters> | null | undefined;
     "vox"?: Array<number> | null | undefined;
     "axes"?: Array<number> | null | undefined;
@@ -108,8 +121,8 @@ interface MrconvertParameters {
     "clear_property"?: Array<MrconvertClearPropertyParameters> | null | undefined;
     "set_property"?: Array<MrconvertSetPropertyParameters> | null | undefined;
     "append_property"?: Array<MrconvertAppendPropertyParameters> | null | undefined;
-    "copy_properties"?: MrconvertVariousStringParameters | MrconvertVariousFileParameters | null | undefined;
-    "strides"?: MrconvertVariousString1Parameters | MrconvertVariousFile1Parameters | null | undefined;
+    "copy_properties"?: MrconvertVariousStringParametersTagged | MrconvertVariousFileParametersTagged | null | undefined;
+    "strides"?: MrconvertVariousString1ParametersTagged | MrconvertVariousFile1ParametersTagged | null | undefined;
     "datatype"?: string | null | undefined;
     "grad"?: InputPathType | null | undefined;
     "fslgrad"?: MrconvertFslgradParameters | null | undefined;
@@ -131,6 +144,7 @@ interface MrconvertParameters {
     "input": InputPathType;
     "output": string;
 }
+type MrconvertParametersTagged = Required<Pick<MrconvertParameters, '@type'>> & MrconvertParameters;
 
 
 /**
@@ -140,24 +154,12 @@ interface MrconvertParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function mrconvert_copy_properties_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "mrtrix.mrconvert": mrconvert_cargs,
-        "mrtrix.mrconvert.coord": mrconvert_coord_cargs,
-        "mrtrix.mrconvert.clear_property": mrconvert_clear_property_cargs,
-        "mrtrix.mrconvert.set_property": mrconvert_set_property_cargs,
-        "mrtrix.mrconvert.append_property": mrconvert_append_property_cargs,
-        "mrtrix.mrconvert.VariousString": mrconvert_various_string_cargs,
-        "mrtrix.mrconvert.VariousFile": mrconvert_various_file_cargs,
-        "mrtrix.mrconvert.VariousString": mrconvert_various_string_1_cargs,
-        "mrtrix.mrconvert.VariousFile": mrconvert_various_file_1_cargs,
-        "mrtrix.mrconvert.fslgrad": mrconvert_fslgrad_cargs,
-        "mrtrix.mrconvert.export_grad_fsl": mrconvert_export_grad_fsl_cargs,
-        "mrtrix.mrconvert.import_pe_eddy": mrconvert_import_pe_eddy_cargs,
-        "mrtrix.mrconvert.export_pe_eddy": mrconvert_export_pe_eddy_cargs,
-        "mrtrix.mrconvert.config": mrconvert_config_cargs,
+        "VariousString": mrconvert_various_string_cargs,
+        "VariousFile": mrconvert_various_file_cargs,
     };
     return cargsFuncs[t];
 }
@@ -170,13 +172,44 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function mrconvert_copy_properties_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "mrtrix.mrconvert": mrconvert_outputs,
-        "mrtrix.mrconvert.export_grad_fsl": mrconvert_export_grad_fsl_outputs,
-        "mrtrix.mrconvert.export_pe_eddy": mrconvert_export_pe_eddy_outputs,
+    };
+    return outputsFuncs[t];
+}
+
+
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
+function mrconvert_strides_cargs_dyn_fn(
+    t: string,
+): Function | undefined {
+    const cargsFuncs = {
+        "VariousString_1": mrconvert_various_string_1_cargs,
+        "VariousFile_1": mrconvert_various_file_1_cargs,
+    };
+    return cargsFuncs[t];
+}
+
+
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
+function mrconvert_strides_outputs_dyn_fn(
+    t: string,
+): Function | undefined {
+    const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
@@ -193,9 +226,9 @@ function dynOutputs(
 function mrconvert_coord_params(
     axis: number,
     selection: Array<number>,
-): MrconvertCoordParameters {
+): MrconvertCoordParametersTagged {
     const params = {
-        "@type": "mrtrix.mrconvert.coord" as const,
+        "@type": "coord" as const,
         "axis": axis,
         "selection": selection,
     };
@@ -232,9 +265,9 @@ function mrconvert_coord_cargs(
  */
 function mrconvert_clear_property_params(
     key: string,
-): MrconvertClearPropertyParameters {
+): MrconvertClearPropertyParametersTagged {
     const params = {
-        "@type": "mrtrix.mrconvert.clear_property" as const,
+        "@type": "clear_property" as const,
         "key": key,
     };
     return params;
@@ -271,9 +304,9 @@ function mrconvert_clear_property_cargs(
 function mrconvert_set_property_params(
     key: string,
     value: string,
-): MrconvertSetPropertyParameters {
+): MrconvertSetPropertyParametersTagged {
     const params = {
-        "@type": "mrtrix.mrconvert.set_property" as const,
+        "@type": "set_property" as const,
         "key": key,
         "value": value,
     };
@@ -312,9 +345,9 @@ function mrconvert_set_property_cargs(
 function mrconvert_append_property_params(
     key: string,
     value: string,
-): MrconvertAppendPropertyParameters {
+): MrconvertAppendPropertyParametersTagged {
     const params = {
-        "@type": "mrtrix.mrconvert.append_property" as const,
+        "@type": "append_property" as const,
         "key": key,
         "value": value,
     };
@@ -351,9 +384,9 @@ function mrconvert_append_property_cargs(
  */
 function mrconvert_various_string_params(
     obj: string,
-): MrconvertVariousStringParameters {
+): MrconvertVariousStringParametersTagged {
     const params = {
-        "@type": "mrtrix.mrconvert.VariousString" as const,
+        "@type": "VariousString" as const,
         "obj": obj,
     };
     return params;
@@ -387,9 +420,9 @@ function mrconvert_various_string_cargs(
  */
 function mrconvert_various_file_params(
     obj: InputPathType,
-): MrconvertVariousFileParameters {
+): MrconvertVariousFileParametersTagged {
     const params = {
-        "@type": "mrtrix.mrconvert.VariousFile" as const,
+        "@type": "VariousFile" as const,
         "obj": obj,
     };
     return params;
@@ -423,9 +456,9 @@ function mrconvert_various_file_cargs(
  */
 function mrconvert_various_string_1_params(
     obj: string,
-): MrconvertVariousString1Parameters {
+): MrconvertVariousString1ParametersTagged {
     const params = {
-        "@type": "mrtrix.mrconvert.VariousString" as const,
+        "@type": "VariousString_1" as const,
         "obj": obj,
     };
     return params;
@@ -459,9 +492,9 @@ function mrconvert_various_string_1_cargs(
  */
 function mrconvert_various_file_1_params(
     obj: InputPathType,
-): MrconvertVariousFile1Parameters {
+): MrconvertVariousFile1ParametersTagged {
     const params = {
-        "@type": "mrtrix.mrconvert.VariousFile" as const,
+        "@type": "VariousFile_1" as const,
         "obj": obj,
     };
     return params;
@@ -497,9 +530,9 @@ function mrconvert_various_file_1_cargs(
 function mrconvert_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
-): MrconvertFslgradParameters {
+): MrconvertFslgradParametersTagged {
     const params = {
-        "@type": "mrtrix.mrconvert.fslgrad" as const,
+        "@type": "fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -559,9 +592,9 @@ interface MrconvertExportGradFslOutputs {
 function mrconvert_export_grad_fsl_params(
     bvecs_path: string,
     bvals_path: string,
-): MrconvertExportGradFslParameters {
+): MrconvertExportGradFslParametersTagged {
     const params = {
-        "@type": "mrtrix.mrconvert.export_grad_fsl" as const,
+        "@type": "export_grad_fsl" as const,
         "bvecs_path": bvecs_path,
         "bvals_path": bvals_path,
     };
@@ -621,9 +654,9 @@ function mrconvert_export_grad_fsl_outputs(
 function mrconvert_import_pe_eddy_params(
     config: InputPathType,
     indices: InputPathType,
-): MrconvertImportPeEddyParameters {
+): MrconvertImportPeEddyParametersTagged {
     const params = {
-        "@type": "mrtrix.mrconvert.import_pe_eddy" as const,
+        "@type": "import_pe_eddy" as const,
         "config": config,
         "indices": indices,
     };
@@ -683,9 +716,9 @@ interface MrconvertExportPeEddyOutputs {
 function mrconvert_export_pe_eddy_params(
     config: string,
     indices: string,
-): MrconvertExportPeEddyParameters {
+): MrconvertExportPeEddyParametersTagged {
     const params = {
-        "@type": "mrtrix.mrconvert.export_pe_eddy" as const,
+        "@type": "export_pe_eddy" as const,
         "config": config,
         "indices": indices,
     };
@@ -745,9 +778,9 @@ function mrconvert_export_pe_eddy_outputs(
 function mrconvert_config_params(
     key: string,
     value: string,
-): MrconvertConfigParameters {
+): MrconvertConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.mrconvert.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -776,7 +809,7 @@ function mrconvert_config_cargs(
 
 
 /**
- * Output object returned when calling `mrconvert(...)`.
+ * Output object returned when calling `MrconvertParameters(...)`.
  *
  * @interface
  */
@@ -861,8 +894,8 @@ function mrconvert_params(
     clear_property: Array<MrconvertClearPropertyParameters> | null = null,
     set_property: Array<MrconvertSetPropertyParameters> | null = null,
     append_property: Array<MrconvertAppendPropertyParameters> | null = null,
-    copy_properties: MrconvertVariousStringParameters | MrconvertVariousFileParameters | null = null,
-    strides: MrconvertVariousString1Parameters | MrconvertVariousFile1Parameters | null = null,
+    copy_properties: MrconvertVariousStringParametersTagged | MrconvertVariousFileParametersTagged | null = null,
+    strides: MrconvertVariousString1ParametersTagged | MrconvertVariousFile1ParametersTagged | null = null,
     datatype: string | null = null,
     grad: InputPathType | null = null,
     fslgrad: MrconvertFslgradParameters | null = null,
@@ -881,9 +914,9 @@ function mrconvert_params(
     config: Array<MrconvertConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrconvertParameters {
+): MrconvertParametersTagged {
     const params = {
-        "@type": "mrtrix.mrconvert" as const,
+        "@type": "mrtrix/mrconvert" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -981,7 +1014,7 @@ function mrconvert_cargs(
     const cargs: string[] = [];
     cargs.push("mrconvert");
     if ((params["coord"] ?? null) !== null) {
-        cargs.push(...(params["coord"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["coord"] ?? null).map(s => mrconvert_coord_cargs(s, execution)).flat());
     }
     if ((params["vox"] ?? null) !== null) {
         cargs.push(
@@ -1014,24 +1047,24 @@ function mrconvert_cargs(
         );
     }
     if ((params["clear_property"] ?? null) !== null) {
-        cargs.push(...(params["clear_property"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["clear_property"] ?? null).map(s => mrconvert_clear_property_cargs(s, execution)).flat());
     }
     if ((params["set_property"] ?? null) !== null) {
-        cargs.push(...(params["set_property"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["set_property"] ?? null).map(s => mrconvert_set_property_cargs(s, execution)).flat());
     }
     if ((params["append_property"] ?? null) !== null) {
-        cargs.push(...(params["append_property"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["append_property"] ?? null).map(s => mrconvert_append_property_cargs(s, execution)).flat());
     }
     if ((params["copy_properties"] ?? null) !== null) {
         cargs.push(
             "-copy_properties",
-            ...dynCargs((params["copy_properties"] ?? null)["@type"])((params["copy_properties"] ?? null), execution)
+            ...mrconvert_copy_properties_cargs_dyn_fn((params["copy_properties"] ?? null)["@type"])((params["copy_properties"] ?? null), execution)
         );
     }
     if ((params["strides"] ?? null) !== null) {
         cargs.push(
             "-strides",
-            ...dynCargs((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
+            ...mrconvert_strides_cargs_dyn_fn((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
         );
     }
     if ((params["datatype"] ?? null) !== null) {
@@ -1047,7 +1080,7 @@ function mrconvert_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
+        cargs.push(...mrconvert_fslgrad_cargs((params["fslgrad"] ?? null), execution));
     }
     if ((params["bvalue_scaling"] ?? null) !== null) {
         cargs.push(
@@ -1062,7 +1095,7 @@ function mrconvert_cargs(
         );
     }
     if ((params["export_grad_fsl"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["export_grad_fsl"] ?? null)["@type"])((params["export_grad_fsl"] ?? null), execution));
+        cargs.push(...mrconvert_export_grad_fsl_cargs((params["export_grad_fsl"] ?? null), execution));
     }
     if ((params["import_pe_table"] ?? null) !== null) {
         cargs.push(
@@ -1071,7 +1104,7 @@ function mrconvert_cargs(
         );
     }
     if ((params["import_pe_eddy"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["import_pe_eddy"] ?? null)["@type"])((params["import_pe_eddy"] ?? null), execution));
+        cargs.push(...mrconvert_import_pe_eddy_cargs((params["import_pe_eddy"] ?? null), execution));
     }
     if ((params["export_pe_table"] ?? null) !== null) {
         cargs.push(
@@ -1080,18 +1113,18 @@ function mrconvert_cargs(
         );
     }
     if ((params["export_pe_eddy"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["export_pe_eddy"] ?? null)["@type"])((params["export_pe_eddy"] ?? null), execution));
+        cargs.push(...mrconvert_export_pe_eddy_cargs((params["export_pe_eddy"] ?? null), execution));
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -1101,12 +1134,12 @@ function mrconvert_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => mrconvert_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -1133,8 +1166,8 @@ function mrconvert_outputs(
         json_export: ((params["json_export"] ?? null) !== null) ? execution.outputFile([(params["json_export"] ?? null)].join('')) : null,
         export_grad_mrtrix: ((params["export_grad_mrtrix"] ?? null) !== null) ? execution.outputFile([(params["export_grad_mrtrix"] ?? null)].join('')) : null,
         export_pe_table: ((params["export_pe_table"] ?? null) !== null) ? execution.outputFile([(params["export_pe_table"] ?? null)].join('')) : null,
-        export_grad_fsl: (params["export_grad_fsl"] ?? null) ? (dynOutputs((params["export_grad_fsl"] ?? null)["@type"])?.((params["export_grad_fsl"] ?? null), execution) ?? null) : null,
-        export_pe_eddy: (params["export_pe_eddy"] ?? null) ? (dynOutputs((params["export_pe_eddy"] ?? null)["@type"])?.((params["export_pe_eddy"] ?? null), execution) ?? null) : null,
+        export_grad_fsl: (params["export_grad_fsl"] ?? null) ? (mrconvert_export_grad_fsl_outputs((params["export_grad_fsl"] ?? null), execution) ?? null) : null,
+        export_pe_eddy: (params["export_pe_eddy"] ?? null) ? (mrconvert_export_pe_eddy_outputs((params["export_pe_eddy"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }
@@ -1260,8 +1293,8 @@ function mrconvert(
     clear_property: Array<MrconvertClearPropertyParameters> | null = null,
     set_property: Array<MrconvertSetPropertyParameters> | null = null,
     append_property: Array<MrconvertAppendPropertyParameters> | null = null,
-    copy_properties: MrconvertVariousStringParameters | MrconvertVariousFileParameters | null = null,
-    strides: MrconvertVariousString1Parameters | MrconvertVariousFile1Parameters | null = null,
+    copy_properties: MrconvertVariousStringParametersTagged | MrconvertVariousFileParametersTagged | null = null,
+    strides: MrconvertVariousString1ParametersTagged | MrconvertVariousFile1ParametersTagged | null = null,
     datatype: string | null = null,
     grad: InputPathType | null = null,
     fslgrad: MrconvertFslgradParameters | null = null,
@@ -1289,23 +1322,9 @@ function mrconvert(
 
 export {
       MRCONVERT_METADATA,
-      MrconvertAppendPropertyParameters,
-      MrconvertClearPropertyParameters,
-      MrconvertConfigParameters,
-      MrconvertCoordParameters,
       MrconvertExportGradFslOutputs,
-      MrconvertExportGradFslParameters,
       MrconvertExportPeEddyOutputs,
-      MrconvertExportPeEddyParameters,
-      MrconvertFslgradParameters,
-      MrconvertImportPeEddyParameters,
       MrconvertOutputs,
-      MrconvertParameters,
-      MrconvertSetPropertyParameters,
-      MrconvertVariousFile1Parameters,
-      MrconvertVariousFileParameters,
-      MrconvertVariousString1Parameters,
-      MrconvertVariousStringParameters,
       mrconvert,
       mrconvert_append_property_params,
       mrconvert_clear_property_params,

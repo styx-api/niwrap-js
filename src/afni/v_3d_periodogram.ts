@@ -12,50 +12,17 @@ const V_3D_PERIODOGRAM_METADATA: Metadata = {
 
 
 interface V3dPeriodogramParameters {
-    "@type": "afni.3dPeriodogram";
+    "@type"?: "afni/3dPeriodogram";
     "prefix"?: string | null | undefined;
     "taper"?: number | null | undefined;
     "nfft"?: number | null | undefined;
     "dataset": InputPathType;
 }
+type V3dPeriodogramParametersTagged = Required<Pick<V3dPeriodogramParameters, '@type'>> & V3dPeriodogramParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dPeriodogram": v_3d_periodogram_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dPeriodogram": v_3d_periodogram_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_periodogram(...)`.
+ * Output object returned when calling `V3dPeriodogramParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +57,9 @@ function v_3d_periodogram_params(
     prefix: string | null = null,
     taper: number | null = null,
     nfft: number | null = null,
-): V3dPeriodogramParameters {
+): V3dPeriodogramParametersTagged {
     const params = {
-        "@type": "afni.3dPeriodogram" as const,
+        "@type": "afni/3dPeriodogram" as const,
         "dataset": dataset,
     };
     if (prefix !== null) {
@@ -225,7 +192,6 @@ function v_3d_periodogram(
 
 export {
       V3dPeriodogramOutputs,
-      V3dPeriodogramParameters,
       V_3D_PERIODOGRAM_METADATA,
       v_3d_periodogram,
       v_3d_periodogram_execute,

@@ -12,7 +12,7 @@ const SUPER_RESOLUTION_METADATA: Metadata = {
 
 
 interface SuperResolutionParameters {
-    "@type": "ants.SuperResolution";
+    "@type"?: "ants/SuperResolution";
     "image_dimension": number;
     "output_image": string;
     "domain_image": InputPathType;
@@ -21,44 +21,11 @@ interface SuperResolutionParameters {
     "number_of_levels": number;
     "input_image_files": Array<InputPathType>;
 }
+type SuperResolutionParametersTagged = Required<Pick<SuperResolutionParameters, '@type'>> & SuperResolutionParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.SuperResolution": super_resolution_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.SuperResolution": super_resolution_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `super_resolution(...)`.
+ * Output object returned when calling `SuperResolutionParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function super_resolution_params(
     mesh_size: number,
     number_of_levels: number,
     input_image_files: Array<InputPathType>,
-): SuperResolutionParameters {
+): SuperResolutionParametersTagged {
     const params = {
-        "@type": "ants.SuperResolution" as const,
+        "@type": "ants/SuperResolution" as const,
         "image_dimension": image_dimension,
         "output_image": output_image,
         "domain_image": domain_image,
@@ -221,7 +188,6 @@ function super_resolution(
 export {
       SUPER_RESOLUTION_METADATA,
       SuperResolutionOutputs,
-      SuperResolutionParameters,
       super_resolution,
       super_resolution_execute,
       super_resolution_params,

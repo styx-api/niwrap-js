@@ -12,7 +12,7 @@ const V_3D_DFT_METADATA: Metadata = {
 
 
 interface V3dDftParameters {
-    "@type": "afni.3dDFT";
+    "@type"?: "afni/3dDFT";
     "infile": InputPathType;
     "prefix": string;
     "abs_output": boolean;
@@ -21,44 +21,11 @@ interface V3dDftParameters {
     "taper"?: number | null | undefined;
     "inverse": boolean;
 }
+type V3dDftParametersTagged = Required<Pick<V3dDftParameters, '@type'>> & V3dDftParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dDFT": v_3d_dft_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dDFT": v_3d_dft_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_dft(...)`.
+ * Output object returned when calling `V3dDftParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +66,9 @@ function v_3d_dft_params(
     detrend: boolean = false,
     taper: number | null = null,
     inverse: boolean = false,
-): V3dDftParameters {
+): V3dDftParametersTagged {
     const params = {
-        "@type": "afni.3dDFT" as const,
+        "@type": "afni/3dDFT" as const,
         "infile": infile,
         "prefix": prefix,
         "abs_output": abs_output,
@@ -137,7 +104,7 @@ function v_3d_dft_cargs(
         "-prefix",
         (params["prefix"] ?? null)
     );
-    if ((params["abs_output"] ?? null)) {
+    if ((params["abs_output"] ?? false)) {
         cargs.push("-abs");
     }
     if ((params["nfft"] ?? null) !== null) {
@@ -146,7 +113,7 @@ function v_3d_dft_cargs(
             String((params["nfft"] ?? null))
         );
     }
-    if ((params["detrend"] ?? null)) {
+    if ((params["detrend"] ?? false)) {
         cargs.push("-detrend");
     }
     if ((params["taper"] ?? null) !== null) {
@@ -155,7 +122,7 @@ function v_3d_dft_cargs(
             String((params["taper"] ?? null))
         );
     }
-    if ((params["inverse"] ?? null)) {
+    if ((params["inverse"] ?? false)) {
         cargs.push("-inverse");
     }
     return cargs;
@@ -248,7 +215,6 @@ function v_3d_dft(
 
 export {
       V3dDftOutputs,
-      V3dDftParameters,
       V_3D_DFT_METADATA,
       v_3d_dft,
       v_3d_dft_execute,

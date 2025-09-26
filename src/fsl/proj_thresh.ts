@@ -12,47 +12,15 @@ const PROJ_THRESH_METADATA: Metadata = {
 
 
 interface ProjThreshParameters {
-    "@type": "fsl.proj_thresh";
+    "@type"?: "fsl/proj_thresh";
     "input_paths": Array<InputPathType>;
     "threshold": number;
 }
+type ProjThreshParametersTagged = Required<Pick<ProjThreshParameters, '@type'>> & ProjThreshParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.proj_thresh": proj_thresh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `proj_thresh(...)`.
+ * Output object returned when calling `ProjThreshParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface ProjThreshOutputs {
 function proj_thresh_params(
     input_paths: Array<InputPathType>,
     threshold: number,
-): ProjThreshParameters {
+): ProjThreshParametersTagged {
     const params = {
-        "@type": "fsl.proj_thresh" as const,
+        "@type": "fsl/proj_thresh" as const,
         "input_paths": input_paths,
         "threshold": threshold,
     };
@@ -180,7 +148,6 @@ function proj_thresh(
 export {
       PROJ_THRESH_METADATA,
       ProjThreshOutputs,
-      ProjThreshParameters,
       proj_thresh,
       proj_thresh_execute,
       proj_thresh_params,

@@ -12,21 +12,23 @@ const METRIC_RESAMPLE_METADATA: Metadata = {
 
 
 interface MetricResampleAreaSurfsParameters {
-    "@type": "workbench.metric-resample.area_surfs";
+    "@type"?: "area_surfs";
     "current_area": InputPathType;
     "new_area": InputPathType;
 }
+type MetricResampleAreaSurfsParametersTagged = Required<Pick<MetricResampleAreaSurfsParameters, '@type'>> & MetricResampleAreaSurfsParameters;
 
 
 interface MetricResampleAreaMetricsParameters {
-    "@type": "workbench.metric-resample.area_metrics";
+    "@type"?: "area_metrics";
     "current_area": InputPathType;
     "new_area": InputPathType;
 }
+type MetricResampleAreaMetricsParametersTagged = Required<Pick<MetricResampleAreaMetricsParameters, '@type'>> & MetricResampleAreaMetricsParameters;
 
 
 interface MetricResampleParameters {
-    "@type": "workbench.metric-resample";
+    "@type"?: "workbench/metric-resample";
     "metric_in": InputPathType;
     "current_sphere": InputPathType;
     "new_sphere": InputPathType;
@@ -39,42 +41,7 @@ interface MetricResampleParameters {
     "opt_largest": boolean;
     "opt_bypass_sphere_check": boolean;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-resample": metric_resample_cargs,
-        "workbench.metric-resample.area_surfs": metric_resample_area_surfs_cargs,
-        "workbench.metric-resample.area_metrics": metric_resample_area_metrics_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.metric-resample": metric_resample_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MetricResampleParametersTagged = Required<Pick<MetricResampleParameters, '@type'>> & MetricResampleParameters;
 
 
 /**
@@ -88,9 +55,9 @@ function dynOutputs(
 function metric_resample_area_surfs_params(
     current_area: InputPathType,
     new_area: InputPathType,
-): MetricResampleAreaSurfsParameters {
+): MetricResampleAreaSurfsParametersTagged {
     const params = {
-        "@type": "workbench.metric-resample.area_surfs" as const,
+        "@type": "area_surfs" as const,
         "current_area": current_area,
         "new_area": new_area,
     };
@@ -129,9 +96,9 @@ function metric_resample_area_surfs_cargs(
 function metric_resample_area_metrics_params(
     current_area: InputPathType,
     new_area: InputPathType,
-): MetricResampleAreaMetricsParameters {
+): MetricResampleAreaMetricsParametersTagged {
     const params = {
-        "@type": "workbench.metric-resample.area_metrics" as const,
+        "@type": "area_metrics" as const,
         "current_area": current_area,
         "new_area": new_area,
     };
@@ -160,7 +127,7 @@ function metric_resample_area_metrics_cargs(
 
 
 /**
- * Output object returned when calling `metric_resample(...)`.
+ * Output object returned when calling `MetricResampleParameters(...)`.
  *
  * @interface
  */
@@ -209,9 +176,9 @@ function metric_resample_params(
     opt_valid_roi_out_roi_out: string | null = null,
     opt_largest: boolean = false,
     opt_bypass_sphere_check: boolean = false,
-): MetricResampleParameters {
+): MetricResampleParametersTagged {
     const params = {
-        "@type": "workbench.metric-resample" as const,
+        "@type": "workbench/metric-resample" as const,
         "metric_in": metric_in,
         "current_sphere": current_sphere,
         "new_sphere": new_sphere,
@@ -257,10 +224,10 @@ function metric_resample_cargs(
     cargs.push((params["method"] ?? null));
     cargs.push((params["metric_out"] ?? null));
     if ((params["area_surfs"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["area_surfs"] ?? null)["@type"])((params["area_surfs"] ?? null), execution));
+        cargs.push(...metric_resample_area_surfs_cargs((params["area_surfs"] ?? null), execution));
     }
     if ((params["area_metrics"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["area_metrics"] ?? null)["@type"])((params["area_metrics"] ?? null), execution));
+        cargs.push(...metric_resample_area_metrics_cargs((params["area_metrics"] ?? null), execution));
     }
     if ((params["opt_current_roi_roi_metric"] ?? null) !== null) {
         cargs.push(
@@ -274,10 +241,10 @@ function metric_resample_cargs(
             (params["opt_valid_roi_out_roi_out"] ?? null)
         );
     }
-    if ((params["opt_largest"] ?? null)) {
+    if ((params["opt_largest"] ?? false)) {
         cargs.push("-largest");
     }
-    if ((params["opt_bypass_sphere_check"] ?? null)) {
+    if ((params["opt_bypass_sphere_check"] ?? false)) {
         cargs.push("-bypass-sphere-check");
     }
     return cargs;
@@ -406,10 +373,7 @@ function metric_resample(
 
 export {
       METRIC_RESAMPLE_METADATA,
-      MetricResampleAreaMetricsParameters,
-      MetricResampleAreaSurfsParameters,
       MetricResampleOutputs,
-      MetricResampleParameters,
       metric_resample,
       metric_resample_area_metrics_params,
       metric_resample_area_surfs_params,

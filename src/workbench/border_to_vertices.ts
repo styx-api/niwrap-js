@@ -12,50 +12,17 @@ const BORDER_TO_VERTICES_METADATA: Metadata = {
 
 
 interface BorderToVerticesParameters {
-    "@type": "workbench.border-to-vertices";
+    "@type"?: "workbench/border-to-vertices";
     "surface": InputPathType;
     "border_file": InputPathType;
     "metric_out": string;
     "opt_border_name"?: string | null | undefined;
 }
+type BorderToVerticesParametersTagged = Required<Pick<BorderToVerticesParameters, '@type'>> & BorderToVerticesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.border-to-vertices": border_to_vertices_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.border-to-vertices": border_to_vertices_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `border_to_vertices(...)`.
+ * Output object returned when calling `BorderToVerticesParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function border_to_vertices_params(
     border_file: InputPathType,
     metric_out: string,
     opt_border_name: string | null = null,
-): BorderToVerticesParameters {
+): BorderToVerticesParametersTagged {
     const params = {
-        "@type": "workbench.border-to-vertices" as const,
+        "@type": "workbench/border-to-vertices" as const,
         "surface": surface,
         "border_file": border_file,
         "metric_out": metric_out,
@@ -212,7 +179,6 @@ function border_to_vertices(
 export {
       BORDER_TO_VERTICES_METADATA,
       BorderToVerticesOutputs,
-      BorderToVerticesParameters,
       border_to_vertices,
       border_to_vertices_execute,
       border_to_vertices_params,

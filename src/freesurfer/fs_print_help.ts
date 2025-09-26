@@ -12,46 +12,14 @@ const FS_PRINT_HELP_METADATA: Metadata = {
 
 
 interface FsPrintHelpParameters {
-    "@type": "freesurfer.fsPrintHelp";
+    "@type"?: "freesurfer/fsPrintHelp";
     "arguments"?: string | null | undefined;
 }
+type FsPrintHelpParametersTagged = Required<Pick<FsPrintHelpParameters, '@type'>> & FsPrintHelpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fsPrintHelp": fs_print_help_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fs_print_help(...)`.
+ * Output object returned when calling `FsPrintHelpParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface FsPrintHelpOutputs {
  */
 function fs_print_help_params(
     arguments_: string | null = null,
-): FsPrintHelpParameters {
+): FsPrintHelpParametersTagged {
     const params = {
-        "@type": "freesurfer.fsPrintHelp" as const,
+        "@type": "freesurfer/fsPrintHelp" as const,
     };
     if (arguments_ !== null) {
         params["arguments"] = arguments_;
@@ -177,7 +145,6 @@ function fs_print_help(
 export {
       FS_PRINT_HELP_METADATA,
       FsPrintHelpOutputs,
-      FsPrintHelpParameters,
       fs_print_help,
       fs_print_help_execute,
       fs_print_help_params,

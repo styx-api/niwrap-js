@@ -12,51 +12,18 @@ const MRIS_LABEL_CALC_METADATA: Metadata = {
 
 
 interface MrisLabelCalcParameters {
-    "@type": "freesurfer.mris_label_calc";
+    "@type"?: "freesurfer/mris_label_calc";
     "command": "union" | "intersect" | "invert" | "erode" | "dilate";
     "input1": InputPathType;
     "input2": InputPathType;
     "output": string;
     "iterations"?: number | null | undefined;
 }
+type MrisLabelCalcParametersTagged = Required<Pick<MrisLabelCalcParameters, '@type'>> & MrisLabelCalcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_label_calc": mris_label_calc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_label_calc": mris_label_calc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_label_calc(...)`.
+ * Output object returned when calling `MrisLabelCalcParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function mris_label_calc_params(
     input2: InputPathType,
     output: string,
     iterations: number | null = null,
-): MrisLabelCalcParameters {
+): MrisLabelCalcParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_label_calc" as const,
+        "@type": "freesurfer/mris_label_calc" as const,
         "command": command,
         "input1": input1,
         "input2": input2,
@@ -214,7 +181,6 @@ function mris_label_calc(
 export {
       MRIS_LABEL_CALC_METADATA,
       MrisLabelCalcOutputs,
-      MrisLabelCalcParameters,
       mris_label_calc,
       mris_label_calc_execute,
       mris_label_calc_params,

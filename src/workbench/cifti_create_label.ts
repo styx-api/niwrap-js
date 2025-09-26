@@ -12,79 +12,46 @@ const CIFTI_CREATE_LABEL_METADATA: Metadata = {
 
 
 interface CiftiCreateLabelVolumeParameters {
-    "@type": "workbench.cifti-create-label.volume";
+    "@type"?: "volume";
     "label_volume": InputPathType;
     "structure_label_volume": InputPathType;
 }
+type CiftiCreateLabelVolumeParametersTagged = Required<Pick<CiftiCreateLabelVolumeParameters, '@type'>> & CiftiCreateLabelVolumeParameters;
 
 
 interface CiftiCreateLabelLeftLabelParameters {
-    "@type": "workbench.cifti-create-label.left_label";
+    "@type"?: "left_label";
     "label": InputPathType;
     "opt_roi_left_roi_metric"?: InputPathType | null | undefined;
 }
+type CiftiCreateLabelLeftLabelParametersTagged = Required<Pick<CiftiCreateLabelLeftLabelParameters, '@type'>> & CiftiCreateLabelLeftLabelParameters;
 
 
 interface CiftiCreateLabelRightLabelParameters {
-    "@type": "workbench.cifti-create-label.right_label";
+    "@type"?: "right_label";
     "label": InputPathType;
     "opt_roi_right_roi_metric"?: InputPathType | null | undefined;
 }
+type CiftiCreateLabelRightLabelParametersTagged = Required<Pick<CiftiCreateLabelRightLabelParameters, '@type'>> & CiftiCreateLabelRightLabelParameters;
 
 
 interface CiftiCreateLabelCerebellumLabelParameters {
-    "@type": "workbench.cifti-create-label.cerebellum_label";
+    "@type"?: "cerebellum_label";
     "label": InputPathType;
     "opt_roi_cerebellum_roi_metric"?: InputPathType | null | undefined;
 }
+type CiftiCreateLabelCerebellumLabelParametersTagged = Required<Pick<CiftiCreateLabelCerebellumLabelParameters, '@type'>> & CiftiCreateLabelCerebellumLabelParameters;
 
 
 interface CiftiCreateLabelParameters {
-    "@type": "workbench.cifti-create-label";
+    "@type"?: "workbench/cifti-create-label";
     "cifti_out": string;
     "volume"?: CiftiCreateLabelVolumeParameters | null | undefined;
     "left_label"?: CiftiCreateLabelLeftLabelParameters | null | undefined;
     "right_label"?: CiftiCreateLabelRightLabelParameters | null | undefined;
     "cerebellum_label"?: CiftiCreateLabelCerebellumLabelParameters | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-create-label": cifti_create_label_cargs,
-        "workbench.cifti-create-label.volume": cifti_create_label_volume_cargs,
-        "workbench.cifti-create-label.left_label": cifti_create_label_left_label_cargs,
-        "workbench.cifti-create-label.right_label": cifti_create_label_right_label_cargs,
-        "workbench.cifti-create-label.cerebellum_label": cifti_create_label_cerebellum_label_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-create-label": cifti_create_label_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiCreateLabelParametersTagged = Required<Pick<CiftiCreateLabelParameters, '@type'>> & CiftiCreateLabelParameters;
 
 
 /**
@@ -98,9 +65,9 @@ function dynOutputs(
 function cifti_create_label_volume_params(
     label_volume: InputPathType,
     structure_label_volume: InputPathType,
-): CiftiCreateLabelVolumeParameters {
+): CiftiCreateLabelVolumeParametersTagged {
     const params = {
-        "@type": "workbench.cifti-create-label.volume" as const,
+        "@type": "volume" as const,
         "label_volume": label_volume,
         "structure_label_volume": structure_label_volume,
     };
@@ -139,9 +106,9 @@ function cifti_create_label_volume_cargs(
 function cifti_create_label_left_label_params(
     label: InputPathType,
     opt_roi_left_roi_metric: InputPathType | null = null,
-): CiftiCreateLabelLeftLabelParameters {
+): CiftiCreateLabelLeftLabelParametersTagged {
     const params = {
-        "@type": "workbench.cifti-create-label.left_label" as const,
+        "@type": "left_label" as const,
         "label": label,
     };
     if (opt_roi_left_roi_metric !== null) {
@@ -187,9 +154,9 @@ function cifti_create_label_left_label_cargs(
 function cifti_create_label_right_label_params(
     label: InputPathType,
     opt_roi_right_roi_metric: InputPathType | null = null,
-): CiftiCreateLabelRightLabelParameters {
+): CiftiCreateLabelRightLabelParametersTagged {
     const params = {
-        "@type": "workbench.cifti-create-label.right_label" as const,
+        "@type": "right_label" as const,
         "label": label,
     };
     if (opt_roi_right_roi_metric !== null) {
@@ -235,9 +202,9 @@ function cifti_create_label_right_label_cargs(
 function cifti_create_label_cerebellum_label_params(
     label: InputPathType,
     opt_roi_cerebellum_roi_metric: InputPathType | null = null,
-): CiftiCreateLabelCerebellumLabelParameters {
+): CiftiCreateLabelCerebellumLabelParametersTagged {
     const params = {
-        "@type": "workbench.cifti-create-label.cerebellum_label" as const,
+        "@type": "cerebellum_label" as const,
         "label": label,
     };
     if (opt_roi_cerebellum_roi_metric !== null) {
@@ -273,7 +240,7 @@ function cifti_create_label_cerebellum_label_cargs(
 
 
 /**
- * Output object returned when calling `cifti_create_label(...)`.
+ * Output object returned when calling `CiftiCreateLabelParameters(...)`.
  *
  * @interface
  */
@@ -306,9 +273,9 @@ function cifti_create_label_params(
     left_label: CiftiCreateLabelLeftLabelParameters | null = null,
     right_label: CiftiCreateLabelRightLabelParameters | null = null,
     cerebellum_label: CiftiCreateLabelCerebellumLabelParameters | null = null,
-): CiftiCreateLabelParameters {
+): CiftiCreateLabelParametersTagged {
     const params = {
-        "@type": "workbench.cifti-create-label" as const,
+        "@type": "workbench/cifti-create-label" as const,
         "cifti_out": cifti_out,
     };
     if (volume !== null) {
@@ -344,16 +311,16 @@ function cifti_create_label_cargs(
     cargs.push("-cifti-create-label");
     cargs.push((params["cifti_out"] ?? null));
     if ((params["volume"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["volume"] ?? null)["@type"])((params["volume"] ?? null), execution));
+        cargs.push(...cifti_create_label_volume_cargs((params["volume"] ?? null), execution));
     }
     if ((params["left_label"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["left_label"] ?? null)["@type"])((params["left_label"] ?? null), execution));
+        cargs.push(...cifti_create_label_left_label_cargs((params["left_label"] ?? null), execution));
     }
     if ((params["right_label"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["right_label"] ?? null)["@type"])((params["right_label"] ?? null), execution));
+        cargs.push(...cifti_create_label_right_label_cargs((params["right_label"] ?? null), execution));
     }
     if ((params["cerebellum_label"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["cerebellum_label"] ?? null)["@type"])((params["cerebellum_label"] ?? null), execution));
+        cargs.push(...cifti_create_label_cerebellum_label_cargs((params["cerebellum_label"] ?? null), execution));
     }
     return cargs;
 }
@@ -516,12 +483,7 @@ function cifti_create_label(
 
 export {
       CIFTI_CREATE_LABEL_METADATA,
-      CiftiCreateLabelCerebellumLabelParameters,
-      CiftiCreateLabelLeftLabelParameters,
       CiftiCreateLabelOutputs,
-      CiftiCreateLabelParameters,
-      CiftiCreateLabelRightLabelParameters,
-      CiftiCreateLabelVolumeParameters,
       cifti_create_label,
       cifti_create_label_cerebellum_label_params,
       cifti_create_label_execute,

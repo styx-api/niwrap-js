@@ -12,49 +12,16 @@ const SURFACE_SET_COORDINATES_METADATA: Metadata = {
 
 
 interface SurfaceSetCoordinatesParameters {
-    "@type": "workbench.surface-set-coordinates";
+    "@type"?: "workbench/surface-set-coordinates";
     "surface_in": InputPathType;
     "coord_metric": InputPathType;
     "surface_out": string;
 }
+type SurfaceSetCoordinatesParametersTagged = Required<Pick<SurfaceSetCoordinatesParameters, '@type'>> & SurfaceSetCoordinatesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-set-coordinates": surface_set_coordinates_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-set-coordinates": surface_set_coordinates_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_set_coordinates(...)`.
+ * Output object returned when calling `SurfaceSetCoordinatesParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function surface_set_coordinates_params(
     surface_in: InputPathType,
     coord_metric: InputPathType,
     surface_out: string,
-): SurfaceSetCoordinatesParameters {
+): SurfaceSetCoordinatesParametersTagged {
     const params = {
-        "@type": "workbench.surface-set-coordinates" as const,
+        "@type": "workbench/surface-set-coordinates" as const,
         "surface_in": surface_in,
         "coord_metric": coord_metric,
         "surface_out": surface_out,
@@ -202,7 +169,6 @@ function surface_set_coordinates(
 export {
       SURFACE_SET_COORDINATES_METADATA,
       SurfaceSetCoordinatesOutputs,
-      SurfaceSetCoordinatesParameters,
       surface_set_coordinates,
       surface_set_coordinates_execute,
       surface_set_coordinates_params,

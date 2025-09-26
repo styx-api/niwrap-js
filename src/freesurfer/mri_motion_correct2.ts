@@ -12,7 +12,7 @@ const MRI_MOTION_CORRECT2_METADATA: Metadata = {
 
 
 interface MriMotionCorrect2Parameters {
-    "@type": "freesurfer.mri_motion_correct2";
+    "@type"?: "freesurfer/mri_motion_correct2";
     "output_spec": string;
     "input_files": Array<InputPathType>;
     "target"?: InputPathType | null | undefined;
@@ -24,44 +24,11 @@ interface MriMotionCorrect2Parameters {
     "version": boolean;
     "debug": boolean;
 }
+type MriMotionCorrect2ParametersTagged = Required<Pick<MriMotionCorrect2Parameters, '@type'>> & MriMotionCorrect2Parameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_motion_correct2": mri_motion_correct2_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_motion_correct2": mri_motion_correct2_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_motion_correct2(...)`.
+ * Output object returned when calling `MriMotionCorrect2Parameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function mri_motion_correct2_params(
     cm: boolean = false,
     version: boolean = false,
     debug: boolean = false,
-): MriMotionCorrect2Parameters {
+): MriMotionCorrect2ParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_motion_correct2" as const,
+        "@type": "freesurfer/mri_motion_correct2" as const,
         "output_spec": output_spec,
         "input_files": input_files,
         "wild": wild,
@@ -156,7 +123,7 @@ function mri_motion_correct2_cargs(
             execution.inputFile((params["target"] ?? null))
         );
     }
-    if ((params["wild"] ?? null)) {
+    if ((params["wild"] ?? false)) {
         cargs.push("-wild");
     }
     if ((params["tmp_dir"] ?? null) !== null) {
@@ -165,7 +132,7 @@ function mri_motion_correct2_cargs(
             (params["tmp_dir"] ?? null)
         );
     }
-    if ((params["nocleanup"] ?? null)) {
+    if ((params["nocleanup"] ?? false)) {
         cargs.push("-nocleanup");
     }
     if ((params["umask"] ?? null) !== null) {
@@ -174,13 +141,13 @@ function mri_motion_correct2_cargs(
             (params["umask"] ?? null)
         );
     }
-    if ((params["cm"] ?? null)) {
+    if ((params["cm"] ?? false)) {
         cargs.push("-cm");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
     return cargs;
@@ -279,7 +246,6 @@ function mri_motion_correct2(
 export {
       MRI_MOTION_CORRECT2_METADATA,
       MriMotionCorrect2Outputs,
-      MriMotionCorrect2Parameters,
       mri_motion_correct2,
       mri_motion_correct2_execute,
       mri_motion_correct2_params,

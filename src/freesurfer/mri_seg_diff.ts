@@ -12,7 +12,7 @@ const MRI_SEG_DIFF_METADATA: Metadata = {
 
 
 interface MriSegDiffParameters {
-    "@type": "freesurfer.mri_seg_diff";
+    "@type"?: "freesurfer/mri_seg_diff";
     "seg1"?: InputPathType | null | undefined;
     "seg2"?: InputPathType | null | undefined;
     "seg"?: InputPathType | null | undefined;
@@ -24,44 +24,11 @@ interface MriSegDiffParameters {
     "checkopts": boolean;
     "version": boolean;
 }
+type MriSegDiffParametersTagged = Required<Pick<MriSegDiffParameters, '@type'>> & MriSegDiffParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_seg_diff": mri_seg_diff_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_seg_diff": mri_seg_diff_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_seg_diff(...)`.
+ * Output object returned when calling `MriSegDiffParameters(...)`.
  *
  * @interface
  */
@@ -108,9 +75,9 @@ function mri_seg_diff_params(
     debug: boolean = false,
     checkopts: boolean = false,
     version: boolean = false,
-): MriSegDiffParameters {
+): MriSegDiffParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_seg_diff" as const,
+        "@type": "freesurfer/mri_seg_diff" as const,
         "diff": diff,
         "diff_force": diff_force,
         "debug": debug,
@@ -184,16 +151,16 @@ function mri_seg_diff_cargs(
             (params["merged"] ?? null)
         );
     }
-    if ((params["diff_force"] ?? null)) {
+    if ((params["diff_force"] ?? false)) {
         cargs.push("--diff-force");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["checkopts"] ?? null)) {
+    if ((params["checkopts"] ?? false)) {
         cargs.push("--checkopts");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -293,7 +260,6 @@ function mri_seg_diff(
 export {
       MRI_SEG_DIFF_METADATA,
       MriSegDiffOutputs,
-      MriSegDiffParameters,
       mri_seg_diff,
       mri_seg_diff_execute,
       mri_seg_diff_params,

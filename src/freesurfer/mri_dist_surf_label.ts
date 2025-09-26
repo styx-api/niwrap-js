@@ -12,49 +12,16 @@ const MRI_DIST_SURF_LABEL_METADATA: Metadata = {
 
 
 interface MriDistSurfLabelParameters {
-    "@type": "freesurfer.mri_dist_surf_label";
+    "@type"?: "freesurfer/mri_dist_surf_label";
     "surface": InputPathType;
     "label_file": InputPathType;
     "output": string;
 }
+type MriDistSurfLabelParametersTagged = Required<Pick<MriDistSurfLabelParameters, '@type'>> & MriDistSurfLabelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_dist_surf_label": mri_dist_surf_label_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_dist_surf_label": mri_dist_surf_label_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_dist_surf_label(...)`.
+ * Output object returned when calling `MriDistSurfLabelParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mri_dist_surf_label_params(
     surface: InputPathType,
     label_file: InputPathType,
     output: string,
-): MriDistSurfLabelParameters {
+): MriDistSurfLabelParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_dist_surf_label" as const,
+        "@type": "freesurfer/mri_dist_surf_label" as const,
         "surface": surface,
         "label_file": label_file,
         "output": output,
@@ -193,7 +160,6 @@ function mri_dist_surf_label(
 export {
       MRI_DIST_SURF_LABEL_METADATA,
       MriDistSurfLabelOutputs,
-      MriDistSurfLabelParameters,
       mri_dist_surf_label,
       mri_dist_surf_label_execute,
       mri_dist_surf_label_params,

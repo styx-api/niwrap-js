@@ -12,46 +12,14 @@ const BUILD_DESIKAN_KILLIANY_GCS_CSH_METADATA: Metadata = {
 
 
 interface BuildDesikanKillianyGcsCshParameters {
-    "@type": "freesurfer.build_desikan_killiany_gcs.csh";
+    "@type"?: "freesurfer/build_desikan_killiany_gcs.csh";
     "hemi": string;
 }
+type BuildDesikanKillianyGcsCshParametersTagged = Required<Pick<BuildDesikanKillianyGcsCshParameters, '@type'>> & BuildDesikanKillianyGcsCshParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.build_desikan_killiany_gcs.csh": build_desikan_killiany_gcs_csh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `build_desikan_killiany_gcs_csh(...)`.
+ * Output object returned when calling `BuildDesikanKillianyGcsCshParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface BuildDesikanKillianyGcsCshOutputs {
  */
 function build_desikan_killiany_gcs_csh_params(
     hemi: string,
-): BuildDesikanKillianyGcsCshParameters {
+): BuildDesikanKillianyGcsCshParametersTagged {
     const params = {
-        "@type": "freesurfer.build_desikan_killiany_gcs.csh" as const,
+        "@type": "freesurfer/build_desikan_killiany_gcs.csh" as const,
         "hemi": hemi,
     };
     return params;
@@ -173,7 +141,6 @@ function build_desikan_killiany_gcs_csh(
 export {
       BUILD_DESIKAN_KILLIANY_GCS_CSH_METADATA,
       BuildDesikanKillianyGcsCshOutputs,
-      BuildDesikanKillianyGcsCshParameters,
       build_desikan_killiany_gcs_csh,
       build_desikan_killiany_gcs_csh_execute,
       build_desikan_killiany_gcs_csh_params,

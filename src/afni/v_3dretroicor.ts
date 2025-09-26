@@ -12,7 +12,7 @@ const V_3DRETROICOR_METADATA: Metadata = {
 
 
 interface V3dretroicorParameters {
-    "@type": "afni.3dretroicor";
+    "@type"?: "afni/3dretroicor";
     "ignore"?: number | null | undefined;
     "prefix"?: string | null | undefined;
     "card"?: InputPathType | null | undefined;
@@ -23,44 +23,11 @@ interface V3dretroicorParameters {
     "order"?: number | null | undefined;
     "dataset": InputPathType;
 }
+type V3dretroicorParametersTagged = Required<Pick<V3dretroicorParameters, '@type'>> & V3dretroicorParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dretroicor": v_3dretroicor_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dretroicor": v_3dretroicor_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dretroicor(...)`.
+ * Output object returned when calling `V3dretroicorParameters(...)`.
  *
  * @interface
  */
@@ -109,9 +76,9 @@ function v_3dretroicor_params(
     resp: InputPathType | null = null,
     respphase: string | null = null,
     order: number | null = null,
-): V3dretroicorParameters {
+): V3dretroicorParametersTagged {
     const params = {
-        "@type": "afni.3dretroicor" as const,
+        "@type": "afni/3dretroicor" as const,
         "dataset": dataset,
     };
     if (ignore !== null) {
@@ -300,7 +267,6 @@ function v_3dretroicor(
 
 export {
       V3dretroicorOutputs,
-      V3dretroicorParameters,
       V_3DRETROICOR_METADATA,
       v_3dretroicor,
       v_3dretroicor_execute,

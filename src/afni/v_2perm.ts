@@ -12,7 +12,7 @@ const V_2PERM_METADATA: Metadata = {
 
 
 interface V2permParameters {
-    "@type": "afni.2perm";
+    "@type"?: "afni/2perm";
     "prefix"?: string | null | undefined;
     "comma": boolean;
     "bottom_int": number;
@@ -20,44 +20,11 @@ interface V2permParameters {
     "subset1_size"?: number | null | undefined;
     "subset2_size"?: number | null | undefined;
 }
+type V2permParametersTagged = Required<Pick<V2permParameters, '@type'>> & V2permParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.2perm": v_2perm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.2perm": v_2perm_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_2perm(...)`.
+ * Output object returned when calling `V2permParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +63,9 @@ function v_2perm_params(
     comma: boolean = false,
     subset1_size: number | null = null,
     subset2_size: number | null = null,
-): V2permParameters {
+): V2permParametersTagged {
     const params = {
-        "@type": "afni.2perm" as const,
+        "@type": "afni/2perm" as const,
         "comma": comma,
         "bottom_int": bottom_int,
         "top_int": top_int,
@@ -136,7 +103,7 @@ function v_2perm_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["comma"] ?? null)) {
+    if ((params["comma"] ?? false)) {
         cargs.push("-comma");
     }
     cargs.push(String((params["bottom_int"] ?? null)));
@@ -235,7 +202,6 @@ function v_2perm(
 
 export {
       V2permOutputs,
-      V2permParameters,
       V_2PERM_METADATA,
       v_2perm,
       v_2perm_execute,

@@ -12,47 +12,14 @@ const V__1D_DIFF_MAG_METADATA: Metadata = {
 
 
 interface V1dDiffMagParameters {
-    "@type": "afni.@1dDiffMag";
+    "@type"?: "afni/@1dDiffMag";
     "infile": InputPathType;
 }
+type V1dDiffMagParametersTagged = Required<Pick<V1dDiffMagParameters, '@type'>> & V1dDiffMagParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@1dDiffMag": v__1d_diff_mag_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@1dDiffMag": v__1d_diff_mag_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__1d_diff_mag(...)`.
+ * Output object returned when calling `V1dDiffMagParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface V1dDiffMagOutputs {
  */
 function v__1d_diff_mag_params(
     infile: InputPathType,
-): V1dDiffMagParameters {
+): V1dDiffMagParametersTagged {
     const params = {
-        "@type": "afni.@1dDiffMag" as const,
+        "@type": "afni/@1dDiffMag" as const,
         "infile": infile,
     };
     return params;
@@ -178,7 +145,6 @@ function v__1d_diff_mag(
 
 export {
       V1dDiffMagOutputs,
-      V1dDiffMagParameters,
       V__1D_DIFF_MAG_METADATA,
       v__1d_diff_mag,
       v__1d_diff_mag_execute,

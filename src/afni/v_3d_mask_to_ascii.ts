@@ -12,49 +12,16 @@ const V_3D_MASK_TO_ASCII_METADATA: Metadata = {
 
 
 interface V3dMaskToAsciiParameters {
-    "@type": "afni.3dMaskToASCII";
+    "@type"?: "afni/3dMaskToASCII";
     "tobin_flag": boolean;
     "dataset": InputPathType;
     "outputfile": string;
 }
+type V3dMaskToAsciiParametersTagged = Required<Pick<V3dMaskToAsciiParameters, '@type'>> & V3dMaskToAsciiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dMaskToASCII": v_3d_mask_to_ascii_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dMaskToASCII": v_3d_mask_to_ascii_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_mask_to_ascii(...)`.
+ * Output object returned when calling `V3dMaskToAsciiParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function v_3d_mask_to_ascii_params(
     dataset: InputPathType,
     outputfile: string,
     tobin_flag: boolean = false,
-): V3dMaskToAsciiParameters {
+): V3dMaskToAsciiParametersTagged {
     const params = {
-        "@type": "afni.3dMaskToASCII" as const,
+        "@type": "afni/3dMaskToASCII" as const,
         "tobin_flag": tobin_flag,
         "dataset": dataset,
         "outputfile": outputfile,
@@ -108,7 +75,7 @@ function v_3d_mask_to_ascii_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("3dMaskToASCII");
-    if ((params["tobin_flag"] ?? null)) {
+    if ((params["tobin_flag"] ?? false)) {
         cargs.push("-tobin");
     }
     cargs.push(execution.inputFile((params["dataset"] ?? null)));
@@ -194,7 +161,6 @@ function v_3d_mask_to_ascii(
 
 export {
       V3dMaskToAsciiOutputs,
-      V3dMaskToAsciiParameters,
       V_3D_MASK_TO_ASCII_METADATA,
       v_3d_mask_to_ascii,
       v_3d_mask_to_ascii_execute,

@@ -12,50 +12,17 @@ const MRI_BRAIN_VOLUME_METADATA: Metadata = {
 
 
 interface MriBrainVolumeParameters {
-    "@type": "freesurfer.mri_brain_volume";
+    "@type"?: "freesurfer/mri_brain_volume";
     "input_file": InputPathType;
     "output_file"?: string | null | undefined;
     "force_param"?: number | null | undefined;
     "version": boolean;
 }
+type MriBrainVolumeParametersTagged = Required<Pick<MriBrainVolumeParameters, '@type'>> & MriBrainVolumeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_brain_volume": mri_brain_volume_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_brain_volume": mri_brain_volume_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_brain_volume(...)`.
+ * Output object returned when calling `MriBrainVolumeParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mri_brain_volume_params(
     output_file: string | null = null,
     force_param: number | null = null,
     version: boolean = false,
-): MriBrainVolumeParameters {
+): MriBrainVolumeParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_brain_volume" as const,
+        "@type": "freesurfer/mri_brain_volume" as const,
         "input_file": input_file,
         "version": version,
     };
@@ -126,7 +93,7 @@ function mri_brain_volume_cargs(
             String((params["force_param"] ?? null))
         );
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -213,7 +180,6 @@ function mri_brain_volume(
 export {
       MRI_BRAIN_VOLUME_METADATA,
       MriBrainVolumeOutputs,
-      MriBrainVolumeParameters,
       mri_brain_volume,
       mri_brain_volume_execute,
       mri_brain_volume_params,

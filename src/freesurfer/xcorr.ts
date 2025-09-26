@@ -12,7 +12,7 @@ const XCORR_METADATA: Metadata = {
 
 
 interface XcorrParameters {
-    "@type": "freesurfer.xcorr";
+    "@type"?: "freesurfer/xcorr";
     "input1": InputPathType;
     "input2": InputPathType;
     "output": string;
@@ -20,44 +20,11 @@ interface XcorrParameters {
     "tmp_dir"?: string | null | undefined;
     "no_cleanup": boolean;
 }
+type XcorrParametersTagged = Required<Pick<XcorrParameters, '@type'>> & XcorrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.xcorr": xcorr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.xcorr": xcorr_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `xcorr(...)`.
+ * Output object returned when calling `XcorrParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +63,9 @@ function xcorr_params(
     log_file: string | null = null,
     tmp_dir: string | null = null,
     no_cleanup: boolean = false,
-): XcorrParameters {
+): XcorrParametersTagged {
     const params = {
-        "@type": "freesurfer.xcorr" as const,
+        "@type": "freesurfer/xcorr" as const,
         "input1": input1,
         "input2": input2,
         "output": output,
@@ -152,7 +119,7 @@ function xcorr_cargs(
             (params["tmp_dir"] ?? null)
         );
     }
-    if ((params["no_cleanup"] ?? null)) {
+    if ((params["no_cleanup"] ?? false)) {
         cargs.push("--no-cleanup");
     }
     return cargs;
@@ -244,7 +211,6 @@ function xcorr(
 export {
       XCORR_METADATA,
       XcorrOutputs,
-      XcorrParameters,
       xcorr,
       xcorr_execute,
       xcorr_params,

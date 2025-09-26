@@ -12,7 +12,7 @@ const AVW2FSL_METADATA: Metadata = {
 
 
 interface Avw2fslParameters {
-    "@type": "fsl.avw2fsl";
+    "@type"?: "fsl/avw2fsl";
     "source": Array<string>;
     "destination": string;
     "archive": boolean;
@@ -50,44 +50,11 @@ interface Avw2fslParameters {
     "help": boolean;
     "version": boolean;
 }
+type Avw2fslParametersTagged = Required<Pick<Avw2fslParameters, '@type'>> & Avw2fslParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.avw2fsl": avw2fsl_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.avw2fsl": avw2fsl_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `avw2fsl(...)`.
+ * Output object returned when calling `Avw2fslParameters(...)`.
  *
  * @interface
  */
@@ -182,9 +149,9 @@ function avw2fsl_params(
     context: string | null = null,
     help: boolean = false,
     version: boolean = false,
-): Avw2fslParameters {
+): Avw2fslParametersTagged {
     const params = {
-        "@type": "fsl.avw2fsl" as const,
+        "@type": "fsl/avw2fsl" as const,
         "source": source,
         "destination": destination,
         "archive": archive,
@@ -258,76 +225,76 @@ function avw2fsl_cargs(
     cargs.push("avw2fsl");
     cargs.push(...(params["source"] ?? null));
     cargs.push((params["destination"] ?? null));
-    if ((params["archive"] ?? null)) {
+    if ((params["archive"] ?? false)) {
         cargs.push("-a");
     }
-    if ((params["attributes_only"] ?? null)) {
+    if ((params["attributes_only"] ?? false)) {
         cargs.push("--attributes-only");
     }
     if ((params["backup"] ?? null) !== null) {
         cargs.push(["--backup=", (params["backup"] ?? null)].join(''));
     }
-    if ((params["backup_noarg"] ?? null)) {
+    if ((params["backup_noarg"] ?? false)) {
         cargs.push("-b");
     }
-    if ((params["copy_contents"] ?? null)) {
+    if ((params["copy_contents"] ?? false)) {
         cargs.push("--copy-contents");
     }
-    if ((params["no_dereference_preserve_links"] ?? null)) {
+    if ((params["no_dereference_preserve_links"] ?? false)) {
         cargs.push("-d");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-f");
     }
-    if ((params["interactive"] ?? null)) {
+    if ((params["interactive"] ?? false)) {
         cargs.push("-i");
     }
-    if ((params["follow_symlinks_cmdline"] ?? null)) {
+    if ((params["follow_symlinks_cmdline"] ?? false)) {
         cargs.push("-H");
     }
-    if ((params["hard_link"] ?? null)) {
+    if ((params["hard_link"] ?? false)) {
         cargs.push("-l");
     }
-    if ((params["dereference"] ?? null)) {
+    if ((params["dereference"] ?? false)) {
         cargs.push("-L");
     }
-    if ((params["no_clobber"] ?? null)) {
+    if ((params["no_clobber"] ?? false)) {
         cargs.push("-n");
     }
-    if ((params["no_dereference"] ?? null)) {
+    if ((params["no_dereference"] ?? false)) {
         cargs.push("-P");
     }
-    if ((params["preserve"] ?? null)) {
+    if ((params["preserve"] ?? false)) {
         cargs.push("-p");
     }
     if ((params["preserve_attr"] ?? null) !== null) {
         cargs.push(["--preserve=", (params["preserve_attr"] ?? null)].join(''));
     }
-    if ((params["preserve_context"] ?? null)) {
+    if ((params["preserve_context"] ?? false)) {
         cargs.push("-c");
     }
     if ((params["no_preserve"] ?? null) !== null) {
         cargs.push(["--no-preserve=", (params["no_preserve"] ?? null)].join(''));
     }
-    if ((params["parents"] ?? null)) {
+    if ((params["parents"] ?? false)) {
         cargs.push("--parents");
     }
-    if ((params["recursive"] ?? null)) {
+    if ((params["recursive"] ?? false)) {
         cargs.push("-R");
     }
     if ((params["reflink"] ?? null) !== null) {
         cargs.push(["--reflink=", (params["reflink"] ?? null)].join(''));
     }
-    if ((params["remove_destination"] ?? null)) {
+    if ((params["remove_destination"] ?? false)) {
         cargs.push("--remove-destination");
     }
     if ((params["sparse"] ?? null) !== null) {
         cargs.push(["--sparse=", (params["sparse"] ?? null)].join(''));
     }
-    if ((params["strip_trailing_slashes"] ?? null)) {
+    if ((params["strip_trailing_slashes"] ?? false)) {
         cargs.push("--strip-trailing-slashes");
     }
-    if ((params["symbolic_link"] ?? null)) {
+    if ((params["symbolic_link"] ?? false)) {
         cargs.push("-s");
     }
     if ((params["suffix"] ?? null) !== null) {
@@ -336,28 +303,28 @@ function avw2fsl_cargs(
     if ((params["target_directory"] ?? null) !== null) {
         cargs.push(["-t=", (params["target_directory"] ?? null)].join(''));
     }
-    if ((params["no_target_directory"] ?? null)) {
+    if ((params["no_target_directory"] ?? false)) {
         cargs.push("-T");
     }
-    if ((params["update"] ?? null)) {
+    if ((params["update"] ?? false)) {
         cargs.push("-u");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["one_file_system"] ?? null)) {
+    if ((params["one_file_system"] ?? false)) {
         cargs.push("-x");
     }
-    if ((params["selinux_context"] ?? null)) {
+    if ((params["selinux_context"] ?? false)) {
         cargs.push("-Z");
     }
     if ((params["context"] ?? null) !== null) {
         cargs.push(["--context=", (params["context"] ?? null)].join(''));
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -508,7 +475,6 @@ function avw2fsl(
 export {
       AVW2FSL_METADATA,
       Avw2fslOutputs,
-      Avw2fslParameters,
       avw2fsl,
       avw2fsl_execute,
       avw2fsl_params,

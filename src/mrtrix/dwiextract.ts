@@ -12,47 +12,53 @@ const DWIEXTRACT_METADATA: Metadata = {
 
 
 interface DwiextractFslgradParameters {
-    "@type": "mrtrix.dwiextract.fslgrad";
+    "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
+type DwiextractFslgradParametersTagged = Required<Pick<DwiextractFslgradParameters, '@type'>> & DwiextractFslgradParameters;
 
 
 interface DwiextractExportGradFslParameters {
-    "@type": "mrtrix.dwiextract.export_grad_fsl";
+    "@type"?: "export_grad_fsl";
     "bvecs_path": string;
     "bvals_path": string;
 }
+type DwiextractExportGradFslParametersTagged = Required<Pick<DwiextractExportGradFslParameters, '@type'>> & DwiextractExportGradFslParameters;
 
 
 interface DwiextractImportPeEddyParameters {
-    "@type": "mrtrix.dwiextract.import_pe_eddy";
+    "@type"?: "import_pe_eddy";
     "config": InputPathType;
     "indices": InputPathType;
 }
+type DwiextractImportPeEddyParametersTagged = Required<Pick<DwiextractImportPeEddyParameters, '@type'>> & DwiextractImportPeEddyParameters;
 
 
 interface DwiextractVariousStringParameters {
-    "@type": "mrtrix.dwiextract.VariousString";
+    "@type"?: "VariousString";
     "obj": string;
 }
+type DwiextractVariousStringParametersTagged = Required<Pick<DwiextractVariousStringParameters, '@type'>> & DwiextractVariousStringParameters;
 
 
 interface DwiextractVariousFileParameters {
-    "@type": "mrtrix.dwiextract.VariousFile";
+    "@type"?: "VariousFile";
     "obj": InputPathType;
 }
+type DwiextractVariousFileParametersTagged = Required<Pick<DwiextractVariousFileParameters, '@type'>> & DwiextractVariousFileParameters;
 
 
 interface DwiextractConfigParameters {
-    "@type": "mrtrix.dwiextract.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type DwiextractConfigParametersTagged = Required<Pick<DwiextractConfigParameters, '@type'>> & DwiextractConfigParameters;
 
 
 interface DwiextractParameters {
-    "@type": "mrtrix.dwiextract";
+    "@type"?: "mrtrix/dwiextract";
     "bzero": boolean;
     "no_bzero": boolean;
     "singleshell": boolean;
@@ -64,7 +70,7 @@ interface DwiextractParameters {
     "import_pe_table"?: InputPathType | null | undefined;
     "import_pe_eddy"?: DwiextractImportPeEddyParameters | null | undefined;
     "pe"?: Array<number> | null | undefined;
-    "strides"?: DwiextractVariousStringParameters | DwiextractVariousFileParameters | null | undefined;
+    "strides"?: DwiextractVariousStringParametersTagged | DwiextractVariousFileParametersTagged | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -76,6 +82,7 @@ interface DwiextractParameters {
     "input": InputPathType;
     "output": string;
 }
+type DwiextractParametersTagged = Required<Pick<DwiextractParameters, '@type'>> & DwiextractParameters;
 
 
 /**
@@ -85,17 +92,12 @@ interface DwiextractParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function dwiextract_strides_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "mrtrix.dwiextract": dwiextract_cargs,
-        "mrtrix.dwiextract.fslgrad": dwiextract_fslgrad_cargs,
-        "mrtrix.dwiextract.export_grad_fsl": dwiextract_export_grad_fsl_cargs,
-        "mrtrix.dwiextract.import_pe_eddy": dwiextract_import_pe_eddy_cargs,
-        "mrtrix.dwiextract.VariousString": dwiextract_various_string_cargs,
-        "mrtrix.dwiextract.VariousFile": dwiextract_various_file_cargs,
-        "mrtrix.dwiextract.config": dwiextract_config_cargs,
+        "VariousString": dwiextract_various_string_cargs,
+        "VariousFile": dwiextract_various_file_cargs,
     };
     return cargsFuncs[t];
 }
@@ -108,12 +110,10 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function dwiextract_strides_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "mrtrix.dwiextract": dwiextract_outputs,
-        "mrtrix.dwiextract.export_grad_fsl": dwiextract_export_grad_fsl_outputs,
     };
     return outputsFuncs[t];
 }
@@ -130,9 +130,9 @@ function dynOutputs(
 function dwiextract_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
-): DwiextractFslgradParameters {
+): DwiextractFslgradParametersTagged {
     const params = {
-        "@type": "mrtrix.dwiextract.fslgrad" as const,
+        "@type": "fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -192,9 +192,9 @@ interface DwiextractExportGradFslOutputs {
 function dwiextract_export_grad_fsl_params(
     bvecs_path: string,
     bvals_path: string,
-): DwiextractExportGradFslParameters {
+): DwiextractExportGradFslParametersTagged {
     const params = {
-        "@type": "mrtrix.dwiextract.export_grad_fsl" as const,
+        "@type": "export_grad_fsl" as const,
         "bvecs_path": bvecs_path,
         "bvals_path": bvals_path,
     };
@@ -254,9 +254,9 @@ function dwiextract_export_grad_fsl_outputs(
 function dwiextract_import_pe_eddy_params(
     config: InputPathType,
     indices: InputPathType,
-): DwiextractImportPeEddyParameters {
+): DwiextractImportPeEddyParametersTagged {
     const params = {
-        "@type": "mrtrix.dwiextract.import_pe_eddy" as const,
+        "@type": "import_pe_eddy" as const,
         "config": config,
         "indices": indices,
     };
@@ -293,9 +293,9 @@ function dwiextract_import_pe_eddy_cargs(
  */
 function dwiextract_various_string_params(
     obj: string,
-): DwiextractVariousStringParameters {
+): DwiextractVariousStringParametersTagged {
     const params = {
-        "@type": "mrtrix.dwiextract.VariousString" as const,
+        "@type": "VariousString" as const,
         "obj": obj,
     };
     return params;
@@ -329,9 +329,9 @@ function dwiextract_various_string_cargs(
  */
 function dwiextract_various_file_params(
     obj: InputPathType,
-): DwiextractVariousFileParameters {
+): DwiextractVariousFileParametersTagged {
     const params = {
-        "@type": "mrtrix.dwiextract.VariousFile" as const,
+        "@type": "VariousFile" as const,
         "obj": obj,
     };
     return params;
@@ -367,9 +367,9 @@ function dwiextract_various_file_cargs(
 function dwiextract_config_params(
     key: string,
     value: string,
-): DwiextractConfigParameters {
+): DwiextractConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.dwiextract.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -398,7 +398,7 @@ function dwiextract_config_cargs(
 
 
 /**
- * Output object returned when calling `dwiextract(...)`.
+ * Output object returned when calling `DwiextractParameters(...)`.
  *
  * @interface
  */
@@ -465,7 +465,7 @@ function dwiextract_params(
     import_pe_table: InputPathType | null = null,
     import_pe_eddy: DwiextractImportPeEddyParameters | null = null,
     pe: Array<number> | null = null,
-    strides: DwiextractVariousStringParameters | DwiextractVariousFileParameters | null = null,
+    strides: DwiextractVariousStringParametersTagged | DwiextractVariousFileParametersTagged | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
@@ -474,9 +474,9 @@ function dwiextract_params(
     config: Array<DwiextractConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): DwiextractParameters {
+): DwiextractParametersTagged {
     const params = {
-        "@type": "mrtrix.dwiextract" as const,
+        "@type": "mrtrix/dwiextract" as const,
         "bzero": bzero,
         "no_bzero": no_bzero,
         "singleshell": singleshell,
@@ -540,13 +540,13 @@ function dwiextract_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("dwiextract");
-    if ((params["bzero"] ?? null)) {
+    if ((params["bzero"] ?? false)) {
         cargs.push("-bzero");
     }
-    if ((params["no_bzero"] ?? null)) {
+    if ((params["no_bzero"] ?? false)) {
         cargs.push("-no_bzero");
     }
-    if ((params["singleshell"] ?? null)) {
+    if ((params["singleshell"] ?? false)) {
         cargs.push("-singleshell");
     }
     if ((params["grad"] ?? null) !== null) {
@@ -556,7 +556,7 @@ function dwiextract_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
+        cargs.push(...dwiextract_fslgrad_cargs((params["fslgrad"] ?? null), execution));
     }
     if ((params["shells"] ?? null) !== null) {
         cargs.push(
@@ -571,7 +571,7 @@ function dwiextract_cargs(
         );
     }
     if ((params["export_grad_fsl"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["export_grad_fsl"] ?? null)["@type"])((params["export_grad_fsl"] ?? null), execution));
+        cargs.push(...dwiextract_export_grad_fsl_cargs((params["export_grad_fsl"] ?? null), execution));
     }
     if ((params["import_pe_table"] ?? null) !== null) {
         cargs.push(
@@ -580,7 +580,7 @@ function dwiextract_cargs(
         );
     }
     if ((params["import_pe_eddy"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["import_pe_eddy"] ?? null)["@type"])((params["import_pe_eddy"] ?? null), execution));
+        cargs.push(...dwiextract_import_pe_eddy_cargs((params["import_pe_eddy"] ?? null), execution));
     }
     if ((params["pe"] ?? null) !== null) {
         cargs.push(
@@ -591,19 +591,19 @@ function dwiextract_cargs(
     if ((params["strides"] ?? null) !== null) {
         cargs.push(
             "-strides",
-            ...dynCargs((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
+            ...dwiextract_strides_cargs_dyn_fn((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -613,12 +613,12 @@ function dwiextract_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dwiextract_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -643,7 +643,7 @@ function dwiextract_outputs(
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
         export_grad_mrtrix: ((params["export_grad_mrtrix"] ?? null) !== null) ? execution.outputFile([(params["export_grad_mrtrix"] ?? null)].join('')) : null,
-        export_grad_fsl: (params["export_grad_fsl"] ?? null) ? (dynOutputs((params["export_grad_fsl"] ?? null)["@type"])?.((params["export_grad_fsl"] ?? null), execution) ?? null) : null,
+        export_grad_fsl: (params["export_grad_fsl"] ?? null) ? (dwiextract_export_grad_fsl_outputs((params["export_grad_fsl"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }
@@ -739,7 +739,7 @@ function dwiextract(
     import_pe_table: InputPathType | null = null,
     import_pe_eddy: DwiextractImportPeEddyParameters | null = null,
     pe: Array<number> | null = null,
-    strides: DwiextractVariousStringParameters | DwiextractVariousFileParameters | null = null,
+    strides: DwiextractVariousStringParametersTagged | DwiextractVariousFileParametersTagged | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
@@ -757,15 +757,8 @@ function dwiextract(
 
 export {
       DWIEXTRACT_METADATA,
-      DwiextractConfigParameters,
       DwiextractExportGradFslOutputs,
-      DwiextractExportGradFslParameters,
-      DwiextractFslgradParameters,
-      DwiextractImportPeEddyParameters,
       DwiextractOutputs,
-      DwiextractParameters,
-      DwiextractVariousFileParameters,
-      DwiextractVariousStringParameters,
       dwiextract,
       dwiextract_config_params,
       dwiextract_execute,

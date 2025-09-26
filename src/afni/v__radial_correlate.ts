@@ -12,7 +12,7 @@ const V__RADIAL_CORRELATE_METADATA: Metadata = {
 
 
 interface VRadialCorrelateParameters {
-    "@type": "afni.@radial_correlate";
+    "@type"?: "afni/@radial_correlate";
     "input_files": Array<InputPathType>;
     "results_dir"?: string | null | undefined;
     "do_corr"?: string | null | undefined;
@@ -34,44 +34,11 @@ interface VRadialCorrelateParameters {
     "polort"?: number | null | undefined;
     "merge_frad"?: number | null | undefined;
 }
+type VRadialCorrelateParametersTagged = Required<Pick<VRadialCorrelateParameters, '@type'>> & VRadialCorrelateParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@radial_correlate": v__radial_correlate_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@radial_correlate": v__radial_correlate_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__radial_correlate(...)`.
+ * Output object returned when calling `VRadialCorrelateParameters(...)`.
  *
  * @interface
  */
@@ -134,9 +101,9 @@ function v__radial_correlate_params(
     do_clean: string | null = null,
     polort: number | null = null,
     merge_frad: number | null = null,
-): VRadialCorrelateParameters {
+): VRadialCorrelateParametersTagged {
     const params = {
-        "@type": "afni.@radial_correlate" as const,
+        "@type": "afni/@radial_correlate" as const,
         "input_files": input_files,
         "ver": ver,
         "verbose": verbose,
@@ -273,16 +240,16 @@ function v__radial_correlate_cargs(
             String((params["nfirst"] ?? null))
         );
     }
-    if ((params["ver"] ?? null)) {
+    if ((params["ver"] ?? false)) {
         cargs.push("-ver");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["hist"] ?? null)) {
+    if ((params["hist"] ?? false)) {
         cargs.push("-hist");
     }
     if ((params["corr_mask"] ?? null) !== null) {
@@ -424,7 +391,6 @@ function v__radial_correlate(
 
 export {
       VRadialCorrelateOutputs,
-      VRadialCorrelateParameters,
       V__RADIAL_CORRELATE_METADATA,
       v__radial_correlate,
       v__radial_correlate_execute,

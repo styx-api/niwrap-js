@@ -12,7 +12,7 @@ const MULTIPLY_IMAGES_METADATA: Metadata = {
 
 
 interface MultiplyImagesParameters {
-    "@type": "ants.MultiplyImages";
+    "@type"?: "ants/MultiplyImages";
     "dimension": 3 | 2;
     "first_input": InputPathType;
     "second_input"?: InputPathType | null | undefined;
@@ -20,44 +20,11 @@ interface MultiplyImagesParameters {
     "output_product_image": string;
     "num_threads"?: number | null | undefined;
 }
+type MultiplyImagesParametersTagged = Required<Pick<MultiplyImagesParameters, '@type'>> & MultiplyImagesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.MultiplyImages": multiply_images_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.MultiplyImages": multiply_images_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `multiply_images(...)`.
+ * Output object returned when calling `MultiplyImagesParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function multiply_images_params(
     second_input: InputPathType | null = null,
     second_input_2: number | null = null,
     num_threads: number | null = null,
-): MultiplyImagesParameters {
+): MultiplyImagesParametersTagged {
     const params = {
-        "@type": "ants.MultiplyImages" as const,
+        "@type": "ants/MultiplyImages" as const,
         "dimension": dimension,
         "first_input": first_input,
         "output_product_image": output_product_image,
@@ -226,7 +193,6 @@ function multiply_images(
 export {
       MULTIPLY_IMAGES_METADATA,
       MultiplyImagesOutputs,
-      MultiplyImagesParameters,
       multiply_images,
       multiply_images_execute,
       multiply_images_params,

@@ -12,50 +12,17 @@ const FSL_LABEL2VOXEL_METADATA: Metadata = {
 
 
 interface FslLabel2voxelParameters {
-    "@type": "freesurfer.fsl_label2voxel";
+    "@type"?: "freesurfer/fsl_label2voxel";
     "label_value": number;
     "labeled_volume": InputPathType;
     "src_volume": InputPathType;
     "output_filename": string;
 }
+type FslLabel2voxelParametersTagged = Required<Pick<FslLabel2voxelParameters, '@type'>> & FslLabel2voxelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fsl_label2voxel": fsl_label2voxel_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.fsl_label2voxel": fsl_label2voxel_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsl_label2voxel(...)`.
+ * Output object returned when calling `FslLabel2voxelParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function fsl_label2voxel_params(
     labeled_volume: InputPathType,
     src_volume: InputPathType,
     output_filename: string,
-): FslLabel2voxelParameters {
+): FslLabel2voxelParametersTagged {
     const params = {
-        "@type": "freesurfer.fsl_label2voxel" as const,
+        "@type": "freesurfer/fsl_label2voxel" as const,
         "label_value": label_value,
         "labeled_volume": labeled_volume,
         "src_volume": src_volume,
@@ -200,7 +167,6 @@ function fsl_label2voxel(
 export {
       FSL_LABEL2VOXEL_METADATA,
       FslLabel2voxelOutputs,
-      FslLabel2voxelParameters,
       fsl_label2voxel,
       fsl_label2voxel_execute,
       fsl_label2voxel_params,

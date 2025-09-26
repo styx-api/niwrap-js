@@ -12,7 +12,7 @@ const MRI_EXVIVO_NORM_METADATA: Metadata = {
 
 
 interface MriExvivoNormParameters {
-    "@type": "freesurfer.mri_exvivo_norm";
+    "@type"?: "freesurfer/mri_exvivo_norm";
     "input_volume": InputPathType;
     "output_volume": string;
     "hemi": string;
@@ -29,44 +29,11 @@ interface MriExvivoNormParameters {
     "weights_file"?: InputPathType | null | undefined;
     "gpu_number"?: number | null | undefined;
 }
+type MriExvivoNormParametersTagged = Required<Pick<MriExvivoNormParameters, '@type'>> & MriExvivoNormParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_exvivo_norm": mri_exvivo_norm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_exvivo_norm": mri_exvivo_norm_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_exvivo_norm(...)`.
+ * Output object returned when calling `MriExvivoNormParameters(...)`.
  *
  * @interface
  */
@@ -119,9 +86,9 @@ function mri_exvivo_norm_params(
     model_file: InputPathType | null = null,
     weights_file: InputPathType | null = null,
     gpu_number: number | null = null,
-): MriExvivoNormParameters {
+): MriExvivoNormParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_exvivo_norm" as const,
+        "@type": "freesurfer/mri_exvivo_norm" as const,
         "input_volume": input_volume,
         "output_volume": output_volume,
         "hemi": hemi,
@@ -196,13 +163,13 @@ function mri_exvivo_norm_cargs(
             (params["normalized_volume"] ?? null)
         );
     }
-    if ((params["freeview"] ?? null)) {
+    if ((params["freeview"] ?? false)) {
         cargs.push("--fv");
     }
-    if ((params["normalize_output_mean"] ?? null)) {
+    if ((params["normalize_output_mean"] ?? false)) {
         cargs.push("--norm_mean");
     }
-    if ((params["write_normalization_rounds"] ?? null)) {
+    if ((params["write_normalization_rounds"] ?? false)) {
         cargs.push("--write_rounds");
     }
     if ((params["upper_threshold"] ?? null) !== null) {
@@ -223,7 +190,7 @@ function mri_exvivo_norm_cargs(
             String((params["normalization_rounds"] ?? null))
         );
     }
-    if ((params["multichannel"] ?? null)) {
+    if ((params["multichannel"] ?? false)) {
         cargs.push("--multichannel");
     }
     if ((params["model_file"] ?? null) !== null) {
@@ -350,7 +317,6 @@ function mri_exvivo_norm(
 export {
       MRI_EXVIVO_NORM_METADATA,
       MriExvivoNormOutputs,
-      MriExvivoNormParameters,
       mri_exvivo_norm,
       mri_exvivo_norm_execute,
       mri_exvivo_norm_params,

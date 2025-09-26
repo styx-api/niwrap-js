@@ -12,7 +12,7 @@ const MRIS_DIFF_METADATA: Metadata = {
 
 
 interface MrisDiffParameters {
-    "@type": "freesurfer.mris_diff";
+    "@type"?: "freesurfer/mris_diff";
     "surface1": InputPathType;
     "surface2": InputPathType;
     "subject1": string;
@@ -43,43 +43,11 @@ interface MrisDiffParameters {
     "help": boolean;
     "version": boolean;
 }
+type MrisDiffParametersTagged = Required<Pick<MrisDiffParameters, '@type'>> & MrisDiffParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_diff": mris_diff_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_diff(...)`.
+ * Output object returned when calling `MrisDiffParameters(...)`.
  *
  * @interface
  */
@@ -156,9 +124,9 @@ function mris_diff_params(
     check_opts: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): MrisDiffParameters {
+): MrisDiffParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_diff" as const,
+        "@type": "freesurfer/mris_diff" as const,
         "surface1": surface1,
         "surface2": surface2,
         "subject1": subject1,
@@ -287,10 +255,10 @@ function mris_diff_cargs(
             (params["aparc2"] ?? null)
         );
     }
-    if ((params["simple"] ?? null)) {
+    if ((params["simple"] ?? false)) {
         cargs.push("--simple");
     }
-    if ((params["simple_patch"] ?? null)) {
+    if ((params["simple_patch"] ?? false)) {
         cargs.push("--simple-patch");
     }
     if ((params["thresh"] ?? null) !== null) {
@@ -305,7 +273,7 @@ function mris_diff_cargs(
             String((params["maxerrs"] ?? null))
         );
     }
-    if ((params["renumbered"] ?? null)) {
+    if ((params["renumbered"] ?? false)) {
         cargs.push("--renumbered");
     }
     if ((params["worst_bucket"] ?? null) !== null) {
@@ -320,10 +288,10 @@ function mris_diff_cargs(
             (params["grid"] ?? null)
         );
     }
-    if ((params["no_check_xyz"] ?? null)) {
+    if ((params["no_check_xyz"] ?? false)) {
         cargs.push("--no-check-xyz");
     }
-    if ((params["no_check_nxyz"] ?? null)) {
+    if ((params["no_check_nxyz"] ?? false)) {
         cargs.push("--no-check-nxyz");
     }
     if ((params["xyz_rms"] ?? null) !== null) {
@@ -350,7 +318,7 @@ function mris_diff_cargs(
             (params["min_dist"] ?? null)
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     if ((params["gdiag_no"] ?? null) !== null) {
@@ -359,13 +327,13 @@ function mris_diff_cargs(
             String((params["gdiag_no"] ?? null))
         );
     }
-    if ((params["check_opts"] ?? null)) {
+    if ((params["check_opts"] ?? false)) {
         cargs.push("--checkopts");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -501,7 +469,6 @@ function mris_diff(
 export {
       MRIS_DIFF_METADATA,
       MrisDiffOutputs,
-      MrisDiffParameters,
       mris_diff,
       mris_diff_execute,
       mris_diff_params,

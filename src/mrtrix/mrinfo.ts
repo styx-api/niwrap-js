@@ -12,41 +12,46 @@ const MRINFO_METADATA: Metadata = {
 
 
 interface MrinfoPropertyParameters {
-    "@type": "mrtrix.mrinfo.property";
+    "@type"?: "property";
     "key": string;
 }
+type MrinfoPropertyParametersTagged = Required<Pick<MrinfoPropertyParameters, '@type'>> & MrinfoPropertyParameters;
 
 
 interface MrinfoFslgradParameters {
-    "@type": "mrtrix.mrinfo.fslgrad";
+    "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
+type MrinfoFslgradParametersTagged = Required<Pick<MrinfoFslgradParameters, '@type'>> & MrinfoFslgradParameters;
 
 
 interface MrinfoExportGradFslParameters {
-    "@type": "mrtrix.mrinfo.export_grad_fsl";
+    "@type"?: "export_grad_fsl";
     "bvecs_path": string;
     "bvals_path": string;
 }
+type MrinfoExportGradFslParametersTagged = Required<Pick<MrinfoExportGradFslParameters, '@type'>> & MrinfoExportGradFslParameters;
 
 
 interface MrinfoExportPeEddyParameters {
-    "@type": "mrtrix.mrinfo.export_pe_eddy";
+    "@type"?: "export_pe_eddy";
     "config": string;
     "indices": string;
 }
+type MrinfoExportPeEddyParametersTagged = Required<Pick<MrinfoExportPeEddyParameters, '@type'>> & MrinfoExportPeEddyParameters;
 
 
 interface MrinfoConfigParameters {
-    "@type": "mrtrix.mrinfo.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MrinfoConfigParametersTagged = Required<Pick<MrinfoConfigParameters, '@type'>> & MrinfoConfigParameters;
 
 
 interface MrinfoParameters {
-    "@type": "mrtrix.mrinfo";
+    "@type"?: "mrtrix/mrinfo";
     "all": boolean;
     "name": boolean;
     "format": boolean;
@@ -84,47 +89,7 @@ interface MrinfoParameters {
     "version": boolean;
     "image": Array<InputPathType>;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.mrinfo": mrinfo_cargs,
-        "mrtrix.mrinfo.property": mrinfo_property_cargs,
-        "mrtrix.mrinfo.fslgrad": mrinfo_fslgrad_cargs,
-        "mrtrix.mrinfo.export_grad_fsl": mrinfo_export_grad_fsl_cargs,
-        "mrtrix.mrinfo.export_pe_eddy": mrinfo_export_pe_eddy_cargs,
-        "mrtrix.mrinfo.config": mrinfo_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.mrinfo": mrinfo_outputs,
-        "mrtrix.mrinfo.export_grad_fsl": mrinfo_export_grad_fsl_outputs,
-        "mrtrix.mrinfo.export_pe_eddy": mrinfo_export_pe_eddy_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MrinfoParametersTagged = Required<Pick<MrinfoParameters, '@type'>> & MrinfoParameters;
 
 
 /**
@@ -136,9 +101,9 @@ function dynOutputs(
  */
 function mrinfo_property_params(
     key: string,
-): MrinfoPropertyParameters {
+): MrinfoPropertyParametersTagged {
     const params = {
-        "@type": "mrtrix.mrinfo.property" as const,
+        "@type": "property" as const,
         "key": key,
     };
     return params;
@@ -175,9 +140,9 @@ function mrinfo_property_cargs(
 function mrinfo_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
-): MrinfoFslgradParameters {
+): MrinfoFslgradParametersTagged {
     const params = {
-        "@type": "mrtrix.mrinfo.fslgrad" as const,
+        "@type": "fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -237,9 +202,9 @@ interface MrinfoExportGradFslOutputs {
 function mrinfo_export_grad_fsl_params(
     bvecs_path: string,
     bvals_path: string,
-): MrinfoExportGradFslParameters {
+): MrinfoExportGradFslParametersTagged {
     const params = {
-        "@type": "mrtrix.mrinfo.export_grad_fsl" as const,
+        "@type": "export_grad_fsl" as const,
         "bvecs_path": bvecs_path,
         "bvals_path": bvals_path,
     };
@@ -320,9 +285,9 @@ interface MrinfoExportPeEddyOutputs {
 function mrinfo_export_pe_eddy_params(
     config: string,
     indices: string,
-): MrinfoExportPeEddyParameters {
+): MrinfoExportPeEddyParametersTagged {
     const params = {
-        "@type": "mrtrix.mrinfo.export_pe_eddy" as const,
+        "@type": "export_pe_eddy" as const,
         "config": config,
         "indices": indices,
     };
@@ -382,9 +347,9 @@ function mrinfo_export_pe_eddy_outputs(
 function mrinfo_config_params(
     key: string,
     value: string,
-): MrinfoConfigParameters {
+): MrinfoConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.mrinfo.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -413,7 +378,7 @@ function mrinfo_config_cargs(
 
 
 /**
- * Output object returned when calling `mrinfo(...)`.
+ * Output object returned when calling `MrinfoParameters(...)`.
  *
  * @interface
  */
@@ -528,9 +493,9 @@ function mrinfo_params(
     config: Array<MrinfoConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrinfoParameters {
+): MrinfoParametersTagged {
     const params = {
-        "@type": "mrtrix.mrinfo" as const,
+        "@type": "mrtrix/mrinfo" as const,
         "all": all,
         "name": name,
         "format": format,
@@ -610,41 +575,41 @@ function mrinfo_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("mrinfo");
-    if ((params["all"] ?? null)) {
+    if ((params["all"] ?? false)) {
         cargs.push("-all");
     }
-    if ((params["name"] ?? null)) {
+    if ((params["name"] ?? false)) {
         cargs.push("-name");
     }
-    if ((params["format"] ?? null)) {
+    if ((params["format"] ?? false)) {
         cargs.push("-format");
     }
-    if ((params["ndim"] ?? null)) {
+    if ((params["ndim"] ?? false)) {
         cargs.push("-ndim");
     }
-    if ((params["size"] ?? null)) {
+    if ((params["size"] ?? false)) {
         cargs.push("-size");
     }
-    if ((params["spacing"] ?? null)) {
+    if ((params["spacing"] ?? false)) {
         cargs.push("-spacing");
     }
-    if ((params["datatype"] ?? null)) {
+    if ((params["datatype"] ?? false)) {
         cargs.push("-datatype");
     }
-    if ((params["strides"] ?? null)) {
+    if ((params["strides"] ?? false)) {
         cargs.push("-strides");
     }
-    if ((params["offset"] ?? null)) {
+    if ((params["offset"] ?? false)) {
         cargs.push("-offset");
     }
-    if ((params["multiplier"] ?? null)) {
+    if ((params["multiplier"] ?? false)) {
         cargs.push("-multiplier");
     }
-    if ((params["transform"] ?? null)) {
+    if ((params["transform"] ?? false)) {
         cargs.push("-transform");
     }
     if ((params["property"] ?? null) !== null) {
-        cargs.push(...(params["property"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["property"] ?? null).map(s => mrinfo_property_cargs(s, execution)).flat());
     }
     if ((params["json_keyval"] ?? null) !== null) {
         cargs.push(
@@ -665,7 +630,7 @@ function mrinfo_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
+        cargs.push(...mrinfo_fslgrad_cargs((params["fslgrad"] ?? null), execution));
     }
     if ((params["bvalue_scaling"] ?? null) !== null) {
         cargs.push(
@@ -680,18 +645,18 @@ function mrinfo_cargs(
         );
     }
     if ((params["export_grad_fsl"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["export_grad_fsl"] ?? null)["@type"])((params["export_grad_fsl"] ?? null), execution));
+        cargs.push(...mrinfo_export_grad_fsl_cargs((params["export_grad_fsl"] ?? null), execution));
     }
-    if ((params["dwgrad"] ?? null)) {
+    if ((params["dwgrad"] ?? false)) {
         cargs.push("-dwgrad");
     }
-    if ((params["shell_bvalues"] ?? null)) {
+    if ((params["shell_bvalues"] ?? false)) {
         cargs.push("-shell_bvalues");
     }
-    if ((params["shell_sizes"] ?? null)) {
+    if ((params["shell_sizes"] ?? false)) {
         cargs.push("-shell_sizes");
     }
-    if ((params["shell_indices"] ?? null)) {
+    if ((params["shell_indices"] ?? false)) {
         cargs.push("-shell_indices");
     }
     if ((params["export_pe_table"] ?? null) !== null) {
@@ -701,24 +666,24 @@ function mrinfo_cargs(
         );
     }
     if ((params["export_pe_eddy"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["export_pe_eddy"] ?? null)["@type"])((params["export_pe_eddy"] ?? null), execution));
+        cargs.push(...mrinfo_export_pe_eddy_cargs((params["export_pe_eddy"] ?? null), execution));
     }
-    if ((params["petable"] ?? null)) {
+    if ((params["petable"] ?? false)) {
         cargs.push("-petable");
     }
-    if ((params["nodelete"] ?? null)) {
+    if ((params["nodelete"] ?? false)) {
         cargs.push("-nodelete");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -728,12 +693,12 @@ function mrinfo_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => mrinfo_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(...(params["image"] ?? null).map(f => execution.inputFile(f)));
@@ -759,8 +724,8 @@ function mrinfo_outputs(
         json_all: ((params["json_all"] ?? null) !== null) ? execution.outputFile([(params["json_all"] ?? null)].join('')) : null,
         export_grad_mrtrix: ((params["export_grad_mrtrix"] ?? null) !== null) ? execution.outputFile([(params["export_grad_mrtrix"] ?? null)].join('')) : null,
         export_pe_table: ((params["export_pe_table"] ?? null) !== null) ? execution.outputFile([(params["export_pe_table"] ?? null)].join('')) : null,
-        export_grad_fsl: (params["export_grad_fsl"] ?? null) ? (dynOutputs((params["export_grad_fsl"] ?? null)["@type"])?.((params["export_grad_fsl"] ?? null), execution) ?? null) : null,
-        export_pe_eddy: (params["export_pe_eddy"] ?? null) ? (dynOutputs((params["export_pe_eddy"] ?? null)["@type"])?.((params["export_pe_eddy"] ?? null), execution) ?? null) : null,
+        export_grad_fsl: (params["export_grad_fsl"] ?? null) ? (mrinfo_export_grad_fsl_outputs((params["export_grad_fsl"] ?? null), execution) ?? null) : null,
+        export_pe_eddy: (params["export_pe_eddy"] ?? null) ? (mrinfo_export_pe_eddy_outputs((params["export_pe_eddy"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }
@@ -917,15 +882,9 @@ function mrinfo(
 
 export {
       MRINFO_METADATA,
-      MrinfoConfigParameters,
       MrinfoExportGradFslOutputs,
-      MrinfoExportGradFslParameters,
       MrinfoExportPeEddyOutputs,
-      MrinfoExportPeEddyParameters,
-      MrinfoFslgradParameters,
       MrinfoOutputs,
-      MrinfoParameters,
-      MrinfoPropertyParameters,
       mrinfo,
       mrinfo_config_params,
       mrinfo_execute,

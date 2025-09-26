@@ -12,51 +12,18 @@ const FSLSWAPDIM_METADATA: Metadata = {
 
 
 interface FslswapdimParameters {
-    "@type": "fsl.fslswapdim";
+    "@type"?: "fsl/fslswapdim";
     "input_file": InputPathType;
     "axis_a": string;
     "axis_b": string;
     "axis_c": string;
     "output_file"?: string | null | undefined;
 }
+type FslswapdimParametersTagged = Required<Pick<FslswapdimParameters, '@type'>> & FslswapdimParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslswapdim": fslswapdim_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fslswapdim": fslswapdim_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslswapdim(...)`.
+ * Output object returned when calling `FslswapdimParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function fslswapdim_params(
     axis_b: string,
     axis_c: string,
     output_file: string | null = null,
-): FslswapdimParameters {
+): FslswapdimParametersTagged {
     const params = {
-        "@type": "fsl.fslswapdim" as const,
+        "@type": "fsl/fslswapdim" as const,
         "input_file": input_file,
         "axis_a": axis_a,
         "axis_b": axis_b,
@@ -211,7 +178,6 @@ function fslswapdim(
 export {
       FSLSWAPDIM_METADATA,
       FslswapdimOutputs,
-      FslswapdimParameters,
       fslswapdim,
       fslswapdim_execute,
       fslswapdim_params,

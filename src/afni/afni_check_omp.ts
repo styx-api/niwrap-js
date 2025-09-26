@@ -12,46 +12,14 @@ const AFNI_CHECK_OMP_METADATA: Metadata = {
 
 
 interface AfniCheckOmpParameters {
-    "@type": "afni.afni_check_omp";
+    "@type"?: "afni/afni_check_omp";
     "iterations"?: number | null | undefined;
 }
+type AfniCheckOmpParametersTagged = Required<Pick<AfniCheckOmpParameters, '@type'>> & AfniCheckOmpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.afni_check_omp": afni_check_omp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `afni_check_omp(...)`.
+ * Output object returned when calling `AfniCheckOmpParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface AfniCheckOmpOutputs {
  */
 function afni_check_omp_params(
     iterations: number | null = null,
-): AfniCheckOmpParameters {
+): AfniCheckOmpParametersTagged {
     const params = {
-        "@type": "afni.afni_check_omp" as const,
+        "@type": "afni/afni_check_omp" as const,
     };
     if (iterations !== null) {
         params["iterations"] = iterations;
@@ -177,7 +145,6 @@ function afni_check_omp(
 export {
       AFNI_CHECK_OMP_METADATA,
       AfniCheckOmpOutputs,
-      AfniCheckOmpParameters,
       afni_check_omp,
       afni_check_omp_execute,
       afni_check_omp_params,

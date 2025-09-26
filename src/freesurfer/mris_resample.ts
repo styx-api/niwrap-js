@@ -12,7 +12,7 @@ const MRIS_RESAMPLE_METADATA: Metadata = {
 
 
 interface MrisResampleParameters {
-    "@type": "freesurfer.mris_resample";
+    "@type"?: "freesurfer/mris_resample";
     "atlas_reg": InputPathType;
     "subject_reg": InputPathType;
     "subject_surf": InputPathType;
@@ -20,44 +20,11 @@ interface MrisResampleParameters {
     "annot_in"?: InputPathType | null | undefined;
     "annot_out"?: string | null | undefined;
 }
+type MrisResampleParametersTagged = Required<Pick<MrisResampleParameters, '@type'>> & MrisResampleParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_resample": mris_resample_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_resample": mris_resample_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_resample(...)`.
+ * Output object returned when calling `MrisResampleParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +63,9 @@ function mris_resample_params(
     output: string,
     annot_in: InputPathType | null = null,
     annot_out: string | null = null,
-): MrisResampleParameters {
+): MrisResampleParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_resample" as const,
+        "@type": "freesurfer/mris_resample" as const,
         "atlas_reg": atlas_reg,
         "subject_reg": subject_reg,
         "subject_surf": subject_surf,
@@ -245,7 +212,6 @@ function mris_resample(
 export {
       MRIS_RESAMPLE_METADATA,
       MrisResampleOutputs,
-      MrisResampleParameters,
       mris_resample,
       mris_resample_execute,
       mris_resample_params,

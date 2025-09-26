@@ -12,7 +12,7 @@ const V__ROI_DECLUSTER_METADATA: Metadata = {
 
 
 interface VRoiDeclusterParameters {
-    "@type": "afni.@ROI_decluster";
+    "@type"?: "afni/@ROI_decluster";
     "input_dset": InputPathType;
     "output_dir"?: string | null | undefined;
     "nvox_thresh"?: number | null | undefined;
@@ -20,44 +20,11 @@ interface VRoiDeclusterParameters {
     "prefix"?: string | null | undefined;
     "neighborhood_type"?: number | null | undefined;
 }
+type VRoiDeclusterParametersTagged = Required<Pick<VRoiDeclusterParameters, '@type'>> & VRoiDeclusterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@ROI_decluster": v__roi_decluster_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@ROI_decluster": v__roi_decluster_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__roi_decluster(...)`.
+ * Output object returned when calling `VRoiDeclusterParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function v__roi_decluster_params(
     frac_thresh: number | null = null,
     prefix: string | null = null,
     neighborhood_type: number | null = null,
-): VRoiDeclusterParameters {
+): VRoiDeclusterParametersTagged {
     const params = {
-        "@type": "afni.@ROI_decluster" as const,
+        "@type": "afni/@ROI_decluster" as const,
         "input_dset": input_dset,
     };
     if (output_dir !== null) {
@@ -251,7 +218,6 @@ function v__roi_decluster(
 
 export {
       VRoiDeclusterOutputs,
-      VRoiDeclusterParameters,
       V__ROI_DECLUSTER_METADATA,
       v__roi_decluster,
       v__roi_decluster_execute,

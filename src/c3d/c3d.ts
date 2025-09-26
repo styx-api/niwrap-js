@@ -12,1085 +12,1265 @@ const C3D_METADATA: Metadata = {
 
 
 interface C3dAccumParameters {
-    "@type": "c3d.c3d.accum";
+    "@type"?: "accum";
     "accum": string;
 }
+type C3dAccumParametersTagged = Required<Pick<C3dAccumParameters, '@type'>> & C3dAccumParameters;
 
 
 interface C3dAcosParameters {
-    "@type": "c3d.c3d.acos";
+    "@type"?: "acos";
     "acos": string;
 }
+type C3dAcosParametersTagged = Required<Pick<C3dAcosParameters, '@type'>> & C3dAcosParameters;
 
 
 interface C3dAddParameters {
-    "@type": "c3d.c3d.add";
+    "@type"?: "add";
     "add": string;
 }
+type C3dAddParametersTagged = Required<Pick<C3dAddParameters, '@type'>> & C3dAddParameters;
 
 
 interface C3dAlignLandmarksParameters {
-    "@type": "c3d.c3d.align_landmarks";
+    "@type"?: "align_landmarks";
     "align_landmarks": string;
 }
+type C3dAlignLandmarksParametersTagged = Required<Pick<C3dAlignLandmarksParameters, '@type'>> & C3dAlignLandmarksParameters;
 
 
 interface C3dAnisotropicDiffusionParameters {
-    "@type": "c3d.c3d.anisotropic_diffusion";
+    "@type"?: "anisotropic_diffusion";
     "anisotropic_diffusion": string;
 }
+type C3dAnisotropicDiffusionParametersTagged = Required<Pick<C3dAnisotropicDiffusionParameters, '@type'>> & C3dAnisotropicDiffusionParameters;
 
 
 interface C3dAntialiasParameters {
-    "@type": "c3d.c3d.antialias";
+    "@type"?: "antialias";
     "antialias": string;
 }
+type C3dAntialiasParametersTagged = Required<Pick<C3dAntialiasParameters, '@type'>> & C3dAntialiasParameters;
 
 
 interface C3dSetParameters {
-    "@type": "c3d.c3d.set";
+    "@type"?: "set";
     "set": string;
 }
+type C3dSetParametersTagged = Required<Pick<C3dSetParameters, '@type'>> & C3dSetParameters;
 
 
 interface C3dAsinParameters {
-    "@type": "c3d.c3d.asin";
+    "@type"?: "asin";
     "asin": string;
 }
+type C3dAsinParametersTagged = Required<Pick<C3dAsinParameters, '@type'>> & C3dAsinParameters;
 
 
 interface C3dAtan2Parameters {
-    "@type": "c3d.c3d.atan2";
+    "@type"?: "atan2";
     "atan2": string;
 }
+type C3dAtan2ParametersTagged = Required<Pick<C3dAtan2Parameters, '@type'>> & C3dAtan2Parameters;
 
 
 interface C3dBackgroundParameters {
-    "@type": "c3d.c3d.background";
+    "@type"?: "background";
     "background": string;
 }
+type C3dBackgroundParametersTagged = Required<Pick<C3dBackgroundParameters, '@type'>> & C3dBackgroundParameters;
 
 
 interface C3dN4BiasCorrectionParameters {
-    "@type": "c3d.c3d.n4_bias_correction";
+    "@type"?: "n4_bias_correction";
     "n4_bias_correction": string;
 }
+type C3dN4BiasCorrectionParametersTagged = Required<Pick<C3dN4BiasCorrectionParameters, '@type'>> & C3dN4BiasCorrectionParameters;
 
 
 interface C3dBinarizeParameters {
-    "@type": "c3d.c3d.binarize";
+    "@type"?: "binarize";
     "binarize": string;
 }
+type C3dBinarizeParametersTagged = Required<Pick<C3dBinarizeParameters, '@type'>> & C3dBinarizeParameters;
 
 
 interface C3dCannyParameters {
-    "@type": "c3d.c3d.canny";
+    "@type"?: "canny";
     "canny": string;
 }
+type C3dCannyParametersTagged = Required<Pick<C3dCannyParameters, '@type'>> & C3dCannyParameters;
 
 
 interface C3dCeilParameters {
-    "@type": "c3d.c3d.ceil";
+    "@type"?: "ceil";
     "ceil": string;
 }
+type C3dCeilParametersTagged = Required<Pick<C3dCeilParameters, '@type'>> & C3dCeilParameters;
 
 
 interface C3dCentroidParameters {
-    "@type": "c3d.c3d.centroid";
+    "@type"?: "centroid";
     "centroid": string;
 }
+type C3dCentroidParametersTagged = Required<Pick<C3dCentroidParameters, '@type'>> & C3dCentroidParameters;
 
 
 interface C3dCentroidMarkParameters {
-    "@type": "c3d.c3d.centroid_mark";
+    "@type"?: "centroid_mark";
     "centroid_mark": string;
 }
+type C3dCentroidMarkParametersTagged = Required<Pick<C3dCentroidMarkParameters, '@type'>> & C3dCentroidMarkParameters;
 
 
 interface C3dConnectedComponentsParameters {
-    "@type": "c3d.c3d.connected_components";
+    "@type"?: "connected_components";
     "connected_components": string;
 }
+type C3dConnectedComponentsParametersTagged = Required<Pick<C3dConnectedComponentsParameters, '@type'>> & C3dConnectedComponentsParameters;
 
 
 interface C3dClearParameters {
-    "@type": "c3d.c3d.clear";
+    "@type"?: "clear";
     "clear": string;
 }
+type C3dClearParametersTagged = Required<Pick<C3dClearParameters, '@type'>> & C3dClearParameters;
 
 
 interface C3dClipParameters {
-    "@type": "c3d.c3d.clip";
+    "@type"?: "clip";
     "clip": string;
 }
+type C3dClipParametersTagged = Required<Pick<C3dClipParameters, '@type'>> & C3dClipParameters;
 
 
 interface C3dColorMapParameters {
-    "@type": "c3d.c3d.color_map";
+    "@type"?: "color_map";
     "color_map": string;
 }
+type C3dColorMapParametersTagged = Required<Pick<C3dColorMapParameters, '@type'>> & C3dColorMapParameters;
 
 
 interface C3dCompressParameters {
-    "@type": "c3d.c3d.compress";
+    "@type"?: "compress";
     "compress": string;
 }
+type C3dCompressParametersTagged = Required<Pick<C3dCompressParameters, '@type'>> & C3dCompressParameters;
 
 
 interface C3dNoCompressParameters {
-    "@type": "c3d.c3d.no_compress";
+    "@type"?: "no_compress";
     "no_compress": string;
 }
+type C3dNoCompressParametersTagged = Required<Pick<C3dNoCompressParameters, '@type'>> & C3dNoCompressParameters;
 
 
 interface C3dConvParameters {
-    "@type": "c3d.c3d.conv";
+    "@type"?: "conv";
     "conv": string;
 }
+type C3dConvParametersTagged = Required<Pick<C3dConvParameters, '@type'>> & C3dConvParameters;
 
 
 interface C3dCoordinateMapVoxelParameters {
-    "@type": "c3d.c3d.coordinate_map_voxel";
+    "@type"?: "coordinate_map_voxel";
     "coordinate_map_voxel": string;
 }
+type C3dCoordinateMapVoxelParametersTagged = Required<Pick<C3dCoordinateMapVoxelParameters, '@type'>> & C3dCoordinateMapVoxelParameters;
 
 
 interface C3dCoordinateMapPhysicalParameters {
-    "@type": "c3d.c3d.coordinate_map_physical";
+    "@type"?: "coordinate_map_physical";
     "coordinate_map_physical": string;
 }
+type C3dCoordinateMapPhysicalParametersTagged = Required<Pick<C3dCoordinateMapPhysicalParameters, '@type'>> & C3dCoordinateMapPhysicalParameters;
 
 
 interface C3dCopyTransformParameters {
-    "@type": "c3d.c3d.copy_transform";
+    "@type"?: "copy_transform";
     "copy_transform": string;
 }
+type C3dCopyTransformParametersTagged = Required<Pick<C3dCopyTransformParameters, '@type'>> & C3dCopyTransformParameters;
 
 
 interface C3dCosParameters {
-    "@type": "c3d.c3d.cos";
+    "@type"?: "cos";
     "cos": string;
 }
+type C3dCosParametersTagged = Required<Pick<C3dCosParameters, '@type'>> & C3dCosParameters;
 
 
 interface C3dCreateParameters {
-    "@type": "c3d.c3d.create";
+    "@type"?: "create";
     "create": string;
 }
+type C3dCreateParametersTagged = Required<Pick<C3dCreateParameters, '@type'>> & C3dCreateParameters;
 
 
 interface C3dDicomSeriesListParameters {
-    "@type": "c3d.c3d.dicom_series_list";
+    "@type"?: "dicom_series_list";
     "dicom_series_list": string;
 }
+type C3dDicomSeriesListParametersTagged = Required<Pick<C3dDicomSeriesListParameters, '@type'>> & C3dDicomSeriesListParameters;
 
 
 interface C3dDicomSeriesReadParameters {
-    "@type": "c3d.c3d.dicom_series_read";
+    "@type"?: "dicom_series_read";
     "dicom_series_read": string;
 }
+type C3dDicomSeriesReadParametersTagged = Required<Pick<C3dDicomSeriesReadParameters, '@type'>> & C3dDicomSeriesReadParameters;
 
 
 interface C3dDilateParameters {
-    "@type": "c3d.c3d.dilate";
+    "@type"?: "dilate";
     "dilate": string;
 }
+type C3dDilateParametersTagged = Required<Pick<C3dDilateParameters, '@type'>> & C3dDilateParameters;
 
 
 interface C3dDivideParameters {
-    "@type": "c3d.c3d.divide";
+    "@type"?: "divide";
     "divide": string;
 }
+type C3dDivideParametersTagged = Required<Pick<C3dDivideParameters, '@type'>> & C3dDivideParameters;
 
 
 interface C3dDuplicateParameters {
-    "@type": "c3d.c3d.duplicate";
+    "@type"?: "duplicate";
     "duplicate": string;
 }
+type C3dDuplicateParametersTagged = Required<Pick<C3dDuplicateParameters, '@type'>> & C3dDuplicateParameters;
 
 
 interface C3dEndaccumParameters {
-    "@type": "c3d.c3d.endaccum";
+    "@type"?: "endaccum";
     "endaccum": string;
 }
+type C3dEndaccumParametersTagged = Required<Pick<C3dEndaccumParameters, '@type'>> & C3dEndaccumParameters;
 
 
 interface C3dEndforParameters {
-    "@type": "c3d.c3d.endfor";
+    "@type"?: "endfor";
     "endfor": string;
 }
+type C3dEndforParametersTagged = Required<Pick<C3dEndforParameters, '@type'>> & C3dEndforParameters;
 
 
 interface C3dErodeParameters {
-    "@type": "c3d.c3d.erode";
+    "@type"?: "erode";
     "erode": string;
 }
+type C3dErodeParametersTagged = Required<Pick<C3dErodeParameters, '@type'>> & C3dErodeParameters;
 
 
 interface C3dErfParameters {
-    "@type": "c3d.c3d.erf";
+    "@type"?: "erf";
     "erf": string;
 }
+type C3dErfParametersTagged = Required<Pick<C3dErfParameters, '@type'>> & C3dErfParameters;
 
 
 interface C3dExpParameters {
-    "@type": "c3d.c3d.exp";
+    "@type"?: "exp";
     "exp": string;
 }
+type C3dExpParametersTagged = Required<Pick<C3dExpParameters, '@type'>> & C3dExpParameters;
 
 
 interface C3dExportPatchesParameters {
-    "@type": "c3d.c3d.export_patches";
+    "@type"?: "export_patches";
     "export_patches": string;
 }
+type C3dExportPatchesParametersTagged = Required<Pick<C3dExportPatchesParameters, '@type'>> & C3dExportPatchesParameters;
 
 
 interface C3dExportPatchesAugParameters {
-    "@type": "c3d.c3d.export_patches_aug";
+    "@type"?: "export_patches_aug";
     "export_patches_aug": string;
 }
+type C3dExportPatchesAugParametersTagged = Required<Pick<C3dExportPatchesAugParameters, '@type'>> & C3dExportPatchesAugParameters;
 
 
 interface C3dExtrudeSegParameters {
-    "@type": "c3d.c3d.extrude_seg";
+    "@type"?: "extrude_seg";
     "extrude_seg": string;
 }
+type C3dExtrudeSegParametersTagged = Required<Pick<C3dExtrudeSegParameters, '@type'>> & C3dExtrudeSegParameters;
 
 
 interface C3dFillBackgroundWithNoiseParameters {
-    "@type": "c3d.c3d.fill_background_with_noise";
+    "@type"?: "fill_background_with_noise";
     "fill_background_with_noise": string;
 }
+type C3dFillBackgroundWithNoiseParametersTagged = Required<Pick<C3dFillBackgroundWithNoiseParameters, '@type'>> & C3dFillBackgroundWithNoiseParameters;
 
 
 interface C3dFftParameters {
-    "@type": "c3d.c3d.fft";
+    "@type"?: "fft";
     "fft": string;
 }
+type C3dFftParametersTagged = Required<Pick<C3dFftParameters, '@type'>> & C3dFftParameters;
 
 
 interface C3dFlipParameters {
-    "@type": "c3d.c3d.flip";
+    "@type"?: "flip";
     "flip": string;
 }
+type C3dFlipParametersTagged = Required<Pick<C3dFlipParameters, '@type'>> & C3dFlipParameters;
 
 
 interface C3dFloorParameters {
-    "@type": "c3d.c3d.floor";
+    "@type"?: "floor";
     "floor": string;
 }
+type C3dFloorParametersTagged = Required<Pick<C3dFloorParameters, '@type'>> & C3dFloorParameters;
 
 
 interface C3dForeachParameters {
-    "@type": "c3d.c3d.foreach";
+    "@type"?: "foreach";
     "foreach": string;
 }
+type C3dForeachParametersTagged = Required<Pick<C3dForeachParameters, '@type'>> & C3dForeachParameters;
 
 
 interface C3dForeachCompParameters {
-    "@type": "c3d.c3d.foreach_comp";
+    "@type"?: "foreach_comp";
     "foreach_comp": string;
 }
+type C3dForeachCompParametersTagged = Required<Pick<C3dForeachCompParameters, '@type'>> & C3dForeachCompParameters;
 
 
 interface C3dGlmParameters {
-    "@type": "c3d.c3d.glm";
+    "@type"?: "glm";
     "glm": string;
 }
+type C3dGlmParametersTagged = Required<Pick<C3dGlmParameters, '@type'>> & C3dGlmParameters;
 
 
 interface C3dGradientParameters {
-    "@type": "c3d.c3d.gradient";
+    "@type"?: "gradient";
     "gradient": string;
 }
+type C3dGradientParametersTagged = Required<Pick<C3dGradientParameters, '@type'>> & C3dGradientParameters;
 
 
 interface C3dHelpParameters {
-    "@type": "c3d.c3d._help";
+    "@type"?: "_help";
     "_help": string;
 }
+type C3dHelpParametersTagged = Required<Pick<C3dHelpParameters, '@type'>> & C3dHelpParameters;
 
 
 interface C3dHolefillParameters {
-    "@type": "c3d.c3d.holefill";
+    "@type"?: "holefill";
     "holefill": string;
 }
+type C3dHolefillParametersTagged = Required<Pick<C3dHolefillParameters, '@type'>> & C3dHolefillParameters;
 
 
 interface C3dHessianEigenvaluesParameters {
-    "@type": "c3d.c3d.hessian_eigenvalues";
+    "@type"?: "hessian_eigenvalues";
     "hessian_eigenvalues": string;
 }
+type C3dHessianEigenvaluesParametersTagged = Required<Pick<C3dHessianEigenvaluesParameters, '@type'>> & C3dHessianEigenvaluesParameters;
 
 
 interface C3dHessianObjectnessParameters {
-    "@type": "c3d.c3d.hessian_objectness";
+    "@type"?: "hessian_objectness";
     "hessian_objectness": string;
 }
+type C3dHessianObjectnessParametersTagged = Required<Pick<C3dHessianObjectnessParameters, '@type'>> & C3dHessianObjectnessParameters;
 
 
 interface C3dHistogramMatchParameters {
-    "@type": "c3d.c3d.histogram_match";
+    "@type"?: "histogram_match";
     "histogram_match": string;
 }
+type C3dHistogramMatchParametersTagged = Required<Pick<C3dHistogramMatchParameters, '@type'>> & C3dHistogramMatchParameters;
 
 
 interface C3dInfoParameters {
-    "@type": "c3d.c3d.info";
+    "@type"?: "info";
     "info": string;
 }
+type C3dInfoParametersTagged = Required<Pick<C3dInfoParameters, '@type'>> & C3dInfoParameters;
 
 
 interface C3dInfoFullParameters {
-    "@type": "c3d.c3d.info_full";
+    "@type"?: "info_full";
     "info_full": string;
 }
+type C3dInfoFullParametersTagged = Required<Pick<C3dInfoFullParameters, '@type'>> & C3dInfoFullParameters;
 
 
 interface C3dInsertParameters {
-    "@type": "c3d.c3d.insert";
+    "@type"?: "insert";
     "insert": string;
 }
+type C3dInsertParametersTagged = Required<Pick<C3dInsertParameters, '@type'>> & C3dInsertParameters;
 
 
 interface C3dInterpolationParameters {
-    "@type": "c3d.c3d.interpolation";
+    "@type"?: "interpolation";
     "interpolation": string;
 }
+type C3dInterpolationParametersTagged = Required<Pick<C3dInterpolationParameters, '@type'>> & C3dInterpolationParameters;
 
 
 interface C3dIterationsParameters {
-    "@type": "c3d.c3d.iterations";
+    "@type"?: "iterations";
     "iterations": string;
 }
+type C3dIterationsParametersTagged = Required<Pick<C3dIterationsParameters, '@type'>> & C3dIterationsParameters;
 
 
 interface C3dLabelOverlapParameters {
-    "@type": "c3d.c3d.label_overlap";
+    "@type"?: "label_overlap";
     "label_overlap": string;
 }
+type C3dLabelOverlapParametersTagged = Required<Pick<C3dLabelOverlapParameters, '@type'>> & C3dLabelOverlapParameters;
 
 
 interface C3dLabelStatisticsParameters {
-    "@type": "c3d.c3d.label_statistics";
+    "@type"?: "label_statistics";
     "label_statistics": string;
 }
+type C3dLabelStatisticsParametersTagged = Required<Pick<C3dLabelStatisticsParameters, '@type'>> & C3dLabelStatisticsParameters;
 
 
 interface C3dLandmarksToSpheresParameters {
-    "@type": "c3d.c3d.landmarks_to_spheres";
+    "@type"?: "landmarks_to_spheres";
     "landmarks_to_spheres": string;
 }
+type C3dLandmarksToSpheresParametersTagged = Required<Pick<C3dLandmarksToSpheresParameters, '@type'>> & C3dLandmarksToSpheresParameters;
 
 
 interface C3dLaplacianParameters {
-    "@type": "c3d.c3d.laplacian";
+    "@type"?: "laplacian";
     "laplacian": string;
 }
+type C3dLaplacianParametersTagged = Required<Pick<C3dLaplacianParameters, '@type'>> & C3dLaplacianParameters;
 
 
 interface C3dLevelsetParameters {
-    "@type": "c3d.c3d.levelset";
+    "@type"?: "levelset";
     "levelset": string;
 }
+type C3dLevelsetParametersTagged = Required<Pick<C3dLevelsetParameters, '@type'>> & C3dLevelsetParameters;
 
 
 interface C3dLevelsetCurvatureParameters {
-    "@type": "c3d.c3d.levelset_curvature";
+    "@type"?: "levelset_curvature";
     "levelset_curvature": string;
 }
+type C3dLevelsetCurvatureParametersTagged = Required<Pick<C3dLevelsetCurvatureParameters, '@type'>> & C3dLevelsetCurvatureParameters;
 
 
 interface C3dLevelsetAdvectionParameters {
-    "@type": "c3d.c3d.levelset_advection";
+    "@type"?: "levelset_advection";
     "levelset_advection": string;
 }
+type C3dLevelsetAdvectionParametersTagged = Required<Pick<C3dLevelsetAdvectionParameters, '@type'>> & C3dLevelsetAdvectionParameters;
 
 
 interface C3dLogParameters {
-    "@type": "c3d.c3d.log";
+    "@type"?: "log";
     "log": string;
 }
+type C3dLogParametersTagged = Required<Pick<C3dLogParameters, '@type'>> & C3dLogParameters;
 
 
 interface C3dLog10Parameters {
-    "@type": "c3d.c3d.log10";
+    "@type"?: "log10";
     "log10": string;
 }
+type C3dLog10ParametersTagged = Required<Pick<C3dLog10Parameters, '@type'>> & C3dLog10Parameters;
 
 
 interface C3dManualParameters {
-    "@type": "c3d.c3d.manual";
+    "@type"?: "manual";
     "manual": string;
 }
+type C3dManualParametersTagged = Required<Pick<C3dManualParameters, '@type'>> & C3dManualParameters;
 
 
 interface C3dMatchBoundingBoxParameters {
-    "@type": "c3d.c3d.match_bounding_box";
+    "@type"?: "match_bounding_box";
     "match_bounding_box": string;
 }
+type C3dMatchBoundingBoxParametersTagged = Required<Pick<C3dMatchBoundingBoxParameters, '@type'>> & C3dMatchBoundingBoxParameters;
 
 
 interface C3dMaximumParameters {
-    "@type": "c3d.c3d.maximum";
+    "@type"?: "maximum";
     "maximum": string;
 }
+type C3dMaximumParametersTagged = Required<Pick<C3dMaximumParameters, '@type'>> & C3dMaximumParameters;
 
 
 interface C3dMulticomponentSplitParameters {
-    "@type": "c3d.c3d.multicomponent_split";
+    "@type"?: "multicomponent_split";
     "multicomponent_split": string;
 }
+type C3dMulticomponentSplitParametersTagged = Required<Pick<C3dMulticomponentSplitParameters, '@type'>> & C3dMulticomponentSplitParameters;
 
 
 interface C3dMeanParameters {
-    "@type": "c3d.c3d.mean";
+    "@type"?: "mean";
     "mean": string;
 }
+type C3dMeanParametersTagged = Required<Pick<C3dMeanParameters, '@type'>> & C3dMeanParameters;
 
 
 interface C3dMedianFilterParameters {
-    "@type": "c3d.c3d.median_filter";
+    "@type"?: "median_filter";
     "median_filter": string;
 }
+type C3dMedianFilterParametersTagged = Required<Pick<C3dMedianFilterParameters, '@type'>> & C3dMedianFilterParameters;
 
 
 interface C3dMergeParameters {
-    "@type": "c3d.c3d.merge";
+    "@type"?: "merge";
     "merge": string;
 }
+type C3dMergeParametersTagged = Required<Pick<C3dMergeParameters, '@type'>> & C3dMergeParameters;
 
 
 interface C3dMeanFilterParameters {
-    "@type": "c3d.c3d.mean_filter";
+    "@type"?: "mean_filter";
     "mean_filter": string;
 }
+type C3dMeanFilterParametersTagged = Required<Pick<C3dMeanFilterParameters, '@type'>> & C3dMeanFilterParameters;
 
 
 interface C3dMutualInfoParameters {
-    "@type": "c3d.c3d.mutual_info";
+    "@type"?: "mutual_info";
     "mutual_info": string;
 }
+type C3dMutualInfoParametersTagged = Required<Pick<C3dMutualInfoParameters, '@type'>> & C3dMutualInfoParameters;
 
 
 interface C3dMinimumParameters {
-    "@type": "c3d.c3d.minimum";
+    "@type"?: "minimum";
     "minimum": string;
 }
+type C3dMinimumParametersTagged = Required<Pick<C3dMinimumParameters, '@type'>> & C3dMinimumParameters;
 
 
 interface C3dMixtureModelParameters {
-    "@type": "c3d.c3d.mixture_model";
+    "@type"?: "mixture_model";
     "mixture_model": string;
 }
+type C3dMixtureModelParametersTagged = Required<Pick<C3dMixtureModelParameters, '@type'>> & C3dMixtureModelParameters;
 
 
 interface C3dMomentsParameters {
-    "@type": "c3d.c3d.moments";
+    "@type"?: "moments";
     "moments": string;
 }
+type C3dMomentsParametersTagged = Required<Pick<C3dMomentsParameters, '@type'>> & C3dMomentsParameters;
 
 
 interface C3dMattesMutualInfoParameters {
-    "@type": "c3d.c3d.mattes_mutual_info";
+    "@type"?: "mattes_mutual_info";
     "mattes_mutual_info": string;
 }
+type C3dMattesMutualInfoParametersTagged = Required<Pick<C3dMattesMutualInfoParameters, '@type'>> & C3dMattesMutualInfoParameters;
 
 
 interface C3dMeanSquareParameters {
-    "@type": "c3d.c3d.mean_square";
+    "@type"?: "mean_square";
     "mean_square": string;
 }
+type C3dMeanSquareParametersTagged = Required<Pick<C3dMeanSquareParameters, '@type'>> & C3dMeanSquareParameters;
 
 
 interface C3dMultiplyParameters {
-    "@type": "c3d.c3d.multiply";
+    "@type"?: "multiply";
     "multiply": string;
 }
+type C3dMultiplyParametersTagged = Required<Pick<C3dMultiplyParameters, '@type'>> & C3dMultiplyParameters;
 
 
 interface C3dNormalizedCrossCorrelationParameters {
-    "@type": "c3d.c3d.normalized_cross_correlation";
+    "@type"?: "normalized_cross_correlation";
     "normalized_cross_correlation": string;
 }
+type C3dNormalizedCrossCorrelationParametersTagged = Required<Pick<C3dNormalizedCrossCorrelationParameters, '@type'>> & C3dNormalizedCrossCorrelationParameters;
 
 
 interface C3dNormalizedCorrelationParameters {
-    "@type": "c3d.c3d.normalized_correlation";
+    "@type"?: "normalized_correlation";
     "normalized_correlation": string;
 }
+type C3dNormalizedCorrelationParametersTagged = Required<Pick<C3dNormalizedCorrelationParameters, '@type'>> & C3dNormalizedCorrelationParameters;
 
 
 interface C3dNormalizedMutualInfoParameters {
-    "@type": "c3d.c3d.normalized_mutual_info";
+    "@type"?: "normalized_mutual_info";
     "normalized_mutual_info": string;
 }
+type C3dNormalizedMutualInfoParametersTagged = Required<Pick<C3dNormalizedMutualInfoParameters, '@type'>> & C3dNormalizedMutualInfoParameters;
 
 
 interface C3dNoiseGaussianParameters {
-    "@type": "c3d.c3d.noise_gaussian";
+    "@type"?: "noise_gaussian";
     "noise_gaussian": string;
 }
+type C3dNoiseGaussianParametersTagged = Required<Pick<C3dNoiseGaussianParameters, '@type'>> & C3dNoiseGaussianParameters;
 
 
 interface C3dNoisePoissonParameters {
-    "@type": "c3d.c3d.noise_poisson";
+    "@type"?: "noise_poisson";
     "noise_poisson": string;
 }
+type C3dNoisePoissonParametersTagged = Required<Pick<C3dNoisePoissonParameters, '@type'>> & C3dNoisePoissonParameters;
 
 
 interface C3dNoiseSpeckleParameters {
-    "@type": "c3d.c3d.noise_speckle";
+    "@type"?: "noise_speckle";
     "noise_speckle": string;
 }
+type C3dNoiseSpeckleParametersTagged = Required<Pick<C3dNoiseSpeckleParameters, '@type'>> & C3dNoiseSpeckleParameters;
 
 
 interface C3dNoiseSaltPepperParameters {
-    "@type": "c3d.c3d.noise_salt_pepper";
+    "@type"?: "noise_salt_pepper";
     "noise_salt_pepper": string;
 }
+type C3dNoiseSaltPepperParametersTagged = Required<Pick<C3dNoiseSaltPepperParameters, '@type'>> & C3dNoiseSaltPepperParameters;
 
 
 interface C3dNoMulticomponentSplitParameters {
-    "@type": "c3d.c3d.no_multicomponent_split";
+    "@type"?: "no_multicomponent_split";
     "no_multicomponent_split": string;
 }
+type C3dNoMulticomponentSplitParametersTagged = Required<Pick<C3dNoMulticomponentSplitParameters, '@type'>> & C3dNoMulticomponentSplitParameters;
 
 
 interface C3dNormalizeLocalWindowParameters {
-    "@type": "c3d.c3d.normalize_local_window";
+    "@type"?: "normalize_local_window";
     "normalize_local_window": string;
 }
+type C3dNormalizeLocalWindowParametersTagged = Required<Pick<C3dNormalizeLocalWindowParameters, '@type'>> & C3dNormalizeLocalWindowParameters;
 
 
 interface C3dNormpdfParameters {
-    "@type": "c3d.c3d.normpdf";
+    "@type"?: "normpdf";
     "normpdf": string;
 }
+type C3dNormpdfParametersTagged = Required<Pick<C3dNormpdfParameters, '@type'>> & C3dNormpdfParameters;
 
 
 interface C3dNoroundParameters {
-    "@type": "c3d.c3d.noround";
+    "@type"?: "noround";
     "noround": string;
 }
+type C3dNoroundParametersTagged = Required<Pick<C3dNoroundParameters, '@type'>> & C3dNoroundParameters;
 
 
 interface C3dNospmParameters {
-    "@type": "c3d.c3d.nospm";
+    "@type"?: "nospm";
     "nospm": string;
 }
+type C3dNospmParametersTagged = Required<Pick<C3dNospmParameters, '@type'>> & C3dNospmParameters;
 
 
 interface C3dOutputParameters {
-    "@type": "c3d.c3d.output";
+    "@type"?: "output";
     "output": string;
 }
+type C3dOutputParametersTagged = Required<Pick<C3dOutputParameters, '@type'>> & C3dOutputParameters;
 
 
 interface C3dOutputMulticomponentParameters {
-    "@type": "c3d.c3d.output_multicomponent";
+    "@type"?: "output_multicomponent";
     "output_multicomponent": string;
 }
+type C3dOutputMulticomponentParametersTagged = Required<Pick<C3dOutputMulticomponentParameters, '@type'>> & C3dOutputMulticomponentParameters;
 
 
 interface C3dOutputMultipleMulticomponentParameters {
-    "@type": "c3d.c3d.output_multiple_multicomponent";
+    "@type"?: "output_multiple_multicomponent";
     "output_multiple_multicomponent": string;
 }
+type C3dOutputMultipleMulticomponentParametersTagged = Required<Pick<C3dOutputMultipleMulticomponentParameters, '@type'>> & C3dOutputMultipleMulticomponentParameters;
 
 
 interface C3dOrientParameters {
-    "@type": "c3d.c3d.orient";
+    "@type"?: "orient";
     "orient": string;
 }
+type C3dOrientParametersTagged = Required<Pick<C3dOrientParameters, '@type'>> & C3dOrientParameters;
 
 
 interface C3dOutputMultipleParameters {
-    "@type": "c3d.c3d.output_multiple";
+    "@type"?: "output_multiple";
     "output_multiple": string;
 }
+type C3dOutputMultipleParametersTagged = Required<Pick<C3dOutputMultipleParameters, '@type'>> & C3dOutputMultipleParameters;
 
 
 interface C3dOrient1Parameters {
-    "@type": "c3d.c3d.orient";
+    "@type"?: "orient_1";
     "orient": string;
 }
+type C3dOrient1ParametersTagged = Required<Pick<C3dOrient1Parameters, '@type'>> & C3dOrient1Parameters;
 
 
 interface C3dOriginParameters {
-    "@type": "c3d.c3d.origin";
+    "@type"?: "origin";
     "origin": string;
 }
+type C3dOriginParametersTagged = Required<Pick<C3dOriginParameters, '@type'>> & C3dOriginParameters;
 
 
 interface C3dOriginVoxelParameters {
-    "@type": "c3d.c3d.origin_voxel";
+    "@type"?: "origin_voxel";
     "origin_voxel": string;
 }
+type C3dOriginVoxelParametersTagged = Required<Pick<C3dOriginVoxelParameters, '@type'>> & C3dOriginVoxelParameters;
 
 
 interface C3dOriginVoxelCoordParameters {
-    "@type": "c3d.c3d.origin_voxel_coord";
+    "@type"?: "origin_voxel_coord";
     "origin_voxel_coord": string;
 }
+type C3dOriginVoxelCoordParametersTagged = Required<Pick<C3dOriginVoxelCoordParameters, '@type'>> & C3dOriginVoxelCoordParameters;
 
 
 interface C3dOverlapParameters {
-    "@type": "c3d.c3d.overlap";
+    "@type"?: "overlap";
     "overlap": string;
 }
+type C3dOverlapParametersTagged = Required<Pick<C3dOverlapParameters, '@type'>> & C3dOverlapParameters;
 
 
 interface C3dOverlayLabelImageParameters {
-    "@type": "c3d.c3d.overlay_label_image";
+    "@type"?: "overlay_label_image";
     "overlay_label_image": string;
 }
+type C3dOverlayLabelImageParametersTagged = Required<Pick<C3dOverlayLabelImageParameters, '@type'>> & C3dOverlayLabelImageParameters;
 
 
 interface C3dPadParameters {
-    "@type": "c3d.c3d.pad";
+    "@type"?: "pad";
     "pad": string;
 }
+type C3dPadParametersTagged = Required<Pick<C3dPadParameters, '@type'>> & C3dPadParameters;
 
 
 interface C3dPadToParameters {
-    "@type": "c3d.c3d.pad_to";
+    "@type"?: "pad_to";
     "pad_to": string;
 }
+type C3dPadToParametersTagged = Required<Pick<C3dPadToParameters, '@type'>> & C3dPadToParameters;
 
 
 interface C3dPcaParameters {
-    "@type": "c3d.c3d.pca";
+    "@type"?: "pca";
     "pca": string;
 }
+type C3dPcaParametersTagged = Required<Pick<C3dPcaParameters, '@type'>> & C3dPcaParameters;
 
 
 interface C3dPercentIntensityModeParameters {
-    "@type": "c3d.c3d.percent_intensity_mode";
+    "@type"?: "percent_intensity_mode";
     "percent_intensity_mode": string;
 }
+type C3dPercentIntensityModeParametersTagged = Required<Pick<C3dPercentIntensityModeParameters, '@type'>> & C3dPercentIntensityModeParameters;
 
 
 interface C3dPixelParameters {
-    "@type": "c3d.c3d.pixel";
+    "@type"?: "pixel";
     "pixel": string;
 }
+type C3dPixelParametersTagged = Required<Pick<C3dPixelParameters, '@type'>> & C3dPixelParameters;
 
 
 interface C3dPopParameters {
-    "@type": "c3d.c3d.pop";
+    "@type"?: "pop";
     "pop": string;
 }
+type C3dPopParametersTagged = Required<Pick<C3dPopParameters, '@type'>> & C3dPopParameters;
 
 
 interface C3dPopasParameters {
-    "@type": "c3d.c3d.popas";
+    "@type"?: "popas";
     "popas": string;
 }
+type C3dPopasParametersTagged = Required<Pick<C3dPopasParameters, '@type'>> & C3dPopasParameters;
 
 
 interface C3dProbeParameters {
-    "@type": "c3d.c3d.probe";
+    "@type"?: "probe";
     "probe": string;
 }
+type C3dProbeParametersTagged = Required<Pick<C3dProbeParameters, '@type'>> & C3dProbeParameters;
 
 
 interface C3dPushParameters {
-    "@type": "c3d.c3d.push";
+    "@type"?: "push";
     "push": string;
 }
+type C3dPushParametersTagged = Required<Pick<C3dPushParameters, '@type'>> & C3dPushParameters;
 
 
 interface C3dRankParameters {
-    "@type": "c3d.c3d.rank";
+    "@type"?: "rank";
     "rank": string;
 }
+type C3dRankParametersTagged = Required<Pick<C3dRankParameters, '@type'>> & C3dRankParameters;
 
 
 interface C3dReciprocalParameters {
-    "@type": "c3d.c3d.reciprocal";
+    "@type"?: "reciprocal";
     "reciprocal": string;
 }
+type C3dReciprocalParametersTagged = Required<Pick<C3dReciprocalParameters, '@type'>> & C3dReciprocalParameters;
 
 
 interface C3dRegionParameters {
-    "@type": "c3d.c3d.region";
+    "@type"?: "region";
     "region": string;
 }
+type C3dRegionParametersTagged = Required<Pick<C3dRegionParameters, '@type'>> & C3dRegionParameters;
 
 
 interface C3dReorderParameters {
-    "@type": "c3d.c3d.reorder";
+    "@type"?: "reorder";
     "reorder": string;
 }
+type C3dReorderParametersTagged = Required<Pick<C3dReorderParameters, '@type'>> & C3dReorderParameters;
 
 
 interface C3dRetainLabelsParameters {
-    "@type": "c3d.c3d.retain_labels";
+    "@type"?: "retain_labels";
     "retain_labels": string;
 }
+type C3dRetainLabelsParametersTagged = Required<Pick<C3dRetainLabelsParameters, '@type'>> & C3dRetainLabelsParameters;
 
 
 interface C3dRfApplyParameters {
-    "@type": "c3d.c3d.rf_apply";
+    "@type"?: "rf_apply";
     "rf_apply": string;
 }
+type C3dRfApplyParametersTagged = Required<Pick<C3dRfApplyParameters, '@type'>> & C3dRfApplyParameters;
 
 
 interface C3dRfTrainParameters {
-    "@type": "c3d.c3d.rf_train";
+    "@type"?: "rf_train";
     "rf_train": string;
 }
+type C3dRfTrainParametersTagged = Required<Pick<C3dRfTrainParameters, '@type'>> & C3dRfTrainParameters;
 
 
 interface C3dRfParamPatchParameters {
-    "@type": "c3d.c3d.rf_param_patch";
+    "@type"?: "rf_param_patch";
     "rf_param_patch": string;
 }
+type C3dRfParamPatchParametersTagged = Required<Pick<C3dRfParamPatchParameters, '@type'>> & C3dRfParamPatchParameters;
 
 
 interface C3dRfParamUsexyzParameters {
-    "@type": "c3d.c3d.rf_param_usexyz";
+    "@type"?: "rf_param_usexyz";
     "rf_param_usexyz": string;
 }
+type C3dRfParamUsexyzParametersTagged = Required<Pick<C3dRfParamUsexyzParameters, '@type'>> & C3dRfParamUsexyzParameters;
 
 
 interface C3dRfParamNousexyzParameters {
-    "@type": "c3d.c3d.rf_param_nousexyz";
+    "@type"?: "rf_param_nousexyz";
     "rf_param_nousexyz": string;
 }
+type C3dRfParamNousexyzParametersTagged = Required<Pick<C3dRfParamNousexyzParameters, '@type'>> & C3dRfParamNousexyzParameters;
 
 
 interface C3dRfParamNtreesParameters {
-    "@type": "c3d.c3d.rf_param_ntrees";
+    "@type"?: "rf_param_ntrees";
     "rf_param_ntrees": string;
 }
+type C3dRfParamNtreesParametersTagged = Required<Pick<C3dRfParamNtreesParameters, '@type'>> & C3dRfParamNtreesParameters;
 
 
 interface C3dRfParamTreedepthParameters {
-    "@type": "c3d.c3d.rf_param_treedepth";
+    "@type"?: "rf_param_treedepth";
     "rf_param_treedepth": string;
 }
+type C3dRfParamTreedepthParametersTagged = Required<Pick<C3dRfParamTreedepthParameters, '@type'>> & C3dRfParamTreedepthParameters;
 
 
 interface C3dSetSformParameters {
-    "@type": "c3d.c3d.set_sform";
+    "@type"?: "set_sform";
     "set_sform": string;
 }
+type C3dSetSformParametersTagged = Required<Pick<C3dSetSformParameters, '@type'>> & C3dSetSformParameters;
 
 
 interface C3dReplaceParameters {
-    "@type": "c3d.c3d.replace";
+    "@type"?: "replace";
     "replace": string;
 }
+type C3dReplaceParametersTagged = Required<Pick<C3dReplaceParameters, '@type'>> & C3dReplaceParameters;
 
 
 interface C3dResampleParameters {
-    "@type": "c3d.c3d.resample";
+    "@type"?: "resample";
     "resample": string;
 }
+type C3dResampleParametersTagged = Required<Pick<C3dResampleParameters, '@type'>> & C3dResampleParameters;
 
 
 interface C3dResampleIsoParameters {
-    "@type": "c3d.c3d.resample_iso";
+    "@type"?: "resample_iso";
     "resample_iso": string;
 }
+type C3dResampleIsoParametersTagged = Required<Pick<C3dResampleIsoParameters, '@type'>> & C3dResampleIsoParameters;
 
 
 interface C3dResampleMmParameters {
-    "@type": "c3d.c3d.resample_mm";
+    "@type"?: "resample_mm";
     "resample_mm": string;
 }
+type C3dResampleMmParametersTagged = Required<Pick<C3dResampleMmParameters, '@type'>> & C3dResampleMmParameters;
 
 
 interface C3dResliceItkParameters {
-    "@type": "c3d.c3d.reslice_itk";
+    "@type"?: "reslice_itk";
     "reslice_itk": string;
 }
+type C3dResliceItkParametersTagged = Required<Pick<C3dResliceItkParameters, '@type'>> & C3dResliceItkParameters;
 
 
 interface C3dResliceMatrixParameters {
-    "@type": "c3d.c3d.reslice_matrix";
+    "@type"?: "reslice_matrix";
     "reslice_matrix": string;
 }
+type C3dResliceMatrixParametersTagged = Required<Pick<C3dResliceMatrixParameters, '@type'>> & C3dResliceMatrixParameters;
 
 
 interface C3dResliceIdentityParameters {
-    "@type": "c3d.c3d.reslice_identity";
+    "@type"?: "reslice_identity";
     "reslice_identity": string;
 }
+type C3dResliceIdentityParametersTagged = Required<Pick<C3dResliceIdentityParameters, '@type'>> & C3dResliceIdentityParameters;
 
 
 interface C3dRgb2hsvParameters {
-    "@type": "c3d.c3d.rgb2hsv";
+    "@type"?: "rgb2hsv";
     "rgb2hsv": string;
 }
+type C3dRgb2hsvParametersTagged = Required<Pick<C3dRgb2hsvParameters, '@type'>> & C3dRgb2hsvParameters;
 
 
 interface C3dRmsParameters {
-    "@type": "c3d.c3d.rms";
+    "@type"?: "rms";
     "rms": string;
 }
+type C3dRmsParametersTagged = Required<Pick<C3dRmsParameters, '@type'>> & C3dRmsParameters;
 
 
 interface C3dRoundParameters {
-    "@type": "c3d.c3d.round";
+    "@type"?: "round";
     "round": string;
 }
+type C3dRoundParametersTagged = Required<Pick<C3dRoundParameters, '@type'>> & C3dRoundParameters;
 
 
 interface C3dScaleParameters {
-    "@type": "c3d.c3d.scale";
+    "@type"?: "scale";
     "scale": string;
 }
+type C3dScaleParametersTagged = Required<Pick<C3dScaleParameters, '@type'>> & C3dScaleParameters;
 
 
 interface C3dSetSform1Parameters {
-    "@type": "c3d.c3d.set_sform";
+    "@type"?: "set_sform_1";
     "set_sform": string;
 }
+type C3dSetSform1ParametersTagged = Required<Pick<C3dSetSform1Parameters, '@type'>> & C3dSetSform1Parameters;
 
 
 interface C3dSinParameters {
-    "@type": "c3d.c3d.sin";
+    "@type"?: "sin";
     "sin": string;
 }
+type C3dSinParametersTagged = Required<Pick<C3dSinParameters, '@type'>> & C3dSinParameters;
 
 
 interface C3dSliceParameters {
-    "@type": "c3d.c3d.slice";
+    "@type"?: "slice";
     "slice": string;
 }
+type C3dSliceParametersTagged = Required<Pick<C3dSliceParameters, '@type'>> & C3dSliceParameters;
 
 
 interface C3dSliceAllParameters {
-    "@type": "c3d.c3d.slice_all";
+    "@type"?: "slice_all";
     "slice_all": string;
 }
+type C3dSliceAllParametersTagged = Required<Pick<C3dSliceAllParameters, '@type'>> & C3dSliceAllParameters;
 
 
 interface C3dSharpenParameters {
-    "@type": "c3d.c3d.sharpen";
+    "@type"?: "sharpen";
     "sharpen": string;
 }
+type C3dSharpenParametersTagged = Required<Pick<C3dSharpenParameters, '@type'>> & C3dSharpenParameters;
 
 
 interface C3dShiftParameters {
-    "@type": "c3d.c3d.shift";
+    "@type"?: "shift";
     "shift": string;
 }
+type C3dShiftParametersTagged = Required<Pick<C3dShiftParameters, '@type'>> & C3dShiftParameters;
 
 
 interface C3dSignedDistanceTransformParameters {
-    "@type": "c3d.c3d.signed_distance_transform";
+    "@type"?: "signed_distance_transform";
     "signed_distance_transform": string;
 }
+type C3dSignedDistanceTransformParametersTagged = Required<Pick<C3dSignedDistanceTransformParameters, '@type'>> & C3dSignedDistanceTransformParameters;
 
 
 interface C3dSmoothParameters {
-    "@type": "c3d.c3d.smooth";
+    "@type"?: "smooth";
     "smooth": string;
 }
+type C3dSmoothParametersTagged = Required<Pick<C3dSmoothParameters, '@type'>> & C3dSmoothParameters;
 
 
 interface C3dSmoothFastParameters {
-    "@type": "c3d.c3d.smooth_fast";
+    "@type"?: "smooth_fast";
     "smooth_fast": string;
 }
+type C3dSmoothFastParametersTagged = Required<Pick<C3dSmoothFastParameters, '@type'>> & C3dSmoothFastParameters;
 
 
 interface C3dSpacingParameters {
-    "@type": "c3d.c3d.spacing";
+    "@type"?: "spacing";
     "spacing": string;
 }
+type C3dSpacingParametersTagged = Required<Pick<C3dSpacingParameters, '@type'>> & C3dSpacingParameters;
 
 
 interface C3dSplitParameters {
-    "@type": "c3d.c3d.split";
+    "@type"?: "split";
     "split": string;
 }
+type C3dSplitParametersTagged = Required<Pick<C3dSplitParameters, '@type'>> & C3dSplitParameters;
 
 
 interface C3dSqrtParameters {
-    "@type": "c3d.c3d.sqrt";
+    "@type"?: "sqrt";
     "sqrt": string;
 }
+type C3dSqrtParametersTagged = Required<Pick<C3dSqrtParameters, '@type'>> & C3dSqrtParameters;
 
 
 interface C3dStapleParameters {
-    "@type": "c3d.c3d.staple";
+    "@type"?: "staple";
     "staple": string;
 }
+type C3dStapleParametersTagged = Required<Pick<C3dStapleParameters, '@type'>> & C3dStapleParameters;
 
 
 interface C3dStructureTensorEigenvaluesParameters {
-    "@type": "c3d.c3d.structure_tensor_eigenvalues";
+    "@type"?: "structure_tensor_eigenvalues";
     "structure_tensor_eigenvalues": string;
 }
+type C3dStructureTensorEigenvaluesParametersTagged = Required<Pick<C3dStructureTensorEigenvaluesParameters, '@type'>> & C3dStructureTensorEigenvaluesParameters;
 
 
 interface C3dSpmParameters {
-    "@type": "c3d.c3d.spm";
+    "@type"?: "spm";
     "spm": string;
 }
+type C3dSpmParametersTagged = Required<Pick<C3dSpmParameters, '@type'>> & C3dSpmParameters;
 
 
 interface C3dSubtractParameters {
-    "@type": "c3d.c3d.subtract";
+    "@type"?: "subtract";
     "subtract": string;
 }
+type C3dSubtractParametersTagged = Required<Pick<C3dSubtractParameters, '@type'>> & C3dSubtractParameters;
 
 
 interface C3dSupervoxelParameters {
-    "@type": "c3d.c3d.supervoxel";
+    "@type"?: "supervoxel";
     "supervoxel": string;
 }
+type C3dSupervoxelParametersTagged = Required<Pick<C3dSupervoxelParameters, '@type'>> & C3dSupervoxelParameters;
 
 
 interface C3dStretchParameters {
-    "@type": "c3d.c3d.stretch";
+    "@type"?: "stretch";
     "stretch": string;
 }
+type C3dStretchParametersTagged = Required<Pick<C3dStretchParameters, '@type'>> & C3dStretchParameters;
 
 
 interface C3dSwapdimParameters {
-    "@type": "c3d.c3d.swapdim";
+    "@type"?: "swapdim";
     "swapdim": string;
 }
+type C3dSwapdimParametersTagged = Required<Pick<C3dSwapdimParameters, '@type'>> & C3dSwapdimParameters;
 
 
 interface C3dTestImageParameters {
-    "@type": "c3d.c3d.test_image";
+    "@type"?: "test_image";
     "test_image": string;
 }
+type C3dTestImageParametersTagged = Required<Pick<C3dTestImageParameters, '@type'>> & C3dTestImageParameters;
 
 
 interface C3dTestProbeParameters {
-    "@type": "c3d.c3d.test_probe";
+    "@type"?: "test_probe";
     "test_probe": string;
 }
+type C3dTestProbeParametersTagged = Required<Pick<C3dTestProbeParameters, '@type'>> & C3dTestProbeParameters;
 
 
 interface C3dThresholdParameters {
-    "@type": "c3d.c3d.threshold";
+    "@type"?: "threshold";
     "threshold": string;
 }
+type C3dThresholdParametersTagged = Required<Pick<C3dThresholdParameters, '@type'>> & C3dThresholdParameters;
 
 
 interface C3dTileParameters {
-    "@type": "c3d.c3d.tile";
+    "@type"?: "tile";
     "tile": string;
 }
+type C3dTileParametersTagged = Required<Pick<C3dTileParameters, '@type'>> & C3dTileParameters;
 
 
 interface C3dTrimParameters {
-    "@type": "c3d.c3d.trim";
+    "@type"?: "trim";
     "trim": string;
 }
+type C3dTrimParametersTagged = Required<Pick<C3dTrimParameters, '@type'>> & C3dTrimParameters;
 
 
 interface C3dTrimToSizeParameters {
-    "@type": "c3d.c3d.trim_to_size";
+    "@type"?: "trim_to_size";
     "trim_to_size": string;
 }
+type C3dTrimToSizeParametersTagged = Required<Pick<C3dTrimToSizeParameters, '@type'>> & C3dTrimToSizeParameters;
 
 
 interface C3dTypeParameters {
-    "@type": "c3d.c3d.type";
+    "@type"?: "type";
     "type": string;
 }
+type C3dTypeParametersTagged = Required<Pick<C3dTypeParameters, '@type'>> & C3dTypeParameters;
 
 
 interface C3dVerboseParameters {
-    "@type": "c3d.c3d.verbose";
+    "@type"?: "verbose";
     "verbose": string;
 }
+type C3dVerboseParametersTagged = Required<Pick<C3dVerboseParameters, '@type'>> & C3dVerboseParameters;
 
 
 interface C3dNoverboseParameters {
-    "@type": "c3d.c3d.noverbose";
+    "@type"?: "noverbose";
     "noverbose": string;
 }
+type C3dNoverboseParametersTagged = Required<Pick<C3dNoverboseParameters, '@type'>> & C3dNoverboseParameters;
 
 
 interface C3dVersionParameters {
-    "@type": "c3d.c3d.version";
+    "@type"?: "version";
     "version": string;
 }
+type C3dVersionParametersTagged = Required<Pick<C3dVersionParameters, '@type'>> & C3dVersionParameters;
 
 
 interface C3dVoteParameters {
-    "@type": "c3d.c3d.vote";
+    "@type"?: "vote";
     "vote": string;
 }
+type C3dVoteParametersTagged = Required<Pick<C3dVoteParameters, '@type'>> & C3dVoteParameters;
 
 
 interface C3dVoteMrfParameters {
-    "@type": "c3d.c3d.vote_mrf";
+    "@type"?: "vote_mrf";
     "vote_mrf": string;
 }
+type C3dVoteMrfParametersTagged = Required<Pick<C3dVoteMrfParameters, '@type'>> & C3dVoteMrfParameters;
 
 
 interface C3dVoteLabelParameters {
-    "@type": "c3d.c3d.vote_label";
+    "@type"?: "vote_label";
     "vote_label": string;
 }
+type C3dVoteLabelParametersTagged = Required<Pick<C3dVoteLabelParameters, '@type'>> & C3dVoteLabelParameters;
 
 
 interface C3dVoxelSumParameters {
-    "@type": "c3d.c3d.voxel_sum";
+    "@type"?: "voxel_sum";
     "voxel_sum": string;
 }
+type C3dVoxelSumParametersTagged = Required<Pick<C3dVoxelSumParameters, '@type'>> & C3dVoxelSumParameters;
 
 
 interface C3dVoxelIntegralParameters {
-    "@type": "c3d.c3d.voxel_integral";
+    "@type"?: "voxel_integral";
     "voxel_integral": string;
 }
+type C3dVoxelIntegralParametersTagged = Required<Pick<C3dVoxelIntegralParameters, '@type'>> & C3dVoxelIntegralParameters;
 
 
 interface C3dVoxelwiseRegressionParameters {
-    "@type": "c3d.c3d.voxelwise_regression";
+    "@type"?: "voxelwise_regression";
     "voxelwise_regression": string;
 }
+type C3dVoxelwiseRegressionParametersTagged = Required<Pick<C3dVoxelwiseRegressionParameters, '@type'>> & C3dVoxelwiseRegressionParameters;
 
 
 interface C3dWarpParameters {
-    "@type": "c3d.c3d.warp";
+    "@type"?: "warp";
     "warp": string;
 }
+type C3dWarpParametersTagged = Required<Pick<C3dWarpParameters, '@type'>> & C3dWarpParameters;
 
 
 interface C3dWarpLabelParameters {
-    "@type": "c3d.c3d.warp_label";
+    "@type"?: "warp_label";
     "warp_label": string;
 }
+type C3dWarpLabelParametersTagged = Required<Pick<C3dWarpLabelParameters, '@type'>> & C3dWarpLabelParameters;
 
 
 interface C3dWrapParameters {
-    "@type": "c3d.c3d.wrap";
+    "@type"?: "wrap";
     "wrap": string;
 }
+type C3dWrapParametersTagged = Required<Pick<C3dWrapParameters, '@type'>> & C3dWrapParameters;
 
 
 interface C3dWeightedSumParameters {
-    "@type": "c3d.c3d.weighted_sum";
+    "@type"?: "weighted_sum";
     "weighted_sum": string;
 }
+type C3dWeightedSumParametersTagged = Required<Pick<C3dWeightedSumParameters, '@type'>> & C3dWeightedSumParameters;
 
 
 interface C3dWeightedSumVoxelwiseParameters {
-    "@type": "c3d.c3d.weighted_sum_voxelwise";
+    "@type"?: "weighted_sum_voxelwise";
     "weighted_sum_voxelwise": string;
 }
+type C3dWeightedSumVoxelwiseParametersTagged = Required<Pick<C3dWeightedSumVoxelwiseParameters, '@type'>> & C3dWeightedSumVoxelwiseParameters;
 
 
 interface C3dParameters {
-    "@type": "c3d.c3d";
+    "@type"?: "c3d/c3d";
     "input": Array<InputPathType>;
-    "operations": Array<C3dAccumParameters | C3dAcosParameters | C3dAddParameters | C3dAlignLandmarksParameters | C3dAnisotropicDiffusionParameters | C3dAntialiasParameters | C3dSetParameters | C3dAsinParameters | C3dAtan2Parameters | C3dBackgroundParameters | C3dN4BiasCorrectionParameters | C3dBinarizeParameters | C3dCannyParameters | C3dCeilParameters | C3dCentroidParameters | C3dCentroidMarkParameters | C3dConnectedComponentsParameters | C3dClearParameters | C3dClipParameters | C3dColorMapParameters | C3dCompressParameters | C3dNoCompressParameters | C3dConvParameters | C3dCoordinateMapVoxelParameters | C3dCoordinateMapPhysicalParameters | C3dCopyTransformParameters | C3dCosParameters | C3dCreateParameters | C3dDicomSeriesListParameters | C3dDicomSeriesReadParameters | C3dDilateParameters | C3dDivideParameters | C3dDuplicateParameters | C3dEndaccumParameters | C3dEndforParameters | C3dErodeParameters | C3dErfParameters | C3dExpParameters | C3dExportPatchesParameters | C3dExportPatchesAugParameters | C3dExtrudeSegParameters | C3dFillBackgroundWithNoiseParameters | C3dFftParameters | C3dFlipParameters | C3dFloorParameters | C3dForeachParameters | C3dForeachCompParameters | C3dGlmParameters | C3dGradientParameters | C3dHelpParameters | C3dHolefillParameters | C3dHessianEigenvaluesParameters | C3dHessianObjectnessParameters | C3dHistogramMatchParameters | C3dInfoParameters | C3dInfoFullParameters | C3dInsertParameters | C3dInterpolationParameters | C3dIterationsParameters | C3dLabelOverlapParameters | C3dLabelStatisticsParameters | C3dLandmarksToSpheresParameters | C3dLaplacianParameters | C3dLevelsetParameters | C3dLevelsetCurvatureParameters | C3dLevelsetAdvectionParameters | C3dLogParameters | C3dLog10Parameters | C3dManualParameters | C3dMatchBoundingBoxParameters | C3dMaximumParameters | C3dMulticomponentSplitParameters | C3dMeanParameters | C3dMedianFilterParameters | C3dMergeParameters | C3dMeanFilterParameters | C3dMutualInfoParameters | C3dMinimumParameters | C3dMixtureModelParameters | C3dMomentsParameters | C3dMattesMutualInfoParameters | C3dMeanSquareParameters | C3dMultiplyParameters | C3dNormalizedCrossCorrelationParameters | C3dNormalizedCorrelationParameters | C3dNormalizedMutualInfoParameters | C3dNoiseGaussianParameters | C3dNoisePoissonParameters | C3dNoiseSpeckleParameters | C3dNoiseSaltPepperParameters | C3dNoMulticomponentSplitParameters | C3dNormalizeLocalWindowParameters | C3dNormpdfParameters | C3dNoroundParameters | C3dNospmParameters | C3dOutputParameters | C3dOutputMulticomponentParameters | C3dOutputMultipleMulticomponentParameters | C3dOrientParameters | C3dOutputMultipleParameters | C3dOrient1Parameters | C3dOriginParameters | C3dOriginVoxelParameters | C3dOriginVoxelCoordParameters | C3dOverlapParameters | C3dOverlayLabelImageParameters | C3dPadParameters | C3dPadToParameters | C3dPcaParameters | C3dPercentIntensityModeParameters | C3dPixelParameters | C3dPopParameters | C3dPopasParameters | C3dProbeParameters | C3dPushParameters | C3dRankParameters | C3dReciprocalParameters | C3dRegionParameters | C3dReorderParameters | C3dRetainLabelsParameters | C3dRfApplyParameters | C3dRfTrainParameters | C3dRfParamPatchParameters | C3dRfParamUsexyzParameters | C3dRfParamNousexyzParameters | C3dRfParamNtreesParameters | C3dRfParamTreedepthParameters | C3dSetSformParameters | C3dReplaceParameters | C3dResampleParameters | C3dResampleIsoParameters | C3dResampleMmParameters | C3dResliceItkParameters | C3dResliceMatrixParameters | C3dResliceIdentityParameters | C3dRgb2hsvParameters | C3dRmsParameters | C3dRoundParameters | C3dScaleParameters | C3dSetSform1Parameters | C3dSinParameters | C3dSliceParameters | C3dSliceAllParameters | C3dSharpenParameters | C3dShiftParameters | C3dSignedDistanceTransformParameters | C3dSmoothParameters | C3dSmoothFastParameters | C3dSpacingParameters | C3dSplitParameters | C3dSqrtParameters | C3dStapleParameters | C3dStructureTensorEigenvaluesParameters | C3dSpmParameters | C3dSubtractParameters | C3dSupervoxelParameters | C3dStretchParameters | C3dSwapdimParameters | C3dTestImageParameters | C3dTestProbeParameters | C3dThresholdParameters | C3dTileParameters | C3dTrimParameters | C3dTrimToSizeParameters | C3dTypeParameters | C3dVerboseParameters | C3dNoverboseParameters | C3dVersionParameters | C3dVoteParameters | C3dVoteMrfParameters | C3dVoteLabelParameters | C3dVoxelSumParameters | C3dVoxelIntegralParameters | C3dVoxelwiseRegressionParameters | C3dWarpParameters | C3dWarpLabelParameters | C3dWrapParameters | C3dWeightedSumParameters | C3dWeightedSumVoxelwiseParameters>;
+    "operations": Array<C3dAccumParametersTagged | C3dAcosParametersTagged | C3dAddParametersTagged | C3dAlignLandmarksParametersTagged | C3dAnisotropicDiffusionParametersTagged | C3dAntialiasParametersTagged | C3dSetParametersTagged | C3dAsinParametersTagged | C3dAtan2ParametersTagged | C3dBackgroundParametersTagged | C3dN4BiasCorrectionParametersTagged | C3dBinarizeParametersTagged | C3dCannyParametersTagged | C3dCeilParametersTagged | C3dCentroidParametersTagged | C3dCentroidMarkParametersTagged | C3dConnectedComponentsParametersTagged | C3dClearParametersTagged | C3dClipParametersTagged | C3dColorMapParametersTagged | C3dCompressParametersTagged | C3dNoCompressParametersTagged | C3dConvParametersTagged | C3dCoordinateMapVoxelParametersTagged | C3dCoordinateMapPhysicalParametersTagged | C3dCopyTransformParametersTagged | C3dCosParametersTagged | C3dCreateParametersTagged | C3dDicomSeriesListParametersTagged | C3dDicomSeriesReadParametersTagged | C3dDilateParametersTagged | C3dDivideParametersTagged | C3dDuplicateParametersTagged | C3dEndaccumParametersTagged | C3dEndforParametersTagged | C3dErodeParametersTagged | C3dErfParametersTagged | C3dExpParametersTagged | C3dExportPatchesParametersTagged | C3dExportPatchesAugParametersTagged | C3dExtrudeSegParametersTagged | C3dFillBackgroundWithNoiseParametersTagged | C3dFftParametersTagged | C3dFlipParametersTagged | C3dFloorParametersTagged | C3dForeachParametersTagged | C3dForeachCompParametersTagged | C3dGlmParametersTagged | C3dGradientParametersTagged | C3dHelpParametersTagged | C3dHolefillParametersTagged | C3dHessianEigenvaluesParametersTagged | C3dHessianObjectnessParametersTagged | C3dHistogramMatchParametersTagged | C3dInfoParametersTagged | C3dInfoFullParametersTagged | C3dInsertParametersTagged | C3dInterpolationParametersTagged | C3dIterationsParametersTagged | C3dLabelOverlapParametersTagged | C3dLabelStatisticsParametersTagged | C3dLandmarksToSpheresParametersTagged | C3dLaplacianParametersTagged | C3dLevelsetParametersTagged | C3dLevelsetCurvatureParametersTagged | C3dLevelsetAdvectionParametersTagged | C3dLogParametersTagged | C3dLog10ParametersTagged | C3dManualParametersTagged | C3dMatchBoundingBoxParametersTagged | C3dMaximumParametersTagged | C3dMulticomponentSplitParametersTagged | C3dMeanParametersTagged | C3dMedianFilterParametersTagged | C3dMergeParametersTagged | C3dMeanFilterParametersTagged | C3dMutualInfoParametersTagged | C3dMinimumParametersTagged | C3dMixtureModelParametersTagged | C3dMomentsParametersTagged | C3dMattesMutualInfoParametersTagged | C3dMeanSquareParametersTagged | C3dMultiplyParametersTagged | C3dNormalizedCrossCorrelationParametersTagged | C3dNormalizedCorrelationParametersTagged | C3dNormalizedMutualInfoParametersTagged | C3dNoiseGaussianParametersTagged | C3dNoisePoissonParametersTagged | C3dNoiseSpeckleParametersTagged | C3dNoiseSaltPepperParametersTagged | C3dNoMulticomponentSplitParametersTagged | C3dNormalizeLocalWindowParametersTagged | C3dNormpdfParametersTagged | C3dNoroundParametersTagged | C3dNospmParametersTagged | C3dOutputParametersTagged | C3dOutputMulticomponentParametersTagged | C3dOutputMultipleMulticomponentParametersTagged | C3dOrientParametersTagged | C3dOutputMultipleParametersTagged | C3dOrient1ParametersTagged | C3dOriginParametersTagged | C3dOriginVoxelParametersTagged | C3dOriginVoxelCoordParametersTagged | C3dOverlapParametersTagged | C3dOverlayLabelImageParametersTagged | C3dPadParametersTagged | C3dPadToParametersTagged | C3dPcaParametersTagged | C3dPercentIntensityModeParametersTagged | C3dPixelParametersTagged | C3dPopParametersTagged | C3dPopasParametersTagged | C3dProbeParametersTagged | C3dPushParametersTagged | C3dRankParametersTagged | C3dReciprocalParametersTagged | C3dRegionParametersTagged | C3dReorderParametersTagged | C3dRetainLabelsParametersTagged | C3dRfApplyParametersTagged | C3dRfTrainParametersTagged | C3dRfParamPatchParametersTagged | C3dRfParamUsexyzParametersTagged | C3dRfParamNousexyzParametersTagged | C3dRfParamNtreesParametersTagged | C3dRfParamTreedepthParametersTagged | C3dSetSformParametersTagged | C3dReplaceParametersTagged | C3dResampleParametersTagged | C3dResampleIsoParametersTagged | C3dResampleMmParametersTagged | C3dResliceItkParametersTagged | C3dResliceMatrixParametersTagged | C3dResliceIdentityParametersTagged | C3dRgb2hsvParametersTagged | C3dRmsParametersTagged | C3dRoundParametersTagged | C3dScaleParametersTagged | C3dSetSform1ParametersTagged | C3dSinParametersTagged | C3dSliceParametersTagged | C3dSliceAllParametersTagged | C3dSharpenParametersTagged | C3dShiftParametersTagged | C3dSignedDistanceTransformParametersTagged | C3dSmoothParametersTagged | C3dSmoothFastParametersTagged | C3dSpacingParametersTagged | C3dSplitParametersTagged | C3dSqrtParametersTagged | C3dStapleParametersTagged | C3dStructureTensorEigenvaluesParametersTagged | C3dSpmParametersTagged | C3dSubtractParametersTagged | C3dSupervoxelParametersTagged | C3dStretchParametersTagged | C3dSwapdimParametersTagged | C3dTestImageParametersTagged | C3dTestProbeParametersTagged | C3dThresholdParametersTagged | C3dTileParametersTagged | C3dTrimParametersTagged | C3dTrimToSizeParametersTagged | C3dTypeParametersTagged | C3dVerboseParametersTagged | C3dNoverboseParametersTagged | C3dVersionParametersTagged | C3dVoteParametersTagged | C3dVoteMrfParametersTagged | C3dVoteLabelParametersTagged | C3dVoxelSumParametersTagged | C3dVoxelIntegralParametersTagged | C3dVoxelwiseRegressionParametersTagged | C3dWarpParametersTagged | C3dWarpLabelParametersTagged | C3dWrapParametersTagged | C3dWeightedSumParametersTagged | C3dWeightedSumVoxelwiseParametersTagged>;
     "output": string;
 }
+type C3dParametersTagged = Required<Pick<C3dParameters, '@type'>> & C3dParameters;
 
 
 /**
@@ -1100,190 +1280,189 @@ interface C3dParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function c3d_operations_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "c3d.c3d": c3d_cargs,
-        "c3d.c3d.accum": c3d_accum_cargs,
-        "c3d.c3d.acos": c3d_acos_cargs,
-        "c3d.c3d.add": c3d_add_cargs,
-        "c3d.c3d.align_landmarks": c3d_align_landmarks_cargs,
-        "c3d.c3d.anisotropic_diffusion": c3d_anisotropic_diffusion_cargs,
-        "c3d.c3d.antialias": c3d_antialias_cargs,
-        "c3d.c3d.set": c3d_set_cargs,
-        "c3d.c3d.asin": c3d_asin_cargs,
-        "c3d.c3d.atan2": c3d_atan2_cargs,
-        "c3d.c3d.background": c3d_background_cargs,
-        "c3d.c3d.n4_bias_correction": c3d_n4_bias_correction_cargs,
-        "c3d.c3d.binarize": c3d_binarize_cargs,
-        "c3d.c3d.canny": c3d_canny_cargs,
-        "c3d.c3d.ceil": c3d_ceil_cargs,
-        "c3d.c3d.centroid": c3d_centroid_cargs,
-        "c3d.c3d.centroid_mark": c3d_centroid_mark_cargs,
-        "c3d.c3d.connected_components": c3d_connected_components_cargs,
-        "c3d.c3d.clear": c3d_clear_cargs,
-        "c3d.c3d.clip": c3d_clip_cargs,
-        "c3d.c3d.color_map": c3d_color_map_cargs,
-        "c3d.c3d.compress": c3d_compress_cargs,
-        "c3d.c3d.no_compress": c3d_no_compress_cargs,
-        "c3d.c3d.conv": c3d_conv_cargs,
-        "c3d.c3d.coordinate_map_voxel": c3d_coordinate_map_voxel_cargs,
-        "c3d.c3d.coordinate_map_physical": c3d_coordinate_map_physical_cargs,
-        "c3d.c3d.copy_transform": c3d_copy_transform_cargs,
-        "c3d.c3d.cos": c3d_cos_cargs,
-        "c3d.c3d.create": c3d_create_cargs,
-        "c3d.c3d.dicom_series_list": c3d_dicom_series_list_cargs,
-        "c3d.c3d.dicom_series_read": c3d_dicom_series_read_cargs,
-        "c3d.c3d.dilate": c3d_dilate_cargs,
-        "c3d.c3d.divide": c3d_divide_cargs,
-        "c3d.c3d.duplicate": c3d_duplicate_cargs,
-        "c3d.c3d.endaccum": c3d_endaccum_cargs,
-        "c3d.c3d.endfor": c3d_endfor_cargs,
-        "c3d.c3d.erode": c3d_erode_cargs,
-        "c3d.c3d.erf": c3d_erf_cargs,
-        "c3d.c3d.exp": c3d_exp_cargs,
-        "c3d.c3d.export_patches": c3d_export_patches_cargs,
-        "c3d.c3d.export_patches_aug": c3d_export_patches_aug_cargs,
-        "c3d.c3d.extrude_seg": c3d_extrude_seg_cargs,
-        "c3d.c3d.fill_background_with_noise": c3d_fill_background_with_noise_cargs,
-        "c3d.c3d.fft": c3d_fft_cargs,
-        "c3d.c3d.flip": c3d_flip_cargs,
-        "c3d.c3d.floor": c3d_floor_cargs,
-        "c3d.c3d.foreach": c3d_foreach_cargs,
-        "c3d.c3d.foreach_comp": c3d_foreach_comp_cargs,
-        "c3d.c3d.glm": c3d_glm_cargs,
-        "c3d.c3d.gradient": c3d_gradient_cargs,
-        "c3d.c3d._help": c3d__help_cargs,
-        "c3d.c3d.holefill": c3d_holefill_cargs,
-        "c3d.c3d.hessian_eigenvalues": c3d_hessian_eigenvalues_cargs,
-        "c3d.c3d.hessian_objectness": c3d_hessian_objectness_cargs,
-        "c3d.c3d.histogram_match": c3d_histogram_match_cargs,
-        "c3d.c3d.info": c3d_info_cargs,
-        "c3d.c3d.info_full": c3d_info_full_cargs,
-        "c3d.c3d.insert": c3d_insert_cargs,
-        "c3d.c3d.interpolation": c3d_interpolation_cargs,
-        "c3d.c3d.iterations": c3d_iterations_cargs,
-        "c3d.c3d.label_overlap": c3d_label_overlap_cargs,
-        "c3d.c3d.label_statistics": c3d_label_statistics_cargs,
-        "c3d.c3d.landmarks_to_spheres": c3d_landmarks_to_spheres_cargs,
-        "c3d.c3d.laplacian": c3d_laplacian_cargs,
-        "c3d.c3d.levelset": c3d_levelset_cargs,
-        "c3d.c3d.levelset_curvature": c3d_levelset_curvature_cargs,
-        "c3d.c3d.levelset_advection": c3d_levelset_advection_cargs,
-        "c3d.c3d.log": c3d_log_cargs,
-        "c3d.c3d.log10": c3d_log10_cargs,
-        "c3d.c3d.manual": c3d_manual_cargs,
-        "c3d.c3d.match_bounding_box": c3d_match_bounding_box_cargs,
-        "c3d.c3d.maximum": c3d_maximum_cargs,
-        "c3d.c3d.multicomponent_split": c3d_multicomponent_split_cargs,
-        "c3d.c3d.mean": c3d_mean_cargs,
-        "c3d.c3d.median_filter": c3d_median_filter_cargs,
-        "c3d.c3d.merge": c3d_merge_cargs,
-        "c3d.c3d.mean_filter": c3d_mean_filter_cargs,
-        "c3d.c3d.mutual_info": c3d_mutual_info_cargs,
-        "c3d.c3d.minimum": c3d_minimum_cargs,
-        "c3d.c3d.mixture_model": c3d_mixture_model_cargs,
-        "c3d.c3d.moments": c3d_moments_cargs,
-        "c3d.c3d.mattes_mutual_info": c3d_mattes_mutual_info_cargs,
-        "c3d.c3d.mean_square": c3d_mean_square_cargs,
-        "c3d.c3d.multiply": c3d_multiply_cargs,
-        "c3d.c3d.normalized_cross_correlation": c3d_normalized_cross_correlation_cargs,
-        "c3d.c3d.normalized_correlation": c3d_normalized_correlation_cargs,
-        "c3d.c3d.normalized_mutual_info": c3d_normalized_mutual_info_cargs,
-        "c3d.c3d.noise_gaussian": c3d_noise_gaussian_cargs,
-        "c3d.c3d.noise_poisson": c3d_noise_poisson_cargs,
-        "c3d.c3d.noise_speckle": c3d_noise_speckle_cargs,
-        "c3d.c3d.noise_salt_pepper": c3d_noise_salt_pepper_cargs,
-        "c3d.c3d.no_multicomponent_split": c3d_no_multicomponent_split_cargs,
-        "c3d.c3d.normalize_local_window": c3d_normalize_local_window_cargs,
-        "c3d.c3d.normpdf": c3d_normpdf_cargs,
-        "c3d.c3d.noround": c3d_noround_cargs,
-        "c3d.c3d.nospm": c3d_nospm_cargs,
-        "c3d.c3d.output": c3d_output_cargs,
-        "c3d.c3d.output_multicomponent": c3d_output_multicomponent_cargs,
-        "c3d.c3d.output_multiple_multicomponent": c3d_output_multiple_multicomponent_cargs,
-        "c3d.c3d.orient": c3d_orient_cargs,
-        "c3d.c3d.output_multiple": c3d_output_multiple_cargs,
-        "c3d.c3d.orient": c3d_orient_1_cargs,
-        "c3d.c3d.origin": c3d_origin_cargs,
-        "c3d.c3d.origin_voxel": c3d_origin_voxel_cargs,
-        "c3d.c3d.origin_voxel_coord": c3d_origin_voxel_coord_cargs,
-        "c3d.c3d.overlap": c3d_overlap_cargs,
-        "c3d.c3d.overlay_label_image": c3d_overlay_label_image_cargs,
-        "c3d.c3d.pad": c3d_pad_cargs,
-        "c3d.c3d.pad_to": c3d_pad_to_cargs,
-        "c3d.c3d.pca": c3d_pca_cargs,
-        "c3d.c3d.percent_intensity_mode": c3d_percent_intensity_mode_cargs,
-        "c3d.c3d.pixel": c3d_pixel_cargs,
-        "c3d.c3d.pop": c3d_pop_cargs,
-        "c3d.c3d.popas": c3d_popas_cargs,
-        "c3d.c3d.probe": c3d_probe_cargs,
-        "c3d.c3d.push": c3d_push_cargs,
-        "c3d.c3d.rank": c3d_rank_cargs,
-        "c3d.c3d.reciprocal": c3d_reciprocal_cargs,
-        "c3d.c3d.region": c3d_region_cargs,
-        "c3d.c3d.reorder": c3d_reorder_cargs,
-        "c3d.c3d.retain_labels": c3d_retain_labels_cargs,
-        "c3d.c3d.rf_apply": c3d_rf_apply_cargs,
-        "c3d.c3d.rf_train": c3d_rf_train_cargs,
-        "c3d.c3d.rf_param_patch": c3d_rf_param_patch_cargs,
-        "c3d.c3d.rf_param_usexyz": c3d_rf_param_usexyz_cargs,
-        "c3d.c3d.rf_param_nousexyz": c3d_rf_param_nousexyz_cargs,
-        "c3d.c3d.rf_param_ntrees": c3d_rf_param_ntrees_cargs,
-        "c3d.c3d.rf_param_treedepth": c3d_rf_param_treedepth_cargs,
-        "c3d.c3d.set_sform": c3d_set_sform_cargs,
-        "c3d.c3d.replace": c3d_replace_cargs,
-        "c3d.c3d.resample": c3d_resample_cargs,
-        "c3d.c3d.resample_iso": c3d_resample_iso_cargs,
-        "c3d.c3d.resample_mm": c3d_resample_mm_cargs,
-        "c3d.c3d.reslice_itk": c3d_reslice_itk_cargs,
-        "c3d.c3d.reslice_matrix": c3d_reslice_matrix_cargs,
-        "c3d.c3d.reslice_identity": c3d_reslice_identity_cargs,
-        "c3d.c3d.rgb2hsv": c3d_rgb2hsv_cargs,
-        "c3d.c3d.rms": c3d_rms_cargs,
-        "c3d.c3d.round": c3d_round_cargs,
-        "c3d.c3d.scale": c3d_scale_cargs,
-        "c3d.c3d.set_sform": c3d_set_sform_1_cargs,
-        "c3d.c3d.sin": c3d_sin_cargs,
-        "c3d.c3d.slice": c3d_slice_cargs,
-        "c3d.c3d.slice_all": c3d_slice_all_cargs,
-        "c3d.c3d.sharpen": c3d_sharpen_cargs,
-        "c3d.c3d.shift": c3d_shift_cargs,
-        "c3d.c3d.signed_distance_transform": c3d_signed_distance_transform_cargs,
-        "c3d.c3d.smooth": c3d_smooth_cargs,
-        "c3d.c3d.smooth_fast": c3d_smooth_fast_cargs,
-        "c3d.c3d.spacing": c3d_spacing_cargs,
-        "c3d.c3d.split": c3d_split_cargs,
-        "c3d.c3d.sqrt": c3d_sqrt_cargs,
-        "c3d.c3d.staple": c3d_staple_cargs,
-        "c3d.c3d.structure_tensor_eigenvalues": c3d_structure_tensor_eigenvalues_cargs,
-        "c3d.c3d.spm": c3d_spm_cargs,
-        "c3d.c3d.subtract": c3d_subtract_cargs,
-        "c3d.c3d.supervoxel": c3d_supervoxel_cargs,
-        "c3d.c3d.stretch": c3d_stretch_cargs,
-        "c3d.c3d.swapdim": c3d_swapdim_cargs,
-        "c3d.c3d.test_image": c3d_test_image_cargs,
-        "c3d.c3d.test_probe": c3d_test_probe_cargs,
-        "c3d.c3d.threshold": c3d_threshold_cargs,
-        "c3d.c3d.tile": c3d_tile_cargs,
-        "c3d.c3d.trim": c3d_trim_cargs,
-        "c3d.c3d.trim_to_size": c3d_trim_to_size_cargs,
-        "c3d.c3d.type": c3d_type_cargs,
-        "c3d.c3d.verbose": c3d_verbose_cargs,
-        "c3d.c3d.noverbose": c3d_noverbose_cargs,
-        "c3d.c3d.version": c3d_version_cargs,
-        "c3d.c3d.vote": c3d_vote_cargs,
-        "c3d.c3d.vote_mrf": c3d_vote_mrf_cargs,
-        "c3d.c3d.vote_label": c3d_vote_label_cargs,
-        "c3d.c3d.voxel_sum": c3d_voxel_sum_cargs,
-        "c3d.c3d.voxel_integral": c3d_voxel_integral_cargs,
-        "c3d.c3d.voxelwise_regression": c3d_voxelwise_regression_cargs,
-        "c3d.c3d.warp": c3d_warp_cargs,
-        "c3d.c3d.warp_label": c3d_warp_label_cargs,
-        "c3d.c3d.wrap": c3d_wrap_cargs,
-        "c3d.c3d.weighted_sum": c3d_weighted_sum_cargs,
-        "c3d.c3d.weighted_sum_voxelwise": c3d_weighted_sum_voxelwise_cargs,
+        "accum": c3d_accum_cargs,
+        "acos": c3d_acos_cargs,
+        "add": c3d_add_cargs,
+        "align_landmarks": c3d_align_landmarks_cargs,
+        "anisotropic_diffusion": c3d_anisotropic_diffusion_cargs,
+        "antialias": c3d_antialias_cargs,
+        "set": c3d_set_cargs,
+        "asin": c3d_asin_cargs,
+        "atan2": c3d_atan2_cargs,
+        "background": c3d_background_cargs,
+        "n4_bias_correction": c3d_n4_bias_correction_cargs,
+        "binarize": c3d_binarize_cargs,
+        "canny": c3d_canny_cargs,
+        "ceil": c3d_ceil_cargs,
+        "centroid": c3d_centroid_cargs,
+        "centroid_mark": c3d_centroid_mark_cargs,
+        "connected_components": c3d_connected_components_cargs,
+        "clear": c3d_clear_cargs,
+        "clip": c3d_clip_cargs,
+        "color_map": c3d_color_map_cargs,
+        "compress": c3d_compress_cargs,
+        "no_compress": c3d_no_compress_cargs,
+        "conv": c3d_conv_cargs,
+        "coordinate_map_voxel": c3d_coordinate_map_voxel_cargs,
+        "coordinate_map_physical": c3d_coordinate_map_physical_cargs,
+        "copy_transform": c3d_copy_transform_cargs,
+        "cos": c3d_cos_cargs,
+        "create": c3d_create_cargs,
+        "dicom_series_list": c3d_dicom_series_list_cargs,
+        "dicom_series_read": c3d_dicom_series_read_cargs,
+        "dilate": c3d_dilate_cargs,
+        "divide": c3d_divide_cargs,
+        "duplicate": c3d_duplicate_cargs,
+        "endaccum": c3d_endaccum_cargs,
+        "endfor": c3d_endfor_cargs,
+        "erode": c3d_erode_cargs,
+        "erf": c3d_erf_cargs,
+        "exp": c3d_exp_cargs,
+        "export_patches": c3d_export_patches_cargs,
+        "export_patches_aug": c3d_export_patches_aug_cargs,
+        "extrude_seg": c3d_extrude_seg_cargs,
+        "fill_background_with_noise": c3d_fill_background_with_noise_cargs,
+        "fft": c3d_fft_cargs,
+        "flip": c3d_flip_cargs,
+        "floor": c3d_floor_cargs,
+        "foreach": c3d_foreach_cargs,
+        "foreach_comp": c3d_foreach_comp_cargs,
+        "glm": c3d_glm_cargs,
+        "gradient": c3d_gradient_cargs,
+        "_help": c3d__help_cargs,
+        "holefill": c3d_holefill_cargs,
+        "hessian_eigenvalues": c3d_hessian_eigenvalues_cargs,
+        "hessian_objectness": c3d_hessian_objectness_cargs,
+        "histogram_match": c3d_histogram_match_cargs,
+        "info": c3d_info_cargs,
+        "info_full": c3d_info_full_cargs,
+        "insert": c3d_insert_cargs,
+        "interpolation": c3d_interpolation_cargs,
+        "iterations": c3d_iterations_cargs,
+        "label_overlap": c3d_label_overlap_cargs,
+        "label_statistics": c3d_label_statistics_cargs,
+        "landmarks_to_spheres": c3d_landmarks_to_spheres_cargs,
+        "laplacian": c3d_laplacian_cargs,
+        "levelset": c3d_levelset_cargs,
+        "levelset_curvature": c3d_levelset_curvature_cargs,
+        "levelset_advection": c3d_levelset_advection_cargs,
+        "log": c3d_log_cargs,
+        "log10": c3d_log10_cargs,
+        "manual": c3d_manual_cargs,
+        "match_bounding_box": c3d_match_bounding_box_cargs,
+        "maximum": c3d_maximum_cargs,
+        "multicomponent_split": c3d_multicomponent_split_cargs,
+        "mean": c3d_mean_cargs,
+        "median_filter": c3d_median_filter_cargs,
+        "merge": c3d_merge_cargs,
+        "mean_filter": c3d_mean_filter_cargs,
+        "mutual_info": c3d_mutual_info_cargs,
+        "minimum": c3d_minimum_cargs,
+        "mixture_model": c3d_mixture_model_cargs,
+        "moments": c3d_moments_cargs,
+        "mattes_mutual_info": c3d_mattes_mutual_info_cargs,
+        "mean_square": c3d_mean_square_cargs,
+        "multiply": c3d_multiply_cargs,
+        "normalized_cross_correlation": c3d_normalized_cross_correlation_cargs,
+        "normalized_correlation": c3d_normalized_correlation_cargs,
+        "normalized_mutual_info": c3d_normalized_mutual_info_cargs,
+        "noise_gaussian": c3d_noise_gaussian_cargs,
+        "noise_poisson": c3d_noise_poisson_cargs,
+        "noise_speckle": c3d_noise_speckle_cargs,
+        "noise_salt_pepper": c3d_noise_salt_pepper_cargs,
+        "no_multicomponent_split": c3d_no_multicomponent_split_cargs,
+        "normalize_local_window": c3d_normalize_local_window_cargs,
+        "normpdf": c3d_normpdf_cargs,
+        "noround": c3d_noround_cargs,
+        "nospm": c3d_nospm_cargs,
+        "output": c3d_output_cargs,
+        "output_multicomponent": c3d_output_multicomponent_cargs,
+        "output_multiple_multicomponent": c3d_output_multiple_multicomponent_cargs,
+        "orient": c3d_orient_cargs,
+        "output_multiple": c3d_output_multiple_cargs,
+        "orient_1": c3d_orient_1_cargs,
+        "origin": c3d_origin_cargs,
+        "origin_voxel": c3d_origin_voxel_cargs,
+        "origin_voxel_coord": c3d_origin_voxel_coord_cargs,
+        "overlap": c3d_overlap_cargs,
+        "overlay_label_image": c3d_overlay_label_image_cargs,
+        "pad": c3d_pad_cargs,
+        "pad_to": c3d_pad_to_cargs,
+        "pca": c3d_pca_cargs,
+        "percent_intensity_mode": c3d_percent_intensity_mode_cargs,
+        "pixel": c3d_pixel_cargs,
+        "pop": c3d_pop_cargs,
+        "popas": c3d_popas_cargs,
+        "probe": c3d_probe_cargs,
+        "push": c3d_push_cargs,
+        "rank": c3d_rank_cargs,
+        "reciprocal": c3d_reciprocal_cargs,
+        "region": c3d_region_cargs,
+        "reorder": c3d_reorder_cargs,
+        "retain_labels": c3d_retain_labels_cargs,
+        "rf_apply": c3d_rf_apply_cargs,
+        "rf_train": c3d_rf_train_cargs,
+        "rf_param_patch": c3d_rf_param_patch_cargs,
+        "rf_param_usexyz": c3d_rf_param_usexyz_cargs,
+        "rf_param_nousexyz": c3d_rf_param_nousexyz_cargs,
+        "rf_param_ntrees": c3d_rf_param_ntrees_cargs,
+        "rf_param_treedepth": c3d_rf_param_treedepth_cargs,
+        "set_sform": c3d_set_sform_cargs,
+        "replace": c3d_replace_cargs,
+        "resample": c3d_resample_cargs,
+        "resample_iso": c3d_resample_iso_cargs,
+        "resample_mm": c3d_resample_mm_cargs,
+        "reslice_itk": c3d_reslice_itk_cargs,
+        "reslice_matrix": c3d_reslice_matrix_cargs,
+        "reslice_identity": c3d_reslice_identity_cargs,
+        "rgb2hsv": c3d_rgb2hsv_cargs,
+        "rms": c3d_rms_cargs,
+        "round": c3d_round_cargs,
+        "scale": c3d_scale_cargs,
+        "set_sform_1": c3d_set_sform_1_cargs,
+        "sin": c3d_sin_cargs,
+        "slice": c3d_slice_cargs,
+        "slice_all": c3d_slice_all_cargs,
+        "sharpen": c3d_sharpen_cargs,
+        "shift": c3d_shift_cargs,
+        "signed_distance_transform": c3d_signed_distance_transform_cargs,
+        "smooth": c3d_smooth_cargs,
+        "smooth_fast": c3d_smooth_fast_cargs,
+        "spacing": c3d_spacing_cargs,
+        "split": c3d_split_cargs,
+        "sqrt": c3d_sqrt_cargs,
+        "staple": c3d_staple_cargs,
+        "structure_tensor_eigenvalues": c3d_structure_tensor_eigenvalues_cargs,
+        "spm": c3d_spm_cargs,
+        "subtract": c3d_subtract_cargs,
+        "supervoxel": c3d_supervoxel_cargs,
+        "stretch": c3d_stretch_cargs,
+        "swapdim": c3d_swapdim_cargs,
+        "test_image": c3d_test_image_cargs,
+        "test_probe": c3d_test_probe_cargs,
+        "threshold": c3d_threshold_cargs,
+        "tile": c3d_tile_cargs,
+        "trim": c3d_trim_cargs,
+        "trim_to_size": c3d_trim_to_size_cargs,
+        "type": c3d_type_cargs,
+        "verbose": c3d_verbose_cargs,
+        "noverbose": c3d_noverbose_cargs,
+        "version": c3d_version_cargs,
+        "vote": c3d_vote_cargs,
+        "vote_mrf": c3d_vote_mrf_cargs,
+        "vote_label": c3d_vote_label_cargs,
+        "voxel_sum": c3d_voxel_sum_cargs,
+        "voxel_integral": c3d_voxel_integral_cargs,
+        "voxelwise_regression": c3d_voxelwise_regression_cargs,
+        "warp": c3d_warp_cargs,
+        "warp_label": c3d_warp_label_cargs,
+        "wrap": c3d_wrap_cargs,
+        "weighted_sum": c3d_weighted_sum_cargs,
+        "weighted_sum_voxelwise": c3d_weighted_sum_voxelwise_cargs,
     };
     return cargsFuncs[t];
 }
@@ -1296,12 +1475,11 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function c3d_operations_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "c3d.c3d": c3d_outputs,
-        "c3d.c3d.output": c3d_output_outputs,
+        "output": c3d_output_outputs,
     };
     return outputsFuncs[t];
 }
@@ -1322,9 +1500,9 @@ Apply a binary operation (such as addition or multiplication) to all the images 
  */
 function c3d_accum_params(
     accum: string,
-): C3dAccumParameters {
+): C3dAccumParametersTagged {
     const params = {
-        "@type": "c3d.c3d.accum" as const,
+        "@type": "accum" as const,
         "accum": accum,
     };
     return params;
@@ -1361,9 +1539,9 @@ function c3d_accum_cargs(
  */
 function c3d_acos_params(
     acos: string,
-): C3dAcosParameters {
+): C3dAcosParametersTagged {
     const params = {
-        "@type": "c3d.c3d.acos" as const,
+        "@type": "acos" as const,
         "acos": acos,
     };
     return params;
@@ -1414,9 +1592,9 @@ Adds the last two images on the stack, and places the sum at the end of the stac
  */
 function c3d_add_params(
     add: string,
-): C3dAddParameters {
+): C3dAddParametersTagged {
     const params = {
-        "@type": "c3d.c3d.add" as const,
+        "@type": "add" as const,
         "add": add,
     };
     return params;
@@ -1460,9 +1638,9 @@ Performs rigid or affine alignment between to sets of landmark images. A landmar
  */
 function c3d_align_landmarks_params(
     align_landmarks: string,
-): C3dAlignLandmarksParameters {
+): C3dAlignLandmarksParametersTagged {
     const params = {
-        "@type": "c3d.c3d.align_landmarks" as const,
+        "@type": "align_landmarks" as const,
         "align_landmarks": align_landmarks,
     };
     return params;
@@ -1513,9 +1691,9 @@ Adds the last two images on the stack, and places the sum at the end of the stac
  */
 function c3d_anisotropic_diffusion_params(
     anisotropic_diffusion: string,
-): C3dAnisotropicDiffusionParameters {
+): C3dAnisotropicDiffusionParametersTagged {
     const params = {
-        "@type": "c3d.c3d.anisotropic_diffusion" as const,
+        "@type": "anisotropic_diffusion" as const,
         "anisotropic_diffusion": anisotropic_diffusion,
     };
     return params;
@@ -1552,9 +1730,9 @@ function c3d_anisotropic_diffusion_cargs(
  */
 function c3d_antialias_params(
     antialias: string,
-): C3dAntialiasParameters {
+): C3dAntialiasParametersTagged {
     const params = {
-        "@type": "c3d.c3d.antialias" as const,
+        "@type": "antialias" as const,
         "antialias": antialias,
     };
     return params;
@@ -1597,9 +1775,9 @@ Associates the image currently at the end of the stack with variable name 'var'.
  */
 function c3d_set_params(
     set_: string,
-): C3dSetParameters {
+): C3dSetParametersTagged {
     const params = {
-        "@type": "c3d.c3d.set" as const,
+        "@type": "set" as const,
         "set": set_,
     };
     return params;
@@ -1636,9 +1814,9 @@ function c3d_set_cargs(
  */
 function c3d_asin_params(
     asin: string,
-): C3dAsinParameters {
+): C3dAsinParametersTagged {
     const params = {
-        "@type": "c3d.c3d.asin" as const,
+        "@type": "asin" as const,
         "asin": asin,
     };
     return params;
@@ -1681,9 +1859,9 @@ Computes the angle in radians from images containing sine and cosine. This is a 
  */
 function c3d_atan2_params(
     atan2: string,
-): C3dAtan2Parameters {
+): C3dAtan2ParametersTagged {
     const params = {
-        "@type": "c3d.c3d.atan2" as const,
+        "@type": "atan2" as const,
         "atan2": atan2,
     };
     return params;
@@ -1724,9 +1902,9 @@ Sets the background intensity for interpolation and other operations where some 
  */
 function c3d_background_params(
     background: string,
-): C3dBackgroundParameters {
+): C3dBackgroundParametersTagged {
     const params = {
-        "@type": "c3d.c3d.background" as const,
+        "@type": "background" as const,
         "background": background,
     };
     return params;
@@ -1769,9 +1947,9 @@ Performs automatic bias field correction for MRI images. This feature uses the [
  */
 function c3d_n4_bias_correction_params(
     n4_bias_correction: string,
-): C3dN4BiasCorrectionParameters {
+): C3dN4BiasCorrectionParametersTagged {
     const params = {
-        "@type": "c3d.c3d.n4_bias_correction" as const,
+        "@type": "n4_bias_correction" as const,
         "n4_bias_correction": n4_bias_correction,
     };
     return params;
@@ -1816,9 +1994,9 @@ Converts an image to binary by mapping all background values (the background is 
  */
 function c3d_binarize_params(
     binarize: string,
-): C3dBinarizeParameters {
+): C3dBinarizeParametersTagged {
     const params = {
-        "@type": "c3d.c3d.binarize" as const,
+        "@type": "binarize" as const,
         "binarize": binarize,
     };
     return params;
@@ -1859,9 +2037,9 @@ Performs edge detection on the last image on the stack using the Canny filter. T
  */
 function c3d_canny_params(
     canny: string,
-): C3dCannyParameters {
+): C3dCannyParametersTagged {
     const params = {
-        "@type": "c3d.c3d.canny" as const,
+        "@type": "canny" as const,
         "canny": canny,
     };
     return params;
@@ -1904,9 +2082,9 @@ Each image intensity is replaced by the smallest integer larger or equal to it
  */
 function c3d_ceil_params(
     ceil: string,
-): C3dCeilParameters {
+): C3dCeilParametersTagged {
     const params = {
-        "@type": "c3d.c3d.ceil" as const,
+        "@type": "ceil" as const,
         "ceil": ceil,
     };
     return params;
@@ -1952,9 +2130,9 @@ Reports the centroid, in physical coordinates, of all foreground voxels in the i
  */
 function c3d_centroid_params(
     centroid: string,
-): C3dCentroidParameters {
+): C3dCentroidParametersTagged {
     const params = {
-        "@type": "c3d.c3d.centroid" as const,
+        "@type": "centroid" as const,
         "centroid": centroid,
     };
     return params;
@@ -1998,9 +2176,9 @@ Marks the centroid of the foreground voxels in an image. Unlike **-centroid**, t
  */
 function c3d_centroid_mark_params(
     centroid_mark: string,
-): C3dCentroidMarkParameters {
+): C3dCentroidMarkParametersTagged {
     const params = {
-        "@type": "c3d.c3d.centroid_mark" as const,
+        "@type": "centroid_mark" as const,
         "centroid_mark": centroid_mark,
     };
     return params;
@@ -2044,9 +2222,9 @@ Computes the connected components of a binary image. Each connected component is
  */
 function c3d_connected_components_params(
     connected_components: string,
-): C3dConnectedComponentsParameters {
+): C3dConnectedComponentsParametersTagged {
     const params = {
-        "@type": "c3d.c3d.connected_components" as const,
+        "@type": "connected_components" as const,
         "connected_components": connected_components,
     };
     return params;
@@ -2087,9 +2265,9 @@ Clears the image stack. Images assigned a name with the **-as** command will rem
  */
 function c3d_clear_params(
     clear: string,
-): C3dClearParameters {
+): C3dClearParametersTagged {
     const params = {
-        "@type": "c3d.c3d.clear" as const,
+        "@type": "clear" as const,
         "clear": clear,
     };
     return params;
@@ -2134,9 +2312,9 @@ Clips image intensities, so that the values below *iMin* are converted to *iMin*
  */
 function c3d_clip_params(
     clip: string,
-): C3dClipParameters {
+): C3dClipParametersTagged {
     const params = {
-        "@type": "c3d.c3d.clip" as const,
+        "@type": "clip" as const,
         "clip": clip,
     };
     return params;
@@ -2183,9 +2361,9 @@ By default the full image intensity range is mapped. The optional **min** and **
  */
 function c3d_color_map_params(
     color_map: string,
-): C3dColorMapParameters {
+): C3dColorMapParametersTagged {
     const params = {
-        "@type": "c3d.c3d.color_map" as const,
+        "@type": "color_map" as const,
         "color_map": color_map,
     };
     return params;
@@ -2229,9 +2407,9 @@ Turns on compressing for image file formats that support it. For some file forma
  */
 function c3d_compress_params(
     compress: string,
-): C3dCompressParameters {
+): C3dCompressParametersTagged {
     const params = {
-        "@type": "c3d.c3d.compress" as const,
+        "@type": "compress" as const,
         "compress": compress,
     };
     return params;
@@ -2275,9 +2453,9 @@ Turns on compressing for image file formats that support it. For some file forma
  */
 function c3d_no_compress_params(
     no_compress: string,
-): C3dNoCompressParameters {
+): C3dNoCompressParametersTagged {
     const params = {
-        "@type": "c3d.c3d.no_compress" as const,
+        "@type": "no_compress" as const,
         "no_compress": no_compress,
     };
     return params;
@@ -2323,9 +2501,9 @@ Performs convolution between the last two images on the stack. The convolution i
  */
 function c3d_conv_params(
     conv: string,
-): C3dConvParameters {
+): C3dConvParametersTagged {
     const params = {
-        "@type": "c3d.c3d.conv" as const,
+        "@type": "conv" as const,
         "conv": conv,
     };
     return params;
@@ -2375,9 +2553,9 @@ One can use this command to split a brain segmentation image into a left hemisph
  */
 function c3d_coordinate_map_voxel_params(
     coordinate_map_voxel: string,
-): C3dCoordinateMapVoxelParameters {
+): C3dCoordinateMapVoxelParametersTagged {
     const params = {
-        "@type": "c3d.c3d.coordinate_map_voxel" as const,
+        "@type": "coordinate_map_voxel" as const,
         "coordinate_map_voxel": coordinate_map_voxel,
     };
     return params;
@@ -2418,9 +2596,9 @@ This command is similar to **-cmv** (**-coordinate-map-voxel**), but the output 
  */
 function c3d_coordinate_map_physical_params(
     coordinate_map_physical: string,
-): C3dCoordinateMapPhysicalParameters {
+): C3dCoordinateMapPhysicalParametersTagged {
     const params = {
-        "@type": "c3d.c3d.coordinate_map_physical" as const,
+        "@type": "coordinate_map_physical" as const,
         "coordinate_map_physical": coordinate_map_physical,
     };
     return params;
@@ -2463,9 +2641,9 @@ Copies the image header, specifically the image to physical space transform (ori
  */
 function c3d_copy_transform_params(
     copy_transform: string,
-): C3dCopyTransformParameters {
+): C3dCopyTransformParametersTagged {
     const params = {
-        "@type": "c3d.c3d.copy_transform" as const,
+        "@type": "copy_transform" as const,
         "copy_transform": copy_transform,
     };
     return params;
@@ -2502,9 +2680,9 @@ function c3d_copy_transform_cargs(
  */
 function c3d_cos_params(
     cos: string,
-): C3dCosParameters {
+): C3dCosParametersTagged {
     const params = {
-        "@type": "c3d.c3d.cos" as const,
+        "@type": "cos" as const,
         "cos": cos,
     };
     return params;
@@ -2548,9 +2726,9 @@ Creates a new blank image with specified dimensions and voxel size, and places i
  */
 function c3d_create_params(
     create: string,
-): C3dCreateParameters {
+): C3dCreateParametersTagged {
     const params = {
-        "@type": "c3d.c3d.create" as const,
+        "@type": "create" as const,
         "create": create,
     };
     return params;
@@ -2591,9 +2769,9 @@ Prints out a table of DICOM series ids and corresponding image information to st
  */
 function c3d_dicom_series_list_params(
     dicom_series_list: string,
-): C3dDicomSeriesListParameters {
+): C3dDicomSeriesListParametersTagged {
     const params = {
-        "@type": "c3d.c3d.dicom_series_list" as const,
+        "@type": "dicom_series_list" as const,
         "dicom_series_list": dicom_series_list,
     };
     return params;
@@ -2635,9 +2813,9 @@ The **seried_id** is a string identifier for the series that can be obtained by 
  */
 function c3d_dicom_series_read_params(
     dicom_series_read: string,
-): C3dDicomSeriesReadParameters {
+): C3dDicomSeriesReadParametersTagged {
     const params = {
-        "@type": "c3d.c3d.dicom_series_read" as const,
+        "@type": "dicom_series_read" as const,
         "dicom_series_read": dicom_series_read,
     };
     return params;
@@ -2680,9 +2858,9 @@ Applies the dilation [mathematical morphology][5] operation to a binary image. T
  */
 function c3d_dilate_params(
     dilate: string,
-): C3dDilateParameters {
+): C3dDilateParametersTagged {
     const params = {
-        "@type": "c3d.c3d.dilate" as const,
+        "@type": "dilate" as const,
         "dilate": dilate,
     };
     return params;
@@ -2729,9 +2907,9 @@ Divison may generate infinite and not-a-number (NaN) values if B contains zeros.
  */
 function c3d_divide_params(
     divide: string,
-): C3dDivideParameters {
+): C3dDivideParametersTagged {
     const params = {
-        "@type": "c3d.c3d.divide" as const,
+        "@type": "divide" as const,
         "divide": divide,
     };
     return params;
@@ -2776,9 +2954,9 @@ Duplicates the image at the end of the stack. This is equivalent to **-as var -p
  */
 function c3d_duplicate_params(
     duplicate: string,
-): C3dDuplicateParameters {
+): C3dDuplicateParametersTagged {
     const params = {
-        "@type": "c3d.c3d.duplicate" as const,
+        "@type": "duplicate" as const,
         "duplicate": duplicate,
     };
     return params;
@@ -2821,9 +2999,9 @@ Apply a binary operation (such as addition or multiplication) to all the images 
  */
 function c3d_endaccum_params(
     endaccum: string,
-): C3dEndaccumParameters {
+): C3dEndaccumParametersTagged {
     const params = {
-        "@type": "c3d.c3d.endaccum" as const,
+        "@type": "endaccum" as const,
         "endaccum": endaccum,
     };
     return params;
@@ -2866,9 +3044,9 @@ This command forces the commands between **-foreach** and **-endfor** to be appl
  */
 function c3d_endfor_params(
     endfor: string,
-): C3dEndforParameters {
+): C3dEndforParametersTagged {
     const params = {
-        "@type": "c3d.c3d.endfor" as const,
+        "@type": "endfor" as const,
         "endfor": endfor,
     };
     return params;
@@ -2911,9 +3089,9 @@ Applies erosion [mathematical morphology][5] operation to a binary image. The fi
  */
 function c3d_erode_params(
     erode: string,
-): C3dErodeParameters {
+): C3dErodeParametersTagged {
     const params = {
-        "@type": "c3d.c3d.erode" as const,
+        "@type": "erode" as const,
         "erode": erode,
     };
     return params;
@@ -2956,9 +3134,9 @@ Computes the standard error function. This is useful for applying soft threshold
  */
 function c3d_erf_params(
     erf: string,
-): C3dErfParameters {
+): C3dErfParametersTagged {
     const params = {
-        "@type": "c3d.c3d.erf" as const,
+        "@type": "erf" as const,
         "erf": erf,
     };
     return params;
@@ -3001,9 +3179,9 @@ Computes exponent of each voxel in the last image on the stack.
  */
 function c3d_exp_params(
     exp: string,
-): C3dExpParameters {
+): C3dExpParametersTagged {
     const params = {
-        "@type": "c3d.c3d.exp" as const,
+        "@type": "exp" as const,
         "exp": exp,
     };
     return params;
@@ -3066,9 +3244,9 @@ In the above example, **-centroid-mark** transforms the lesion segmentation into
  */
 function c3d_export_patches_params(
     export_patches: string,
-): C3dExportPatchesParameters {
+): C3dExportPatchesParametersTagged {
     const params = {
-        "@type": "c3d.c3d.export_patches" as const,
+        "@type": "export_patches" as const,
         "export_patches": export_patches,
     };
     return params;
@@ -3111,9 +3289,9 @@ This command must precede the `-export-patches (-xp)` command and instructs this
  */
 function c3d_export_patches_aug_params(
     export_patches_aug: string,
-): C3dExportPatchesAugParameters {
+): C3dExportPatchesAugParametersTagged {
     const params = {
-        "@type": "c3d.c3d.export_patches_aug" as const,
+        "@type": "export_patches_aug" as const,
         "export_patches_aug": export_patches_aug,
     };
     return params;
@@ -3150,9 +3328,9 @@ function c3d_export_patches_aug_cargs(
  */
 function c3d_extrude_seg_params(
     extrude_seg: string,
-): C3dExtrudeSegParameters {
+): C3dExtrudeSegParametersTagged {
     const params = {
-        "@type": "c3d.c3d.extrude_seg" as const,
+        "@type": "extrude_seg" as const,
         "extrude_seg": extrude_seg,
     };
     return params;
@@ -3189,9 +3367,9 @@ function c3d_extrude_seg_cargs(
  */
 function c3d_fill_background_with_noise_params(
     fill_background_with_noise: string,
-): C3dFillBackgroundWithNoiseParameters {
+): C3dFillBackgroundWithNoiseParametersTagged {
     const params = {
-        "@type": "c3d.c3d.fill_background_with_noise" as const,
+        "@type": "fill_background_with_noise" as const,
         "fill_background_with_noise": fill_background_with_noise,
     };
     return params;
@@ -3234,9 +3412,9 @@ Computes the Fourier transform of a real-valued image at the end of the stack. T
  */
 function c3d_fft_params(
     fft: string,
-): C3dFftParameters {
+): C3dFftParametersTagged {
     const params = {
-        "@type": "c3d.c3d.fft" as const,
+        "@type": "fft" as const,
         "fft": fft,
     };
     return params;
@@ -3279,9 +3457,9 @@ Flips the image around specified axes. The parameter 'axes' may be any combinati
  */
 function c3d_flip_params(
     flip: string,
-): C3dFlipParameters {
+): C3dFlipParametersTagged {
     const params = {
-        "@type": "c3d.c3d.flip" as const,
+        "@type": "flip" as const,
         "flip": flip,
     };
     return params;
@@ -3328,9 +3506,9 @@ To round each intensity to the closest integer, use
  */
 function c3d_floor_params(
     floor: string,
-): C3dFloorParameters {
+): C3dFloorParametersTagged {
     const params = {
-        "@type": "c3d.c3d.floor" as const,
+        "@type": "floor" as const,
         "floor": floor,
     };
     return params;
@@ -3373,9 +3551,9 @@ This command forces the commands between **-foreach** and **-endfor** to be appl
  */
 function c3d_foreach_params(
     foreach: string,
-): C3dForeachParameters {
+): C3dForeachParametersTagged {
     const params = {
-        "@type": "c3d.c3d.foreach" as const,
+        "@type": "foreach" as const,
         "foreach": foreach,
     };
     return params;
@@ -3418,9 +3596,9 @@ This command runs the list of commands separately for each component of a set of
  */
 function c3d_foreach_comp_params(
     foreach_comp: string,
-): C3dForeachCompParameters {
+): C3dForeachCompParametersTagged {
     const params = {
-        "@type": "c3d.c3d.foreach_comp" as const,
+        "@type": "foreach_comp" as const,
         "foreach_comp": foreach_comp,
     };
     return params;
@@ -3468,9 +3646,9 @@ Applies voxel-wise general linear model to a set of images. More precisely, the 
  */
 function c3d_glm_params(
     glm: string,
-): C3dGlmParameters {
+): C3dGlmParametersTagged {
     const params = {
-        "@type": "c3d.c3d.glm" as const,
+        "@type": "glm" as const,
         "glm": glm,
     };
     return params;
@@ -3513,9 +3691,9 @@ Computes the gradient of the image. Each component of the gradient is placed on 
  */
 function c3d_gradient_params(
     gradient: string,
-): C3dGradientParameters {
+): C3dGradientParametersTagged {
     const params = {
-        "@type": "c3d.c3d.gradient" as const,
+        "@type": "gradient" as const,
         "gradient": gradient,
     };
     return params;
@@ -3558,9 +3736,9 @@ Computes the Hessian matrix at every pixel of an image and the eigenvalues of th
  */
 function c3d__help_params(
     v__help: string,
-): C3dHelpParameters {
+): C3dHelpParametersTagged {
     const params = {
-        "@type": "c3d.c3d._help" as const,
+        "@type": "_help" as const,
         "_help": v__help,
     };
     return params;
@@ -3603,9 +3781,9 @@ Apply the binary hole filling algorithm to a particular intensity value in the i
  */
 function c3d_holefill_params(
     holefill: string,
-): C3dHolefillParameters {
+): C3dHolefillParametersTagged {
     const params = {
-        "@type": "c3d.c3d.holefill" as const,
+        "@type": "holefill" as const,
         "holefill": holefill,
     };
     return params;
@@ -3648,9 +3826,9 @@ Computes the Hessian matrix at every pixel of an image and the eigenvalues of th
  */
 function c3d_hessian_eigenvalues_params(
     hessian_eigenvalues: string,
-): C3dHessianEigenvaluesParameters {
+): C3dHessianEigenvaluesParametersTagged {
     const params = {
-        "@type": "c3d.c3d.hessian_eigenvalues" as const,
+        "@type": "hessian_eigenvalues" as const,
         "hessian_eigenvalues": hessian_eigenvalues,
     };
     return params;
@@ -3698,9 +3876,9 @@ Parameter `dimension` is an integer that determines the kind of features that ar
  */
 function c3d_hessian_objectness_params(
     hessian_objectness: string,
-): C3dHessianObjectnessParameters {
+): C3dHessianObjectnessParametersTagged {
     const params = {
-        "@type": "c3d.c3d.hessian_objectness" as const,
+        "@type": "hessian_objectness" as const,
         "hessian_objectness": hessian_objectness,
     };
     return params;
@@ -3737,9 +3915,9 @@ function c3d_hessian_objectness_cargs(
  */
 function c3d_histogram_match_params(
     histogram_match: string,
-): C3dHistogramMatchParameters {
+): C3dHistogramMatchParametersTagged {
     const params = {
-        "@type": "c3d.c3d.histogram_match" as const,
+        "@type": "histogram_match" as const,
         "histogram_match": histogram_match,
     };
     return params;
@@ -3786,9 +3964,9 @@ Use with the **-foreach** command to get information on multiple images
  */
 function c3d_info_params(
     info: string,
-): C3dInfoParameters {
+): C3dInfoParametersTagged {
     const params = {
-        "@type": "c3d.c3d.info" as const,
+        "@type": "info" as const,
         "info": info,
     };
     return params;
@@ -3831,9 +4009,9 @@ Prints extended information about the last image on the stack, such as the metad
  */
 function c3d_info_full_params(
     info_full: string,
-): C3dInfoFullParameters {
+): C3dInfoFullParametersTagged {
     const params = {
-        "@type": "c3d.c3d.info_full" as const,
+        "@type": "info_full" as const,
         "info_full": info_full,
     };
     return params;
@@ -3874,9 +4052,9 @@ This command is similar to **-push**, but allows you to insert the image associa
  */
 function c3d_insert_params(
     insert: string,
-): C3dInsertParameters {
+): C3dInsertParametersTagged {
     const params = {
-        "@type": "c3d.c3d.insert" as const,
+        "@type": "insert" as const,
         "insert": insert,
     };
     return params;
@@ -3921,9 +4099,9 @@ Shorthand 0 can be used for *NearestNeighbor*, 1 for *Linear* and 3 for *Cubic*.
  */
 function c3d_interpolation_params(
     interpolation: string,
-): C3dInterpolationParameters {
+): C3dInterpolationParametersTagged {
     const params = {
-        "@type": "c3d.c3d.interpolation" as const,
+        "@type": "interpolation" as const,
         "interpolation": interpolation,
     };
     return params;
@@ -3960,9 +4138,9 @@ function c3d_interpolation_cargs(
  */
 function c3d_iterations_params(
     iterations: string,
-): C3dIterationsParameters {
+): C3dIterationsParametersTagged {
     const params = {
-        "@type": "c3d.c3d.iterations" as const,
+        "@type": "iterations" as const,
         "iterations": iterations,
     };
     return params;
@@ -3999,9 +4177,9 @@ function c3d_iterations_cargs(
  */
 function c3d_label_overlap_params(
     label_overlap: string,
-): C3dLabelOverlapParameters {
+): C3dLabelOverlapParametersTagged {
     const params = {
-        "@type": "c3d.c3d.label_overlap" as const,
+        "@type": "label_overlap" as const,
         "label_overlap": label_overlap,
     };
     return params;
@@ -4048,9 +4226,9 @@ The output contains the mean, standard deviation, maximum intensity and minimum 
  */
 function c3d_label_statistics_params(
     label_statistics: string,
-): C3dLabelStatisticsParameters {
+): C3dLabelStatisticsParametersTagged {
     const params = {
-        "@type": "c3d.c3d.label_statistics" as const,
+        "@type": "label_statistics" as const,
         "label_statistics": label_statistics,
     };
     return params;
@@ -4087,9 +4265,9 @@ function c3d_label_statistics_cargs(
  */
 function c3d_landmarks_to_spheres_params(
     landmarks_to_spheres: string,
-): C3dLandmarksToSpheresParameters {
+): C3dLandmarksToSpheresParametersTagged {
     const params = {
-        "@type": "c3d.c3d.landmarks_to_spheres" as const,
+        "@type": "landmarks_to_spheres" as const,
         "landmarks_to_spheres": landmarks_to_spheres,
     };
     return params;
@@ -4132,9 +4310,9 @@ Applies the Laplacian filter to the image. Used to detect ridges of intensity. T
  */
 function c3d_laplacian_params(
     laplacian: string,
-): C3dLaplacianParameters {
+): C3dLaplacianParametersTagged {
     const params = {
-        "@type": "c3d.c3d.laplacian" as const,
+        "@type": "laplacian" as const,
         "laplacian": laplacian,
     };
     return params;
@@ -4196,9 +4374,9 @@ Another example of smoothing a binary image that is useful for cleaning up manua
  */
 function c3d_levelset_params(
     levelset: string,
-): C3dLevelsetParameters {
+): C3dLevelsetParametersTagged {
     const params = {
-        "@type": "c3d.c3d.levelset" as const,
+        "@type": "levelset" as const,
         "levelset": levelset,
     };
     return params;
@@ -4235,9 +4413,9 @@ function c3d_levelset_cargs(
  */
 function c3d_levelset_curvature_params(
     levelset_curvature: string,
-): C3dLevelsetCurvatureParameters {
+): C3dLevelsetCurvatureParametersTagged {
     const params = {
-        "@type": "c3d.c3d.levelset_curvature" as const,
+        "@type": "levelset_curvature" as const,
         "levelset_curvature": levelset_curvature,
     };
     return params;
@@ -4274,9 +4452,9 @@ function c3d_levelset_curvature_cargs(
  */
 function c3d_levelset_advection_params(
     levelset_advection: string,
-): C3dLevelsetAdvectionParameters {
+): C3dLevelsetAdvectionParametersTagged {
     const params = {
-        "@type": "c3d.c3d.levelset_advection" as const,
+        "@type": "levelset_advection" as const,
         "levelset_advection": levelset_advection,
     };
     return params;
@@ -4317,9 +4495,9 @@ Computes natural logarithm of each voxel in the last image on the stack.
  */
 function c3d_log_params(
     log: string,
-): C3dLogParameters {
+): C3dLogParametersTagged {
     const params = {
-        "@type": "c3d.c3d.log" as const,
+        "@type": "log" as const,
         "log": log,
     };
     return params;
@@ -4360,9 +4538,9 @@ Computes base 10 logarithm of each voxel in the last image on the stack.
  */
 function c3d_log10_params(
     log10: string,
-): C3dLog10Parameters {
+): C3dLog10ParametersTagged {
     const params = {
-        "@type": "c3d.c3d.log10" as const,
+        "@type": "log10" as const,
         "log10": log10,
     };
     return params;
@@ -4399,9 +4577,9 @@ function c3d_log10_cargs(
  */
 function c3d_manual_params(
     manual: string,
-): C3dManualParameters {
+): C3dManualParametersTagged {
     const params = {
-        "@type": "c3d.c3d.manual" as const,
+        "@type": "manual" as const,
         "manual": manual,
     };
     return params;
@@ -4444,9 +4622,9 @@ Given two images on the stack (reference and target), sets the header of the tar
  */
 function c3d_match_bounding_box_params(
     match_bounding_box: string,
-): C3dMatchBoundingBoxParameters {
+): C3dMatchBoundingBoxParametersTagged {
     const params = {
-        "@type": "c3d.c3d.match_bounding_box" as const,
+        "@type": "match_bounding_box" as const,
         "match_bounding_box": match_bounding_box,
     };
     return params;
@@ -4490,9 +4668,9 @@ Computes the voxel-wise maximum of two images. Can be used with the **-accum** c
  */
 function c3d_maximum_params(
     maximum: string,
-): C3dMaximumParameters {
+): C3dMaximumParametersTagged {
     const params = {
-        "@type": "c3d.c3d.maximum" as const,
+        "@type": "maximum" as const,
         "maximum": maximum,
     };
     return params;
@@ -4541,9 +4719,9 @@ Enable reading of multi-component images. By default, when a multi-component ima
  */
 function c3d_multicomponent_split_params(
     multicomponent_split: string,
-): C3dMulticomponentSplitParameters {
+): C3dMulticomponentSplitParametersTagged {
     const params = {
-        "@type": "c3d.c3d.multicomponent_split" as const,
+        "@type": "multicomponent_split" as const,
         "multicomponent_split": multicomponent_split,
     };
     return params;
@@ -4586,9 +4764,9 @@ Computes the mean of all the images on the stack. All images on the stack are re
  */
 function c3d_mean_params(
     mean: string,
-): C3dMeanParameters {
+): C3dMeanParametersTagged {
     const params = {
-        "@type": "c3d.c3d.mean" as const,
+        "@type": "mean" as const,
         "mean": mean,
     };
     return params;
@@ -4631,9 +4809,9 @@ Applies the median filter: the intensity of each voxel is replaced by the median
  */
 function c3d_median_filter_params(
     median_filter: string,
-): C3dMedianFilterParameters {
+): C3dMedianFilterParametersTagged {
     const params = {
-        "@type": "c3d.c3d.median_filter" as const,
+        "@type": "median_filter" as const,
         "median_filter": median_filter,
     };
     return params;
@@ -4674,9 +4852,9 @@ Works in conjunction with the **-split** command. Has similar behavior to **-vot
  */
 function c3d_merge_params(
     merge: string,
-): C3dMergeParameters {
+): C3dMergeParametersTagged {
     const params = {
-        "@type": "c3d.c3d.merge" as const,
+        "@type": "merge" as const,
         "merge": merge,
     };
     return params;
@@ -4719,9 +4897,9 @@ Applies the mean filter: the intensity of each voxel is replaced by the mean of 
  */
 function c3d_mean_filter_params(
     mean_filter: string,
-): C3dMeanFilterParameters {
+): C3dMeanFilterParametersTagged {
     const params = {
-        "@type": "c3d.c3d.mean_filter" as const,
+        "@type": "mean_filter" as const,
         "mean_filter": mean_filter,
     };
     return params;
@@ -4765,9 +4943,9 @@ Computes the voxel-wise minimum of two images. Can be used with the **-accum** c
  */
 function c3d_mutual_info_params(
     mutual_info: string,
-): C3dMutualInfoParameters {
+): C3dMutualInfoParametersTagged {
     const params = {
-        "@type": "c3d.c3d.mutual_info" as const,
+        "@type": "mutual_info" as const,
         "mutual_info": mutual_info,
     };
     return params;
@@ -4811,9 +4989,9 @@ Computes the voxel-wise minimum of two images. Can be used with the **-accum** c
  */
 function c3d_minimum_params(
     minimum: string,
-): C3dMinimumParameters {
+): C3dMinimumParametersTagged {
     const params = {
-        "@type": "c3d.c3d.minimum" as const,
+        "@type": "minimum" as const,
         "minimum": minimum,
     };
     return params;
@@ -4850,9 +5028,9 @@ function c3d_minimum_cargs(
  */
 function c3d_mixture_model_params(
     mixture_model: string,
-): C3dMixtureModelParameters {
+): C3dMixtureModelParametersTagged {
     const params = {
-        "@type": "c3d.c3d.mixture_model" as const,
+        "@type": "mixture_model" as const,
         "mixture_model": mixture_model,
     };
     return params;
@@ -4889,9 +5067,9 @@ function c3d_mixture_model_cargs(
  */
 function c3d_moments_params(
     moments: string,
-): C3dMomentsParameters {
+): C3dMomentsParametersTagged {
     const params = {
-        "@type": "c3d.c3d.moments" as const,
+        "@type": "moments" as const,
         "moments": moments,
     };
     return params;
@@ -4928,9 +5106,9 @@ function c3d_moments_cargs(
  */
 function c3d_mattes_mutual_info_params(
     mattes_mutual_info: string,
-): C3dMattesMutualInfoParameters {
+): C3dMattesMutualInfoParametersTagged {
     const params = {
-        "@type": "c3d.c3d.mattes_mutual_info" as const,
+        "@type": "mattes_mutual_info" as const,
         "mattes_mutual_info": mattes_mutual_info,
     };
     return params;
@@ -4980,9 +5158,9 @@ Compute the mean square difference metric between the last two images on the sta
  */
 function c3d_mean_square_params(
     mean_square: string,
-): C3dMeanSquareParameters {
+): C3dMeanSquareParametersTagged {
     const params = {
-        "@type": "c3d.c3d.mean_square" as const,
+        "@type": "mean_square" as const,
         "mean_square": mean_square,
     };
     return params;
@@ -5034,9 +5212,9 @@ Combine with the **-dup** command to compute voxelwise square of the image
  */
 function c3d_multiply_params(
     multiply: string,
-): C3dMultiplyParameters {
+): C3dMultiplyParametersTagged {
     const params = {
-        "@type": "c3d.c3d.multiply" as const,
+        "@type": "multiply" as const,
         "multiply": multiply,
     };
     return params;
@@ -5077,9 +5255,9 @@ Computes normalized cross-correlation between two images that occupy the same ph
  */
 function c3d_normalized_cross_correlation_params(
     normalized_cross_correlation: string,
-): C3dNormalizedCrossCorrelationParameters {
+): C3dNormalizedCrossCorrelationParametersTagged {
     const params = {
-        "@type": "c3d.c3d.normalized_cross_correlation" as const,
+        "@type": "normalized_cross_correlation" as const,
         "normalized_cross_correlation": normalized_cross_correlation,
     };
     return params;
@@ -5120,9 +5298,9 @@ Syntax: `-ncor [movtransform.mat] [reftransform.mat]`
  */
 function c3d_normalized_correlation_params(
     normalized_correlation: string,
-): C3dNormalizedCorrelationParameters {
+): C3dNormalizedCorrelationParametersTagged {
     const params = {
-        "@type": "c3d.c3d.normalized_correlation" as const,
+        "@type": "normalized_correlation" as const,
         "normalized_correlation": normalized_correlation,
     };
     return params;
@@ -5163,9 +5341,9 @@ Compute the Mattes mutual information metric between the last two images on the 
  */
 function c3d_normalized_mutual_info_params(
     normalized_mutual_info: string,
-): C3dNormalizedMutualInfoParameters {
+): C3dNormalizedMutualInfoParametersTagged {
     const params = {
-        "@type": "c3d.c3d.normalized_mutual_info" as const,
+        "@type": "normalized_mutual_info" as const,
         "normalized_mutual_info": normalized_mutual_info,
     };
     return params;
@@ -5208,9 +5386,9 @@ Adds Gaussian noise to an image with zero mean and standard deviation sigma. Ple
  */
 function c3d_noise_gaussian_params(
     noise_gaussian: string,
-): C3dNoiseGaussianParameters {
+): C3dNoiseGaussianParametersTagged {
     const params = {
-        "@type": "c3d.c3d.noise_gaussian" as const,
+        "@type": "noise_gaussian" as const,
         "noise_gaussian": noise_gaussian,
     };
     return params;
@@ -5252,9 +5430,9 @@ Applies Poisson (shot) noise to an image with given scale. Please see [Noise sim
  */
 function c3d_noise_poisson_params(
     noise_poisson: string,
-): C3dNoisePoissonParameters {
+): C3dNoisePoissonParametersTagged {
     const params = {
-        "@type": "c3d.c3d.noise_poisson" as const,
+        "@type": "noise_poisson" as const,
         "noise_poisson": noise_poisson,
     };
     return params;
@@ -5296,9 +5474,9 @@ Applies Speckle noise to an image with given standard deviation. Please see [Noi
  */
 function c3d_noise_speckle_params(
     noise_speckle: string,
-): C3dNoiseSpeckleParameters {
+): C3dNoiseSpeckleParametersTagged {
     const params = {
-        "@type": "c3d.c3d.noise_speckle" as const,
+        "@type": "noise_speckle" as const,
         "noise_speckle": noise_speckle,
     };
     return params;
@@ -5340,9 +5518,9 @@ Applies salt and pepper noise to an image with given probability. Please see [No
  */
 function c3d_noise_salt_pepper_params(
     noise_salt_pepper: string,
-): C3dNoiseSaltPepperParameters {
+): C3dNoiseSaltPepperParametersTagged {
     const params = {
-        "@type": "c3d.c3d.noise_salt_pepper" as const,
+        "@type": "noise_salt_pepper" as const,
         "noise_salt_pepper": noise_salt_pepper,
     };
     return params;
@@ -5383,9 +5561,9 @@ Used to reverse the effect of previous **-mcs** command.
  */
 function c3d_no_multicomponent_split_params(
     no_multicomponent_split: string,
-): C3dNoMulticomponentSplitParameters {
+): C3dNoMulticomponentSplitParametersTagged {
     const params = {
-        "@type": "c3d.c3d.no_multicomponent_split" as const,
+        "@type": "no_multicomponent_split" as const,
         "no_multicomponent_split": no_multicomponent_split,
     };
     return params;
@@ -5428,9 +5606,9 @@ This command takes as inputs an image and a mask image. At each voxel, the mean 
  */
 function c3d_normalize_local_window_params(
     normalize_local_window: string,
-): C3dNormalizeLocalWindowParameters {
+): C3dNormalizeLocalWindowParametersTagged {
     const params = {
-        "@type": "c3d.c3d.normalize_local_window" as const,
+        "@type": "normalize_local_window" as const,
         "normalize_local_window": normalize_local_window,
     };
     return params;
@@ -5467,9 +5645,9 @@ function c3d_normalize_local_window_cargs(
  */
 function c3d_normpdf_params(
     normpdf: string,
-): C3dNormpdfParameters {
+): C3dNormpdfParametersTagged {
     const params = {
-        "@type": "c3d.c3d.normpdf" as const,
+        "@type": "normpdf" as const,
         "normpdf": normpdf,
     };
     return params;
@@ -5512,9 +5690,9 @@ By default, **convert3d** will round floating point values when converting to an
  */
 function c3d_noround_params(
     noround: string,
-): C3dNoroundParameters {
+): C3dNoroundParametersTagged {
     const params = {
-        "@type": "c3d.c3d.noround" as const,
+        "@type": "noround" as const,
         "noround": noround,
     };
     return params;
@@ -5557,9 +5735,9 @@ These options specify whether use the SPM extension to the Analyze (.hdr,.img) f
  */
 function c3d_nospm_params(
     nospm: string,
-): C3dNospmParameters {
+): C3dNospmParametersTagged {
     const params = {
-        "@type": "c3d.c3d.nospm" as const,
+        "@type": "nospm" as const,
         "nospm": nospm,
     };
     return params;
@@ -5623,9 +5801,9 @@ The **-o** option can also be used to save an intermediate image in the stack:
  */
 function c3d_output_params(
     output: string,
-): C3dOutputParameters {
+): C3dOutputParametersTagged {
     const params = {
-        "@type": "c3d.c3d.output" as const,
+        "@type": "output" as const,
         "output": output,
     };
     return params;
@@ -5692,9 +5870,9 @@ For 2D images, this command can be used to generate color PNG files:
  */
 function c3d_output_multicomponent_params(
     output_multicomponent: string,
-): C3dOutputMulticomponentParameters {
+): C3dOutputMulticomponentParametersTagged {
     const params = {
-        "@type": "c3d.c3d.output_multicomponent" as const,
+        "@type": "output_multicomponent" as const,
         "output_multicomponent": output_multicomponent,
     };
     return params;
@@ -5741,9 +5919,9 @@ Sometimes, for complex operations, it is useful to change the order of the image
  */
 function c3d_output_multiple_multicomponent_params(
     output_multiple_multicomponent: string,
-): C3dOutputMultipleMulticomponentParameters {
+): C3dOutputMultipleMulticomponentParametersTagged {
     const params = {
-        "@type": "c3d.c3d.output_multiple_multicomponent" as const,
+        "@type": "output_multiple_multicomponent" as const,
         "output_multiple_multicomponent": output_multiple_multicomponent,
     };
     return params;
@@ -5791,9 +5969,9 @@ This command has the same behavior as the 'Reorient Image' menu option in ITK-SN
  */
 function c3d_orient_params(
     orient: string,
-): C3dOrientParameters {
+): C3dOrientParametersTagged {
     const params = {
-        "@type": "c3d.c3d.orient" as const,
+        "@type": "orient" as const,
         "orient": orient,
     };
     return params;
@@ -5844,9 +6022,9 @@ will generate images *label00.nii*, *label01.nii*, *label02.nii* and so on. The 
  */
 function c3d_output_multiple_params(
     output_multiple: string,
-): C3dOutputMultipleParameters {
+): C3dOutputMultipleParametersTagged {
     const params = {
-        "@type": "c3d.c3d.output_multiple" as const,
+        "@type": "output_multiple" as const,
         "output_multiple": output_multiple,
     };
     return params;
@@ -5894,9 +6072,9 @@ This command has the same behavior as the 'Reorient Image' menu option in ITK-SN
  */
 function c3d_orient_1_params(
     orient: string,
-): C3dOrient1Parameters {
+): C3dOrient1ParametersTagged {
     const params = {
-        "@type": "c3d.c3d.orient" as const,
+        "@type": "orient_1" as const,
         "orient": orient,
     };
     return params;
@@ -5939,9 +6117,9 @@ Set the origin of the image. The origin is the world coordinate (in NIfTI coordi
  */
 function c3d_origin_params(
     origin: string,
-): C3dOriginParameters {
+): C3dOriginParametersTagged {
     const params = {
-        "@type": "c3d.c3d.origin" as const,
+        "@type": "origin" as const,
         "origin": origin,
     };
     return params;
@@ -5985,9 +6163,9 @@ Set the origin of the image by specifying the voxel coordinates of the center of
  */
 function c3d_origin_voxel_params(
     origin_voxel: string,
-): C3dOriginVoxelParameters {
+): C3dOriginVoxelParametersTagged {
     const params = {
-        "@type": "c3d.c3d.origin_voxel" as const,
+        "@type": "origin_voxel" as const,
         "origin_voxel": origin_voxel,
     };
     return params;
@@ -6030,9 +6208,9 @@ This command updates the origin of the image such that the specifed voxel has th
  */
 function c3d_origin_voxel_coord_params(
     origin_voxel_coord: string,
-): C3dOriginVoxelCoordParameters {
+): C3dOriginVoxelCoordParametersTagged {
     const params = {
-        "@type": "c3d.c3d.origin_voxel_coord" as const,
+        "@type": "origin_voxel_coord" as const,
         "origin_voxel_coord": origin_voxel_coord,
     };
     return params;
@@ -6091,9 +6269,9 @@ This command does not alter the stack.
  */
 function c3d_overlap_params(
     overlap: string,
-): C3dOverlapParameters {
+): C3dOverlapParametersTagged {
     const params = {
-        "@type": "c3d.c3d.overlap" as const,
+        "@type": "overlap" as const,
         "overlap": overlap,
     };
     return params;
@@ -6148,9 +6326,9 @@ Here is a more complex example, used to visualize a segmentation result. We do a
  */
 function c3d_overlay_label_image_params(
     overlay_label_image: string,
-): C3dOverlayLabelImageParameters {
+): C3dOverlayLabelImageParametersTagged {
     const params = {
-        "@type": "c3d.c3d.overlay_label_image" as const,
+        "@type": "overlay_label_image" as const,
         "overlay_label_image": overlay_label_image,
     };
     return params;
@@ -6205,9 +6383,9 @@ Adds 10% to all sides of the image, and fills the new voxels with the value 1.
  */
 function c3d_pad_params(
     pad: string,
-): C3dPadParameters {
+): C3dPadParametersTagged {
     const params = {
-        "@type": "c3d.c3d.pad" as const,
+        "@type": "pad" as const,
         "pad": pad,
     };
     return params;
@@ -6244,9 +6422,9 @@ function c3d_pad_cargs(
  */
 function c3d_pad_to_params(
     pad_to: string,
-): C3dPadToParameters {
+): C3dPadToParametersTagged {
     const params = {
-        "@type": "c3d.c3d.pad_to" as const,
+        "@type": "pad_to" as const,
         "pad_to": pad_to,
     };
     return params;
@@ -6291,9 +6469,9 @@ Similar to the *-centroid* command, computes the centroid and prinicipal compone
  */
 function c3d_pca_params(
     pca: string,
-): C3dPcaParameters {
+): C3dPcaParametersTagged {
     const params = {
-        "@type": "c3d.c3d.pca" as const,
+        "@type": "pca" as const,
         "pca": pca,
     };
     return params;
@@ -6343,9 +6521,9 @@ This options changes how the percent sign (%) is interpreted when specifying int
  */
 function c3d_percent_intensity_mode_params(
     percent_intensity_mode: string,
-): C3dPercentIntensityModeParameters {
+): C3dPercentIntensityModeParametersTagged {
     const params = {
-        "@type": "c3d.c3d.percent_intensity_mode" as const,
+        "@type": "percent_intensity_mode" as const,
         "percent_intensity_mode": percent_intensity_mode,
     };
     return params;
@@ -6382,9 +6560,9 @@ function c3d_percent_intensity_mode_cargs(
  */
 function c3d_pixel_params(
     pixel: string,
-): C3dPixelParameters {
+): C3dPixelParametersTagged {
     const params = {
-        "@type": "c3d.c3d.pixel" as const,
+        "@type": "pixel" as const,
         "pixel": pixel,
     };
     return params;
@@ -6425,9 +6603,9 @@ Removes the last image from the image stack. Images assigned a name with the **-
  */
 function c3d_pop_params(
     pop: string,
-): C3dPopParameters {
+): C3dPopParametersTagged {
     const params = {
-        "@type": "c3d.c3d.pop" as const,
+        "@type": "pop" as const,
         "pop": pop,
     };
     return params;
@@ -6468,9 +6646,9 @@ Removes the last image from the stack, but also assigns it the name 'var', keepi
  */
 function c3d_popas_params(
     popas: string,
-): C3dPopasParameters {
+): C3dPopasParametersTagged {
     const params = {
-        "@type": "c3d.c3d.popas" as const,
+        "@type": "popas" as const,
         "popas": popas,
     };
     return params;
@@ -6515,9 +6693,9 @@ Prints the value of the image at the position specified by the parameter `point_
  */
 function c3d_probe_params(
     probe: string,
-): C3dProbeParameters {
+): C3dProbeParametersTagged {
     const params = {
-        "@type": "c3d.c3d.probe" as const,
+        "@type": "probe" as const,
         "probe": probe,
     };
     return params;
@@ -6560,9 +6738,9 @@ Places the image associated with variable name 'var' on end of the image stack. 
  */
 function c3d_push_params(
     push: string,
-): C3dPushParameters {
+): C3dPushParametersTagged {
     const params = {
-        "@type": "c3d.c3d.push" as const,
+        "@type": "push" as const,
         "push": push,
     };
     return params;
@@ -6605,9 +6783,9 @@ This command takes N images as the input (all the images on the stack are used).
  */
 function c3d_rank_params(
     rank: string,
-): C3dRankParameters {
+): C3dRankParametersTagged {
     const params = {
-        "@type": "c3d.c3d.rank" as const,
+        "@type": "rank" as const,
         "rank": rank,
     };
     return params;
@@ -6650,9 +6828,9 @@ Computes the reciprocal of an image. For instance to compute B = 1 / A, use the 
  */
 function c3d_reciprocal_params(
     reciprocal: string,
-): C3dReciprocalParameters {
+): C3dReciprocalParametersTagged {
     const params = {
-        "@type": "c3d.c3d.reciprocal" as const,
+        "@type": "reciprocal" as const,
         "reciprocal": reciprocal,
     };
     return params;
@@ -6696,9 +6874,9 @@ Extract a rectangular region from the image. The first parameter is the position
  */
 function c3d_region_params(
     region: string,
-): C3dRegionParameters {
+): C3dRegionParametersTagged {
     const params = {
-        "@type": "c3d.c3d.region" as const,
+        "@type": "region" as const,
         "region": region,
     };
     return params;
@@ -6753,9 +6931,9 @@ is equivalent to the command
  */
 function c3d_reorder_params(
     reorder: string,
-): C3dReorderParameters {
+): C3dReorderParametersTagged {
     const params = {
-        "@type": "c3d.c3d.reorder" as const,
+        "@type": "reorder" as const,
         "reorder": reorder,
     };
     return params;
@@ -6798,9 +6976,9 @@ Assuming that the input is a multi-label segmentation image, this command keeps 
  */
 function c3d_retain_labels_params(
     retain_labels: string,
-): C3dRetainLabelsParameters {
+): C3dRetainLabelsParametersTagged {
     const params = {
-        "@type": "c3d.c3d.retain_labels" as const,
+        "@type": "retain_labels" as const,
         "retain_labels": retain_labels,
     };
     return params;
@@ -6841,9 +7019,9 @@ This command applies a classifier trained previously by **-rf-train**. The stack
  */
 function c3d_rf_apply_params(
     rf_apply: string,
-): C3dRfApplyParameters {
+): C3dRfApplyParametersTagged {
     const params = {
-        "@type": "c3d.c3d.rf_apply" as const,
+        "@type": "rf_apply" as const,
         "rf_apply": rf_apply,
     };
     return params;
@@ -6907,9 +7085,9 @@ The commands are meant to replicate the "classification" pre-segmentation mode i
  */
 function c3d_rf_train_params(
     rf_train: string,
-): C3dRfTrainParameters {
+): C3dRfTrainParametersTagged {
     const params = {
-        "@type": "c3d.c3d.rf_train" as const,
+        "@type": "rf_train" as const,
         "rf_train": rf_train,
     };
     return params;
@@ -6953,9 +7131,9 @@ Set the radius of the patch used to generate features for the RF classifier. By 
  */
 function c3d_rf_param_patch_params(
     rf_param_patch: string,
-): C3dRfParamPatchParameters {
+): C3dRfParamPatchParametersTagged {
     const params = {
-        "@type": "c3d.c3d.rf_param_patch" as const,
+        "@type": "rf_param_patch" as const,
         "rf_param_patch": rf_param_patch,
     };
     return params;
@@ -6996,9 +7174,9 @@ Use the coordinates of voxels as additional features. This allows some geometric
  */
 function c3d_rf_param_usexyz_params(
     rf_param_usexyz: string,
-): C3dRfParamUsexyzParameters {
+): C3dRfParamUsexyzParametersTagged {
     const params = {
-        "@type": "c3d.c3d.rf_param_usexyz" as const,
+        "@type": "rf_param_usexyz" as const,
         "rf_param_usexyz": rf_param_usexyz,
     };
     return params;
@@ -7035,9 +7213,9 @@ function c3d_rf_param_usexyz_cargs(
  */
 function c3d_rf_param_nousexyz_params(
     rf_param_nousexyz: string,
-): C3dRfParamNousexyzParameters {
+): C3dRfParamNousexyzParametersTagged {
     const params = {
-        "@type": "c3d.c3d.rf_param_nousexyz" as const,
+        "@type": "rf_param_nousexyz" as const,
         "rf_param_nousexyz": rf_param_nousexyz,
     };
     return params;
@@ -7078,9 +7256,9 @@ Sets the number of trees in the forest. Default value is 50. Larger forests are 
  */
 function c3d_rf_param_ntrees_params(
     rf_param_ntrees: string,
-): C3dRfParamNtreesParameters {
+): C3dRfParamNtreesParametersTagged {
     const params = {
-        "@type": "c3d.c3d.rf_param_ntrees" as const,
+        "@type": "rf_param_ntrees" as const,
         "rf_param_ntrees": rf_param_ntrees,
     };
     return params;
@@ -7121,9 +7299,9 @@ Sets the depth of the trees in the classifier. Default value is 30. Deeper trees
  */
 function c3d_rf_param_treedepth_params(
     rf_param_treedepth: string,
-): C3dRfParamTreedepthParameters {
+): C3dRfParamTreedepthParametersTagged {
     const params = {
-        "@type": "c3d.c3d.rf_param_treedepth" as const,
+        "@type": "rf_param_treedepth" as const,
         "rf_param_treedepth": rf_param_treedepth,
     };
     return params;
@@ -7164,9 +7342,9 @@ Sets the Nifti sform of the last image on the stack to the 4x4 matrix provided.
  */
 function c3d_set_sform_params(
     set_sform: string,
-): C3dSetSformParameters {
+): C3dSetSformParametersTagged {
     const params = {
-        "@type": "c3d.c3d.set_sform" as const,
+        "@type": "set_sform" as const,
         "set_sform": set_sform,
     };
     return params;
@@ -7209,9 +7387,9 @@ Replace intensity I1 by J1, I2 by J2 and so on. Allowed values of intensity incl
  */
 function c3d_replace_params(
     replace: string,
-): C3dReplaceParameters {
+): C3dReplaceParametersTagged {
     const params = {
-        "@type": "c3d.c3d.replace" as const,
+        "@type": "replace" as const,
         "replace": replace,
     };
     return params;
@@ -7257,9 +7435,9 @@ Resamples the image, keeping the bounding box the same, but changing the number 
  */
 function c3d_resample_params(
     resample: string,
-): C3dResampleParameters {
+): C3dResampleParametersTagged {
     const params = {
-        "@type": "c3d.c3d.resample" as const,
+        "@type": "resample" as const,
         "resample": resample,
     };
     return params;
@@ -7302,9 +7480,9 @@ Resamples the image to have approximately isotropic resolution, either based on 
  */
 function c3d_resample_iso_params(
     resample_iso: string,
-): C3dResampleIsoParameters {
+): C3dResampleIsoParametersTagged {
     const params = {
-        "@type": "c3d.c3d.resample_iso" as const,
+        "@type": "resample_iso" as const,
         "resample_iso": resample_iso,
     };
     return params;
@@ -7347,9 +7525,9 @@ Resamples the image as in **-resample**, but the user specifies the new voxel si
  */
 function c3d_resample_mm_params(
     resample_mm: string,
-): C3dResampleMmParameters {
+): C3dResampleMmParametersTagged {
     const params = {
-        "@type": "c3d.c3d.resample_mm" as const,
+        "@type": "resample_mm" as const,
         "resample_mm": resample_mm,
     };
     return params;
@@ -7390,9 +7568,9 @@ Applies affine (or other) transform in ITK (ANTs) format to an image. See notes 
  */
 function c3d_reslice_itk_params(
     reslice_itk: string,
-): C3dResliceItkParameters {
+): C3dResliceItkParametersTagged {
     const params = {
-        "@type": "c3d.c3d.reslice_itk" as const,
+        "@type": "reslice_itk" as const,
         "reslice_itk": reslice_itk,
     };
     return params;
@@ -7429,9 +7607,9 @@ function c3d_reslice_itk_cargs(
  */
 function c3d_reslice_matrix_params(
     reslice_matrix: string,
-): C3dResliceMatrixParameters {
+): C3dResliceMatrixParametersTagged {
     const params = {
-        "@type": "c3d.c3d.reslice_matrix" as const,
+        "@type": "reslice_matrix" as const,
         "reslice_matrix": reslice_matrix,
     };
     return params;
@@ -7474,9 +7652,9 @@ Applies the **-reslice-matrix** command with the identity transform. This is use
  */
 function c3d_reslice_identity_params(
     reslice_identity: string,
-): C3dResliceIdentityParameters {
+): C3dResliceIdentityParametersTagged {
     const params = {
-        "@type": "c3d.c3d.reslice_identity" as const,
+        "@type": "reslice_identity" as const,
         "reslice_identity": reslice_identity,
     };
     return params;
@@ -7519,9 +7697,9 @@ Takes the last three images on the stack and treats them as red, green, and blue
  */
 function c3d_rgb2hsv_params(
     rgb2hsv: string,
-): C3dRgb2hsvParameters {
+): C3dRgb2hsvParametersTagged {
     const params = {
-        "@type": "c3d.c3d.rgb2hsv" as const,
+        "@type": "rgb2hsv" as const,
         "rgb2hsv": rgb2hsv,
     };
     return params;
@@ -7569,9 +7747,9 @@ The equivalent of this command is
  */
 function c3d_rms_params(
     rms: string,
-): C3dRmsParameters {
+): C3dRmsParametersTagged {
     const params = {
-        "@type": "c3d.c3d.rms" as const,
+        "@type": "rms" as const,
         "rms": rms,
     };
     return params;
@@ -7614,9 +7792,9 @@ By default, **convert3d** will round floating point values when converting to an
  */
 function c3d_round_params(
     round: string,
-): C3dRoundParameters {
+): C3dRoundParametersTagged {
     const params = {
-        "@type": "c3d.c3d.round" as const,
+        "@type": "round" as const,
         "round": round,
     };
     return params;
@@ -7659,9 +7837,9 @@ Multiplies the intensity of each voxel in the last image on the stack by the giv
  */
 function c3d_scale_params(
     scale: string,
-): C3dScaleParameters {
+): C3dScaleParametersTagged {
     const params = {
-        "@type": "c3d.c3d.scale" as const,
+        "@type": "scale" as const,
         "scale": scale,
     };
     return params;
@@ -7702,9 +7880,9 @@ Sets the Nifti sform of the last image on the stack to the 4x4 matrix provided.
  */
 function c3d_set_sform_1_params(
     set_sform: string,
-): C3dSetSform1Parameters {
+): C3dSetSform1ParametersTagged {
     const params = {
-        "@type": "c3d.c3d.set_sform" as const,
+        "@type": "set_sform_1" as const,
         "set_sform": set_sform,
     };
     return params;
@@ -7745,9 +7923,9 @@ Replaces the last image on the stack with the cosine trigonometric operation app
  */
 function c3d_sin_params(
     sin: string,
-): C3dSinParameters {
+): C3dSinParametersTagged {
     const params = {
-        "@type": "c3d.c3d.sin" as const,
+        "@type": "sin" as const,
         "sin": sin,
     };
     return params;
@@ -7798,9 +7976,9 @@ With the new command **c4d**, the **-slice** command can be used to extract volu
  */
 function c3d_slice_params(
     slice: string,
-): C3dSliceParameters {
+): C3dSliceParametersTagged {
     const params = {
-        "@type": "c3d.c3d.slice" as const,
+        "@type": "slice" as const,
         "slice": slice,
     };
     return params;
@@ -7843,9 +8021,9 @@ This command behaves identical to the **-slice** command, but all images on the 
  */
 function c3d_slice_all_params(
     slice_all: string,
-): C3dSliceAllParameters {
+): C3dSliceAllParametersTagged {
     const params = {
-        "@type": "c3d.c3d.slice_all" as const,
+        "@type": "slice_all" as const,
         "slice_all": slice_all,
     };
     return params;
@@ -7888,9 +8066,9 @@ Applies the Laplacian sharpening filter from ITK, which accentuates the edges in
  */
 function c3d_sharpen_params(
     sharpen: string,
-): C3dSharpenParameters {
+): C3dSharpenParametersTagged {
     const params = {
-        "@type": "c3d.c3d.sharpen" as const,
+        "@type": "sharpen" as const,
         "sharpen": sharpen,
     };
     return params;
@@ -7933,9 +8111,9 @@ Adds the given constant to every voxel.
  */
 function c3d_shift_params(
     shift: string,
-): C3dShiftParameters {
+): C3dShiftParametersTagged {
     const params = {
-        "@type": "c3d.c3d.shift" as const,
+        "@type": "shift" as const,
         "shift": shift,
     };
     return params;
@@ -7978,9 +8156,9 @@ Computes the signed distance transform of a binary image. Voxels where the binar
  */
 function c3d_signed_distance_transform_params(
     signed_distance_transform: string,
-): C3dSignedDistanceTransformParameters {
+): C3dSignedDistanceTransformParametersTagged {
     const params = {
-        "@type": "c3d.c3d.signed_distance_transform" as const,
+        "@type": "signed_distance_transform" as const,
         "signed_distance_transform": signed_distance_transform,
     };
     return params;
@@ -8023,9 +8201,9 @@ Applies Gaussian smoothing to the image. The parameter vector specifies the stan
  */
 function c3d_smooth_params(
     smooth: string,
-): C3dSmoothParameters {
+): C3dSmoothParametersTagged {
     const params = {
-        "@type": "c3d.c3d.smooth" as const,
+        "@type": "smooth" as const,
         "smooth": smooth,
     };
     return params;
@@ -8068,9 +8246,9 @@ Applies Gaussian smoothing to the image using the fast [Deriche recursive smooth
  */
 function c3d_smooth_fast_params(
     smooth_fast: string,
-): C3dSmoothFastParameters {
+): C3dSmoothFastParametersTagged {
     const params = {
-        "@type": "c3d.c3d.smooth_fast" as const,
+        "@type": "smooth_fast" as const,
         "smooth_fast": smooth_fast,
     };
     return params;
@@ -8113,9 +8291,9 @@ Sets the voxel spacing of the image. This should always be a vector with positiv
  */
 function c3d_spacing_params(
     spacing: string,
-): C3dSpacingParameters {
+): C3dSpacingParametersTagged {
     const params = {
-        "@type": "c3d.c3d.spacing" as const,
+        "@type": "spacing" as const,
         "spacing": spacing,
     };
     return params;
@@ -8160,9 +8338,9 @@ Also of note is that the **-split** command will disregard infinite intensity va
  */
 function c3d_split_params(
     split: string,
-): C3dSplitParameters {
+): C3dSplitParametersTagged {
     const params = {
-        "@type": "c3d.c3d.split" as const,
+        "@type": "split" as const,
         "split": split,
     };
     return params;
@@ -8205,9 +8383,9 @@ Computes square root of each voxel in the image.
  */
 function c3d_sqrt_params(
     sqrt: string,
-): C3dSqrtParameters {
+): C3dSqrtParametersTagged {
     const params = {
-        "@type": "c3d.c3d.sqrt" as const,
+        "@type": "sqrt" as const,
         "sqrt": sqrt,
     };
     return params;
@@ -8251,9 +8429,9 @@ Runs the ITK implementation of the STAPLE algorithm ([See Paper][11]). STAPLE ge
  */
 function c3d_staple_params(
     staple: string,
-): C3dStapleParameters {
+): C3dStapleParametersTagged {
     const params = {
-        "@type": "c3d.c3d.staple" as const,
+        "@type": "staple" as const,
         "staple": staple,
     };
     return params;
@@ -8296,9 +8474,9 @@ Computes the Hessian matrix at every pixel of an image and the eigenvalues of th
  */
 function c3d_structure_tensor_eigenvalues_params(
     structure_tensor_eigenvalues: string,
-): C3dStructureTensorEigenvaluesParameters {
+): C3dStructureTensorEigenvaluesParametersTagged {
     const params = {
-        "@type": "c3d.c3d.structure_tensor_eigenvalues" as const,
+        "@type": "structure_tensor_eigenvalues" as const,
         "structure_tensor_eigenvalues": structure_tensor_eigenvalues,
     };
     return params;
@@ -8341,9 +8519,9 @@ These options specify whether use the SPM extension to the Analyze (.hdr,.img) f
  */
 function c3d_spm_params(
     spm: string,
-): C3dSpmParameters {
+): C3dSpmParametersTagged {
     const params = {
-        "@type": "c3d.c3d.spm" as const,
+        "@type": "spm" as const,
         "spm": spm,
     };
     return params;
@@ -8380,9 +8558,9 @@ function c3d_spm_cargs(
  */
 function c3d_subtract_params(
     subtract: string,
-): C3dSubtractParameters {
+): C3dSubtractParametersTagged {
     const params = {
-        "@type": "c3d.c3d.subtract" as const,
+        "@type": "subtract" as const,
         "subtract": subtract,
     };
     return params;
@@ -8419,9 +8597,9 @@ function c3d_subtract_cargs(
  */
 function c3d_supervoxel_params(
     supervoxel: string,
-): C3dSupervoxelParameters {
+): C3dSupervoxelParametersTagged {
     const params = {
-        "@type": "c3d.c3d.supervoxel" as const,
+        "@type": "supervoxel" as const,
         "supervoxel": supervoxel,
     };
     return params;
@@ -8464,9 +8642,9 @@ Stretches the intensities in the image linearly, such that u1 maps to v1 and u2 
  */
 function c3d_stretch_params(
     stretch: string,
-): C3dStretchParameters {
+): C3dStretchParametersTagged {
     const params = {
-        "@type": "c3d.c3d.stretch" as const,
+        "@type": "stretch" as const,
         "stretch": stretch,
     };
     return params;
@@ -8514,9 +8692,9 @@ The following commands invoke an action that is applied to images. Unary command
  */
 function c3d_swapdim_params(
     swapdim: string,
-): C3dSwapdimParameters {
+): C3dSwapdimParametersTagged {
     const params = {
-        "@type": "c3d.c3d.swapdim" as const,
+        "@type": "swapdim" as const,
         "swapdim": swapdim,
     };
     return params;
@@ -8565,9 +8743,9 @@ These advanced commands (with more to come in the future) are primarily meant to
  */
 function c3d_test_image_params(
     test_image: string,
-): C3dTestImageParameters {
+): C3dTestImageParametersTagged {
     const params = {
-        "@type": "c3d.c3d.test_image" as const,
+        "@type": "test_image" as const,
         "test_image": test_image,
     };
     return params;
@@ -8616,9 +8794,9 @@ These advanced commands (with more to come in the future) are primarily meant to
  */
 function c3d_test_probe_params(
     test_probe: string,
-): C3dTestProbeParameters {
+): C3dTestProbeParametersTagged {
     const params = {
-        "@type": "c3d.c3d.test_probe" as const,
+        "@type": "test_probe" as const,
         "test_probe": test_probe,
     };
     return params;
@@ -8662,9 +8840,9 @@ Thresholds the image, setting voxels whose intensity is in the range [u1,u2] to 
  */
 function c3d_threshold_params(
     threshold: string,
-): C3dThresholdParameters {
+): C3dThresholdParametersTagged {
     const params = {
-        "@type": "c3d.c3d.threshold" as const,
+        "@type": "threshold" as const,
         "threshold": threshold,
     };
     return params;
@@ -8711,9 +8889,9 @@ And to arrange the same 2D slices into a 2D montage of 4 images per row, we woul
  */
 function c3d_tile_params(
     tile: string,
-): C3dTileParameters {
+): C3dTileParametersTagged {
     const params = {
-        "@type": "c3d.c3d.tile" as const,
+        "@type": "tile" as const,
         "tile": tile,
     };
     return params;
@@ -8756,9 +8934,9 @@ Use this command to trim background in an image. When most of the image is fille
  */
 function c3d_trim_params(
     trim: string,
-): C3dTrimParameters {
+): C3dTrimParametersTagged {
     const params = {
-        "@type": "c3d.c3d.trim" as const,
+        "@type": "trim" as const,
         "trim": trim,
     };
     return params;
@@ -8801,9 +8979,9 @@ Like **-trim**, this command trims the background in an image. However, instead 
  */
 function c3d_trim_to_size_params(
     trim_to_size: string,
-): C3dTrimToSizeParameters {
+): C3dTrimToSizeParametersTagged {
     const params = {
-        "@type": "c3d.c3d.trim_to_size" as const,
+        "@type": "trim_to_size" as const,
         "trim_to_size": trim_to_size,
     };
     return params;
@@ -8848,9 +9026,9 @@ Some images require data in certain types. For example, to save PNG images, ucha
  */
 function c3d_type_params(
     type_: string,
-): C3dTypeParameters {
+): C3dTypeParametersTagged {
     const params = {
-        "@type": "c3d.c3d.type" as const,
+        "@type": "type" as const,
         "type": type_,
     };
     return params;
@@ -8893,9 +9071,9 @@ Commands entered after the **-verbose** command will print debugging information
  */
 function c3d_verbose_params(
     verbose: string,
-): C3dVerboseParameters {
+): C3dVerboseParametersTagged {
     const params = {
-        "@type": "c3d.c3d.verbose" as const,
+        "@type": "verbose" as const,
         "verbose": verbose,
     };
     return params;
@@ -8932,9 +9110,9 @@ function c3d_verbose_cargs(
  */
 function c3d_noverbose_params(
     noverbose: string,
-): C3dNoverboseParameters {
+): C3dNoverboseParametersTagged {
     const params = {
-        "@type": "c3d.c3d.noverbose" as const,
+        "@type": "noverbose" as const,
         "noverbose": noverbose,
     };
     return params;
@@ -8971,9 +9149,9 @@ function c3d_noverbose_cargs(
  */
 function c3d_version_params(
     version: string,
-): C3dVersionParameters {
+): C3dVersionParametersTagged {
     const params = {
-        "@type": "c3d.c3d.version" as const,
+        "@type": "version" as const,
         "version": version,
     };
     return params;
@@ -9018,9 +9196,9 @@ The value assigned to each image is based on its position from the bottom of the
  */
 function c3d_vote_params(
     vote: string,
-): C3dVoteParameters {
+): C3dVoteParametersTagged {
     const params = {
-        "@type": "c3d.c3d.vote" as const,
+        "@type": "vote" as const,
         "vote": vote,
     };
     return params;
@@ -9087,9 +9265,9 @@ The example below illustrates applying **-vote-mrf** with a user-specified mask.
  */
 function c3d_vote_mrf_params(
     vote_mrf: string,
-): C3dVoteMrfParameters {
+): C3dVoteMrfParametersTagged {
     const params = {
-        "@type": "c3d.c3d.vote_mrf" as const,
+        "@type": "vote_mrf" as const,
         "vote_mrf": vote_mrf,
     };
     return params;
@@ -9126,9 +9304,9 @@ function c3d_vote_mrf_cargs(
  */
 function c3d_vote_label_params(
     vote_label: string,
-): C3dVoteLabelParameters {
+): C3dVoteLabelParametersTagged {
     const params = {
-        "@type": "c3d.c3d.vote_label" as const,
+        "@type": "vote_label" as const,
         "vote_label": vote_label,
     };
     return params;
@@ -9172,9 +9350,9 @@ Print the sum of all voxels in the image.
  */
 function c3d_voxel_sum_params(
     voxel_sum: string,
-): C3dVoxelSumParameters {
+): C3dVoxelSumParametersTagged {
     const params = {
-        "@type": "c3d.c3d.voxel_sum" as const,
+        "@type": "voxel_sum" as const,
         "voxel_sum": voxel_sum,
     };
     return params;
@@ -9218,9 +9396,9 @@ Like **-voxel-sum**, but multiplies the sum of voxel intensities by voxel volume
  */
 function c3d_voxel_integral_params(
     voxel_integral: string,
-): C3dVoxelIntegralParameters {
+): C3dVoxelIntegralParametersTagged {
     const params = {
-        "@type": "c3d.c3d.voxel_integral" as const,
+        "@type": "voxel_integral" as const,
         "voxel_integral": voxel_integral,
     };
     return params;
@@ -9269,9 +9447,9 @@ Perform regression between corresponding voxels in two images. This command take
  */
 function c3d_voxelwise_regression_params(
     voxelwise_regression: string,
-): C3dVoxelwiseRegressionParameters {
+): C3dVoxelwiseRegressionParametersTagged {
     const params = {
-        "@type": "c3d.c3d.voxelwise_regression" as const,
+        "@type": "voxelwise_regression" as const,
         "voxelwise_regression": voxelwise_regression,
     };
     return params;
@@ -9308,9 +9486,9 @@ function c3d_voxelwise_regression_cargs(
  */
 function c3d_warp_params(
     warp: string,
-): C3dWarpParameters {
+): C3dWarpParametersTagged {
     const params = {
-        "@type": "c3d.c3d.warp" as const,
+        "@type": "warp" as const,
         "warp": warp,
     };
     return params;
@@ -9347,9 +9525,9 @@ function c3d_warp_cargs(
  */
 function c3d_warp_label_params(
     warp_label: string,
-): C3dWarpLabelParameters {
+): C3dWarpLabelParametersTagged {
     const params = {
-        "@type": "c3d.c3d.warp_label" as const,
+        "@type": "warp_label" as const,
         "warp_label": warp_label,
     };
     return params;
@@ -9399,9 +9577,9 @@ Options change the behavior of commands that *appear later on the command line*.
  */
 function c3d_wrap_params(
     wrap: string,
-): C3dWrapParameters {
+): C3dWrapParametersTagged {
     const params = {
-        "@type": "c3d.c3d.wrap" as const,
+        "@type": "wrap" as const,
         "wrap": wrap,
     };
     return params;
@@ -9448,9 +9626,9 @@ This command is particularly useful for combining components in a multicomponent
  */
 function c3d_weighted_sum_params(
     weighted_sum: string,
-): C3dWeightedSumParameters {
+): C3dWeightedSumParametersTagged {
     const params = {
-        "@type": "c3d.c3d.weighted_sum" as const,
+        "@type": "weighted_sum" as const,
         "weighted_sum": weighted_sum,
     };
     return params;
@@ -9499,9 +9677,9 @@ The **-reorder** command can simplify loading the images:
  */
 function c3d_weighted_sum_voxelwise_params(
     weighted_sum_voxelwise: string,
-): C3dWeightedSumVoxelwiseParameters {
+): C3dWeightedSumVoxelwiseParametersTagged {
     const params = {
-        "@type": "c3d.c3d.weighted_sum_voxelwise" as const,
+        "@type": "weighted_sum_voxelwise" as const,
         "weighted_sum_voxelwise": weighted_sum_voxelwise,
     };
     return params;
@@ -9530,7 +9708,7 @@ function c3d_weighted_sum_voxelwise_cargs(
 
 
 /**
- * Output object returned when calling `c3d_(...)`.
+ * Output object returned when calling `C3dParameters(...)`.
  *
  * @interface
  */
@@ -9557,11 +9735,11 @@ interface C3dOutputs {
  */
 function c3d_params(
     input: Array<InputPathType>,
-    operations: Array<C3dAccumParameters | C3dAcosParameters | C3dAddParameters | C3dAlignLandmarksParameters | C3dAnisotropicDiffusionParameters | C3dAntialiasParameters | C3dSetParameters | C3dAsinParameters | C3dAtan2Parameters | C3dBackgroundParameters | C3dN4BiasCorrectionParameters | C3dBinarizeParameters | C3dCannyParameters | C3dCeilParameters | C3dCentroidParameters | C3dCentroidMarkParameters | C3dConnectedComponentsParameters | C3dClearParameters | C3dClipParameters | C3dColorMapParameters | C3dCompressParameters | C3dNoCompressParameters | C3dConvParameters | C3dCoordinateMapVoxelParameters | C3dCoordinateMapPhysicalParameters | C3dCopyTransformParameters | C3dCosParameters | C3dCreateParameters | C3dDicomSeriesListParameters | C3dDicomSeriesReadParameters | C3dDilateParameters | C3dDivideParameters | C3dDuplicateParameters | C3dEndaccumParameters | C3dEndforParameters | C3dErodeParameters | C3dErfParameters | C3dExpParameters | C3dExportPatchesParameters | C3dExportPatchesAugParameters | C3dExtrudeSegParameters | C3dFillBackgroundWithNoiseParameters | C3dFftParameters | C3dFlipParameters | C3dFloorParameters | C3dForeachParameters | C3dForeachCompParameters | C3dGlmParameters | C3dGradientParameters | C3dHelpParameters | C3dHolefillParameters | C3dHessianEigenvaluesParameters | C3dHessianObjectnessParameters | C3dHistogramMatchParameters | C3dInfoParameters | C3dInfoFullParameters | C3dInsertParameters | C3dInterpolationParameters | C3dIterationsParameters | C3dLabelOverlapParameters | C3dLabelStatisticsParameters | C3dLandmarksToSpheresParameters | C3dLaplacianParameters | C3dLevelsetParameters | C3dLevelsetCurvatureParameters | C3dLevelsetAdvectionParameters | C3dLogParameters | C3dLog10Parameters | C3dManualParameters | C3dMatchBoundingBoxParameters | C3dMaximumParameters | C3dMulticomponentSplitParameters | C3dMeanParameters | C3dMedianFilterParameters | C3dMergeParameters | C3dMeanFilterParameters | C3dMutualInfoParameters | C3dMinimumParameters | C3dMixtureModelParameters | C3dMomentsParameters | C3dMattesMutualInfoParameters | C3dMeanSquareParameters | C3dMultiplyParameters | C3dNormalizedCrossCorrelationParameters | C3dNormalizedCorrelationParameters | C3dNormalizedMutualInfoParameters | C3dNoiseGaussianParameters | C3dNoisePoissonParameters | C3dNoiseSpeckleParameters | C3dNoiseSaltPepperParameters | C3dNoMulticomponentSplitParameters | C3dNormalizeLocalWindowParameters | C3dNormpdfParameters | C3dNoroundParameters | C3dNospmParameters | C3dOutputParameters | C3dOutputMulticomponentParameters | C3dOutputMultipleMulticomponentParameters | C3dOrientParameters | C3dOutputMultipleParameters | C3dOrient1Parameters | C3dOriginParameters | C3dOriginVoxelParameters | C3dOriginVoxelCoordParameters | C3dOverlapParameters | C3dOverlayLabelImageParameters | C3dPadParameters | C3dPadToParameters | C3dPcaParameters | C3dPercentIntensityModeParameters | C3dPixelParameters | C3dPopParameters | C3dPopasParameters | C3dProbeParameters | C3dPushParameters | C3dRankParameters | C3dReciprocalParameters | C3dRegionParameters | C3dReorderParameters | C3dRetainLabelsParameters | C3dRfApplyParameters | C3dRfTrainParameters | C3dRfParamPatchParameters | C3dRfParamUsexyzParameters | C3dRfParamNousexyzParameters | C3dRfParamNtreesParameters | C3dRfParamTreedepthParameters | C3dSetSformParameters | C3dReplaceParameters | C3dResampleParameters | C3dResampleIsoParameters | C3dResampleMmParameters | C3dResliceItkParameters | C3dResliceMatrixParameters | C3dResliceIdentityParameters | C3dRgb2hsvParameters | C3dRmsParameters | C3dRoundParameters | C3dScaleParameters | C3dSetSform1Parameters | C3dSinParameters | C3dSliceParameters | C3dSliceAllParameters | C3dSharpenParameters | C3dShiftParameters | C3dSignedDistanceTransformParameters | C3dSmoothParameters | C3dSmoothFastParameters | C3dSpacingParameters | C3dSplitParameters | C3dSqrtParameters | C3dStapleParameters | C3dStructureTensorEigenvaluesParameters | C3dSpmParameters | C3dSubtractParameters | C3dSupervoxelParameters | C3dStretchParameters | C3dSwapdimParameters | C3dTestImageParameters | C3dTestProbeParameters | C3dThresholdParameters | C3dTileParameters | C3dTrimParameters | C3dTrimToSizeParameters | C3dTypeParameters | C3dVerboseParameters | C3dNoverboseParameters | C3dVersionParameters | C3dVoteParameters | C3dVoteMrfParameters | C3dVoteLabelParameters | C3dVoxelSumParameters | C3dVoxelIntegralParameters | C3dVoxelwiseRegressionParameters | C3dWarpParameters | C3dWarpLabelParameters | C3dWrapParameters | C3dWeightedSumParameters | C3dWeightedSumVoxelwiseParameters>,
+    operations: Array<C3dAccumParametersTagged | C3dAcosParametersTagged | C3dAddParametersTagged | C3dAlignLandmarksParametersTagged | C3dAnisotropicDiffusionParametersTagged | C3dAntialiasParametersTagged | C3dSetParametersTagged | C3dAsinParametersTagged | C3dAtan2ParametersTagged | C3dBackgroundParametersTagged | C3dN4BiasCorrectionParametersTagged | C3dBinarizeParametersTagged | C3dCannyParametersTagged | C3dCeilParametersTagged | C3dCentroidParametersTagged | C3dCentroidMarkParametersTagged | C3dConnectedComponentsParametersTagged | C3dClearParametersTagged | C3dClipParametersTagged | C3dColorMapParametersTagged | C3dCompressParametersTagged | C3dNoCompressParametersTagged | C3dConvParametersTagged | C3dCoordinateMapVoxelParametersTagged | C3dCoordinateMapPhysicalParametersTagged | C3dCopyTransformParametersTagged | C3dCosParametersTagged | C3dCreateParametersTagged | C3dDicomSeriesListParametersTagged | C3dDicomSeriesReadParametersTagged | C3dDilateParametersTagged | C3dDivideParametersTagged | C3dDuplicateParametersTagged | C3dEndaccumParametersTagged | C3dEndforParametersTagged | C3dErodeParametersTagged | C3dErfParametersTagged | C3dExpParametersTagged | C3dExportPatchesParametersTagged | C3dExportPatchesAugParametersTagged | C3dExtrudeSegParametersTagged | C3dFillBackgroundWithNoiseParametersTagged | C3dFftParametersTagged | C3dFlipParametersTagged | C3dFloorParametersTagged | C3dForeachParametersTagged | C3dForeachCompParametersTagged | C3dGlmParametersTagged | C3dGradientParametersTagged | C3dHelpParametersTagged | C3dHolefillParametersTagged | C3dHessianEigenvaluesParametersTagged | C3dHessianObjectnessParametersTagged | C3dHistogramMatchParametersTagged | C3dInfoParametersTagged | C3dInfoFullParametersTagged | C3dInsertParametersTagged | C3dInterpolationParametersTagged | C3dIterationsParametersTagged | C3dLabelOverlapParametersTagged | C3dLabelStatisticsParametersTagged | C3dLandmarksToSpheresParametersTagged | C3dLaplacianParametersTagged | C3dLevelsetParametersTagged | C3dLevelsetCurvatureParametersTagged | C3dLevelsetAdvectionParametersTagged | C3dLogParametersTagged | C3dLog10ParametersTagged | C3dManualParametersTagged | C3dMatchBoundingBoxParametersTagged | C3dMaximumParametersTagged | C3dMulticomponentSplitParametersTagged | C3dMeanParametersTagged | C3dMedianFilterParametersTagged | C3dMergeParametersTagged | C3dMeanFilterParametersTagged | C3dMutualInfoParametersTagged | C3dMinimumParametersTagged | C3dMixtureModelParametersTagged | C3dMomentsParametersTagged | C3dMattesMutualInfoParametersTagged | C3dMeanSquareParametersTagged | C3dMultiplyParametersTagged | C3dNormalizedCrossCorrelationParametersTagged | C3dNormalizedCorrelationParametersTagged | C3dNormalizedMutualInfoParametersTagged | C3dNoiseGaussianParametersTagged | C3dNoisePoissonParametersTagged | C3dNoiseSpeckleParametersTagged | C3dNoiseSaltPepperParametersTagged | C3dNoMulticomponentSplitParametersTagged | C3dNormalizeLocalWindowParametersTagged | C3dNormpdfParametersTagged | C3dNoroundParametersTagged | C3dNospmParametersTagged | C3dOutputParametersTagged | C3dOutputMulticomponentParametersTagged | C3dOutputMultipleMulticomponentParametersTagged | C3dOrientParametersTagged | C3dOutputMultipleParametersTagged | C3dOrient1ParametersTagged | C3dOriginParametersTagged | C3dOriginVoxelParametersTagged | C3dOriginVoxelCoordParametersTagged | C3dOverlapParametersTagged | C3dOverlayLabelImageParametersTagged | C3dPadParametersTagged | C3dPadToParametersTagged | C3dPcaParametersTagged | C3dPercentIntensityModeParametersTagged | C3dPixelParametersTagged | C3dPopParametersTagged | C3dPopasParametersTagged | C3dProbeParametersTagged | C3dPushParametersTagged | C3dRankParametersTagged | C3dReciprocalParametersTagged | C3dRegionParametersTagged | C3dReorderParametersTagged | C3dRetainLabelsParametersTagged | C3dRfApplyParametersTagged | C3dRfTrainParametersTagged | C3dRfParamPatchParametersTagged | C3dRfParamUsexyzParametersTagged | C3dRfParamNousexyzParametersTagged | C3dRfParamNtreesParametersTagged | C3dRfParamTreedepthParametersTagged | C3dSetSformParametersTagged | C3dReplaceParametersTagged | C3dResampleParametersTagged | C3dResampleIsoParametersTagged | C3dResampleMmParametersTagged | C3dResliceItkParametersTagged | C3dResliceMatrixParametersTagged | C3dResliceIdentityParametersTagged | C3dRgb2hsvParametersTagged | C3dRmsParametersTagged | C3dRoundParametersTagged | C3dScaleParametersTagged | C3dSetSform1ParametersTagged | C3dSinParametersTagged | C3dSliceParametersTagged | C3dSliceAllParametersTagged | C3dSharpenParametersTagged | C3dShiftParametersTagged | C3dSignedDistanceTransformParametersTagged | C3dSmoothParametersTagged | C3dSmoothFastParametersTagged | C3dSpacingParametersTagged | C3dSplitParametersTagged | C3dSqrtParametersTagged | C3dStapleParametersTagged | C3dStructureTensorEigenvaluesParametersTagged | C3dSpmParametersTagged | C3dSubtractParametersTagged | C3dSupervoxelParametersTagged | C3dStretchParametersTagged | C3dSwapdimParametersTagged | C3dTestImageParametersTagged | C3dTestProbeParametersTagged | C3dThresholdParametersTagged | C3dTileParametersTagged | C3dTrimParametersTagged | C3dTrimToSizeParametersTagged | C3dTypeParametersTagged | C3dVerboseParametersTagged | C3dNoverboseParametersTagged | C3dVersionParametersTagged | C3dVoteParametersTagged | C3dVoteMrfParametersTagged | C3dVoteLabelParametersTagged | C3dVoxelSumParametersTagged | C3dVoxelIntegralParametersTagged | C3dVoxelwiseRegressionParametersTagged | C3dWarpParametersTagged | C3dWarpLabelParametersTagged | C3dWrapParametersTagged | C3dWeightedSumParametersTagged | C3dWeightedSumVoxelwiseParametersTagged>,
     output: string,
-): C3dParameters {
+): C3dParametersTagged {
     const params = {
-        "@type": "c3d.c3d" as const,
+        "@type": "c3d/c3d" as const,
         "input": input,
         "operations": operations,
         "output": output,
@@ -9585,7 +9763,7 @@ function c3d_cargs(
     const cargs: string[] = [];
     cargs.push("c3d");
     cargs.push((params["input"] ?? null).map(f => execution.inputFile(f)).join(" "));
-    cargs.push(...(params["operations"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+    cargs.push(...(params["operations"] ?? null).map(s => c3d_operations_cargs_dyn_fn(s["@type"])(s, execution)).flat());
     cargs.push(
         "-o",
         (params["output"] ?? null)
@@ -9608,7 +9786,7 @@ function c3d_outputs(
 ): C3dOutputs {
     const ret: C3dOutputs = {
         root: execution.outputFile("."),
-        operations: (params["operations"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null),
+        operations: (params["operations"] ?? null).map(i => c3d_operations_outputs_dyn_fn(i["@type"])?.(i, execution) ?? null),
     };
     return ret;
 }
@@ -9660,7 +9838,7 @@ function c3d_execute(
  */
 function c3d_(
     input: Array<InputPathType>,
-    operations: Array<C3dAccumParameters | C3dAcosParameters | C3dAddParameters | C3dAlignLandmarksParameters | C3dAnisotropicDiffusionParameters | C3dAntialiasParameters | C3dSetParameters | C3dAsinParameters | C3dAtan2Parameters | C3dBackgroundParameters | C3dN4BiasCorrectionParameters | C3dBinarizeParameters | C3dCannyParameters | C3dCeilParameters | C3dCentroidParameters | C3dCentroidMarkParameters | C3dConnectedComponentsParameters | C3dClearParameters | C3dClipParameters | C3dColorMapParameters | C3dCompressParameters | C3dNoCompressParameters | C3dConvParameters | C3dCoordinateMapVoxelParameters | C3dCoordinateMapPhysicalParameters | C3dCopyTransformParameters | C3dCosParameters | C3dCreateParameters | C3dDicomSeriesListParameters | C3dDicomSeriesReadParameters | C3dDilateParameters | C3dDivideParameters | C3dDuplicateParameters | C3dEndaccumParameters | C3dEndforParameters | C3dErodeParameters | C3dErfParameters | C3dExpParameters | C3dExportPatchesParameters | C3dExportPatchesAugParameters | C3dExtrudeSegParameters | C3dFillBackgroundWithNoiseParameters | C3dFftParameters | C3dFlipParameters | C3dFloorParameters | C3dForeachParameters | C3dForeachCompParameters | C3dGlmParameters | C3dGradientParameters | C3dHelpParameters | C3dHolefillParameters | C3dHessianEigenvaluesParameters | C3dHessianObjectnessParameters | C3dHistogramMatchParameters | C3dInfoParameters | C3dInfoFullParameters | C3dInsertParameters | C3dInterpolationParameters | C3dIterationsParameters | C3dLabelOverlapParameters | C3dLabelStatisticsParameters | C3dLandmarksToSpheresParameters | C3dLaplacianParameters | C3dLevelsetParameters | C3dLevelsetCurvatureParameters | C3dLevelsetAdvectionParameters | C3dLogParameters | C3dLog10Parameters | C3dManualParameters | C3dMatchBoundingBoxParameters | C3dMaximumParameters | C3dMulticomponentSplitParameters | C3dMeanParameters | C3dMedianFilterParameters | C3dMergeParameters | C3dMeanFilterParameters | C3dMutualInfoParameters | C3dMinimumParameters | C3dMixtureModelParameters | C3dMomentsParameters | C3dMattesMutualInfoParameters | C3dMeanSquareParameters | C3dMultiplyParameters | C3dNormalizedCrossCorrelationParameters | C3dNormalizedCorrelationParameters | C3dNormalizedMutualInfoParameters | C3dNoiseGaussianParameters | C3dNoisePoissonParameters | C3dNoiseSpeckleParameters | C3dNoiseSaltPepperParameters | C3dNoMulticomponentSplitParameters | C3dNormalizeLocalWindowParameters | C3dNormpdfParameters | C3dNoroundParameters | C3dNospmParameters | C3dOutputParameters | C3dOutputMulticomponentParameters | C3dOutputMultipleMulticomponentParameters | C3dOrientParameters | C3dOutputMultipleParameters | C3dOrient1Parameters | C3dOriginParameters | C3dOriginVoxelParameters | C3dOriginVoxelCoordParameters | C3dOverlapParameters | C3dOverlayLabelImageParameters | C3dPadParameters | C3dPadToParameters | C3dPcaParameters | C3dPercentIntensityModeParameters | C3dPixelParameters | C3dPopParameters | C3dPopasParameters | C3dProbeParameters | C3dPushParameters | C3dRankParameters | C3dReciprocalParameters | C3dRegionParameters | C3dReorderParameters | C3dRetainLabelsParameters | C3dRfApplyParameters | C3dRfTrainParameters | C3dRfParamPatchParameters | C3dRfParamUsexyzParameters | C3dRfParamNousexyzParameters | C3dRfParamNtreesParameters | C3dRfParamTreedepthParameters | C3dSetSformParameters | C3dReplaceParameters | C3dResampleParameters | C3dResampleIsoParameters | C3dResampleMmParameters | C3dResliceItkParameters | C3dResliceMatrixParameters | C3dResliceIdentityParameters | C3dRgb2hsvParameters | C3dRmsParameters | C3dRoundParameters | C3dScaleParameters | C3dSetSform1Parameters | C3dSinParameters | C3dSliceParameters | C3dSliceAllParameters | C3dSharpenParameters | C3dShiftParameters | C3dSignedDistanceTransformParameters | C3dSmoothParameters | C3dSmoothFastParameters | C3dSpacingParameters | C3dSplitParameters | C3dSqrtParameters | C3dStapleParameters | C3dStructureTensorEigenvaluesParameters | C3dSpmParameters | C3dSubtractParameters | C3dSupervoxelParameters | C3dStretchParameters | C3dSwapdimParameters | C3dTestImageParameters | C3dTestProbeParameters | C3dThresholdParameters | C3dTileParameters | C3dTrimParameters | C3dTrimToSizeParameters | C3dTypeParameters | C3dVerboseParameters | C3dNoverboseParameters | C3dVersionParameters | C3dVoteParameters | C3dVoteMrfParameters | C3dVoteLabelParameters | C3dVoxelSumParameters | C3dVoxelIntegralParameters | C3dVoxelwiseRegressionParameters | C3dWarpParameters | C3dWarpLabelParameters | C3dWrapParameters | C3dWeightedSumParameters | C3dWeightedSumVoxelwiseParameters>,
+    operations: Array<C3dAccumParametersTagged | C3dAcosParametersTagged | C3dAddParametersTagged | C3dAlignLandmarksParametersTagged | C3dAnisotropicDiffusionParametersTagged | C3dAntialiasParametersTagged | C3dSetParametersTagged | C3dAsinParametersTagged | C3dAtan2ParametersTagged | C3dBackgroundParametersTagged | C3dN4BiasCorrectionParametersTagged | C3dBinarizeParametersTagged | C3dCannyParametersTagged | C3dCeilParametersTagged | C3dCentroidParametersTagged | C3dCentroidMarkParametersTagged | C3dConnectedComponentsParametersTagged | C3dClearParametersTagged | C3dClipParametersTagged | C3dColorMapParametersTagged | C3dCompressParametersTagged | C3dNoCompressParametersTagged | C3dConvParametersTagged | C3dCoordinateMapVoxelParametersTagged | C3dCoordinateMapPhysicalParametersTagged | C3dCopyTransformParametersTagged | C3dCosParametersTagged | C3dCreateParametersTagged | C3dDicomSeriesListParametersTagged | C3dDicomSeriesReadParametersTagged | C3dDilateParametersTagged | C3dDivideParametersTagged | C3dDuplicateParametersTagged | C3dEndaccumParametersTagged | C3dEndforParametersTagged | C3dErodeParametersTagged | C3dErfParametersTagged | C3dExpParametersTagged | C3dExportPatchesParametersTagged | C3dExportPatchesAugParametersTagged | C3dExtrudeSegParametersTagged | C3dFillBackgroundWithNoiseParametersTagged | C3dFftParametersTagged | C3dFlipParametersTagged | C3dFloorParametersTagged | C3dForeachParametersTagged | C3dForeachCompParametersTagged | C3dGlmParametersTagged | C3dGradientParametersTagged | C3dHelpParametersTagged | C3dHolefillParametersTagged | C3dHessianEigenvaluesParametersTagged | C3dHessianObjectnessParametersTagged | C3dHistogramMatchParametersTagged | C3dInfoParametersTagged | C3dInfoFullParametersTagged | C3dInsertParametersTagged | C3dInterpolationParametersTagged | C3dIterationsParametersTagged | C3dLabelOverlapParametersTagged | C3dLabelStatisticsParametersTagged | C3dLandmarksToSpheresParametersTagged | C3dLaplacianParametersTagged | C3dLevelsetParametersTagged | C3dLevelsetCurvatureParametersTagged | C3dLevelsetAdvectionParametersTagged | C3dLogParametersTagged | C3dLog10ParametersTagged | C3dManualParametersTagged | C3dMatchBoundingBoxParametersTagged | C3dMaximumParametersTagged | C3dMulticomponentSplitParametersTagged | C3dMeanParametersTagged | C3dMedianFilterParametersTagged | C3dMergeParametersTagged | C3dMeanFilterParametersTagged | C3dMutualInfoParametersTagged | C3dMinimumParametersTagged | C3dMixtureModelParametersTagged | C3dMomentsParametersTagged | C3dMattesMutualInfoParametersTagged | C3dMeanSquareParametersTagged | C3dMultiplyParametersTagged | C3dNormalizedCrossCorrelationParametersTagged | C3dNormalizedCorrelationParametersTagged | C3dNormalizedMutualInfoParametersTagged | C3dNoiseGaussianParametersTagged | C3dNoisePoissonParametersTagged | C3dNoiseSpeckleParametersTagged | C3dNoiseSaltPepperParametersTagged | C3dNoMulticomponentSplitParametersTagged | C3dNormalizeLocalWindowParametersTagged | C3dNormpdfParametersTagged | C3dNoroundParametersTagged | C3dNospmParametersTagged | C3dOutputParametersTagged | C3dOutputMulticomponentParametersTagged | C3dOutputMultipleMulticomponentParametersTagged | C3dOrientParametersTagged | C3dOutputMultipleParametersTagged | C3dOrient1ParametersTagged | C3dOriginParametersTagged | C3dOriginVoxelParametersTagged | C3dOriginVoxelCoordParametersTagged | C3dOverlapParametersTagged | C3dOverlayLabelImageParametersTagged | C3dPadParametersTagged | C3dPadToParametersTagged | C3dPcaParametersTagged | C3dPercentIntensityModeParametersTagged | C3dPixelParametersTagged | C3dPopParametersTagged | C3dPopasParametersTagged | C3dProbeParametersTagged | C3dPushParametersTagged | C3dRankParametersTagged | C3dReciprocalParametersTagged | C3dRegionParametersTagged | C3dReorderParametersTagged | C3dRetainLabelsParametersTagged | C3dRfApplyParametersTagged | C3dRfTrainParametersTagged | C3dRfParamPatchParametersTagged | C3dRfParamUsexyzParametersTagged | C3dRfParamNousexyzParametersTagged | C3dRfParamNtreesParametersTagged | C3dRfParamTreedepthParametersTagged | C3dSetSformParametersTagged | C3dReplaceParametersTagged | C3dResampleParametersTagged | C3dResampleIsoParametersTagged | C3dResampleMmParametersTagged | C3dResliceItkParametersTagged | C3dResliceMatrixParametersTagged | C3dResliceIdentityParametersTagged | C3dRgb2hsvParametersTagged | C3dRmsParametersTagged | C3dRoundParametersTagged | C3dScaleParametersTagged | C3dSetSform1ParametersTagged | C3dSinParametersTagged | C3dSliceParametersTagged | C3dSliceAllParametersTagged | C3dSharpenParametersTagged | C3dShiftParametersTagged | C3dSignedDistanceTransformParametersTagged | C3dSmoothParametersTagged | C3dSmoothFastParametersTagged | C3dSpacingParametersTagged | C3dSplitParametersTagged | C3dSqrtParametersTagged | C3dStapleParametersTagged | C3dStructureTensorEigenvaluesParametersTagged | C3dSpmParametersTagged | C3dSubtractParametersTagged | C3dSupervoxelParametersTagged | C3dStretchParametersTagged | C3dSwapdimParametersTagged | C3dTestImageParametersTagged | C3dTestProbeParametersTagged | C3dThresholdParametersTagged | C3dTileParametersTagged | C3dTrimParametersTagged | C3dTrimToSizeParametersTagged | C3dTypeParametersTagged | C3dVerboseParametersTagged | C3dNoverboseParametersTagged | C3dVersionParametersTagged | C3dVoteParametersTagged | C3dVoteMrfParametersTagged | C3dVoteLabelParametersTagged | C3dVoxelSumParametersTagged | C3dVoxelIntegralParametersTagged | C3dVoxelwiseRegressionParametersTagged | C3dWarpParametersTagged | C3dWarpLabelParametersTagged | C3dWrapParametersTagged | C3dWeightedSumParametersTagged | C3dWeightedSumVoxelwiseParametersTagged>,
     output: string,
     runner: Runner | null = null,
 ): C3dOutputs {
@@ -9671,188 +9849,8 @@ function c3d_(
 
 export {
       C3D_METADATA,
-      C3dAccumParameters,
-      C3dAcosParameters,
-      C3dAddParameters,
-      C3dAlignLandmarksParameters,
-      C3dAnisotropicDiffusionParameters,
-      C3dAntialiasParameters,
-      C3dAsinParameters,
-      C3dAtan2Parameters,
-      C3dBackgroundParameters,
-      C3dBinarizeParameters,
-      C3dCannyParameters,
-      C3dCeilParameters,
-      C3dCentroidMarkParameters,
-      C3dCentroidParameters,
-      C3dClearParameters,
-      C3dClipParameters,
-      C3dColorMapParameters,
-      C3dCompressParameters,
-      C3dConnectedComponentsParameters,
-      C3dConvParameters,
-      C3dCoordinateMapPhysicalParameters,
-      C3dCoordinateMapVoxelParameters,
-      C3dCopyTransformParameters,
-      C3dCosParameters,
-      C3dCreateParameters,
-      C3dDicomSeriesListParameters,
-      C3dDicomSeriesReadParameters,
-      C3dDilateParameters,
-      C3dDivideParameters,
-      C3dDuplicateParameters,
-      C3dEndaccumParameters,
-      C3dEndforParameters,
-      C3dErfParameters,
-      C3dErodeParameters,
-      C3dExpParameters,
-      C3dExportPatchesAugParameters,
-      C3dExportPatchesParameters,
-      C3dExtrudeSegParameters,
-      C3dFftParameters,
-      C3dFillBackgroundWithNoiseParameters,
-      C3dFlipParameters,
-      C3dFloorParameters,
-      C3dForeachCompParameters,
-      C3dForeachParameters,
-      C3dGlmParameters,
-      C3dGradientParameters,
-      C3dHelpParameters,
-      C3dHessianEigenvaluesParameters,
-      C3dHessianObjectnessParameters,
-      C3dHistogramMatchParameters,
-      C3dHolefillParameters,
-      C3dInfoFullParameters,
-      C3dInfoParameters,
-      C3dInsertParameters,
-      C3dInterpolationParameters,
-      C3dIterationsParameters,
-      C3dLabelOverlapParameters,
-      C3dLabelStatisticsParameters,
-      C3dLandmarksToSpheresParameters,
-      C3dLaplacianParameters,
-      C3dLevelsetAdvectionParameters,
-      C3dLevelsetCurvatureParameters,
-      C3dLevelsetParameters,
-      C3dLog10Parameters,
-      C3dLogParameters,
-      C3dManualParameters,
-      C3dMatchBoundingBoxParameters,
-      C3dMattesMutualInfoParameters,
-      C3dMaximumParameters,
-      C3dMeanFilterParameters,
-      C3dMeanParameters,
-      C3dMeanSquareParameters,
-      C3dMedianFilterParameters,
-      C3dMergeParameters,
-      C3dMinimumParameters,
-      C3dMixtureModelParameters,
-      C3dMomentsParameters,
-      C3dMulticomponentSplitParameters,
-      C3dMultiplyParameters,
-      C3dMutualInfoParameters,
-      C3dN4BiasCorrectionParameters,
-      C3dNoCompressParameters,
-      C3dNoMulticomponentSplitParameters,
-      C3dNoiseGaussianParameters,
-      C3dNoisePoissonParameters,
-      C3dNoiseSaltPepperParameters,
-      C3dNoiseSpeckleParameters,
-      C3dNormalizeLocalWindowParameters,
-      C3dNormalizedCorrelationParameters,
-      C3dNormalizedCrossCorrelationParameters,
-      C3dNormalizedMutualInfoParameters,
-      C3dNormpdfParameters,
-      C3dNoroundParameters,
-      C3dNospmParameters,
-      C3dNoverboseParameters,
-      C3dOrient1Parameters,
-      C3dOrientParameters,
-      C3dOriginParameters,
-      C3dOriginVoxelCoordParameters,
-      C3dOriginVoxelParameters,
-      C3dOutputMulticomponentParameters,
-      C3dOutputMultipleMulticomponentParameters,
-      C3dOutputMultipleParameters,
       C3dOutputOutputs,
-      C3dOutputParameters,
       C3dOutputs,
-      C3dOverlapParameters,
-      C3dOverlayLabelImageParameters,
-      C3dPadParameters,
-      C3dPadToParameters,
-      C3dParameters,
-      C3dPcaParameters,
-      C3dPercentIntensityModeParameters,
-      C3dPixelParameters,
-      C3dPopParameters,
-      C3dPopasParameters,
-      C3dProbeParameters,
-      C3dPushParameters,
-      C3dRankParameters,
-      C3dReciprocalParameters,
-      C3dRegionParameters,
-      C3dReorderParameters,
-      C3dReplaceParameters,
-      C3dResampleIsoParameters,
-      C3dResampleMmParameters,
-      C3dResampleParameters,
-      C3dResliceIdentityParameters,
-      C3dResliceItkParameters,
-      C3dResliceMatrixParameters,
-      C3dRetainLabelsParameters,
-      C3dRfApplyParameters,
-      C3dRfParamNousexyzParameters,
-      C3dRfParamNtreesParameters,
-      C3dRfParamPatchParameters,
-      C3dRfParamTreedepthParameters,
-      C3dRfParamUsexyzParameters,
-      C3dRfTrainParameters,
-      C3dRgb2hsvParameters,
-      C3dRmsParameters,
-      C3dRoundParameters,
-      C3dScaleParameters,
-      C3dSetParameters,
-      C3dSetSform1Parameters,
-      C3dSetSformParameters,
-      C3dSharpenParameters,
-      C3dShiftParameters,
-      C3dSignedDistanceTransformParameters,
-      C3dSinParameters,
-      C3dSliceAllParameters,
-      C3dSliceParameters,
-      C3dSmoothFastParameters,
-      C3dSmoothParameters,
-      C3dSpacingParameters,
-      C3dSplitParameters,
-      C3dSpmParameters,
-      C3dSqrtParameters,
-      C3dStapleParameters,
-      C3dStretchParameters,
-      C3dStructureTensorEigenvaluesParameters,
-      C3dSubtractParameters,
-      C3dSupervoxelParameters,
-      C3dSwapdimParameters,
-      C3dTestImageParameters,
-      C3dTestProbeParameters,
-      C3dThresholdParameters,
-      C3dTileParameters,
-      C3dTrimParameters,
-      C3dTrimToSizeParameters,
-      C3dTypeParameters,
-      C3dVerboseParameters,
-      C3dVersionParameters,
-      C3dVoteLabelParameters,
-      C3dVoteMrfParameters,
-      C3dVoteParameters,
-      C3dVoxelIntegralParameters,
-      C3dVoxelSumParameters,
-      C3dVoxelwiseRegressionParameters,
-      C3dWarpLabelParameters,
-      C3dWarpParameters,
-      C3dWeightedSumParameters,
-      C3dWeightedSumVoxelwiseParameters,
-      C3dWrapParameters,
       c3d_,
       c3d__help_params,
       c3d_accum_params,

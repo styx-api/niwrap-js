@@ -12,50 +12,18 @@ const V_3D_ABOVERLAP_METADATA: Metadata = {
 
 
 interface V3dAboverlapParameters {
-    "@type": "afni.3dABoverlap";
+    "@type"?: "afni/3dABoverlap";
     "dataset_a": InputPathType;
     "dataset_b": InputPathType;
     "no_automask": boolean;
     "quiet": boolean;
     "verbose": boolean;
 }
+type V3dAboverlapParametersTagged = Required<Pick<V3dAboverlapParameters, '@type'>> & V3dAboverlapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dABoverlap": v_3d_aboverlap_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_aboverlap(...)`.
+ * Output object returned when calling `V3dAboverlapParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function v_3d_aboverlap_params(
     no_automask: boolean = false,
     quiet: boolean = false,
     verbose: boolean = false,
-): V3dAboverlapParameters {
+): V3dAboverlapParametersTagged {
     const params = {
-        "@type": "afni.3dABoverlap" as const,
+        "@type": "afni/3dABoverlap" as const,
         "dataset_a": dataset_a,
         "dataset_b": dataset_b,
         "no_automask": no_automask,
@@ -113,13 +81,13 @@ function v_3d_aboverlap_cargs(
     cargs.push("3dABoverlap");
     cargs.push(execution.inputFile((params["dataset_a"] ?? null)));
     cargs.push(execution.inputFile((params["dataset_b"] ?? null)));
-    if ((params["no_automask"] ?? null)) {
+    if ((params["no_automask"] ?? false)) {
         cargs.push("-no_automask");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
     return cargs;
@@ -206,7 +174,6 @@ function v_3d_aboverlap(
 
 export {
       V3dAboverlapOutputs,
-      V3dAboverlapParameters,
       V_3D_ABOVERLAP_METADATA,
       v_3d_aboverlap,
       v_3d_aboverlap_execute,

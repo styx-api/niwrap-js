@@ -12,7 +12,7 @@ const V__DJUNCT_OVERLAP_CHECK_METADATA: Metadata = {
 
 
 interface VDjunctOverlapCheckParameters {
-    "@type": "afni.@djunct_overlap_check";
+    "@type"?: "afni/@djunct_overlap_check";
     "ulay": InputPathType;
     "olay": InputPathType;
     "prefix": string;
@@ -38,43 +38,11 @@ interface VDjunctOverlapCheckParameters {
     "no_sag": boolean;
     "no_clean": boolean;
 }
+type VDjunctOverlapCheckParametersTagged = Required<Pick<VDjunctOverlapCheckParameters, '@type'>> & VDjunctOverlapCheckParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@djunct_overlap_check": v__djunct_overlap_check_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__djunct_overlap_check(...)`.
+ * Output object returned when calling `VDjunctOverlapCheckParameters(...)`.
  *
  * @interface
  */
@@ -141,9 +109,9 @@ function v__djunct_overlap_check_params(
     no_axi: boolean = false,
     no_sag: boolean = false,
     no_clean: boolean = false,
-): VDjunctOverlapCheckParameters {
+): VDjunctOverlapCheckParametersTagged {
     const params = {
-        "@type": "afni.@djunct_overlap_check" as const,
+        "@type": "afni/@djunct_overlap_check" as const,
         "ulay": ulay,
         "olay": olay,
         "prefix": prefix,
@@ -299,25 +267,25 @@ function v__djunct_overlap_check_cargs(
             (params["label_mode"] ?? null)
         );
     }
-    if ((params["pbar_posonly_off"] ?? null)) {
+    if ((params["pbar_posonly_off"] ?? false)) {
         cargs.push("-pbar_posonly_off");
     }
-    if ((params["edgy_ulay"] ?? null)) {
+    if ((params["edgy_ulay"] ?? false)) {
         cargs.push("-edgy_ulay");
     }
-    if ((params["set_dicom_xyz_off"] ?? null)) {
+    if ((params["set_dicom_xyz_off"] ?? false)) {
         cargs.push("-set_dicom_xyz_off");
     }
-    if ((params["no_cor"] ?? null)) {
+    if ((params["no_cor"] ?? false)) {
         cargs.push("-no_cor");
     }
-    if ((params["no_axi"] ?? null)) {
+    if ((params["no_axi"] ?? false)) {
         cargs.push("-no_axi");
     }
-    if ((params["no_sag"] ?? null)) {
+    if ((params["no_sag"] ?? false)) {
         cargs.push("-no_sag");
     }
-    if ((params["no_clean"] ?? null)) {
+    if ((params["no_clean"] ?? false)) {
         cargs.push("-no_clean");
     }
     return cargs;
@@ -442,7 +410,6 @@ function v__djunct_overlap_check(
 
 export {
       VDjunctOverlapCheckOutputs,
-      VDjunctOverlapCheckParameters,
       V__DJUNCT_OVERLAP_CHECK_METADATA,
       v__djunct_overlap_check,
       v__djunct_overlap_check_execute,

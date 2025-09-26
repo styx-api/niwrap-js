@@ -12,49 +12,16 @@ const MRI_DCT_ALIGN_METADATA: Metadata = {
 
 
 interface MriDctAlignParameters {
-    "@type": "freesurfer.mri_dct_align";
+    "@type"?: "freesurfer/mri_dct_align";
     "source": InputPathType;
     "destination": InputPathType;
     "output_xform": string;
 }
+type MriDctAlignParametersTagged = Required<Pick<MriDctAlignParameters, '@type'>> & MriDctAlignParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_dct_align": mri_dct_align_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_dct_align": mri_dct_align_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_dct_align(...)`.
+ * Output object returned when calling `MriDctAlignParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mri_dct_align_params(
     source: InputPathType,
     destination: InputPathType,
     output_xform: string,
-): MriDctAlignParameters {
+): MriDctAlignParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_dct_align" as const,
+        "@type": "freesurfer/mri_dct_align" as const,
         "source": source,
         "destination": destination,
         "output_xform": output_xform,
@@ -193,7 +160,6 @@ function mri_dct_align(
 export {
       MRI_DCT_ALIGN_METADATA,
       MriDctAlignOutputs,
-      MriDctAlignParameters,
       mri_dct_align,
       mri_dct_align_execute,
       mri_dct_align_params,

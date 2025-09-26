@@ -12,7 +12,7 @@ const V_3D_BANDPASS_METADATA: Metadata = {
 
 
 interface V3dBandpassParameters {
-    "@type": "afni.3dBandpass";
+    "@type"?: "afni/3dBandpass";
     "prefix"?: string | null | undefined;
     "automask": boolean;
     "blur"?: number | null | undefined;
@@ -31,44 +31,11 @@ interface V3dBandpassParameters {
     "outputtype"?: "NIFTI" | "AFNI" | "NIFTI_GZ" | null | undefined;
     "tr"?: number | null | undefined;
 }
+type V3dBandpassParametersTagged = Required<Pick<V3dBandpassParameters, '@type'>> & V3dBandpassParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dBandpass": v_3d_bandpass_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dBandpass": v_3d_bandpass_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_bandpass(...)`.
+ * Output object returned when calling `V3dBandpassParameters(...)`.
  *
  * @interface
  */
@@ -125,9 +92,9 @@ function v_3d_bandpass_params(
     orthogonalize_file: Array<InputPathType> | null = null,
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     tr: number | null = null,
-): V3dBandpassParameters {
+): V3dBandpassParametersTagged {
     const params = {
-        "@type": "afni.3dBandpass" as const,
+        "@type": "afni/3dBandpass" as const,
         "automask": automask,
         "despike": despike,
         "highpass": highpass,
@@ -188,7 +155,7 @@ function v_3d_bandpass_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     if ((params["blur"] ?? null) !== null) {
@@ -197,7 +164,7 @@ function v_3d_bandpass_cargs(
             String((params["blur"] ?? null))
         );
     }
-    if ((params["despike"] ?? null)) {
+    if ((params["despike"] ?? false)) {
         cargs.push("-despike");
     }
     cargs.push(String((params["highpass"] ?? null)));
@@ -221,13 +188,13 @@ function v_3d_bandpass_cargs(
             String((params["nfft"] ?? null))
         );
     }
-    if ((params["no_detrend"] ?? null)) {
+    if ((params["no_detrend"] ?? false)) {
         cargs.push("-nodetrend");
     }
-    if ((params["normalize"] ?? null)) {
+    if ((params["normalize"] ?? false)) {
         cargs.push("-norm");
     }
-    if ((params["notrans"] ?? null)) {
+    if ((params["notrans"] ?? false)) {
         cargs.push("-notrans");
     }
     if ((params["orthogonalize_dset"] ?? null) !== null) {
@@ -360,7 +327,6 @@ function v_3d_bandpass(
 
 export {
       V3dBandpassOutputs,
-      V3dBandpassParameters,
       V_3D_BANDPASS_METADATA,
       v_3d_bandpass,
       v_3d_bandpass_execute,

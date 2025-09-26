@@ -12,46 +12,14 @@ const MPR2MNI305_METADATA: Metadata = {
 
 
 interface Mpr2mni305Parameters {
-    "@type": "freesurfer.mpr2mni305";
+    "@type"?: "freesurfer/mpr2mni305";
     "mpr_anat": string;
 }
+type Mpr2mni305ParametersTagged = Required<Pick<Mpr2mni305Parameters, '@type'>> & Mpr2mni305Parameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mpr2mni305": mpr2mni305_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mpr2mni305(...)`.
+ * Output object returned when calling `Mpr2mni305Parameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface Mpr2mni305Outputs {
  */
 function mpr2mni305_params(
     mpr_anat: string,
-): Mpr2mni305Parameters {
+): Mpr2mni305ParametersTagged {
     const params = {
-        "@type": "freesurfer.mpr2mni305" as const,
+        "@type": "freesurfer/mpr2mni305" as const,
         "mpr_anat": mpr_anat,
     };
     return params;
@@ -173,7 +141,6 @@ function mpr2mni305(
 export {
       MPR2MNI305_METADATA,
       Mpr2mni305Outputs,
-      Mpr2mni305Parameters,
       mpr2mni305,
       mpr2mni305_execute,
       mpr2mni305_params,

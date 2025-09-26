@@ -12,22 +12,24 @@ const WARP2METRIC_METADATA: Metadata = {
 
 
 interface Warp2metricFcParameters {
-    "@type": "mrtrix.warp2metric.fc";
+    "@type"?: "fc";
     "template_fixel_directory": InputPathType;
     "output_fixel_directory": string;
     "output_fixel_data": string;
 }
+type Warp2metricFcParametersTagged = Required<Pick<Warp2metricFcParameters, '@type'>> & Warp2metricFcParameters;
 
 
 interface Warp2metricConfigParameters {
-    "@type": "mrtrix.warp2metric.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Warp2metricConfigParametersTagged = Required<Pick<Warp2metricConfigParameters, '@type'>> & Warp2metricConfigParameters;
 
 
 interface Warp2metricParameters {
-    "@type": "mrtrix.warp2metric";
+    "@type"?: "mrtrix/warp2metric";
     "fc"?: Warp2metricFcParameters | null | undefined;
     "jmat"?: string | null | undefined;
     "jdet"?: string | null | undefined;
@@ -41,42 +43,7 @@ interface Warp2metricParameters {
     "version": boolean;
     "in": InputPathType;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.warp2metric": warp2metric_cargs,
-        "mrtrix.warp2metric.fc": warp2metric_fc_cargs,
-        "mrtrix.warp2metric.config": warp2metric_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.warp2metric": warp2metric_outputs,
-    };
-    return outputsFuncs[t];
-}
+type Warp2metricParametersTagged = Required<Pick<Warp2metricParameters, '@type'>> & Warp2metricParameters;
 
 
 /**
@@ -92,9 +59,9 @@ function warp2metric_fc_params(
     template_fixel_directory: InputPathType,
     output_fixel_directory: string,
     output_fixel_data: string,
-): Warp2metricFcParameters {
+): Warp2metricFcParametersTagged {
     const params = {
-        "@type": "mrtrix.warp2metric.fc" as const,
+        "@type": "fc" as const,
         "template_fixel_directory": template_fixel_directory,
         "output_fixel_directory": output_fixel_directory,
         "output_fixel_data": output_fixel_data,
@@ -135,9 +102,9 @@ function warp2metric_fc_cargs(
 function warp2metric_config_params(
     key: string,
     value: string,
-): Warp2metricConfigParameters {
+): Warp2metricConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.warp2metric.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -166,7 +133,7 @@ function warp2metric_config_cargs(
 
 
 /**
- * Output object returned when calling `warp2metric(...)`.
+ * Output object returned when calling `Warp2metricParameters(...)`.
  *
  * @interface
  */
@@ -217,9 +184,9 @@ function warp2metric_params(
     config: Array<Warp2metricConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Warp2metricParameters {
+): Warp2metricParametersTagged {
     const params = {
-        "@type": "mrtrix.warp2metric" as const,
+        "@type": "mrtrix/warp2metric" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -262,7 +229,7 @@ function warp2metric_cargs(
     const cargs: string[] = [];
     cargs.push("warp2metric");
     if ((params["fc"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fc"] ?? null)["@type"])((params["fc"] ?? null), execution));
+        cargs.push(...warp2metric_fc_cargs((params["fc"] ?? null), execution));
     }
     if ((params["jmat"] ?? null) !== null) {
         cargs.push(
@@ -276,16 +243,16 @@ function warp2metric_cargs(
             (params["jdet"] ?? null)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -295,12 +262,12 @@ function warp2metric_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => warp2metric_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["in"] ?? null)));
@@ -416,10 +383,7 @@ function warp2metric(
 
 export {
       WARP2METRIC_METADATA,
-      Warp2metricConfigParameters,
-      Warp2metricFcParameters,
       Warp2metricOutputs,
-      Warp2metricParameters,
       warp2metric,
       warp2metric_config_params,
       warp2metric_execute,

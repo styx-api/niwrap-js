@@ -12,7 +12,7 @@ const MRI_FUSE_SEGMENTATIONS_METADATA: Metadata = {
 
 
 interface MriFuseSegmentationsParameters {
-    "@type": "freesurfer.mri_fuse_segmentations";
+    "@type"?: "freesurfer/mri_fuse_segmentations";
     "asegs": Array<InputPathType>;
     "nocc_asegs": Array<InputPathType>;
     "norm_volumes": Array<InputPathType>;
@@ -21,44 +21,11 @@ interface MriFuseSegmentationsParameters {
     "input_file": InputPathType;
     "output_file": string;
 }
+type MriFuseSegmentationsParametersTagged = Required<Pick<MriFuseSegmentationsParameters, '@type'>> & MriFuseSegmentationsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_fuse_segmentations": mri_fuse_segmentations_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_fuse_segmentations": mri_fuse_segmentations_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_fuse_segmentations(...)`.
+ * Output object returned when calling `MriFuseSegmentationsParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function mri_fuse_segmentations_params(
     output_file: string,
     transforms: Array<InputPathType> | null = null,
     sigma: number | null = null,
-): MriFuseSegmentationsParameters {
+): MriFuseSegmentationsParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_fuse_segmentations" as const,
+        "@type": "freesurfer/mri_fuse_segmentations" as const,
         "asegs": asegs,
         "nocc_asegs": nocc_asegs,
         "norm_volumes": norm_volumes,
@@ -244,7 +211,6 @@ function mri_fuse_segmentations(
 export {
       MRI_FUSE_SEGMENTATIONS_METADATA,
       MriFuseSegmentationsOutputs,
-      MriFuseSegmentationsParameters,
       mri_fuse_segmentations,
       mri_fuse_segmentations_execute,
       mri_fuse_segmentations_params,

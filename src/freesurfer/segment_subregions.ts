@@ -12,7 +12,7 @@ const SEGMENT_SUBREGIONS_METADATA: Metadata = {
 
 
 interface SegmentSubregionsParameters {
-    "@type": "freesurfer.segment_subregions";
+    "@type"?: "freesurfer/segment_subregions";
     "structure": string;
     "cross"?: string | null | undefined;
     "long_base"?: string | null | undefined;
@@ -23,43 +23,11 @@ interface SegmentSubregionsParameters {
     "debug": boolean;
     "threads"?: number | null | undefined;
 }
+type SegmentSubregionsParametersTagged = Required<Pick<SegmentSubregionsParameters, '@type'>> & SegmentSubregionsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.segment_subregions": segment_subregions_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `segment_subregions(...)`.
+ * Output object returned when calling `SegmentSubregionsParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +64,9 @@ function segment_subregions_params(
     out_dir: string | null = null,
     debug: boolean = false,
     threads: number | null = null,
-): SegmentSubregionsParameters {
+): SegmentSubregionsParametersTagged {
     const params = {
-        "@type": "freesurfer.segment_subregions" as const,
+        "@type": "freesurfer/segment_subregions" as const,
         "structure": structure,
         "debug": debug,
     };
@@ -178,7 +146,7 @@ function segment_subregions_cargs(
             (params["out_dir"] ?? null)
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     if ((params["threads"] ?? null) !== null) {
@@ -280,7 +248,6 @@ function segment_subregions(
 export {
       SEGMENT_SUBREGIONS_METADATA,
       SegmentSubregionsOutputs,
-      SegmentSubregionsParameters,
       segment_subregions,
       segment_subregions_execute,
       segment_subregions_params,

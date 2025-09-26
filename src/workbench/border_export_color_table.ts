@@ -12,48 +12,16 @@ const BORDER_EXPORT_COLOR_TABLE_METADATA: Metadata = {
 
 
 interface BorderExportColorTableParameters {
-    "@type": "workbench.border-export-color-table";
+    "@type"?: "workbench/border-export-color-table";
     "border_file": InputPathType;
     "table_out": string;
     "opt_class_colors": boolean;
 }
+type BorderExportColorTableParametersTagged = Required<Pick<BorderExportColorTableParameters, '@type'>> & BorderExportColorTableParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.border-export-color-table": border_export_color_table_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `border_export_color_table(...)`.
+ * Output object returned when calling `BorderExportColorTableParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function border_export_color_table_params(
     border_file: InputPathType,
     table_out: string,
     opt_class_colors: boolean = false,
-): BorderExportColorTableParameters {
+): BorderExportColorTableParametersTagged {
     const params = {
-        "@type": "workbench.border-export-color-table" as const,
+        "@type": "workbench/border-export-color-table" as const,
         "border_file": border_file,
         "table_out": table_out,
         "opt_class_colors": opt_class_colors,
@@ -106,7 +74,7 @@ function border_export_color_table_cargs(
     cargs.push("-border-export-color-table");
     cargs.push(execution.inputFile((params["border_file"] ?? null)));
     cargs.push((params["table_out"] ?? null));
-    if ((params["opt_class_colors"] ?? null)) {
+    if ((params["opt_class_colors"] ?? false)) {
         cargs.push("-class-colors");
     }
     return cargs;
@@ -194,7 +162,6 @@ function border_export_color_table(
 export {
       BORDER_EXPORT_COLOR_TABLE_METADATA,
       BorderExportColorTableOutputs,
-      BorderExportColorTableParameters,
       border_export_color_table,
       border_export_color_table_execute,
       border_export_color_table_params,

@@ -12,51 +12,18 @@ const V_3D_KRUSKAL_WALLIS_METADATA: Metadata = {
 
 
 interface V3dKruskalWallisParameters {
-    "@type": "afni.3dKruskalWallis";
+    "@type"?: "afni/3dKruskalWallis";
     "levels": number;
     "datasets": Array<string>;
     "workmem"?: number | null | undefined;
     "voxel"?: number | null | undefined;
     "output": string;
 }
+type V3dKruskalWallisParametersTagged = Required<Pick<V3dKruskalWallisParameters, '@type'>> & V3dKruskalWallisParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dKruskalWallis": v_3d_kruskal_wallis_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dKruskalWallis": v_3d_kruskal_wallis_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_kruskal_wallis(...)`.
+ * Output object returned when calling `V3dKruskalWallisParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function v_3d_kruskal_wallis_params(
     output: string,
     workmem: number | null = null,
     voxel: number | null = null,
-): V3dKruskalWallisParameters {
+): V3dKruskalWallisParametersTagged {
     const params = {
-        "@type": "afni.3dKruskalWallis" as const,
+        "@type": "afni/3dKruskalWallis" as const,
         "levels": levels,
         "datasets": datasets,
         "output": output,
@@ -229,7 +196,6 @@ function v_3d_kruskal_wallis(
 
 export {
       V3dKruskalWallisOutputs,
-      V3dKruskalWallisParameters,
       V_3D_KRUSKAL_WALLIS_METADATA,
       v_3d_kruskal_wallis,
       v_3d_kruskal_wallis_execute,

@@ -12,49 +12,16 @@ const ASEGSTATSDIFF_METADATA: Metadata = {
 
 
 interface AsegstatsdiffParameters {
-    "@type": "freesurfer.asegstatsdiff";
+    "@type"?: "freesurfer/asegstatsdiff";
     "subject1": string;
     "subject2": string;
     "outdir"?: string | null | undefined;
 }
+type AsegstatsdiffParametersTagged = Required<Pick<AsegstatsdiffParameters, '@type'>> & AsegstatsdiffParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.asegstatsdiff": asegstatsdiff_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.asegstatsdiff": asegstatsdiff_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `asegstatsdiff(...)`.
+ * Output object returned when calling `AsegstatsdiffParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function asegstatsdiff_params(
     subject1: string,
     subject2: string,
     outdir: string | null = null,
-): AsegstatsdiffParameters {
+): AsegstatsdiffParametersTagged {
     const params = {
-        "@type": "freesurfer.asegstatsdiff" as const,
+        "@type": "freesurfer/asegstatsdiff" as const,
         "subject1": subject1,
         "subject2": subject2,
     };
@@ -196,7 +163,6 @@ function asegstatsdiff(
 export {
       ASEGSTATSDIFF_METADATA,
       AsegstatsdiffOutputs,
-      AsegstatsdiffParameters,
       asegstatsdiff,
       asegstatsdiff_execute,
       asegstatsdiff_params,

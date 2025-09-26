@@ -12,51 +12,18 @@ const I_MATH_METADATA: Metadata = {
 
 
 interface IMathParameters {
-    "@type": "ants.iMath";
+    "@type"?: "ants/iMath";
     "image_dimension": 2 | 3 | 4;
     "output_image": string;
     "operations": string;
     "image1": InputPathType;
     "image2"?: InputPathType | null | undefined;
 }
+type IMathParametersTagged = Required<Pick<IMathParameters, '@type'>> & IMathParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.iMath": i_math_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.iMath": i_math_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `i_math(...)`.
+ * Output object returned when calling `IMathParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function i_math_params(
     operations: string,
     image1: InputPathType,
     image2: InputPathType | null = null,
-): IMathParameters {
+): IMathParametersTagged {
     const params = {
-        "@type": "ants.iMath" as const,
+        "@type": "ants/iMath" as const,
         "image_dimension": image_dimension,
         "output_image": output_image,
         "operations": operations,
@@ -210,7 +177,6 @@ function i_math(
 
 export {
       IMathOutputs,
-      IMathParameters,
       I_MATH_METADATA,
       i_math,
       i_math_execute,

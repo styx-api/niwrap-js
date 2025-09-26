@@ -12,49 +12,16 @@ const DTISTUDIO_FIBERTO_SEGMENTS_METADATA: Metadata = {
 
 
 interface DtistudioFibertoSegmentsParameters {
-    "@type": "afni.DTIStudioFibertoSegments";
+    "@type"?: "afni/DTIStudioFibertoSegments";
     "dataset": InputPathType;
     "output_file"?: string | null | undefined;
     "swap_flag": boolean;
 }
+type DtistudioFibertoSegmentsParametersTagged = Required<Pick<DtistudioFibertoSegmentsParameters, '@type'>> & DtistudioFibertoSegmentsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.DTIStudioFibertoSegments": dtistudio_fiberto_segments_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.DTIStudioFibertoSegments": dtistudio_fiberto_segments_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dtistudio_fiberto_segments(...)`.
+ * Output object returned when calling `DtistudioFibertoSegmentsParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function dtistudio_fiberto_segments_params(
     dataset: InputPathType,
     output_file: string | null = null,
     swap_flag: boolean = false,
-): DtistudioFibertoSegmentsParameters {
+): DtistudioFibertoSegmentsParametersTagged {
     const params = {
-        "@type": "afni.DTIStudioFibertoSegments" as const,
+        "@type": "afni/DTIStudioFibertoSegments" as const,
         "dataset": dataset,
         "swap_flag": swap_flag,
     };
@@ -117,7 +84,7 @@ function dtistudio_fiberto_segments_cargs(
             (params["output_file"] ?? null)
         );
     }
-    if ((params["swap_flag"] ?? null)) {
+    if ((params["swap_flag"] ?? false)) {
         cargs.push("-swap");
     }
     return cargs;
@@ -202,7 +169,6 @@ function dtistudio_fiberto_segments(
 export {
       DTISTUDIO_FIBERTO_SEGMENTS_METADATA,
       DtistudioFibertoSegmentsOutputs,
-      DtistudioFibertoSegmentsParameters,
       dtistudio_fiberto_segments,
       dtistudio_fiberto_segments_execute,
       dtistudio_fiberto_segments_params,

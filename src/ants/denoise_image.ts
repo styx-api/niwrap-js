@@ -12,20 +12,22 @@ const DENOISE_IMAGE_METADATA: Metadata = {
 
 
 interface DenoiseImageCorrectedOutputParameters {
-    "@type": "ants.DenoiseImage.correctedOutput";
+    "@type"?: "correctedOutput";
     "correctedOutputFileName": string;
 }
+type DenoiseImageCorrectedOutputParametersTagged = Required<Pick<DenoiseImageCorrectedOutputParameters, '@type'>> & DenoiseImageCorrectedOutputParameters;
 
 
 interface DenoiseImageCorrectedOutputNoiseParameters {
-    "@type": "ants.DenoiseImage.correctedOutputNoise";
+    "@type"?: "correctedOutputNoise";
     "correctedOutputFileName": string;
     "noiseFile"?: string | null | undefined;
 }
+type DenoiseImageCorrectedOutputNoiseParametersTagged = Required<Pick<DenoiseImageCorrectedOutputNoiseParameters, '@type'>> & DenoiseImageCorrectedOutputNoiseParameters;
 
 
 interface DenoiseImageParameters {
-    "@type": "ants.DenoiseImage";
+    "@type"?: "ants/DenoiseImage";
     "image_dimensionality"?: 2 | 3 | 4 | null | undefined;
     "noise_model"?: "Gaussian" | "Rician" | null | undefined;
     "shrink_factor"?: number | null | undefined;
@@ -34,8 +36,9 @@ interface DenoiseImageParameters {
     "search_radius"?: string | null | undefined;
     "verbose"?: 0 | 1 | null | undefined;
     "input_image": InputPathType;
-    "output": DenoiseImageCorrectedOutputParameters | DenoiseImageCorrectedOutputNoiseParameters;
+    "output": DenoiseImageCorrectedOutputParametersTagged | DenoiseImageCorrectedOutputNoiseParametersTagged;
 }
+type DenoiseImageParametersTagged = Required<Pick<DenoiseImageParameters, '@type'>> & DenoiseImageParameters;
 
 
 /**
@@ -45,13 +48,12 @@ interface DenoiseImageParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function denoise_image_output_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "ants.DenoiseImage": denoise_image_cargs,
-        "ants.DenoiseImage.correctedOutput": denoise_image_corrected_output_cargs,
-        "ants.DenoiseImage.correctedOutputNoise": denoise_image_corrected_output_noise_cargs,
+        "correctedOutput": denoise_image_corrected_output_cargs,
+        "correctedOutputNoise": denoise_image_corrected_output_noise_cargs,
     };
     return cargsFuncs[t];
 }
@@ -64,13 +66,12 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function denoise_image_output_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "ants.DenoiseImage": denoise_image_outputs,
-        "ants.DenoiseImage.correctedOutput": denoise_image_corrected_output_outputs,
-        "ants.DenoiseImage.correctedOutputNoise": denoise_image_corrected_output_noise_outputs,
+        "correctedOutput": denoise_image_corrected_output_outputs,
+        "correctedOutputNoise": denoise_image_corrected_output_noise_outputs,
     };
     return outputsFuncs[t];
 }
@@ -102,9 +103,9 @@ interface DenoiseImageCorrectedOutputOutputs {
  */
 function denoise_image_corrected_output_params(
     corrected_output_file_name: string,
-): DenoiseImageCorrectedOutputParameters {
+): DenoiseImageCorrectedOutputParametersTagged {
     const params = {
-        "@type": "ants.DenoiseImage.correctedOutput" as const,
+        "@type": "correctedOutput" as const,
         "correctedOutputFileName": corrected_output_file_name,
     };
     return params;
@@ -181,9 +182,9 @@ interface DenoiseImageCorrectedOutputNoiseOutputs {
 function denoise_image_corrected_output_noise_params(
     corrected_output_file_name: string,
     noise_file: string | null = null,
-): DenoiseImageCorrectedOutputNoiseParameters {
+): DenoiseImageCorrectedOutputNoiseParametersTagged {
     const params = {
-        "@type": "ants.DenoiseImage.correctedOutputNoise" as const,
+        "@type": "correctedOutputNoise" as const,
         "correctedOutputFileName": corrected_output_file_name,
     };
     if (noise_file !== null) {
@@ -235,7 +236,7 @@ function denoise_image_corrected_output_noise_outputs(
 
 
 /**
- * Output object returned when calling `denoise_image(...)`.
+ * Output object returned when calling `DenoiseImageParameters(...)`.
  *
  * @interface
  */
@@ -268,7 +269,7 @@ interface DenoiseImageOutputs {
  */
 function denoise_image_params(
     input_image: InputPathType,
-    output: DenoiseImageCorrectedOutputParameters | DenoiseImageCorrectedOutputNoiseParameters,
+    output: DenoiseImageCorrectedOutputParametersTagged | DenoiseImageCorrectedOutputNoiseParametersTagged,
     image_dimensionality: 2 | 3 | 4 | null = null,
     noise_model: "Gaussian" | "Rician" | null = null,
     shrink_factor: number | null = null,
@@ -276,9 +277,9 @@ function denoise_image_params(
     patch_radius: string | null = null,
     search_radius: string | null = null,
     verbose: 0 | 1 | null = null,
-): DenoiseImageParameters {
+): DenoiseImageParametersTagged {
     const params = {
-        "@type": "ants.DenoiseImage" as const,
+        "@type": "ants/DenoiseImage" as const,
         "input_image": input_image,
         "output": output,
     };
@@ -369,7 +370,7 @@ function denoise_image_cargs(
     );
     cargs.push(
         "--output",
-        ...dynCargs((params["output"] ?? null)["@type"])((params["output"] ?? null), execution)
+        ...denoise_image_output_cargs_dyn_fn((params["output"] ?? null)["@type"])((params["output"] ?? null), execution)
     );
     return cargs;
 }
@@ -389,7 +390,7 @@ function denoise_image_outputs(
 ): DenoiseImageOutputs {
     const ret: DenoiseImageOutputs = {
         root: execution.outputFile("."),
-        output: dynOutputs((params["output"] ?? null)["@type"])?.((params["output"] ?? null), execution),
+        output: denoise_image_output_outputs_dyn_fn((params["output"] ?? null)["@type"])?.((params["output"] ?? null), execution),
     };
     return ret;
 }
@@ -447,7 +448,7 @@ function denoise_image_execute(
  */
 function denoise_image(
     input_image: InputPathType,
-    output: DenoiseImageCorrectedOutputParameters | DenoiseImageCorrectedOutputNoiseParameters,
+    output: DenoiseImageCorrectedOutputParametersTagged | DenoiseImageCorrectedOutputNoiseParametersTagged,
     image_dimensionality: 2 | 3 | 4 | null = null,
     noise_model: "Gaussian" | "Rician" | null = null,
     shrink_factor: number | null = null,
@@ -465,11 +466,8 @@ function denoise_image(
 export {
       DENOISE_IMAGE_METADATA,
       DenoiseImageCorrectedOutputNoiseOutputs,
-      DenoiseImageCorrectedOutputNoiseParameters,
       DenoiseImageCorrectedOutputOutputs,
-      DenoiseImageCorrectedOutputParameters,
       DenoiseImageOutputs,
-      DenoiseImageParameters,
       denoise_image,
       denoise_image_corrected_output_noise_params,
       denoise_image_corrected_output_params,

@@ -12,7 +12,7 @@ const DIMON_METADATA: Metadata = {
 
 
 interface DimonParameters {
-    "@type": "afni.Dimon";
+    "@type"?: "afni/Dimon";
     "infile_prefix": string;
     "infile_pattern"?: string | null | undefined;
     "infile_list"?: InputPathType | null | undefined;
@@ -23,44 +23,11 @@ interface DimonParameters {
     "te_list"?: string | null | undefined;
     "sort_method"?: string | null | undefined;
 }
+type DimonParametersTagged = Required<Pick<DimonParameters, '@type'>> & DimonParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.Dimon": dimon_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.Dimon": dimon_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dimon(...)`.
+ * Output object returned when calling `DimonParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function dimon_params(
     drive_wait: string | null = null,
     te_list: string | null = null,
     sort_method: string | null = null,
-): DimonParameters {
+): DimonParametersTagged {
     const params = {
-        "@type": "afni.Dimon" as const,
+        "@type": "afni/Dimon" as const,
         "infile_prefix": infile_prefix,
     };
     if (infile_pattern !== null) {
@@ -294,7 +261,6 @@ function dimon(
 export {
       DIMON_METADATA,
       DimonOutputs,
-      DimonParameters,
       dimon,
       dimon_execute,
       dimon_params,

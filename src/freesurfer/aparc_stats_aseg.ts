@@ -12,7 +12,7 @@ const APARC_STATS_ASEG_METADATA: Metadata = {
 
 
 interface AparcStatsAsegParameters {
-    "@type": "freesurfer.aparc_stats_aseg";
+    "@type"?: "freesurfer/aparc_stats_aseg";
     "subject_name": string;
     "gcs_name": string;
     "subject_dir"?: string | null | undefined;
@@ -36,43 +36,11 @@ interface AparcStatsAsegParameters {
     "expert_clean_flag": boolean;
     "expert_overwrite_flag": boolean;
 }
+type AparcStatsAsegParametersTagged = Required<Pick<AparcStatsAsegParameters, '@type'>> & AparcStatsAsegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.aparc_stats_aseg": aparc_stats_aseg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `aparc_stats_aseg(...)`.
+ * Output object returned when calling `AparcStatsAsegParameters(...)`.
  *
  * @interface
  */
@@ -135,9 +103,9 @@ function aparc_stats_aseg_params(
     expert_use_flag: boolean = false,
     expert_clean_flag: boolean = false,
     expert_overwrite_flag: boolean = false,
-): AparcStatsAsegParameters {
+): AparcStatsAsegParametersTagged {
     const params = {
-        "@type": "freesurfer.aparc_stats_aseg" as const,
+        "@type": "freesurfer/aparc_stats_aseg" as const,
         "subject_name": subject_name,
         "gcs_name": gcs_name,
         "lh_flag": lh_flag,
@@ -233,25 +201,25 @@ function aparc_stats_aseg_cargs(
             (params["log_file"] ?? null)
         );
     }
-    if ((params["lh_flag"] ?? null)) {
+    if ((params["lh_flag"] ?? false)) {
         cargs.push("-lh");
     }
-    if ((params["rh_flag"] ?? null)) {
+    if ((params["rh_flag"] ?? false)) {
         cargs.push("-rh");
     }
-    if ((params["a2009s_flag"] ?? null)) {
+    if ((params["a2009s_flag"] ?? false)) {
         cargs.push("-a2009s");
     }
-    if ((params["no_aseg_flag"] ?? null)) {
+    if ((params["no_aseg_flag"] ?? false)) {
         cargs.push("-noaseg");
     }
-    if ((params["no_cortparc_flag"] ?? null)) {
+    if ((params["no_cortparc_flag"] ?? false)) {
         cargs.push("-nocortparc");
     }
-    if ((params["no_parcstats_flag"] ?? null)) {
+    if ((params["no_parcstats_flag"] ?? false)) {
         cargs.push("-noparcstats");
     }
-    if ((params["no_aparc2aseg_flag"] ?? null)) {
+    if ((params["no_aparc2aseg_flag"] ?? false)) {
         cargs.push("-noaparc2aseg");
     }
     if ((params["random_seed"] ?? null) !== null) {
@@ -260,10 +228,10 @@ function aparc_stats_aseg_cargs(
             String((params["random_seed"] ?? null))
         );
     }
-    if ((params["th3_flag"] ?? null)) {
+    if ((params["th3_flag"] ?? false)) {
         cargs.push("-th3");
     }
-    if ((params["no_th3_flag"] ?? null)) {
+    if ((params["no_th3_flag"] ?? false)) {
         cargs.push("-no-th3");
     }
     if ((params["longitudinal"] ?? null) !== null) {
@@ -278,13 +246,13 @@ function aparc_stats_aseg_cargs(
             (params["expert_file"] ?? null)
         );
     }
-    if ((params["expert_use_flag"] ?? null)) {
+    if ((params["expert_use_flag"] ?? false)) {
         cargs.push("-xopts-use");
     }
-    if ((params["expert_clean_flag"] ?? null)) {
+    if ((params["expert_clean_flag"] ?? false)) {
         cargs.push("-xopts-clean");
     }
-    if ((params["expert_overwrite_flag"] ?? null)) {
+    if ((params["expert_overwrite_flag"] ?? false)) {
         cargs.push("-xopts-overwrite");
     }
     return cargs;
@@ -406,7 +374,6 @@ function aparc_stats_aseg(
 export {
       APARC_STATS_ASEG_METADATA,
       AparcStatsAsegOutputs,
-      AparcStatsAsegParameters,
       aparc_stats_aseg,
       aparc_stats_aseg_execute,
       aparc_stats_aseg_params,

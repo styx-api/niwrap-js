@@ -12,7 +12,7 @@ const ABIDS_TOOL_PY_METADATA: Metadata = {
 
 
 interface AbidsToolPyParameters {
-    "@type": "afni.abids_tool.py";
+    "@type"?: "afni/abids_tool.py";
     "input_files": Array<InputPathType>;
     "tr_match": boolean;
     "add_tr": boolean;
@@ -20,43 +20,11 @@ interface AbidsToolPyParameters {
     "copy_prefix"?: Array<string> | null | undefined;
     "help_flag": boolean;
 }
+type AbidsToolPyParametersTagged = Required<Pick<AbidsToolPyParameters, '@type'>> & AbidsToolPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.abids_tool.py": abids_tool_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `abids_tool_py(...)`.
+ * Output object returned when calling `AbidsToolPyParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function abids_tool_py_params(
     add_slice_times: boolean = false,
     copy_prefix: Array<string> | null = null,
     help_flag: boolean = false,
-): AbidsToolPyParameters {
+): AbidsToolPyParametersTagged {
     const params = {
-        "@type": "afni.abids_tool.py" as const,
+        "@type": "afni/abids_tool.py" as const,
         "input_files": input_files,
         "tr_match": tr_match,
         "add_tr": add_tr,
@@ -118,13 +86,13 @@ function abids_tool_py_cargs(
     const cargs: string[] = [];
     cargs.push("abids_tool.py");
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
-    if ((params["tr_match"] ?? null)) {
+    if ((params["tr_match"] ?? false)) {
         cargs.push("-TR_match");
     }
-    if ((params["add_tr"] ?? null)) {
+    if ((params["add_tr"] ?? false)) {
         cargs.push("-add_TR");
     }
-    if ((params["add_slice_times"] ?? null)) {
+    if ((params["add_slice_times"] ?? false)) {
         cargs.push("-add_slice_times");
     }
     if ((params["copy_prefix"] ?? null) !== null) {
@@ -133,7 +101,7 @@ function abids_tool_py_cargs(
             ...(params["copy_prefix"] ?? null)
         );
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -223,7 +191,6 @@ function abids_tool_py(
 export {
       ABIDS_TOOL_PY_METADATA,
       AbidsToolPyOutputs,
-      AbidsToolPyParameters,
       abids_tool_py,
       abids_tool_py_execute,
       abids_tool_py_params,

@@ -12,7 +12,7 @@ const SURF_CLUST_METADATA: Metadata = {
 
 
 interface SurfClustParameters {
-    "@type": "afni.SurfClust";
+    "@type"?: "afni/SurfClust";
     "specfile"?: InputPathType | null | undefined;
     "input_surface"?: string | null | undefined;
     "input_surf_name"?: InputPathType | null | undefined;
@@ -53,44 +53,11 @@ interface SurfClustParameters {
     "spx_help": boolean;
     "aspx_help": boolean;
 }
+type SurfClustParametersTagged = Required<Pick<SurfClustParameters, '@type'>> & SurfClustParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.SurfClust": surf_clust_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.SurfClust": surf_clust_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surf_clust(...)`.
+ * Output object returned when calling `SurfClustParameters(...)`.
  *
  * @interface
  */
@@ -199,9 +166,9 @@ function surf_clust_params(
     raw_help: boolean = false,
     spx_help: boolean = false,
     aspx_help: boolean = false,
-): SurfClustParameters {
+): SurfClustParametersTagged {
     const params = {
-        "@type": "afni.SurfClust" as const,
+        "@type": "afni/SurfClust" as const,
         "input_dataset": input_dataset,
         "rmm": rmm,
         "out_clusterdset": out_clusterdset,
@@ -332,22 +299,22 @@ function surf_clust_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["out_clusterdset"] ?? null)) {
+    if ((params["out_clusterdset"] ?? false)) {
         cargs.push("-out_clusterdset");
     }
-    if ((params["out_roidset"] ?? null)) {
+    if ((params["out_roidset"] ?? false)) {
         cargs.push("-out_roidset");
     }
-    if ((params["out_fulllist"] ?? null)) {
+    if ((params["out_fulllist"] ?? false)) {
         cargs.push("-out_fulllist");
     }
-    if ((params["sort_none"] ?? null)) {
+    if ((params["sort_none"] ?? false)) {
         cargs.push("-sort_none");
     }
-    if ((params["sort_n_nodes"] ?? null)) {
+    if ((params["sort_n_nodes"] ?? false)) {
         cargs.push("-sort_n_nodes");
     }
-    if ((params["sort_area"] ?? null)) {
+    if ((params["sort_area"] ?? false)) {
         cargs.push("-sort_area");
     }
     if ((params["thresh_col"] ?? null) !== null) {
@@ -380,7 +347,7 @@ function surf_clust_cargs(
             ...(params["ex_range"] ?? null).map(String)
         );
     }
-    if ((params["prepend_node_index"] ?? null)) {
+    if ((params["prepend_node_index"] ?? false)) {
         cargs.push("-prepend_node_index");
     }
     if ((params["update"] ?? null) !== null) {
@@ -389,16 +356,16 @@ function surf_clust_cargs(
             String((params["update"] ?? null))
         );
     }
-    if ((params["no_cent"] ?? null)) {
+    if ((params["no_cent"] ?? false)) {
         cargs.push("-no_cent");
     }
-    if ((params["cent"] ?? null)) {
+    if ((params["cent"] ?? false)) {
         cargs.push("-cent");
     }
-    if ((params["novolreg"] ?? null)) {
+    if ((params["novolreg"] ?? false)) {
         cargs.push("-novolreg");
     }
-    if ((params["noxform"] ?? null)) {
+    if ((params["noxform"] ?? false)) {
         cargs.push("-noxform");
     }
     if ((params["set_env"] ?? null) !== null) {
@@ -407,31 +374,31 @@ function surf_clust_cargs(
             (params["set_env"] ?? null)
         );
     }
-    if ((params["trace"] ?? null)) {
+    if ((params["trace"] ?? false)) {
         cargs.push("-trace");
     }
-    if ((params["trace_extreme"] ?? null)) {
+    if ((params["trace_extreme"] ?? false)) {
         cargs.push("-TRACE");
     }
-    if ((params["no_memory_trace"] ?? null)) {
+    if ((params["no_memory_trace"] ?? false)) {
         cargs.push("-nomall");
     }
-    if ((params["yes_memory_trace"] ?? null)) {
+    if ((params["yes_memory_trace"] ?? false)) {
         cargs.push("-yesmall");
     }
-    if ((params["mini_help"] ?? null)) {
+    if ((params["mini_help"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["extreme_help"] ?? null)) {
+    if ((params["extreme_help"] ?? false)) {
         cargs.push("-HELP");
     }
-    if ((params["view_help"] ?? null)) {
+    if ((params["view_help"] ?? false)) {
         cargs.push("-h_view");
     }
-    if ((params["web_help"] ?? null)) {
+    if ((params["web_help"] ?? false)) {
         cargs.push("-h_web");
     }
     if ((params["find_help"] ?? null) !== null) {
@@ -440,13 +407,13 @@ function surf_clust_cargs(
             (params["find_help"] ?? null)
         );
     }
-    if ((params["raw_help"] ?? null)) {
+    if ((params["raw_help"] ?? false)) {
         cargs.push("-h_raw");
     }
-    if ((params["spx_help"] ?? null)) {
+    if ((params["spx_help"] ?? false)) {
         cargs.push("-h_spx");
     }
-    if ((params["aspx_help"] ?? null)) {
+    if ((params["aspx_help"] ?? false)) {
         cargs.push("-h_aspx");
     }
     return cargs;
@@ -605,7 +572,6 @@ function surf_clust(
 export {
       SURF_CLUST_METADATA,
       SurfClustOutputs,
-      SurfClustParameters,
       surf_clust,
       surf_clust_execute,
       surf_clust_params,

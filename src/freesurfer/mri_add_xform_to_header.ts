@@ -12,51 +12,18 @@ const MRI_ADD_XFORM_TO_HEADER_METADATA: Metadata = {
 
 
 interface MriAddXformToHeaderParameters {
-    "@type": "freesurfer.mri_add_xform_to_header";
+    "@type"?: "freesurfer/mri_add_xform_to_header";
     "xfm_file": InputPathType;
     "input_volume": InputPathType;
     "output_volume": string;
     "verbose": boolean;
     "copy_name": boolean;
 }
+type MriAddXformToHeaderParametersTagged = Required<Pick<MriAddXformToHeaderParameters, '@type'>> & MriAddXformToHeaderParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_add_xform_to_header": mri_add_xform_to_header_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_add_xform_to_header": mri_add_xform_to_header_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_add_xform_to_header(...)`.
+ * Output object returned when calling `MriAddXformToHeaderParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function mri_add_xform_to_header_params(
     output_volume: string,
     verbose: boolean = false,
     copy_name: boolean = false,
-): MriAddXformToHeaderParameters {
+): MriAddXformToHeaderParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_add_xform_to_header" as const,
+        "@type": "freesurfer/mri_add_xform_to_header" as const,
         "xfm_file": xfm_file,
         "input_volume": input_volume,
         "output_volume": output_volume,
@@ -119,10 +86,10 @@ function mri_add_xform_to_header_cargs(
     cargs.push(execution.inputFile((params["xfm_file"] ?? null)));
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
     cargs.push((params["output_volume"] ?? null));
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["copy_name"] ?? null)) {
+    if ((params["copy_name"] ?? false)) {
         cargs.push("-c");
     }
     return cargs;
@@ -211,7 +178,6 @@ function mri_add_xform_to_header(
 export {
       MRI_ADD_XFORM_TO_HEADER_METADATA,
       MriAddXformToHeaderOutputs,
-      MriAddXformToHeaderParameters,
       mri_add_xform_to_header,
       mri_add_xform_to_header_execute,
       mri_add_xform_to_header_params,

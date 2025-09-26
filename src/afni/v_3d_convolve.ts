@@ -12,49 +12,16 @@ const V_3D_CONVOLVE_METADATA: Metadata = {
 
 
 interface V3dConvolveParameters {
-    "@type": "afni.3dConvolve";
+    "@type"?: "afni/3dConvolve";
     "infile": InputPathType;
     "outfile": string;
     "options"?: string | null | undefined;
 }
+type V3dConvolveParametersTagged = Required<Pick<V3dConvolveParameters, '@type'>> & V3dConvolveParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dConvolve": v_3d_convolve_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dConvolve": v_3d_convolve_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_convolve(...)`.
+ * Output object returned when calling `V3dConvolveParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function v_3d_convolve_params(
     infile: InputPathType,
     outfile: string,
     options: string | null = null,
-): V3dConvolveParameters {
+): V3dConvolveParametersTagged {
     const params = {
-        "@type": "afni.3dConvolve" as const,
+        "@type": "afni/3dConvolve" as const,
         "infile": infile,
         "outfile": outfile,
     };
@@ -199,7 +166,6 @@ function v_3d_convolve(
 
 export {
       V3dConvolveOutputs,
-      V3dConvolveParameters,
       V_3D_CONVOLVE_METADATA,
       v_3d_convolve,
       v_3d_convolve_execute,

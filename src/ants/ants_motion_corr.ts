@@ -12,7 +12,7 @@ const ANTS_MOTION_CORR_METADATA: Metadata = {
 
 
 interface AntsMotionCorrParameters {
-    "@type": "ants.antsMotionCorr";
+    "@type"?: "ants/antsMotionCorr";
     "dimensionality"?: 2 | 3 | null | undefined;
     "n_images"?: number | null | undefined;
     "metric"?: string | null | undefined;
@@ -30,44 +30,11 @@ interface AntsMotionCorrParameters {
     "interpolation"?: "Linear" | "NearestNeighbor" | "BSpline" | "BlackmanWindowedSinc" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | null | undefined;
     "verbose"?: 0 | 1 | null | undefined;
 }
+type AntsMotionCorrParametersTagged = Required<Pick<AntsMotionCorrParameters, '@type'>> & AntsMotionCorrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.antsMotionCorr": ants_motion_corr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.antsMotionCorr": ants_motion_corr_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ants_motion_corr(...)`.
+ * Output object returned when calling `AntsMotionCorrParameters(...)`.
  *
  * @interface
  */
@@ -130,9 +97,9 @@ function ants_motion_corr_params(
     random_seed: number | null = null,
     interpolation: "Linear" | "NearestNeighbor" | "BSpline" | "BlackmanWindowedSinc" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | null = null,
     verbose: 0 | 1 | null = null,
-): AntsMotionCorrParameters {
+): AntsMotionCorrParametersTagged {
     const params = {
-        "@type": "ants.antsMotionCorr" as const,
+        "@type": "ants/antsMotionCorr" as const,
         "use_scales_estimator": use_scales_estimator,
         "average_image": average_image,
         "write_displacement": write_displacement,
@@ -218,7 +185,7 @@ function ants_motion_corr_cargs(
             String((params["use_fixed_reference_image"] ?? null))
         );
     }
-    if ((params["use_scales_estimator"] ?? null)) {
+    if ((params["use_scales_estimator"] ?? false)) {
         cargs.push("--useScalesEstimator");
     }
     if ((params["transform"] ?? null) !== null) {
@@ -251,10 +218,10 @@ function ants_motion_corr_cargs(
             (params["output"] ?? null)
         );
     }
-    if ((params["average_image"] ?? null)) {
+    if ((params["average_image"] ?? false)) {
         cargs.push("--average-image");
     }
-    if ((params["write_displacement"] ?? null)) {
+    if ((params["write_displacement"] ?? false)) {
         cargs.push("--write-displacement");
     }
     if ((params["use_histogram_matching"] ?? null) !== null) {
@@ -391,7 +358,6 @@ function ants_motion_corr(
 export {
       ANTS_MOTION_CORR_METADATA,
       AntsMotionCorrOutputs,
-      AntsMotionCorrParameters,
       ants_motion_corr,
       ants_motion_corr_execute,
       ants_motion_corr_params,

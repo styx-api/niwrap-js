@@ -12,7 +12,7 @@ const EXTRACT_REGION_FROM_IMAGE_BY_MASK_METADATA: Metadata = {
 
 
 interface ExtractRegionFromImageByMaskParameters {
-    "@type": "ants.ExtractRegionFromImageByMask";
+    "@type"?: "ants/ExtractRegionFromImageByMask";
     "image_dimension": number;
     "input_image": InputPathType;
     "output_image": InputPathType;
@@ -20,43 +20,11 @@ interface ExtractRegionFromImageByMaskParameters {
     "label"?: number | null | undefined;
     "pad_radius"?: number | null | undefined;
 }
+type ExtractRegionFromImageByMaskParametersTagged = Required<Pick<ExtractRegionFromImageByMaskParameters, '@type'>> & ExtractRegionFromImageByMaskParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.ExtractRegionFromImageByMask": extract_region_from_image_by_mask_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `extract_region_from_image_by_mask(...)`.
+ * Output object returned when calling `ExtractRegionFromImageByMaskParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function extract_region_from_image_by_mask_params(
     label_mask_image: InputPathType,
     label: number | null = null,
     pad_radius: number | null = null,
-): ExtractRegionFromImageByMaskParameters {
+): ExtractRegionFromImageByMaskParametersTagged {
     const params = {
-        "@type": "ants.ExtractRegionFromImageByMask" as const,
+        "@type": "ants/ExtractRegionFromImageByMask" as const,
         "image_dimension": image_dimension,
         "input_image": input_image,
         "output_image": output_image,
@@ -216,7 +184,6 @@ function extract_region_from_image_by_mask(
 export {
       EXTRACT_REGION_FROM_IMAGE_BY_MASK_METADATA,
       ExtractRegionFromImageByMaskOutputs,
-      ExtractRegionFromImageByMaskParameters,
       extract_region_from_image_by_mask,
       extract_region_from_image_by_mask_execute,
       extract_region_from_image_by_mask_params,

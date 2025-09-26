@@ -12,7 +12,7 @@ const METRIC_FIND_CLUSTERS_METADATA: Metadata = {
 
 
 interface MetricFindClustersParameters {
-    "@type": "workbench.metric-find-clusters";
+    "@type"?: "workbench/metric-find-clusters";
     "surface": InputPathType;
     "metric_in": InputPathType;
     "value_threshold": number;
@@ -26,44 +26,11 @@ interface MetricFindClustersParameters {
     "opt_distance_distance"?: number | null | undefined;
     "opt_start_startval"?: number | null | undefined;
 }
+type MetricFindClustersParametersTagged = Required<Pick<MetricFindClustersParameters, '@type'>> & MetricFindClustersParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-find-clusters": metric_find_clusters_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.metric-find-clusters": metric_find_clusters_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `metric_find_clusters(...)`.
+ * Output object returned when calling `MetricFindClustersParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function metric_find_clusters_params(
     opt_size_ratio_ratio: number | null = null,
     opt_distance_distance: number | null = null,
     opt_start_startval: number | null = null,
-): MetricFindClustersParameters {
+): MetricFindClustersParametersTagged {
     const params = {
-        "@type": "workbench.metric-find-clusters" as const,
+        "@type": "workbench/metric-find-clusters" as const,
         "surface": surface,
         "metric_in": metric_in,
         "value_threshold": value_threshold,
@@ -162,7 +129,7 @@ function metric_find_clusters_cargs(
     cargs.push(String((params["value_threshold"] ?? null)));
     cargs.push(String((params["minimum_area"] ?? null)));
     cargs.push((params["metric_out"] ?? null));
-    if ((params["opt_less_than"] ?? null)) {
+    if ((params["opt_less_than"] ?? false)) {
         cargs.push("-less-than");
     }
     if ((params["opt_roi_roi_metric"] ?? null) !== null) {
@@ -305,7 +272,6 @@ function metric_find_clusters(
 export {
       METRIC_FIND_CLUSTERS_METADATA,
       MetricFindClustersOutputs,
-      MetricFindClustersParameters,
       metric_find_clusters,
       metric_find_clusters_execute,
       metric_find_clusters_params,

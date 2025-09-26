@@ -12,7 +12,7 @@ const B0CALC_METADATA: Metadata = {
 
 
 interface B0calcParameters {
-    "@type": "fsl.b0calc";
+    "@type"?: "fsl/b0calc";
     "input_file": InputPathType;
     "output_file": string;
     "zero_order_x"?: number | null | undefined;
@@ -29,44 +29,11 @@ interface B0calcParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
+type B0calcParametersTagged = Required<Pick<B0calcParameters, '@type'>> & B0calcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.b0calc": b0calc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.b0calc": b0calc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `b0calc(...)`.
+ * Output object returned when calling `B0calcParameters(...)`.
  *
  * @interface
  */
@@ -131,9 +98,9 @@ function b0calc_params(
     direct_conv: boolean = false,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): B0calcParameters {
+): B0calcParametersTagged {
     const params = {
-        "@type": "fsl.b0calc" as const,
+        "@type": "fsl/b0calc" as const,
         "input_file": input_file,
         "output_file": output_file,
         "xyz_flag": xyz_flag,
@@ -242,7 +209,7 @@ function b0calc_cargs(
             String((params["chi0"] ?? null))
         );
     }
-    if ((params["xyz_flag"] ?? null)) {
+    if ((params["xyz_flag"] ?? false)) {
         cargs.push("--xyz");
     }
     if ((params["extend_boundary"] ?? null) !== null) {
@@ -251,13 +218,13 @@ function b0calc_cargs(
             String((params["extend_boundary"] ?? null))
         );
     }
-    if ((params["direct_conv"] ?? null)) {
+    if ((params["direct_conv"] ?? false)) {
         cargs.push("--directconv");
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -369,7 +336,6 @@ function b0calc(
 export {
       B0CALC_METADATA,
       B0calcOutputs,
-      B0calcParameters,
       b0calc,
       b0calc_execute,
       b0calc_params,

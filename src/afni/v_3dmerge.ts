@@ -12,7 +12,7 @@ const V_3DMERGE_METADATA: Metadata = {
 
 
 interface V3dmergeParameters {
-    "@type": "afni.3dmerge";
+    "@type"?: "afni/3dmerge";
     "input_files": Array<InputPathType>;
     "output_file": string;
     "blur_fwhm"?: number | null | undefined;
@@ -26,44 +26,11 @@ interface V3dmergeParameters {
     "gmax": boolean;
     "quiet": boolean;
 }
+type V3dmergeParametersTagged = Required<Pick<V3dmergeParameters, '@type'>> & V3dmergeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dmerge": v_3dmerge_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dmerge": v_3dmerge_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dmerge(...)`.
+ * Output object returned when calling `V3dmergeParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function v_3dmerge_params(
     gmean: boolean = false,
     gmax: boolean = false,
     quiet: boolean = false,
-): V3dmergeParameters {
+): V3dmergeParametersTagged {
     const params = {
-        "@type": "afni.3dmerge" as const,
+        "@type": "afni/3dmerge" as const,
         "input_files": input_files,
         "output_file": output_file,
         "absolute": absolute,
@@ -189,19 +156,19 @@ function v_3dmerge_cargs(
             String((params["tindex"] ?? null))
         );
     }
-    if ((params["absolute"] ?? null)) {
+    if ((params["absolute"] ?? false)) {
         cargs.push("-1abs");
     }
-    if ((params["dxyz"] ?? null)) {
+    if ((params["dxyz"] ?? false)) {
         cargs.push("-dxyz=1");
     }
-    if ((params["gmean"] ?? null)) {
+    if ((params["gmean"] ?? false)) {
         cargs.push("-gmean");
     }
-    if ((params["gmax"] ?? null)) {
+    if ((params["gmax"] ?? false)) {
         cargs.push("-gmax");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
     return cargs;
@@ -303,7 +270,6 @@ function v_3dmerge(
 
 export {
       V3dmergeOutputs,
-      V3dmergeParameters,
       V_3DMERGE_METADATA,
       v_3dmerge,
       v_3dmerge_execute,

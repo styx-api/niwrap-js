@@ -12,7 +12,7 @@ const LONG_STATS_TPS_METADATA: Metadata = {
 
 
 interface LongStatsTpsParameters {
-    "@type": "freesurfer.long_stats_tps";
+    "@type"?: "freesurfer/long_stats_tps";
     "qdec_table": InputPathType;
     "stats_file": string;
     "measure": string;
@@ -22,44 +22,11 @@ interface LongStatsTpsParameters {
     "qcolumn"?: string | null | undefined;
     "cross_sectional": boolean;
 }
+type LongStatsTpsParametersTagged = Required<Pick<LongStatsTpsParameters, '@type'>> & LongStatsTpsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.long_stats_tps": long_stats_tps_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.long_stats_tps": long_stats_tps_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `long_stats_tps(...)`.
+ * Output object returned when calling `LongStatsTpsParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function long_stats_tps_params(
     output_file: string,
     qcolumn: string | null = null,
     cross_sectional: boolean = false,
-): LongStatsTpsParameters {
+): LongStatsTpsParametersTagged {
     const params = {
-        "@type": "freesurfer.long_stats_tps" as const,
+        "@type": "freesurfer/long_stats_tps" as const,
         "qdec_table": qdec_table,
         "stats_file": stats_file,
         "measure": measure,
@@ -160,7 +127,7 @@ function long_stats_tps_cargs(
             (params["qcolumn"] ?? null)
         );
     }
-    if ((params["cross_sectional"] ?? null)) {
+    if ((params["cross_sectional"] ?? false)) {
         cargs.push("--cross");
     }
     return cargs;
@@ -255,7 +222,6 @@ function long_stats_tps(
 export {
       LONG_STATS_TPS_METADATA,
       LongStatsTpsOutputs,
-      LongStatsTpsParameters,
       long_stats_tps,
       long_stats_tps_execute,
       long_stats_tps_params,

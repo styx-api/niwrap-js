@@ -12,49 +12,16 @@ const MRIS_SPHERE_METADATA: Metadata = {
 
 
 interface MrisSphereParameters {
-    "@type": "freesurfer.mris_sphere";
+    "@type"?: "freesurfer/mris_sphere";
     "surface_file": InputPathType;
     "patch_file": InputPathType;
     "output_patch": string;
 }
+type MrisSphereParametersTagged = Required<Pick<MrisSphereParameters, '@type'>> & MrisSphereParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_sphere": mris_sphere_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_sphere": mris_sphere_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_sphere(...)`.
+ * Output object returned when calling `MrisSphereParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mris_sphere_params(
     surface_file: InputPathType,
     patch_file: InputPathType,
     output_patch: string,
-): MrisSphereParameters {
+): MrisSphereParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_sphere" as const,
+        "@type": "freesurfer/mris_sphere" as const,
         "surface_file": surface_file,
         "patch_file": patch_file,
         "output_patch": output_patch,
@@ -193,7 +160,6 @@ function mris_sphere(
 export {
       MRIS_SPHERE_METADATA,
       MrisSphereOutputs,
-      MrisSphereParameters,
       mris_sphere,
       mris_sphere_execute,
       mris_sphere_params,

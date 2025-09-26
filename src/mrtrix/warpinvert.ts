@@ -12,14 +12,15 @@ const WARPINVERT_METADATA: Metadata = {
 
 
 interface WarpinvertConfigParameters {
-    "@type": "mrtrix.warpinvert.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type WarpinvertConfigParametersTagged = Required<Pick<WarpinvertConfigParameters, '@type'>> & WarpinvertConfigParameters;
 
 
 interface WarpinvertParameters {
-    "@type": "mrtrix.warpinvert";
+    "@type"?: "mrtrix/warpinvert";
     "template"?: InputPathType | null | undefined;
     "displacement": boolean;
     "info": boolean;
@@ -33,41 +34,7 @@ interface WarpinvertParameters {
     "in": InputPathType;
     "out": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.warpinvert": warpinvert_cargs,
-        "mrtrix.warpinvert.config": warpinvert_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.warpinvert": warpinvert_outputs,
-    };
-    return outputsFuncs[t];
-}
+type WarpinvertParametersTagged = Required<Pick<WarpinvertParameters, '@type'>> & WarpinvertParameters;
 
 
 /**
@@ -81,9 +48,9 @@ function dynOutputs(
 function warpinvert_config_params(
     key: string,
     value: string,
-): WarpinvertConfigParameters {
+): WarpinvertConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.warpinvert.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -112,7 +79,7 @@ function warpinvert_config_cargs(
 
 
 /**
- * Output object returned when calling `warpinvert(...)`.
+ * Output object returned when calling `WarpinvertParameters(...)`.
  *
  * @interface
  */
@@ -159,9 +126,9 @@ function warpinvert_params(
     config: Array<WarpinvertConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): WarpinvertParameters {
+): WarpinvertParametersTagged {
     const params = {
-        "@type": "mrtrix.warpinvert" as const,
+        "@type": "mrtrix/warpinvert" as const,
         "displacement": displacement,
         "info": info,
         "quiet": quiet,
@@ -205,19 +172,19 @@ function warpinvert_cargs(
             execution.inputFile((params["template"] ?? null))
         );
     }
-    if ((params["displacement"] ?? null)) {
+    if ((params["displacement"] ?? false)) {
         cargs.push("-displacement");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -227,12 +194,12 @@ function warpinvert_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => warpinvert_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["in"] ?? null)));
@@ -348,9 +315,7 @@ function warpinvert(
 
 export {
       WARPINVERT_METADATA,
-      WarpinvertConfigParameters,
       WarpinvertOutputs,
-      WarpinvertParameters,
       warpinvert,
       warpinvert_config_params,
       warpinvert_execute,

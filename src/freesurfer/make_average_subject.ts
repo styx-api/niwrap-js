@@ -12,7 +12,7 @@ const MAKE_AVERAGE_SUBJECT_METADATA: Metadata = {
 
 
 interface MakeAverageSubjectParameters {
-    "@type": "freesurfer.make_average_subject";
+    "@type"?: "freesurfer/make_average_subject";
     "subjects": Array<string>;
     "fsgd_file"?: InputPathType | null | undefined;
     "subject_list_file"?: InputPathType | null | undefined;
@@ -36,43 +36,11 @@ interface MakeAverageSubjectParameters {
     "echo": boolean;
     "debug": boolean;
 }
+type MakeAverageSubjectParametersTagged = Required<Pick<MakeAverageSubjectParameters, '@type'>> & MakeAverageSubjectParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.make_average_subject": make_average_subject_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `make_average_subject(...)`.
+ * Output object returned when calling `MakeAverageSubjectParameters(...)`.
  *
  * @interface
  */
@@ -135,9 +103,9 @@ function make_average_subject_params(
     version: boolean = false,
     echo: boolean = false,
     debug: boolean = false,
-): MakeAverageSubjectParameters {
+): MakeAverageSubjectParametersTagged {
     const params = {
-        "@type": "freesurfer.make_average_subject" as const,
+        "@type": "freesurfer/make_average_subject" as const,
         "subjects": subjects,
         "average_subject_name": average_subject_name,
         "no_link": no_link,
@@ -221,7 +189,7 @@ function make_average_subject_cargs(
             (params["sd_out"] ?? null)
         );
     }
-    if ((params["no_link"] ?? null)) {
+    if ((params["no_link"] ?? false)) {
         cargs.push("--no-link");
     }
     if ((params["sdir"] ?? null) !== null) {
@@ -248,25 +216,25 @@ function make_average_subject_cargs(
             (params["surface_registration"] ?? null)
         );
     }
-    if ((params["no_surfaces"] ?? null)) {
+    if ((params["no_surfaces"] ?? false)) {
         cargs.push("--no-surf");
     }
-    if ((params["no_volumes"] ?? null)) {
+    if ((params["no_volumes"] ?? false)) {
         cargs.push("--no-vol");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("--force");
     }
-    if ((params["keep_all_orig"] ?? null)) {
+    if ((params["keep_all_orig"] ?? false)) {
         cargs.push("--keep-all-orig");
     }
-    if ((params["no_symlink"] ?? null)) {
+    if ((params["no_symlink"] ?? false)) {
         cargs.push("--no-symlink");
     }
-    if ((params["no_ribbon"] ?? null)) {
+    if ((params["no_ribbon"] ?? false)) {
         cargs.push("--no-ribbon");
     }
-    if ((params["no_surf2surf"] ?? null)) {
+    if ((params["no_surf2surf"] ?? false)) {
         cargs.push("--no-surf2surf");
     }
     if ((params["rca_threads"] ?? null) !== null) {
@@ -275,16 +243,16 @@ function make_average_subject_cargs(
             String((params["rca_threads"] ?? null))
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["echo"] ?? null)) {
+    if ((params["echo"] ?? false)) {
         cargs.push("--echo");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -406,7 +374,6 @@ function make_average_subject(
 export {
       MAKE_AVERAGE_SUBJECT_METADATA,
       MakeAverageSubjectOutputs,
-      MakeAverageSubjectParameters,
       make_average_subject,
       make_average_subject_execute,
       make_average_subject_params,

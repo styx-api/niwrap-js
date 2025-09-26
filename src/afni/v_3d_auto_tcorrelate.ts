@@ -12,7 +12,7 @@ const V_3D_AUTO_TCORRELATE_METADATA: Metadata = {
 
 
 interface V3dAutoTcorrelateParameters {
-    "@type": "afni.3dAutoTcorrelate";
+    "@type"?: "afni/3dAutoTcorrelate";
     "input_dataset": InputPathType;
     "pearson": boolean;
     "eta2": boolean;
@@ -27,44 +27,11 @@ interface V3dAutoTcorrelateParameters {
     "time": boolean;
     "mmap": boolean;
 }
+type V3dAutoTcorrelateParametersTagged = Required<Pick<V3dAutoTcorrelateParameters, '@type'>> & V3dAutoTcorrelateParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dAutoTcorrelate": v_3d_auto_tcorrelate_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dAutoTcorrelate": v_3d_auto_tcorrelate_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_auto_tcorrelate(...)`.
+ * Output object returned when calling `V3dAutoTcorrelateParameters(...)`.
  *
  * @interface
  */
@@ -121,9 +88,9 @@ function v_3d_auto_tcorrelate_params(
     out1d: string | null = null,
     time: boolean = false,
     mmap: boolean = false,
-): V3dAutoTcorrelateParameters {
+): V3dAutoTcorrelateParametersTagged {
     const params = {
-        "@type": "afni.3dAutoTcorrelate" as const,
+        "@type": "afni/3dAutoTcorrelate" as const,
         "input_dataset": input_dataset,
         "pearson": pearson,
         "eta2": eta2,
@@ -167,10 +134,10 @@ function v_3d_auto_tcorrelate_cargs(
     const cargs: string[] = [];
     cargs.push("3dAutoTcorrelate");
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
-    if ((params["pearson"] ?? null)) {
+    if ((params["pearson"] ?? false)) {
         cargs.push("-pearson");
     }
-    if ((params["eta2"] ?? null)) {
+    if ((params["eta2"] ?? false)) {
         cargs.push("-eta2");
     }
     if ((params["polort"] ?? null) !== null) {
@@ -179,10 +146,10 @@ function v_3d_auto_tcorrelate_cargs(
             String((params["polort"] ?? null))
         );
     }
-    if ((params["autoclip"] ?? null)) {
+    if ((params["autoclip"] ?? false)) {
         cargs.push("-autoclip");
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -191,7 +158,7 @@ function v_3d_auto_tcorrelate_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["mask_only_targets"] ?? null)) {
+    if ((params["mask_only_targets"] ?? false)) {
         cargs.push("-mask_only_targets");
     }
     if ((params["mask_source"] ?? null) !== null) {
@@ -212,10 +179,10 @@ function v_3d_auto_tcorrelate_cargs(
             (params["out1d"] ?? null)
         );
     }
-    if ((params["time"] ?? null)) {
+    if ((params["time"] ?? false)) {
         cargs.push("-time");
     }
-    if ((params["mmap"] ?? null)) {
+    if ((params["mmap"] ?? false)) {
         cargs.push("-mmap");
     }
     return cargs;
@@ -321,7 +288,6 @@ function v_3d_auto_tcorrelate(
 
 export {
       V3dAutoTcorrelateOutputs,
-      V3dAutoTcorrelateParameters,
       V_3D_AUTO_TCORRELATE_METADATA,
       v_3d_auto_tcorrelate,
       v_3d_auto_tcorrelate_execute,

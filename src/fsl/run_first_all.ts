@@ -12,7 +12,7 @@ const RUN_FIRST_ALL_METADATA: Metadata = {
 
 
 interface RunFirstAllParameters {
-    "@type": "fsl.run_first_all";
+    "@type"?: "fsl/run_first_all";
     "method"?: "auto" | "fast" | "none" | null | undefined;
     "brainextract_flag": boolean;
     "structure"?: string | null | undefined;
@@ -23,44 +23,11 @@ interface RunFirstAllParameters {
     "input_image": InputPathType;
     "output_image": string;
 }
+type RunFirstAllParametersTagged = Required<Pick<RunFirstAllParameters, '@type'>> & RunFirstAllParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.run_first_all": run_first_all_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.run_first_all": run_first_all_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `run_first_all(...)`.
+ * Output object returned when calling `RunFirstAllParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function run_first_all_params(
     threestage_flag: boolean = false,
     debug_flag: boolean = false,
     verbose_flag: boolean = false,
-): RunFirstAllParameters {
+): RunFirstAllParametersTagged {
     const params = {
-        "@type": "fsl.run_first_all" as const,
+        "@type": "fsl/run_first_all" as const,
         "brainextract_flag": brainextract_flag,
         "threestage_flag": threestage_flag,
         "debug_flag": debug_flag,
@@ -144,7 +111,7 @@ function run_first_all_cargs(
             (params["method"] ?? null)
         );
     }
-    if ((params["brainextract_flag"] ?? null)) {
+    if ((params["brainextract_flag"] ?? false)) {
         cargs.push("-b");
     }
     if ((params["structure"] ?? null) !== null) {
@@ -159,13 +126,13 @@ function run_first_all_cargs(
             execution.inputFile((params["affine_matrix"] ?? null))
         );
     }
-    if ((params["threestage_flag"] ?? null)) {
+    if ((params["threestage_flag"] ?? false)) {
         cargs.push("-3");
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("-d");
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
     cargs.push(
@@ -270,7 +237,6 @@ function run_first_all(
 export {
       RUN_FIRST_ALL_METADATA,
       RunFirstAllOutputs,
-      RunFirstAllParameters,
       run_first_all,
       run_first_all_execute,
       run_first_all_params,

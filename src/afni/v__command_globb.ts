@@ -12,49 +12,17 @@ const V__COMMAND_GLOBB_METADATA: Metadata = {
 
 
 interface VCommandGlobbParameters {
-    "@type": "afni.@CommandGlobb";
+    "@type"?: "afni/@CommandGlobb";
     "program_command": string;
     "output_dir": string;
     "extension"?: string | null | undefined;
     "brick_list": Array<string>;
 }
+type VCommandGlobbParametersTagged = Required<Pick<VCommandGlobbParameters, '@type'>> & VCommandGlobbParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@CommandGlobb": v__command_globb_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__command_globb(...)`.
+ * Output object returned when calling `VCommandGlobbParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function v__command_globb_params(
     output_dir: string,
     brick_list: Array<string>,
     extension: string | null = null,
-): VCommandGlobbParameters {
+): VCommandGlobbParametersTagged {
     const params = {
-        "@type": "afni.@CommandGlobb" as const,
+        "@type": "afni/@CommandGlobb" as const,
         "program_command": program_command,
         "output_dir": output_dir,
         "brick_list": brick_list,
@@ -209,7 +177,6 @@ function v__command_globb(
 
 export {
       VCommandGlobbOutputs,
-      VCommandGlobbParameters,
       V__COMMAND_GLOBB_METADATA,
       v__command_globb,
       v__command_globb_execute,

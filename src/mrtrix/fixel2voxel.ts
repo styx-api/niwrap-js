@@ -12,14 +12,15 @@ const FIXEL2VOXEL_METADATA: Metadata = {
 
 
 interface Fixel2voxelConfigParameters {
-    "@type": "mrtrix.fixel2voxel.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Fixel2voxelConfigParametersTagged = Required<Pick<Fixel2voxelConfigParameters, '@type'>> & Fixel2voxelConfigParameters;
 
 
 interface Fixel2voxelParameters {
-    "@type": "mrtrix.fixel2voxel";
+    "@type"?: "mrtrix/fixel2voxel";
     "number"?: number | null | undefined;
     "fill"?: number | null | undefined;
     "weighted"?: InputPathType | null | undefined;
@@ -35,41 +36,7 @@ interface Fixel2voxelParameters {
     "operation": string;
     "image_out": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.fixel2voxel": fixel2voxel_cargs,
-        "mrtrix.fixel2voxel.config": fixel2voxel_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.fixel2voxel": fixel2voxel_outputs,
-    };
-    return outputsFuncs[t];
-}
+type Fixel2voxelParametersTagged = Required<Pick<Fixel2voxelParameters, '@type'>> & Fixel2voxelParameters;
 
 
 /**
@@ -83,9 +50,9 @@ function dynOutputs(
 function fixel2voxel_config_params(
     key: string,
     value: string,
-): Fixel2voxelConfigParameters {
+): Fixel2voxelConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.fixel2voxel.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -114,7 +81,7 @@ function fixel2voxel_config_cargs(
 
 
 /**
- * Output object returned when calling `fixel2voxel(...)`.
+ * Output object returned when calling `Fixel2voxelParameters(...)`.
  *
  * @interface
  */
@@ -165,9 +132,9 @@ function fixel2voxel_params(
     config: Array<Fixel2voxelConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Fixel2voxelParameters {
+): Fixel2voxelParametersTagged {
     const params = {
-        "@type": "mrtrix.fixel2voxel" as const,
+        "@type": "mrtrix/fixel2voxel" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -229,16 +196,16 @@ function fixel2voxel_cargs(
             execution.inputFile((params["weighted"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -248,12 +215,12 @@ function fixel2voxel_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => fixel2voxel_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["fixel_in"] ?? null)));
@@ -400,9 +367,7 @@ function fixel2voxel(
 
 export {
       FIXEL2VOXEL_METADATA,
-      Fixel2voxelConfigParameters,
       Fixel2voxelOutputs,
-      Fixel2voxelParameters,
       fixel2voxel,
       fixel2voxel_config_params,
       fixel2voxel_execute,

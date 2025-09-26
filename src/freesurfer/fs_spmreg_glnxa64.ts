@@ -12,48 +12,15 @@ const FS_SPMREG_GLNXA64_METADATA: Metadata = {
 
 
 interface FsSpmregGlnxa64Parameters {
-    "@type": "freesurfer.fs_spmreg.glnxa64";
+    "@type"?: "freesurfer/fs_spmreg.glnxa64";
     "input_volume": InputPathType;
     "output_matrix": string;
 }
+type FsSpmregGlnxa64ParametersTagged = Required<Pick<FsSpmregGlnxa64Parameters, '@type'>> & FsSpmregGlnxa64Parameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fs_spmreg.glnxa64": fs_spmreg_glnxa64_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.fs_spmreg.glnxa64": fs_spmreg_glnxa64_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fs_spmreg_glnxa64(...)`.
+ * Output object returned when calling `FsSpmregGlnxa64Parameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface FsSpmregGlnxa64Outputs {
 function fs_spmreg_glnxa64_params(
     input_volume: InputPathType,
     output_matrix: string = "output.mat",
-): FsSpmregGlnxa64Parameters {
+): FsSpmregGlnxa64ParametersTagged {
     const params = {
-        "@type": "freesurfer.fs_spmreg.glnxa64" as const,
+        "@type": "freesurfer/fs_spmreg.glnxa64" as const,
         "input_volume": input_volume,
         "output_matrix": output_matrix,
     };
@@ -105,7 +72,7 @@ function fs_spmreg_glnxa64_cargs(
     const cargs: string[] = [];
     cargs.push("fs_spmreg.glnxa64");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
-    cargs.push((params["output_matrix"] ?? null));
+    cargs.push((params["output_matrix"] ?? "output.mat"));
     return cargs;
 }
 
@@ -124,7 +91,7 @@ function fs_spmreg_glnxa64_outputs(
 ): FsSpmregGlnxa64Outputs {
     const ret: FsSpmregGlnxa64Outputs = {
         root: execution.outputFile("."),
-        output_matrix_file: execution.outputFile([(params["output_matrix"] ?? null)].join('')),
+        output_matrix_file: execution.outputFile([(params["output_matrix"] ?? "output.mat")].join('')),
     };
     return ret;
 }
@@ -186,7 +153,6 @@ function fs_spmreg_glnxa64(
 export {
       FS_SPMREG_GLNXA64_METADATA,
       FsSpmregGlnxa64Outputs,
-      FsSpmregGlnxa64Parameters,
       fs_spmreg_glnxa64,
       fs_spmreg_glnxa64_execute,
       fs_spmreg_glnxa64_params,

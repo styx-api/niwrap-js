@@ -12,48 +12,15 @@ const OLD_BETALL_METADATA: Metadata = {
 
 
 interface OldBetallParameters {
-    "@type": "fsl.old_betall";
+    "@type"?: "fsl/old_betall";
     "t1_filerout": string;
     "t2_filerout": string;
 }
+type OldBetallParametersTagged = Required<Pick<OldBetallParameters, '@type'>> & OldBetallParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.old_betall": old_betall_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.old_betall": old_betall_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `old_betall(...)`.
+ * Output object returned when calling `OldBetallParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +51,9 @@ interface OldBetallOutputs {
 function old_betall_params(
     t1_filerout: string,
     t2_filerout: string,
-): OldBetallParameters {
+): OldBetallParametersTagged {
     const params = {
-        "@type": "fsl.old_betall" as const,
+        "@type": "fsl/old_betall" as const,
         "t1_filerout": t1_filerout,
         "t2_filerout": t2_filerout,
     };
@@ -191,7 +158,6 @@ function old_betall(
 export {
       OLD_BETALL_METADATA,
       OldBetallOutputs,
-      OldBetallParameters,
       old_betall,
       old_betall_execute,
       old_betall_params,

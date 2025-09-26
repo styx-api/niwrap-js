@@ -12,28 +12,31 @@ const CIFTI_SMOOTHING_METADATA: Metadata = {
 
 
 interface CiftiSmoothingLeftSurfaceParameters {
-    "@type": "workbench.cifti-smoothing.left_surface";
+    "@type"?: "left_surface";
     "surface": InputPathType;
     "opt_left_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
+type CiftiSmoothingLeftSurfaceParametersTagged = Required<Pick<CiftiSmoothingLeftSurfaceParameters, '@type'>> & CiftiSmoothingLeftSurfaceParameters;
 
 
 interface CiftiSmoothingRightSurfaceParameters {
-    "@type": "workbench.cifti-smoothing.right_surface";
+    "@type"?: "right_surface";
     "surface": InputPathType;
     "opt_right_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
+type CiftiSmoothingRightSurfaceParametersTagged = Required<Pick<CiftiSmoothingRightSurfaceParameters, '@type'>> & CiftiSmoothingRightSurfaceParameters;
 
 
 interface CiftiSmoothingCerebellumSurfaceParameters {
-    "@type": "workbench.cifti-smoothing.cerebellum_surface";
+    "@type"?: "cerebellum_surface";
     "surface": InputPathType;
     "opt_cerebellum_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
+type CiftiSmoothingCerebellumSurfaceParametersTagged = Required<Pick<CiftiSmoothingCerebellumSurfaceParameters, '@type'>> & CiftiSmoothingCerebellumSurfaceParameters;
 
 
 interface CiftiSmoothingParameters {
-    "@type": "workbench.cifti-smoothing";
+    "@type"?: "workbench/cifti-smoothing";
     "cifti": InputPathType;
     "surface_kernel": number;
     "volume_kernel": number;
@@ -48,43 +51,7 @@ interface CiftiSmoothingParameters {
     "opt_fix_zeros_surface": boolean;
     "opt_merged_volume": boolean;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-smoothing": cifti_smoothing_cargs,
-        "workbench.cifti-smoothing.left_surface": cifti_smoothing_left_surface_cargs,
-        "workbench.cifti-smoothing.right_surface": cifti_smoothing_right_surface_cargs,
-        "workbench.cifti-smoothing.cerebellum_surface": cifti_smoothing_cerebellum_surface_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-smoothing": cifti_smoothing_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiSmoothingParametersTagged = Required<Pick<CiftiSmoothingParameters, '@type'>> & CiftiSmoothingParameters;
 
 
 /**
@@ -98,9 +65,9 @@ function dynOutputs(
 function cifti_smoothing_left_surface_params(
     surface: InputPathType,
     opt_left_corrected_areas_area_metric: InputPathType | null = null,
-): CiftiSmoothingLeftSurfaceParameters {
+): CiftiSmoothingLeftSurfaceParametersTagged {
     const params = {
-        "@type": "workbench.cifti-smoothing.left_surface" as const,
+        "@type": "left_surface" as const,
         "surface": surface,
     };
     if (opt_left_corrected_areas_area_metric !== null) {
@@ -146,9 +113,9 @@ function cifti_smoothing_left_surface_cargs(
 function cifti_smoothing_right_surface_params(
     surface: InputPathType,
     opt_right_corrected_areas_area_metric: InputPathType | null = null,
-): CiftiSmoothingRightSurfaceParameters {
+): CiftiSmoothingRightSurfaceParametersTagged {
     const params = {
-        "@type": "workbench.cifti-smoothing.right_surface" as const,
+        "@type": "right_surface" as const,
         "surface": surface,
     };
     if (opt_right_corrected_areas_area_metric !== null) {
@@ -194,9 +161,9 @@ function cifti_smoothing_right_surface_cargs(
 function cifti_smoothing_cerebellum_surface_params(
     surface: InputPathType,
     opt_cerebellum_corrected_areas_area_metric: InputPathType | null = null,
-): CiftiSmoothingCerebellumSurfaceParameters {
+): CiftiSmoothingCerebellumSurfaceParametersTagged {
     const params = {
-        "@type": "workbench.cifti-smoothing.cerebellum_surface" as const,
+        "@type": "cerebellum_surface" as const,
         "surface": surface,
     };
     if (opt_cerebellum_corrected_areas_area_metric !== null) {
@@ -232,7 +199,7 @@ function cifti_smoothing_cerebellum_surface_cargs(
 
 
 /**
- * Output object returned when calling `cifti_smoothing(...)`.
+ * Output object returned when calling `CiftiSmoothingParameters(...)`.
  *
  * @interface
  */
@@ -281,9 +248,9 @@ function cifti_smoothing_params(
     opt_fix_zeros_volume: boolean = false,
     opt_fix_zeros_surface: boolean = false,
     opt_merged_volume: boolean = false,
-): CiftiSmoothingParameters {
+): CiftiSmoothingParametersTagged {
     const params = {
-        "@type": "workbench.cifti-smoothing" as const,
+        "@type": "workbench/cifti-smoothing" as const,
         "cifti": cifti,
         "surface_kernel": surface_kernel,
         "volume_kernel": volume_kernel,
@@ -330,17 +297,17 @@ function cifti_smoothing_cargs(
     cargs.push(String((params["volume_kernel"] ?? null)));
     cargs.push((params["direction"] ?? null));
     cargs.push((params["cifti_out"] ?? null));
-    if ((params["opt_fwhm"] ?? null)) {
+    if ((params["opt_fwhm"] ?? false)) {
         cargs.push("-fwhm");
     }
     if ((params["left_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["left_surface"] ?? null)["@type"])((params["left_surface"] ?? null), execution));
+        cargs.push(...cifti_smoothing_left_surface_cargs((params["left_surface"] ?? null), execution));
     }
     if ((params["right_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["right_surface"] ?? null)["@type"])((params["right_surface"] ?? null), execution));
+        cargs.push(...cifti_smoothing_right_surface_cargs((params["right_surface"] ?? null), execution));
     }
     if ((params["cerebellum_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["cerebellum_surface"] ?? null)["@type"])((params["cerebellum_surface"] ?? null), execution));
+        cargs.push(...cifti_smoothing_cerebellum_surface_cargs((params["cerebellum_surface"] ?? null), execution));
     }
     if ((params["opt_cifti_roi_roi_cifti"] ?? null) !== null) {
         cargs.push(
@@ -348,13 +315,13 @@ function cifti_smoothing_cargs(
             execution.inputFile((params["opt_cifti_roi_roi_cifti"] ?? null))
         );
     }
-    if ((params["opt_fix_zeros_volume"] ?? null)) {
+    if ((params["opt_fix_zeros_volume"] ?? false)) {
         cargs.push("-fix-zeros-volume");
     }
-    if ((params["opt_fix_zeros_surface"] ?? null)) {
+    if ((params["opt_fix_zeros_surface"] ?? false)) {
         cargs.push("-fix-zeros-surface");
     }
-    if ((params["opt_merged_volume"] ?? null)) {
+    if ((params["opt_merged_volume"] ?? false)) {
         cargs.push("-merged-volume");
     }
     return cargs;
@@ -470,11 +437,7 @@ function cifti_smoothing(
 
 export {
       CIFTI_SMOOTHING_METADATA,
-      CiftiSmoothingCerebellumSurfaceParameters,
-      CiftiSmoothingLeftSurfaceParameters,
       CiftiSmoothingOutputs,
-      CiftiSmoothingParameters,
-      CiftiSmoothingRightSurfaceParameters,
       cifti_smoothing,
       cifti_smoothing_cerebellum_surface_params,
       cifti_smoothing_execute,

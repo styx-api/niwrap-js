@@ -12,7 +12,7 @@ const VOLUME_FIND_CLUSTERS_METADATA: Metadata = {
 
 
 interface VolumeFindClustersParameters {
-    "@type": "workbench.volume-find-clusters";
+    "@type"?: "workbench/volume-find-clusters";
     "volume_in": InputPathType;
     "value_threshold": number;
     "minimum_volume": number;
@@ -24,44 +24,11 @@ interface VolumeFindClustersParameters {
     "opt_distance_distance"?: number | null | undefined;
     "opt_start_startval"?: number | null | undefined;
 }
+type VolumeFindClustersParametersTagged = Required<Pick<VolumeFindClustersParameters, '@type'>> & VolumeFindClustersParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-find-clusters": volume_find_clusters_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-find-clusters": volume_find_clusters_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `volume_find_clusters(...)`.
+ * Output object returned when calling `VolumeFindClustersParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function volume_find_clusters_params(
     opt_size_ratio_ratio: number | null = null,
     opt_distance_distance: number | null = null,
     opt_start_startval: number | null = null,
-): VolumeFindClustersParameters {
+): VolumeFindClustersParametersTagged {
     const params = {
-        "@type": "workbench.volume-find-clusters" as const,
+        "@type": "workbench/volume-find-clusters" as const,
         "volume_in": volume_in,
         "value_threshold": value_threshold,
         "minimum_volume": minimum_volume,
@@ -151,7 +118,7 @@ function volume_find_clusters_cargs(
     cargs.push(String((params["value_threshold"] ?? null)));
     cargs.push(String((params["minimum_volume"] ?? null)));
     cargs.push((params["volume_out"] ?? null));
-    if ((params["opt_less_than"] ?? null)) {
+    if ((params["opt_less_than"] ?? false)) {
         cargs.push("-less-than");
     }
     if ((params["opt_roi_roi_volume"] ?? null) !== null) {
@@ -284,7 +251,6 @@ function volume_find_clusters(
 export {
       VOLUME_FIND_CLUSTERS_METADATA,
       VolumeFindClustersOutputs,
-      VolumeFindClustersParameters,
       volume_find_clusters,
       volume_find_clusters_execute,
       volume_find_clusters_params,

@@ -12,14 +12,15 @@ const CIFTI_ROIS_FROM_EXTREMA_METADATA: Metadata = {
 
 
 interface CiftiRoisFromExtremaGaussianParameters {
-    "@type": "workbench.cifti-rois-from-extrema.gaussian";
+    "@type"?: "gaussian";
     "surf_sigma": number;
     "vol_sigma": number;
 }
+type CiftiRoisFromExtremaGaussianParametersTagged = Required<Pick<CiftiRoisFromExtremaGaussianParameters, '@type'>> & CiftiRoisFromExtremaGaussianParameters;
 
 
 interface CiftiRoisFromExtremaParameters {
-    "@type": "workbench.cifti-rois-from-extrema";
+    "@type"?: "workbench/cifti-rois-from-extrema";
     "cifti": InputPathType;
     "surf_limit": number;
     "vol_limit": number;
@@ -32,41 +33,7 @@ interface CiftiRoisFromExtremaParameters {
     "opt_overlap_logic_method"?: string | null | undefined;
     "opt_merged_volume": boolean;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-rois-from-extrema": cifti_rois_from_extrema_cargs,
-        "workbench.cifti-rois-from-extrema.gaussian": cifti_rois_from_extrema_gaussian_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-rois-from-extrema": cifti_rois_from_extrema_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiRoisFromExtremaParametersTagged = Required<Pick<CiftiRoisFromExtremaParameters, '@type'>> & CiftiRoisFromExtremaParameters;
 
 
 /**
@@ -80,9 +47,9 @@ function dynOutputs(
 function cifti_rois_from_extrema_gaussian_params(
     surf_sigma: number,
     vol_sigma: number,
-): CiftiRoisFromExtremaGaussianParameters {
+): CiftiRoisFromExtremaGaussianParametersTagged {
     const params = {
-        "@type": "workbench.cifti-rois-from-extrema.gaussian" as const,
+        "@type": "gaussian" as const,
         "surf_sigma": surf_sigma,
         "vol_sigma": vol_sigma,
     };
@@ -111,7 +78,7 @@ function cifti_rois_from_extrema_gaussian_cargs(
 
 
 /**
- * Output object returned when calling `cifti_rois_from_extrema(...)`.
+ * Output object returned when calling `CiftiRoisFromExtremaParameters(...)`.
  *
  * @interface
  */
@@ -156,9 +123,9 @@ function cifti_rois_from_extrema_params(
     gaussian: CiftiRoisFromExtremaGaussianParameters | null = null,
     opt_overlap_logic_method: string | null = null,
     opt_merged_volume: boolean = false,
-): CiftiRoisFromExtremaParameters {
+): CiftiRoisFromExtremaParametersTagged {
     const params = {
-        "@type": "workbench.cifti-rois-from-extrema" as const,
+        "@type": "workbench/cifti-rois-from-extrema" as const,
         "cifti": cifti,
         "surf_limit": surf_limit,
         "vol_limit": vol_limit,
@@ -224,7 +191,7 @@ function cifti_rois_from_extrema_cargs(
         );
     }
     if ((params["gaussian"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["gaussian"] ?? null)["@type"])((params["gaussian"] ?? null), execution));
+        cargs.push(...cifti_rois_from_extrema_gaussian_cargs((params["gaussian"] ?? null), execution));
     }
     if ((params["opt_overlap_logic_method"] ?? null) !== null) {
         cargs.push(
@@ -232,7 +199,7 @@ function cifti_rois_from_extrema_cargs(
             (params["opt_overlap_logic_method"] ?? null)
         );
     }
-    if ((params["opt_merged_volume"] ?? null)) {
+    if ((params["opt_merged_volume"] ?? false)) {
         cargs.push("-merged-volume");
     }
     return cargs;
@@ -336,9 +303,7 @@ function cifti_rois_from_extrema(
 
 export {
       CIFTI_ROIS_FROM_EXTREMA_METADATA,
-      CiftiRoisFromExtremaGaussianParameters,
       CiftiRoisFromExtremaOutputs,
-      CiftiRoisFromExtremaParameters,
       cifti_rois_from_extrema,
       cifti_rois_from_extrema_execute,
       cifti_rois_from_extrema_gaussian_params,

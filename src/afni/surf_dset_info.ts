@@ -12,7 +12,7 @@ const SURF_DSET_INFO_METADATA: Metadata = {
 
 
 interface SurfDsetInfoParameters {
-    "@type": "afni.SurfDsetInfo";
+    "@type"?: "afni/SurfDsetInfo";
     "input_dsets": Array<InputPathType>;
     "debug_level"?: number | null | undefined;
     "novolreg": boolean;
@@ -33,43 +33,11 @@ interface SurfDsetInfoParameters {
     "help_aspx": boolean;
     "all_opts": boolean;
 }
+type SurfDsetInfoParametersTagged = Required<Pick<SurfDsetInfoParameters, '@type'>> & SurfDsetInfoParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.SurfDsetInfo": surf_dset_info_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surf_dset_info(...)`.
+ * Output object returned when calling `SurfDsetInfoParameters(...)`.
  *
  * @interface
  */
@@ -126,9 +94,9 @@ function surf_dset_info_params(
     help_spx: boolean = false,
     help_aspx: boolean = false,
     all_opts: boolean = false,
-): SurfDsetInfoParameters {
+): SurfDsetInfoParametersTagged {
     const params = {
-        "@type": "afni.SurfDsetInfo" as const,
+        "@type": "afni/SurfDsetInfo" as const,
         "input_dsets": input_dsets,
         "novolreg": novolreg,
         "noxform": noxform,
@@ -183,10 +151,10 @@ function surf_dset_info_cargs(
             String((params["debug_level"] ?? null))
         );
     }
-    if ((params["novolreg"] ?? null)) {
+    if ((params["novolreg"] ?? false)) {
         cargs.push("-novolreg");
     }
-    if ((params["noxform"] ?? null)) {
+    if ((params["noxform"] ?? false)) {
         cargs.push("-noxform");
     }
     if ((params["setenv"] ?? null) !== null) {
@@ -195,31 +163,31 @@ function surf_dset_info_cargs(
             (params["setenv"] ?? null)
         );
     }
-    if ((params["trace"] ?? null)) {
+    if ((params["trace"] ?? false)) {
         cargs.push("-trace");
     }
-    if ((params["extreme_trace"] ?? null)) {
+    if ((params["extreme_trace"] ?? false)) {
         cargs.push("-TRACE");
     }
-    if ((params["nomall"] ?? null)) {
+    if ((params["nomall"] ?? false)) {
         cargs.push("-nomall");
     }
-    if ((params["yesmall"] ?? null)) {
+    if ((params["yesmall"] ?? false)) {
         cargs.push("-yesmall");
     }
-    if ((params["mini_help"] ?? null)) {
+    if ((params["mini_help"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["extreme_help"] ?? null)) {
+    if ((params["extreme_help"] ?? false)) {
         cargs.push("-HELP");
     }
-    if ((params["help_view"] ?? null)) {
+    if ((params["help_view"] ?? false)) {
         cargs.push("-h_view");
     }
-    if ((params["help_web"] ?? null)) {
+    if ((params["help_web"] ?? false)) {
         cargs.push("-h_web");
     }
     if ((params["help_find"] ?? null) !== null) {
@@ -228,16 +196,16 @@ function surf_dset_info_cargs(
             (params["help_find"] ?? null)
         );
     }
-    if ((params["help_raw"] ?? null)) {
+    if ((params["help_raw"] ?? false)) {
         cargs.push("-h_raw");
     }
-    if ((params["help_spx"] ?? null)) {
+    if ((params["help_spx"] ?? false)) {
         cargs.push("-h_spx");
     }
-    if ((params["help_aspx"] ?? null)) {
+    if ((params["help_aspx"] ?? false)) {
         cargs.push("-h_aspx");
     }
-    if ((params["all_opts"] ?? null)) {
+    if ((params["all_opts"] ?? false)) {
         cargs.push("-all_opts");
     }
     return cargs;
@@ -353,7 +321,6 @@ function surf_dset_info(
 export {
       SURF_DSET_INFO_METADATA,
       SurfDsetInfoOutputs,
-      SurfDsetInfoParameters,
       surf_dset_info,
       surf_dset_info_execute,
       surf_dset_info_params,

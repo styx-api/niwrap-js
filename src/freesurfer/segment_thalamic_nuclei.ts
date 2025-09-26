@@ -12,48 +12,15 @@ const SEGMENT_THALAMIC_NUCLEI_METADATA: Metadata = {
 
 
 interface SegmentThalamicNucleiParameters {
-    "@type": "freesurfer.SegmentThalamicNuclei";
+    "@type"?: "freesurfer/SegmentThalamicNuclei";
     "t1_image": InputPathType;
     "output_dir": string;
 }
+type SegmentThalamicNucleiParametersTagged = Required<Pick<SegmentThalamicNucleiParameters, '@type'>> & SegmentThalamicNucleiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.SegmentThalamicNuclei": segment_thalamic_nuclei_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.SegmentThalamicNuclei": segment_thalamic_nuclei_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `segment_thalamic_nuclei(...)`.
+ * Output object returned when calling `SegmentThalamicNucleiParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface SegmentThalamicNucleiOutputs {
 function segment_thalamic_nuclei_params(
     t1_image: InputPathType,
     output_dir: string,
-): SegmentThalamicNucleiParameters {
+): SegmentThalamicNucleiParametersTagged {
     const params = {
-        "@type": "freesurfer.SegmentThalamicNuclei" as const,
+        "@type": "freesurfer/SegmentThalamicNuclei" as const,
         "t1_image": t1_image,
         "output_dir": output_dir,
     };
@@ -186,7 +153,6 @@ function segment_thalamic_nuclei(
 export {
       SEGMENT_THALAMIC_NUCLEI_METADATA,
       SegmentThalamicNucleiOutputs,
-      SegmentThalamicNucleiParameters,
       segment_thalamic_nuclei,
       segment_thalamic_nuclei_execute,
       segment_thalamic_nuclei_params,

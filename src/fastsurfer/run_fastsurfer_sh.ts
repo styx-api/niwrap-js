@@ -12,7 +12,7 @@ const RUN_FASTSURFER_SH_METADATA: Metadata = {
 
 
 interface RunFastsurferShParameters {
-    "@type": "fastsurfer.run_fastsurfer.sh";
+    "@type"?: "fastsurfer/run_fastsurfer.sh";
     "sid": string;
     "subjects_dir": string;
     "t1_input": InputPathType;
@@ -49,44 +49,11 @@ interface RunFastsurferShParameters {
     "allow_root": boolean;
     "version"?: string | null | undefined;
 }
+type RunFastsurferShParametersTagged = Required<Pick<RunFastsurferShParameters, '@type'>> & RunFastsurferShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fastsurfer.run_fastsurfer.sh": run_fastsurfer_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fastsurfer.run_fastsurfer.sh": run_fastsurfer_sh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `run_fastsurfer_sh(...)`.
+ * Output object returned when calling `RunFastsurferShParameters(...)`.
  *
  * @interface
  */
@@ -195,9 +162,9 @@ function run_fastsurfer_sh_params(
     no_surfreg: boolean = false,
     allow_root: boolean = false,
     version: string | null = null,
-): RunFastsurferShParameters {
+): RunFastsurferShParametersTagged {
     const params = {
-        "@type": "fastsurfer.run_fastsurfer.sh" as const,
+        "@type": "fastsurfer/run_fastsurfer.sh" as const,
         "sid": sid,
         "subjects_dir": subjects_dir,
         "t1_input": t1_input,
@@ -312,7 +279,7 @@ function run_fastsurfer_sh_cargs(
             (params["vox_size"] ?? null)
         );
     }
-    if ((params["seg_only"] ?? null)) {
+    if ((params["seg_only"] ?? false)) {
         cargs.push("--seg_only");
     }
     if ((params["seg_log"] ?? null) !== null) {
@@ -375,19 +342,19 @@ function run_fastsurfer_sh_cargs(
             (params["python_cmd"] ?? null)
         );
     }
-    if ((params["surf_only"] ?? null)) {
+    if ((params["surf_only"] ?? false)) {
         cargs.push("--surf_only");
     }
-    if ((params["no_biasfield"] ?? null)) {
+    if ((params["no_biasfield"] ?? false)) {
         cargs.push("--no_biasfield");
     }
-    if ((params["tal_reg"] ?? null)) {
+    if ((params["tal_reg"] ?? false)) {
         cargs.push("--tal_reg");
     }
-    if ((params["no_asegdkt"] ?? null)) {
+    if ((params["no_asegdkt"] ?? false)) {
         cargs.push("--no_asegdkt");
     }
-    if ((params["no_cereb"] ?? null)) {
+    if ((params["no_cereb"] ?? false)) {
         cargs.push("--no_cereb");
     }
     if ((params["cereb_segfile"] ?? null) !== null) {
@@ -396,37 +363,37 @@ function run_fastsurfer_sh_cargs(
             (params["cereb_segfile"] ?? null)
         );
     }
-    if ((params["no_hypothal"] ?? null)) {
+    if ((params["no_hypothal"] ?? false)) {
         cargs.push("--no_hypothal");
     }
-    if ((params["qc_snap"] ?? null)) {
+    if ((params["qc_snap"] ?? false)) {
         cargs.push("--qc_snap");
     }
-    if ((params["three_t"] ?? null)) {
+    if ((params["three_t"] ?? false)) {
         cargs.push("--3T");
     }
-    if ((params["parallel"] ?? null)) {
+    if ((params["parallel"] ?? false)) {
         cargs.push("--parallel");
     }
-    if ((params["ignore_fs_version"] ?? null)) {
+    if ((params["ignore_fs_version"] ?? false)) {
         cargs.push("--ignore_fs_version");
     }
-    if ((params["fstess"] ?? null)) {
+    if ((params["fstess"] ?? false)) {
         cargs.push("--fstess");
     }
-    if ((params["fsqsphere"] ?? null)) {
+    if ((params["fsqsphere"] ?? false)) {
         cargs.push("--fsqsphere");
     }
-    if ((params["fsaparc"] ?? null)) {
+    if ((params["fsaparc"] ?? false)) {
         cargs.push("--fsaparc");
     }
-    if ((params["no_fs_t1"] ?? null)) {
+    if ((params["no_fs_t1"] ?? false)) {
         cargs.push("--no_fs_T1");
     }
-    if ((params["no_surfreg"] ?? null)) {
+    if ((params["no_surfreg"] ?? false)) {
         cargs.push("--no_surfreg");
     }
-    if ((params["allow_root"] ?? null)) {
+    if ((params["allow_root"] ?? false)) {
         cargs.push("--allow_root");
     }
     if ((params["version"] ?? null) !== null) {
@@ -577,7 +544,6 @@ function run_fastsurfer_sh(
 export {
       RUN_FASTSURFER_SH_METADATA,
       RunFastsurferShOutputs,
-      RunFastsurferShParameters,
       run_fastsurfer_sh,
       run_fastsurfer_sh_execute,
       run_fastsurfer_sh_params,

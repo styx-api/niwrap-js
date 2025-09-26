@@ -12,7 +12,7 @@ const MRI_SURF2VOL_METADATA: Metadata = {
 
 
 interface MriSurf2volParameters {
-    "@type": "freesurfer.mri_surf2vol";
+    "@type"?: "freesurfer/mri_surf2vol";
     "surface_overlay"?: Array<string> | null | undefined;
     "ltafile"?: InputPathType | null | undefined;
     "outfile": string;
@@ -43,44 +43,11 @@ interface MriSurf2volParameters {
     "version": boolean;
     "help": boolean;
 }
+type MriSurf2volParametersTagged = Required<Pick<MriSurf2volParameters, '@type'>> & MriSurf2volParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_surf2vol": mri_surf2vol_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_surf2vol": mri_surf2vol_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_surf2vol(...)`.
+ * Output object returned when calling `MriSurf2volParameters(...)`.
  *
  * @interface
  */
@@ -165,9 +132,9 @@ function mri_surf2vol_params(
     gdiagno: number | null = null,
     version: boolean = false,
     help: boolean = false,
-): MriSurf2volParameters {
+): MriSurf2volParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_surf2vol" as const,
+        "@type": "freesurfer/mri_surf2vol" as const,
         "outfile": outfile,
         "mkmask": mkmask,
         "fill_ribbon": fill_ribbon,
@@ -300,7 +267,7 @@ function mri_surf2vol_cargs(
             (params["surface_values"] ?? null)
         );
     }
-    if ((params["mkmask"] ?? null)) {
+    if ((params["mkmask"] ?? false)) {
         cargs.push("--mkmask");
     }
     if ((params["hemi"] ?? null) !== null) {
@@ -321,7 +288,7 @@ function mri_surf2vol_cargs(
             String((params["projfrac"] ?? null))
         );
     }
-    if ((params["fill_ribbon"] ?? null)) {
+    if ((params["fill_ribbon"] ?? false)) {
         cargs.push("--fillribbon");
     }
     if ((params["fill_projfrac"] ?? null) !== null) {
@@ -372,7 +339,7 @@ function mri_surf2vol_cargs(
             (params["sphpvf"] ?? null)
         );
     }
-    if ((params["mask_to_cortex"] ?? null)) {
+    if ((params["mask_to_cortex"] ?? false)) {
         cargs.push("--mask-to-cortex");
     }
     if ((params["mask_to_label"] ?? null) !== null) {
@@ -393,7 +360,7 @@ function mri_surf2vol_cargs(
             String((params["add_const"] ?? null))
         );
     }
-    if ((params["copy_ctab"] ?? null)) {
+    if ((params["copy_ctab"] ?? false)) {
         cargs.push("--copy-ctab");
     }
     if ((params["subjects_dir"] ?? null) !== null) {
@@ -408,10 +375,10 @@ function mri_surf2vol_cargs(
             String((params["gdiagno"] ?? null))
         );
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -549,7 +516,6 @@ function mri_surf2vol(
 export {
       MRI_SURF2VOL_METADATA,
       MriSurf2volOutputs,
-      MriSurf2volParameters,
       mri_surf2vol,
       mri_surf2vol_execute,
       mri_surf2vol_params,

@@ -12,7 +12,7 @@ const MRI_DEFACER_METADATA: Metadata = {
 
 
 interface MriDefacerParameters {
-    "@type": "freesurfer.mri_defacer";
+    "@type"?: "freesurfer/mri_defacer";
     "input_volume": InputPathType;
     "headmask": InputPathType;
     "tempsurf": InputPathType;
@@ -38,43 +38,11 @@ interface MriDefacerParameters {
     "checkopts": boolean;
     "version": boolean;
 }
+type MriDefacerParametersTagged = Required<Pick<MriDefacerParameters, '@type'>> & MriDefacerParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_defacer": mri_defacer_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_defacer(...)`.
+ * Output object returned when calling `MriDefacerParameters(...)`.
  *
  * @interface
  */
@@ -141,9 +109,9 @@ function mri_defacer_params(
     debug: boolean = false,
     checkopts: boolean = false,
     version: boolean = false,
-): MriDefacerParameters {
+): MriDefacerParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_defacer" as const,
+        "@type": "freesurfer/mri_defacer" as const,
         "input_volume": input_volume,
         "headmask": headmask,
         "tempsurf": tempsurf,
@@ -339,13 +307,13 @@ function mri_defacer_cargs(
             String((params["diagnostic_level"] ?? null))
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["checkopts"] ?? null)) {
+    if ((params["checkopts"] ?? false)) {
         cargs.push("--checkopts");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -471,7 +439,6 @@ function mri_defacer(
 export {
       MRI_DEFACER_METADATA,
       MriDefacerOutputs,
-      MriDefacerParameters,
       mri_defacer,
       mri_defacer_execute,
       mri_defacer_params,

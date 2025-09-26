@@ -12,7 +12,7 @@ const FDR_METADATA: Metadata = {
 
 
 interface FdrParameters {
-    "@type": "fsl.fdr";
+    "@type"?: "fsl/fdr";
     "infile": InputPathType;
     "maskfile"?: InputPathType | null | undefined;
     "qvalue"?: number | null | undefined;
@@ -26,44 +26,11 @@ interface FdrParameters {
     "debug_flag": boolean;
     "verbose_flag": boolean;
 }
+type FdrParametersTagged = Required<Pick<FdrParameters, '@type'>> & FdrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fdr": fdr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fdr": fdr_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fdr(...)`.
+ * Output object returned when calling `FdrParameters(...)`.
  *
  * @interface
  */
@@ -118,9 +85,9 @@ function fdr_params(
     conservative_flag: boolean = false,
     debug_flag: boolean = false,
     verbose_flag: boolean = false,
-): FdrParameters {
+): FdrParametersTagged {
     const params = {
-        "@type": "fsl.fdr" as const,
+        "@type": "fsl/fdr" as const,
         "infile": infile,
         "othresh_flag": othresh_flag,
         "order_flag": order_flag,
@@ -180,28 +147,28 @@ function fdr_cargs(
             (params["adjustedimage"] ?? null)
         );
     }
-    if ((params["othresh_flag"] ?? null)) {
+    if ((params["othresh_flag"] ?? false)) {
         cargs.push("--othresh");
     }
-    if ((params["order_flag"] ?? null)) {
+    if ((params["order_flag"] ?? false)) {
         cargs.push("--order");
     }
-    if ((params["oneminusp_flag"] ?? null)) {
+    if ((params["oneminusp_flag"] ?? false)) {
         cargs.push("--oneminusp");
     }
-    if ((params["positive_corr_flag"] ?? null)) {
+    if ((params["positive_corr_flag"] ?? false)) {
         cargs.push("--positivecorr");
     }
-    if ((params["independent_flag"] ?? null)) {
+    if ((params["independent_flag"] ?? false)) {
         cargs.push("--independent");
     }
-    if ((params["conservative_flag"] ?? null)) {
+    if ((params["conservative_flag"] ?? false)) {
         cargs.push("--conservative");
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
     return cargs;
@@ -306,7 +273,6 @@ function fdr(
 export {
       FDR_METADATA,
       FdrOutputs,
-      FdrParameters,
       fdr,
       fdr_execute,
       fdr_params,

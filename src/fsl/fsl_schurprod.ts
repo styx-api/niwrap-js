@@ -12,7 +12,7 @@ const FSL_SCHURPROD_METADATA: Metadata = {
 
 
 interface FslSchurprodParameters {
-    "@type": "fsl.fsl_schurprod";
+    "@type"?: "fsl/fsl_schurprod";
     "input_file": InputPathType;
     "design_file": InputPathType;
     "output_file": string;
@@ -22,44 +22,11 @@ interface FslSchurprodParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
+type FslSchurprodParametersTagged = Required<Pick<FslSchurprodParameters, '@type'>> & FslSchurprodParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fsl_schurprod": fsl_schurprod_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fsl_schurprod": fsl_schurprod_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsl_schurprod(...)`.
+ * Output object returned when calling `FslSchurprodParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function fsl_schurprod_params(
     mask_file: InputPathType | null = null,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): FslSchurprodParameters {
+): FslSchurprodParametersTagged {
     const params = {
-        "@type": "fsl.fsl_schurprod" as const,
+        "@type": "fsl/fsl_schurprod" as const,
         "input_file": input_file,
         "design_file": design_file,
         "output_file": output_file,
@@ -144,7 +111,7 @@ function fsl_schurprod_cargs(
         "-o",
         (params["output_file"] ?? null)
     );
-    if ((params["regression_flag"] ?? null)) {
+    if ((params["regression_flag"] ?? false)) {
         cargs.push("-r");
     }
     if ((params["index"] ?? null) !== null) {
@@ -159,10 +126,10 @@ function fsl_schurprod_cargs(
             execution.inputFile((params["mask_file"] ?? null))
         );
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -257,7 +224,6 @@ function fsl_schurprod(
 export {
       FSL_SCHURPROD_METADATA,
       FslSchurprodOutputs,
-      FslSchurprodParameters,
       fsl_schurprod,
       fsl_schurprod_execute,
       fsl_schurprod_params,

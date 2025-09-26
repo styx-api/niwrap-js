@@ -12,14 +12,15 @@ const SCALE_TO_MAP_METADATA: Metadata = {
 
 
 interface ScaleToMapTraceParameters {
-    "@type": "afni.ScaleToMap.trace";
+    "@type"?: "trace";
     "trace": boolean;
     "TRACE": boolean;
 }
+type ScaleToMapTraceParametersTagged = Required<Pick<ScaleToMapTraceParameters, '@type'>> & ScaleToMapTraceParameters;
 
 
 interface ScaleToMapParameters {
-    "@type": "afni.ScaleToMap";
+    "@type"?: "afni/ScaleToMap";
     "input_file": InputPathType;
     "icol": number;
     "vcol": number;
@@ -50,40 +51,7 @@ interface ScaleToMapParameters {
     "nomall": boolean;
     "yesmall": boolean;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.ScaleToMap": scale_to_map_cargs,
-        "afni.ScaleToMap.trace": scale_to_map_trace_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type ScaleToMapParametersTagged = Required<Pick<ScaleToMapParameters, '@type'>> & ScaleToMapParameters;
 
 
 /**
@@ -97,9 +65,9 @@ function dynOutputs(
 function scale_to_map_trace_params(
     trace: boolean = false,
     trace_: boolean = false,
-): ScaleToMapTraceParameters {
+): ScaleToMapTraceParametersTagged {
     const params = {
-        "@type": "afni.ScaleToMap.trace" as const,
+        "@type": "trace" as const,
         "trace": trace,
         "TRACE": trace_,
     };
@@ -120,10 +88,10 @@ function scale_to_map_trace_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["trace"] ?? null)) {
+    if ((params["trace"] ?? false)) {
         cargs.push("-trace");
     }
-    if ((params["TRACE"] ?? null)) {
+    if ((params["TRACE"] ?? false)) {
         cargs.push("-TRACE");
     }
     return cargs;
@@ -131,7 +99,7 @@ function scale_to_map_trace_cargs(
 
 
 /**
- * Output object returned when calling `scale_to_map(...)`.
+ * Output object returned when calling `ScaleToMapParameters(...)`.
  *
  * @interface
  */
@@ -208,9 +176,9 @@ function scale_to_map_params(
     trace: ScaleToMapTraceParameters | null = null,
     nomall: boolean = false,
     yesmall: boolean = false,
-): ScaleToMapParameters {
+): ScaleToMapParametersTagged {
     const params = {
-        "@type": "afni.ScaleToMap" as const,
+        "@type": "afni/ScaleToMap" as const,
         "input_file": input_file,
         "icol": icol,
         "vcol": vcol,
@@ -304,7 +272,7 @@ function scale_to_map_cargs(
             execution.inputFile((params["cmapdb"] ?? null))
         );
     }
-    if ((params["frf"] ?? null)) {
+    if ((params["frf"] ?? false)) {
         cargs.push("-frf");
     }
     if ((params["clp"] ?? null) !== null) {
@@ -331,16 +299,16 @@ function scale_to_map_cargs(
             String((params["anr"] ?? null))
         );
     }
-    if ((params["interp"] ?? null)) {
+    if ((params["interp"] ?? false)) {
         cargs.push("-interp");
     }
-    if ((params["nointerp"] ?? null)) {
+    if ((params["nointerp"] ?? false)) {
         cargs.push("-nointerp");
     }
-    if ((params["direct"] ?? null)) {
+    if ((params["direct"] ?? false)) {
         cargs.push("-direct");
     }
-    if ((params["msk_zero"] ?? null)) {
+    if ((params["msk_zero"] ?? false)) {
         cargs.push("-msk_zero");
     }
     if ((params["msk"] ?? null) !== null) {
@@ -355,7 +323,7 @@ function scale_to_map_cargs(
             ...(params["msk_col"] ?? null).map(String)
         );
     }
-    if ((params["nomsk_col"] ?? null)) {
+    if ((params["nomsk_col"] ?? false)) {
         cargs.push("-nomsk_col");
     }
     if ((params["br"] ?? null) !== null) {
@@ -364,22 +332,22 @@ function scale_to_map_cargs(
             String((params["br"] ?? null))
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["showmap"] ?? null)) {
+    if ((params["showmap"] ?? false)) {
         cargs.push("-showmap");
     }
-    if ((params["showdb"] ?? null)) {
+    if ((params["showdb"] ?? false)) {
         cargs.push("-showdb");
     }
-    if ((params["novolreg"] ?? null)) {
+    if ((params["novolreg"] ?? false)) {
         cargs.push("-novolreg");
     }
-    if ((params["noxform"] ?? null)) {
+    if ((params["noxform"] ?? false)) {
         cargs.push("-noxform");
     }
     if ((params["setenv"] ?? null) !== null) {
@@ -389,12 +357,12 @@ function scale_to_map_cargs(
         );
     }
     if ((params["trace"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["trace"] ?? null)["@type"])((params["trace"] ?? null), execution));
+        cargs.push(...scale_to_map_trace_cargs((params["trace"] ?? null), execution));
     }
-    if ((params["nomall"] ?? null)) {
+    if ((params["nomall"] ?? false)) {
         cargs.push("-nomall");
     }
-    if ((params["yesmall"] ?? null)) {
+    if ((params["yesmall"] ?? false)) {
         cargs.push("-yesmall");
     }
     return cargs;
@@ -530,8 +498,6 @@ function scale_to_map(
 export {
       SCALE_TO_MAP_METADATA,
       ScaleToMapOutputs,
-      ScaleToMapParameters,
-      ScaleToMapTraceParameters,
       scale_to_map,
       scale_to_map_execute,
       scale_to_map_params,

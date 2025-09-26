@@ -12,7 +12,7 @@ const FLIRT_AVERAGE_METADATA: Metadata = {
 
 
 interface FlirtAverageParameters {
-    "@type": "fsl.flirt_average";
+    "@type"?: "fsl/flirt_average";
     "ninputs": number;
     "input1": InputPathType;
     "input2": InputPathType;
@@ -21,44 +21,11 @@ interface FlirtAverageParameters {
     "reference_image"?: InputPathType | null | undefined;
     "flirt_options"?: string | null | undefined;
 }
+type FlirtAverageParametersTagged = Required<Pick<FlirtAverageParameters, '@type'>> & FlirtAverageParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.flirt_average": flirt_average_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.flirt_average": flirt_average_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `flirt_average(...)`.
+ * Output object returned when calling `FlirtAverageParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function flirt_average_params(
     input3: InputPathType | null = null,
     reference_image: InputPathType | null = null,
     flirt_options: string | null = null,
-): FlirtAverageParameters {
+): FlirtAverageParametersTagged {
     const params = {
-        "@type": "fsl.flirt_average" as const,
+        "@type": "fsl/flirt_average" as const,
         "ninputs": ninputs,
         "input1": input1,
         "input2": input2,
@@ -236,7 +203,6 @@ function flirt_average(
 export {
       FLIRT_AVERAGE_METADATA,
       FlirtAverageOutputs,
-      FlirtAverageParameters,
       flirt_average,
       flirt_average_execute,
       flirt_average_params,

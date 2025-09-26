@@ -12,7 +12,7 @@ const MRI_VOL2LABEL_METADATA: Metadata = {
 
 
 interface MriVol2labelParameters {
-    "@type": "freesurfer.mri_vol2label";
+    "@type"?: "freesurfer/mri_vol2label";
     "input": InputPathType;
     "label_id"?: number | null | undefined;
     "threshold"?: number | null | undefined;
@@ -26,44 +26,11 @@ interface MriVol2labelParameters {
     "erosions"?: number | null | undefined;
     "help": boolean;
 }
+type MriVol2labelParametersTagged = Required<Pick<MriVol2labelParameters, '@type'>> & MriVol2labelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_vol2label": mri_vol2label_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_vol2label": mri_vol2label_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_vol2label(...)`.
+ * Output object returned when calling `MriVol2labelParameters(...)`.
  *
  * @interface
  */
@@ -114,9 +81,9 @@ function mri_vol2label_params(
     dilations: number | null = null,
     erosions: number | null = null,
     help: boolean = false,
-): MriVol2labelParameters {
+): MriVol2labelParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_vol2label" as const,
+        "@type": "freesurfer/mri_vol2label" as const,
         "input": input,
         "label_file": label_file,
         "remove_holes": remove_holes,
@@ -208,7 +175,7 @@ function mri_vol2label_cargs(
             (params["opt_params"] ?? null)
         );
     }
-    if ((params["remove_holes"] ?? null)) {
+    if ((params["remove_holes"] ?? false)) {
         cargs.push("--remove-holes-islands");
     }
     if ((params["dilations"] ?? null) !== null) {
@@ -223,7 +190,7 @@ function mri_vol2label_cargs(
             String((params["erosions"] ?? null))
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -327,7 +294,6 @@ function mri_vol2label(
 export {
       MRI_VOL2LABEL_METADATA,
       MriVol2labelOutputs,
-      MriVol2labelParameters,
       mri_vol2label,
       mri_vol2label_execute,
       mri_vol2label_params,

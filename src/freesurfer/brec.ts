@@ -12,47 +12,15 @@ const BREC_METADATA: Metadata = {
 
 
 interface BrecParameters {
-    "@type": "freesurfer.brec";
+    "@type"?: "freesurfer/brec";
     "my_file": string;
     "depth_limit": boolean;
 }
+type BrecParametersTagged = Required<Pick<BrecParameters, '@type'>> & BrecParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.brec": brec_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `brec(...)`.
+ * Output object returned when calling `BrecParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface BrecOutputs {
 function brec_params(
     my_file: string,
     depth_limit: boolean = false,
-): BrecParameters {
+): BrecParametersTagged {
     const params = {
-        "@type": "freesurfer.brec" as const,
+        "@type": "freesurfer/brec" as const,
         "my_file": my_file,
         "depth_limit": depth_limit,
     };
@@ -100,7 +68,7 @@ function brec_cargs(
     const cargs: string[] = [];
     cargs.push("brec");
     cargs.push((params["my_file"] ?? null));
-    if ((params["depth_limit"] ?? null)) {
+    if ((params["depth_limit"] ?? false)) {
         cargs.push("-depth_limit");
     }
     return cargs;
@@ -182,7 +150,6 @@ function brec(
 export {
       BREC_METADATA,
       BrecOutputs,
-      BrecParameters,
       brec,
       brec_execute,
       brec_params,

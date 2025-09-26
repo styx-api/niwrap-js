@@ -12,7 +12,7 @@ const ANTS_JOINT_LABEL_FUSION_SH_METADATA: Metadata = {
 
 
 interface AntsJointLabelFusionShParameters {
-    "@type": "ants.antsJointLabelFusion.sh";
+    "@type"?: "ants/antsJointLabelFusion.sh";
     "dimensionality"?: 2 | 3 | null | undefined;
     "output"?: string | null | undefined;
     "atlas_image_mrf"?: string | null | undefined;
@@ -26,44 +26,11 @@ interface AntsJointLabelFusionShParameters {
     "rigid_transform_additional_options"?: string | null | undefined;
     "similarity_metric_additional_options"?: string | null | undefined;
 }
+type AntsJointLabelFusionShParametersTagged = Required<Pick<AntsJointLabelFusionShParameters, '@type'>> & AntsJointLabelFusionShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.antsJointLabelFusion.sh": ants_joint_label_fusion_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.antsJointLabelFusion.sh": ants_joint_label_fusion_sh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ants_joint_label_fusion_sh(...)`.
+ * Output object returned when calling `AntsJointLabelFusionShParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function ants_joint_label_fusion_sh_params(
     verbose: 0 | 1 | null = null,
     rigid_transform_additional_options: string | null = null,
     similarity_metric_additional_options: string | null = null,
-): AntsJointLabelFusionShParameters {
+): AntsJointLabelFusionShParametersTagged {
     const params = {
-        "@type": "ants.antsJointLabelFusion.sh" as const,
+        "@type": "ants/antsJointLabelFusion.sh" as const,
         "target_image": target_image,
         "mask_image": mask_image,
     };
@@ -332,7 +299,6 @@ function ants_joint_label_fusion_sh(
 export {
       ANTS_JOINT_LABEL_FUSION_SH_METADATA,
       AntsJointLabelFusionShOutputs,
-      AntsJointLabelFusionShParameters,
       ants_joint_label_fusion_sh,
       ants_joint_label_fusion_sh_execute,
       ants_joint_label_fusion_sh_params,

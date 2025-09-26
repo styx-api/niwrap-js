@@ -12,7 +12,7 @@ const MRI_PATH2LABEL_METADATA: Metadata = {
 
 
 interface MriPath2labelParameters {
-    "@type": "freesurfer.mri_path2label";
+    "@type"?: "freesurfer/mri_path2label";
     "input_file": string;
     "output_file": string;
     "single": boolean;
@@ -25,43 +25,11 @@ interface MriPath2labelParameters {
     "source_file"?: string | null | undefined;
     "dest_file"?: string | null | undefined;
 }
+type MriPath2labelParametersTagged = Required<Pick<MriPath2labelParameters, '@type'>> & MriPath2labelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_path2label": mri_path2label_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_path2label(...)`.
+ * Output object returned when calling `MriPath2labelParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +70,9 @@ function mri_path2label_params(
     confill: Array<string> | null = null,
     source_file: string | null = null,
     dest_file: string | null = null,
-): MriPath2labelParameters {
+): MriPath2labelParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_path2label" as const,
+        "@type": "freesurfer/mri_path2label" as const,
         "input_file": input_file,
         "output_file": output_file,
         "single": single,
@@ -149,13 +117,13 @@ function mri_path2label_cargs(
     cargs.push("mri_path2label");
     cargs.push((params["input_file"] ?? null));
     cargs.push((params["output_file"] ?? null));
-    if ((params["single"] ?? null)) {
+    if ((params["single"] ?? false)) {
         cargs.push("--single");
     }
-    if ((params["path_to_label"] ?? null)) {
+    if ((params["path_to_label"] ?? false)) {
         cargs.push("--path2label");
     }
-    if ((params["label_to_path"] ?? null)) {
+    if ((params["label_to_path"] ?? false)) {
         cargs.push("--label2path");
     }
     if ((params["connect"] ?? null) !== null) {
@@ -291,7 +259,6 @@ function mri_path2label(
 export {
       MRI_PATH2LABEL_METADATA,
       MriPath2labelOutputs,
-      MriPath2labelParameters,
       mri_path2label,
       mri_path2label_execute,
       mri_path2label_params,

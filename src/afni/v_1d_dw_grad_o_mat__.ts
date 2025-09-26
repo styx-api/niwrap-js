@@ -12,7 +12,7 @@ const V_1D_DW_GRAD_O_MAT___METADATA: Metadata = {
 
 
 interface V1dDwGradOMatParameters {
-    "@type": "afni.1dDW_Grad_o_Mat++";
+    "@type"?: "afni/1dDW_Grad_o_Mat++";
     "in_row_vec": InputPathType;
     "in_col_vec": InputPathType;
     "in_col_matA": InputPathType;
@@ -35,44 +35,11 @@ interface V1dDwGradOMatParameters {
     "put_zeros_top": boolean;
     "bmax_ref"?: number | null | undefined;
 }
+type V1dDwGradOMatParametersTagged = Required<Pick<V1dDwGradOMatParameters, '@type'>> & V1dDwGradOMatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dDW_Grad_o_Mat++": v_1d_dw_grad_o_mat___cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.1dDW_Grad_o_Mat++": v_1d_dw_grad_o_mat___outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1d_dw_grad_o_mat__(...)`.
+ * Output object returned when calling `V1dDwGradOMatParameters(...)`.
  *
  * @interface
  */
@@ -145,9 +112,9 @@ function v_1d_dw_grad_o_mat___params(
     bref_mean_top: boolean = false,
     put_zeros_top: boolean = false,
     bmax_ref: number | null = null,
-): V1dDwGradOMatParameters {
+): V1dDwGradOMatParametersTagged {
     const params = {
-        "@type": "afni.1dDW_Grad_o_Mat++" as const,
+        "@type": "afni/1dDW_Grad_o_Mat++" as const,
         "in_row_vec": in_row_vec,
         "in_col_vec": in_col_vec,
         "in_col_matA": in_col_mat_a,
@@ -214,16 +181,16 @@ function v_1d_dw_grad_o_mat___cargs(
         "-in_col_matT",
         execution.inputFile((params["in_col_matT"] ?? null))
     );
-    if ((params["flip_x"] ?? null)) {
+    if ((params["flip_x"] ?? false)) {
         cargs.push("-flip_x");
     }
-    if ((params["flip_y"] ?? null)) {
+    if ((params["flip_y"] ?? false)) {
         cargs.push("-flip_y");
     }
-    if ((params["flip_z"] ?? null)) {
+    if ((params["flip_z"] ?? false)) {
         cargs.push("-flip_z");
     }
-    if ((params["no_flip"] ?? null)) {
+    if ((params["no_flip"] ?? false)) {
         cargs.push("-no_flip");
     }
     cargs.push(
@@ -248,7 +215,7 @@ function v_1d_dw_grad_o_mat___cargs(
             execution.inputFile((params["in_bvals"] ?? null))
         );
     }
-    if ((params["out_col_bval"] ?? null)) {
+    if ((params["out_col_bval"] ?? false)) {
         cargs.push("-out_col_bval");
     }
     if ((params["out_row_bval_sep"] ?? null) !== null) {
@@ -263,7 +230,7 @@ function v_1d_dw_grad_o_mat___cargs(
             (params["out_col_bval_sep"] ?? null)
         );
     }
-    if ((params["unit_mag_out"] ?? null)) {
+    if ((params["unit_mag_out"] ?? false)) {
         cargs.push("-unit_mag_out");
     }
     if ((params["check_abs_min"] ?? null) !== null) {
@@ -272,10 +239,10 @@ function v_1d_dw_grad_o_mat___cargs(
             String((params["check_abs_min"] ?? null))
         );
     }
-    if ((params["bref_mean_top"] ?? null)) {
+    if ((params["bref_mean_top"] ?? false)) {
         cargs.push("-bref_mean_top");
     }
-    if ((params["put_zeros_top"] ?? null)) {
+    if ((params["put_zeros_top"] ?? false)) {
         cargs.push("-put_zeros_top");
     }
     if ((params["bmax_ref"] ?? null) !== null) {
@@ -403,7 +370,6 @@ function v_1d_dw_grad_o_mat__(
 
 export {
       V1dDwGradOMatOutputs,
-      V1dDwGradOMatParameters,
       V_1D_DW_GRAD_O_MAT___METADATA,
       v_1d_dw_grad_o_mat__,
       v_1d_dw_grad_o_mat___execute,

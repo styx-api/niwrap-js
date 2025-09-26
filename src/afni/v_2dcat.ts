@@ -12,7 +12,7 @@ const V_2DCAT_METADATA: Metadata = {
 
 
 interface V2dcatParameters {
-    "@type": "afni.2dcat";
+    "@type"?: "afni/2dcat";
     "filenames": Array<InputPathType>;
     "scale_image"?: InputPathType | null | undefined;
     "scale_pixels"?: InputPathType | null | undefined;
@@ -39,44 +39,11 @@ interface V2dcatParameters {
     "gap"?: number | null | undefined;
     "gap_col"?: Array<number> | null | undefined;
 }
+type V2dcatParametersTagged = Required<Pick<V2dcatParameters, '@type'>> & V2dcatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.2dcat": v_2dcat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.2dcat": v_2dcat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_2dcat(...)`.
+ * Output object returned when calling `V2dcatParameters(...)`.
  *
  * @interface
  */
@@ -153,9 +120,9 @@ function v_2dcat_params(
     matrix_from_scale: boolean = false,
     gap: number | null = null,
     gap_col: Array<number> | null = null,
-): V2dcatParameters {
+): V2dcatParametersTagged {
     const params = {
-        "@type": "afni.2dcat" as const,
+        "@type": "afni/2dcat" as const,
         "filenames": filenames,
         "scale_intensity": scale_intensity,
         "rgb_out": rgb_out,
@@ -245,7 +212,7 @@ function v_2dcat_cargs(
             execution.inputFile((params["scale_pixels"] ?? null))
         );
     }
-    if ((params["scale_intensity"] ?? null)) {
+    if ((params["scale_intensity"] ?? false)) {
         cargs.push("-scale_intensity");
     }
     if ((params["gscale"] ?? null) !== null) {
@@ -254,7 +221,7 @@ function v_2dcat_cargs(
             String((params["gscale"] ?? null))
         );
     }
-    if ((params["rgb_out"] ?? null)) {
+    if ((params["rgb_out"] ?? false)) {
         cargs.push("-rgb_out");
     }
     if ((params["res_in"] ?? null) !== null) {
@@ -293,13 +260,13 @@ function v_2dcat_cargs(
             String((params["autocrop_atol"] ?? null))
         );
     }
-    if ((params["autocrop"] ?? null)) {
+    if ((params["autocrop"] ?? false)) {
         cargs.push("-autocrop");
     }
-    if ((params["zero_wrap"] ?? null)) {
+    if ((params["zero_wrap"] ?? false)) {
         cargs.push("-zero_wrap");
     }
-    if ((params["white_wrap"] ?? null)) {
+    if ((params["white_wrap"] ?? false)) {
         cargs.push("-white_wrap");
     }
     if ((params["gray_wrap"] ?? null) !== null) {
@@ -308,10 +275,10 @@ function v_2dcat_cargs(
             String((params["gray_wrap"] ?? null))
         );
     }
-    if ((params["image_wrap"] ?? null)) {
+    if ((params["image_wrap"] ?? false)) {
         cargs.push("-image_wrap");
     }
-    if ((params["rand_wrap"] ?? null)) {
+    if ((params["rand_wrap"] ?? false)) {
         cargs.push("-rand_wrap");
     }
     if ((params["prefix"] ?? null) !== null) {
@@ -338,7 +305,7 @@ function v_2dcat_cargs(
             String((params["ny"] ?? null))
         );
     }
-    if ((params["matrix_from_scale"] ?? null)) {
+    if ((params["matrix_from_scale"] ?? false)) {
         cargs.push("-matrix_from_scale");
     }
     if ((params["gap"] ?? null) !== null) {
@@ -479,7 +446,6 @@ function v_2dcat(
 
 export {
       V2dcatOutputs,
-      V2dcatParameters,
       V_2DCAT_METADATA,
       v_2dcat,
       v_2dcat_execute,

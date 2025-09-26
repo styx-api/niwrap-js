@@ -12,7 +12,7 @@ const V_3D_PFM_METADATA: Metadata = {
 
 
 interface V3dPfmParameters {
-    "@type": "afni.3dPFM";
+    "@type"?: "afni/3dPFM";
     "input": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "algorithm"?: string | null | undefined;
@@ -29,44 +29,11 @@ interface V3dPfmParameters {
     "nSeg"?: number | null | undefined;
     "verb"?: number | null | undefined;
 }
+type V3dPfmParametersTagged = Required<Pick<V3dPfmParameters, '@type'>> & V3dPfmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dPFM": v_3d_pfm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dPFM": v_3d_pfm_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_pfm(...)`.
+ * Output object returned when calling `V3dPfmParameters(...)`.
  *
  * @interface
  */
@@ -219,9 +186,9 @@ function v_3d_pfm_params(
     jobs: number | null = null,
     n_seg: number | null = null,
     verb: number | null = null,
-): V3dPfmParameters {
+): V3dPfmParametersTagged {
     const params = {
-        "@type": "afni.3dPFM" as const,
+        "@type": "afni/3dPFM" as const,
         "input": input,
     };
     if (mask !== null) {
@@ -502,7 +469,6 @@ function v_3d_pfm(
 
 export {
       V3dPfmOutputs,
-      V3dPfmParameters,
       V_3D_PFM_METADATA,
       v_3d_pfm,
       v_3d_pfm_execute,

@@ -12,7 +12,7 @@ const FSR_IMPORT_METADATA: Metadata = {
 
 
 interface FsrImportParameters {
-    "@type": "freesurfer.fsr-import";
+    "@type"?: "freesurfer/fsr-import";
     "outdir": string;
     "t1w_input"?: Array<InputPathType> | null | undefined;
     "t2w_input"?: Array<InputPathType> | null | undefined;
@@ -22,44 +22,11 @@ interface FsrImportParameters {
     "no_conform": boolean;
     "hires": boolean;
 }
+type FsrImportParametersTagged = Required<Pick<FsrImportParameters, '@type'>> & FsrImportParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fsr-import": fsr_import_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.fsr-import": fsr_import_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsr_import(...)`.
+ * Output object returned when calling `FsrImportParameters(...)`.
  *
  * @interface
  */
@@ -106,9 +73,9 @@ function fsr_import_params(
     force_update: boolean = false,
     no_conform: boolean = false,
     hires: boolean = false,
-): FsrImportParameters {
+): FsrImportParametersTagged {
     const params = {
-        "@type": "freesurfer.fsr-import" as const,
+        "@type": "freesurfer/fsr-import" as const,
         "outdir": outdir,
         "force_update": force_update,
         "no_conform": no_conform,
@@ -172,13 +139,13 @@ function fsr_import_cargs(
             ...(params["custom_mode_input"] ?? null)
         );
     }
-    if ((params["force_update"] ?? null)) {
+    if ((params["force_update"] ?? false)) {
         cargs.push("--force-update");
     }
-    if ((params["no_conform"] ?? null)) {
+    if ((params["no_conform"] ?? false)) {
         cargs.push("--no-conform");
     }
-    if ((params["hires"] ?? null)) {
+    if ((params["hires"] ?? false)) {
         cargs.push("--hires");
     }
     return cargs;
@@ -275,7 +242,6 @@ function fsr_import(
 export {
       FSR_IMPORT_METADATA,
       FsrImportOutputs,
-      FsrImportParameters,
       fsr_import,
       fsr_import_execute,
       fsr_import_params,

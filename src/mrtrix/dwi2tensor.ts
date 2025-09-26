@@ -12,21 +12,23 @@ const DWI2TENSOR_METADATA: Metadata = {
 
 
 interface Dwi2tensorFslgradParameters {
-    "@type": "mrtrix.dwi2tensor.fslgrad";
+    "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
+type Dwi2tensorFslgradParametersTagged = Required<Pick<Dwi2tensorFslgradParameters, '@type'>> & Dwi2tensorFslgradParameters;
 
 
 interface Dwi2tensorConfigParameters {
-    "@type": "mrtrix.dwi2tensor.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Dwi2tensorConfigParametersTagged = Required<Pick<Dwi2tensorConfigParameters, '@type'>> & Dwi2tensorConfigParameters;
 
 
 interface Dwi2tensorParameters {
-    "@type": "mrtrix.dwi2tensor";
+    "@type"?: "mrtrix/dwi2tensor";
     "ols": boolean;
     "mask"?: InputPathType | null | undefined;
     "b0"?: string | null | undefined;
@@ -46,42 +48,7 @@ interface Dwi2tensorParameters {
     "dwi": InputPathType;
     "dt": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.dwi2tensor": dwi2tensor_cargs,
-        "mrtrix.dwi2tensor.fslgrad": dwi2tensor_fslgrad_cargs,
-        "mrtrix.dwi2tensor.config": dwi2tensor_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.dwi2tensor": dwi2tensor_outputs,
-    };
-    return outputsFuncs[t];
-}
+type Dwi2tensorParametersTagged = Required<Pick<Dwi2tensorParameters, '@type'>> & Dwi2tensorParameters;
 
 
 /**
@@ -95,9 +62,9 @@ function dynOutputs(
 function dwi2tensor_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
-): Dwi2tensorFslgradParameters {
+): Dwi2tensorFslgradParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2tensor.fslgrad" as const,
+        "@type": "fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -136,9 +103,9 @@ function dwi2tensor_fslgrad_cargs(
 function dwi2tensor_config_params(
     key: string,
     value: string,
-): Dwi2tensorConfigParameters {
+): Dwi2tensorConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2tensor.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -167,7 +134,7 @@ function dwi2tensor_config_cargs(
 
 
 /**
- * Output object returned when calling `dwi2tensor(...)`.
+ * Output object returned when calling `Dwi2tensorParameters(...)`.
  *
  * @interface
  */
@@ -238,9 +205,9 @@ function dwi2tensor_params(
     config: Array<Dwi2tensorConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Dwi2tensorParameters {
+): Dwi2tensorParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2tensor" as const,
+        "@type": "mrtrix/dwi2tensor" as const,
         "ols": ols,
         "info": info,
         "quiet": quiet,
@@ -296,7 +263,7 @@ function dwi2tensor_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("dwi2tensor");
-    if ((params["ols"] ?? null)) {
+    if ((params["ols"] ?? false)) {
         cargs.push("-ols");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -336,18 +303,18 @@ function dwi2tensor_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
+        cargs.push(...dwi2tensor_fslgrad_cargs((params["fslgrad"] ?? null), execution));
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -357,12 +324,12 @@ function dwi2tensor_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dwi2tensor_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["dwi"] ?? null)));
@@ -531,10 +498,7 @@ function dwi2tensor(
 
 export {
       DWI2TENSOR_METADATA,
-      Dwi2tensorConfigParameters,
-      Dwi2tensorFslgradParameters,
       Dwi2tensorOutputs,
-      Dwi2tensorParameters,
       dwi2tensor,
       dwi2tensor_config_params,
       dwi2tensor_execute,

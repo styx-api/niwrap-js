@@ -12,7 +12,7 @@ const V_3D_WARP_METADATA: Metadata = {
 
 
 interface V3dWarpParameters {
-    "@type": "afni.3dWarp";
+    "@type"?: "afni/3dWarp";
     "matvec_in2out"?: InputPathType | null | undefined;
     "matvec_out2in"?: InputPathType | null | undefined;
     "tta2mni": boolean;
@@ -36,43 +36,11 @@ interface V3dWarpParameters {
     "prefix"?: string | null | undefined;
     "dataset": string;
 }
+type V3dWarpParametersTagged = Required<Pick<V3dWarpParameters, '@type'>> & V3dWarpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dWarp": v_3d_warp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_warp(...)`.
+ * Output object returned when calling `V3dWarpParameters(...)`.
  *
  * @interface
  */
@@ -135,9 +103,9 @@ function v_3d_warp_params(
     zpad: number | null = null,
     verb: boolean = false,
     prefix: string | null = null,
-): V3dWarpParameters {
+): V3dWarpParametersTagged {
     const params = {
-        "@type": "afni.3dWarp" as const,
+        "@type": "afni/3dWarp" as const,
         "tta2mni": tta2mni,
         "mni2tta": mni2tta,
         "deoblique": deoblique,
@@ -209,10 +177,10 @@ function v_3d_warp_cargs(
             execution.inputFile((params["matvec_out2in"] ?? null))
         );
     }
-    if ((params["tta2mni"] ?? null)) {
+    if ((params["tta2mni"] ?? false)) {
         cargs.push("-tta2mni");
     }
-    if ((params["mni2tta"] ?? null)) {
+    if ((params["mni2tta"] ?? false)) {
         cargs.push("-mni2tta");
     }
     if ((params["matparent"] ?? null) !== null) {
@@ -233,31 +201,31 @@ function v_3d_warp_cargs(
             (params["oblique_parent"] ?? null)
         );
     }
-    if ((params["deoblique"] ?? null)) {
+    if ((params["deoblique"] ?? false)) {
         cargs.push("-deoblique");
     }
-    if ((params["oblique2card"] ?? null)) {
+    if ((params["oblique2card"] ?? false)) {
         cargs.push("-oblique2card");
     }
-    if ((params["disp_obl_xform_only"] ?? null)) {
+    if ((params["disp_obl_xform_only"] ?? false)) {
         cargs.push("-disp_obl_xform_only");
     }
-    if ((params["linear"] ?? null)) {
+    if ((params["linear"] ?? false)) {
         cargs.push("-linear");
     }
-    if ((params["cubic"] ?? null)) {
+    if ((params["cubic"] ?? false)) {
         cargs.push("-cubic");
     }
-    if ((params["NN"] ?? null)) {
+    if ((params["NN"] ?? false)) {
         cargs.push("-NN");
     }
-    if ((params["quintic"] ?? null)) {
+    if ((params["quintic"] ?? false)) {
         cargs.push("-quintic");
     }
-    if ((params["wsinc5"] ?? null)) {
+    if ((params["wsinc5"] ?? false)) {
         cargs.push("-wsinc5");
     }
-    if ((params["fsl_matvec"] ?? null)) {
+    if ((params["fsl_matvec"] ?? false)) {
         cargs.push("-fsl_matvec");
     }
     if ((params["newgrid"] ?? null) !== null) {
@@ -278,7 +246,7 @@ function v_3d_warp_cargs(
             String((params["zpad"] ?? null))
         );
     }
-    if ((params["verb"] ?? null)) {
+    if ((params["verb"] ?? false)) {
         cargs.push("-verb");
     }
     if ((params["prefix"] ?? null) !== null) {
@@ -406,7 +374,6 @@ function v_3d_warp(
 
 export {
       V3dWarpOutputs,
-      V3dWarpParameters,
       V_3D_WARP_METADATA,
       v_3d_warp,
       v_3d_warp_execute,

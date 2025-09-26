@@ -12,7 +12,7 @@ const SLICES_SUMMARY_METADATA: Metadata = {
 
 
 interface SlicesSummaryParameters {
-    "@type": "fsl.slices_summary";
+    "@type"?: "fsl/slices_summary";
     "4d_input_file": InputPathType;
     "threshold": number;
     "background_image": InputPathType;
@@ -24,44 +24,11 @@ interface SlicesSummaryParameters {
     "output_png": string;
     "timepoints": string;
 }
+type SlicesSummaryParametersTagged = Required<Pick<SlicesSummaryParameters, '@type'>> & SlicesSummaryParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.slices_summary": slices_summary_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.slices_summary": slices_summary_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `slices_summary(...)`.
+ * Output object returned when calling `SlicesSummaryParameters(...)`.
  *
  * @interface
  */
@@ -108,9 +75,9 @@ function slices_summary_params(
     single_slice_flag: boolean = false,
     darker_background_flag: boolean = false,
     dumb_rule_flag: boolean = false,
-): SlicesSummaryParameters {
+): SlicesSummaryParametersTagged {
     const params = {
-        "@type": "fsl.slices_summary" as const,
+        "@type": "fsl/slices_summary" as const,
         "4d_input_file": v_4d_input_file,
         "threshold": threshold,
         "background_image": background_image,
@@ -144,13 +111,13 @@ function slices_summary_cargs(
     cargs.push(String((params["threshold"] ?? null)));
     cargs.push(execution.inputFile((params["background_image"] ?? null)));
     cargs.push((params["pictures_sum"] ?? null));
-    if ((params["single_slice_flag"] ?? null)) {
+    if ((params["single_slice_flag"] ?? false)) {
         cargs.push("-1");
     }
-    if ((params["darker_background_flag"] ?? null)) {
+    if ((params["darker_background_flag"] ?? false)) {
         cargs.push("-d");
     }
-    if ((params["dumb_rule_flag"] ?? null)) {
+    if ((params["dumb_rule_flag"] ?? false)) {
         cargs.push("-c");
     }
     cargs.push((params["pictures_sum_second"] ?? null));
@@ -253,7 +220,6 @@ function slices_summary(
 export {
       SLICES_SUMMARY_METADATA,
       SlicesSummaryOutputs,
-      SlicesSummaryParameters,
       slices_summary,
       slices_summary_execute,
       slices_summary_params,

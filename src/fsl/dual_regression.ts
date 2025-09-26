@@ -12,7 +12,7 @@ const DUAL_REGRESSION_METADATA: Metadata = {
 
 
 interface DualRegressionParameters {
-    "@type": "fsl.dual_regression";
+    "@type"?: "fsl/dual_regression";
     "group_ic_maps": InputPathType;
     "des_norm": number;
     "design_mat": InputPathType;
@@ -22,44 +22,11 @@ interface DualRegressionParameters {
     "output_directory": string;
     "input_files": Array<InputPathType>;
 }
+type DualRegressionParametersTagged = Required<Pick<DualRegressionParameters, '@type'>> & DualRegressionParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.dual_regression": dual_regression_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.dual_regression": dual_regression_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dual_regression(...)`.
+ * Output object returned when calling `DualRegressionParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function dual_regression_params(
     output_directory: string,
     input_files: Array<InputPathType>,
     thr_flag: boolean = false,
-): DualRegressionParameters {
+): DualRegressionParametersTagged {
     const params = {
-        "@type": "fsl.dual_regression" as const,
+        "@type": "fsl/dual_regression" as const,
         "group_ic_maps": group_ic_maps,
         "des_norm": des_norm,
         "design_mat": design_mat,
@@ -145,7 +112,7 @@ function dual_regression_cargs(
     cargs.push(execution.inputFile((params["design_mat"] ?? null)));
     cargs.push(execution.inputFile((params["design_con"] ?? null)));
     cargs.push(String((params["n_perm"] ?? null)));
-    if ((params["thr_flag"] ?? null)) {
+    if ((params["thr_flag"] ?? false)) {
         cargs.push("--thr");
     }
     cargs.push((params["output_directory"] ?? null));
@@ -245,7 +212,6 @@ function dual_regression(
 export {
       DUAL_REGRESSION_METADATA,
       DualRegressionOutputs,
-      DualRegressionParameters,
       dual_regression,
       dual_regression_execute,
       dual_regression_params,

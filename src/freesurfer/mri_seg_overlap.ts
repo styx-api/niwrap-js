@@ -12,7 +12,7 @@ const MRI_SEG_OVERLAP_METADATA: Metadata = {
 
 
 interface MriSegOverlapParameters {
-    "@type": "freesurfer.mri_seg_overlap";
+    "@type"?: "freesurfer/mri_seg_overlap";
     "vol1": InputPathType;
     "vol2": InputPathType;
     "out_file"?: string | null | undefined;
@@ -24,44 +24,11 @@ interface MriSegOverlapParameters {
     "seg_flag": boolean;
     "quiet_flag": boolean;
 }
+type MriSegOverlapParametersTagged = Required<Pick<MriSegOverlapParameters, '@type'>> & MriSegOverlapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_seg_overlap": mri_seg_overlap_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_seg_overlap": mri_seg_overlap_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_seg_overlap(...)`.
+ * Output object returned when calling `MriSegOverlapParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function mri_seg_overlap_params(
     no_names_flag: boolean = false,
     seg_flag: boolean = false,
     quiet_flag: boolean = false,
-): MriSegOverlapParameters {
+): MriSegOverlapParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_seg_overlap" as const,
+        "@type": "freesurfer/mri_seg_overlap" as const,
         "vol1": vol1,
         "vol2": vol2,
         "no_names_flag": no_names_flag,
@@ -178,13 +145,13 @@ function mri_seg_overlap_cargs(
             execution.inputFile((params["label_file"] ?? null))
         );
     }
-    if ((params["no_names_flag"] ?? null)) {
+    if ((params["no_names_flag"] ?? false)) {
         cargs.push("-x");
     }
-    if ((params["seg_flag"] ?? null)) {
+    if ((params["seg_flag"] ?? false)) {
         cargs.push("-s");
     }
-    if ((params["quiet_flag"] ?? null)) {
+    if ((params["quiet_flag"] ?? false)) {
         cargs.push("-q");
     }
     return cargs;
@@ -283,7 +250,6 @@ function mri_seg_overlap(
 export {
       MRI_SEG_OVERLAP_METADATA,
       MriSegOverlapOutputs,
-      MriSegOverlapParameters,
       mri_seg_overlap,
       mri_seg_overlap_execute,
       mri_seg_overlap_params,

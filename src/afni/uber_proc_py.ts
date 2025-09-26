@@ -12,46 +12,14 @@ const UBER_PROC_PY_METADATA: Metadata = {
 
 
 interface UberProcPyParameters {
-    "@type": "afni.uber_proc.py";
+    "@type"?: "afni/uber_proc.py";
     "results_dir"?: string | null | undefined;
 }
+type UberProcPyParametersTagged = Required<Pick<UberProcPyParameters, '@type'>> & UberProcPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.uber_proc.py": uber_proc_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `uber_proc_py(...)`.
+ * Output object returned when calling `UberProcPyParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface UberProcPyOutputs {
  */
 function uber_proc_py_params(
     results_dir: string | null = null,
-): UberProcPyParameters {
+): UberProcPyParametersTagged {
     const params = {
-        "@type": "afni.uber_proc.py" as const,
+        "@type": "afni/uber_proc.py" as const,
     };
     if (results_dir !== null) {
         params["results_dir"] = results_dir;
@@ -177,7 +145,6 @@ function uber_proc_py(
 export {
       UBER_PROC_PY_METADATA,
       UberProcPyOutputs,
-      UberProcPyParameters,
       uber_proc_py,
       uber_proc_py_execute,
       uber_proc_py_params,

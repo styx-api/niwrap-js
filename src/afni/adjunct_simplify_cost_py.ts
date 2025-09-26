@@ -12,46 +12,14 @@ const ADJUNCT_SIMPLIFY_COST_PY_METADATA: Metadata = {
 
 
 interface AdjunctSimplifyCostPyParameters {
-    "@type": "afni.adjunct_simplify_cost.py";
+    "@type"?: "afni/adjunct_simplify_cost.py";
     "cost_function": string;
 }
+type AdjunctSimplifyCostPyParametersTagged = Required<Pick<AdjunctSimplifyCostPyParameters, '@type'>> & AdjunctSimplifyCostPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.adjunct_simplify_cost.py": adjunct_simplify_cost_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `adjunct_simplify_cost_py(...)`.
+ * Output object returned when calling `AdjunctSimplifyCostPyParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface AdjunctSimplifyCostPyOutputs {
  */
 function adjunct_simplify_cost_py_params(
     cost_function: string,
-): AdjunctSimplifyCostPyParameters {
+): AdjunctSimplifyCostPyParametersTagged {
     const params = {
-        "@type": "afni.adjunct_simplify_cost.py" as const,
+        "@type": "afni/adjunct_simplify_cost.py" as const,
         "cost_function": cost_function,
     };
     return params;
@@ -173,7 +141,6 @@ function adjunct_simplify_cost_py(
 export {
       ADJUNCT_SIMPLIFY_COST_PY_METADATA,
       AdjunctSimplifyCostPyOutputs,
-      AdjunctSimplifyCostPyParameters,
       adjunct_simplify_cost_py,
       adjunct_simplify_cost_py_execute,
       adjunct_simplify_cost_py_params,

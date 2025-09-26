@@ -12,7 +12,7 @@ const BORDER_TO_ROIS_METADATA: Metadata = {
 
 
 interface BorderToRoisParameters {
-    "@type": "workbench.border-to-rois";
+    "@type"?: "workbench/border-to-rois";
     "surface": InputPathType;
     "border_file": InputPathType;
     "metric_out": string;
@@ -20,44 +20,11 @@ interface BorderToRoisParameters {
     "opt_inverse": boolean;
     "opt_include_border": boolean;
 }
+type BorderToRoisParametersTagged = Required<Pick<BorderToRoisParameters, '@type'>> & BorderToRoisParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.border-to-rois": border_to_rois_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.border-to-rois": border_to_rois_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `border_to_rois(...)`.
+ * Output object returned when calling `BorderToRoisParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function border_to_rois_params(
     opt_border_name: string | null = null,
     opt_inverse: boolean = false,
     opt_include_border: boolean = false,
-): BorderToRoisParameters {
+): BorderToRoisParametersTagged {
     const params = {
-        "@type": "workbench.border-to-rois" as const,
+        "@type": "workbench/border-to-rois" as const,
         "surface": surface,
         "border_file": border_file,
         "metric_out": metric_out,
@@ -132,10 +99,10 @@ function border_to_rois_cargs(
             (params["opt_border_name"] ?? null)
         );
     }
-    if ((params["opt_inverse"] ?? null)) {
+    if ((params["opt_inverse"] ?? false)) {
         cargs.push("-inverse");
     }
-    if ((params["opt_include_border"] ?? null)) {
+    if ((params["opt_include_border"] ?? false)) {
         cargs.push("-include-border");
     }
     return cargs;
@@ -230,7 +197,6 @@ function border_to_rois(
 export {
       BORDER_TO_ROIS_METADATA,
       BorderToRoisOutputs,
-      BorderToRoisParameters,
       border_to_rois,
       border_to_rois_execute,
       border_to_rois_params,

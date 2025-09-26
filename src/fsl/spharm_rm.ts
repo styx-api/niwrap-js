@@ -12,51 +12,18 @@ const SPHARM_RM_METADATA: Metadata = {
 
 
 interface SpharmRmParameters {
-    "@type": "fsl.spharm_rm";
+    "@type"?: "fsl/spharm_rm";
     "input_file": InputPathType;
     "output_file": string;
     "mask_file"?: InputPathType | null | undefined;
     "number_of_terms"?: number | null | undefined;
     "verbose_flag": boolean;
 }
+type SpharmRmParametersTagged = Required<Pick<SpharmRmParameters, '@type'>> & SpharmRmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.spharm_rm": spharm_rm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.spharm_rm": spharm_rm_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `spharm_rm(...)`.
+ * Output object returned when calling `SpharmRmParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function spharm_rm_params(
     mask_file: InputPathType | null = null,
     number_of_terms: number | null = null,
     verbose_flag: boolean = false,
-): SpharmRmParameters {
+): SpharmRmParametersTagged {
     const params = {
-        "@type": "fsl.spharm_rm" as const,
+        "@type": "fsl/spharm_rm" as const,
         "input_file": input_file,
         "output_file": output_file,
         "verbose_flag": verbose_flag,
@@ -140,7 +107,7 @@ function spharm_rm_cargs(
             String((params["number_of_terms"] ?? null))
         );
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("--verbose");
     }
     return cargs;
@@ -229,7 +196,6 @@ function spharm_rm(
 export {
       SPHARM_RM_METADATA,
       SpharmRmOutputs,
-      SpharmRmParameters,
       spharm_rm,
       spharm_rm_execute,
       spharm_rm_params,

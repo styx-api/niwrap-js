@@ -12,7 +12,7 @@ const V_3D_ANOVA_METADATA: Metadata = {
 
 
 interface V3dAnovaParameters {
-    "@type": "afni.3dANOVA";
+    "@type"?: "afni/3dANOVA";
     "levels": number;
     "datasets": Array<string>;
     "voxel"?: number | null | undefined;
@@ -28,44 +28,11 @@ interface V3dAnovaParameters {
     "assume_sph": boolean;
     "bucket"?: string | null | undefined;
 }
+type V3dAnovaParametersTagged = Required<Pick<V3dAnovaParameters, '@type'>> & V3dAnovaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dANOVA": v_3d_anova_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dANOVA": v_3d_anova_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_anova(...)`.
+ * Output object returned when calling `V3dAnovaParameters(...)`.
  *
  * @interface
  */
@@ -152,9 +119,9 @@ function v_3d_anova_params(
     ok: boolean = false,
     assume_sph: boolean = false,
     bucket: string | null = null,
-): V3dAnovaParameters {
+): V3dAnovaParametersTagged {
     const params = {
-        "@type": "afni.3dANOVA" as const,
+        "@type": "afni/3dANOVA" as const,
         "levels": levels,
         "datasets": datasets,
         "diskspace": diskspace,
@@ -218,7 +185,7 @@ function v_3d_anova_cargs(
             String((params["voxel"] ?? null))
         );
     }
-    if ((params["diskspace"] ?? null)) {
+    if ((params["diskspace"] ?? false)) {
         cargs.push("-diskspace");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -257,13 +224,13 @@ function v_3d_anova_cargs(
             (params["contr"] ?? null)
         );
     }
-    if ((params["old_method"] ?? null)) {
+    if ((params["old_method"] ?? false)) {
         cargs.push("-old_method");
     }
-    if ((params["ok"] ?? null)) {
+    if ((params["ok"] ?? false)) {
         cargs.push("-OK");
     }
-    if ((params["assume_sph"] ?? null)) {
+    if ((params["assume_sph"] ?? false)) {
         cargs.push("-assume_sph");
     }
     if ((params["bucket"] ?? null) !== null) {
@@ -384,7 +351,6 @@ function v_3d_anova(
 
 export {
       V3dAnovaOutputs,
-      V3dAnovaParameters,
       V_3D_ANOVA_METADATA,
       v_3d_anova,
       v_3d_anova_execute,

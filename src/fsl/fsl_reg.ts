@@ -12,7 +12,7 @@ const FSL_REG_METADATA: Metadata = {
 
 
 interface FslRegParameters {
-    "@type": "fsl.fsl_reg";
+    "@type"?: "fsl/fsl_reg";
     "input_file": InputPathType;
     "reference_file": InputPathType;
     "output_file": string;
@@ -22,44 +22,11 @@ interface FslRegParameters {
     "flirt_options"?: string | null | undefined;
     "fnirt_options"?: string | null | undefined;
 }
+type FslRegParametersTagged = Required<Pick<FslRegParameters, '@type'>> & FslRegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fsl_reg": fsl_reg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fsl_reg": fsl_reg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsl_reg(...)`.
+ * Output object returned when calling `FslRegParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function fsl_reg_params(
     fnirt_fa_config_flag: boolean = false,
     flirt_options: string | null = null,
     fnirt_options: string | null = null,
-): FslRegParameters {
+): FslRegParametersTagged {
     const params = {
-        "@type": "fsl.fsl_reg" as const,
+        "@type": "fsl/fsl_reg" as const,
         "input_file": input_file,
         "reference_file": reference_file,
         "output_file": output_file,
@@ -135,13 +102,13 @@ function fsl_reg_cargs(
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
     cargs.push(execution.inputFile((params["reference_file"] ?? null)));
     cargs.push((params["output_file"] ?? null));
-    if ((params["estimate_only_flag"] ?? null)) {
+    if ((params["estimate_only_flag"] ?? false)) {
         cargs.push("-e");
     }
-    if ((params["affine_only_flag"] ?? null)) {
+    if ((params["affine_only_flag"] ?? false)) {
         cargs.push("-a");
     }
-    if ((params["fnirt_fa_config_flag"] ?? null)) {
+    if ((params["fnirt_fa_config_flag"] ?? false)) {
         cargs.push("-FA");
     }
     if ((params["flirt_options"] ?? null) !== null) {
@@ -248,7 +215,6 @@ function fsl_reg(
 export {
       FSL_REG_METADATA,
       FslRegOutputs,
-      FslRegParameters,
       fsl_reg,
       fsl_reg_execute,
       fsl_reg_params,

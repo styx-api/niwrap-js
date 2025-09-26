@@ -12,7 +12,7 @@ const V_3D_XCLUST_SIM_METADATA: Metadata = {
 
 
 interface V3dXclustSimParameters {
-    "@type": "afni.3dXClustSim";
+    "@type"?: "afni/3dXClustSim";
     "inset": InputPathType;
     "insdat"?: InputPathType | null | undefined;
     "nn"?: number | null | undefined;
@@ -32,43 +32,11 @@ interface V3dXclustSimParameters {
     "verbose": boolean;
     "quiet": boolean;
 }
+type V3dXclustSimParametersTagged = Required<Pick<V3dXclustSimParameters, '@type'>> & V3dXclustSimParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dXClustSim": v_3d_xclust_sim_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_xclust_sim(...)`.
+ * Output object returned when calling `V3dXclustSimParameters(...)`.
  *
  * @interface
  */
@@ -123,9 +91,9 @@ function v_3d_xclust_sim_params(
     prefix: string | null = null,
     verbose: boolean = false,
     quiet: boolean = false,
-): V3dXclustSimParameters {
+): V3dXclustSimParametersTagged {
     const params = {
-        "@type": "afni.3dXClustSim" as const,
+        "@type": "afni/3dXClustSim" as const,
         "inset": inset,
         "multiFPR": multi_fpr,
         "local": local,
@@ -223,7 +191,7 @@ function v_3d_xclust_sim_cargs(
             String((params["fpr"] ?? null))
         );
     }
-    if ((params["multiFPR"] ?? null)) {
+    if ((params["multiFPR"] ?? false)) {
         cargs.push("-multiFPR");
     }
     if ((params["minclust"] ?? null) !== null) {
@@ -232,16 +200,16 @@ function v_3d_xclust_sim_cargs(
             String((params["minclust"] ?? null))
         );
     }
-    if ((params["local"] ?? null)) {
+    if ((params["local"] ?? false)) {
         cargs.push("-local");
     }
-    if ((params["global"] ?? null)) {
+    if ((params["global"] ?? false)) {
         cargs.push("-global");
     }
-    if ((params["nolocal"] ?? null)) {
+    if ((params["nolocal"] ?? false)) {
         cargs.push("-nolocal");
     }
-    if ((params["noglobal"] ?? null)) {
+    if ((params["noglobal"] ?? false)) {
         cargs.push("-noglobal");
     }
     if ((params["splitfrac"] ?? null) !== null) {
@@ -256,10 +224,10 @@ function v_3d_xclust_sim_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
     return cargs;
@@ -372,7 +340,6 @@ function v_3d_xclust_sim(
 
 export {
       V3dXclustSimOutputs,
-      V3dXclustSimParameters,
       V_3D_XCLUST_SIM_METADATA,
       v_3d_xclust_sim,
       v_3d_xclust_sim_execute,

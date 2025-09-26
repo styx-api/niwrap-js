@@ -12,49 +12,16 @@ const DEFECT_SEG_METADATA: Metadata = {
 
 
 interface DefectSegParameters {
-    "@type": "freesurfer.defect-seg";
+    "@type"?: "freesurfer/defect-seg";
     "subject": string;
     "lh_only": boolean;
     "rh_only": boolean;
 }
+type DefectSegParametersTagged = Required<Pick<DefectSegParameters, '@type'>> & DefectSegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.defect-seg": defect_seg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.defect-seg": defect_seg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `defect_seg(...)`.
+ * Output object returned when calling `DefectSegParameters(...)`.
  *
  * @interface
  */
@@ -131,9 +98,9 @@ function defect_seg_params(
     subject: string,
     lh_only: boolean = false,
     rh_only: boolean = false,
-): DefectSegParameters {
+): DefectSegParametersTagged {
     const params = {
-        "@type": "freesurfer.defect-seg" as const,
+        "@type": "freesurfer/defect-seg" as const,
         "subject": subject,
         "lh_only": lh_only,
         "rh_only": rh_only,
@@ -160,10 +127,10 @@ function defect_seg_cargs(
         "--s",
         (params["subject"] ?? null)
     );
-    if ((params["lh_only"] ?? null)) {
+    if ((params["lh_only"] ?? false)) {
         cargs.push("--lh-only");
     }
-    if ((params["rh_only"] ?? null)) {
+    if ((params["rh_only"] ?? false)) {
         cargs.push("--rh-only");
     }
     return cargs;
@@ -260,7 +227,6 @@ function defect_seg(
 export {
       DEFECT_SEG_METADATA,
       DefectSegOutputs,
-      DefectSegParameters,
       defect_seg,
       defect_seg_execute,
       defect_seg_params,

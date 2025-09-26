@@ -12,7 +12,7 @@ const GRAD_UNWARP_METADATA: Metadata = {
 
 
 interface GradUnwarpParameters {
-    "@type": "freesurfer.grad_unwarp";
+    "@type"?: "freesurfer/grad_unwarp";
     "infile": InputPathType;
     "seriesno"?: string | null | undefined;
     "unwarp_type"?: string | null | undefined;
@@ -23,44 +23,11 @@ interface GradUnwarpParameters {
     "outfile": string;
     "matlab_binary"?: string | null | undefined;
 }
+type GradUnwarpParametersTagged = Required<Pick<GradUnwarpParameters, '@type'>> & GradUnwarpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.grad_unwarp": grad_unwarp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.grad_unwarp": grad_unwarp_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `grad_unwarp(...)`.
+ * Output object returned when calling `GradUnwarpParameters(...)`.
  *
  * @interface
  */
@@ -105,9 +72,9 @@ function grad_unwarp_params(
     cor: boolean = false,
     interp: string | null = null,
     matlab_binary: string | null = null,
-): GradUnwarpParameters {
+): GradUnwarpParametersTagged {
     const params = {
-        "@type": "freesurfer.grad_unwarp" as const,
+        "@type": "freesurfer/grad_unwarp" as const,
         "infile": infile,
         "nojac": nojac,
         "corfov": corfov,
@@ -157,13 +124,13 @@ function grad_unwarp_cargs(
             (params["unwarp_type"] ?? null)
         );
     }
-    if ((params["nojac"] ?? null)) {
+    if ((params["nojac"] ?? false)) {
         cargs.push("-nojac");
     }
-    if ((params["corfov"] ?? null)) {
+    if ((params["corfov"] ?? false)) {
         cargs.push("-corfov");
     }
-    if ((params["cor"] ?? null)) {
+    if ((params["cor"] ?? false)) {
         cargs.push("-cor");
     }
     if ((params["interp"] ?? null) !== null) {
@@ -277,7 +244,6 @@ function grad_unwarp(
 export {
       GRAD_UNWARP_METADATA,
       GradUnwarpOutputs,
-      GradUnwarpParameters,
       grad_unwarp,
       grad_unwarp_execute,
       grad_unwarp_params,

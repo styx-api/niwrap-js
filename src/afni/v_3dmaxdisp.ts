@@ -12,49 +12,16 @@ const V_3DMAXDISP_METADATA: Metadata = {
 
 
 interface V3dmaxdispParameters {
-    "@type": "afni.3dmaxdisp";
+    "@type"?: "afni/3dmaxdisp";
     "inset": InputPathType;
     "matrix": InputPathType;
     "verbose": boolean;
 }
+type V3dmaxdispParametersTagged = Required<Pick<V3dmaxdispParameters, '@type'>> & V3dmaxdispParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dmaxdisp": v_3dmaxdisp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dmaxdisp": v_3dmaxdisp_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dmaxdisp(...)`.
+ * Output object returned when calling `V3dmaxdispParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function v_3dmaxdisp_params(
     inset: InputPathType,
     matrix: InputPathType,
     verbose: boolean = false,
-): V3dmaxdispParameters {
+): V3dmaxdispParametersTagged {
     const params = {
-        "@type": "afni.3dmaxdisp" as const,
+        "@type": "afni/3dmaxdisp" as const,
         "inset": inset,
         "matrix": matrix,
         "verbose": verbose,
@@ -116,7 +83,7 @@ function v_3dmaxdisp_cargs(
         "-matrix",
         execution.inputFile((params["matrix"] ?? null))
     );
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
     return cargs;
@@ -200,7 +167,6 @@ function v_3dmaxdisp(
 
 export {
       V3dmaxdispOutputs,
-      V3dmaxdispParameters,
       V_3DMAXDISP_METADATA,
       v_3dmaxdisp,
       v_3dmaxdisp_execute,

@@ -12,7 +12,7 @@ const FAT_PROC_IMIT2W_FROM_T1W_METADATA: Metadata = {
 
 
 interface FatProcImit2wFromT1wParameters {
-    "@type": "afni.fat_proc_imit2w_from_t1w";
+    "@type"?: "afni/fat_proc_imit2w_from_t1w";
     "t1_file": InputPathType;
     "prefix": string;
     "workdir"?: string | null | undefined;
@@ -22,44 +22,11 @@ interface FatProcImit2wFromT1wParameters {
     "no_qc_view": boolean;
     "qc_prefix"?: string | null | undefined;
 }
+type FatProcImit2wFromT1wParametersTagged = Required<Pick<FatProcImit2wFromT1wParameters, '@type'>> & FatProcImit2wFromT1wParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.fat_proc_imit2w_from_t1w": fat_proc_imit2w_from_t1w_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.fat_proc_imit2w_from_t1w": fat_proc_imit2w_from_t1w_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fat_proc_imit2w_from_t1w(...)`.
+ * Output object returned when calling `FatProcImit2wFromT1wParameters(...)`.
  *
  * @interface
  */
@@ -106,9 +73,9 @@ function fat_proc_imit2w_from_t1w_params(
     no_clean: boolean = false,
     no_qc_view: boolean = false,
     qc_prefix: string | null = null,
-): FatProcImit2wFromT1wParameters {
+): FatProcImit2wFromT1wParametersTagged {
     const params = {
-        "@type": "afni.fat_proc_imit2w_from_t1w" as const,
+        "@type": "afni/fat_proc_imit2w_from_t1w" as const,
         "t1_file": t1_file,
         "prefix": prefix,
         "no_clean": no_clean,
@@ -170,10 +137,10 @@ function fat_proc_imit2w_from_t1w_cargs(
             String((params["ss_blur_fwhm"] ?? null))
         );
     }
-    if ((params["no_clean"] ?? null)) {
+    if ((params["no_clean"] ?? false)) {
         cargs.push("-no_clean");
     }
-    if ((params["no_qc_view"] ?? null)) {
+    if ((params["no_qc_view"] ?? false)) {
         cargs.push("-no_qc_view");
     }
     if ((params["qc_prefix"] ?? null) !== null) {
@@ -276,7 +243,6 @@ function fat_proc_imit2w_from_t1w(
 export {
       FAT_PROC_IMIT2W_FROM_T1W_METADATA,
       FatProcImit2wFromT1wOutputs,
-      FatProcImit2wFromT1wParameters,
       fat_proc_imit2w_from_t1w,
       fat_proc_imit2w_from_t1w_execute,
       fat_proc_imit2w_from_t1w_params,

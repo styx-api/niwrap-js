@@ -12,7 +12,7 @@ const V_3D_BLUR_IN_MASK_METADATA: Metadata = {
 
 
 interface V3dBlurInMaskParameters {
-    "@type": "afni.3dBlurInMask";
+    "@type"?: "afni/3dBlurInMask";
     "input_file": InputPathType;
     "output_prefix": string;
     "fwhm": number;
@@ -25,44 +25,11 @@ interface V3dBlurInMaskParameters {
     "float": boolean;
     "fwhm_xyz"?: Array<number> | null | undefined;
 }
+type V3dBlurInMaskParametersTagged = Required<Pick<V3dBlurInMaskParameters, '@type'>> & V3dBlurInMaskParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dBlurInMask": v_3d_blur_in_mask_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dBlurInMask": v_3d_blur_in_mask_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_blur_in_mask(...)`.
+ * Output object returned when calling `V3dBlurInMaskParameters(...)`.
  *
  * @interface
  */
@@ -107,9 +74,9 @@ function v_3d_blur_in_mask_params(
     quiet: boolean = false,
     float: boolean = false,
     fwhm_xyz: Array<number> | null = null,
-): V3dBlurInMaskParameters {
+): V3dBlurInMaskParametersTagged {
     const params = {
-        "@type": "afni.3dBlurInMask" as const,
+        "@type": "afni/3dBlurInMask" as const,
         "input_file": input_file,
         "output_prefix": output_prefix,
         "fwhm": fwhm,
@@ -172,16 +139,16 @@ function v_3d_blur_in_mask_cargs(
             execution.inputFile((params["multi_mask"] ?? null))
         );
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
-    if ((params["preserve"] ?? null)) {
+    if ((params["preserve"] ?? false)) {
         cargs.push("-preserve");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["float"] ?? null)) {
+    if ((params["float"] ?? false)) {
         cargs.push("-float");
     }
     if ((params["fwhm_xyz"] ?? null) !== null) {
@@ -287,7 +254,6 @@ function v_3d_blur_in_mask(
 
 export {
       V3dBlurInMaskOutputs,
-      V3dBlurInMaskParameters,
       V_3D_BLUR_IN_MASK_METADATA,
       v_3d_blur_in_mask,
       v_3d_blur_in_mask_execute,

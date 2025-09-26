@@ -12,7 +12,7 @@ const NIFTI_TOOL_METADATA: Metadata = {
 
 
 interface NiftiToolParameters {
-    "@type": "afni.nifti_tool";
+    "@type"?: "afni/nifti_tool";
     "action": string;
     "input_files"?: Array<InputPathType> | null | undefined;
     "field"?: string | null | undefined;
@@ -26,44 +26,11 @@ interface NiftiToolParameters {
     "add_comment_ext"?: string | null | undefined;
     "rm_ext"?: string | null | undefined;
 }
+type NiftiToolParametersTagged = Required<Pick<NiftiToolParameters, '@type'>> & NiftiToolParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.nifti_tool": nifti_tool_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.nifti_tool": nifti_tool_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `nifti_tool(...)`.
+ * Output object returned when calling `NiftiToolParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function nifti_tool_params(
     convert_verify: boolean = false,
     add_comment_ext: string | null = null,
     rm_ext: string | null = null,
-): NiftiToolParameters {
+): NiftiToolParametersTagged {
     const params = {
-        "@type": "afni.nifti_tool" as const,
+        "@type": "afni/nifti_tool" as const,
         "action": action,
         "overwrite": overwrite,
         "convert_verify": convert_verify,
@@ -193,7 +160,7 @@ function nifti_tool_cargs(
             String((params["debug"] ?? null))
         );
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("-overwrite");
     }
     if ((params["convert2dtype"] ?? null) !== null) {
@@ -208,7 +175,7 @@ function nifti_tool_cargs(
             (params["convert_fail_choice"] ?? null)
         );
     }
-    if ((params["convert_verify"] ?? null)) {
+    if ((params["convert_verify"] ?? false)) {
         cargs.push("-convert_verify");
     }
     if ((params["add_comment_ext"] ?? null) !== null) {
@@ -323,7 +290,6 @@ function nifti_tool(
 export {
       NIFTI_TOOL_METADATA,
       NiftiToolOutputs,
-      NiftiToolParameters,
       nifti_tool,
       nifti_tool_execute,
       nifti_tool_params,

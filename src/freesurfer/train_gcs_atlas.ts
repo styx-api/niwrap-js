@@ -12,7 +12,7 @@ const TRAIN_GCS_ATLAS_METADATA: Metadata = {
 
 
 interface TrainGcsAtlasParameters {
-    "@type": "freesurfer.train-gcs-atlas";
+    "@type"?: "freesurfer/train-gcs-atlas";
     "manual_parcellation"?: string | null | undefined;
     "subjlist_file"?: InputPathType | null | undefined;
     "left_hemi": boolean;
@@ -26,44 +26,11 @@ interface TrainGcsAtlasParameters {
     "aseg_filename"?: string | null | undefined;
     "threads"?: number | null | undefined;
 }
+type TrainGcsAtlasParametersTagged = Required<Pick<TrainGcsAtlasParameters, '@type'>> & TrainGcsAtlasParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.train-gcs-atlas": train_gcs_atlas_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.train-gcs-atlas": train_gcs_atlas_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `train_gcs_atlas(...)`.
+ * Output object returned when calling `TrainGcsAtlasParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function train_gcs_atlas_params(
     jackknife_flag: boolean = false,
     aseg_filename: string | null = null,
     threads: number | null = null,
-): TrainGcsAtlasParameters {
+): TrainGcsAtlasParametersTagged {
     const params = {
-        "@type": "freesurfer.train-gcs-atlas" as const,
+        "@type": "freesurfer/train-gcs-atlas" as const,
         "left_hemi": left_hemi,
         "right_hemi": right_hemi,
         "output_gcs": output_gcs,
@@ -172,10 +139,10 @@ function train_gcs_atlas_cargs(
             execution.inputFile((params["subjlist_file"] ?? null))
         );
     }
-    if ((params["left_hemi"] ?? null)) {
+    if ((params["left_hemi"] ?? false)) {
         cargs.push("--lh");
     }
-    if ((params["right_hemi"] ?? null)) {
+    if ((params["right_hemi"] ?? false)) {
         cargs.push("--rh");
     }
     if ((params["hemi_spec"] ?? null) !== null) {
@@ -206,7 +173,7 @@ function train_gcs_atlas_cargs(
             (params["exclude_subject"] ?? null)
         );
     }
-    if ((params["jackknife_flag"] ?? null)) {
+    if ((params["jackknife_flag"] ?? false)) {
         cargs.push("--jackknife");
     }
     if ((params["aseg_filename"] ?? null) !== null) {
@@ -321,7 +288,6 @@ function train_gcs_atlas(
 export {
       TRAIN_GCS_ATLAS_METADATA,
       TrainGcsAtlasOutputs,
-      TrainGcsAtlasParameters,
       train_gcs_atlas,
       train_gcs_atlas_execute,
       train_gcs_atlas_params,

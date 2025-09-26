@@ -12,48 +12,15 @@ const MRIS_REVERSE_METADATA: Metadata = {
 
 
 interface MrisReverseParameters {
-    "@type": "freesurfer.mris_reverse";
+    "@type"?: "freesurfer/mris_reverse";
     "input_surface": InputPathType;
     "output_surface": string;
 }
+type MrisReverseParametersTagged = Required<Pick<MrisReverseParameters, '@type'>> & MrisReverseParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_reverse": mris_reverse_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_reverse": mris_reverse_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_reverse(...)`.
+ * Output object returned when calling `MrisReverseParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface MrisReverseOutputs {
 function mris_reverse_params(
     input_surface: InputPathType,
     output_surface: string,
-): MrisReverseParameters {
+): MrisReverseParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_reverse" as const,
+        "@type": "freesurfer/mris_reverse" as const,
         "input_surface": input_surface,
         "output_surface": output_surface,
     };
@@ -186,7 +153,6 @@ function mris_reverse(
 export {
       MRIS_REVERSE_METADATA,
       MrisReverseOutputs,
-      MrisReverseParameters,
       mris_reverse,
       mris_reverse_execute,
       mris_reverse_params,

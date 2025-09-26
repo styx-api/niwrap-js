@@ -12,7 +12,7 @@ const V_1DNORM_METADATA: Metadata = {
 
 
 interface V1dnormParameters {
-    "@type": "afni.1dnorm";
+    "@type"?: "afni/1dnorm";
     "infile": InputPathType;
     "outfile": string;
     "norm1": boolean;
@@ -20,44 +20,11 @@ interface V1dnormParameters {
     "demean": boolean;
     "demed": boolean;
 }
+type V1dnormParametersTagged = Required<Pick<V1dnormParameters, '@type'>> & V1dnormParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dnorm": v_1dnorm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.1dnorm": v_1dnorm_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1dnorm(...)`.
+ * Output object returned when calling `V1dnormParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function v_1dnorm_params(
     normx: boolean = false,
     demean: boolean = false,
     demed: boolean = false,
-): V1dnormParameters {
+): V1dnormParametersTagged {
     const params = {
-        "@type": "afni.1dnorm" as const,
+        "@type": "afni/1dnorm" as const,
         "infile": infile,
         "outfile": outfile,
         "norm1": norm1,
@@ -122,16 +89,16 @@ function v_1dnorm_cargs(
     cargs.push("1dnorm");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
     cargs.push((params["outfile"] ?? null));
-    if ((params["norm1"] ?? null)) {
+    if ((params["norm1"] ?? false)) {
         cargs.push("-norm1");
     }
-    if ((params["normx"] ?? null)) {
+    if ((params["normx"] ?? false)) {
         cargs.push("-normx");
     }
-    if ((params["demean"] ?? null)) {
+    if ((params["demean"] ?? false)) {
         cargs.push("-demean");
     }
-    if ((params["demed"] ?? null)) {
+    if ((params["demed"] ?? false)) {
         cargs.push("-demed");
     }
     return cargs;
@@ -221,7 +188,6 @@ function v_1dnorm(
 
 export {
       V1dnormOutputs,
-      V1dnormParameters,
       V_1DNORM_METADATA,
       v_1dnorm,
       v_1dnorm_execute,

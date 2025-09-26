@@ -12,7 +12,7 @@ const V__ELECTRO_GRID_METADATA: Metadata = {
 
 
 interface VElectroGridParameters {
-    "@type": "afni.@ElectroGrid";
+    "@type"?: "afni/@ElectroGrid";
     "strip"?: number | null | undefined;
     "grid"?: Array<number> | null | undefined;
     "prefix"?: string | null | undefined;
@@ -20,44 +20,11 @@ interface VElectroGridParameters {
     "with_markers": boolean;
     "echo": boolean;
 }
+type VElectroGridParametersTagged = Required<Pick<VElectroGridParameters, '@type'>> & VElectroGridParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@ElectroGrid": v__electro_grid_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@ElectroGrid": v__electro_grid_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__electro_grid(...)`.
+ * Output object returned when calling `VElectroGridParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function v__electro_grid_params(
     coords: InputPathType | null = null,
     with_markers: boolean = false,
     echo: boolean = false,
-): VElectroGridParameters {
+): VElectroGridParametersTagged {
     const params = {
-        "@type": "afni.@ElectroGrid" as const,
+        "@type": "afni/@ElectroGrid" as const,
         "with_markers": with_markers,
         "echo": echo,
     };
@@ -152,10 +119,10 @@ function v__electro_grid_cargs(
             execution.inputFile((params["coords"] ?? null))
         );
     }
-    if ((params["with_markers"] ?? null)) {
+    if ((params["with_markers"] ?? false)) {
         cargs.push("-with_markers");
     }
-    if ((params["echo"] ?? null)) {
+    if ((params["echo"] ?? false)) {
         cargs.push("-echo");
     }
     return cargs;
@@ -245,7 +212,6 @@ function v__electro_grid(
 
 export {
       VElectroGridOutputs,
-      VElectroGridParameters,
       V__ELECTRO_GRID_METADATA,
       v__electro_grid,
       v__electro_grid_execute,

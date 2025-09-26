@@ -12,48 +12,15 @@ const FIND_THE_BIGGEST_METADATA: Metadata = {
 
 
 interface FindTheBiggestParameters {
-    "@type": "fsl.find_the_biggest";
+    "@type"?: "fsl/find_the_biggest";
     "volumes_surfaces": Array<InputPathType>;
     "output_index": string;
 }
+type FindTheBiggestParametersTagged = Required<Pick<FindTheBiggestParameters, '@type'>> & FindTheBiggestParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.find_the_biggest": find_the_biggest_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.find_the_biggest": find_the_biggest_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `find_the_biggest(...)`.
+ * Output object returned when calling `FindTheBiggestParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface FindTheBiggestOutputs {
 function find_the_biggest_params(
     volumes_surfaces: Array<InputPathType>,
     output_index: string,
-): FindTheBiggestParameters {
+): FindTheBiggestParametersTagged {
     const params = {
-        "@type": "fsl.find_the_biggest" as const,
+        "@type": "fsl/find_the_biggest" as const,
         "volumes_surfaces": volumes_surfaces,
         "output_index": output_index,
     };
@@ -186,7 +153,6 @@ function find_the_biggest(
 export {
       FIND_THE_BIGGEST_METADATA,
       FindTheBiggestOutputs,
-      FindTheBiggestParameters,
       find_the_biggest,
       find_the_biggest_execute,
       find_the_biggest_params,

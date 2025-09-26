@@ -12,7 +12,7 @@ const FILM_GLS_METADATA: Metadata = {
 
 
 interface FilmGlsParameters {
-    "@type": "fsl.film_gls";
+    "@type"?: "fsl/film_gls";
     "infile": InputPathType;
     "ac_flag": boolean;
     "threshold"?: number | null | undefined;
@@ -37,44 +37,11 @@ interface FilmGlsParameters {
     "ven"?: Array<string> | null | undefined;
     "vef"?: Array<InputPathType> | null | undefined;
 }
+type FilmGlsParametersTagged = Required<Pick<FilmGlsParameters, '@type'>> & FilmGlsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.film_gls": film_gls_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.film_gls": film_gls_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `film_gls(...)`.
+ * Output object returned when calling `FilmGlsParameters(...)`.
  *
  * @interface
  */
@@ -151,9 +118,9 @@ function film_gls_params(
     mt: number | null = null,
     ven: Array<string> | null = null,
     vef: Array<InputPathType> | null = null,
-): FilmGlsParameters {
+): FilmGlsParametersTagged {
     const params = {
-        "@type": "fsl.film_gls" as const,
+        "@type": "fsl/film_gls" as const,
         "infile": infile,
         "ac_flag": ac_flag,
         "ar_flag": ar_flag,
@@ -227,7 +194,7 @@ function film_gls_cargs(
     const cargs: string[] = [];
     cargs.push("film_gls");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
-    if ((params["ac_flag"] ?? null)) {
+    if ((params["ac_flag"] ?? false)) {
         cargs.push("--ac");
     }
     if ((params["threshold"] ?? null) !== null) {
@@ -236,22 +203,22 @@ function film_gls_cargs(
             String((params["threshold"] ?? null))
         );
     }
-    if ((params["ar_flag"] ?? null)) {
+    if ((params["ar_flag"] ?? false)) {
         cargs.push("--ar");
     }
-    if ((params["noest_flag"] ?? null)) {
+    if ((params["noest_flag"] ?? false)) {
         cargs.push("--noest");
     }
-    if ((params["outputPW_flag"] ?? null)) {
+    if ((params["outputPW_flag"] ?? false)) {
         cargs.push("--outputPWdata");
     }
-    if ((params["pava_flag"] ?? null)) {
+    if ((params["pava_flag"] ?? false)) {
         cargs.push("--pava");
     }
-    if ((params["sa_flag"] ?? null)) {
+    if ((params["sa_flag"] ?? false)) {
         cargs.push("--sa");
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
     if ((params["results_dir"] ?? null) !== null) {
@@ -462,7 +429,6 @@ function film_gls(
 export {
       FILM_GLS_METADATA,
       FilmGlsOutputs,
-      FilmGlsParameters,
       film_gls,
       film_gls_execute,
       film_gls_params,

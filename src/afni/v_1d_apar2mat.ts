@@ -12,7 +12,7 @@ const V_1D_APAR2MAT_METADATA: Metadata = {
 
 
 interface V1dApar2matParameters {
-    "@type": "afni.1dApar2mat";
+    "@type"?: "afni/1dApar2mat";
     "x_shift": number;
     "y_shift": number;
     "z_shift": number;
@@ -26,43 +26,11 @@ interface V1dApar2matParameters {
     "z_x_shear": number;
     "z_y_shear": number;
 }
+type V1dApar2matParametersTagged = Required<Pick<V1dApar2matParameters, '@type'>> & V1dApar2matParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dApar2mat": v_1d_apar2mat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1d_apar2mat(...)`.
+ * Output object returned when calling `V1dApar2matParameters(...)`.
  *
  * @interface
  */
@@ -105,9 +73,9 @@ function v_1d_apar2mat_params(
     y_x_shear: number,
     z_x_shear: number,
     z_y_shear: number,
-): V1dApar2matParameters {
+): V1dApar2matParametersTagged {
     const params = {
-        "@type": "afni.1dApar2mat" as const,
+        "@type": "afni/1dApar2mat" as const,
         "x_shift": x_shift,
         "y_shift": y_shift,
         "z_shift": z_shift,
@@ -249,7 +217,6 @@ function v_1d_apar2mat(
 
 export {
       V1dApar2matOutputs,
-      V1dApar2matParameters,
       V_1D_APAR2MAT_METADATA,
       v_1d_apar2mat,
       v_1d_apar2mat_execute,

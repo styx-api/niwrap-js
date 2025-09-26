@@ -12,7 +12,7 @@ const MRI_CONCATENATE_GCAM_METADATA: Metadata = {
 
 
 interface MriConcatenateGcamParameters {
-    "@type": "freesurfer.mri_concatenate_gcam";
+    "@type"?: "freesurfer/mri_concatenate_gcam";
     "inputs": Array<InputPathType>;
     "output": string;
     "source_image"?: InputPathType | null | undefined;
@@ -21,44 +21,11 @@ interface MriConcatenateGcamParameters {
     "invert": boolean;
     "downsample": boolean;
 }
+type MriConcatenateGcamParametersTagged = Required<Pick<MriConcatenateGcamParameters, '@type'>> & MriConcatenateGcamParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_concatenate_gcam": mri_concatenate_gcam_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_concatenate_gcam": mri_concatenate_gcam_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_concatenate_gcam(...)`.
+ * Output object returned when calling `MriConcatenateGcamParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function mri_concatenate_gcam_params(
     reduce: boolean = false,
     invert: boolean = false,
     downsample: boolean = false,
-): MriConcatenateGcamParameters {
+): MriConcatenateGcamParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_concatenate_gcam" as const,
+        "@type": "freesurfer/mri_concatenate_gcam" as const,
         "inputs": inputs,
         "output": output,
         "reduce": reduce,
@@ -142,13 +109,13 @@ function mri_concatenate_gcam_cargs(
             execution.inputFile((params["target_image"] ?? null))
         );
     }
-    if ((params["reduce"] ?? null)) {
+    if ((params["reduce"] ?? false)) {
         cargs.push("-r");
     }
-    if ((params["invert"] ?? null)) {
+    if ((params["invert"] ?? false)) {
         cargs.push("-i");
     }
-    if ((params["downsample"] ?? null)) {
+    if ((params["downsample"] ?? false)) {
         cargs.push("-d");
     }
     return cargs;
@@ -241,7 +208,6 @@ function mri_concatenate_gcam(
 export {
       MRI_CONCATENATE_GCAM_METADATA,
       MriConcatenateGcamOutputs,
-      MriConcatenateGcamParameters,
       mri_concatenate_gcam,
       mri_concatenate_gcam_execute,
       mri_concatenate_gcam_params,

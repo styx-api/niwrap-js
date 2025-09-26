@@ -12,48 +12,15 @@ const V__CENTER_DISTANCE_METADATA: Metadata = {
 
 
 interface VCenterDistanceParameters {
-    "@type": "afni.@Center_Distance";
+    "@type"?: "afni/@Center_Distance";
     "dset1": InputPathType;
     "dset2": InputPathType;
 }
+type VCenterDistanceParametersTagged = Required<Pick<VCenterDistanceParameters, '@type'>> & VCenterDistanceParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@Center_Distance": v__center_distance_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@Center_Distance": v__center_distance_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__center_distance(...)`.
+ * Output object returned when calling `VCenterDistanceParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface VCenterDistanceOutputs {
 function v__center_distance_params(
     dset1: InputPathType,
     dset2: InputPathType,
-): VCenterDistanceParameters {
+): VCenterDistanceParametersTagged {
     const params = {
-        "@type": "afni.@Center_Distance" as const,
+        "@type": "afni/@Center_Distance" as const,
         "dset1": dset1,
         "dset2": dset2,
     };
@@ -188,7 +155,6 @@ function v__center_distance(
 
 export {
       VCenterDistanceOutputs,
-      VCenterDistanceParameters,
       V__CENTER_DISTANCE_METADATA,
       v__center_distance,
       v__center_distance_execute,

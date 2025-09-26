@@ -12,21 +12,23 @@ const DCMINFO_METADATA: Metadata = {
 
 
 interface DcminfoTagParameters {
-    "@type": "mrtrix.dcminfo.tag";
+    "@type"?: "tag";
     "group": string;
     "element": string;
 }
+type DcminfoTagParametersTagged = Required<Pick<DcminfoTagParameters, '@type'>> & DcminfoTagParameters;
 
 
 interface DcminfoConfigParameters {
-    "@type": "mrtrix.dcminfo.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type DcminfoConfigParametersTagged = Required<Pick<DcminfoConfigParameters, '@type'>> & DcminfoConfigParameters;
 
 
 interface DcminfoParameters {
-    "@type": "mrtrix.dcminfo";
+    "@type"?: "mrtrix/dcminfo";
     "all": boolean;
     "csa": boolean;
     "phoenix": boolean;
@@ -41,41 +43,7 @@ interface DcminfoParameters {
     "version": boolean;
     "file": InputPathType;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.dcminfo": dcminfo_cargs,
-        "mrtrix.dcminfo.tag": dcminfo_tag_cargs,
-        "mrtrix.dcminfo.config": dcminfo_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type DcminfoParametersTagged = Required<Pick<DcminfoParameters, '@type'>> & DcminfoParameters;
 
 
 /**
@@ -89,9 +57,9 @@ function dynOutputs(
 function dcminfo_tag_params(
     group: string,
     element: string,
-): DcminfoTagParameters {
+): DcminfoTagParametersTagged {
     const params = {
-        "@type": "mrtrix.dcminfo.tag" as const,
+        "@type": "tag" as const,
         "group": group,
         "element": element,
     };
@@ -130,9 +98,9 @@ function dcminfo_tag_cargs(
 function dcminfo_config_params(
     key: string,
     value: string,
-): DcminfoConfigParameters {
+): DcminfoConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.dcminfo.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -161,7 +129,7 @@ function dcminfo_config_cargs(
 
 
 /**
- * Output object returned when calling `dcminfo(...)`.
+ * Output object returned when calling `DcminfoParameters(...)`.
  *
  * @interface
  */
@@ -206,9 +174,9 @@ function dcminfo_params(
     config: Array<DcminfoConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): DcminfoParameters {
+): DcminfoParametersTagged {
     const params = {
-        "@type": "mrtrix.dcminfo" as const,
+        "@type": "mrtrix/dcminfo" as const,
         "all": all,
         "csa": csa,
         "phoenix": phoenix,
@@ -247,28 +215,28 @@ function dcminfo_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("dcminfo");
-    if ((params["all"] ?? null)) {
+    if ((params["all"] ?? false)) {
         cargs.push("-all");
     }
-    if ((params["csa"] ?? null)) {
+    if ((params["csa"] ?? false)) {
         cargs.push("-csa");
     }
-    if ((params["phoenix"] ?? null)) {
+    if ((params["phoenix"] ?? false)) {
         cargs.push("-phoenix");
     }
     if ((params["tag"] ?? null) !== null) {
-        cargs.push(...(params["tag"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["tag"] ?? null).map(s => dcminfo_tag_cargs(s, execution)).flat());
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -278,12 +246,12 @@ function dcminfo_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dcminfo_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["file"] ?? null)));
@@ -399,10 +367,7 @@ function dcminfo(
 
 export {
       DCMINFO_METADATA,
-      DcminfoConfigParameters,
       DcminfoOutputs,
-      DcminfoParameters,
-      DcminfoTagParameters,
       dcminfo,
       dcminfo_config_params,
       dcminfo_execute,

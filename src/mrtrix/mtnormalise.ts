@@ -12,21 +12,23 @@ const MTNORMALISE_METADATA: Metadata = {
 
 
 interface MtnormaliseConfigParameters {
-    "@type": "mrtrix.mtnormalise.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MtnormaliseConfigParametersTagged = Required<Pick<MtnormaliseConfigParameters, '@type'>> & MtnormaliseConfigParameters;
 
 
 interface MtnormaliseInputOutputParameters {
-    "@type": "mrtrix.mtnormalise.input_output";
+    "@type"?: "input_output";
     "input": InputPathType;
     "output": string;
 }
+type MtnormaliseInputOutputParametersTagged = Required<Pick<MtnormaliseInputOutputParameters, '@type'>> & MtnormaliseInputOutputParameters;
 
 
 interface MtnormaliseParameters {
-    "@type": "mrtrix.mtnormalise";
+    "@type"?: "mrtrix/mtnormalise";
     "mask": InputPathType;
     "order"?: string | null | undefined;
     "niter"?: Array<number> | null | undefined;
@@ -45,43 +47,7 @@ interface MtnormaliseParameters {
     "version": boolean;
     "input_output": Array<MtnormaliseInputOutputParameters>;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.mtnormalise": mtnormalise_cargs,
-        "mrtrix.mtnormalise.config": mtnormalise_config_cargs,
-        "mrtrix.mtnormalise.input_output": mtnormalise_input_output_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.mtnormalise": mtnormalise_outputs,
-        "mrtrix.mtnormalise.input_output": mtnormalise_input_output_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MtnormaliseParametersTagged = Required<Pick<MtnormaliseParameters, '@type'>> & MtnormaliseParameters;
 
 
 /**
@@ -95,9 +61,9 @@ function dynOutputs(
 function mtnormalise_config_params(
     key: string,
     value: string,
-): MtnormaliseConfigParameters {
+): MtnormaliseConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.mtnormalise.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -153,9 +119,9 @@ interface MtnormaliseInputOutputOutputs {
 function mtnormalise_input_output_params(
     input: InputPathType,
     output: string,
-): MtnormaliseInputOutputParameters {
+): MtnormaliseInputOutputParametersTagged {
     const params = {
-        "@type": "mrtrix.mtnormalise.input_output" as const,
+        "@type": "input_output" as const,
         "input": input,
         "output": output,
     };
@@ -203,7 +169,7 @@ function mtnormalise_input_output_outputs(
 
 
 /**
- * Output object returned when calling `mtnormalise(...)`.
+ * Output object returned when calling `MtnormaliseParameters(...)`.
  *
  * @interface
  */
@@ -272,9 +238,9 @@ function mtnormalise_params(
     config: Array<MtnormaliseConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MtnormaliseParameters {
+): MtnormaliseParametersTagged {
     const params = {
-        "@type": "mrtrix.mtnormalise" as const,
+        "@type": "mrtrix/mtnormalise" as const,
         "mask": mask,
         "balanced": balanced,
         "info": info,
@@ -349,7 +315,7 @@ function mtnormalise_cargs(
             String((params["reference"] ?? null))
         );
     }
-    if ((params["balanced"] ?? null)) {
+    if ((params["balanced"] ?? false)) {
         cargs.push("-balanced");
     }
     if ((params["check_norm"] ?? null) !== null) {
@@ -370,16 +336,16 @@ function mtnormalise_cargs(
             (params["check_factors"] ?? null)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -389,15 +355,15 @@ function mtnormalise_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => mtnormalise_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
-    cargs.push(...(params["input_output"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+    cargs.push(...(params["input_output"] ?? null).map(s => mtnormalise_input_output_cargs(s, execution)).flat());
     return cargs;
 }
 
@@ -419,7 +385,7 @@ function mtnormalise_outputs(
         check_norm: ((params["check_norm"] ?? null) !== null) ? execution.outputFile([(params["check_norm"] ?? null)].join('')) : null,
         check_mask: ((params["check_mask"] ?? null) !== null) ? execution.outputFile([(params["check_mask"] ?? null)].join('')) : null,
         check_factors: ((params["check_factors"] ?? null) !== null) ? execution.outputFile([(params["check_factors"] ?? null)].join('')) : null,
-        input_output: (params["input_output"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null),
+        input_output: (params["input_output"] ?? null).map(i => mtnormalise_input_output_outputs(i, execution) ?? null),
     };
     return ret;
 }
@@ -530,11 +496,8 @@ function mtnormalise(
 
 export {
       MTNORMALISE_METADATA,
-      MtnormaliseConfigParameters,
       MtnormaliseInputOutputOutputs,
-      MtnormaliseInputOutputParameters,
       MtnormaliseOutputs,
-      MtnormaliseParameters,
       mtnormalise,
       mtnormalise_config_params,
       mtnormalise_execute,

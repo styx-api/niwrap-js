@@ -12,7 +12,7 @@ const V__CHAUFFEUR_AFNI_METADATA: Metadata = {
 
 
 interface VChauffeurAfniParameters {
-    "@type": "afni.@chauffeur_afni";
+    "@type"?: "afni/@chauffeur_afni";
     "ulay": InputPathType;
     "olay"?: InputPathType | null | undefined;
     "prefix": string;
@@ -32,44 +32,11 @@ interface VChauffeurAfniParameters {
     "help": boolean;
     "version": boolean;
 }
+type VChauffeurAfniParametersTagged = Required<Pick<VChauffeurAfniParameters, '@type'>> & VChauffeurAfniParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@chauffeur_afni": v__chauffeur_afni_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@chauffeur_afni": v__chauffeur_afni_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__chauffeur_afni(...)`.
+ * Output object returned when calling `VChauffeurAfniParameters(...)`.
  *
  * @interface
  */
@@ -136,9 +103,9 @@ function v__chauffeur_afni_params(
     do_clean: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): VChauffeurAfniParameters {
+): VChauffeurAfniParametersTagged {
     const params = {
-        "@type": "afni.@chauffeur_afni" as const,
+        "@type": "afni/@chauffeur_afni" as const,
         "ulay": ulay,
         "prefix": prefix,
         "mode_4D": mode_4_d,
@@ -206,7 +173,7 @@ function v__chauffeur_afni_cargs(
         "-prefix",
         (params["prefix"] ?? null)
     );
-    if ((params["mode_4D"] ?? null)) {
+    if ((params["mode_4D"] ?? false)) {
         cargs.push("-mode_4D");
     }
     if ((params["func_range"] ?? null) !== null) {
@@ -269,16 +236,16 @@ function v__chauffeur_afni_cargs(
             String((params["label_setback"] ?? null))
         );
     }
-    if ((params["no_clean"] ?? null)) {
+    if ((params["no_clean"] ?? false)) {
         cargs.push("-no_clean");
     }
-    if ((params["do_clean"] ?? null)) {
+    if ((params["do_clean"] ?? false)) {
         cargs.push("-do_clean");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-ver");
     }
     return cargs;
@@ -394,7 +361,6 @@ function v__chauffeur_afni(
 
 export {
       VChauffeurAfniOutputs,
-      VChauffeurAfniParameters,
       V__CHAUFFEUR_AFNI_METADATA,
       v__chauffeur_afni,
       v__chauffeur_afni_execute,

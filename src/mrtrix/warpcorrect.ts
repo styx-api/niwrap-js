@@ -12,14 +12,15 @@ const WARPCORRECT_METADATA: Metadata = {
 
 
 interface WarpcorrectConfigParameters {
-    "@type": "mrtrix.warpcorrect.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type WarpcorrectConfigParametersTagged = Required<Pick<WarpcorrectConfigParameters, '@type'>> & WarpcorrectConfigParameters;
 
 
 interface WarpcorrectParameters {
-    "@type": "mrtrix.warpcorrect";
+    "@type"?: "mrtrix/warpcorrect";
     "marker"?: Array<number> | null | undefined;
     "tolerance"?: number | null | undefined;
     "info": boolean;
@@ -33,41 +34,7 @@ interface WarpcorrectParameters {
     "in": InputPathType;
     "out": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.warpcorrect": warpcorrect_cargs,
-        "mrtrix.warpcorrect.config": warpcorrect_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.warpcorrect": warpcorrect_outputs,
-    };
-    return outputsFuncs[t];
-}
+type WarpcorrectParametersTagged = Required<Pick<WarpcorrectParameters, '@type'>> & WarpcorrectParameters;
 
 
 /**
@@ -81,9 +48,9 @@ function dynOutputs(
 function warpcorrect_config_params(
     key: string,
     value: string,
-): WarpcorrectConfigParameters {
+): WarpcorrectConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.warpcorrect.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -112,7 +79,7 @@ function warpcorrect_config_cargs(
 
 
 /**
- * Output object returned when calling `warpcorrect(...)`.
+ * Output object returned when calling `WarpcorrectParameters(...)`.
  *
  * @interface
  */
@@ -159,9 +126,9 @@ function warpcorrect_params(
     config: Array<WarpcorrectConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): WarpcorrectParameters {
+): WarpcorrectParametersTagged {
     const params = {
-        "@type": "mrtrix.warpcorrect" as const,
+        "@type": "mrtrix/warpcorrect" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -213,16 +180,16 @@ function warpcorrect_cargs(
             String((params["tolerance"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -232,12 +199,12 @@ function warpcorrect_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => warpcorrect_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["in"] ?? null)));
@@ -353,9 +320,7 @@ function warpcorrect(
 
 export {
       WARPCORRECT_METADATA,
-      WarpcorrectConfigParameters,
       WarpcorrectOutputs,
-      WarpcorrectParameters,
       warpcorrect,
       warpcorrect_config_params,
       warpcorrect_execute,

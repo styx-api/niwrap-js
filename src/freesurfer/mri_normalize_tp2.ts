@@ -12,7 +12,7 @@ const MRI_NORMALIZE_TP2_METADATA: Metadata = {
 
 
 interface MriNormalizeTp2Parameters {
-    "@type": "freesurfer.mri_normalize_tp2";
+    "@type"?: "freesurfer/mri_normalize_tp2";
     "input_vol": InputPathType;
     "normalized_vol": string;
     "t1_volume"?: InputPathType | null | undefined;
@@ -25,44 +25,11 @@ interface MriNormalizeTp2Parameters {
     "lta_src"?: InputPathType | null | undefined;
     "lta_dst"?: InputPathType | null | undefined;
 }
+type MriNormalizeTp2ParametersTagged = Required<Pick<MriNormalizeTp2Parameters, '@type'>> & MriNormalizeTp2Parameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_normalize_tp2": mri_normalize_tp2_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_normalize_tp2": mri_normalize_tp2_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_normalize_tp2(...)`.
+ * Output object returned when calling `MriNormalizeTp2Parameters(...)`.
  *
  * @interface
  */
@@ -107,9 +74,9 @@ function mri_normalize_tp2_params(
     invert_flag: boolean = false,
     lta_src: InputPathType | null = null,
     lta_dst: InputPathType | null = null,
-): MriNormalizeTp2Parameters {
+): MriNormalizeTp2ParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_normalize_tp2" as const,
+        "@type": "freesurfer/mri_normalize_tp2" as const,
         "input_vol": input_vol,
         "normalized_vol": normalized_vol,
         "invert_flag": invert_flag,
@@ -194,7 +161,7 @@ function mri_normalize_tp2_cargs(
             execution.inputFile((params["xform"] ?? null))
         );
     }
-    if ((params["invert_flag"] ?? null)) {
+    if ((params["invert_flag"] ?? false)) {
         cargs.push("-invert");
     }
     if ((params["lta_src"] ?? null) !== null) {
@@ -307,7 +274,6 @@ function mri_normalize_tp2(
 export {
       MRI_NORMALIZE_TP2_METADATA,
       MriNormalizeTp2Outputs,
-      MriNormalizeTp2Parameters,
       mri_normalize_tp2,
       mri_normalize_tp2_execute,
       mri_normalize_tp2_params,

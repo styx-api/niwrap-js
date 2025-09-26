@@ -12,46 +12,14 @@ const MS_REFINE_SUBJECT_METADATA: Metadata = {
 
 
 interface MsRefineSubjectParameters {
-    "@type": "freesurfer.ms_refine_subject";
+    "@type"?: "freesurfer/ms_refine_subject";
     "subjects_dir": string;
 }
+type MsRefineSubjectParametersTagged = Required<Pick<MsRefineSubjectParameters, '@type'>> & MsRefineSubjectParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.ms_refine_subject": ms_refine_subject_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ms_refine_subject(...)`.
+ * Output object returned when calling `MsRefineSubjectParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface MsRefineSubjectOutputs {
  */
 function ms_refine_subject_params(
     subjects_dir: string,
-): MsRefineSubjectParameters {
+): MsRefineSubjectParametersTagged {
     const params = {
-        "@type": "freesurfer.ms_refine_subject" as const,
+        "@type": "freesurfer/ms_refine_subject" as const,
         "subjects_dir": subjects_dir,
     };
     return params;
@@ -173,7 +141,6 @@ function ms_refine_subject(
 export {
       MS_REFINE_SUBJECT_METADATA,
       MsRefineSubjectOutputs,
-      MsRefineSubjectParameters,
       ms_refine_subject,
       ms_refine_subject_execute,
       ms_refine_subject_params,

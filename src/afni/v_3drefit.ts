@@ -12,7 +12,7 @@ const V_3DREFIT_METADATA: Metadata = {
 
 
 interface V3drefitParameters {
-    "@type": "afni.3drefit";
+    "@type"?: "afni/3drefit";
     "atrcopy"?: Array<string> | null | undefined;
     "atrfloat"?: Array<string> | null | undefined;
     "atrint"?: Array<string> | null | undefined;
@@ -31,44 +31,11 @@ interface V3drefitParameters {
     "zdel"?: number | null | undefined;
     "zorigin"?: string | null | undefined;
 }
+type V3drefitParametersTagged = Required<Pick<V3drefitParameters, '@type'>> & V3drefitParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3drefit": v_3drefit_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3drefit": v_3drefit_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3drefit(...)`.
+ * Output object returned when calling `V3drefitParameters(...)`.
  *
  * @interface
  */
@@ -125,9 +92,9 @@ function v_3drefit_params(
     yorigin: string | null = null,
     zdel: number | null = null,
     zorigin: string | null = null,
-): V3drefitParameters {
+): V3drefitParametersTagged {
     const params = {
-        "@type": "afni.3drefit" as const,
+        "@type": "afni/3drefit" as const,
         "deoblique": deoblique,
         "in_file": in_file,
         "nosaveatr": nosaveatr,
@@ -214,7 +181,7 @@ function v_3drefit_cargs(
             ...(params["atrstring"] ?? null)
         );
     }
-    if ((params["deoblique"] ?? null)) {
+    if ((params["deoblique"] ?? false)) {
         cargs.push("-deoblique");
     }
     if ((params["duporigin_file"] ?? null) !== null) {
@@ -224,10 +191,10 @@ function v_3drefit_cargs(
         );
     }
     cargs.push(execution.inputFile((params["in_file"] ?? null), { mutable: true }));
-    if ((params["nosaveatr"] ?? null)) {
+    if ((params["nosaveatr"] ?? false)) {
         cargs.push("-nosaveatr");
     }
-    if ((params["saveatr"] ?? null)) {
+    if ((params["saveatr"] ?? false)) {
         cargs.push("-saveatr");
     }
     if ((params["space"] ?? null) !== null) {
@@ -387,7 +354,6 @@ function v_3drefit(
 
 export {
       V3drefitOutputs,
-      V3drefitParameters,
       V_3DREFIT_METADATA,
       v_3drefit,
       v_3drefit_execute,

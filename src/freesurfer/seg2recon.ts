@@ -12,7 +12,7 @@ const SEG2RECON_METADATA: Metadata = {
 
 
 interface Seg2reconParameters {
-    "@type": "freesurfer.seg2recon";
+    "@type"?: "freesurfer/seg2recon";
     "subject": string;
     "segvol": InputPathType;
     "inputvol": InputPathType;
@@ -28,44 +28,11 @@ interface Seg2reconParameters {
     "rca": boolean;
     "no_bias_field_cor": boolean;
 }
+type Seg2reconParametersTagged = Required<Pick<Seg2reconParameters, '@type'>> & Seg2reconParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.seg2recon": seg2recon_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.seg2recon": seg2recon_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `seg2recon(...)`.
+ * Output object returned when calling `Seg2reconParameters(...)`.
  *
  * @interface
  */
@@ -124,9 +91,9 @@ function seg2recon_params(
     expert: InputPathType | null = null,
     rca: boolean = false,
     no_bias_field_cor: boolean = false,
-): Seg2reconParameters {
+): Seg2reconParametersTagged {
     const params = {
-        "@type": "freesurfer.seg2recon" as const,
+        "@type": "freesurfer/seg2recon" as const,
         "subject": subject,
         "segvol": segvol,
         "inputvol": inputvol,
@@ -204,10 +171,10 @@ function seg2recon_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["force_update"] ?? null)) {
+    if ((params["force_update"] ?? false)) {
         cargs.push("--force-update");
     }
-    if ((params["no_cc"] ?? null)) {
+    if ((params["no_cc"] ?? false)) {
         cargs.push("--no-cc");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -234,10 +201,10 @@ function seg2recon_cargs(
             execution.inputFile((params["expert"] ?? null))
         );
     }
-    if ((params["rca"] ?? null)) {
+    if ((params["rca"] ?? false)) {
         cargs.push("--rca");
     }
-    if ((params["no_bias_field_cor"] ?? null)) {
+    if ((params["no_bias_field_cor"] ?? false)) {
         cargs.push("--no-bias-field-cor");
     }
     return cargs;
@@ -346,7 +313,6 @@ function seg2recon(
 export {
       SEG2RECON_METADATA,
       Seg2reconOutputs,
-      Seg2reconParameters,
       seg2recon,
       seg2recon_execute,
       seg2recon_params,

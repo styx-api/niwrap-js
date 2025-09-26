@@ -12,47 +12,14 @@ const MORPH_ONLY_SUBJECT_LH_METADATA: Metadata = {
 
 
 interface MorphOnlySubjectLhParameters {
-    "@type": "freesurfer.morph_only_subject-lh";
+    "@type"?: "freesurfer/morph_only_subject-lh";
     "subject_dir": string;
 }
+type MorphOnlySubjectLhParametersTagged = Required<Pick<MorphOnlySubjectLhParameters, '@type'>> & MorphOnlySubjectLhParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.morph_only_subject-lh": morph_only_subject_lh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.morph_only_subject-lh": morph_only_subject_lh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `morph_only_subject_lh(...)`.
+ * Output object returned when calling `MorphOnlySubjectLhParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface MorphOnlySubjectLhOutputs {
  */
 function morph_only_subject_lh_params(
     subject_dir: string,
-): MorphOnlySubjectLhParameters {
+): MorphOnlySubjectLhParametersTagged {
     const params = {
-        "@type": "freesurfer.morph_only_subject-lh" as const,
+        "@type": "freesurfer/morph_only_subject-lh" as const,
         "subject_dir": subject_dir,
     };
     return params;
@@ -182,7 +149,6 @@ function morph_only_subject_lh(
 export {
       MORPH_ONLY_SUBJECT_LH_METADATA,
       MorphOnlySubjectLhOutputs,
-      MorphOnlySubjectLhParameters,
       morph_only_subject_lh,
       morph_only_subject_lh_execute,
       morph_only_subject_lh_params,

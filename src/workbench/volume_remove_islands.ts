@@ -12,48 +12,15 @@ const VOLUME_REMOVE_ISLANDS_METADATA: Metadata = {
 
 
 interface VolumeRemoveIslandsParameters {
-    "@type": "workbench.volume-remove-islands";
+    "@type"?: "workbench/volume-remove-islands";
     "volume_in": InputPathType;
     "volume_out": string;
 }
+type VolumeRemoveIslandsParametersTagged = Required<Pick<VolumeRemoveIslandsParameters, '@type'>> & VolumeRemoveIslandsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-remove-islands": volume_remove_islands_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-remove-islands": volume_remove_islands_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `volume_remove_islands(...)`.
+ * Output object returned when calling `VolumeRemoveIslandsParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface VolumeRemoveIslandsOutputs {
 function volume_remove_islands_params(
     volume_in: InputPathType,
     volume_out: string,
-): VolumeRemoveIslandsParameters {
+): VolumeRemoveIslandsParametersTagged {
     const params = {
-        "@type": "workbench.volume-remove-islands" as const,
+        "@type": "workbench/volume-remove-islands" as const,
         "volume_in": volume_in,
         "volume_out": volume_out,
     };
@@ -191,7 +158,6 @@ function volume_remove_islands(
 export {
       VOLUME_REMOVE_ISLANDS_METADATA,
       VolumeRemoveIslandsOutputs,
-      VolumeRemoveIslandsParameters,
       volume_remove_islands,
       volume_remove_islands_execute,
       volume_remove_islands_params,

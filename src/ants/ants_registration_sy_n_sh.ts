@@ -12,7 +12,7 @@ const ANTS_REGISTRATION_SY_N_SH_METADATA: Metadata = {
 
 
 interface AntsRegistrationSyNShParameters {
-    "@type": "ants.antsRegistrationSyN.sh";
+    "@type"?: "ants/antsRegistrationSyN.sh";
     "image_dimension": 2 | 3;
     "fixed_image": InputPathType;
     "moving_image": InputPathType;
@@ -30,44 +30,11 @@ interface AntsRegistrationSyNShParameters {
     "collapse_output_transforms"?: 0 | 1 | null | undefined;
     "random_seed"?: number | null | undefined;
 }
+type AntsRegistrationSyNShParametersTagged = Required<Pick<AntsRegistrationSyNShParameters, '@type'>> & AntsRegistrationSyNShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.antsRegistrationSyN.sh": ants_registration_sy_n_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.antsRegistrationSyN.sh": ants_registration_sy_n_sh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ants_registration_sy_n_sh(...)`.
+ * Output object returned when calling `AntsRegistrationSyNShParameters(...)`.
  *
  * @interface
  */
@@ -147,9 +114,9 @@ function ants_registration_sy_n_sh_params(
     use_repro_mode: 0 | 1 | null = null,
     collapse_output_transforms: 0 | 1 | null = null,
     random_seed: number | null = null,
-): AntsRegistrationSyNShParameters {
+): AntsRegistrationSyNShParametersTagged {
     const params = {
-        "@type": "ants.antsRegistrationSyN.sh" as const,
+        "@type": "ants/antsRegistrationSyN.sh" as const,
         "image_dimension": image_dimension,
         "fixed_image": fixed_image,
         "moving_image": moving_image,
@@ -424,7 +391,6 @@ function ants_registration_sy_n_sh(
 export {
       ANTS_REGISTRATION_SY_N_SH_METADATA,
       AntsRegistrationSyNShOutputs,
-      AntsRegistrationSyNShParameters,
       ants_registration_sy_n_sh,
       ants_registration_sy_n_sh_execute,
       ants_registration_sy_n_sh_params,

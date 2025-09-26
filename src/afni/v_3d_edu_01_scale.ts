@@ -12,49 +12,17 @@ const V_3D_EDU_01_SCALE_METADATA: Metadata = {
 
 
 interface V3dEdu01ScaleParameters {
-    "@type": "afni.3dEdu_01_scale";
+    "@type"?: "afni/3dEdu_01_scale";
     "input": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "mult_factors"?: Array<number> | null | undefined;
     "option_flag": boolean;
 }
+type V3dEdu01ScaleParametersTagged = Required<Pick<V3dEdu01ScaleParameters, '@type'>> & V3dEdu01ScaleParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dEdu_01_scale": v_3d_edu_01_scale_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_edu_01_scale(...)`.
+ * Output object returned when calling `V3dEdu01ScaleParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function v_3d_edu_01_scale_params(
     mask: InputPathType | null = null,
     mult_factors: Array<number> | null = null,
     option_flag: boolean = false,
-): V3dEdu01ScaleParameters {
+): V3dEdu01ScaleParametersTagged {
     const params = {
-        "@type": "afni.3dEdu_01_scale" as const,
+        "@type": "afni/3dEdu_01_scale" as const,
         "input": input,
         "option_flag": option_flag,
     };
@@ -124,7 +92,7 @@ function v_3d_edu_01_scale_cargs(
             ...(params["mult_factors"] ?? null).map(String)
         );
     }
-    if ((params["option_flag"] ?? null)) {
+    if ((params["option_flag"] ?? false)) {
         cargs.push("-some_opt");
     }
     return cargs;
@@ -209,7 +177,6 @@ function v_3d_edu_01_scale(
 
 export {
       V3dEdu01ScaleOutputs,
-      V3dEdu01ScaleParameters,
       V_3D_EDU_01_SCALE_METADATA,
       v_3d_edu_01_scale,
       v_3d_edu_01_scale_execute,

@@ -12,7 +12,7 @@ const MRIS_TARGET_POS_METADATA: Metadata = {
 
 
 interface MrisTargetPosParameters {
-    "@type": "freesurfer.mris_target_pos";
+    "@type"?: "freesurfer/mris_target_pos";
     "input_volume": InputPathType;
     "input_surface": InputPathType;
     "output_surface": string;
@@ -27,43 +27,11 @@ interface MrisTargetPosParameters {
     "help_flag": boolean;
     "version_flag": boolean;
 }
+type MrisTargetPosParametersTagged = Required<Pick<MrisTargetPosParameters, '@type'>> & MrisTargetPosParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_target_pos": mris_target_pos_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_target_pos(...)`.
+ * Output object returned when calling `MrisTargetPosParameters(...)`.
  *
  * @interface
  */
@@ -108,9 +76,9 @@ function mris_target_pos_params(
     check_options: boolean = false,
     help_flag: boolean = false,
     version_flag: boolean = false,
-): MrisTargetPosParameters {
+): MrisTargetPosParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_target_pos" as const,
+        "@type": "freesurfer/mris_target_pos" as const,
         "input_volume": input_volume,
         "input_surface": input_surface,
         "output_surface": output_surface,
@@ -191,19 +159,19 @@ function mris_target_pos_cargs(
             String((params["debug_vertex"] ?? null))
         );
     }
-    if ((params["cbv_flag"] ?? null)) {
+    if ((params["cbv_flag"] ?? false)) {
         cargs.push("--cbv");
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["check_options"] ?? null)) {
+    if ((params["check_options"] ?? false)) {
         cargs.push("--checkopts");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version_flag"] ?? null)) {
+    if ((params["version_flag"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -307,7 +275,6 @@ function mris_target_pos(
 export {
       MRIS_TARGET_POS_METADATA,
       MrisTargetPosOutputs,
-      MrisTargetPosParameters,
       mris_target_pos,
       mris_target_pos_execute,
       mris_target_pos_params,

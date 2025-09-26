@@ -12,47 +12,14 @@ const V__DJUNCT_4D_SLICES_TO_3D_VOL_METADATA: Metadata = {
 
 
 interface VDjunct4dSlicesTo3dVolParameters {
-    "@type": "afni.@djunct_4d_slices_to_3d_vol";
+    "@type"?: "afni/@djunct_4d_slices_to_3d_vol";
     "do_something": boolean;
 }
+type VDjunct4dSlicesTo3dVolParametersTagged = Required<Pick<VDjunct4dSlicesTo3dVolParameters, '@type'>> & VDjunct4dSlicesTo3dVolParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@djunct_4d_slices_to_3d_vol": v__djunct_4d_slices_to_3d_vol_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@djunct_4d_slices_to_3d_vol": v__djunct_4d_slices_to_3d_vol_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__djunct_4d_slices_to_3d_vol(...)`.
+ * Output object returned when calling `VDjunct4dSlicesTo3dVolParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface VDjunct4dSlicesTo3dVolOutputs {
  */
 function v__djunct_4d_slices_to_3d_vol_params(
     do_something: boolean = false,
-): VDjunct4dSlicesTo3dVolParameters {
+): VDjunct4dSlicesTo3dVolParametersTagged {
     const params = {
-        "@type": "afni.@djunct_4d_slices_to_3d_vol" as const,
+        "@type": "afni/@djunct_4d_slices_to_3d_vol" as const,
         "do_something": do_something,
     };
     return params;
@@ -100,7 +67,7 @@ function v__djunct_4d_slices_to_3d_vol_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("@djunct_4d_slices_to_3d_vol");
-    if ((params["do_something"] ?? null)) {
+    if ((params["do_something"] ?? false)) {
         cargs.push("-do-something");
     }
     return cargs;
@@ -180,7 +147,6 @@ function v__djunct_4d_slices_to_3d_vol(
 
 export {
       VDjunct4dSlicesTo3dVolOutputs,
-      VDjunct4dSlicesTo3dVolParameters,
       V__DJUNCT_4D_SLICES_TO_3D_VOL_METADATA,
       v__djunct_4d_slices_to_3d_vol,
       v__djunct_4d_slices_to_3d_vol_execute,

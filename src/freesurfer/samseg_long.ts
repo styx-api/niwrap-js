@@ -12,7 +12,7 @@ const SAMSEG_LONG_METADATA: Metadata = {
 
 
 interface SamsegLongParameters {
-    "@type": "freesurfer.samseg-long";
+    "@type"?: "freesurfer/samseg-long";
     "output_dir": string;
     "input_files": Array<InputPathType>;
     "align_mc": boolean;
@@ -21,44 +21,11 @@ interface SamsegLongParameters {
     "save_posteriors": boolean;
     "force_update": boolean;
 }
+type SamsegLongParametersTagged = Required<Pick<SamsegLongParameters, '@type'>> & SamsegLongParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.samseg-long": samseg_long_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.samseg-long": samseg_long_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `samseg_long(...)`.
+ * Output object returned when calling `SamsegLongParameters(...)`.
  *
  * @interface
  */
@@ -103,9 +70,9 @@ function samseg_long_params(
     threads: number | null = null,
     save_posteriors: boolean = false,
     force_update: boolean = false,
-): SamsegLongParameters {
+): SamsegLongParametersTagged {
     const params = {
-        "@type": "freesurfer.samseg-long" as const,
+        "@type": "freesurfer/samseg-long" as const,
         "output_dir": output_dir,
         "input_files": input_files,
         "align_mc": align_mc,
@@ -142,10 +109,10 @@ function samseg_long_cargs(
         "--i",
         ...(params["input_files"] ?? null).map(f => execution.inputFile(f))
     );
-    if ((params["align_mc"] ?? null)) {
+    if ((params["align_mc"] ?? false)) {
         cargs.push("--mc");
     }
-    if ((params["align_no_mc"] ?? null)) {
+    if ((params["align_no_mc"] ?? false)) {
         cargs.push("--no-mc");
     }
     if ((params["threads"] ?? null) !== null) {
@@ -154,10 +121,10 @@ function samseg_long_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["save_posteriors"] ?? null)) {
+    if ((params["save_posteriors"] ?? false)) {
         cargs.push("--save-posteriors");
     }
-    if ((params["force_update"] ?? null)) {
+    if ((params["force_update"] ?? false)) {
         cargs.push("--force-update");
     }
     return cargs;
@@ -252,7 +219,6 @@ function samseg_long(
 export {
       SAMSEG_LONG_METADATA,
       SamsegLongOutputs,
-      SamsegLongParameters,
       samseg_long,
       samseg_long_execute,
       samseg_long_params,

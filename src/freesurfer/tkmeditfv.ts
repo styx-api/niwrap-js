@@ -12,7 +12,7 @@ const TKMEDITFV_METADATA: Metadata = {
 
 
 interface TkmeditfvParameters {
-    "@type": "freesurfer.tkmeditfv";
+    "@type"?: "freesurfer/tkmeditfv";
     "subject"?: string | null | undefined;
     "mainvol": InputPathType;
     "aux_volume"?: InputPathType | null | undefined;
@@ -46,43 +46,11 @@ interface TkmeditfvParameters {
     "use_tkmedit": boolean;
     "load_aparc_aseg": boolean;
 }
+type TkmeditfvParametersTagged = Required<Pick<TkmeditfvParameters, '@type'>> & TkmeditfvParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.tkmeditfv": tkmeditfv_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tkmeditfv(...)`.
+ * Output object returned when calling `TkmeditfvParameters(...)`.
  *
  * @interface
  */
@@ -165,9 +133,9 @@ function tkmeditfv_params(
     vgl_display: boolean = false,
     use_tkmedit: boolean = false,
     load_aparc_aseg: boolean = false,
-): TkmeditfvParameters {
+): TkmeditfvParametersTagged {
     const params = {
-        "@type": "freesurfer.tkmeditfv" as const,
+        "@type": "freesurfer/tkmeditfv" as const,
         "mainvol": mainvol,
         "load_white": load_white,
         "load_pial": load_pial,
@@ -311,25 +279,25 @@ function tkmeditfv_cargs(
             ...(params["additional_segments"] ?? null).map(f => execution.inputFile(f))
         );
     }
-    if ((params["load_white"] ?? null)) {
+    if ((params["load_white"] ?? false)) {
         cargs.push("-white");
     }
-    if ((params["load_pial"] ?? null)) {
+    if ((params["load_pial"] ?? false)) {
         cargs.push("-pial");
     }
-    if ((params["load_orig"] ?? null)) {
+    if ((params["load_orig"] ?? false)) {
         cargs.push("-orig");
     }
-    if ((params["load_orig_nofix"] ?? null)) {
+    if ((params["load_orig_nofix"] ?? false)) {
         cargs.push("-orig.nofix");
     }
-    if ((params["load_smoothwm_nofix"] ?? null)) {
+    if ((params["load_smoothwm_nofix"] ?? false)) {
         cargs.push("-smoothwm.nofix");
     }
-    if ((params["load_white_preaparc"] ?? null)) {
+    if ((params["load_white_preaparc"] ?? false)) {
         cargs.push("-white.preaparc");
     }
-    if ((params["load_inflated"] ?? null)) {
+    if ((params["load_inflated"] ?? false)) {
         cargs.push("-inflated");
     }
     if ((params["annot"] ?? null) !== null) {
@@ -338,7 +306,7 @@ function tkmeditfv_cargs(
             (params["annot"] ?? null)
         );
     }
-    if ((params["load_aparc"] ?? null)) {
+    if ((params["load_aparc"] ?? false)) {
         cargs.push("-aparc");
     }
     if ((params["surfext"] ?? null) !== null) {
@@ -347,7 +315,7 @@ function tkmeditfv_cargs(
             (params["surfext"] ?? null)
         );
     }
-    if ((params["seg_outline"] ?? null)) {
+    if ((params["seg_outline"] ?? false)) {
         cargs.push("-seg-outline");
     }
     if ((params["intensity_minmax"] ?? null) !== null) {
@@ -356,28 +324,28 @@ function tkmeditfv_cargs(
             ...(params["intensity_minmax"] ?? null).map(String)
         );
     }
-    if ((params["load_defects"] ?? null)) {
+    if ((params["load_defects"] ?? false)) {
         cargs.push("-defects");
     }
-    if ((params["load_defect_pointset"] ?? null)) {
+    if ((params["load_defect_pointset"] ?? false)) {
         cargs.push("-defectps");
     }
-    if ((params["trilin_interpolation"] ?? null)) {
+    if ((params["trilin_interpolation"] ?? false)) {
         cargs.push("-trilin");
     }
-    if ((params["neurological_orientation"] ?? null)) {
+    if ((params["neurological_orientation"] ?? false)) {
         cargs.push("-neuro");
     }
-    if ((params["rotate_around_cursor"] ?? null)) {
+    if ((params["rotate_around_cursor"] ?? false)) {
         cargs.push("-rotate-around-cursor");
     }
-    if ((params["vgl_display"] ?? null)) {
+    if ((params["vgl_display"] ?? false)) {
         cargs.push("-vgl");
     }
-    if ((params["use_tkmedit"] ?? null)) {
+    if ((params["use_tkmedit"] ?? false)) {
         cargs.push("-tkmedit");
     }
-    if ((params["load_aparc_aseg"] ?? null)) {
+    if ((params["load_aparc_aseg"] ?? false)) {
         cargs.push("-aparc+aseg");
     }
     return cargs;
@@ -519,7 +487,6 @@ function tkmeditfv(
 export {
       TKMEDITFV_METADATA,
       TkmeditfvOutputs,
-      TkmeditfvParameters,
       tkmeditfv,
       tkmeditfv_execute,
       tkmeditfv_params,

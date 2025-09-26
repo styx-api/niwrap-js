@@ -12,7 +12,7 @@ const NON_LOCAL_SUPER_RESOLUTION_METADATA: Metadata = {
 
 
 interface NonLocalSuperResolutionParameters {
-    "@type": "ants.NonLocalSuperResolution";
+    "@type"?: "ants/NonLocalSuperResolution";
     "image_dimensionality"?: 2 | 3 | 4 | null | undefined;
     "input_image": InputPathType;
     "interpolated_image"?: InputPathType | null | undefined;
@@ -26,44 +26,11 @@ interface NonLocalSuperResolutionParameters {
     "output": string;
     "verbose"?: 0 | 1 | null | undefined;
 }
+type NonLocalSuperResolutionParametersTagged = Required<Pick<NonLocalSuperResolutionParameters, '@type'>> & NonLocalSuperResolutionParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.NonLocalSuperResolution": non_local_super_resolution_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.NonLocalSuperResolution": non_local_super_resolution_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `non_local_super_resolution(...)`.
+ * Output object returned when calling `NonLocalSuperResolutionParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function non_local_super_resolution_params(
     scale_levels: string | null = null,
     interpolation: "Linear" | "NearestNeighbor" | "Gaussian" | "BSpline" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | null = null,
     verbose: 0 | 1 | null = null,
-): NonLocalSuperResolutionParameters {
+): NonLocalSuperResolutionParametersTagged {
     const params = {
-        "@type": "ants.NonLocalSuperResolution" as const,
+        "@type": "ants/NonLocalSuperResolution" as const,
         "input_image": input_image,
         "output": output,
     };
@@ -332,7 +299,6 @@ function non_local_super_resolution(
 export {
       NON_LOCAL_SUPER_RESOLUTION_METADATA,
       NonLocalSuperResolutionOutputs,
-      NonLocalSuperResolutionParameters,
       non_local_super_resolution,
       non_local_super_resolution_execute,
       non_local_super_resolution_params,

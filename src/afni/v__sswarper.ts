@@ -12,7 +12,7 @@ const V__SSWARPER_METADATA: Metadata = {
 
 
 interface VSswarperParameters {
-    "@type": "afni.@SSwarper";
+    "@type"?: "afni/@SSwarper";
     "input_file": InputPathType;
     "base_template": InputPathType;
     "subject_id": string;
@@ -37,44 +37,11 @@ interface VSswarperParameters {
     "verbose": boolean;
     "noclean": boolean;
 }
+type VSswarperParametersTagged = Required<Pick<VSswarperParameters, '@type'>> & VSswarperParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@SSwarper": v__sswarper_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@SSwarper": v__sswarper_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__sswarper(...)`.
+ * Output object returned when calling `VSswarperParameters(...)`.
  *
  * @interface
  */
@@ -195,9 +162,9 @@ function v__sswarper_params(
     echo: boolean = false,
     verbose: boolean = false,
     noclean: boolean = false,
-): VSswarperParameters {
+): VSswarperParametersTagged {
     const params = {
-        "@type": "afni.@SSwarper" as const,
+        "@type": "afni/@SSwarper" as const,
         "input_file": input_file,
         "base_template": base_template,
         "subject_id": subject_id,
@@ -276,22 +243,22 @@ function v__sswarper_cargs(
             String((params["min_patch_size"] ?? null))
         );
     }
-    if ((params["no_lite"] ?? null)) {
+    if ((params["no_lite"] ?? false)) {
         cargs.push("-nolite");
     }
-    if ((params["skip_warp"] ?? null)) {
+    if ((params["skip_warp"] ?? false)) {
         cargs.push("-skipwarp");
     }
-    if ((params["unifize_off"] ?? null)) {
+    if ((params["unifize_off"] ?? false)) {
         cargs.push("-unifize_off");
     }
-    if ((params["init_skullstr_off"] ?? null)) {
+    if ((params["init_skullstr_off"] ?? false)) {
         cargs.push("-init_skullstr_off");
     }
-    if ((params["extra_qc_off"] ?? null)) {
+    if ((params["extra_qc_off"] ?? false)) {
         cargs.push("-extra_qc_off");
     }
-    if ((params["jump_to_extra_qc"] ?? null)) {
+    if ((params["jump_to_extra_qc"] ?? false)) {
         cargs.push("-jump_to_extra_qc");
     }
     if ((params["cost_nl_init"] ?? null) !== null) {
@@ -306,10 +273,10 @@ function v__sswarper_cargs(
             (params["cost_nl_final"] ?? null)
         );
     }
-    if ((params["deoblique"] ?? null)) {
+    if ((params["deoblique"] ?? false)) {
         cargs.push("-deoblique");
     }
-    if ((params["deoblique_refitly"] ?? null)) {
+    if ((params["deoblique_refitly"] ?? false)) {
         cargs.push("-deoblique_refitly");
     }
     if ((params["warp_scale"] ?? null) !== null) {
@@ -324,22 +291,22 @@ function v__sswarper_cargs(
             (params["ssopt_flag"] ?? null)
         );
     }
-    if ((params["aniso_off"] ?? null)) {
+    if ((params["aniso_off"] ?? false)) {
         cargs.push("-aniso_off");
     }
-    if ((params["ceil_off"] ?? null)) {
+    if ((params["ceil_off"] ?? false)) {
         cargs.push("-ceil_off");
     }
-    if ((params["tmp_name_nice"] ?? null)) {
+    if ((params["tmp_name_nice"] ?? false)) {
         cargs.push("-tmp_name_nice");
     }
-    if ((params["echo"] ?? null)) {
+    if ((params["echo"] ?? false)) {
         cargs.push("-echo");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["noclean"] ?? null)) {
+    if ((params["noclean"] ?? false)) {
         cargs.push("-noclean");
     }
     return cargs;
@@ -476,7 +443,6 @@ function v__sswarper(
 
 export {
       VSswarperOutputs,
-      VSswarperParameters,
       V__SSWARPER_METADATA,
       v__sswarper,
       v__sswarper_execute,

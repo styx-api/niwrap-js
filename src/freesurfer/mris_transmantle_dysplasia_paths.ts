@@ -12,7 +12,7 @@ const MRIS_TRANSMANTLE_DYSPLASIA_PATHS_METADATA: Metadata = {
 
 
 interface MrisTransmantleDysplasiaPathsParameters {
-    "@type": "freesurfer.mris_transmantle_dysplasia_paths";
+    "@type"?: "freesurfer/mris_transmantle_dysplasia_paths";
     "surface": InputPathType;
     "aseg_volume": InputPathType;
     "intensity_volume": InputPathType;
@@ -21,44 +21,11 @@ interface MrisTransmantleDysplasiaPathsParameters {
     "filter"?: Array<number> | null | undefined;
     "noise_sensitivity": boolean;
 }
+type MrisTransmantleDysplasiaPathsParametersTagged = Required<Pick<MrisTransmantleDysplasiaPathsParameters, '@type'>> & MrisTransmantleDysplasiaPathsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_transmantle_dysplasia_paths": mris_transmantle_dysplasia_paths_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_transmantle_dysplasia_paths": mris_transmantle_dysplasia_paths_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_transmantle_dysplasia_paths(...)`.
+ * Output object returned when calling `MrisTransmantleDysplasiaPathsParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function mris_transmantle_dysplasia_paths_params(
     output_volume: string,
     filter: Array<number> | null = null,
     noise_sensitivity: boolean = false,
-): MrisTransmantleDysplasiaPathsParameters {
+): MrisTransmantleDysplasiaPathsParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_transmantle_dysplasia_paths" as const,
+        "@type": "freesurfer/mris_transmantle_dysplasia_paths" as const,
         "surface": surface,
         "aseg_volume": aseg_volume,
         "intensity_volume": intensity_volume,
@@ -137,7 +104,7 @@ function mris_transmantle_dysplasia_paths_cargs(
             ...(params["filter"] ?? null).map(String)
         );
     }
-    if ((params["noise_sensitivity"] ?? null)) {
+    if ((params["noise_sensitivity"] ?? false)) {
         cargs.push("-n");
     }
     return cargs;
@@ -230,7 +197,6 @@ function mris_transmantle_dysplasia_paths(
 export {
       MRIS_TRANSMANTLE_DYSPLASIA_PATHS_METADATA,
       MrisTransmantleDysplasiaPathsOutputs,
-      MrisTransmantleDysplasiaPathsParameters,
       mris_transmantle_dysplasia_paths,
       mris_transmantle_dysplasia_paths_execute,
       mris_transmantle_dysplasia_paths_params,

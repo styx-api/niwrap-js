@@ -12,7 +12,7 @@ const V_3D_MSS_METADATA: Metadata = {
 
 
 interface V3dMssParameters {
-    "@type": "afni.3dMSS";
+    "@type"?: "afni/3dMSS";
     "prefix": string;
     "jobs"?: number | null | undefined;
     "mrr_formula"?: string | null | undefined;
@@ -32,44 +32,11 @@ interface V3dMssParameters {
     "sdiff_vars"?: string | null | undefined;
     "vt_formula"?: string | null | undefined;
 }
+type V3dMssParametersTagged = Required<Pick<V3dMssParameters, '@type'>> & V3dMssParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dMSS": v_3d_mss_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dMSS": v_3d_mss_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_mss(...)`.
+ * Output object returned when calling `V3dMssParameters(...)`.
  *
  * @interface
  */
@@ -128,9 +95,9 @@ function v_3d_mss_params(
     show_allowed_options_flag: boolean = false,
     sdiff_vars: string | null = null,
     vt_formula: string | null = null,
-): V3dMssParameters {
+): V3dMssParametersTagged {
     const params = {
-        "@type": "afni.3dMSS" as const,
+        "@type": "afni/3dMSS" as const,
         "prefix": prefix,
         "data_table": data_table,
         "cio_flag": cio_flag,
@@ -243,16 +210,16 @@ function v_3d_mss_cargs(
         "-dataTable",
         execution.inputFile((params["data_table"] ?? null))
     );
-    if ((params["cio_flag"] ?? null)) {
+    if ((params["cio_flag"] ?? false)) {
         cargs.push("-cio");
     }
-    if ((params["rio_flag"] ?? null)) {
+    if ((params["rio_flag"] ?? false)) {
         cargs.push("-Rio");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["dbg_args_flag"] ?? null)) {
+    if ((params["dbg_args_flag"] ?? false)) {
         cargs.push("-dbgArgs");
     }
     if ((params["if_name"] ?? null) !== null) {
@@ -261,7 +228,7 @@ function v_3d_mss_cargs(
             (params["if_name"] ?? null)
         );
     }
-    if ((params["show_allowed_options_flag"] ?? null)) {
+    if ((params["show_allowed_options_flag"] ?? false)) {
         cargs.push("-show_allowed_options");
     }
     if ((params["sdiff_vars"] ?? null) !== null) {
@@ -387,7 +354,6 @@ function v_3d_mss(
 
 export {
       V3dMssOutputs,
-      V3dMssParameters,
       V_3D_MSS_METADATA,
       v_3d_mss,
       v_3d_mss_execute,

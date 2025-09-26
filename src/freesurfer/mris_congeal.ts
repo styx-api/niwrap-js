@@ -12,7 +12,7 @@ const MRIS_CONGEAL_METADATA: Metadata = {
 
 
 interface MrisCongealParameters {
-    "@type": "freesurfer.mris_congeal";
+    "@type"?: "freesurfer/mris_congeal";
     "input_surface_name": string;
     "hemi": string;
     "subjects": Array<string>;
@@ -29,44 +29,11 @@ interface MrisCongealParameters {
     "overlay_dir"?: string | null | undefined;
     "target_subject": boolean;
 }
+type MrisCongealParametersTagged = Required<Pick<MrisCongealParameters, '@type'>> & MrisCongealParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_congeal": mris_congeal_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_congeal": mris_congeal_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_congeal(...)`.
+ * Output object returned when calling `MrisCongealParameters(...)`.
  *
  * @interface
  */
@@ -119,9 +86,9 @@ function mris_congeal_params(
     overlay: Array<string> | null = null,
     overlay_dir: string | null = null,
     target_subject: boolean = false,
-): MrisCongealParameters {
+): MrisCongealParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_congeal" as const,
+        "@type": "freesurfer/mris_congeal" as const,
         "input_surface_name": input_surface_name,
         "hemi": hemi,
         "subjects": subjects,
@@ -180,13 +147,13 @@ function mris_congeal_cargs(
             (params["subjects_dir"] ?? null)
         );
     }
-    if ((params["disable_rigid_alignment"] ?? null)) {
+    if ((params["disable_rigid_alignment"] ?? false)) {
         cargs.push("-norot");
     }
-    if ((params["disable_sulc_alignment"] ?? null)) {
+    if ((params["disable_sulc_alignment"] ?? false)) {
         cargs.push("-nosulc");
     }
-    if ((params["smoothwm_curv"] ?? null)) {
+    if ((params["smoothwm_curv"] ?? false)) {
         cargs.push("-curv");
     }
     if ((params["jacobian_output"] ?? null) !== null) {
@@ -225,7 +192,7 @@ function mris_congeal_cargs(
             (params["overlay_dir"] ?? null)
         );
     }
-    if ((params["target_subject"] ?? null)) {
+    if ((params["target_subject"] ?? false)) {
         cargs.push("-1");
     }
     return cargs;
@@ -334,7 +301,6 @@ function mris_congeal(
 export {
       MRIS_CONGEAL_METADATA,
       MrisCongealOutputs,
-      MrisCongealParameters,
       mris_congeal,
       mris_congeal_execute,
       mris_congeal_params,

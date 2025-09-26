@@ -12,7 +12,7 @@ const FSLASCII2IMG_METADATA: Metadata = {
 
 
 interface Fslascii2imgParameters {
-    "@type": "fsl.fslascii2img";
+    "@type"?: "fsl/fslascii2img";
     "infile": InputPathType;
     "xsize": number;
     "ysize": number;
@@ -24,44 +24,11 @@ interface Fslascii2imgParameters {
     "tr": number;
     "outfile": string;
 }
+type Fslascii2imgParametersTagged = Required<Pick<Fslascii2imgParameters, '@type'>> & Fslascii2imgParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslascii2img": fslascii2img_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fslascii2img": fslascii2img_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslascii2img(...)`.
+ * Output object returned when calling `Fslascii2imgParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function fslascii2img_params(
     zdim: number,
     tr: number,
     outfile: string = "output",
-): Fslascii2imgParameters {
+): Fslascii2imgParametersTagged {
     const params = {
-        "@type": "fsl.fslascii2img" as const,
+        "@type": "fsl/fslascii2img" as const,
         "infile": infile,
         "xsize": xsize,
         "ysize": ysize,
@@ -145,7 +112,7 @@ function fslascii2img_cargs(
     cargs.push(String((params["ydim"] ?? null)));
     cargs.push(String((params["zdim"] ?? null)));
     cargs.push(String((params["tr"] ?? null)));
-    cargs.push((params["outfile"] ?? null));
+    cargs.push((params["outfile"] ?? "output"));
     return cargs;
 }
 
@@ -164,7 +131,7 @@ function fslascii2img_outputs(
 ): Fslascii2imgOutputs {
     const ret: Fslascii2imgOutputs = {
         root: execution.outputFile("."),
-        outfile: execution.outputFile([(params["outfile"] ?? null)].join('')),
+        outfile: execution.outputFile([(params["outfile"] ?? "output")].join('')),
     };
     return ret;
 }
@@ -242,7 +209,6 @@ function fslascii2img(
 export {
       FSLASCII2IMG_METADATA,
       Fslascii2imgOutputs,
-      Fslascii2imgParameters,
       fslascii2img,
       fslascii2img_execute,
       fslascii2img_params,

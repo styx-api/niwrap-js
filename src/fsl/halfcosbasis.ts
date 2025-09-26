@@ -12,7 +12,7 @@ const HALFCOSBASIS_METADATA: Metadata = {
 
 
 interface HalfcosbasisParameters {
-    "@type": "fsl.halfcosbasis";
+    "@type"?: "fsl/halfcosbasis";
     "hrf_param_file": InputPathType;
     "hrf_param_file_hf": InputPathType;
     "verbose_flag": boolean;
@@ -31,43 +31,11 @@ interface HalfcosbasisParameters {
     "help_flag": boolean;
     "help_flag_long": boolean;
 }
+type HalfcosbasisParametersTagged = Required<Pick<HalfcosbasisParameters, '@type'>> & HalfcosbasisParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.halfcosbasis": halfcosbasis_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `halfcosbasis(...)`.
+ * Output object returned when calling `HalfcosbasisParameters(...)`.
  *
  * @interface
  */
@@ -120,9 +88,9 @@ function halfcosbasis_params(
     temp_res: number | null = null,
     help_flag: boolean = false,
     help_flag_long: boolean = false,
-): HalfcosbasisParameters {
+): HalfcosbasisParametersTagged {
     const params = {
-        "@type": "fsl.halfcosbasis" as const,
+        "@type": "fsl/halfcosbasis" as const,
         "hrf_param_file": hrf_param_file,
         "hrf_param_file_hf": hrf_param_file_hf,
         "verbose_flag": verbose_flag,
@@ -189,7 +157,7 @@ function halfcosbasis_cargs(
         "--hf",
         execution.inputFile((params["hrf_param_file_hf"] ?? null))
     );
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-V");
     }
     if ((params["debug_level"] ?? null) !== null) {
@@ -210,7 +178,7 @@ function halfcosbasis_cargs(
             String((params["debug_level_debuglevel"] ?? null))
         );
     }
-    if ((params["timing_on_flag"] ?? null)) {
+    if ((params["timing_on_flag"] ?? false)) {
         cargs.push("--to");
     }
     if ((params["log_dir"] ?? null) !== null) {
@@ -261,10 +229,10 @@ function halfcosbasis_cargs(
             String((params["temp_res"] ?? null))
         );
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["help_flag_long"] ?? null)) {
+    if ((params["help_flag_long"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -376,7 +344,6 @@ function halfcosbasis(
 export {
       HALFCOSBASIS_METADATA,
       HalfcosbasisOutputs,
-      HalfcosbasisParameters,
       halfcosbasis,
       halfcosbasis_execute,
       halfcosbasis_params,

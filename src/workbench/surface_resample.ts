@@ -12,21 +12,23 @@ const SURFACE_RESAMPLE_METADATA: Metadata = {
 
 
 interface SurfaceResampleAreaSurfsParameters {
-    "@type": "workbench.surface-resample.area_surfs";
+    "@type"?: "area_surfs";
     "current_area": InputPathType;
     "new_area": InputPathType;
 }
+type SurfaceResampleAreaSurfsParametersTagged = Required<Pick<SurfaceResampleAreaSurfsParameters, '@type'>> & SurfaceResampleAreaSurfsParameters;
 
 
 interface SurfaceResampleAreaMetricsParameters {
-    "@type": "workbench.surface-resample.area_metrics";
+    "@type"?: "area_metrics";
     "current_area": InputPathType;
     "new_area": InputPathType;
 }
+type SurfaceResampleAreaMetricsParametersTagged = Required<Pick<SurfaceResampleAreaMetricsParameters, '@type'>> & SurfaceResampleAreaMetricsParameters;
 
 
 interface SurfaceResampleParameters {
-    "@type": "workbench.surface-resample";
+    "@type"?: "workbench/surface-resample";
     "surface_in": InputPathType;
     "current_sphere": InputPathType;
     "new_sphere": InputPathType;
@@ -36,42 +38,7 @@ interface SurfaceResampleParameters {
     "area_metrics"?: SurfaceResampleAreaMetricsParameters | null | undefined;
     "opt_bypass_sphere_check": boolean;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-resample": surface_resample_cargs,
-        "workbench.surface-resample.area_surfs": surface_resample_area_surfs_cargs,
-        "workbench.surface-resample.area_metrics": surface_resample_area_metrics_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-resample": surface_resample_outputs,
-    };
-    return outputsFuncs[t];
-}
+type SurfaceResampleParametersTagged = Required<Pick<SurfaceResampleParameters, '@type'>> & SurfaceResampleParameters;
 
 
 /**
@@ -85,9 +52,9 @@ function dynOutputs(
 function surface_resample_area_surfs_params(
     current_area: InputPathType,
     new_area: InputPathType,
-): SurfaceResampleAreaSurfsParameters {
+): SurfaceResampleAreaSurfsParametersTagged {
     const params = {
-        "@type": "workbench.surface-resample.area_surfs" as const,
+        "@type": "area_surfs" as const,
         "current_area": current_area,
         "new_area": new_area,
     };
@@ -126,9 +93,9 @@ function surface_resample_area_surfs_cargs(
 function surface_resample_area_metrics_params(
     current_area: InputPathType,
     new_area: InputPathType,
-): SurfaceResampleAreaMetricsParameters {
+): SurfaceResampleAreaMetricsParametersTagged {
     const params = {
-        "@type": "workbench.surface-resample.area_metrics" as const,
+        "@type": "area_metrics" as const,
         "current_area": current_area,
         "new_area": new_area,
     };
@@ -157,7 +124,7 @@ function surface_resample_area_metrics_cargs(
 
 
 /**
- * Output object returned when calling `surface_resample(...)`.
+ * Output object returned when calling `SurfaceResampleParameters(...)`.
  *
  * @interface
  */
@@ -196,9 +163,9 @@ function surface_resample_params(
     area_surfs: SurfaceResampleAreaSurfsParameters | null = null,
     area_metrics: SurfaceResampleAreaMetricsParameters | null = null,
     opt_bypass_sphere_check: boolean = false,
-): SurfaceResampleParameters {
+): SurfaceResampleParametersTagged {
     const params = {
-        "@type": "workbench.surface-resample" as const,
+        "@type": "workbench/surface-resample" as const,
         "surface_in": surface_in,
         "current_sphere": current_sphere,
         "new_sphere": new_sphere,
@@ -237,12 +204,12 @@ function surface_resample_cargs(
     cargs.push((params["method"] ?? null));
     cargs.push((params["surface_out"] ?? null));
     if ((params["area_surfs"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["area_surfs"] ?? null)["@type"])((params["area_surfs"] ?? null), execution));
+        cargs.push(...surface_resample_area_surfs_cargs((params["area_surfs"] ?? null), execution));
     }
     if ((params["area_metrics"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["area_metrics"] ?? null)["@type"])((params["area_metrics"] ?? null), execution));
+        cargs.push(...surface_resample_area_metrics_cargs((params["area_metrics"] ?? null), execution));
     }
-    if ((params["opt_bypass_sphere_check"] ?? null)) {
+    if ((params["opt_bypass_sphere_check"] ?? false)) {
         cargs.push("-bypass-sphere-check");
     }
     return cargs;
@@ -364,10 +331,7 @@ function surface_resample(
 
 export {
       SURFACE_RESAMPLE_METADATA,
-      SurfaceResampleAreaMetricsParameters,
-      SurfaceResampleAreaSurfsParameters,
       SurfaceResampleOutputs,
-      SurfaceResampleParameters,
       surface_resample,
       surface_resample_area_metrics_params,
       surface_resample_area_surfs_params,

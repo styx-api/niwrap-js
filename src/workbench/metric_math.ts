@@ -12,56 +12,23 @@ const METRIC_MATH_METADATA: Metadata = {
 
 
 interface MetricMathVarParameters {
-    "@type": "workbench.metric-math.var";
+    "@type"?: "var";
     "name": string;
     "metric": InputPathType;
     "opt_column_column"?: string | null | undefined;
     "opt_repeat": boolean;
 }
+type MetricMathVarParametersTagged = Required<Pick<MetricMathVarParameters, '@type'>> & MetricMathVarParameters;
 
 
 interface MetricMathParameters {
-    "@type": "workbench.metric-math";
+    "@type"?: "workbench/metric-math";
     "expression": string;
     "metric_out": string;
     "opt_fixnan_replace"?: number | null | undefined;
     "var"?: Array<MetricMathVarParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-math": metric_math_cargs,
-        "workbench.metric-math.var": metric_math_var_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.metric-math": metric_math_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MetricMathParametersTagged = Required<Pick<MetricMathParameters, '@type'>> & MetricMathParameters;
 
 
 /**
@@ -79,9 +46,9 @@ function metric_math_var_params(
     metric: InputPathType,
     opt_column_column: string | null = null,
     opt_repeat: boolean = false,
-): MetricMathVarParameters {
+): MetricMathVarParametersTagged {
     const params = {
-        "@type": "workbench.metric-math.var" as const,
+        "@type": "var" as const,
         "name": name,
         "metric": metric,
         "opt_repeat": opt_repeat,
@@ -115,7 +82,7 @@ function metric_math_var_cargs(
             (params["opt_column_column"] ?? null)
         );
     }
-    if ((params["opt_repeat"] ?? null)) {
+    if ((params["opt_repeat"] ?? false)) {
         cargs.push("-repeat");
     }
     return cargs;
@@ -123,7 +90,7 @@ function metric_math_var_cargs(
 
 
 /**
- * Output object returned when calling `metric_math(...)`.
+ * Output object returned when calling `MetricMathParameters(...)`.
  *
  * @interface
  */
@@ -154,9 +121,9 @@ function metric_math_params(
     metric_out: string,
     opt_fixnan_replace: number | null = null,
     var_: Array<MetricMathVarParameters> | null = null,
-): MetricMathParameters {
+): MetricMathParametersTagged {
     const params = {
-        "@type": "workbench.metric-math" as const,
+        "@type": "workbench/metric-math" as const,
         "expression": expression,
         "metric_out": metric_out,
     };
@@ -194,7 +161,7 @@ function metric_math_cargs(
         );
     }
     if ((params["var"] ?? null) !== null) {
-        cargs.push(...(params["var"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["var"] ?? null).map(s => metric_math_var_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -358,8 +325,6 @@ function metric_math(
 export {
       METRIC_MATH_METADATA,
       MetricMathOutputs,
-      MetricMathParameters,
-      MetricMathVarParameters,
       metric_math,
       metric_math_execute,
       metric_math_params,

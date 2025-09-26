@@ -12,50 +12,17 @@ const CREATE_DISPLACEMENT_FIELD_METADATA: Metadata = {
 
 
 interface CreateDisplacementFieldParameters {
-    "@type": "ants.CreateDisplacementField";
+    "@type"?: "ants/CreateDisplacementField";
     "image_dimension": number;
     "enforce_zero_boundary_flag": 0 | 1;
     "component_images": Array<InputPathType>;
     "output_image": string;
 }
+type CreateDisplacementFieldParametersTagged = Required<Pick<CreateDisplacementFieldParameters, '@type'>> & CreateDisplacementFieldParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.CreateDisplacementField": create_displacement_field_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.CreateDisplacementField": create_displacement_field_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `create_displacement_field(...)`.
+ * Output object returned when calling `CreateDisplacementFieldParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function create_displacement_field_params(
     enforce_zero_boundary_flag: 0 | 1,
     component_images: Array<InputPathType>,
     output_image: string,
-): CreateDisplacementFieldParameters {
+): CreateDisplacementFieldParametersTagged {
     const params = {
-        "@type": "ants.CreateDisplacementField" as const,
+        "@type": "ants/CreateDisplacementField" as const,
         "image_dimension": image_dimension,
         "enforce_zero_boundary_flag": enforce_zero_boundary_flag,
         "component_images": component_images,
@@ -200,7 +167,6 @@ function create_displacement_field(
 export {
       CREATE_DISPLACEMENT_FIELD_METADATA,
       CreateDisplacementFieldOutputs,
-      CreateDisplacementFieldParameters,
       create_displacement_field,
       create_displacement_field_execute,
       create_displacement_field_params,

@@ -12,7 +12,7 @@ const MRIS_IMAGE2VTK_METADATA: Metadata = {
 
 
 interface MrisImage2vtkParameters {
-    "@type": "freesurfer.mris_image2vtk";
+    "@type"?: "freesurfer/mris_image2vtk";
     "input_filename": InputPathType;
     "output_filename": string;
     "lower_threshold": number;
@@ -21,44 +21,11 @@ interface MrisImage2vtkParameters {
     "image_smoothing_size": number;
     "reduction_percent": number;
 }
+type MrisImage2vtkParametersTagged = Required<Pick<MrisImage2vtkParameters, '@type'>> & MrisImage2vtkParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_image2vtk": mris_image2vtk_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_image2vtk": mris_image2vtk_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_image2vtk(...)`.
+ * Output object returned when calling `MrisImage2vtkParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function mris_image2vtk_params(
     vtk_smoothing_iters: number,
     image_smoothing_size: number,
     reduction_percent: number,
-): MrisImage2vtkParameters {
+): MrisImage2vtkParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_image2vtk" as const,
+        "@type": "freesurfer/mris_image2vtk" as const,
         "input_filename": input_filename,
         "output_filename": output_filename,
         "lower_threshold": lower_threshold,
@@ -221,7 +188,6 @@ function mris_image2vtk(
 export {
       MRIS_IMAGE2VTK_METADATA,
       MrisImage2vtkOutputs,
-      MrisImage2vtkParameters,
       mris_image2vtk,
       mris_image2vtk_execute,
       mris_image2vtk_params,

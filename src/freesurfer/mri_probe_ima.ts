@@ -12,7 +12,7 @@ const MRI_PROBE_IMA_METADATA: Metadata = {
 
 
 interface MriProbeImaParameters {
-    "@type": "freesurfer.mri_probe_ima";
+    "@type"?: "freesurfer/mri_probe_ima";
     "ima_file": InputPathType;
     "key_string"?: string | null | undefined;
     "offset_type_len"?: string | null | undefined;
@@ -23,43 +23,11 @@ interface MriProbeImaParameters {
     "help": boolean;
     "version": boolean;
 }
+type MriProbeImaParametersTagged = Required<Pick<MriProbeImaParameters, '@type'>> & MriProbeImaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_probe_ima": mri_probe_ima_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_probe_ima(...)`.
+ * Output object returned when calling `MriProbeImaParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +64,9 @@ function mri_probe_ima_params(
     ob_stem: string | null = null,
     help: boolean = false,
     version: boolean = false,
-): MriProbeImaParameters {
+): MriProbeImaParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_probe_ima" as const,
+        "@type": "freesurfer/mri_probe_ima" as const,
         "ima_file": ima_file,
         "fileinfo": fileinfo,
         "dictionary": dictionary,
@@ -157,10 +125,10 @@ function mri_probe_ima_cargs(
             (params["attribute_name"] ?? null)
         );
     }
-    if ((params["fileinfo"] ?? null)) {
+    if ((params["fileinfo"] ?? false)) {
         cargs.push("--fileinfo");
     }
-    if ((params["dictionary"] ?? null)) {
+    if ((params["dictionary"] ?? false)) {
         cargs.push("--dictionary");
     }
     if ((params["ob_stem"] ?? null) !== null) {
@@ -169,10 +137,10 @@ function mri_probe_ima_cargs(
             (params["ob_stem"] ?? null)
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -268,7 +236,6 @@ function mri_probe_ima(
 export {
       MRI_PROBE_IMA_METADATA,
       MriProbeImaOutputs,
-      MriProbeImaParameters,
       mri_probe_ima,
       mri_probe_ima_execute,
       mri_probe_ima_params,

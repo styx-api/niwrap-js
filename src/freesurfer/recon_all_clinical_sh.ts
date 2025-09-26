@@ -12,49 +12,17 @@ const RECON_ALL_CLINICAL_SH_METADATA: Metadata = {
 
 
 interface ReconAllClinicalShParameters {
-    "@type": "freesurfer.recon-all-clinical.sh";
+    "@type"?: "freesurfer/recon-all-clinical.sh";
     "input_scan": InputPathType;
     "subject_id": string;
     "threads": number;
     "subject_dir"?: string | null | undefined;
 }
+type ReconAllClinicalShParametersTagged = Required<Pick<ReconAllClinicalShParameters, '@type'>> & ReconAllClinicalShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.recon-all-clinical.sh": recon_all_clinical_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `recon_all_clinical_sh(...)`.
+ * Output object returned when calling `ReconAllClinicalShParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function recon_all_clinical_sh_params(
     subject_id: string,
     threads: number,
     subject_dir: string | null = null,
-): ReconAllClinicalShParameters {
+): ReconAllClinicalShParametersTagged {
     const params = {
-        "@type": "freesurfer.recon-all-clinical.sh" as const,
+        "@type": "freesurfer/recon-all-clinical.sh" as const,
         "input_scan": input_scan,
         "subject_id": subject_id,
         "threads": threads,
@@ -198,7 +166,6 @@ function recon_all_clinical_sh(
 export {
       RECON_ALL_CLINICAL_SH_METADATA,
       ReconAllClinicalShOutputs,
-      ReconAllClinicalShParameters,
       recon_all_clinical_sh,
       recon_all_clinical_sh_execute,
       recon_all_clinical_sh_params,

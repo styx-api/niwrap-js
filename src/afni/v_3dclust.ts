@@ -12,7 +12,7 @@ const V_3DCLUST_METADATA: Metadata = {
 
 
 interface V3dclustParameters {
-    "@type": "afni.3dclust";
+    "@type"?: "afni/3dclust";
     "rmm"?: number | null | undefined;
     "vmul"?: number | null | undefined;
     "datasets": Array<InputPathType>;
@@ -34,44 +34,11 @@ interface V3dclustParameters {
     "savemask"?: string | null | undefined;
     "binary": boolean;
 }
+type V3dclustParametersTagged = Required<Pick<V3dclustParameters, '@type'>> & V3dclustParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dclust": v_3dclust_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dclust": v_3dclust_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dclust(...)`.
+ * Output object returned when calling `V3dclustParameters(...)`.
  *
  * @interface
  */
@@ -138,9 +105,9 @@ function v_3dclust_params(
     prefix: string | null = null,
     savemask: string | null = null,
     binary: boolean = false,
-): V3dclustParameters {
+): V3dclustParametersTagged {
     const params = {
-        "@type": "afni.3dclust" as const,
+        "@type": "afni/3dclust" as const,
         "datasets": datasets,
         "nn1": nn1,
         "nn2": nn2,
@@ -195,46 +162,46 @@ function v_3dclust_cargs(
         cargs.push(String((params["vmul"] ?? null)));
     }
     cargs.push(...(params["datasets"] ?? null).map(f => execution.inputFile(f)));
-    if ((params["nn1"] ?? null)) {
+    if ((params["nn1"] ?? false)) {
         cargs.push("-NN1");
     }
-    if ((params["nn2"] ?? null)) {
+    if ((params["nn2"] ?? false)) {
         cargs.push("-NN2");
     }
-    if ((params["nn3"] ?? null)) {
+    if ((params["nn3"] ?? false)) {
         cargs.push("-NN3");
     }
-    if ((params["noabs"] ?? null)) {
+    if ((params["noabs"] ?? false)) {
         cargs.push("-noabs");
     }
-    if ((params["summarize"] ?? null)) {
+    if ((params["summarize"] ?? false)) {
         cargs.push("-summarize");
     }
-    if ((params["nosum"] ?? null)) {
+    if ((params["nosum"] ?? false)) {
         cargs.push("-nosum");
     }
-    if ((params["verb"] ?? null)) {
+    if ((params["verb"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["oned_format"] ?? null)) {
+    if ((params["oned_format"] ?? false)) {
         cargs.push("-1Dformat");
     }
-    if ((params["no_oned_format"] ?? null)) {
+    if ((params["no_oned_format"] ?? false)) {
         cargs.push("-no_1Dformat");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["mni"] ?? null)) {
+    if ((params["mni"] ?? false)) {
         cargs.push("-mni");
     }
-    if ((params["isovalue"] ?? null)) {
+    if ((params["isovalue"] ?? false)) {
         cargs.push("-isovalue");
     }
-    if ((params["isomerge"] ?? null)) {
+    if ((params["isomerge"] ?? false)) {
         cargs.push("-isomerge");
     }
-    if ((params["inmask"] ?? null)) {
+    if ((params["inmask"] ?? false)) {
         cargs.push("-inmask");
     }
     if ((params["prefix"] ?? null) !== null) {
@@ -249,7 +216,7 @@ function v_3dclust_cargs(
             (params["savemask"] ?? null)
         );
     }
-    if ((params["binary"] ?? null)) {
+    if ((params["binary"] ?? false)) {
         cargs.push("-binary");
     }
     return cargs;
@@ -368,7 +335,6 @@ function v_3dclust(
 
 export {
       V3dclustOutputs,
-      V3dclustParameters,
       V_3DCLUST_METADATA,
       v_3dclust,
       v_3dclust_execute,

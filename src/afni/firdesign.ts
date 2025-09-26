@@ -12,7 +12,7 @@ const FIRDESIGN_METADATA: Metadata = {
 
 
 interface FirdesignParameters {
-    "@type": "afni.FIRdesign";
+    "@type"?: "afni/FIRdesign";
     "fbot": number;
     "ftop": number;
     "ntap": number;
@@ -20,43 +20,11 @@ interface FirdesignParameters {
     "alternative_band"?: Array<number> | null | undefined;
     "alternative_ntap"?: number | null | undefined;
 }
+type FirdesignParametersTagged = Required<Pick<FirdesignParameters, '@type'>> & FirdesignParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.FIRdesign": firdesign_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `firdesign(...)`.
+ * Output object returned when calling `FirdesignParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function firdesign_params(
     tr: number | null = null,
     alternative_band: Array<number> | null = null,
     alternative_ntap: number | null = null,
-): FirdesignParameters {
+): FirdesignParametersTagged {
     const params = {
-        "@type": "afni.FIRdesign" as const,
+        "@type": "afni/FIRdesign" as const,
         "fbot": fbot,
         "ftop": ftop,
         "ntap": ntap,
@@ -229,7 +197,6 @@ function firdesign(
 export {
       FIRDESIGN_METADATA,
       FirdesignOutputs,
-      FirdesignParameters,
       firdesign,
       firdesign_execute,
       firdesign_params,

@@ -12,7 +12,7 @@ const DTIGEN_METADATA: Metadata = {
 
 
 interface DtigenParameters {
-    "@type": "fsl.dtigen";
+    "@type"?: "fsl/dtigen";
     "tensor": InputPathType;
     "s0": InputPathType;
     "output_data": string;
@@ -22,44 +22,11 @@ interface DtigenParameters {
     "kurtosis"?: InputPathType | null | undefined;
     "help": boolean;
 }
+type DtigenParametersTagged = Required<Pick<DtigenParameters, '@type'>> & DtigenParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.dtigen": dtigen_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.dtigen": dtigen_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dtigen(...)`.
+ * Output object returned when calling `DtigenParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +69,9 @@ function dtigen_params(
     brainmask: InputPathType,
     kurtosis: InputPathType | null = null,
     help: boolean = false,
-): DtigenParameters {
+): DtigenParametersTagged {
     const params = {
-        "@type": "fsl.dtigen" as const,
+        "@type": "fsl/dtigen" as const,
         "tensor": tensor,
         "s0": s0,
         "output_data": output_data,
@@ -164,7 +131,7 @@ function dtigen_cargs(
             execution.inputFile((params["kurtosis"] ?? null))
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -260,7 +227,6 @@ function dtigen(
 export {
       DTIGEN_METADATA,
       DtigenOutputs,
-      DtigenParameters,
       dtigen,
       dtigen_execute,
       dtigen_params,

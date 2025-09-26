@@ -12,7 +12,7 @@ const MRIS_CA_LABEL_METADATA: Metadata = {
 
 
 interface MrisCaLabelParameters {
-    "@type": "freesurfer.mris_ca_label";
+    "@type"?: "freesurfer/mris_ca_label";
     "subject": string;
     "hemi": string;
     "canonsurf": InputPathType;
@@ -33,44 +33,11 @@ interface MrisCaLabelParameters {
     "help_flag": boolean;
     "version_flag": boolean;
 }
+type MrisCaLabelParametersTagged = Required<Pick<MrisCaLabelParameters, '@type'>> & MrisCaLabelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_ca_label": mris_ca_label_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_ca_label": mris_ca_label_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_ca_label(...)`.
+ * Output object returned when calling `MrisCaLabelParameters(...)`.
  *
  * @interface
  */
@@ -131,9 +98,9 @@ function mris_ca_label_params(
     w: string | null = null,
     help_flag: boolean = false,
     version_flag: boolean = false,
-): MrisCaLabelParameters {
+): MrisCaLabelParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_ca_label" as const,
+        "@type": "freesurfer/mris_ca_label" as const,
         "subject": subject,
         "hemi": hemi,
         "canonsurf": canonsurf,
@@ -215,7 +182,7 @@ function mris_ca_label_cargs(
             (params["orig"] ?? null)
         );
     }
-    if ((params["long_flag"] ?? null)) {
+    if ((params["long_flag"] ?? false)) {
         cargs.push("-long");
     }
     if ((params["r"] ?? null) !== null) {
@@ -224,7 +191,7 @@ function mris_ca_label_cargs(
             execution.inputFile((params["r"] ?? null))
         );
     }
-    if ((params["novar_flag"] ?? null)) {
+    if ((params["novar_flag"] ?? false)) {
         cargs.push("-novar");
     }
     if ((params["nbrs"] ?? null) !== null) {
@@ -263,10 +230,10 @@ function mris_ca_label_cargs(
             (params["w"] ?? null)
         );
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version_flag"] ?? null)) {
+    if ((params["version_flag"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -383,7 +350,6 @@ function mris_ca_label(
 export {
       MRIS_CA_LABEL_METADATA,
       MrisCaLabelOutputs,
-      MrisCaLabelParameters,
       mris_ca_label,
       mris_ca_label_execute,
       mris_ca_label_params,

@@ -12,7 +12,7 @@ const IMROTATE_METADATA: Metadata = {
 
 
 interface ImrotateParameters {
-    "@type": "afni.imrotate";
+    "@type"?: "afni/imrotate";
     "linear_interpolation": boolean;
     "fourier_interpolation": boolean;
     "dx": number;
@@ -21,44 +21,11 @@ interface ImrotateParameters {
     "input_image": InputPathType;
     "output_image": string;
 }
+type ImrotateParametersTagged = Required<Pick<ImrotateParameters, '@type'>> & ImrotateParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.imrotate": imrotate_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.imrotate": imrotate_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `imrotate(...)`.
+ * Output object returned when calling `ImrotateParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function imrotate_params(
     output_image: string,
     linear_interpolation: boolean = false,
     fourier_interpolation: boolean = false,
-): ImrotateParameters {
+): ImrotateParametersTagged {
     const params = {
-        "@type": "afni.imrotate" as const,
+        "@type": "afni/imrotate" as const,
         "linear_interpolation": linear_interpolation,
         "fourier_interpolation": fourier_interpolation,
         "dx": dx,
@@ -124,10 +91,10 @@ function imrotate_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("imrotate");
-    if ((params["linear_interpolation"] ?? null)) {
+    if ((params["linear_interpolation"] ?? false)) {
         cargs.push("-linear");
     }
-    if ((params["fourier_interpolation"] ?? null)) {
+    if ((params["fourier_interpolation"] ?? false)) {
         cargs.push("-Fourier");
     }
     cargs.push(String((params["dx"] ?? null)));
@@ -225,7 +192,6 @@ function imrotate(
 export {
       IMROTATE_METADATA,
       ImrotateOutputs,
-      ImrotateParameters,
       imrotate,
       imrotate_execute,
       imrotate_params,

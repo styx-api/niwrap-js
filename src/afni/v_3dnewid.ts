@@ -12,7 +12,7 @@ const V_3DNEWID_METADATA: Metadata = {
 
 
 interface V3dnewidParameters {
-    "@type": "afni.3dnewid";
+    "@type"?: "afni/3dnewid";
     "datasets": Array<InputPathType>;
     "fun"?: number | null | undefined;
     "fun11": boolean;
@@ -20,43 +20,11 @@ interface V3dnewidParameters {
     "hash"?: string | null | undefined;
     "MD5"?: string | null | undefined;
 }
+type V3dnewidParametersTagged = Required<Pick<V3dnewidParameters, '@type'>> & V3dnewidParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dnewid": v_3dnewid_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dnewid(...)`.
+ * Output object returned when calling `V3dnewidParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function v_3dnewid_params(
     int: boolean = false,
     hash: string | null = null,
     md5: string | null = null,
-): V3dnewidParameters {
+): V3dnewidParametersTagged {
     const params = {
-        "@type": "afni.3dnewid" as const,
+        "@type": "afni/3dnewid" as const,
         "datasets": datasets,
         "fun11": fun11,
         "int": int,
@@ -128,10 +96,10 @@ function v_3dnewid_cargs(
             String((params["fun"] ?? null))
         );
     }
-    if ((params["fun11"] ?? null)) {
+    if ((params["fun11"] ?? false)) {
         cargs.push("-fun11");
     }
-    if ((params["int"] ?? null)) {
+    if ((params["int"] ?? false)) {
         cargs.push("-int");
     }
     if ((params["hash"] ?? null) !== null) {
@@ -232,7 +200,6 @@ function v_3dnewid(
 
 export {
       V3dnewidOutputs,
-      V3dnewidParameters,
       V_3DNEWID_METADATA,
       v_3dnewid,
       v_3dnewid_execute,

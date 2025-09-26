@@ -12,7 +12,7 @@ const NEURO_DECONVOLVE_PY_METADATA: Metadata = {
 
 
 interface NeuroDeconvolvePyParameters {
-    "@type": "afni.neuro_deconvolve.py";
+    "@type"?: "afni/neuro_deconvolve.py";
     "input_file": InputPathType;
     "prefix": string;
     "script": string;
@@ -24,44 +24,11 @@ interface NeuroDeconvolvePyParameters {
     "tr_nup"?: number | null | undefined;
     "verbosity"?: number | null | undefined;
 }
+type NeuroDeconvolvePyParametersTagged = Required<Pick<NeuroDeconvolvePyParameters, '@type'>> & NeuroDeconvolvePyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.neuro_deconvolve.py": neuro_deconvolve_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.neuro_deconvolve.py": neuro_deconvolve_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `neuro_deconvolve_py(...)`.
+ * Output object returned when calling `NeuroDeconvolvePyParameters(...)`.
  *
  * @interface
  */
@@ -112,9 +79,9 @@ function neuro_deconvolve_py_params(
     tr: number | null = null,
     tr_nup: number | null = null,
     verbosity: number | null = null,
-): NeuroDeconvolvePyParameters {
+): NeuroDeconvolvePyParametersTagged {
     const params = {
-        "@type": "afni.neuro_deconvolve.py" as const,
+        "@type": "afni/neuro_deconvolve.py" as const,
         "input_file": input_file,
         "prefix": prefix,
         "script": script,
@@ -177,7 +144,7 @@ function neuro_deconvolve_py_cargs(
             execution.inputFile((params["mask_dset"] ?? null))
         );
     }
-    if ((params["old_style"] ?? null)) {
+    if ((params["old_style"] ?? false)) {
         cargs.push("-old");
     }
     if ((params["tr"] ?? null) !== null) {
@@ -296,7 +263,6 @@ function neuro_deconvolve_py(
 export {
       NEURO_DECONVOLVE_PY_METADATA,
       NeuroDeconvolvePyOutputs,
-      NeuroDeconvolvePyParameters,
       neuro_deconvolve_py,
       neuro_deconvolve_py_execute,
       neuro_deconvolve_py_params,

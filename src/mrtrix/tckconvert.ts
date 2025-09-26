@@ -12,26 +12,29 @@ const TCKCONVERT_METADATA: Metadata = {
 
 
 interface TckconvertConfigParameters {
-    "@type": "mrtrix.tckconvert.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type TckconvertConfigParametersTagged = Required<Pick<TckconvertConfigParameters, '@type'>> & TckconvertConfigParameters;
 
 
 interface TckconvertVariousStringParameters {
-    "@type": "mrtrix.tckconvert.VariousString";
+    "@type"?: "VariousString";
     "obj": string;
 }
+type TckconvertVariousStringParametersTagged = Required<Pick<TckconvertVariousStringParameters, '@type'>> & TckconvertVariousStringParameters;
 
 
 interface TckconvertVariousFileParameters {
-    "@type": "mrtrix.tckconvert.VariousFile";
+    "@type"?: "VariousFile";
     "obj": InputPathType;
 }
+type TckconvertVariousFileParametersTagged = Required<Pick<TckconvertVariousFileParameters, '@type'>> & TckconvertVariousFileParameters;
 
 
 interface TckconvertParameters {
-    "@type": "mrtrix.tckconvert";
+    "@type"?: "mrtrix/tckconvert";
     "scanner2voxel"?: InputPathType | null | undefined;
     "scanner2image"?: InputPathType | null | undefined;
     "voxel2scanner"?: InputPathType | null | undefined;
@@ -50,9 +53,10 @@ interface TckconvertParameters {
     "config"?: Array<TckconvertConfigParameters> | null | undefined;
     "help": boolean;
     "version": boolean;
-    "input": TckconvertVariousStringParameters | TckconvertVariousFileParameters;
+    "input": TckconvertVariousStringParametersTagged | TckconvertVariousFileParametersTagged;
     "output": string;
 }
+type TckconvertParametersTagged = Required<Pick<TckconvertParameters, '@type'>> & TckconvertParameters;
 
 
 /**
@@ -62,14 +66,12 @@ interface TckconvertParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function tckconvert_input_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "mrtrix.tckconvert": tckconvert_cargs,
-        "mrtrix.tckconvert.config": tckconvert_config_cargs,
-        "mrtrix.tckconvert.VariousString": tckconvert_various_string_cargs,
-        "mrtrix.tckconvert.VariousFile": tckconvert_various_file_cargs,
+        "VariousString": tckconvert_various_string_cargs,
+        "VariousFile": tckconvert_various_file_cargs,
     };
     return cargsFuncs[t];
 }
@@ -82,11 +84,10 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function tckconvert_input_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "mrtrix.tckconvert": tckconvert_outputs,
     };
     return outputsFuncs[t];
 }
@@ -103,9 +104,9 @@ function dynOutputs(
 function tckconvert_config_params(
     key: string,
     value: string,
-): TckconvertConfigParameters {
+): TckconvertConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.tckconvert.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -142,9 +143,9 @@ function tckconvert_config_cargs(
  */
 function tckconvert_various_string_params(
     obj: string,
-): TckconvertVariousStringParameters {
+): TckconvertVariousStringParametersTagged {
     const params = {
-        "@type": "mrtrix.tckconvert.VariousString" as const,
+        "@type": "VariousString" as const,
         "obj": obj,
     };
     return params;
@@ -178,9 +179,9 @@ function tckconvert_various_string_cargs(
  */
 function tckconvert_various_file_params(
     obj: InputPathType,
-): TckconvertVariousFileParameters {
+): TckconvertVariousFileParametersTagged {
     const params = {
-        "@type": "mrtrix.tckconvert.VariousFile" as const,
+        "@type": "VariousFile" as const,
         "obj": obj,
     };
     return params;
@@ -206,7 +207,7 @@ function tckconvert_various_file_cargs(
 
 
 /**
- * Output object returned when calling `tckconvert(...)`.
+ * Output object returned when calling `TckconvertParameters(...)`.
  *
  * @interface
  */
@@ -249,7 +250,7 @@ interface TckconvertOutputs {
  * @returns Parameter dictionary
  */
 function tckconvert_params(
-    input: TckconvertVariousStringParameters | TckconvertVariousFileParameters,
+    input: TckconvertVariousStringParametersTagged | TckconvertVariousFileParametersTagged,
     output: string,
     scanner2voxel: InputPathType | null = null,
     scanner2image: InputPathType | null = null,
@@ -269,9 +270,9 @@ function tckconvert_params(
     config: Array<TckconvertConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TckconvertParameters {
+): TckconvertParametersTagged {
     const params = {
-        "@type": "mrtrix.tckconvert" as const,
+        "@type": "mrtrix/tckconvert" as const,
         "dec": dec,
         "ascii": ascii,
         "binary": binary,
@@ -365,7 +366,7 @@ function tckconvert_cargs(
             String((params["increment"] ?? null))
         );
     }
-    if ((params["dec"] ?? null)) {
+    if ((params["dec"] ?? false)) {
         cargs.push("-dec");
     }
     if ((params["radius"] ?? null) !== null) {
@@ -374,22 +375,22 @@ function tckconvert_cargs(
             String((params["radius"] ?? null))
         );
     }
-    if ((params["ascii"] ?? null)) {
+    if ((params["ascii"] ?? false)) {
         cargs.push("-ascii");
     }
-    if ((params["binary"] ?? null)) {
+    if ((params["binary"] ?? false)) {
         cargs.push("-binary");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -399,15 +400,15 @@ function tckconvert_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => tckconvert_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
-    cargs.push(...dynCargs((params["input"] ?? null)["@type"])((params["input"] ?? null), execution));
+    cargs.push(...tckconvert_input_cargs_dyn_fn((params["input"] ?? null)["@type"])((params["input"] ?? null), execution));
     cargs.push((params["output"] ?? null));
     return cargs;
 }
@@ -519,7 +520,7 @@ function tckconvert_execute(
  * @returns NamedTuple of outputs (described in `TckconvertOutputs`).
  */
 function tckconvert(
-    input: TckconvertVariousStringParameters | TckconvertVariousFileParameters,
+    input: TckconvertVariousStringParametersTagged | TckconvertVariousFileParametersTagged,
     output: string,
     scanner2voxel: InputPathType | null = null,
     scanner2image: InputPathType | null = null,
@@ -548,11 +549,7 @@ function tckconvert(
 
 export {
       TCKCONVERT_METADATA,
-      TckconvertConfigParameters,
       TckconvertOutputs,
-      TckconvertParameters,
-      TckconvertVariousFileParameters,
-      TckconvertVariousStringParameters,
       tckconvert,
       tckconvert_config_params,
       tckconvert_execute,

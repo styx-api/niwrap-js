@@ -12,7 +12,7 @@ const BEDPOSTX_MGH_METADATA: Metadata = {
 
 
 interface BedpostxMghParameters {
-    "@type": "freesurfer.bedpostx_mgh";
+    "@type"?: "freesurfer/bedpostx_mgh";
     "subject_directory": string;
     "fibres"?: number | null | undefined;
     "ard_weight"?: number | null | undefined;
@@ -22,43 +22,11 @@ interface BedpostxMghParameters {
     "deconv_model"?: number | null | undefined;
     "gradient_nonlin": boolean;
 }
+type BedpostxMghParametersTagged = Required<Pick<BedpostxMghParameters, '@type'>> & BedpostxMghParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.bedpostx_mgh": bedpostx_mgh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `bedpostx_mgh(...)`.
+ * Output object returned when calling `BedpostxMghParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +61,9 @@ function bedpostx_mgh_params(
     sample_every: number | null = null,
     deconv_model: number | null = null,
     gradient_nonlin: boolean = false,
-): BedpostxMghParameters {
+): BedpostxMghParametersTagged {
     const params = {
-        "@type": "freesurfer.bedpostx_mgh" as const,
+        "@type": "freesurfer/bedpostx_mgh" as const,
         "subject_directory": subject_directory,
         "gradient_nonlin": gradient_nonlin,
     };
@@ -172,7 +140,7 @@ function bedpostx_mgh_cargs(
             String((params["deconv_model"] ?? null))
         );
     }
-    if ((params["gradient_nonlin"] ?? null)) {
+    if ((params["gradient_nonlin"] ?? false)) {
         cargs.push("-g");
     }
     return cargs;
@@ -266,7 +234,6 @@ function bedpostx_mgh(
 export {
       BEDPOSTX_MGH_METADATA,
       BedpostxMghOutputs,
-      BedpostxMghParameters,
       bedpostx_mgh,
       bedpostx_mgh_execute,
       bedpostx_mgh_params,

@@ -12,49 +12,16 @@ const V_1D_MARRY_METADATA: Metadata = {
 
 
 interface V1dMarryParameters {
-    "@type": "afni.1dMarry";
+    "@type"?: "afni/1dMarry";
     "sep"?: string | null | undefined;
     "divorce": boolean;
     "files": Array<InputPathType>;
 }
+type V1dMarryParametersTagged = Required<Pick<V1dMarryParameters, '@type'>> & V1dMarryParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dMarry": v_1d_marry_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.1dMarry": v_1d_marry_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1d_marry(...)`.
+ * Output object returned when calling `V1dMarryParameters(...)`.
  *
  * @interface
  */
@@ -91,9 +58,9 @@ function v_1d_marry_params(
     files: Array<InputPathType>,
     sep: string | null = null,
     divorce: boolean = false,
-): V1dMarryParameters {
+): V1dMarryParametersTagged {
     const params = {
-        "@type": "afni.1dMarry" as const,
+        "@type": "afni/1dMarry" as const,
         "divorce": divorce,
         "files": files,
     };
@@ -124,7 +91,7 @@ function v_1d_marry_cargs(
             (params["sep"] ?? null)
         );
     }
-    if ((params["divorce"] ?? null)) {
+    if ((params["divorce"] ?? false)) {
         cargs.push("-divorce");
     }
     cargs.push(...(params["files"] ?? null).map(f => execution.inputFile(f)));
@@ -211,7 +178,6 @@ function v_1d_marry(
 
 export {
       V1dMarryOutputs,
-      V1dMarryParameters,
       V_1D_MARRY_METADATA,
       v_1d_marry,
       v_1d_marry_execute,

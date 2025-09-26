@@ -12,7 +12,7 @@ const CBLUMWMGYRI_METADATA: Metadata = {
 
 
 interface CblumwmgyriParameters {
-    "@type": "freesurfer.cblumwmgyri";
+    "@type"?: "freesurfer/cblumwmgyri";
     "subject": string;
     "source_seg"?: InputPathType | null | undefined;
     "n_erodes_dilates"?: number | null | undefined;
@@ -20,44 +20,11 @@ interface CblumwmgyriParameters {
     "no_segstats": boolean;
     "subjects_dir"?: string | null | undefined;
 }
+type CblumwmgyriParametersTagged = Required<Pick<CblumwmgyriParameters, '@type'>> & CblumwmgyriParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.cblumwmgyri": cblumwmgyri_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.cblumwmgyri": cblumwmgyri_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `cblumwmgyri(...)`.
+ * Output object returned when calling `CblumwmgyriParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function cblumwmgyri_params(
     out_seg: string | null = null,
     no_segstats: boolean = false,
     subjects_dir: string | null = null,
-): CblumwmgyriParameters {
+): CblumwmgyriParametersTagged {
     const params = {
-        "@type": "freesurfer.cblumwmgyri" as const,
+        "@type": "freesurfer/cblumwmgyri" as const,
         "subject": subject,
         "no_segstats": no_segstats,
     };
@@ -150,7 +117,7 @@ function cblumwmgyri_cargs(
             (params["out_seg"] ?? null)
         );
     }
-    if ((params["no_segstats"] ?? null)) {
+    if ((params["no_segstats"] ?? false)) {
         cargs.push("--no-segstats");
     }
     if ((params["subjects_dir"] ?? null) !== null) {
@@ -247,7 +214,6 @@ function cblumwmgyri(
 export {
       CBLUMWMGYRI_METADATA,
       CblumwmgyriOutputs,
-      CblumwmgyriParameters,
       cblumwmgyri,
       cblumwmgyri_execute,
       cblumwmgyri_params,

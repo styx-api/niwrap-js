@@ -12,46 +12,14 @@ const ISANALYZE_METADATA: Metadata = {
 
 
 interface IsanalyzeParameters {
-    "@type": "freesurfer.isanalyze";
+    "@type"?: "freesurfer/isanalyze";
     "input_file": InputPathType;
 }
+type IsanalyzeParametersTagged = Required<Pick<IsanalyzeParameters, '@type'>> & IsanalyzeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.isanalyze": isanalyze_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `isanalyze(...)`.
+ * Output object returned when calling `IsanalyzeParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface IsanalyzeOutputs {
  */
 function isanalyze_params(
     input_file: InputPathType,
-): IsanalyzeParameters {
+): IsanalyzeParametersTagged {
     const params = {
-        "@type": "freesurfer.isanalyze" as const,
+        "@type": "freesurfer/isanalyze" as const,
         "input_file": input_file,
     };
     return params;
@@ -173,7 +141,6 @@ function isanalyze(
 export {
       ISANALYZE_METADATA,
       IsanalyzeOutputs,
-      IsanalyzeParameters,
       isanalyze,
       isanalyze_execute,
       isanalyze_params,

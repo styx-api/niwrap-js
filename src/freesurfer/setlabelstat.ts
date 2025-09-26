@@ -12,50 +12,17 @@ const SETLABELSTAT_METADATA: Metadata = {
 
 
 interface SetlabelstatParameters {
-    "@type": "freesurfer.setlabelstat";
+    "@type"?: "freesurfer/setlabelstat";
     "inlabelfile": InputPathType;
     "outlabelfile": InputPathType;
     "statval": number;
     "help": boolean;
 }
+type SetlabelstatParametersTagged = Required<Pick<SetlabelstatParameters, '@type'>> & SetlabelstatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.setlabelstat": setlabelstat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.setlabelstat": setlabelstat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `setlabelstat(...)`.
+ * Output object returned when calling `SetlabelstatParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function setlabelstat_params(
     outlabelfile: InputPathType,
     statval: number,
     help: boolean = false,
-): SetlabelstatParameters {
+): SetlabelstatParametersTagged {
     const params = {
-        "@type": "freesurfer.setlabelstat" as const,
+        "@type": "freesurfer/setlabelstat" as const,
         "inlabelfile": inlabelfile,
         "outlabelfile": outlabelfile,
         "statval": statval,
@@ -124,7 +91,7 @@ function setlabelstat_cargs(
         "-s",
         String((params["statval"] ?? null))
     );
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -211,7 +178,6 @@ function setlabelstat(
 export {
       SETLABELSTAT_METADATA,
       SetlabelstatOutputs,
-      SetlabelstatParameters,
       setlabelstat,
       setlabelstat_execute,
       setlabelstat_params,

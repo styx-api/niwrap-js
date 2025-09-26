@@ -12,7 +12,7 @@ const V_3D_BRAIN_SYNC_METADATA: Metadata = {
 
 
 interface V3dBrainSyncParameters {
-    "@type": "afni.3dBrainSync";
+    "@type"?: "afni/3dBrainSync";
     "inset1": InputPathType;
     "inset2": InputPathType;
     "qprefix"?: string | null | undefined;
@@ -21,44 +21,11 @@ interface V3dBrainSyncParameters {
     "mask"?: InputPathType | null | undefined;
     "verb": boolean;
 }
+type V3dBrainSyncParametersTagged = Required<Pick<V3dBrainSyncParameters, '@type'>> & V3dBrainSyncParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dBrainSync": v_3d_brain_sync_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dBrainSync": v_3d_brain_sync_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_brain_sync(...)`.
+ * Output object returned when calling `V3dBrainSyncParameters(...)`.
  *
  * @interface
  */
@@ -111,9 +78,9 @@ function v_3d_brain_sync_params(
     normalize: boolean = false,
     mask: InputPathType | null = null,
     verb: boolean = false,
-): V3dBrainSyncParameters {
+): V3dBrainSyncParametersTagged {
     const params = {
-        "@type": "afni.3dBrainSync" as const,
+        "@type": "afni/3dBrainSync" as const,
         "inset1": inset1,
         "inset2": inset2,
         "normalize": normalize,
@@ -166,7 +133,7 @@ function v_3d_brain_sync_cargs(
             (params["pprefix"] ?? null)
         );
     }
-    if ((params["normalize"] ?? null)) {
+    if ((params["normalize"] ?? false)) {
         cargs.push("-normalize");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -175,7 +142,7 @@ function v_3d_brain_sync_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["verb"] ?? null)) {
+    if ((params["verb"] ?? false)) {
         cargs.push("-verb");
     }
     return cargs;
@@ -271,7 +238,6 @@ function v_3d_brain_sync(
 
 export {
       V3dBrainSyncOutputs,
-      V3dBrainSyncParameters,
       V_3D_BRAIN_SYNC_METADATA,
       v_3d_brain_sync,
       v_3d_brain_sync_execute,

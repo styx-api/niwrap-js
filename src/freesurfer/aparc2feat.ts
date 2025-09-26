@@ -12,7 +12,7 @@ const APARC2FEAT_METADATA: Metadata = {
 
 
 interface Aparc2featParameters {
-    "@type": "freesurfer.aparc2feat";
+    "@type"?: "freesurfer/aparc2feat";
     "feat_directories": string;
     "featdirfile"?: InputPathType | null | undefined;
     "hemi"?: string | null | undefined;
@@ -23,44 +23,11 @@ interface Aparc2featParameters {
     "help_flag": boolean;
     "version_flag": boolean;
 }
+type Aparc2featParametersTagged = Required<Pick<Aparc2featParameters, '@type'>> & Aparc2featParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.aparc2feat": aparc2feat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.aparc2feat": aparc2feat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `aparc2feat(...)`.
+ * Output object returned when calling `Aparc2featParameters(...)`.
  *
  * @interface
  */
@@ -105,9 +72,9 @@ function aparc2feat_params(
     debug_flag: boolean = false,
     help_flag: boolean = false,
     version_flag: boolean = false,
-): Aparc2featParameters {
+): Aparc2featParametersTagged {
     const params = {
-        "@type": "freesurfer.aparc2feat" as const,
+        "@type": "freesurfer/aparc2feat" as const,
         "feat_directories": feat_directories,
         "annot_a2005s_flag": annot_a2005s_flag,
         "annot_a2009s_flag": annot_a2009s_flag,
@@ -164,19 +131,19 @@ function aparc2feat_cargs(
             (params["annot"] ?? null)
         );
     }
-    if ((params["annot_a2005s_flag"] ?? null)) {
+    if ((params["annot_a2005s_flag"] ?? false)) {
         cargs.push("--a2005s");
     }
-    if ((params["annot_a2009s_flag"] ?? null)) {
+    if ((params["annot_a2009s_flag"] ?? false)) {
         cargs.push("--a2009s");
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version_flag"] ?? null)) {
+    if ((params["version_flag"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -274,7 +241,6 @@ function aparc2feat(
 export {
       APARC2FEAT_METADATA,
       Aparc2featOutputs,
-      Aparc2featParameters,
       aparc2feat,
       aparc2feat_execute,
       aparc2feat_params,

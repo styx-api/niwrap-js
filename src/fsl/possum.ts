@@ -12,7 +12,7 @@ const POSSUM_METADATA: Metadata = {
 
 
 interface PossumParameters {
-    "@type": "fsl.possum";
+    "@type"?: "fsl/possum";
     "input_volume": InputPathType;
     "mr_parameters": InputPathType;
     "motion_matrix": InputPathType;
@@ -38,44 +38,11 @@ interface PossumParameters {
     "no_speedup": boolean;
     "rf_average": boolean;
 }
+type PossumParametersTagged = Required<Pick<PossumParameters, '@type'>> & PossumParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.possum": possum_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.possum": possum_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `possum(...)`.
+ * Output object returned when calling `PossumParameters(...)`.
  *
  * @interface
  */
@@ -146,9 +113,9 @@ function possum_params(
     proc_id: number | null = null,
     no_speedup: boolean = false,
     rf_average: boolean = false,
-): PossumParameters {
+): PossumParametersTagged {
     const params = {
-        "@type": "fsl.possum" as const,
+        "@type": "fsl/possum" as const,
         "input_volume": input_volume,
         "mr_parameters": mr_parameters,
         "motion_matrix": motion_matrix,
@@ -244,13 +211,13 @@ function possum_cargs(
         "--mainmatx",
         execution.inputFile((params["event_matrix"] ?? null))
     );
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("--verbose");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["kcoord"] ?? null)) {
+    if ((params["kcoord"] ?? false)) {
         cargs.push("--kcoord");
     }
     if ((params["b0_inhomogeneities"] ?? null) !== null) {
@@ -325,10 +292,10 @@ function possum_cargs(
             String((params["proc_id"] ?? null))
         );
     }
-    if ((params["no_speedup"] ?? null)) {
+    if ((params["no_speedup"] ?? false)) {
         cargs.push("--nospeedup");
     }
-    if ((params["rf_average"] ?? null)) {
+    if ((params["rf_average"] ?? false)) {
         cargs.push("--rfavg");
     }
     return cargs;
@@ -455,7 +422,6 @@ function possum(
 export {
       POSSUM_METADATA,
       PossumOutputs,
-      PossumParameters,
       possum,
       possum_execute,
       possum_params,

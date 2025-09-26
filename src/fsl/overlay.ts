@@ -12,7 +12,7 @@ const OVERLAY_METADATA: Metadata = {
 
 
 interface OverlayParameters {
-    "@type": "fsl.overlay";
+    "@type"?: "fsl/overlay";
     "auto_thresh_bg": boolean;
     "background_image": InputPathType;
     "bg_thresh": Array<number>;
@@ -26,44 +26,11 @@ interface OverlayParameters {
     "stat_thresh2"?: Array<number> | null | undefined;
     "use_checkerboard": boolean;
 }
+type OverlayParametersTagged = Required<Pick<OverlayParameters, '@type'>> & OverlayParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.overlay": overlay_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.overlay": overlay_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `overlay(...)`.
+ * Output object returned when calling `OverlayParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function overlay_params(
     stat_image2: InputPathType | null = null,
     stat_thresh2: Array<number> | null = null,
     use_checkerboard: boolean = false,
-): OverlayParameters {
+): OverlayParametersTagged {
     const params = {
-        "@type": "fsl.overlay" as const,
+        "@type": "fsl/overlay" as const,
         "auto_thresh_bg": auto_thresh_bg,
         "background_image": background_image,
         "bg_thresh": bg_thresh,
@@ -154,12 +121,12 @@ function overlay_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("overlay");
-    if ((params["auto_thresh_bg"] ?? null)) {
+    if ((params["auto_thresh_bg"] ?? false)) {
         cargs.push("-a");
     }
     cargs.push(execution.inputFile((params["background_image"] ?? null)));
     cargs.push(...(params["bg_thresh"] ?? null).map(String));
-    if ((params["full_bg_range"] ?? null)) {
+    if ((params["full_bg_range"] ?? false)) {
         cargs.push("-A");
     }
     if ((params["out_file"] ?? null) !== null) {
@@ -179,7 +146,7 @@ function overlay_cargs(
     if ((params["stat_thresh2"] ?? null) !== null) {
         cargs.push(...(params["stat_thresh2"] ?? null).map(String));
     }
-    if ((params["use_checkerboard"] ?? null)) {
+    if ((params["use_checkerboard"] ?? false)) {
         cargs.push("-c");
     }
     return cargs;
@@ -282,7 +249,6 @@ function overlay(
 export {
       OVERLAY_METADATA,
       OverlayOutputs,
-      OverlayParameters,
       overlay,
       overlay_execute,
       overlay_params,

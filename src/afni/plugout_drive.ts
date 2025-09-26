@@ -12,7 +12,7 @@ const PLUGOUT_DRIVE_METADATA: Metadata = {
 
 
 interface PlugoutDriveParameters {
-    "@type": "afni.plugout_drive";
+    "@type"?: "afni/plugout_drive";
     "host"?: string | null | undefined;
     "shm": boolean;
     "verbose": boolean;
@@ -29,43 +29,11 @@ interface PlugoutDriveParameters {
     "num_assigned_ports": boolean;
     "num_assigned_ports_quiet": boolean;
 }
+type PlugoutDriveParametersTagged = Required<Pick<PlugoutDriveParameters, '@type'>> & PlugoutDriveParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.plugout_drive": plugout_drive_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `plugout_drive(...)`.
+ * Output object returned when calling `PlugoutDriveParameters(...)`.
  *
  * @interface
  */
@@ -114,9 +82,9 @@ function plugout_drive_params(
     max_port_bloc_quiet: boolean = false,
     num_assigned_ports: boolean = false,
     num_assigned_ports_quiet: boolean = false,
-): PlugoutDriveParameters {
+): PlugoutDriveParametersTagged {
     const params = {
-        "@type": "afni.plugout_drive" as const,
+        "@type": "afni/plugout_drive" as const,
         "shm": shm,
         "verbose": verbose,
         "quit": quit,
@@ -173,10 +141,10 @@ function plugout_drive_cargs(
             (params["host"] ?? null)
         );
     }
-    if ((params["shm"] ?? null)) {
+    if ((params["shm"] ?? false)) {
         cargs.push("-shm");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
     if ((params["port"] ?? null) !== null) {
@@ -203,7 +171,7 @@ function plugout_drive_cargs(
             ...(params["command"] ?? null)
         );
     }
-    if ((params["quit"] ?? null)) {
+    if ((params["quit"] ?? false)) {
         cargs.push("-quit");
     }
     if ((params["np"] ?? null) !== null) {
@@ -224,16 +192,16 @@ function plugout_drive_cargs(
             String((params["npb"] ?? null))
         );
     }
-    if ((params["max_port_bloc"] ?? null)) {
+    if ((params["max_port_bloc"] ?? false)) {
         cargs.push("-max_port_bloc");
     }
-    if ((params["max_port_bloc_quiet"] ?? null)) {
+    if ((params["max_port_bloc_quiet"] ?? false)) {
         cargs.push("-max_port_bloc_quiet");
     }
-    if ((params["num_assigned_ports"] ?? null)) {
+    if ((params["num_assigned_ports"] ?? false)) {
         cargs.push("-num_assigned_ports");
     }
-    if ((params["num_assigned_ports_quiet"] ?? null)) {
+    if ((params["num_assigned_ports_quiet"] ?? false)) {
         cargs.push("-num_assigned_ports_quiet");
     }
     return cargs;
@@ -341,7 +309,6 @@ function plugout_drive(
 export {
       PLUGOUT_DRIVE_METADATA,
       PlugoutDriveOutputs,
-      PlugoutDriveParameters,
       plugout_drive,
       plugout_drive_execute,
       plugout_drive_params,

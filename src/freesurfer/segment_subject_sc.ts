@@ -12,50 +12,17 @@ const SEGMENT_SUBJECT_SC_METADATA: Metadata = {
 
 
 interface SegmentSubjectScParameters {
-    "@type": "freesurfer.segment_subject_sc";
+    "@type"?: "freesurfer/segment_subject_sc";
     "invol": InputPathType;
     "outxfm": InputPathType;
     "log"?: string | null | undefined;
     "debug": boolean;
 }
+type SegmentSubjectScParametersTagged = Required<Pick<SegmentSubjectScParameters, '@type'>> & SegmentSubjectScParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.segment_subject_sc": segment_subject_sc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.segment_subject_sc": segment_subject_sc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `segment_subject_sc(...)`.
+ * Output object returned when calling `SegmentSubjectScParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function segment_subject_sc_params(
     outxfm: InputPathType,
     log: string | null = null,
     debug: boolean = false,
-): SegmentSubjectScParameters {
+): SegmentSubjectScParametersTagged {
     const params = {
-        "@type": "freesurfer.segment_subject_sc" as const,
+        "@type": "freesurfer/segment_subject_sc" as const,
         "invol": invol,
         "outxfm": outxfm,
         "debug": debug,
@@ -128,7 +95,7 @@ function segment_subject_sc_cargs(
             (params["log"] ?? null)
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -215,7 +182,6 @@ function segment_subject_sc(
 export {
       SEGMENT_SUBJECT_SC_METADATA,
       SegmentSubjectScOutputs,
-      SegmentSubjectScParameters,
       segment_subject_sc,
       segment_subject_sc_execute,
       segment_subject_sc_params,

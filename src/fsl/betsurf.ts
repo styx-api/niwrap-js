@@ -12,7 +12,7 @@ const BETSURF_METADATA: Metadata = {
 
 
 interface BetsurfParameters {
-    "@type": "fsl.betsurf";
+    "@type"?: "fsl/betsurf";
     "t1_image": InputPathType;
     "t2_image"?: InputPathType | null | undefined;
     "bet_mesh": InputPathType;
@@ -26,44 +26,11 @@ interface BetsurfParameters {
     "skull_mask_flag": boolean;
     "increased_precision"?: number | null | undefined;
 }
+type BetsurfParametersTagged = Required<Pick<BetsurfParameters, '@type'>> & BetsurfParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.betsurf": betsurf_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.betsurf": betsurf_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `betsurf(...)`.
+ * Output object returned when calling `BetsurfParameters(...)`.
  *
  * @interface
  */
@@ -118,9 +85,9 @@ function betsurf_params(
     mask_flag: boolean = false,
     skull_mask_flag: boolean = false,
     increased_precision: number | null = null,
-): BetsurfParameters {
+): BetsurfParametersTagged {
     const params = {
-        "@type": "fsl.betsurf" as const,
+        "@type": "fsl/betsurf" as const,
         "t1_image": t1_image,
         "bet_mesh": bet_mesh,
         "t1_to_standard_mat": t1_to_standard_mat,
@@ -163,22 +130,22 @@ function betsurf_cargs(
     cargs.push(execution.inputFile((params["bet_mesh"] ?? null)));
     cargs.push(execution.inputFile((params["t1_to_standard_mat"] ?? null)));
     cargs.push((params["output_prefix"] ?? null));
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["t1only_flag"] ?? null)) {
+    if ((params["t1only_flag"] ?? false)) {
         cargs.push("-1");
     }
-    if ((params["outline_flag"] ?? null)) {
+    if ((params["outline_flag"] ?? false)) {
         cargs.push("-o");
     }
-    if ((params["mask_flag"] ?? null)) {
+    if ((params["mask_flag"] ?? false)) {
         cargs.push("-m");
     }
-    if ((params["skull_mask_flag"] ?? null)) {
+    if ((params["skull_mask_flag"] ?? false)) {
         cargs.push("-s");
     }
     if ((params["increased_precision"] ?? null) !== null) {
@@ -289,7 +256,6 @@ function betsurf(
 export {
       BETSURF_METADATA,
       BetsurfOutputs,
-      BetsurfParameters,
       betsurf,
       betsurf_execute,
       betsurf_params,

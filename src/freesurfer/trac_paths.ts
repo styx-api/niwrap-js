@@ -12,7 +12,7 @@ const TRAC_PATHS_METADATA: Metadata = {
 
 
 interface TracPathsParameters {
-    "@type": "freesurfer.trac-paths";
+    "@type"?: "freesurfer/trac-paths";
     "dmrirc_file": InputPathType;
     "log_file"?: string | null | undefined;
     "no_log": boolean;
@@ -27,43 +27,11 @@ interface TracPathsParameters {
     "version": boolean;
     "help": boolean;
 }
+type TracPathsParametersTagged = Required<Pick<TracPathsParameters, '@type'>> & TracPathsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.trac-paths": trac_paths_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `trac_paths(...)`.
+ * Output object returned when calling `TracPathsParameters(...)`.
  *
  * @interface
  */
@@ -108,9 +76,9 @@ function trac_paths_params(
     dontrun: boolean = false,
     version: boolean = false,
     help: boolean = false,
-): TracPathsParameters {
+): TracPathsParametersTagged {
     const params = {
-        "@type": "freesurfer.trac-paths" as const,
+        "@type": "freesurfer/trac-paths" as const,
         "dmrirc_file": dmrirc_file,
         "no_log": no_log,
         "no_cmd": no_cmd,
@@ -161,7 +129,7 @@ function trac_paths_cargs(
             (params["log_file"] ?? null)
         );
     }
-    if ((params["no_log"] ?? null)) {
+    if ((params["no_log"] ?? false)) {
         cargs.push("-nolog");
     }
     if ((params["cmd_file"] ?? null) !== null) {
@@ -170,10 +138,10 @@ function trac_paths_cargs(
             (params["cmd_file"] ?? null)
         );
     }
-    if ((params["no_cmd"] ?? null)) {
+    if ((params["no_cmd"] ?? false)) {
         cargs.push("-nocmd");
     }
-    if ((params["no_isrunning"] ?? null)) {
+    if ((params["no_isrunning"] ?? false)) {
         cargs.push("-no-isrunning");
     }
     if ((params["umask"] ?? null) !== null) {
@@ -188,19 +156,19 @@ function trac_paths_cargs(
             (params["group_id"] ?? null)
         );
     }
-    if ((params["allow_core_dump"] ?? null)) {
+    if ((params["allow_core_dump"] ?? false)) {
         cargs.push("-allowcoredump");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["dontrun"] ?? null)) {
+    if ((params["dontrun"] ?? false)) {
         cargs.push("-dontrun");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -304,7 +272,6 @@ function trac_paths(
 export {
       TRAC_PATHS_METADATA,
       TracPathsOutputs,
-      TracPathsParameters,
       trac_paths,
       trac_paths_execute,
       trac_paths_params,

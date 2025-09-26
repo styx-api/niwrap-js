@@ -12,47 +12,14 @@ const V__STATAUXCODE_METADATA: Metadata = {
 
 
 interface VStatauxcodeParameters {
-    "@type": "afni.@statauxcode";
+    "@type"?: "afni/@statauxcode";
     "code": string;
 }
+type VStatauxcodeParametersTagged = Required<Pick<VStatauxcodeParameters, '@type'>> & VStatauxcodeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@statauxcode": v__statauxcode_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@statauxcode": v__statauxcode_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__statauxcode(...)`.
+ * Output object returned when calling `VStatauxcodeParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface VStatauxcodeOutputs {
  */
 function v__statauxcode_params(
     code: string,
-): VStatauxcodeParameters {
+): VStatauxcodeParametersTagged {
     const params = {
-        "@type": "afni.@statauxcode" as const,
+        "@type": "afni/@statauxcode" as const,
         "code": code,
     };
     return params;
@@ -178,7 +145,6 @@ function v__statauxcode(
 
 export {
       VStatauxcodeOutputs,
-      VStatauxcodeParameters,
       V__STATAUXCODE_METADATA,
       v__statauxcode,
       v__statauxcode_execute,

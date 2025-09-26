@@ -12,47 +12,15 @@ const FSREALPATH_METADATA: Metadata = {
 
 
 interface FsrealpathParameters {
-    "@type": "freesurfer.fsrealpath";
+    "@type"?: "freesurfer/fsrealpath";
     "path": string;
     "help": boolean;
 }
+type FsrealpathParametersTagged = Required<Pick<FsrealpathParameters, '@type'>> & FsrealpathParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fsrealpath": fsrealpath_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsrealpath(...)`.
+ * Output object returned when calling `FsrealpathParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface FsrealpathOutputs {
 function fsrealpath_params(
     path: string,
     help: boolean = false,
-): FsrealpathParameters {
+): FsrealpathParametersTagged {
     const params = {
-        "@type": "freesurfer.fsrealpath" as const,
+        "@type": "freesurfer/fsrealpath" as const,
         "path": path,
         "help": help,
     };
@@ -100,7 +68,7 @@ function fsrealpath_cargs(
     const cargs: string[] = [];
     cargs.push("fsrealpath");
     cargs.push((params["path"] ?? null));
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -182,7 +150,6 @@ function fsrealpath(
 export {
       FSREALPATH_METADATA,
       FsrealpathOutputs,
-      FsrealpathParameters,
       fsrealpath,
       fsrealpath_execute,
       fsrealpath_params,

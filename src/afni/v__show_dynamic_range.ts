@@ -12,47 +12,14 @@ const V__SHOW_DYNAMIC_RANGE_METADATA: Metadata = {
 
 
 interface VShowDynamicRangeParameters {
-    "@type": "afni.@ShowDynamicRange";
+    "@type"?: "afni/@ShowDynamicRange";
     "infile": InputPathType;
 }
+type VShowDynamicRangeParametersTagged = Required<Pick<VShowDynamicRangeParameters, '@type'>> & VShowDynamicRangeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@ShowDynamicRange": v__show_dynamic_range_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@ShowDynamicRange": v__show_dynamic_range_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__show_dynamic_range(...)`.
+ * Output object returned when calling `VShowDynamicRangeParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +48,9 @@ interface VShowDynamicRangeOutputs {
  */
 function v__show_dynamic_range_params(
     infile: InputPathType,
-): VShowDynamicRangeParameters {
+): VShowDynamicRangeParametersTagged {
     const params = {
-        "@type": "afni.@ShowDynamicRange" as const,
+        "@type": "afni/@ShowDynamicRange" as const,
         "infile": infile,
     };
     return params;
@@ -183,7 +150,6 @@ function v__show_dynamic_range(
 
 export {
       VShowDynamicRangeOutputs,
-      VShowDynamicRangeParameters,
       V__SHOW_DYNAMIC_RANGE_METADATA,
       v__show_dynamic_range,
       v__show_dynamic_range_execute,

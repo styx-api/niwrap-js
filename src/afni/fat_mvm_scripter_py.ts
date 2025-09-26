@@ -12,7 +12,7 @@ const FAT_MVM_SCRIPTER_PY_METADATA: Metadata = {
 
 
 interface FatMvmScripterPyParameters {
-    "@type": "afni.fat_mvm_scripter.py";
+    "@type"?: "afni/fat_mvm_scripter.py";
     "prefix": string;
     "table": InputPathType;
     "log": InputPathType;
@@ -27,44 +27,11 @@ interface FatMvmScripterPyParameters {
     "subnet_pref"?: string | null | undefined;
     "cat_pair_off": boolean;
 }
+type FatMvmScripterPyParametersTagged = Required<Pick<FatMvmScripterPyParameters, '@type'>> & FatMvmScripterPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.fat_mvm_scripter.py": fat_mvm_scripter_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.fat_mvm_scripter.py": fat_mvm_scripter_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fat_mvm_scripter_py(...)`.
+ * Output object returned when calling `FatMvmScripterPyParameters(...)`.
  *
  * @interface
  */
@@ -117,9 +84,9 @@ function fat_mvm_scripter_py_params(
     na_warn_off: boolean = false,
     subnet_pref: string | null = null,
     cat_pair_off: boolean = false,
-): FatMvmScripterPyParameters {
+): FatMvmScripterPyParametersTagged {
     const params = {
-        "@type": "afni.fat_mvm_scripter.py" as const,
+        "@type": "afni/fat_mvm_scripter.py" as const,
         "prefix": prefix,
         "table": table,
         "log": log,
@@ -214,10 +181,10 @@ function fat_mvm_scripter_py_cargs(
             execution.inputFile((params["file_rois"] ?? null))
         );
     }
-    if ((params["no_posthoc"] ?? null)) {
+    if ((params["no_posthoc"] ?? false)) {
         cargs.push("--no_posthoc");
     }
-    if ((params["NA_warn_off"] ?? null)) {
+    if ((params["NA_warn_off"] ?? false)) {
         cargs.push("--NA_warn_off");
     }
     if ((params["subnet_pref"] ?? null) !== null) {
@@ -226,7 +193,7 @@ function fat_mvm_scripter_py_cargs(
             (params["subnet_pref"] ?? null)
         );
     }
-    if ((params["cat_pair_off"] ?? null)) {
+    if ((params["cat_pair_off"] ?? false)) {
         cargs.push("--cat_pair_off");
     }
     return cargs;
@@ -332,7 +299,6 @@ function fat_mvm_scripter_py(
 export {
       FAT_MVM_SCRIPTER_PY_METADATA,
       FatMvmScripterPyOutputs,
-      FatMvmScripterPyParameters,
       fat_mvm_scripter_py,
       fat_mvm_scripter_py_execute,
       fat_mvm_scripter_py_params,

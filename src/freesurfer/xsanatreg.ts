@@ -12,7 +12,7 @@ const XSANATREG_METADATA: Metadata = {
 
 
 interface XsanatregParameters {
-    "@type": "freesurfer.xsanatreg";
+    "@type"?: "freesurfer/xsanatreg";
     "src_cordir": string;
     "targ_cordir": string;
     "transform_file": string;
@@ -23,43 +23,11 @@ interface XsanatregParameters {
     "version": boolean;
     "umask"?: string | null | undefined;
 }
+type XsanatregParametersTagged = Required<Pick<XsanatregParameters, '@type'>> & XsanatregParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.xsanatreg": xsanatreg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `xsanatreg(...)`.
+ * Output object returned when calling `XsanatregParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +64,9 @@ function xsanatreg_params(
     no_cleanup: boolean = false,
     version: boolean = false,
     umask: string | null = null,
-): XsanatregParameters {
+): XsanatregParametersTagged {
     const params = {
-        "@type": "freesurfer.xsanatreg" as const,
+        "@type": "freesurfer/xsanatreg" as const,
         "src_cordir": src_cordir,
         "targ_cordir": targ_cordir,
         "transform_file": transform_file,
@@ -165,10 +133,10 @@ function xsanatreg_cargs(
             (params["target_minc"] ?? null)
         );
     }
-    if ((params["no_cleanup"] ?? null)) {
+    if ((params["no_cleanup"] ?? false)) {
         cargs.push("-nocleanup");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     if ((params["umask"] ?? null) !== null) {
@@ -270,7 +238,6 @@ function xsanatreg(
 export {
       XSANATREG_METADATA,
       XsanatregOutputs,
-      XsanatregParameters,
       xsanatreg,
       xsanatreg_execute,
       xsanatreg_params,

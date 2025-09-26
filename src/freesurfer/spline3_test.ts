@@ -12,49 +12,16 @@ const SPLINE3_TEST_METADATA: Metadata = {
 
 
 interface Spline3TestParameters {
-    "@type": "freesurfer.Spline3_test";
+    "@type"?: "freesurfer/Spline3_test";
     "x_values": Array<number>;
     "y_values": Array<number>;
     "x_new_values": Array<number>;
 }
+type Spline3TestParametersTagged = Required<Pick<Spline3TestParameters, '@type'>> & Spline3TestParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.Spline3_test": spline3_test_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.Spline3_test": spline3_test_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `spline3_test(...)`.
+ * Output object returned when calling `Spline3TestParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +54,9 @@ function spline3_test_params(
     x_values: Array<number>,
     y_values: Array<number>,
     x_new_values: Array<number>,
-): Spline3TestParameters {
+): Spline3TestParametersTagged {
     const params = {
-        "@type": "freesurfer.Spline3_test" as const,
+        "@type": "freesurfer/Spline3_test" as const,
         "x_values": x_values,
         "y_values": y_values,
         "x_new_values": x_new_values,
@@ -198,7 +165,6 @@ function spline3_test(
 export {
       SPLINE3_TEST_METADATA,
       Spline3TestOutputs,
-      Spline3TestParameters,
       spline3_test,
       spline3_test_execute,
       spline3_test_params,

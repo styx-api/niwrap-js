@@ -12,13 +12,14 @@ const FILE_INFORMATION_METADATA: Metadata = {
 
 
 interface FileInformationOnlyMetadataParameters {
-    "@type": "workbench.file-information.only_metadata";
+    "@type"?: "only_metadata";
     "opt_key_key"?: string | null | undefined;
 }
+type FileInformationOnlyMetadataParametersTagged = Required<Pick<FileInformationOnlyMetadataParameters, '@type'>> & FileInformationOnlyMetadataParameters;
 
 
 interface FileInformationParameters {
-    "@type": "workbench.file-information";
+    "@type"?: "workbench/file-information";
     "data_file": string;
     "opt_no_map_info": boolean;
     "opt_only_step_interval": boolean;
@@ -30,40 +31,7 @@ interface FileInformationParameters {
     "opt_czi_all_sub_blocks": boolean;
     "opt_czi_xml": boolean;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.file-information": file_information_cargs,
-        "workbench.file-information.only_metadata": file_information_only_metadata_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type FileInformationParametersTagged = Required<Pick<FileInformationParameters, '@type'>> & FileInformationParameters;
 
 
 /**
@@ -75,9 +43,9 @@ function dynOutputs(
  */
 function file_information_only_metadata_params(
     opt_key_key: string | null = null,
-): FileInformationOnlyMetadataParameters {
+): FileInformationOnlyMetadataParametersTagged {
     const params = {
-        "@type": "workbench.file-information.only_metadata" as const,
+        "@type": "only_metadata" as const,
     };
     if (opt_key_key !== null) {
         params["opt_key_key"] = opt_key_key;
@@ -111,7 +79,7 @@ function file_information_only_metadata_cargs(
 
 
 /**
- * Output object returned when calling `file_information(...)`.
+ * Output object returned when calling `FileInformationParameters(...)`.
  *
  * @interface
  */
@@ -150,9 +118,9 @@ function file_information_params(
     opt_czi: boolean = false,
     opt_czi_all_sub_blocks: boolean = false,
     opt_czi_xml: boolean = false,
-): FileInformationParameters {
+): FileInformationParametersTagged {
     const params = {
-        "@type": "workbench.file-information" as const,
+        "@type": "workbench/file-information" as const,
         "data_file": data_file,
         "opt_no_map_info": opt_no_map_info,
         "opt_only_step_interval": opt_only_step_interval,
@@ -186,31 +154,31 @@ function file_information_cargs(
     cargs.push("wb_command");
     cargs.push("-file-information");
     cargs.push((params["data_file"] ?? null));
-    if ((params["opt_no_map_info"] ?? null)) {
+    if ((params["opt_no_map_info"] ?? false)) {
         cargs.push("-no-map-info");
     }
-    if ((params["opt_only_step_interval"] ?? null)) {
+    if ((params["opt_only_step_interval"] ?? false)) {
         cargs.push("-only-step-interval");
     }
-    if ((params["opt_only_number_of_maps"] ?? null)) {
+    if ((params["opt_only_number_of_maps"] ?? false)) {
         cargs.push("-only-number-of-maps");
     }
-    if ((params["opt_only_map_names"] ?? null)) {
+    if ((params["opt_only_map_names"] ?? false)) {
         cargs.push("-only-map-names");
     }
     if ((params["only_metadata"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["only_metadata"] ?? null)["@type"])((params["only_metadata"] ?? null), execution));
+        cargs.push(...file_information_only_metadata_cargs((params["only_metadata"] ?? null), execution));
     }
-    if ((params["opt_only_cifti_xml"] ?? null)) {
+    if ((params["opt_only_cifti_xml"] ?? false)) {
         cargs.push("-only-cifti-xml");
     }
-    if ((params["opt_czi"] ?? null)) {
+    if ((params["opt_czi"] ?? false)) {
         cargs.push("-czi");
     }
-    if ((params["opt_czi_all_sub_blocks"] ?? null)) {
+    if ((params["opt_czi_all_sub_blocks"] ?? false)) {
         cargs.push("-czi-all-sub-blocks");
     }
-    if ((params["opt_czi_xml"] ?? null)) {
+    if ((params["opt_czi_xml"] ?? false)) {
         cargs.push("-czi-xml");
     }
     return cargs;
@@ -387,9 +355,7 @@ function file_information(
 
 export {
       FILE_INFORMATION_METADATA,
-      FileInformationOnlyMetadataParameters,
       FileInformationOutputs,
-      FileInformationParameters,
       file_information,
       file_information_execute,
       file_information_only_metadata_params,

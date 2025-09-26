@@ -12,7 +12,7 @@ const MRI_WATERSHED_METADATA: Metadata = {
 
 
 interface MriWatershedParameters {
-    "@type": "freesurfer.mri_watershed";
+    "@type"?: "freesurfer/mri_watershed";
     "input_volume": InputPathType;
     "output_volume": string;
     "weight"?: number | null | undefined;
@@ -45,44 +45,11 @@ interface MriWatershedParameters {
     "xthresh"?: number | null | undefined;
     "mask_flag": boolean;
 }
+type MriWatershedParametersTagged = Required<Pick<MriWatershedParameters, '@type'>> & MriWatershedParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_watershed": mri_watershed_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_watershed": mri_watershed_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_watershed(...)`.
+ * Output object returned when calling `MriWatershedParameters(...)`.
  *
  * @interface
  */
@@ -171,9 +138,9 @@ function mri_watershed_params(
     manual_params: Array<number> | null = null,
     xthresh: number | null = null,
     mask_flag: boolean = false,
-): MriWatershedParameters {
+): MriWatershedParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_watershed" as const,
+        "@type": "freesurfer/mri_watershed" as const,
         "input_volume": input_volume,
         "output_volume": output_volume,
         "no_wta_flag": no_wta_flag,
@@ -258,7 +225,7 @@ function mri_watershed_cargs(
             String((params["weight"] ?? null))
         );
     }
-    if ((params["no_wta_flag"] ?? null)) {
+    if ((params["no_wta_flag"] ?? false)) {
         cargs.push("-no_wta");
     }
     if ((params["proba_merging"] ?? null) !== null) {
@@ -273,16 +240,16 @@ function mri_watershed_cargs(
             String((params["preflooding_height"] ?? null))
         );
     }
-    if ((params["no_seedpt_flag"] ?? null)) {
+    if ((params["no_seedpt_flag"] ?? false)) {
         cargs.push("-no_seedpt");
     }
-    if ((params["no_ta_flag"] ?? null)) {
+    if ((params["no_ta_flag"] ?? false)) {
         cargs.push("-no-ta");
     }
-    if ((params["copy_flag"] ?? null)) {
+    if ((params["copy_flag"] ?? false)) {
         cargs.push("-copy");
     }
-    if ((params["atlas_flag"] ?? null)) {
+    if ((params["atlas_flag"] ?? false)) {
         cargs.push("-atlas");
     }
     if ((params["surf_name"] ?? null) !== null) {
@@ -291,19 +258,19 @@ function mri_watershed_cargs(
             (params["surf_name"] ?? null)
         );
     }
-    if ((params["usesurf_ras_flag"] ?? null)) {
+    if ((params["usesurf_ras_flag"] ?? false)) {
         cargs.push("-useSRAS");
     }
-    if ((params["no_t1_analysis_flag"] ?? null)) {
+    if ((params["no_t1_analysis_flag"] ?? false)) {
         cargs.push("-noT1");
     }
-    if ((params["shrink_surface_flag"] ?? null)) {
+    if ((params["shrink_surface_flag"] ?? false)) {
         cargs.push("-less");
     }
-    if ((params["expand_surface_flag"] ?? null)) {
+    if ((params["expand_surface_flag"] ?? false)) {
         cargs.push("-more");
     }
-    if ((params["use_watershed_flag"] ?? null)) {
+    if ((params["use_watershed_flag"] ?? false)) {
         cargs.push("-wat");
     }
     if ((params["t1_volume"] ?? null) !== null) {
@@ -312,13 +279,13 @@ function mri_watershed_cargs(
             execution.inputFile((params["t1_volume"] ?? null))
         );
     }
-    if ((params["wat_temp_flag"] ?? null)) {
+    if ((params["wat_temp_flag"] ?? false)) {
         cargs.push("-wat+temp");
     }
-    if ((params["first_temp_flag"] ?? null)) {
+    if ((params["first_temp_flag"] ?? false)) {
         cargs.push("-first_temp");
     }
-    if ((params["surf_debug_flag"] ?? null)) {
+    if ((params["surf_debug_flag"] ?? false)) {
         cargs.push("-surf_debug");
     }
     if ((params["brain_surf_name"] ?? null) !== null) {
@@ -357,10 +324,10 @@ function mri_watershed_cargs(
             String((params["watershed_threshold"] ?? null))
         );
     }
-    if ((params["no_watershed_analysis_flag"] ?? null)) {
+    if ((params["no_watershed_analysis_flag"] ?? false)) {
         cargs.push("-n");
     }
-    if ((params["label_flag"] ?? null)) {
+    if ((params["label_flag"] ?? false)) {
         cargs.push("-LABEL");
     }
     if ((params["manual_params"] ?? null) !== null) {
@@ -375,7 +342,7 @@ function mri_watershed_cargs(
             String((params["xthresh"] ?? null))
         );
     }
-    if ((params["mask_flag"] ?? null)) {
+    if ((params["mask_flag"] ?? false)) {
         cargs.push("-mask");
     }
     return cargs;
@@ -517,7 +484,6 @@ function mri_watershed(
 export {
       MRI_WATERSHED_METADATA,
       MriWatershedOutputs,
-      MriWatershedParameters,
       mri_watershed,
       mri_watershed_execute,
       mri_watershed_params,

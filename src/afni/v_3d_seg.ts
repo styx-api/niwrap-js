@@ -12,7 +12,7 @@ const V_3D_SEG_METADATA: Metadata = {
 
 
 interface V3dSegParameters {
-    "@type": "afni.3dSeg";
+    "@type"?: "afni/3dSeg";
     "anat": InputPathType;
     "mask"?: string | null | undefined;
     "blur_meth"?: string | null | undefined;
@@ -33,44 +33,11 @@ interface V3dSegParameters {
     "vox_debug"?: string | null | undefined;
     "vox_debug_file"?: string | null | undefined;
 }
+type V3dSegParametersTagged = Required<Pick<V3dSegParameters, '@type'>> & V3dSegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dSeg": v_3d_seg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dSeg": v_3d_seg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_seg(...)`.
+ * Output object returned when calling `V3dSegParameters(...)`.
  *
  * @interface
  */
@@ -139,9 +106,9 @@ function v_3d_seg_params(
     labeltable: InputPathType | null = null,
     vox_debug: string | null = null,
     vox_debug_file: string | null = null,
-): V3dSegParameters {
+): V3dSegParametersTagged {
     const params = {
-        "@type": "afni.3dSeg" as const,
+        "@type": "afni/3dSeg" as const,
         "anat": anat,
         "overwrite": overwrite,
     };
@@ -260,7 +227,7 @@ function v_3d_seg_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("-overwrite");
     }
     if ((params["debug"] ?? null) !== null) {
@@ -438,7 +405,6 @@ function v_3d_seg(
 
 export {
       V3dSegOutputs,
-      V3dSegParameters,
       V_3D_SEG_METADATA,
       v_3d_seg,
       v_3d_seg_execute,

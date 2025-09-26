@@ -12,7 +12,7 @@ const REGISTER_ELDERLY_SUBJECT_METADATA: Metadata = {
 
 
 interface RegisterElderlySubjectParameters {
-    "@type": "freesurfer.register_elderly_subject";
+    "@type"?: "freesurfer/register_elderly_subject";
     "sampling_percentage"?: number | null | undefined;
     "output_fsamples": string;
     "output_norm": string;
@@ -20,44 +20,11 @@ interface RegisterElderlySubjectParameters {
     "gca_file": InputPathType;
     "transform_file": InputPathType;
 }
+type RegisterElderlySubjectParametersTagged = Required<Pick<RegisterElderlySubjectParameters, '@type'>> & RegisterElderlySubjectParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.register_elderly_subject": register_elderly_subject_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.register_elderly_subject": register_elderly_subject_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `register_elderly_subject(...)`.
+ * Output object returned when calling `RegisterElderlySubjectParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +63,9 @@ function register_elderly_subject_params(
     gca_file: InputPathType,
     transform_file: InputPathType,
     sampling_percentage: number | null = null,
-): RegisterElderlySubjectParameters {
+): RegisterElderlySubjectParametersTagged {
     const params = {
-        "@type": "freesurfer.register_elderly_subject" as const,
+        "@type": "freesurfer/register_elderly_subject" as const,
         "output_fsamples": output_fsamples,
         "output_norm": output_norm,
         "input_volume": input_volume,
@@ -232,7 +199,6 @@ function register_elderly_subject(
 export {
       REGISTER_ELDERLY_SUBJECT_METADATA,
       RegisterElderlySubjectOutputs,
-      RegisterElderlySubjectParameters,
       register_elderly_subject,
       register_elderly_subject_execute,
       register_elderly_subject_params,

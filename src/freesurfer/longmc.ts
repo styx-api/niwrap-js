@@ -12,7 +12,7 @@ const LONGMC_METADATA: Metadata = {
 
 
 interface LongmcParameters {
-    "@type": "freesurfer.longmc";
+    "@type"?: "freesurfer/longmc";
     "cross_tp_name": string;
     "base_name": string;
     "conform_to_hires": boolean;
@@ -21,43 +21,11 @@ interface LongmcParameters {
     "subject_name"?: string | null | undefined;
     "no_force_update": boolean;
 }
+type LongmcParametersTagged = Required<Pick<LongmcParameters, '@type'>> & LongmcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.longmc": longmc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `longmc(...)`.
+ * Output object returned when calling `LongmcParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +58,9 @@ function longmc_params(
     no_conform_to_hires: boolean = false,
     subject_name: string | null = null,
     no_force_update: boolean = false,
-): LongmcParameters {
+): LongmcParametersTagged {
     const params = {
-        "@type": "freesurfer.longmc" as const,
+        "@type": "freesurfer/longmc" as const,
         "cross_tp_name": cross_tp_name,
         "base_name": base_name,
         "conform_to_hires": conform_to_hires,
@@ -126,10 +94,10 @@ function longmc_cargs(
         (params["cross_tp_name"] ?? null)
     );
     cargs.push((params["base_name"] ?? null));
-    if ((params["conform_to_hires"] ?? null)) {
+    if ((params["conform_to_hires"] ?? false)) {
         cargs.push("-conf2hires");
     }
-    if ((params["no_conform_to_hires"] ?? null)) {
+    if ((params["no_conform_to_hires"] ?? false)) {
         cargs.push("-no-conf2hires");
     }
     cargs.push(
@@ -142,7 +110,7 @@ function longmc_cargs(
             (params["subject_name"] ?? null)
         );
     }
-    if ((params["no_force_update"] ?? null)) {
+    if ((params["no_force_update"] ?? false)) {
         cargs.push("-no-force-update");
     }
     return cargs;
@@ -234,7 +202,6 @@ function longmc(
 export {
       LONGMC_METADATA,
       LongmcOutputs,
-      LongmcParameters,
       longmc,
       longmc_execute,
       longmc_params,

@@ -12,7 +12,7 @@ const XTRACT_STATS_METADATA: Metadata = {
 
 
 interface XtractStatsParameters {
-    "@type": "fsl.xtract_stats";
+    "@type"?: "fsl/xtract_stats";
     "folder_basename": string;
     "XTRACT_dir": string;
     "xtract2diff": string;
@@ -23,44 +23,11 @@ interface XtractStatsParameters {
     "measurements"?: string | null | undefined;
     "keep_temp_files": boolean;
 }
+type XtractStatsParametersTagged = Required<Pick<XtractStatsParameters, '@type'>> & XtractStatsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.xtract_stats": xtract_stats_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.xtract_stats": xtract_stats_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `xtract_stats(...)`.
+ * Output object returned when calling `XtractStatsParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function xtract_stats_params(
     threshold: number | null = null,
     measurements: string | null = null,
     keep_temp_files: boolean = false,
-): XtractStatsParameters {
+): XtractStatsParametersTagged {
     const params = {
-        "@type": "fsl.xtract_stats" as const,
+        "@type": "fsl/xtract_stats" as const,
         "folder_basename": folder_basename,
         "XTRACT_dir": xtract_dir,
         "xtract2diff": xtract2diff,
@@ -184,7 +151,7 @@ function xtract_stats_cargs(
             (params["measurements"] ?? null)
         );
     }
-    if ((params["keep_temp_files"] ?? null)) {
+    if ((params["keep_temp_files"] ?? false)) {
         cargs.push("-keepfiles");
     }
     return cargs;
@@ -281,7 +248,6 @@ function xtract_stats(
 export {
       XTRACT_STATS_METADATA,
       XtractStatsOutputs,
-      XtractStatsParameters,
       xtract_stats,
       xtract_stats_execute,
       xtract_stats_params,

@@ -12,28 +12,31 @@ const V_1DPLOT_METADATA: Metadata = {
 
 
 interface V1dplotNolineParameters {
-    "@type": "afni.1dplot.noline";
+    "@type"?: "noline";
     "noline": boolean;
     "NOLINE": boolean;
 }
+type V1dplotNolineParametersTagged = Required<Pick<V1dplotNolineParameters, '@type'>> & V1dplotNolineParameters;
 
 
 interface V1dplotThickParameters {
-    "@type": "afni.1dplot.thick";
+    "@type"?: "thick";
     "thick": boolean;
     "THICK": boolean;
 }
+type V1dplotThickParametersTagged = Required<Pick<V1dplotThickParameters, '@type'>> & V1dplotThickParameters;
 
 
 interface V1dplotRboxParameters {
-    "@type": "afni.1dplot.rbox";
+    "@type"?: "rbox";
     "rbox"?: string | null | undefined;
     "Rbox"?: string | null | undefined;
 }
+type V1dplotRboxParametersTagged = Required<Pick<V1dplotRboxParameters, '@type'>> & V1dplotRboxParameters;
 
 
 interface V1dplotParameters {
-    "@type": "afni.1dplot";
+    "@type"?: "afni/1dplot";
     "tsfiles": Array<InputPathType>;
     "install": boolean;
     "sep": boolean;
@@ -86,42 +89,7 @@ interface V1dplotParameters {
     "rbox"?: V1dplotRboxParameters | null | undefined;
     "line"?: string | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dplot": v_1dplot_cargs,
-        "afni.1dplot.noline": v_1dplot_noline_cargs,
-        "afni.1dplot.thick": v_1dplot_thick_cargs,
-        "afni.1dplot.rbox": v_1dplot_rbox_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type V1dplotParametersTagged = Required<Pick<V1dplotParameters, '@type'>> & V1dplotParameters;
 
 
 /**
@@ -135,9 +103,9 @@ function dynOutputs(
 function v_1dplot_noline_params(
     noline: boolean = false,
     noline_: boolean = false,
-): V1dplotNolineParameters {
+): V1dplotNolineParametersTagged {
     const params = {
-        "@type": "afni.1dplot.noline" as const,
+        "@type": "noline" as const,
         "noline": noline,
         "NOLINE": noline_,
     };
@@ -158,10 +126,10 @@ function v_1dplot_noline_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["noline"] ?? null)) {
+    if ((params["noline"] ?? false)) {
         cargs.push("-noline");
     }
-    if ((params["NOLINE"] ?? null)) {
+    if ((params["NOLINE"] ?? false)) {
         cargs.push("-NOLINE");
     }
     return cargs;
@@ -179,9 +147,9 @@ function v_1dplot_noline_cargs(
 function v_1dplot_thick_params(
     thick: boolean = false,
     thick_: boolean = false,
-): V1dplotThickParameters {
+): V1dplotThickParametersTagged {
     const params = {
-        "@type": "afni.1dplot.thick" as const,
+        "@type": "thick" as const,
         "thick": thick,
         "THICK": thick_,
     };
@@ -202,10 +170,10 @@ function v_1dplot_thick_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["thick"] ?? null)) {
+    if ((params["thick"] ?? false)) {
         cargs.push("-thick");
     }
-    if ((params["THICK"] ?? null)) {
+    if ((params["THICK"] ?? false)) {
         cargs.push("-THICK");
     }
     return cargs;
@@ -223,9 +191,9 @@ function v_1dplot_thick_cargs(
 function v_1dplot_rbox_params(
     rbox: string | null = null,
     rbox_: string | null = null,
-): V1dplotRboxParameters {
+): V1dplotRboxParametersTagged {
     const params = {
-        "@type": "afni.1dplot.rbox" as const,
+        "@type": "rbox" as const,
     };
     if (rbox !== null) {
         params["rbox"] = rbox;
@@ -267,7 +235,7 @@ function v_1dplot_rbox_cargs(
 
 
 /**
- * Output object returned when calling `v_1dplot(...)`.
+ * Output object returned when calling `V1dplotParameters(...)`.
  *
  * @interface
  */
@@ -388,9 +356,9 @@ function v_1dplot_params(
     concat: InputPathType | null = null,
     rbox: V1dplotRboxParameters | null = null,
     line: string | null = null,
-): V1dplotParameters {
+): V1dplotParametersTagged {
     const params = {
-        "@type": "afni.1dplot" as const,
+        "@type": "afni/1dplot" as const,
         "tsfiles": tsfiles,
         "install": install,
         "sep": sep,
@@ -532,37 +500,37 @@ function v_1dplot_cargs(
     const cargs: string[] = [];
     cargs.push("1dplot");
     cargs.push(...(params["tsfiles"] ?? null).map(f => execution.inputFile(f)));
-    if ((params["install"] ?? null)) {
+    if ((params["install"] ?? false)) {
         cargs.push("-install");
     }
-    if ((params["sep"] ?? null)) {
+    if ((params["sep"] ?? false)) {
         cargs.push("-sep");
     }
-    if ((params["one"] ?? null)) {
+    if ((params["one"] ?? false)) {
         cargs.push("-one");
     }
-    if ((params["sepscl"] ?? null)) {
+    if ((params["sepscl"] ?? false)) {
         cargs.push("-sepscl");
     }
     if ((params["noline"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["noline"] ?? null)["@type"])((params["noline"] ?? null), execution));
+        cargs.push(...v_1dplot_noline_cargs((params["noline"] ?? null), execution));
     }
-    if ((params["box"] ?? null)) {
+    if ((params["box"] ?? false)) {
         cargs.push("-box");
     }
-    if ((params["hist"] ?? null)) {
+    if ((params["hist"] ?? false)) {
         cargs.push("-hist");
     }
-    if ((params["norm2"] ?? null)) {
+    if ((params["norm2"] ?? false)) {
         cargs.push("-norm2");
     }
-    if ((params["normx"] ?? null)) {
+    if ((params["normx"] ?? false)) {
         cargs.push("-normx");
     }
-    if ((params["norm1"] ?? null)) {
+    if ((params["norm1"] ?? false)) {
         cargs.push("-norm1");
     }
-    if ((params["demean"] ?? null)) {
+    if ((params["demean"] ?? false)) {
         cargs.push("-demean");
     }
     if ((params["x"] ?? null) !== null) {
@@ -589,7 +557,7 @@ function v_1dplot_cargs(
             String((params["xzero"] ?? null))
         );
     }
-    if ((params["nopush"] ?? null)) {
+    if ((params["nopush"] ?? false)) {
         cargs.push("-nopush");
     }
     if ((params["ignore"] ?? null) !== null) {
@@ -634,7 +602,7 @@ function v_1dplot_cargs(
             (params["wintitle"] ?? null)
         );
     }
-    if ((params["naked"] ?? null)) {
+    if ((params["naked"] ?? false)) {
         cargs.push("-naked");
     }
     if ((params["aspect"] ?? null) !== null) {
@@ -643,10 +611,10 @@ function v_1dplot_cargs(
             String((params["aspect"] ?? null))
         );
     }
-    if ((params["stdin"] ?? null)) {
+    if ((params["stdin"] ?? false)) {
         cargs.push("-stdin");
     }
-    if ((params["ps"] ?? null)) {
+    if ((params["ps"] ?? false)) {
         cargs.push("-ps");
     }
     if ((params["jpg"] ?? null) !== null) {
@@ -727,11 +695,11 @@ function v_1dplot_cargs(
             ...(params["ynames"] ?? null)
         );
     }
-    if ((params["volreg"] ?? null)) {
+    if ((params["volreg"] ?? false)) {
         cargs.push("-volreg");
     }
     if ((params["thick"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["thick"] ?? null)["@type"])((params["thick"] ?? null), execution));
+        cargs.push(...v_1dplot_thick_cargs((params["thick"] ?? null), execution));
     }
     if ((params["dashed"] ?? null) !== null) {
         cargs.push(
@@ -770,7 +738,7 @@ function v_1dplot_cargs(
         );
     }
     if ((params["rbox"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["rbox"] ?? null)["@type"])((params["rbox"] ?? null), execution));
+        cargs.push(...v_1dplot_rbox_cargs((params["rbox"] ?? null), execution));
     }
     if ((params["line"] ?? null) !== null) {
         cargs.push(
@@ -953,11 +921,7 @@ function v_1dplot(
 
 
 export {
-      V1dplotNolineParameters,
       V1dplotOutputs,
-      V1dplotParameters,
-      V1dplotRboxParameters,
-      V1dplotThickParameters,
       V_1DPLOT_METADATA,
       v_1dplot,
       v_1dplot_execute,

@@ -12,49 +12,16 @@ const MRI_DCT_ALIGN_BINARY_METADATA: Metadata = {
 
 
 interface MriDctAlignBinaryParameters {
-    "@type": "freesurfer.mri_dct_align_binary";
+    "@type"?: "freesurfer/mri_dct_align_binary";
     "source_image": InputPathType;
     "destination_image": InputPathType;
     "output_transformation": string;
 }
+type MriDctAlignBinaryParametersTagged = Required<Pick<MriDctAlignBinaryParameters, '@type'>> & MriDctAlignBinaryParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_dct_align_binary": mri_dct_align_binary_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_dct_align_binary": mri_dct_align_binary_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_dct_align_binary(...)`.
+ * Output object returned when calling `MriDctAlignBinaryParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mri_dct_align_binary_params(
     source_image: InputPathType,
     destination_image: InputPathType,
     output_transformation: string,
-): MriDctAlignBinaryParameters {
+): MriDctAlignBinaryParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_dct_align_binary" as const,
+        "@type": "freesurfer/mri_dct_align_binary" as const,
         "source_image": source_image,
         "destination_image": destination_image,
         "output_transformation": output_transformation,
@@ -193,7 +160,6 @@ function mri_dct_align_binary(
 export {
       MRI_DCT_ALIGN_BINARY_METADATA,
       MriDctAlignBinaryOutputs,
-      MriDctAlignBinaryParameters,
       mri_dct_align_binary,
       mri_dct_align_binary_execute,
       mri_dct_align_binary_params,

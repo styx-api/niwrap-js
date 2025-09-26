@@ -12,50 +12,17 @@ const MRIS_DEFORM_METADATA: Metadata = {
 
 
 interface MrisDeformParameters {
-    "@type": "freesurfer.mris_deform";
+    "@type"?: "freesurfer/mris_deform";
     "input_surface": InputPathType;
     "input_volume": InputPathType;
     "xform": InputPathType;
     "output_surface": string;
 }
+type MrisDeformParametersTagged = Required<Pick<MrisDeformParameters, '@type'>> & MrisDeformParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_deform": mris_deform_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_deform": mris_deform_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_deform(...)`.
+ * Output object returned when calling `MrisDeformParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mris_deform_params(
     input_volume: InputPathType,
     xform: InputPathType,
     output_surface: string,
-): MrisDeformParameters {
+): MrisDeformParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_deform" as const,
+        "@type": "freesurfer/mris_deform" as const,
         "input_surface": input_surface,
         "input_volume": input_volume,
         "xform": xform,
@@ -200,7 +167,6 @@ function mris_deform(
 export {
       MRIS_DEFORM_METADATA,
       MrisDeformOutputs,
-      MrisDeformParameters,
       mris_deform,
       mris_deform_execute,
       mris_deform_params,

@@ -12,40 +12,45 @@ const MRTRANSFORM_METADATA: Metadata = {
 
 
 interface MrtransformFslgradParameters {
-    "@type": "mrtrix.mrtransform.fslgrad";
+    "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
+type MrtransformFslgradParametersTagged = Required<Pick<MrtransformFslgradParameters, '@type'>> & MrtransformFslgradParameters;
 
 
 interface MrtransformExportGradFslParameters {
-    "@type": "mrtrix.mrtransform.export_grad_fsl";
+    "@type"?: "export_grad_fsl";
     "bvecs_path": string;
     "bvals_path": string;
 }
+type MrtransformExportGradFslParametersTagged = Required<Pick<MrtransformExportGradFslParameters, '@type'>> & MrtransformExportGradFslParameters;
 
 
 interface MrtransformVariousStringParameters {
-    "@type": "mrtrix.mrtransform.VariousString";
+    "@type"?: "VariousString";
     "obj": string;
 }
+type MrtransformVariousStringParametersTagged = Required<Pick<MrtransformVariousStringParameters, '@type'>> & MrtransformVariousStringParameters;
 
 
 interface MrtransformVariousFileParameters {
-    "@type": "mrtrix.mrtransform.VariousFile";
+    "@type"?: "VariousFile";
     "obj": InputPathType;
 }
+type MrtransformVariousFileParametersTagged = Required<Pick<MrtransformVariousFileParameters, '@type'>> & MrtransformVariousFileParameters;
 
 
 interface MrtransformConfigParameters {
-    "@type": "mrtrix.mrtransform.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MrtransformConfigParametersTagged = Required<Pick<MrtransformConfigParameters, '@type'>> & MrtransformConfigParameters;
 
 
 interface MrtransformParameters {
-    "@type": "mrtrix.mrtransform";
+    "@type"?: "mrtrix/mrtransform";
     "linear"?: InputPathType | null | undefined;
     "flip"?: Array<number> | null | undefined;
     "inverse": boolean;
@@ -67,7 +72,7 @@ interface MrtransformParameters {
     "export_grad_mrtrix"?: string | null | undefined;
     "export_grad_fsl"?: MrtransformExportGradFslParameters | null | undefined;
     "datatype"?: string | null | undefined;
-    "strides"?: MrtransformVariousStringParameters | MrtransformVariousFileParameters | null | undefined;
+    "strides"?: MrtransformVariousStringParametersTagged | MrtransformVariousFileParametersTagged | null | undefined;
     "nan": boolean;
     "no_reorientation": boolean;
     "info": boolean;
@@ -81,6 +86,7 @@ interface MrtransformParameters {
     "input": InputPathType;
     "output": string;
 }
+type MrtransformParametersTagged = Required<Pick<MrtransformParameters, '@type'>> & MrtransformParameters;
 
 
 /**
@@ -90,16 +96,12 @@ interface MrtransformParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function mrtransform_strides_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "mrtrix.mrtransform": mrtransform_cargs,
-        "mrtrix.mrtransform.fslgrad": mrtransform_fslgrad_cargs,
-        "mrtrix.mrtransform.export_grad_fsl": mrtransform_export_grad_fsl_cargs,
-        "mrtrix.mrtransform.VariousString": mrtransform_various_string_cargs,
-        "mrtrix.mrtransform.VariousFile": mrtransform_various_file_cargs,
-        "mrtrix.mrtransform.config": mrtransform_config_cargs,
+        "VariousString": mrtransform_various_string_cargs,
+        "VariousFile": mrtransform_various_file_cargs,
     };
     return cargsFuncs[t];
 }
@@ -112,12 +114,10 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function mrtransform_strides_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "mrtrix.mrtransform": mrtransform_outputs,
-        "mrtrix.mrtransform.export_grad_fsl": mrtransform_export_grad_fsl_outputs,
     };
     return outputsFuncs[t];
 }
@@ -134,9 +134,9 @@ function dynOutputs(
 function mrtransform_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
-): MrtransformFslgradParameters {
+): MrtransformFslgradParametersTagged {
     const params = {
-        "@type": "mrtrix.mrtransform.fslgrad" as const,
+        "@type": "fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -196,9 +196,9 @@ interface MrtransformExportGradFslOutputs {
 function mrtransform_export_grad_fsl_params(
     bvecs_path: string,
     bvals_path: string,
-): MrtransformExportGradFslParameters {
+): MrtransformExportGradFslParametersTagged {
     const params = {
-        "@type": "mrtrix.mrtransform.export_grad_fsl" as const,
+        "@type": "export_grad_fsl" as const,
         "bvecs_path": bvecs_path,
         "bvals_path": bvals_path,
     };
@@ -256,9 +256,9 @@ function mrtransform_export_grad_fsl_outputs(
  */
 function mrtransform_various_string_params(
     obj: string,
-): MrtransformVariousStringParameters {
+): MrtransformVariousStringParametersTagged {
     const params = {
-        "@type": "mrtrix.mrtransform.VariousString" as const,
+        "@type": "VariousString" as const,
         "obj": obj,
     };
     return params;
@@ -292,9 +292,9 @@ function mrtransform_various_string_cargs(
  */
 function mrtransform_various_file_params(
     obj: InputPathType,
-): MrtransformVariousFileParameters {
+): MrtransformVariousFileParametersTagged {
     const params = {
-        "@type": "mrtrix.mrtransform.VariousFile" as const,
+        "@type": "VariousFile" as const,
         "obj": obj,
     };
     return params;
@@ -330,9 +330,9 @@ function mrtransform_various_file_cargs(
 function mrtransform_config_params(
     key: string,
     value: string,
-): MrtransformConfigParameters {
+): MrtransformConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.mrtransform.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -361,7 +361,7 @@ function mrtransform_config_cargs(
 
 
 /**
- * Output object returned when calling `mrtransform(...)`.
+ * Output object returned when calling `MrtransformParameters(...)`.
  *
  * @interface
  */
@@ -451,7 +451,7 @@ function mrtransform_params(
     export_grad_mrtrix: string | null = null,
     export_grad_fsl: MrtransformExportGradFslParameters | null = null,
     datatype: string | null = null,
-    strides: MrtransformVariousStringParameters | MrtransformVariousFileParameters | null = null,
+    strides: MrtransformVariousStringParametersTagged | MrtransformVariousFileParametersTagged | null = null,
     nan: boolean = false,
     no_reorientation: boolean = false,
     info: boolean = false,
@@ -462,9 +462,9 @@ function mrtransform_params(
     config: Array<MrtransformConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrtransformParameters {
+): MrtransformParametersTagged {
     const params = {
-        "@type": "mrtrix.mrtransform" as const,
+        "@type": "mrtrix/mrtransform" as const,
         "inverse": inverse,
         "half": half,
         "identity": identity,
@@ -570,10 +570,10 @@ function mrtransform_cargs(
             (params["flip"] ?? null).map(String).join(",")
         );
     }
-    if ((params["inverse"] ?? null)) {
+    if ((params["inverse"] ?? false)) {
         cargs.push("-inverse");
     }
-    if ((params["half"] ?? null)) {
+    if ((params["half"] ?? false)) {
         cargs.push("-half");
     }
     if ((params["replace"] ?? null) !== null) {
@@ -582,7 +582,7 @@ function mrtransform_cargs(
             execution.inputFile((params["replace"] ?? null))
         );
     }
-    if ((params["identity"] ?? null)) {
+    if ((params["identity"] ?? false)) {
         cargs.push("-identity");
     }
     if ((params["template"] ?? null) !== null) {
@@ -591,7 +591,7 @@ function mrtransform_cargs(
             execution.inputFile((params["template"] ?? null))
         );
     }
-    if ((params["midway_space"] ?? null)) {
+    if ((params["midway_space"] ?? false)) {
         cargs.push("-midway_space");
     }
     if ((params["interp"] ?? null) !== null) {
@@ -649,7 +649,7 @@ function mrtransform_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
+        cargs.push(...mrtransform_fslgrad_cargs((params["fslgrad"] ?? null), execution));
     }
     if ((params["export_grad_mrtrix"] ?? null) !== null) {
         cargs.push(
@@ -658,7 +658,7 @@ function mrtransform_cargs(
         );
     }
     if ((params["export_grad_fsl"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["export_grad_fsl"] ?? null)["@type"])((params["export_grad_fsl"] ?? null), execution));
+        cargs.push(...mrtransform_export_grad_fsl_cargs((params["export_grad_fsl"] ?? null), execution));
     }
     if ((params["datatype"] ?? null) !== null) {
         cargs.push(
@@ -669,25 +669,25 @@ function mrtransform_cargs(
     if ((params["strides"] ?? null) !== null) {
         cargs.push(
             "-strides",
-            ...dynCargs((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
+            ...mrtransform_strides_cargs_dyn_fn((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
         );
     }
-    if ((params["nan"] ?? null)) {
+    if ((params["nan"] ?? false)) {
         cargs.push("-nan");
     }
-    if ((params["no_reorientation"] ?? null)) {
+    if ((params["no_reorientation"] ?? false)) {
         cargs.push("-no_reorientation");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -697,12 +697,12 @@ function mrtransform_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => mrtransform_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -727,7 +727,7 @@ function mrtransform_outputs(
         root: execution.outputFile("."),
         output: execution.outputFile([(params["output"] ?? null)].join('')),
         export_grad_mrtrix: ((params["export_grad_mrtrix"] ?? null) !== null) ? execution.outputFile([(params["export_grad_mrtrix"] ?? null)].join('')) : null,
-        export_grad_fsl: (params["export_grad_fsl"] ?? null) ? (dynOutputs((params["export_grad_fsl"] ?? null)["@type"])?.((params["export_grad_fsl"] ?? null), execution) ?? null) : null,
+        export_grad_fsl: (params["export_grad_fsl"] ?? null) ? (mrtransform_export_grad_fsl_outputs((params["export_grad_fsl"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }
@@ -870,7 +870,7 @@ function mrtransform(
     export_grad_mrtrix: string | null = null,
     export_grad_fsl: MrtransformExportGradFslParameters | null = null,
     datatype: string | null = null,
-    strides: MrtransformVariousStringParameters | MrtransformVariousFileParameters | null = null,
+    strides: MrtransformVariousStringParametersTagged | MrtransformVariousFileParametersTagged | null = null,
     nan: boolean = false,
     no_reorientation: boolean = false,
     info: boolean = false,
@@ -890,14 +890,8 @@ function mrtransform(
 
 export {
       MRTRANSFORM_METADATA,
-      MrtransformConfigParameters,
       MrtransformExportGradFslOutputs,
-      MrtransformExportGradFslParameters,
-      MrtransformFslgradParameters,
       MrtransformOutputs,
-      MrtransformParameters,
-      MrtransformVariousFileParameters,
-      MrtransformVariousStringParameters,
       mrtransform,
       mrtransform_config_params,
       mrtransform_execute,

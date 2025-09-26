@@ -12,35 +12,39 @@ const SCENE_CAPTURE_IMAGE_METADATA: Metadata = {
 
 
 interface SceneCaptureImageSizeWidthHeightParameters {
-    "@type": "workbench.scene-capture-image.size_width_height";
+    "@type"?: "size_width_height";
     "width": number;
     "height": number;
 }
+type SceneCaptureImageSizeWidthHeightParametersTagged = Required<Pick<SceneCaptureImageSizeWidthHeightParameters, '@type'>> & SceneCaptureImageSizeWidthHeightParameters;
 
 
 interface SceneCaptureImageResolutionParameters {
-    "@type": "workbench.scene-capture-image.resolution";
+    "@type"?: "resolution";
     "number_of_pixels": number;
     "units_name": string;
 }
+type SceneCaptureImageResolutionParametersTagged = Required<Pick<SceneCaptureImageResolutionParameters, '@type'>> & SceneCaptureImageResolutionParameters;
 
 
 interface SceneCaptureImageSetMapYokeParameters {
-    "@type": "workbench.scene-capture-image.set_map_yoke";
+    "@type"?: "set_map_yoke";
     "map_yoking_roman_numeral": string;
     "map_undex": number;
 }
+type SceneCaptureImageSetMapYokeParametersTagged = Required<Pick<SceneCaptureImageSetMapYokeParameters, '@type'>> & SceneCaptureImageSetMapYokeParameters;
 
 
 interface SceneCaptureImageConnDbLoginParameters {
-    "@type": "workbench.scene-capture-image.conn_db_login";
+    "@type"?: "conn_db_login";
     "username": string;
     "password": string;
 }
+type SceneCaptureImageConnDbLoginParametersTagged = Required<Pick<SceneCaptureImageConnDbLoginParameters, '@type'>> & SceneCaptureImageConnDbLoginParameters;
 
 
 interface SceneCaptureImageParameters {
-    "@type": "workbench.scene-capture-image";
+    "@type"?: "workbench/scene-capture-image";
     "scene_file": string;
     "scene_name_or_number": string;
     "image_file_name": string;
@@ -59,43 +63,7 @@ interface SceneCaptureImageParameters {
     "opt_renderer_renderer"?: string | null | undefined;
     "opt_print_image_info": boolean;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.scene-capture-image": scene_capture_image_cargs,
-        "workbench.scene-capture-image.size_width_height": scene_capture_image_size_width_height_cargs,
-        "workbench.scene-capture-image.resolution": scene_capture_image_resolution_cargs,
-        "workbench.scene-capture-image.set_map_yoke": scene_capture_image_set_map_yoke_cargs,
-        "workbench.scene-capture-image.conn_db_login": scene_capture_image_conn_db_login_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type SceneCaptureImageParametersTagged = Required<Pick<SceneCaptureImageParameters, '@type'>> & SceneCaptureImageParameters;
 
 
 /**
@@ -109,9 +77,9 @@ function dynOutputs(
 function scene_capture_image_size_width_height_params(
     width: number,
     height: number,
-): SceneCaptureImageSizeWidthHeightParameters {
+): SceneCaptureImageSizeWidthHeightParametersTagged {
     const params = {
-        "@type": "workbench.scene-capture-image.size_width_height" as const,
+        "@type": "size_width_height" as const,
         "width": width,
         "height": height,
     };
@@ -155,9 +123,9 @@ function scene_capture_image_size_width_height_cargs(
 function scene_capture_image_resolution_params(
     number_of_pixels: number,
     units_name: string,
-): SceneCaptureImageResolutionParameters {
+): SceneCaptureImageResolutionParametersTagged {
     const params = {
-        "@type": "workbench.scene-capture-image.resolution" as const,
+        "@type": "resolution" as const,
         "number_of_pixels": number_of_pixels,
         "units_name": units_name,
     };
@@ -196,9 +164,9 @@ function scene_capture_image_resolution_cargs(
 function scene_capture_image_set_map_yoke_params(
     map_yoking_roman_numeral: string,
     map_undex: number,
-): SceneCaptureImageSetMapYokeParameters {
+): SceneCaptureImageSetMapYokeParametersTagged {
     const params = {
-        "@type": "workbench.scene-capture-image.set_map_yoke" as const,
+        "@type": "set_map_yoke" as const,
         "map_yoking_roman_numeral": map_yoking_roman_numeral,
         "map_undex": map_undex,
     };
@@ -237,9 +205,9 @@ function scene_capture_image_set_map_yoke_cargs(
 function scene_capture_image_conn_db_login_params(
     username: string,
     password: string,
-): SceneCaptureImageConnDbLoginParameters {
+): SceneCaptureImageConnDbLoginParametersTagged {
     const params = {
-        "@type": "workbench.scene-capture-image.conn_db_login" as const,
+        "@type": "conn_db_login" as const,
         "username": username,
         "password": password,
     };
@@ -268,7 +236,7 @@ function scene_capture_image_conn_db_login_cargs(
 
 
 /**
- * Output object returned when calling `scene_capture_image(...)`.
+ * Output object returned when calling `SceneCaptureImageParameters(...)`.
  *
  * @interface
  */
@@ -332,9 +300,9 @@ function scene_capture_image_params(
     opt_show_capture_settings: boolean = false,
     opt_renderer_renderer: string | null = null,
     opt_print_image_info: boolean = false,
-): SceneCaptureImageParameters {
+): SceneCaptureImageParametersTagged {
     const params = {
-        "@type": "workbench.scene-capture-image" as const,
+        "@type": "workbench/scene-capture-image" as const,
         "scene_file": scene_file,
         "scene_name_or_number": scene_name_or_number,
         "image_file_name": image_file_name,
@@ -393,14 +361,14 @@ function scene_capture_image_cargs(
     cargs.push((params["scene_file"] ?? null));
     cargs.push((params["scene_name_or_number"] ?? null));
     cargs.push((params["image_file_name"] ?? null));
-    if ((params["opt_size_window"] ?? null)) {
+    if ((params["opt_size_window"] ?? false)) {
         cargs.push("-size-window");
     }
-    if ((params["opt_size_capture"] ?? null)) {
+    if ((params["opt_size_capture"] ?? false)) {
         cargs.push("-size-capture");
     }
     if ((params["size_width_height"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["size_width_height"] ?? null)["@type"])((params["size_width_height"] ?? null), execution));
+        cargs.push(...scene_capture_image_size_width_height_cargs((params["size_width_height"] ?? null), execution));
     }
     if ((params["opt_size_width_width"] ?? null) !== null) {
         cargs.push(
@@ -421,7 +389,7 @@ function scene_capture_image_cargs(
         );
     }
     if ((params["resolution"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["resolution"] ?? null)["@type"])((params["resolution"] ?? null), execution));
+        cargs.push(...scene_capture_image_resolution_cargs((params["resolution"] ?? null), execution));
     }
     if ((params["opt_margin_size"] ?? null) !== null) {
         cargs.push(
@@ -429,16 +397,16 @@ function scene_capture_image_cargs(
             String((params["opt_margin_size"] ?? null))
         );
     }
-    if ((params["opt_no_scene_colors"] ?? null)) {
+    if ((params["opt_no_scene_colors"] ?? false)) {
         cargs.push("-no-scene-colors");
     }
     if ((params["set_map_yoke"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["set_map_yoke"] ?? null)["@type"])((params["set_map_yoke"] ?? null), execution));
+        cargs.push(...scene_capture_image_set_map_yoke_cargs((params["set_map_yoke"] ?? null), execution));
     }
     if ((params["conn_db_login"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["conn_db_login"] ?? null)["@type"])((params["conn_db_login"] ?? null), execution));
+        cargs.push(...scene_capture_image_conn_db_login_cargs((params["conn_db_login"] ?? null), execution));
     }
-    if ((params["opt_show_capture_settings"] ?? null)) {
+    if ((params["opt_show_capture_settings"] ?? false)) {
         cargs.push("-show-capture-settings");
     }
     if ((params["opt_renderer_renderer"] ?? null) !== null) {
@@ -447,7 +415,7 @@ function scene_capture_image_cargs(
             (params["opt_renderer_renderer"] ?? null)
         );
     }
-    if ((params["opt_print_image_info"] ?? null)) {
+    if ((params["opt_print_image_info"] ?? false)) {
         cargs.push("-print-image-info");
     }
     return cargs;
@@ -641,12 +609,7 @@ function scene_capture_image(
 
 export {
       SCENE_CAPTURE_IMAGE_METADATA,
-      SceneCaptureImageConnDbLoginParameters,
       SceneCaptureImageOutputs,
-      SceneCaptureImageParameters,
-      SceneCaptureImageResolutionParameters,
-      SceneCaptureImageSetMapYokeParameters,
-      SceneCaptureImageSizeWidthHeightParameters,
       scene_capture_image,
       scene_capture_image_conn_db_login_params,
       scene_capture_image_execute,

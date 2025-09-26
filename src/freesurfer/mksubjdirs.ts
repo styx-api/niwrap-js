@@ -12,7 +12,7 @@ const MKSUBJDIRS_METADATA: Metadata = {
 
 
 interface MksubjdirsParameters {
-    "@type": "freesurfer.mksubjdirs";
+    "@type"?: "freesurfer/mksubjdirs";
     "subj_name": string;
     "mode"?: string | null | undefined;
     "parents": boolean;
@@ -21,43 +21,11 @@ interface MksubjdirsParameters {
     "help": boolean;
     "version": boolean;
 }
+type MksubjdirsParametersTagged = Required<Pick<MksubjdirsParameters, '@type'>> & MksubjdirsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mksubjdirs": mksubjdirs_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mksubjdirs(...)`.
+ * Output object returned when calling `MksubjdirsParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +58,9 @@ function mksubjdirs_params(
     selinux_context: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): MksubjdirsParameters {
+): MksubjdirsParametersTagged {
     const params = {
-        "@type": "freesurfer.mksubjdirs" as const,
+        "@type": "freesurfer/mksubjdirs" as const,
         "subj_name": subj_name,
         "parents": parents,
         "verbose": verbose,
@@ -128,19 +96,19 @@ function mksubjdirs_cargs(
             (params["mode"] ?? null)
         );
     }
-    if ((params["parents"] ?? null)) {
+    if ((params["parents"] ?? false)) {
         cargs.push("-p");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["selinux_context"] ?? null)) {
+    if ((params["selinux_context"] ?? false)) {
         cargs.push("-Z");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -232,7 +200,6 @@ function mksubjdirs(
 export {
       MKSUBJDIRS_METADATA,
       MksubjdirsOutputs,
-      MksubjdirsParameters,
       mksubjdirs,
       mksubjdirs_execute,
       mksubjdirs_params,

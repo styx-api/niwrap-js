@@ -12,28 +12,31 @@ const CIFTI_DILATE_METADATA: Metadata = {
 
 
 interface CiftiDilateLeftSurfaceParameters {
-    "@type": "workbench.cifti-dilate.left_surface";
+    "@type"?: "left_surface";
     "surface": InputPathType;
     "opt_left_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
+type CiftiDilateLeftSurfaceParametersTagged = Required<Pick<CiftiDilateLeftSurfaceParameters, '@type'>> & CiftiDilateLeftSurfaceParameters;
 
 
 interface CiftiDilateRightSurfaceParameters {
-    "@type": "workbench.cifti-dilate.right_surface";
+    "@type"?: "right_surface";
     "surface": InputPathType;
     "opt_right_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
+type CiftiDilateRightSurfaceParametersTagged = Required<Pick<CiftiDilateRightSurfaceParameters, '@type'>> & CiftiDilateRightSurfaceParameters;
 
 
 interface CiftiDilateCerebellumSurfaceParameters {
-    "@type": "workbench.cifti-dilate.cerebellum_surface";
+    "@type"?: "cerebellum_surface";
     "surface": InputPathType;
     "opt_cerebellum_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
+type CiftiDilateCerebellumSurfaceParametersTagged = Required<Pick<CiftiDilateCerebellumSurfaceParameters, '@type'>> & CiftiDilateCerebellumSurfaceParameters;
 
 
 interface CiftiDilateParameters {
-    "@type": "workbench.cifti-dilate";
+    "@type"?: "workbench/cifti-dilate";
     "cifti_in": InputPathType;
     "direction": string;
     "surface_distance": number;
@@ -47,43 +50,7 @@ interface CiftiDilateParameters {
     "opt_merged_volume": boolean;
     "opt_legacy_mode": boolean;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-dilate": cifti_dilate_cargs,
-        "workbench.cifti-dilate.left_surface": cifti_dilate_left_surface_cargs,
-        "workbench.cifti-dilate.right_surface": cifti_dilate_right_surface_cargs,
-        "workbench.cifti-dilate.cerebellum_surface": cifti_dilate_cerebellum_surface_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-dilate": cifti_dilate_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiDilateParametersTagged = Required<Pick<CiftiDilateParameters, '@type'>> & CiftiDilateParameters;
 
 
 /**
@@ -97,9 +64,9 @@ function dynOutputs(
 function cifti_dilate_left_surface_params(
     surface: InputPathType,
     opt_left_corrected_areas_area_metric: InputPathType | null = null,
-): CiftiDilateLeftSurfaceParameters {
+): CiftiDilateLeftSurfaceParametersTagged {
     const params = {
-        "@type": "workbench.cifti-dilate.left_surface" as const,
+        "@type": "left_surface" as const,
         "surface": surface,
     };
     if (opt_left_corrected_areas_area_metric !== null) {
@@ -145,9 +112,9 @@ function cifti_dilate_left_surface_cargs(
 function cifti_dilate_right_surface_params(
     surface: InputPathType,
     opt_right_corrected_areas_area_metric: InputPathType | null = null,
-): CiftiDilateRightSurfaceParameters {
+): CiftiDilateRightSurfaceParametersTagged {
     const params = {
-        "@type": "workbench.cifti-dilate.right_surface" as const,
+        "@type": "right_surface" as const,
         "surface": surface,
     };
     if (opt_right_corrected_areas_area_metric !== null) {
@@ -193,9 +160,9 @@ function cifti_dilate_right_surface_cargs(
 function cifti_dilate_cerebellum_surface_params(
     surface: InputPathType,
     opt_cerebellum_corrected_areas_area_metric: InputPathType | null = null,
-): CiftiDilateCerebellumSurfaceParameters {
+): CiftiDilateCerebellumSurfaceParametersTagged {
     const params = {
-        "@type": "workbench.cifti-dilate.cerebellum_surface" as const,
+        "@type": "cerebellum_surface" as const,
         "surface": surface,
     };
     if (opt_cerebellum_corrected_areas_area_metric !== null) {
@@ -231,7 +198,7 @@ function cifti_dilate_cerebellum_surface_cargs(
 
 
 /**
- * Output object returned when calling `cifti_dilate(...)`.
+ * Output object returned when calling `CiftiDilateParameters(...)`.
  *
  * @interface
  */
@@ -278,9 +245,9 @@ function cifti_dilate_params(
     opt_nearest: boolean = false,
     opt_merged_volume: boolean = false,
     opt_legacy_mode: boolean = false,
-): CiftiDilateParameters {
+): CiftiDilateParametersTagged {
     const params = {
-        "@type": "workbench.cifti-dilate" as const,
+        "@type": "workbench/cifti-dilate" as const,
         "cifti_in": cifti_in,
         "direction": direction,
         "surface_distance": surface_distance,
@@ -327,13 +294,13 @@ function cifti_dilate_cargs(
     cargs.push(String((params["volume_distance"] ?? null)));
     cargs.push((params["cifti_out"] ?? null));
     if ((params["left_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["left_surface"] ?? null)["@type"])((params["left_surface"] ?? null), execution));
+        cargs.push(...cifti_dilate_left_surface_cargs((params["left_surface"] ?? null), execution));
     }
     if ((params["right_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["right_surface"] ?? null)["@type"])((params["right_surface"] ?? null), execution));
+        cargs.push(...cifti_dilate_right_surface_cargs((params["right_surface"] ?? null), execution));
     }
     if ((params["cerebellum_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["cerebellum_surface"] ?? null)["@type"])((params["cerebellum_surface"] ?? null), execution));
+        cargs.push(...cifti_dilate_cerebellum_surface_cargs((params["cerebellum_surface"] ?? null), execution));
     }
     if ((params["opt_bad_brainordinate_roi_roi_cifti"] ?? null) !== null) {
         cargs.push(
@@ -341,13 +308,13 @@ function cifti_dilate_cargs(
             execution.inputFile((params["opt_bad_brainordinate_roi_roi_cifti"] ?? null))
         );
     }
-    if ((params["opt_nearest"] ?? null)) {
+    if ((params["opt_nearest"] ?? false)) {
         cargs.push("-nearest");
     }
-    if ((params["opt_merged_volume"] ?? null)) {
+    if ((params["opt_merged_volume"] ?? false)) {
         cargs.push("-merged-volume");
     }
-    if ((params["opt_legacy_mode"] ?? null)) {
+    if ((params["opt_legacy_mode"] ?? false)) {
         cargs.push("-legacy-mode");
     }
     return cargs;
@@ -461,11 +428,7 @@ function cifti_dilate(
 
 export {
       CIFTI_DILATE_METADATA,
-      CiftiDilateCerebellumSurfaceParameters,
-      CiftiDilateLeftSurfaceParameters,
       CiftiDilateOutputs,
-      CiftiDilateParameters,
-      CiftiDilateRightSurfaceParameters,
       cifti_dilate,
       cifti_dilate_cerebellum_surface_params,
       cifti_dilate_execute,

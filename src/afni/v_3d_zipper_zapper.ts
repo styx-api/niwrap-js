@@ -12,7 +12,7 @@ const V_3D_ZIPPER_ZAPPER_METADATA: Metadata = {
 
 
 interface V3dZipperZapperParameters {
-    "@type": "afni.3dZipperZapper";
+    "@type"?: "afni/3dZipperZapper";
     "input_file": InputPathType;
     "output_prefix": string;
     "mask_file"?: InputPathType | null | undefined;
@@ -30,44 +30,11 @@ interface V3dZipperZapperParameters {
     "min_corr_len"?: number | null | undefined;
     "min_corr_corr"?: number | null | undefined;
 }
+type V3dZipperZapperParametersTagged = Required<Pick<V3dZipperZapperParameters, '@type'>> & V3dZipperZapperParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dZipperZapper": v_3d_zipper_zapper_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dZipperZapper": v_3d_zipper_zapper_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_zipper_zapper(...)`.
+ * Output object returned when calling `V3dZipperZapperParameters(...)`.
  *
  * @interface
  */
@@ -138,9 +105,9 @@ function v_3d_zipper_zapper_params(
     min_drop_diff: number | null = null,
     min_corr_len: number | null = null,
     min_corr_corr: number | null = null,
-): V3dZipperZapperParameters {
+): V3dZipperZapperParametersTagged {
     const params = {
-        "@type": "afni.3dZipperZapper" as const,
+        "@type": "afni/3dZipperZapper" as const,
         "input_file": input_file,
         "output_prefix": output_prefix,
         "do_out_slice_param": do_out_slice_param,
@@ -218,22 +185,22 @@ function v_3d_zipper_zapper_cargs(
             String((params["min_streak_len"] ?? null))
         );
     }
-    if ((params["do_out_slice_param"] ?? null)) {
+    if ((params["do_out_slice_param"] ?? false)) {
         cargs.push("-do_out_slice_param");
     }
-    if ((params["no_out_bad_mask"] ?? null)) {
+    if ((params["no_out_bad_mask"] ?? false)) {
         cargs.push("-no_out_bad_mask");
     }
-    if ((params["no_out_text_vals"] ?? null)) {
+    if ((params["no_out_text_vals"] ?? false)) {
         cargs.push("-no_out_text_vals");
     }
-    if ((params["dont_use_streak"] ?? null)) {
+    if ((params["dont_use_streak"] ?? false)) {
         cargs.push("-dont_use_streak");
     }
-    if ((params["dont_use_drop"] ?? null)) {
+    if ((params["dont_use_drop"] ?? false)) {
         cargs.push("-dont_use_drop");
     }
-    if ((params["dont_use_corr"] ?? null)) {
+    if ((params["dont_use_corr"] ?? false)) {
         cargs.push("-dont_use_corr");
     }
     if ((params["min_streak_val"] ?? null) !== null) {
@@ -377,7 +344,6 @@ function v_3d_zipper_zapper(
 
 export {
       V3dZipperZapperOutputs,
-      V3dZipperZapperParameters,
       V_3D_ZIPPER_ZAPPER_METADATA,
       v_3d_zipper_zapper,
       v_3d_zipper_zapper_execute,

@@ -12,49 +12,17 @@ const BUGR_METADATA: Metadata = {
 
 
 interface BugrParameters {
-    "@type": "freesurfer.bugr";
+    "@type"?: "freesurfer/bugr";
     "subject_name": string;
     "command_line": string;
     "error_message": string;
     "log_file"?: InputPathType | null | undefined;
 }
+type BugrParametersTagged = Required<Pick<BugrParameters, '@type'>> & BugrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.bugr": bugr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `bugr(...)`.
+ * Output object returned when calling `BugrParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function bugr_params(
     command_line: string,
     error_message: string,
     log_file: InputPathType | null = null,
-): BugrParameters {
+): BugrParametersTagged {
     const params = {
-        "@type": "freesurfer.bugr" as const,
+        "@type": "freesurfer/bugr" as const,
         "subject_name": subject_name,
         "command_line": command_line,
         "error_message": error_message,
@@ -210,7 +178,6 @@ function bugr(
 export {
       BUGR_METADATA,
       BugrOutputs,
-      BugrParameters,
       bugr,
       bugr_execute,
       bugr_params,

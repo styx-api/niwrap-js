@@ -12,7 +12,7 @@ const V_3D_DTTO_DWI_METADATA: Metadata = {
 
 
 interface V3dDttoDwiParameters {
-    "@type": "afni.3dDTtoDWI";
+    "@type"?: "afni/3dDTtoDWI";
     "gradient_file": InputPathType;
     "i0_dataset": InputPathType;
     "dt_dataset": InputPathType;
@@ -22,44 +22,11 @@ interface V3dDttoDwiParameters {
     "scale_out_1000": boolean;
     "help": boolean;
 }
+type V3dDttoDwiParametersTagged = Required<Pick<V3dDttoDwiParameters, '@type'>> & V3dDttoDwiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dDTtoDWI": v_3d_dtto_dwi_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dDTtoDWI": v_3d_dtto_dwi_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_dtto_dwi(...)`.
+ * Output object returned when calling `V3dDttoDwiParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function v_3d_dtto_dwi_params(
     datum_type: string | null = null,
     scale_out_1000: boolean = false,
     help: boolean = false,
-): V3dDttoDwiParameters {
+): V3dDttoDwiParametersTagged {
     const params = {
-        "@type": "afni.3dDTtoDWI" as const,
+        "@type": "afni/3dDTtoDWI" as const,
         "gradient_file": gradient_file,
         "i0_dataset": i0_dataset,
         "dt_dataset": dt_dataset,
@@ -141,7 +108,7 @@ function v_3d_dtto_dwi_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     if ((params["datum_type"] ?? null) !== null) {
@@ -150,10 +117,10 @@ function v_3d_dtto_dwi_cargs(
             (params["datum_type"] ?? null)
         );
     }
-    if ((params["scale_out_1000"] ?? null)) {
+    if ((params["scale_out_1000"] ?? false)) {
         cargs.push("-scale_out_1000");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -247,7 +214,6 @@ function v_3d_dtto_dwi(
 
 export {
       V3dDttoDwiOutputs,
-      V3dDttoDwiParameters,
       V_3D_DTTO_DWI_METADATA,
       v_3d_dtto_dwi,
       v_3d_dtto_dwi_execute,

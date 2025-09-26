@@ -12,7 +12,7 @@ const V_3DTTEST___METADATA: Metadata = {
 
 
 interface V3dttestParameters {
-    "@type": "afni.3dttest++";
+    "@type"?: "afni/3dttest++";
     "setA": Array<string>;
     "setB"?: Array<string> | null | undefined;
     "setA_long"?: Array<string> | null | undefined;
@@ -35,44 +35,11 @@ interface V3dttestParameters {
     "ETAC_opt"?: Array<string> | null | undefined;
     "seed"?: number | null | undefined;
 }
+type V3dttestParametersTagged = Required<Pick<V3dttestParameters, '@type'>> & V3dttestParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dttest++": v_3dttest___cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dttest++": v_3dttest___outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dttest__(...)`.
+ * Output object returned when calling `V3dttestParameters(...)`.
  *
  * @interface
  */
@@ -141,9 +108,9 @@ function v_3dttest___params(
     etac_blur: Array<number> | null = null,
     etac_opt: Array<string> | null = null,
     seed: number | null = null,
-): V3dttestParameters {
+): V3dttestParametersTagged {
     const params = {
-        "@type": "afni.3dttest++" as const,
+        "@type": "afni/3dttest++" as const,
         "setA": set_a,
         "paired": paired,
         "unpooled": unpooled,
@@ -278,10 +245,10 @@ function v_3dttest___cargs(
             (params["resid"] ?? null)
         );
     }
-    if ((params["paired"] ?? null)) {
+    if ((params["paired"] ?? false)) {
         cargs.push("-paired");
     }
-    if ((params["unpooled"] ?? null)) {
+    if ((params["unpooled"] ?? false)) {
         cargs.push("-unpooled");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -296,13 +263,13 @@ function v_3dttest___cargs(
             String((params["exblur"] ?? null))
         );
     }
-    if ((params["randomsign"] ?? null)) {
+    if ((params["randomsign"] ?? false)) {
         cargs.push("-randomsign");
     }
-    if ((params["permute"] ?? null)) {
+    if ((params["permute"] ?? false)) {
         cargs.push("-permute");
     }
-    if ((params["ETAC"] ?? null)) {
+    if ((params["ETAC"] ?? false)) {
         cargs.push("-ETAC");
     }
     if ((params["ETAC_blur"] ?? null) !== null) {
@@ -441,7 +408,6 @@ function v_3dttest__(
 
 export {
       V3dttestOutputs,
-      V3dttestParameters,
       V_3DTTEST___METADATA,
       v_3dttest__,
       v_3dttest___execute,

@@ -12,49 +12,16 @@ const GIFTI_ALL_LABELS_TO_ROIS_METADATA: Metadata = {
 
 
 interface GiftiAllLabelsToRoisParameters {
-    "@type": "workbench.gifti-all-labels-to-rois";
+    "@type"?: "workbench/gifti-all-labels-to-rois";
     "label_in": InputPathType;
     "map": string;
     "metric_out": string;
 }
+type GiftiAllLabelsToRoisParametersTagged = Required<Pick<GiftiAllLabelsToRoisParameters, '@type'>> & GiftiAllLabelsToRoisParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.gifti-all-labels-to-rois": gifti_all_labels_to_rois_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.gifti-all-labels-to-rois": gifti_all_labels_to_rois_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `gifti_all_labels_to_rois(...)`.
+ * Output object returned when calling `GiftiAllLabelsToRoisParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function gifti_all_labels_to_rois_params(
     label_in: InputPathType,
     map: string,
     metric_out: string,
-): GiftiAllLabelsToRoisParameters {
+): GiftiAllLabelsToRoisParametersTagged {
     const params = {
-        "@type": "workbench.gifti-all-labels-to-rois" as const,
+        "@type": "workbench/gifti-all-labels-to-rois" as const,
         "label_in": label_in,
         "map": map,
         "metric_out": metric_out,
@@ -198,7 +165,6 @@ function gifti_all_labels_to_rois(
 export {
       GIFTI_ALL_LABELS_TO_ROIS_METADATA,
       GiftiAllLabelsToRoisOutputs,
-      GiftiAllLabelsToRoisParameters,
       gifti_all_labels_to_rois,
       gifti_all_labels_to_rois_execute,
       gifti_all_labels_to_rois_params,

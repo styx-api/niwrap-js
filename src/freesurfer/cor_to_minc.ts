@@ -12,48 +12,15 @@ const COR_TO_MINC_METADATA: Metadata = {
 
 
 interface CorToMincParameters {
-    "@type": "freesurfer.cor_to_minc";
+    "@type"?: "freesurfer/cor_to_minc";
     "cor_directory": string;
     "minc_file": string;
 }
+type CorToMincParametersTagged = Required<Pick<CorToMincParameters, '@type'>> & CorToMincParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.cor_to_minc": cor_to_minc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.cor_to_minc": cor_to_minc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `cor_to_minc(...)`.
+ * Output object returned when calling `CorToMincParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface CorToMincOutputs {
 function cor_to_minc_params(
     cor_directory: string,
     minc_file: string,
-): CorToMincParameters {
+): CorToMincParametersTagged {
     const params = {
-        "@type": "freesurfer.cor_to_minc" as const,
+        "@type": "freesurfer/cor_to_minc" as const,
         "cor_directory": cor_directory,
         "minc_file": minc_file,
     };
@@ -186,7 +153,6 @@ function cor_to_minc(
 export {
       COR_TO_MINC_METADATA,
       CorToMincOutputs,
-      CorToMincParameters,
       cor_to_minc,
       cor_to_minc_execute,
       cor_to_minc_params,

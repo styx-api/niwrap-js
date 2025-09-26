@@ -12,7 +12,7 @@ const CJPEG_METADATA: Metadata = {
 
 
 interface CjpegParameters {
-    "@type": "afni.cjpeg";
+    "@type"?: "afni/cjpeg";
     "quality"?: number | null | undefined;
     "grayscale": boolean;
     "optimize": boolean;
@@ -21,44 +21,11 @@ interface CjpegParameters {
     "outfile": string;
     "infile": InputPathType;
 }
+type CjpegParametersTagged = Required<Pick<CjpegParameters, '@type'>> & CjpegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.cjpeg": cjpeg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.cjpeg": cjpeg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `cjpeg(...)`.
+ * Output object returned when calling `CjpegParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function cjpeg_params(
     optimize: boolean = false,
     baseline: boolean = false,
     progressive: boolean = false,
-): CjpegParameters {
+): CjpegParametersTagged {
     const params = {
-        "@type": "afni.cjpeg" as const,
+        "@type": "afni/cjpeg" as const,
         "grayscale": grayscale,
         "optimize": optimize,
         "baseline": baseline,
@@ -132,16 +99,16 @@ function cjpeg_cargs(
             String((params["quality"] ?? null))
         );
     }
-    if ((params["grayscale"] ?? null)) {
+    if ((params["grayscale"] ?? false)) {
         cargs.push("-grayscale");
     }
-    if ((params["optimize"] ?? null)) {
+    if ((params["optimize"] ?? false)) {
         cargs.push("-optimize");
     }
-    if ((params["baseline"] ?? null)) {
+    if ((params["baseline"] ?? false)) {
         cargs.push("-baseline");
     }
-    if ((params["progressive"] ?? null)) {
+    if ((params["progressive"] ?? false)) {
         cargs.push("-progressive");
     }
     cargs.push((params["outfile"] ?? null));
@@ -236,7 +203,6 @@ function cjpeg(
 export {
       CJPEG_METADATA,
       CjpegOutputs,
-      CjpegParameters,
       cjpeg,
       cjpeg_execute,
       cjpeg_params,

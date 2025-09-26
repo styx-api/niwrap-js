@@ -12,50 +12,17 @@ const SIMPLE_SYN_REGISTRATION_METADATA: Metadata = {
 
 
 interface SimpleSynRegistrationParameters {
-    "@type": "ants.simpleSynRegistration";
+    "@type"?: "ants/simpleSynRegistration";
     "fixed_image": InputPathType;
     "moving_image": InputPathType;
     "initial_transform": string;
     "output_prefix": string;
 }
+type SimpleSynRegistrationParametersTagged = Required<Pick<SimpleSynRegistrationParameters, '@type'>> & SimpleSynRegistrationParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.simpleSynRegistration": simple_syn_registration_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.simpleSynRegistration": simple_syn_registration_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `simple_syn_registration(...)`.
+ * Output object returned when calling `SimpleSynRegistrationParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +57,9 @@ function simple_syn_registration_params(
     moving_image: InputPathType,
     initial_transform: string,
     output_prefix: string,
-): SimpleSynRegistrationParameters {
+): SimpleSynRegistrationParametersTagged {
     const params = {
-        "@type": "ants.simpleSynRegistration" as const,
+        "@type": "ants/simpleSynRegistration" as const,
         "fixed_image": fixed_image,
         "moving_image": moving_image,
         "initial_transform": initial_transform,
@@ -205,7 +172,6 @@ function simple_syn_registration(
 export {
       SIMPLE_SYN_REGISTRATION_METADATA,
       SimpleSynRegistrationOutputs,
-      SimpleSynRegistrationParameters,
       simple_syn_registration,
       simple_syn_registration_execute,
       simple_syn_registration_params,

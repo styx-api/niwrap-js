@@ -12,7 +12,7 @@ const MRI_MASK_METADATA: Metadata = {
 
 
 interface MriMaskParameters {
-    "@type": "freesurfer.mri_mask";
+    "@type"?: "freesurfer/mri_mask";
     "input_volume": InputPathType;
     "mask_volume": InputPathType;
     "output_volume": string;
@@ -35,44 +35,11 @@ interface MriMaskParameters {
     "keep_mask_deletion_edits": boolean;
     "samseg": boolean;
 }
+type MriMaskParametersTagged = Required<Pick<MriMaskParameters, '@type'>> & MriMaskParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_mask": mri_mask_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_mask": mri_mask_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_mask(...)`.
+ * Output object returned when calling `MriMaskParameters(...)`.
  *
  * @interface
  */
@@ -137,9 +104,9 @@ function mri_mask_params(
     transfer_value: number | null = null,
     keep_mask_deletion_edits: boolean = false,
     samseg: boolean = false,
-): MriMaskParameters {
+): MriMaskParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_mask" as const,
+        "@type": "freesurfer/mri_mask" as const,
         "input_volume": input_volume,
         "mask_volume": mask_volume,
         "output_volume": output_volume,
@@ -245,19 +212,19 @@ function mri_mask_cargs(
             ...(params["npad_multi_vector"] ?? null).map(String)
         );
     }
-    if ((params["abs"] ?? null)) {
+    if ((params["abs"] ?? false)) {
         cargs.push("-abs");
     }
-    if ((params["invert"] ?? null)) {
+    if ((params["invert"] ?? false)) {
         cargs.push("-invert");
     }
-    if ((params["no_invert"] ?? null)) {
+    if ((params["no_invert"] ?? false)) {
         cargs.push("-no-invert");
     }
-    if ((params["rh_labels"] ?? null)) {
+    if ((params["rh_labels"] ?? false)) {
         cargs.push("-rh");
     }
-    if ((params["lh_labels"] ?? null)) {
+    if ((params["lh_labels"] ?? false)) {
         cargs.push("-lh");
     }
     if ((params["dilate"] ?? null) !== null) {
@@ -266,7 +233,7 @@ function mri_mask_cargs(
             String((params["dilate"] ?? null))
         );
     }
-    if ((params["no_cerebellum"] ?? null)) {
+    if ((params["no_cerebellum"] ?? false)) {
         cargs.push("-no_cerebellum");
     }
     if ((params["oval_value"] ?? null) !== null) {
@@ -281,10 +248,10 @@ function mri_mask_cargs(
             String((params["transfer_value"] ?? null))
         );
     }
-    if ((params["keep_mask_deletion_edits"] ?? null)) {
+    if ((params["keep_mask_deletion_edits"] ?? false)) {
         cargs.push("-keep_mask_deletion_edits");
     }
-    if ((params["samseg"] ?? null)) {
+    if ((params["samseg"] ?? false)) {
         cargs.push("-samseg");
     }
     return cargs;
@@ -405,7 +372,6 @@ function mri_mask(
 export {
       MRI_MASK_METADATA,
       MriMaskOutputs,
-      MriMaskParameters,
       mri_mask,
       mri_mask_execute,
       mri_mask_params,

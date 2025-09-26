@@ -12,7 +12,7 @@ const MRI_CONVERT_METADATA: Metadata = {
 
 
 interface MriConvertParameters {
-    "@type": "freesurfer.mri_convert";
+    "@type"?: "freesurfer/mri_convert";
     "inp_volume": InputPathType;
     "out_volume": string;
     "read_only": boolean;
@@ -33,44 +33,11 @@ interface MriConvertParameters {
     "bfile_little_endian": boolean;
     "sphinx": boolean;
 }
+type MriConvertParametersTagged = Required<Pick<MriConvertParameters, '@type'>> & MriConvertParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_convert": mri_convert_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_convert": mri_convert_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_convert(...)`.
+ * Output object returned when calling `MriConvertParameters(...)`.
  *
  * @interface
  */
@@ -131,9 +98,9 @@ function mri_convert_params(
     scale_factor: number | null = null,
     bfile_little_endian: boolean = false,
     sphinx: boolean = false,
-): MriConvertParameters {
+): MriConvertParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_convert" as const,
+        "@type": "freesurfer/mri_convert" as const,
         "inp_volume": inp_volume,
         "out_volume": out_volume,
         "read_only": read_only,
@@ -190,22 +157,22 @@ function mri_convert_cargs(
     cargs.push("mri_convert");
     cargs.push(execution.inputFile((params["inp_volume"] ?? null)));
     cargs.push((params["out_volume"] ?? null));
-    if ((params["read_only"] ?? null)) {
+    if ((params["read_only"] ?? false)) {
         cargs.push("-ro");
     }
-    if ((params["no_write"] ?? null)) {
+    if ((params["no_write"] ?? false)) {
         cargs.push("-nw");
     }
-    if ((params["in_info"] ?? null)) {
+    if ((params["in_info"] ?? false)) {
         cargs.push("-ii");
     }
-    if ((params["out_info"] ?? null)) {
+    if ((params["out_info"] ?? false)) {
         cargs.push("-oi");
     }
-    if ((params["in_stats"] ?? null)) {
+    if ((params["in_stats"] ?? false)) {
         cargs.push("-is");
     }
-    if ((params["out_stats"] ?? null)) {
+    if ((params["out_stats"] ?? false)) {
         cargs.push("-os");
     }
     if ((params["upsample"] ?? null) !== null) {
@@ -214,7 +181,7 @@ function mri_convert_cargs(
             String((params["upsample"] ?? null))
         );
     }
-    if ((params["force_ras_good"] ?? null)) {
+    if ((params["force_ras_good"] ?? false)) {
         cargs.push("--force_ras_good");
     }
     if ((params["apply_transform"] ?? null) !== null) {
@@ -259,10 +226,10 @@ function mri_convert_cargs(
             String((params["scale_factor"] ?? null))
         );
     }
-    if ((params["bfile_little_endian"] ?? null)) {
+    if ((params["bfile_little_endian"] ?? false)) {
         cargs.push("--bfile-little-endian");
     }
-    if ((params["sphinx"] ?? null)) {
+    if ((params["sphinx"] ?? false)) {
         cargs.push("--sphinx");
     }
     return cargs;
@@ -379,7 +346,6 @@ function mri_convert(
 export {
       MRI_CONVERT_METADATA,
       MriConvertOutputs,
-      MriConvertParameters,
       mri_convert,
       mri_convert_execute,
       mri_convert_params,

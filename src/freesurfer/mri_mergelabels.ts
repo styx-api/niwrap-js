@@ -12,49 +12,16 @@ const MRI_MERGELABELS_METADATA: Metadata = {
 
 
 interface MriMergelabelsParameters {
-    "@type": "freesurfer.mri_mergelabels";
+    "@type"?: "freesurfer/mri_mergelabels";
     "input_labels": Array<InputPathType>;
     "output_label": string;
     "input_directory"?: string | null | undefined;
 }
+type MriMergelabelsParametersTagged = Required<Pick<MriMergelabelsParameters, '@type'>> & MriMergelabelsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_mergelabels": mri_mergelabels_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_mergelabels": mri_mergelabels_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_mergelabels(...)`.
+ * Output object returned when calling `MriMergelabelsParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mri_mergelabels_params(
     input_labels: Array<InputPathType>,
     output_label: string,
     input_directory: string | null = null,
-): MriMergelabelsParameters {
+): MriMergelabelsParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_mergelabels" as const,
+        "@type": "freesurfer/mri_mergelabels" as const,
         "input_labels": input_labels,
         "output_label": output_label,
     };
@@ -206,7 +173,6 @@ function mri_mergelabels(
 export {
       MRI_MERGELABELS_METADATA,
       MriMergelabelsOutputs,
-      MriMergelabelsParameters,
       mri_mergelabels,
       mri_mergelabels_execute,
       mri_mergelabels_params,

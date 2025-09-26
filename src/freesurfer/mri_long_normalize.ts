@@ -12,7 +12,7 @@ const MRI_LONG_NORMALIZE_METADATA: Metadata = {
 
 
 interface MriLongNormalizeParameters {
-    "@type": "freesurfer.mri_long_normalize";
+    "@type"?: "freesurfer/mri_long_normalize";
     "input_vol": InputPathType;
     "base_tp_file": InputPathType;
     "output_vol": string;
@@ -25,44 +25,11 @@ interface MriLongNormalizeParameters {
     "reading"?: Array<string> | null | undefined;
     "print_usage": boolean;
 }
+type MriLongNormalizeParametersTagged = Required<Pick<MriLongNormalizeParameters, '@type'>> & MriLongNormalizeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_long_normalize": mri_long_normalize_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_long_normalize": mri_long_normalize_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_long_normalize(...)`.
+ * Output object returned when calling `MriLongNormalizeParameters(...)`.
  *
  * @interface
  */
@@ -107,9 +74,9 @@ function mri_long_normalize_params(
     debug_gx: Array<number> | null = null,
     reading: Array<string> | null = null,
     print_usage: boolean = false,
-): MriLongNormalizeParameters {
+): MriLongNormalizeParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_long_normalize" as const,
+        "@type": "freesurfer/mri_long_normalize" as const,
         "input_vol": input_vol,
         "base_tp_file": base_tp_file,
         "output_vol": output_vol,
@@ -161,7 +128,7 @@ function mri_long_normalize_cargs(
             String((params["normalization_iters"] ?? null))
         );
     }
-    if ((params["disable_1d"] ?? null)) {
+    if ((params["disable_1d"] ?? false)) {
         cargs.push("-no1d");
     }
     if ((params["smooth_bias"] ?? null) !== null) {
@@ -194,7 +161,7 @@ function mri_long_normalize_cargs(
             ...(params["reading"] ?? null)
         );
     }
-    if ((params["print_usage"] ?? null)) {
+    if ((params["print_usage"] ?? false)) {
         cargs.push("-u");
     }
     return cargs;
@@ -295,7 +262,6 @@ function mri_long_normalize(
 export {
       MRI_LONG_NORMALIZE_METADATA,
       MriLongNormalizeOutputs,
-      MriLongNormalizeParameters,
       mri_long_normalize,
       mri_long_normalize_execute,
       mri_long_normalize_params,

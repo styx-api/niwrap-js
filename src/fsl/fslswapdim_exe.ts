@@ -12,7 +12,7 @@ const FSLSWAPDIM_EXE_METADATA: Metadata = {
 
 
 interface FslswapdimExeParameters {
-    "@type": "fsl.fslswapdim_exe";
+    "@type"?: "fsl/fslswapdim_exe";
     "input_file": InputPathType;
     "axis_a": string;
     "axis_b": string;
@@ -20,44 +20,11 @@ interface FslswapdimExeParameters {
     "output_file"?: string | null | undefined;
     "checkLR_flag": boolean;
 }
+type FslswapdimExeParametersTagged = Required<Pick<FslswapdimExeParameters, '@type'>> & FslswapdimExeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslswapdim_exe": fslswapdim_exe_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fslswapdim_exe": fslswapdim_exe_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslswapdim_exe(...)`.
+ * Output object returned when calling `FslswapdimExeParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function fslswapdim_exe_params(
     axis_c: string,
     output_file: string | null = null,
     check_lr_flag: boolean = false,
-): FslswapdimExeParameters {
+): FslswapdimExeParametersTagged {
     const params = {
-        "@type": "fsl.fslswapdim_exe" as const,
+        "@type": "fsl/fslswapdim_exe" as const,
         "input_file": input_file,
         "axis_a": axis_a,
         "axis_b": axis_b,
@@ -129,7 +96,7 @@ function fslswapdim_exe_cargs(
     if ((params["output_file"] ?? null) !== null) {
         cargs.push((params["output_file"] ?? null));
     }
-    if ((params["checkLR_flag"] ?? null)) {
+    if ((params["checkLR_flag"] ?? false)) {
         cargs.push("--checkLR");
     }
     return cargs;
@@ -220,7 +187,6 @@ function fslswapdim_exe(
 export {
       FSLSWAPDIM_EXE_METADATA,
       FslswapdimExeOutputs,
-      FslswapdimExeParameters,
       fslswapdim_exe,
       fslswapdim_exe_execute,
       fslswapdim_exe_params,

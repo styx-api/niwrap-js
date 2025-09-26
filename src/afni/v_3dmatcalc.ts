@@ -12,50 +12,17 @@ const V_3DMATCALC_METADATA: Metadata = {
 
 
 interface V3dmatcalcParameters {
-    "@type": "afni.3dmatcalc";
+    "@type"?: "afni/3dmatcalc";
     "input_dataset": InputPathType;
     "input_matrix": InputPathType;
     "output_dataset": string;
     "mask"?: InputPathType | null | undefined;
 }
+type V3dmatcalcParametersTagged = Required<Pick<V3dmatcalcParameters, '@type'>> & V3dmatcalcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dmatcalc": v_3dmatcalc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dmatcalc": v_3dmatcalc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dmatcalc(...)`.
+ * Output object returned when calling `V3dmatcalcParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +57,9 @@ function v_3dmatcalc_params(
     input_matrix: InputPathType,
     output_dataset: string,
     mask: InputPathType | null = null,
-): V3dmatcalcParameters {
+): V3dmatcalcParametersTagged {
     const params = {
-        "@type": "afni.3dmatcalc" as const,
+        "@type": "afni/3dmatcalc" as const,
         "input_dataset": input_dataset,
         "input_matrix": input_matrix,
         "output_dataset": output_dataset,
@@ -220,7 +187,6 @@ function v_3dmatcalc(
 
 export {
       V3dmatcalcOutputs,
-      V3dmatcalcParameters,
       V_3DMATCALC_METADATA,
       v_3dmatcalc,
       v_3dmatcalc_execute,

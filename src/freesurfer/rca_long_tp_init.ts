@@ -12,7 +12,7 @@ const RCA_LONG_TP_INIT_METADATA: Metadata = {
 
 
 interface RcaLongTpInitParameters {
-    "@type": "freesurfer.rca-long-tp-init";
+    "@type"?: "freesurfer/rca-long-tp-init";
     "timepoint": string;
     "base": string;
     "use_long_base_ctrl_vol": boolean;
@@ -20,43 +20,11 @@ interface RcaLongTpInitParameters {
     "expert_opts"?: InputPathType | null | undefined;
     "subject"?: string | null | undefined;
 }
+type RcaLongTpInitParametersTagged = Required<Pick<RcaLongTpInitParameters, '@type'>> & RcaLongTpInitParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.rca-long-tp-init": rca_long_tp_init_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `rca_long_tp_init(...)`.
+ * Output object returned when calling `RcaLongTpInitParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function rca_long_tp_init_params(
     hemisphere: "lh" | "rh" | null = null,
     expert_opts: InputPathType | null = null,
     subject: string | null = null,
-): RcaLongTpInitParameters {
+): RcaLongTpInitParametersTagged {
     const params = {
-        "@type": "freesurfer.rca-long-tp-init" as const,
+        "@type": "freesurfer/rca-long-tp-init" as const,
         "timepoint": timepoint,
         "base": base,
         "use_long_base_ctrl_vol": use_long_base_ctrl_vol,
@@ -126,7 +94,7 @@ function rca_long_tp_init_cargs(
         (params["timepoint"] ?? null)
     );
     cargs.push((params["base"] ?? null));
-    if ((params["use_long_base_ctrl_vol"] ?? null)) {
+    if ((params["use_long_base_ctrl_vol"] ?? false)) {
         cargs.push("-uselongbasectrlvol");
     }
     if ((params["hemisphere"] ?? null) !== null) {
@@ -234,7 +202,6 @@ function rca_long_tp_init(
 export {
       RCA_LONG_TP_INIT_METADATA,
       RcaLongTpInitOutputs,
-      RcaLongTpInitParameters,
       rca_long_tp_init,
       rca_long_tp_init_execute,
       rca_long_tp_init_params,

@@ -12,48 +12,15 @@ const IREPIFITVOL_GLNX64_METADATA: Metadata = {
 
 
 interface IrepifitvolGlnx64Parameters {
-    "@type": "freesurfer.irepifitvol.glnx64";
+    "@type"?: "freesurfer/irepifitvol.glnx64";
     "input_file": InputPathType;
     "output_file": string;
 }
+type IrepifitvolGlnx64ParametersTagged = Required<Pick<IrepifitvolGlnx64Parameters, '@type'>> & IrepifitvolGlnx64Parameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.irepifitvol.glnx64": irepifitvol_glnx64_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.irepifitvol.glnx64": irepifitvol_glnx64_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `irepifitvol_glnx64(...)`.
+ * Output object returned when calling `IrepifitvolGlnx64Parameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface IrepifitvolGlnx64Outputs {
 function irepifitvol_glnx64_params(
     input_file: InputPathType,
     output_file: string,
-): IrepifitvolGlnx64Parameters {
+): IrepifitvolGlnx64ParametersTagged {
     const params = {
-        "@type": "freesurfer.irepifitvol.glnx64" as const,
+        "@type": "freesurfer/irepifitvol.glnx64" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -186,7 +153,6 @@ function irepifitvol_glnx64(
 export {
       IREPIFITVOL_GLNX64_METADATA,
       IrepifitvolGlnx64Outputs,
-      IrepifitvolGlnx64Parameters,
       irepifitvol_glnx64,
       irepifitvol_glnx64_execute,
       irepifitvol_glnx64_params,

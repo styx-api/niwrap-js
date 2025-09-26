@@ -12,7 +12,7 @@ const FS_CHECK_VERSION_METADATA: Metadata = {
 
 
 interface FsCheckVersionParameters {
-    "@type": "freesurfer.fs-check-version";
+    "@type"?: "freesurfer/fs-check-version";
     "subjects_dir": string;
     "outfile": string;
     "subject"?: string | null | undefined;
@@ -21,44 +21,11 @@ interface FsCheckVersionParameters {
     "test": boolean;
     "test_debug": boolean;
 }
+type FsCheckVersionParametersTagged = Required<Pick<FsCheckVersionParameters, '@type'>> & FsCheckVersionParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fs-check-version": fs_check_version_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.fs-check-version": fs_check_version_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fs_check_version(...)`.
+ * Output object returned when calling `FsCheckVersionParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function fs_check_version_params(
     no_require_match: boolean = false,
     test: boolean = false,
     test_debug: boolean = false,
-): FsCheckVersionParameters {
+): FsCheckVersionParametersTagged {
     const params = {
-        "@type": "freesurfer.fs-check-version" as const,
+        "@type": "freesurfer/fs-check-version" as const,
         "subjects_dir": subjects_dir,
         "outfile": outfile,
         "require_match": require_match,
@@ -140,16 +107,16 @@ function fs_check_version_cargs(
             (params["subject"] ?? null)
         );
     }
-    if ((params["require_match"] ?? null)) {
+    if ((params["require_match"] ?? false)) {
         cargs.push("--require-match");
     }
-    if ((params["no_require_match"] ?? null)) {
+    if ((params["no_require_match"] ?? false)) {
         cargs.push("--no-require-match");
     }
-    if ((params["test"] ?? null)) {
+    if ((params["test"] ?? false)) {
         cargs.push("--test");
     }
-    if ((params["test_debug"] ?? null)) {
+    if ((params["test_debug"] ?? false)) {
         cargs.push("--test-debug");
     }
     return cargs;
@@ -242,7 +209,6 @@ function fs_check_version(
 export {
       FS_CHECK_VERSION_METADATA,
       FsCheckVersionOutputs,
-      FsCheckVersionParameters,
       fs_check_version,
       fs_check_version_execute,
       fs_check_version_params,

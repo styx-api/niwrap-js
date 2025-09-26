@@ -12,48 +12,16 @@ const COMPUTE_VOX2VOX_METADATA: Metadata = {
 
 
 interface ComputeVox2voxParameters {
-    "@type": "freesurfer.compute_vox2vox";
+    "@type"?: "freesurfer/compute_vox2vox";
     "source": InputPathType;
     "t4file": InputPathType;
     "target": InputPathType;
 }
+type ComputeVox2voxParametersTagged = Required<Pick<ComputeVox2voxParameters, '@type'>> & ComputeVox2voxParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.compute_vox2vox": compute_vox2vox_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `compute_vox2vox(...)`.
+ * Output object returned when calling `ComputeVox2voxParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function compute_vox2vox_params(
     source: InputPathType,
     t4file: InputPathType,
     target: InputPathType,
-): ComputeVox2voxParameters {
+): ComputeVox2voxParametersTagged {
     const params = {
-        "@type": "freesurfer.compute_vox2vox" as const,
+        "@type": "freesurfer/compute_vox2vox" as const,
         "source": source,
         "t4file": t4file,
         "target": target,
@@ -187,7 +155,6 @@ function compute_vox2vox(
 export {
       COMPUTE_VOX2VOX_METADATA,
       ComputeVox2voxOutputs,
-      ComputeVox2voxParameters,
       compute_vox2vox,
       compute_vox2vox_execute,
       compute_vox2vox_params,

@@ -12,7 +12,7 @@ const FSL_TSPLOT_METADATA: Metadata = {
 
 
 interface FslTsplotParameters {
-    "@type": "fsl.fsl_tsplot";
+    "@type"?: "fsl/fsl_tsplot";
     "input_files": string;
     "output_file": string;
     "title"?: string | null | undefined;
@@ -30,44 +30,11 @@ interface FslTsplotParameters {
     "start_col"?: number | null | undefined;
     "end_col"?: number | null | undefined;
 }
+type FslTsplotParametersTagged = Required<Pick<FslTsplotParameters, '@type'>> & FslTsplotParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fsl_tsplot": fsl_tsplot_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fsl_tsplot": fsl_tsplot_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsl_tsplot(...)`.
+ * Output object returned when calling `FslTsplotParameters(...)`.
  *
  * @interface
  */
@@ -122,9 +89,9 @@ function fsl_tsplot_params(
     sci_flag: boolean = false,
     start_col: number | null = null,
     end_col: number | null = null,
-): FslTsplotParameters {
+): FslTsplotParametersTagged {
     const params = {
-        "@type": "fsl.fsl_tsplot" as const,
+        "@type": "fsl/fsl_tsplot" as const,
         "input_files": input_files,
         "output_file": output_file,
         "sci_flag": sci_flag,
@@ -260,7 +227,7 @@ function fsl_tsplot_cargs(
             String((params["precision"] ?? null))
         );
     }
-    if ((params["sci_flag"] ?? null)) {
+    if ((params["sci_flag"] ?? false)) {
         cargs.push("--sci");
     }
     if ((params["start_col"] ?? null) !== null) {
@@ -383,7 +350,6 @@ function fsl_tsplot(
 export {
       FSL_TSPLOT_METADATA,
       FslTsplotOutputs,
-      FslTsplotParameters,
       fsl_tsplot,
       fsl_tsplot_execute,
       fsl_tsplot_params,

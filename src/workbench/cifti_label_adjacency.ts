@@ -12,51 +12,18 @@ const CIFTI_LABEL_ADJACENCY_METADATA: Metadata = {
 
 
 interface CiftiLabelAdjacencyParameters {
-    "@type": "workbench.cifti-label-adjacency";
+    "@type"?: "workbench/cifti-label-adjacency";
     "label_in": InputPathType;
     "adjacency_out": string;
     "opt_left_surface_surface"?: InputPathType | null | undefined;
     "opt_right_surface_surface"?: InputPathType | null | undefined;
     "opt_cerebellum_surface_surface"?: InputPathType | null | undefined;
 }
+type CiftiLabelAdjacencyParametersTagged = Required<Pick<CiftiLabelAdjacencyParameters, '@type'>> & CiftiLabelAdjacencyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-label-adjacency": cifti_label_adjacency_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-label-adjacency": cifti_label_adjacency_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `cifti_label_adjacency(...)`.
+ * Output object returned when calling `CiftiLabelAdjacencyParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function cifti_label_adjacency_params(
     opt_left_surface_surface: InputPathType | null = null,
     opt_right_surface_surface: InputPathType | null = null,
     opt_cerebellum_surface_surface: InputPathType | null = null,
-): CiftiLabelAdjacencyParameters {
+): CiftiLabelAdjacencyParametersTagged {
     const params = {
-        "@type": "workbench.cifti-label-adjacency" as const,
+        "@type": "workbench/cifti-label-adjacency" as const,
         "label_in": label_in,
         "adjacency_out": adjacency_out,
     };
@@ -233,7 +200,6 @@ function cifti_label_adjacency(
 export {
       CIFTI_LABEL_ADJACENCY_METADATA,
       CiftiLabelAdjacencyOutputs,
-      CiftiLabelAdjacencyParameters,
       cifti_label_adjacency,
       cifti_label_adjacency_execute,
       cifti_label_adjacency_params,

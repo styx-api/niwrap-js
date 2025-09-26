@@ -12,7 +12,7 @@ const FSR_COREG_METADATA: Metadata = {
 
 
 interface FsrCoregParameters {
-    "@type": "freesurfer.fsr-coreg";
+    "@type"?: "freesurfer/fsr-coreg";
     "import_dir": string;
     "reference_mode": string;
     "num_threads"?: number | null | undefined;
@@ -20,44 +20,11 @@ interface FsrCoregParameters {
     "output_dir"?: string | null | undefined;
     "expert_options"?: InputPathType | null | undefined;
 }
+type FsrCoregParametersTagged = Required<Pick<FsrCoregParameters, '@type'>> & FsrCoregParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fsr-coreg": fsr_coreg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.fsr-coreg": fsr_coreg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsr_coreg(...)`.
+ * Output object returned when calling `FsrCoregParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +63,9 @@ function fsr_coreg_params(
     force_update: boolean = false,
     output_dir: string | null = null,
     expert_options: InputPathType | null = null,
-): FsrCoregParameters {
+): FsrCoregParametersTagged {
     const params = {
-        "@type": "freesurfer.fsr-coreg" as const,
+        "@type": "freesurfer/fsr-coreg" as const,
         "import_dir": import_dir,
         "reference_mode": reference_mode,
         "force_update": force_update,
@@ -144,7 +111,7 @@ function fsr_coreg_cargs(
             String((params["num_threads"] ?? null))
         );
     }
-    if ((params["force_update"] ?? null)) {
+    if ((params["force_update"] ?? false)) {
         cargs.push("--force-update");
     }
     if ((params["output_dir"] ?? null) !== null) {
@@ -248,7 +215,6 @@ function fsr_coreg(
 export {
       FSR_COREG_METADATA,
       FsrCoregOutputs,
-      FsrCoregParameters,
       fsr_coreg,
       fsr_coreg_execute,
       fsr_coreg_params,

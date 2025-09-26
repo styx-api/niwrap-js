@@ -12,7 +12,7 @@ const LONG_SUBMIT_POSTPROC_METADATA: Metadata = {
 
 
 interface LongSubmitPostprocParameters {
-    "@type": "freesurfer.long_submit_postproc";
+    "@type"?: "freesurfer/long_submit_postproc";
     "qdec": InputPathType;
     "prog": string;
     "flags"?: string | null | undefined;
@@ -22,43 +22,11 @@ interface LongSubmitPostprocParameters {
     "max"?: number | null | undefined;
     "queue"?: string | null | undefined;
 }
+type LongSubmitPostprocParametersTagged = Required<Pick<LongSubmitPostprocParameters, '@type'>> & LongSubmitPostprocParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.long_submit_postproc": long_submit_postproc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `long_submit_postproc(...)`.
+ * Output object returned when calling `LongSubmitPostprocParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +61,9 @@ function long_submit_postproc_params(
     pause: number | null = null,
     max: number | null = null,
     queue: string | null = null,
-): LongSubmitPostprocParameters {
+): LongSubmitPostprocParametersTagged {
     const params = {
-        "@type": "freesurfer.long_submit_postproc" as const,
+        "@type": "freesurfer/long_submit_postproc" as const,
         "qdec": qdec,
         "prog": prog,
         "simulate": simulate,
@@ -153,7 +121,7 @@ function long_submit_postproc_cargs(
             (params["dir"] ?? null)
         );
     }
-    if ((params["simulate"] ?? null)) {
+    if ((params["simulate"] ?? false)) {
         cargs.push("--simulate");
     }
     if ((params["pause"] ?? null) !== null) {
@@ -265,7 +233,6 @@ function long_submit_postproc(
 export {
       LONG_SUBMIT_POSTPROC_METADATA,
       LongSubmitPostprocOutputs,
-      LongSubmitPostprocParameters,
       long_submit_postproc,
       long_submit_postproc_execute,
       long_submit_postproc_params,

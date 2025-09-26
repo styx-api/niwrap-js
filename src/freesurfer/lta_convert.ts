@@ -12,7 +12,7 @@ const LTA_CONVERT_METADATA: Metadata = {
 
 
 interface LtaConvertParameters {
-    "@type": "freesurfer.lta_convert";
+    "@type"?: "freesurfer/lta_convert";
     "in_lta"?: InputPathType | null | undefined;
     "in_fsl"?: InputPathType | null | undefined;
     "in_mni"?: InputPathType | null | undefined;
@@ -35,44 +35,11 @@ interface LtaConvertParameters {
     "trg_conform": boolean;
     "subject_name"?: string | null | undefined;
 }
+type LtaConvertParametersTagged = Required<Pick<LtaConvertParameters, '@type'>> & LtaConvertParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.lta_convert": lta_convert_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.lta_convert": lta_convert_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `lta_convert(...)`.
+ * Output object returned when calling `LtaConvertParameters(...)`.
  *
  * @interface
  */
@@ -137,9 +104,9 @@ function lta_convert_params(
     trg_geometry: InputPathType | null = null,
     trg_conform: boolean = false,
     subject_name: string | null = null,
-): LtaConvertParameters {
+): LtaConvertParametersTagged {
     const params = {
-        "@type": "freesurfer.lta_convert" as const,
+        "@type": "freesurfer/lta_convert" as const,
         "invert": invert,
         "ltavox2vox": ltavox2vox,
         "ltatkreg": ltatkreg,
@@ -298,13 +265,13 @@ function lta_convert_cargs(
             (params["out_vox"] ?? null)
         );
     }
-    if ((params["invert"] ?? null)) {
+    if ((params["invert"] ?? false)) {
         cargs.push("--invert");
     }
-    if ((params["ltavox2vox"] ?? null)) {
+    if ((params["ltavox2vox"] ?? false)) {
         cargs.push("--ltavox2vox");
     }
-    if ((params["ltatkreg"] ?? null)) {
+    if ((params["ltatkreg"] ?? false)) {
         cargs.push("--ltatkreg");
     }
     if ((params["src_geometry"] ?? null) !== null) {
@@ -319,7 +286,7 @@ function lta_convert_cargs(
             execution.inputFile((params["trg_geometry"] ?? null))
         );
     }
-    if ((params["trg_conform"] ?? null)) {
+    if ((params["trg_conform"] ?? false)) {
         cargs.push("--trgconform");
     }
     if ((params["subject_name"] ?? null) !== null) {
@@ -446,7 +413,6 @@ function lta_convert(
 export {
       LTA_CONVERT_METADATA,
       LtaConvertOutputs,
-      LtaConvertParameters,
       lta_convert,
       lta_convert_execute,
       lta_convert_params,

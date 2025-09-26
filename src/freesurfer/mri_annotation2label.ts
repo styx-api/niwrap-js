@@ -12,7 +12,7 @@ const MRI_ANNOTATION2LABEL_METADATA: Metadata = {
 
 
 interface MriAnnotation2labelParameters {
-    "@type": "freesurfer.mri_annotation2label";
+    "@type"?: "freesurfer/mri_annotation2label";
     "subject": string;
     "hemi": string;
     "lobes"?: InputPathType | null | undefined;
@@ -33,43 +33,11 @@ interface MriAnnotation2labelParameters {
     "help": boolean;
     "version": boolean;
 }
+type MriAnnotation2labelParametersTagged = Required<Pick<MriAnnotation2labelParameters, '@type'>> & MriAnnotation2labelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_annotation2label": mri_annotation2label_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_annotation2label(...)`.
+ * Output object returned when calling `MriAnnotation2labelParameters(...)`.
  *
  * @interface
  */
@@ -126,9 +94,9 @@ function mri_annotation2label_params(
     stat: InputPathType | null = null,
     help: boolean = false,
     version: boolean = false,
-): MriAnnotation2labelParameters {
+): MriAnnotation2labelParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_annotation2label" as const,
+        "@type": "freesurfer/mri_annotation2label" as const,
         "subject": subject,
         "hemi": hemi,
         "help": help,
@@ -295,10 +263,10 @@ function mri_annotation2label_cargs(
             execution.inputFile((params["stat"] ?? null))
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -414,7 +382,6 @@ function mri_annotation2label(
 export {
       MRI_ANNOTATION2LABEL_METADATA,
       MriAnnotation2labelOutputs,
-      MriAnnotation2labelParameters,
       mri_annotation2label,
       mri_annotation2label_execute,
       mri_annotation2label_params,

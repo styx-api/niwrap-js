@@ -12,50 +12,17 @@ const MRIS_MAKE_FACE_PARCELLATION_METADATA: Metadata = {
 
 
 interface MrisMakeFaceParcellationParameters {
-    "@type": "freesurfer.mris_make_face_parcellation";
+    "@type"?: "freesurfer/mris_make_face_parcellation";
     "input_surface": InputPathType;
     "ico_file": InputPathType;
     "output_annot": string;
     "colortable"?: InputPathType | null | undefined;
 }
+type MrisMakeFaceParcellationParametersTagged = Required<Pick<MrisMakeFaceParcellationParameters, '@type'>> & MrisMakeFaceParcellationParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_make_face_parcellation": mris_make_face_parcellation_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_make_face_parcellation": mris_make_face_parcellation_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_make_face_parcellation(...)`.
+ * Output object returned when calling `MrisMakeFaceParcellationParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mris_make_face_parcellation_params(
     ico_file: InputPathType,
     output_annot: string,
     colortable: InputPathType | null = null,
-): MrisMakeFaceParcellationParameters {
+): MrisMakeFaceParcellationParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_make_face_parcellation" as const,
+        "@type": "freesurfer/mris_make_face_parcellation" as const,
         "input_surface": input_surface,
         "ico_file": ico_file,
         "output_annot": output_annot,
@@ -207,7 +174,6 @@ function mris_make_face_parcellation(
 export {
       MRIS_MAKE_FACE_PARCELLATION_METADATA,
       MrisMakeFaceParcellationOutputs,
-      MrisMakeFaceParcellationParameters,
       mris_make_face_parcellation,
       mris_make_face_parcellation_execute,
       mris_make_face_parcellation_params,

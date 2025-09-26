@@ -12,51 +12,18 @@ const FTOZ_METADATA: Metadata = {
 
 
 interface FtozParameters {
-    "@type": "fsl.ftoz";
+    "@type"?: "fsl/ftoz";
     "input_file": InputPathType;
     "dof1": number;
     "dof2": number;
     "output_file"?: string | null | undefined;
     "help_flag": boolean;
 }
+type FtozParametersTagged = Required<Pick<FtozParameters, '@type'>> & FtozParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.ftoz": ftoz_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.ftoz": ftoz_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ftoz(...)`.
+ * Output object returned when calling `FtozParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function ftoz_params(
     dof2: number,
     output_file: string | null = null,
     help_flag: boolean = false,
-): FtozParameters {
+): FtozParametersTagged {
     const params = {
-        "@type": "fsl.ftoz" as const,
+        "@type": "fsl/ftoz" as const,
         "input_file": input_file,
         "dof1": dof1,
         "dof2": dof2,
@@ -127,7 +94,7 @@ function ftoz_cargs(
             (params["output_file"] ?? null)
         );
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -216,7 +183,6 @@ function ftoz(
 export {
       FTOZ_METADATA,
       FtozOutputs,
-      FtozParameters,
       ftoz,
       ftoz_execute,
       ftoz_params,

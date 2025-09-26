@@ -12,7 +12,7 @@ const ANTS_AI_METADATA: Metadata = {
 
 
 interface AntsAiParameters {
-    "@type": "ants.antsAI";
+    "@type"?: "ants/antsAI";
     "dimensionality"?: 2 | 3 | null | undefined;
     "metric": "Mattes[fixedImage,movingImage]" | "GC[fixedImage,movingImage]" | "MI[fixedImage,movingImage]";
     "transform": "Rigid[gradientStep]" | "Affine[gradientStep]" | "Similarity[gradientStep]" | "AlignGeometricCenters" | "AlignCentersOfMass";
@@ -26,44 +26,11 @@ interface AntsAiParameters {
     "random_seed"?: number | null | undefined;
     "verbose"?: 0 | 1 | null | undefined;
 }
+type AntsAiParametersTagged = Required<Pick<AntsAiParameters, '@type'>> & AntsAiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.antsAI": ants_ai_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.antsAI": ants_ai_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ants_ai(...)`.
+ * Output object returned when calling `AntsAiParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function ants_ai_params(
     masks: "fixedImageMask" | "[fixedImageMask,movingImageMask]" | null = null,
     random_seed: number | null = null,
     verbose: 0 | 1 | null = null,
-): AntsAiParameters {
+): AntsAiParametersTagged {
     const params = {
-        "@type": "ants.antsAI" as const,
+        "@type": "ants/antsAI" as const,
         "metric": metric,
         "transform": transform,
         "output": output,
@@ -328,7 +295,6 @@ function ants_ai(
 export {
       ANTS_AI_METADATA,
       AntsAiOutputs,
-      AntsAiParameters,
       ants_ai,
       ants_ai_execute,
       ants_ai_params,

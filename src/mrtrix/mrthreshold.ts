@@ -12,14 +12,15 @@ const MRTHRESHOLD_METADATA: Metadata = {
 
 
 interface MrthresholdConfigParameters {
-    "@type": "mrtrix.mrthreshold.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MrthresholdConfigParametersTagged = Required<Pick<MrthresholdConfigParameters, '@type'>> & MrthresholdConfigParameters;
 
 
 interface MrthresholdParameters {
-    "@type": "mrtrix.mrthreshold";
+    "@type"?: "mrtrix/mrthreshold";
     "abs"?: number | null | undefined;
     "percentile"?: number | null | undefined;
     "top"?: number | null | undefined;
@@ -42,41 +43,7 @@ interface MrthresholdParameters {
     "input": InputPathType;
     "output"?: string | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.mrthreshold": mrthreshold_cargs,
-        "mrtrix.mrthreshold.config": mrthreshold_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.mrthreshold": mrthreshold_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MrthresholdParametersTagged = Required<Pick<MrthresholdParameters, '@type'>> & MrthresholdParameters;
 
 
 /**
@@ -90,9 +57,9 @@ function dynOutputs(
 function mrthreshold_config_params(
     key: string,
     value: string,
-): MrthresholdConfigParameters {
+): MrthresholdConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.mrthreshold.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -121,7 +88,7 @@ function mrthreshold_config_cargs(
 
 
 /**
- * Output object returned when calling `mrthreshold(...)`.
+ * Output object returned when calling `MrthresholdParameters(...)`.
  *
  * @interface
  */
@@ -186,9 +153,9 @@ function mrthreshold_params(
     help: boolean = false,
     version: boolean = false,
     output: string | null = null,
-): MrthresholdParameters {
+): MrthresholdParametersTagged {
     const params = {
-        "@type": "mrtrix.mrthreshold" as const,
+        "@type": "mrtrix/mrthreshold" as const,
         "allvolumes": allvolumes,
         "ignorezero": ignorezero,
         "invert": invert,
@@ -271,10 +238,10 @@ function mrthreshold_cargs(
             String((params["bottom"] ?? null))
         );
     }
-    if ((params["allvolumes"] ?? null)) {
+    if ((params["allvolumes"] ?? false)) {
         cargs.push("-allvolumes");
     }
-    if ((params["ignorezero"] ?? null)) {
+    if ((params["ignorezero"] ?? false)) {
         cargs.push("-ignorezero");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -289,25 +256,25 @@ function mrthreshold_cargs(
             (params["comparison"] ?? null)
         );
     }
-    if ((params["invert"] ?? null)) {
+    if ((params["invert"] ?? false)) {
         cargs.push("-invert");
     }
-    if ((params["out_masked"] ?? null)) {
+    if ((params["out_masked"] ?? false)) {
         cargs.push("-out_masked");
     }
-    if ((params["nan"] ?? null)) {
+    if ((params["nan"] ?? false)) {
         cargs.push("-nan");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -317,12 +284,12 @@ function mrthreshold_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => mrthreshold_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -484,9 +451,7 @@ function mrthreshold(
 
 export {
       MRTHRESHOLD_METADATA,
-      MrthresholdConfigParameters,
       MrthresholdOutputs,
-      MrthresholdParameters,
       mrthreshold,
       mrthreshold_config_params,
       mrthreshold_execute,

@@ -12,46 +12,14 @@ const MRIS2RGB_METADATA: Metadata = {
 
 
 interface Mris2rgbParameters {
-    "@type": "freesurfer.mris2rgb";
+    "@type"?: "freesurfer/mris2rgb";
     "library_path": string;
 }
+type Mris2rgbParametersTagged = Required<Pick<Mris2rgbParameters, '@type'>> & Mris2rgbParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris2rgb": mris2rgb_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris2rgb(...)`.
+ * Output object returned when calling `Mris2rgbParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface Mris2rgbOutputs {
  */
 function mris2rgb_params(
     library_path: string,
-): Mris2rgbParameters {
+): Mris2rgbParametersTagged {
     const params = {
-        "@type": "freesurfer.mris2rgb" as const,
+        "@type": "freesurfer/mris2rgb" as const,
         "library_path": library_path,
     };
     return params;
@@ -176,7 +144,6 @@ function mris2rgb(
 export {
       MRIS2RGB_METADATA,
       Mris2rgbOutputs,
-      Mris2rgbParameters,
       mris2rgb,
       mris2rgb_execute,
       mris2rgb_params,

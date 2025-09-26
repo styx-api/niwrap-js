@@ -12,49 +12,17 @@ const BIANCA_CLUSTER_STATS_METADATA: Metadata = {
 
 
 interface BiancaClusterStatsParameters {
-    "@type": "fsl.bianca_cluster_stats";
+    "@type"?: "fsl/bianca_cluster_stats";
     "bianca_output_map": InputPathType;
     "threshold": number;
     "min_cluster_size": number;
     "mask"?: InputPathType | null | undefined;
 }
+type BiancaClusterStatsParametersTagged = Required<Pick<BiancaClusterStatsParameters, '@type'>> & BiancaClusterStatsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.bianca_cluster_stats": bianca_cluster_stats_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `bianca_cluster_stats(...)`.
+ * Output object returned when calling `BiancaClusterStatsParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function bianca_cluster_stats_params(
     threshold: number,
     min_cluster_size: number,
     mask: InputPathType | null = null,
-): BiancaClusterStatsParameters {
+): BiancaClusterStatsParametersTagged {
     const params = {
-        "@type": "fsl.bianca_cluster_stats" as const,
+        "@type": "fsl/bianca_cluster_stats" as const,
         "bianca_output_map": bianca_output_map,
         "threshold": threshold,
         "min_cluster_size": min_cluster_size,
@@ -198,7 +166,6 @@ function bianca_cluster_stats(
 export {
       BIANCA_CLUSTER_STATS_METADATA,
       BiancaClusterStatsOutputs,
-      BiancaClusterStatsParameters,
       bianca_cluster_stats,
       bianca_cluster_stats_execute,
       bianca_cluster_stats_params,

@@ -12,51 +12,18 @@ const ANTS_REGISTRATION_SY_NQUICK_SH_METADATA: Metadata = {
 
 
 interface AntsRegistrationSyNquickShParameters {
-    "@type": "ants.antsRegistrationSyNQuick.sh";
+    "@type"?: "ants/antsRegistrationSyNQuick.sh";
     "dimensionality": 2 | 3;
     "fixed_image": InputPathType;
     "moving_image": InputPathType;
     "output_prefix": string;
     "transform_type"?: "s" | "b" | null | undefined;
 }
+type AntsRegistrationSyNquickShParametersTagged = Required<Pick<AntsRegistrationSyNquickShParameters, '@type'>> & AntsRegistrationSyNquickShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.antsRegistrationSyNQuick.sh": ants_registration_sy_nquick_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.antsRegistrationSyNQuick.sh": ants_registration_sy_nquick_sh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ants_registration_sy_nquick_sh(...)`.
+ * Output object returned when calling `AntsRegistrationSyNquickShParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function ants_registration_sy_nquick_sh_params(
     moving_image: InputPathType,
     output_prefix: string,
     transform_type: "s" | "b" | null = null,
-): AntsRegistrationSyNquickShParameters {
+): AntsRegistrationSyNquickShParametersTagged {
     const params = {
-        "@type": "ants.antsRegistrationSyNQuick.sh" as const,
+        "@type": "ants/antsRegistrationSyNQuick.sh" as const,
         "dimensionality": dimensionality,
         "fixed_image": fixed_image,
         "moving_image": moving_image,
@@ -238,7 +205,6 @@ function ants_registration_sy_nquick_sh(
 export {
       ANTS_REGISTRATION_SY_NQUICK_SH_METADATA,
       AntsRegistrationSyNquickShOutputs,
-      AntsRegistrationSyNquickShParameters,
       ants_registration_sy_nquick_sh,
       ants_registration_sy_nquick_sh_execute,
       ants_registration_sy_nquick_sh_params,

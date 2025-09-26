@@ -12,7 +12,7 @@ const V_3DMAXIMA_METADATA: Metadata = {
 
 
 interface V3dmaximaParameters {
-    "@type": "afni.3dmaxima";
+    "@type"?: "afni/3dmaxima";
     "input_dataset": InputPathType;
     "output_prefix"?: string | null | undefined;
     "threshold"?: number | null | undefined;
@@ -34,44 +34,11 @@ interface V3dmaximaParameters {
     "hist_flag": boolean;
     "ver_flag": boolean;
 }
+type V3dmaximaParametersTagged = Required<Pick<V3dmaximaParameters, '@type'>> & V3dmaximaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dmaxima": v_3dmaxima_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dmaxima": v_3dmaxima_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dmaxima(...)`.
+ * Output object returned when calling `V3dmaximaParameters(...)`.
  *
  * @interface
  */
@@ -138,9 +105,9 @@ function v_3dmaxima_params(
     help_flag: boolean = false,
     hist_flag: boolean = false,
     ver_flag: boolean = false,
-): V3dmaximaParameters {
+): V3dmaximaParametersTagged {
     const params = {
-        "@type": "afni.3dmaxima" as const,
+        "@type": "afni/3dmaxima" as const,
         "input_dataset": input_dataset,
         "input_flag": input_flag,
         "spheres_1_flag": spheres_1_flag,
@@ -215,37 +182,37 @@ function v_3dmaxima_cargs(
             String((params["out_rad"] ?? null))
         );
     }
-    if ((params["input_flag"] ?? null)) {
+    if ((params["input_flag"] ?? false)) {
         cargs.push("-input");
     }
-    if ((params["spheres_1_flag"] ?? null)) {
+    if ((params["spheres_1_flag"] ?? false)) {
         cargs.push("-spheres_1");
     }
-    if ((params["spheres_1toN_flag"] ?? null)) {
+    if ((params["spheres_1toN_flag"] ?? false)) {
         cargs.push("-spheres_1toN");
     }
-    if ((params["spheres_Nto1_flag"] ?? null)) {
+    if ((params["spheres_Nto1_flag"] ?? false)) {
         cargs.push("-spheres_Nto1");
     }
-    if ((params["neg_ext_flag"] ?? null)) {
+    if ((params["neg_ext_flag"] ?? false)) {
         cargs.push("-neg_ext");
     }
-    if ((params["true_max_flag"] ?? null)) {
+    if ((params["true_max_flag"] ?? false)) {
         cargs.push("-true_max");
     }
-    if ((params["dset_coords_flag"] ?? null)) {
+    if ((params["dset_coords_flag"] ?? false)) {
         cargs.push("-dset_coords");
     }
-    if ((params["no_text_flag"] ?? null)) {
+    if ((params["no_text_flag"] ?? false)) {
         cargs.push("-no_text");
     }
-    if ((params["coords_only_flag"] ?? null)) {
+    if ((params["coords_only_flag"] ?? false)) {
         cargs.push("-coords_only");
     }
-    if ((params["n_style_sort_flag"] ?? null)) {
+    if ((params["n_style_sort_flag"] ?? false)) {
         cargs.push("-n_style_sort");
     }
-    if ((params["n_style_weight_ave_flag"] ?? null)) {
+    if ((params["n_style_weight_ave_flag"] ?? false)) {
         cargs.push("-n_style_weight_ave");
     }
     if ((params["debug_level"] ?? null) !== null) {
@@ -254,13 +221,13 @@ function v_3dmaxima_cargs(
             String((params["debug_level"] ?? null))
         );
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["hist_flag"] ?? null)) {
+    if ((params["hist_flag"] ?? false)) {
         cargs.push("-hist");
     }
-    if ((params["ver_flag"] ?? null)) {
+    if ((params["ver_flag"] ?? false)) {
         cargs.push("-ver");
     }
     return cargs;
@@ -379,7 +346,6 @@ function v_3dmaxima(
 
 export {
       V3dmaximaOutputs,
-      V3dmaximaParameters,
       V_3DMAXIMA_METADATA,
       v_3dmaxima,
       v_3dmaxima_execute,

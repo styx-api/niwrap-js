@@ -12,7 +12,7 @@ const V__SUMA_MAKE_SPEC_CARET_METADATA: Metadata = {
 
 
 interface VSumaMakeSpecCaretParameters {
-    "@type": "afni.@SUMA_Make_Spec_Caret";
+    "@type"?: "afni/@SUMA_Make_Spec_Caret";
     "subject_id": string;
     "help": boolean;
     "debug"?: number | null | undefined;
@@ -20,44 +20,11 @@ interface VSumaMakeSpecCaretParameters {
     "surface_path"?: string | null | undefined;
     "side_labels_style"?: number | null | undefined;
 }
+type VSumaMakeSpecCaretParametersTagged = Required<Pick<VSumaMakeSpecCaretParameters, '@type'>> & VSumaMakeSpecCaretParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@SUMA_Make_Spec_Caret": v__suma_make_spec_caret_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@SUMA_Make_Spec_Caret": v__suma_make_spec_caret_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__suma_make_spec_caret(...)`.
+ * Output object returned when calling `VSumaMakeSpecCaretParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +63,9 @@ function v__suma_make_spec_caret_params(
     echo: boolean = false,
     surface_path: string | null = null,
     side_labels_style: number | null = null,
-): VSumaMakeSpecCaretParameters {
+): VSumaMakeSpecCaretParametersTagged {
     const params = {
-        "@type": "afni.@SUMA_Make_Spec_Caret" as const,
+        "@type": "afni/@SUMA_Make_Spec_Caret" as const,
         "subject_id": subject_id,
         "help": help,
         "echo": echo,
@@ -134,7 +101,7 @@ function v__suma_make_spec_caret_cargs(
         "-sid",
         (params["subject_id"] ?? null)
     );
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     if ((params["debug"] ?? null) !== null) {
@@ -143,7 +110,7 @@ function v__suma_make_spec_caret_cargs(
             String((params["debug"] ?? null))
         );
     }
-    if ((params["echo"] ?? null)) {
+    if ((params["echo"] ?? false)) {
         cargs.push("-echo");
     }
     if ((params["surface_path"] ?? null) !== null) {
@@ -246,7 +213,6 @@ function v__suma_make_spec_caret(
 
 export {
       VSumaMakeSpecCaretOutputs,
-      VSumaMakeSpecCaretParameters,
       V__SUMA_MAKE_SPEC_CARET_METADATA,
       v__suma_make_spec_caret,
       v__suma_make_spec_caret_execute,

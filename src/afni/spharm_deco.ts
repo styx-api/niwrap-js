@@ -12,7 +12,7 @@ const SPHARM_DECO_METADATA: Metadata = {
 
 
 interface SpharmDecoParameters {
-    "@type": "afni.SpharmDeco";
+    "@type"?: "afni/SpharmDeco";
     "i_type_s": InputPathType;
     "unit_sph_label": string;
     "order_l": number;
@@ -24,44 +24,11 @@ interface SpharmDecoParameters {
     "debug"?: number | null | undefined;
     "sigma"?: number | null | undefined;
 }
+type SpharmDecoParametersTagged = Required<Pick<SpharmDecoParameters, '@type'>> & SpharmDecoParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.SpharmDeco": spharm_deco_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.SpharmDeco": spharm_deco_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `spharm_deco(...)`.
+ * Output object returned when calling `SpharmDecoParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function spharm_deco_params(
     o_type_sdr: Array<InputPathType> | null = null,
     debug: number | null = null,
     sigma: number | null = null,
-): SpharmDecoParameters {
+): SpharmDecoParametersTagged {
     const params = {
-        "@type": "afni.SpharmDeco" as const,
+        "@type": "afni/SpharmDeco" as const,
         "i_type_s": i_type_s,
         "unit_sph_label": unit_sph_label,
         "order_l": order_l,
@@ -276,7 +243,6 @@ function spharm_deco(
 export {
       SPHARM_DECO_METADATA,
       SpharmDecoOutputs,
-      SpharmDecoParameters,
       spharm_deco,
       spharm_deco_execute,
       spharm_deco_params,

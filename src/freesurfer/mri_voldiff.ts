@@ -12,7 +12,7 @@ const MRI_VOLDIFF_METADATA: Metadata = {
 
 
 interface MriVoldiffParameters {
-    "@type": "freesurfer.mri_voldiff";
+    "@type"?: "freesurfer/mri_voldiff";
     "volume1": InputPathType;
     "volume2": InputPathType;
     "vox2ras_thresh"?: number | null | undefined;
@@ -23,43 +23,11 @@ interface MriVoldiffParameters {
     "debug": boolean;
     "checkopts": boolean;
 }
+type MriVoldiffParametersTagged = Required<Pick<MriVoldiffParameters, '@type'>> & MriVoldiffParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_voldiff": mri_voldiff_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_voldiff(...)`.
+ * Output object returned when calling `MriVoldiffParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +64,9 @@ function mri_voldiff_params(
     allow_vox2ras: boolean = false,
     debug: boolean = false,
     checkopts: boolean = false,
-): MriVoldiffParameters {
+): MriVoldiffParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_voldiff" as const,
+        "@type": "freesurfer/mri_voldiff" as const,
         "volume1": volume1,
         "volume2": volume2,
         "allow_precision": allow_precision,
@@ -151,19 +119,19 @@ function mri_voldiff_cargs(
             String((params["pix_thresh"] ?? null))
         );
     }
-    if ((params["allow_precision"] ?? null)) {
+    if ((params["allow_precision"] ?? false)) {
         cargs.push("--allow-prec");
     }
-    if ((params["allow_resolution"] ?? null)) {
+    if ((params["allow_resolution"] ?? false)) {
         cargs.push("--allow-res");
     }
-    if ((params["allow_vox2ras"] ?? null)) {
+    if ((params["allow_vox2ras"] ?? false)) {
         cargs.push("--allow-vox2ras");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["checkopts"] ?? null)) {
+    if ((params["checkopts"] ?? false)) {
         cargs.push("--checkopts");
     }
     return cargs;
@@ -259,7 +227,6 @@ function mri_voldiff(
 export {
       MRI_VOLDIFF_METADATA,
       MriVoldiffOutputs,
-      MriVoldiffParameters,
       mri_voldiff,
       mri_voldiff_execute,
       mri_voldiff_params,

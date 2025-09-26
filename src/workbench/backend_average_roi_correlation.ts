@@ -12,47 +12,15 @@ const BACKEND_AVERAGE_ROI_CORRELATION_METADATA: Metadata = {
 
 
 interface BackendAverageRoiCorrelationParameters {
-    "@type": "workbench.backend-average-roi-correlation";
+    "@type"?: "workbench/backend-average-roi-correlation";
     "index_list": string;
     "out_file": string;
 }
+type BackendAverageRoiCorrelationParametersTagged = Required<Pick<BackendAverageRoiCorrelationParameters, '@type'>> & BackendAverageRoiCorrelationParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.backend-average-roi-correlation": backend_average_roi_correlation_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `backend_average_roi_correlation(...)`.
+ * Output object returned when calling `BackendAverageRoiCorrelationParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface BackendAverageRoiCorrelationOutputs {
 function backend_average_roi_correlation_params(
     index_list: string,
     out_file: string,
-): BackendAverageRoiCorrelationParameters {
+): BackendAverageRoiCorrelationParametersTagged {
     const params = {
-        "@type": "workbench.backend-average-roi-correlation" as const,
+        "@type": "workbench/backend-average-roi-correlation" as const,
         "index_list": index_list,
         "out_file": out_file,
     };
@@ -185,7 +153,6 @@ function backend_average_roi_correlation(
 export {
       BACKEND_AVERAGE_ROI_CORRELATION_METADATA,
       BackendAverageRoiCorrelationOutputs,
-      BackendAverageRoiCorrelationParameters,
       backend_average_roi_correlation,
       backend_average_roi_correlation_execute,
       backend_average_roi_correlation_params,

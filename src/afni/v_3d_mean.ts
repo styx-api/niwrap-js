@@ -12,7 +12,7 @@ const V_3D_MEAN_METADATA: Metadata = {
 
 
 interface V3dMeanParameters {
-    "@type": "afni.3dMean";
+    "@type"?: "afni/3dMean";
     "input_files": Array<InputPathType>;
     "verbose": boolean;
     "prefix"?: string | null | undefined;
@@ -33,44 +33,11 @@ interface V3dMeanParameters {
     "mask_union": boolean;
     "weightset"?: InputPathType | null | undefined;
 }
+type V3dMeanParametersTagged = Required<Pick<V3dMeanParameters, '@type'>> & V3dMeanParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dMean": v_3d_mean_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dMean": v_3d_mean_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_mean(...)`.
+ * Output object returned when calling `V3dMeanParameters(...)`.
  *
  * @interface
  */
@@ -131,9 +98,9 @@ function v_3d_mean_params(
     mask_inter: boolean = false,
     mask_union: boolean = false,
     weightset: InputPathType | null = null,
-): V3dMeanParameters {
+): V3dMeanParametersTagged {
     const params = {
-        "@type": "afni.3dMean" as const,
+        "@type": "afni/3dMean" as const,
         "input_files": input_files,
         "verbose": verbose,
         "fscale": fscale,
@@ -179,7 +146,7 @@ function v_3d_mean_cargs(
     const cargs: string[] = [];
     cargs.push("3dMean");
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verbose");
     }
     if ((params["prefix"] ?? null) !== null) {
@@ -194,46 +161,46 @@ function v_3d_mean_cargs(
             (params["datum"] ?? null)
         );
     }
-    if ((params["fscale"] ?? null)) {
+    if ((params["fscale"] ?? false)) {
         cargs.push("-fscale");
     }
-    if ((params["gscale"] ?? null)) {
+    if ((params["gscale"] ?? false)) {
         cargs.push("-gscale");
     }
-    if ((params["nscale"] ?? null)) {
+    if ((params["nscale"] ?? false)) {
         cargs.push("-nscale");
     }
-    if ((params["non_zero"] ?? null)) {
+    if ((params["non_zero"] ?? false)) {
         cargs.push("-non_zero");
     }
-    if ((params["stdev"] ?? null)) {
+    if ((params["stdev"] ?? false)) {
         cargs.push("-sd");
     }
-    if ((params["sqr"] ?? null)) {
+    if ((params["sqr"] ?? false)) {
         cargs.push("-sqr");
     }
-    if ((params["sum"] ?? null)) {
+    if ((params["sum"] ?? false)) {
         cargs.push("-sum");
     }
-    if ((params["count"] ?? null)) {
+    if ((params["count"] ?? false)) {
         cargs.push("-count");
     }
-    if ((params["max"] ?? null)) {
+    if ((params["max"] ?? false)) {
         cargs.push("-max");
     }
-    if ((params["min"] ?? null)) {
+    if ((params["min"] ?? false)) {
         cargs.push("-min");
     }
-    if ((params["absmax"] ?? null)) {
+    if ((params["absmax"] ?? false)) {
         cargs.push("-absmax");
     }
-    if ((params["signed_absmax"] ?? null)) {
+    if ((params["signed_absmax"] ?? false)) {
         cargs.push("-signed_absmax");
     }
-    if ((params["mask_inter"] ?? null)) {
+    if ((params["mask_inter"] ?? false)) {
         cargs.push("-mask_inter");
     }
-    if ((params["mask_union"] ?? null)) {
+    if ((params["mask_union"] ?? false)) {
         cargs.push("-mask_union");
     }
     if ((params["weightset"] ?? null) !== null) {
@@ -355,7 +322,6 @@ function v_3d_mean(
 
 export {
       V3dMeanOutputs,
-      V3dMeanParameters,
       V_3D_MEAN_METADATA,
       v_3d_mean,
       v_3d_mean_execute,

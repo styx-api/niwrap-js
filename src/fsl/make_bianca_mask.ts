@@ -12,7 +12,7 @@ const MAKE_BIANCA_MASK_METADATA: Metadata = {
 
 
 interface MakeBiancaMaskParameters {
-    "@type": "fsl.make_bianca_mask";
+    "@type"?: "fsl/make_bianca_mask";
     "input_image": InputPathType;
     "output_image": string;
     "overlay_flag": boolean;
@@ -35,44 +35,11 @@ interface MakeBiancaMaskParameters {
     "verbose_flag": boolean;
     "debug_flag": boolean;
 }
+type MakeBiancaMaskParametersTagged = Required<Pick<MakeBiancaMaskParameters, '@type'>> & MakeBiancaMaskParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.make_bianca_mask": make_bianca_mask_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.make_bianca_mask": make_bianca_mask_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `make_bianca_mask(...)`.
+ * Output object returned when calling `MakeBiancaMaskParameters(...)`.
  *
  * @interface
  */
@@ -137,9 +104,9 @@ function make_bianca_mask_params(
     additional_surfaces_t2: InputPathType | null = null,
     verbose_flag: boolean = false,
     debug_flag: boolean = false,
-): MakeBiancaMaskParameters {
+): MakeBiancaMaskParametersTagged {
     const params = {
-        "@type": "fsl.make_bianca_mask" as const,
+        "@type": "fsl/make_bianca_mask" as const,
         "input_image": input_image,
         "output_image": output_image,
         "overlay_flag": overlay_flag,
@@ -192,16 +159,16 @@ function make_bianca_mask_cargs(
     cargs.push("make_bianca_mask");
     cargs.push(execution.inputFile((params["input_image"] ?? null)));
     cargs.push((params["output_image"] ?? null));
-    if ((params["overlay_flag"] ?? null)) {
+    if ((params["overlay_flag"] ?? false)) {
         cargs.push("-o");
     }
-    if ((params["binary_mask_flag"] ?? null)) {
+    if ((params["binary_mask_flag"] ?? false)) {
         cargs.push("-m");
     }
-    if ((params["approx_skull_flag"] ?? null)) {
+    if ((params["approx_skull_flag"] ?? false)) {
         cargs.push("-s");
     }
-    if ((params["no_seg_output_flag"] ?? null)) {
+    if ((params["no_seg_output_flag"] ?? false)) {
         cargs.push("-n");
     }
     if ((params["fractional_intensity"] ?? null) !== null) {
@@ -228,28 +195,28 @@ function make_bianca_mask_cargs(
             (params["center_of_gravity"] ?? null)
         );
     }
-    if ((params["thresholding_flag"] ?? null)) {
+    if ((params["thresholding_flag"] ?? false)) {
         cargs.push("-t");
     }
-    if ((params["vtk_mesh"] ?? null)) {
+    if ((params["vtk_mesh"] ?? false)) {
         cargs.push("-e");
     }
-    if ((params["robust_iters_flag"] ?? null)) {
+    if ((params["robust_iters_flag"] ?? false)) {
         cargs.push("-R");
     }
-    if ((params["residual_optic_cleanup_flag"] ?? null)) {
+    if ((params["residual_optic_cleanup_flag"] ?? false)) {
         cargs.push("-S");
     }
-    if ((params["reduce_bias_flag"] ?? null)) {
+    if ((params["reduce_bias_flag"] ?? false)) {
         cargs.push("-B");
     }
-    if ((params["slice_padding_flag"] ?? null)) {
+    if ((params["slice_padding_flag"] ?? false)) {
         cargs.push("-Z");
     }
-    if ((params["whole_set_mask_flag"] ?? null)) {
+    if ((params["whole_set_mask_flag"] ?? false)) {
         cargs.push("-F");
     }
-    if ((params["additional_surfaces_flag"] ?? null)) {
+    if ((params["additional_surfaces_flag"] ?? false)) {
         cargs.push("-A");
     }
     if ((params["additional_surfaces_t2"] ?? null) !== null) {
@@ -258,10 +225,10 @@ function make_bianca_mask_cargs(
             execution.inputFile((params["additional_surfaces_t2"] ?? null))
         );
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("-d");
     }
     return cargs;
@@ -382,7 +349,6 @@ function make_bianca_mask(
 export {
       MAKE_BIANCA_MASK_METADATA,
       MakeBiancaMaskOutputs,
-      MakeBiancaMaskParameters,
       make_bianca_mask,
       make_bianca_mask_execute,
       make_bianca_mask_params,

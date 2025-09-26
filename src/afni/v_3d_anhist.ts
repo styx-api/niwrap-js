@@ -12,7 +12,7 @@ const V_3D_ANHIST_METADATA: Metadata = {
 
 
 interface V3dAnhistParameters {
-    "@type": "afni.3dAnhist";
+    "@type"?: "afni/3dAnhist";
     "dataset": InputPathType;
     "quiet": boolean;
     "dump_histogram": boolean;
@@ -22,44 +22,11 @@ interface V3dAnhistParameters {
     "label"?: string | null | undefined;
     "filename"?: string | null | undefined;
 }
+type V3dAnhistParametersTagged = Required<Pick<V3dAnhistParameters, '@type'>> & V3dAnhistParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dAnhist": v_3d_anhist_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dAnhist": v_3d_anhist_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_anhist(...)`.
+ * Output object returned when calling `V3dAnhistParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +69,9 @@ function v_3d_anhist_params(
     top_2peaks: boolean = false,
     label: string | null = null,
     filename: string | null = null,
-): V3dAnhistParameters {
+): V3dAnhistParametersTagged {
     const params = {
-        "@type": "afni.3dAnhist" as const,
+        "@type": "afni/3dAnhist" as const,
         "dataset": dataset,
         "quiet": quiet,
         "dump_histogram": dump_histogram,
@@ -139,13 +106,13 @@ function v_3d_anhist_cargs(
     const cargs: string[] = [];
     cargs.push("3dAnhist");
     cargs.push(execution.inputFile((params["dataset"] ?? null)));
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-q");
     }
-    if ((params["dump_histogram"] ?? null)) {
+    if ((params["dump_histogram"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["no_scurve"] ?? null)) {
+    if ((params["no_scurve"] ?? false)) {
         cargs.push("-F");
     }
     if ((params["winsorize"] ?? null) !== null) {
@@ -154,7 +121,7 @@ function v_3d_anhist_cargs(
             (params["winsorize"] ?? null)
         );
     }
-    if ((params["top_2peaks"] ?? null)) {
+    if ((params["top_2peaks"] ?? false)) {
         cargs.push("-2");
     }
     if ((params["label"] ?? null) !== null) {
@@ -261,7 +228,6 @@ function v_3d_anhist(
 
 export {
       V3dAnhistOutputs,
-      V3dAnhistParameters,
       V_3D_ANHIST_METADATA,
       v_3d_anhist,
       v_3d_anhist_execute,

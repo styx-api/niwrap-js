@@ -12,7 +12,7 @@ const QDELAUNAY_METADATA: Metadata = {
 
 
 interface QdelaunayParameters {
-    "@type": "afni.qdelaunay";
+    "@type"?: "afni/qdelaunay";
     "input_file": InputPathType;
     "furthest_site": boolean;
     "triangulated_output": boolean;
@@ -47,43 +47,11 @@ interface QdelaunayParameters {
     "point_coordinates": boolean;
     "summary": boolean;
 }
+type QdelaunayParametersTagged = Required<Pick<QdelaunayParameters, '@type'>> & QdelaunayParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.qdelaunay": qdelaunay_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `qdelaunay(...)`.
+ * Output object returned when calling `QdelaunayParameters(...)`.
  *
  * @interface
  */
@@ -168,9 +136,9 @@ function qdelaunay_params(
     off_format: boolean = false,
     point_coordinates: boolean = false,
     summary: boolean = false,
-): QdelaunayParameters {
+): QdelaunayParametersTagged {
     const params = {
-        "@type": "afni.qdelaunay" as const,
+        "@type": "afni/qdelaunay" as const,
         "input_file": input_file,
         "furthest_site": furthest_site,
         "triangulated_output": triangulated_output,
@@ -256,13 +224,13 @@ function qdelaunay_cargs(
     const cargs: string[] = [];
     cargs.push("qdelaunay");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
-    if ((params["furthest_site"] ?? null)) {
+    if ((params["furthest_site"] ?? false)) {
         cargs.push("Qu");
     }
-    if ((params["triangulated_output"] ?? null)) {
+    if ((params["triangulated_output"] ?? false)) {
         cargs.push("Qt");
     }
-    if ((params["joggled_input"] ?? null)) {
+    if ((params["joggled_input"] ?? false)) {
         cargs.push("QJ");
     }
     if ((params["joggle_range"] ?? null) !== null) {
@@ -271,10 +239,10 @@ function qdelaunay_cargs(
             String((params["joggle_range"] ?? null))
         );
     }
-    if ((params["search_simplex"] ?? null)) {
+    if ((params["search_simplex"] ?? false)) {
         cargs.push("Qs");
     }
-    if ((params["point_infinity"] ?? null)) {
+    if ((params["point_infinity"] ?? false)) {
         cargs.push("Qz");
     }
     if ((params["delaunay_visible"] ?? null) !== null) {
@@ -295,16 +263,16 @@ function qdelaunay_cargs(
             String((params["trace_level"] ?? null))
         );
     }
-    if ((params["check"] ?? null)) {
+    if ((params["check"] ?? false)) {
         cargs.push("Tc");
     }
-    if ((params["statistics"] ?? null)) {
+    if ((params["statistics"] ?? false)) {
         cargs.push("Ts");
     }
-    if ((params["verify"] ?? null)) {
+    if ((params["verify"] ?? false)) {
         cargs.push("Tv");
     }
-    if ((params["output_stdout"] ?? null)) {
+    if ((params["output_stdout"] ?? false)) {
         cargs.push("Tz");
     }
     if ((params["facets_summary"] ?? null) !== null) {
@@ -379,25 +347,25 @@ function qdelaunay_cargs(
             String((params["min_facet_width"] ?? null))
         );
     }
-    if ((params["facet_dump"] ?? null)) {
+    if ((params["facet_dump"] ?? false)) {
         cargs.push("f");
     }
-    if ((params["geomview"] ?? null)) {
+    if ((params["geomview"] ?? false)) {
         cargs.push("G");
     }
-    if ((params["vertices_incident"] ?? null)) {
+    if ((params["vertices_incident"] ?? false)) {
         cargs.push("i");
     }
-    if ((params["mathematica"] ?? null)) {
+    if ((params["mathematica"] ?? false)) {
         cargs.push("m");
     }
-    if ((params["off_format"] ?? null)) {
+    if ((params["off_format"] ?? false)) {
         cargs.push("o");
     }
-    if ((params["point_coordinates"] ?? null)) {
+    if ((params["point_coordinates"] ?? false)) {
         cargs.push("p");
     }
-    if ((params["summary"] ?? null)) {
+    if ((params["summary"] ?? false)) {
         cargs.push("s");
     }
     return cargs;
@@ -541,7 +509,6 @@ function qdelaunay(
 export {
       QDELAUNAY_METADATA,
       QdelaunayOutputs,
-      QdelaunayParameters,
       qdelaunay,
       qdelaunay_execute,
       qdelaunay_params,

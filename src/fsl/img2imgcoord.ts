@@ -12,7 +12,7 @@ const IMG2IMGCOORD_METADATA: Metadata = {
 
 
 interface Img2imgcoordParameters {
-    "@type": "fsl.img2imgcoord";
+    "@type"?: "fsl/img2imgcoord";
     "coordinates_file": string;
     "source_image": InputPathType;
     "dest_image": InputPathType;
@@ -24,43 +24,11 @@ interface Img2imgcoordParameters {
     "verbose": boolean;
     "help": boolean;
 }
+type Img2imgcoordParametersTagged = Required<Pick<Img2imgcoordParameters, '@type'>> & Img2imgcoordParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.img2imgcoord": img2imgcoord_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `img2imgcoord(...)`.
+ * Output object returned when calling `Img2imgcoordParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +67,9 @@ function img2imgcoord_params(
     coords_in_mm: boolean = false,
     verbose: boolean = false,
     help: boolean = false,
-): Img2imgcoordParameters {
+): Img2imgcoordParametersTagged {
     const params = {
-        "@type": "fsl.img2imgcoord" as const,
+        "@type": "fsl/img2imgcoord" as const,
         "coordinates_file": coordinates_file,
         "source_image": source_image,
         "dest_image": dest_image,
@@ -160,16 +128,16 @@ function img2imgcoord_cargs(
             execution.inputFile((params["pre_warp_affine"] ?? null))
         );
     }
-    if ((params["coords_in_voxels"] ?? null)) {
+    if ((params["coords_in_voxels"] ?? false)) {
         cargs.push("-vox");
     }
-    if ((params["coords_in_mm"] ?? null)) {
+    if ((params["coords_in_mm"] ?? false)) {
         cargs.push("-mm");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -267,7 +235,6 @@ function img2imgcoord(
 export {
       IMG2IMGCOORD_METADATA,
       Img2imgcoordOutputs,
-      Img2imgcoordParameters,
       img2imgcoord,
       img2imgcoord_execute,
       img2imgcoord_params,

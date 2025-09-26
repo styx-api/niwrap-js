@@ -12,49 +12,17 @@ const GET_AFNI_MODEL_PRF_METADATA: Metadata = {
 
 
 interface GetAfniModelPrfParameters {
-    "@type": "afni.get_afni_model_PRF";
+    "@type"?: "afni/get_afni_model_PRF";
     "amplitude": number;
     "x_coord": number;
     "y_coord": number;
     "sigma": number;
 }
+type GetAfniModelPrfParametersTagged = Required<Pick<GetAfniModelPrfParameters, '@type'>> & GetAfniModelPrfParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.get_afni_model_PRF": get_afni_model_prf_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `get_afni_model_prf(...)`.
+ * Output object returned when calling `GetAfniModelPrfParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function get_afni_model_prf_params(
     x_coord: number,
     y_coord: number,
     sigma: number,
-): GetAfniModelPrfParameters {
+): GetAfniModelPrfParametersTagged {
     const params = {
-        "@type": "afni.get_afni_model_PRF" as const,
+        "@type": "afni/get_afni_model_PRF" as const,
         "amplitude": amplitude,
         "x_coord": x_coord,
         "y_coord": y_coord,
@@ -194,7 +162,6 @@ function get_afni_model_prf(
 export {
       GET_AFNI_MODEL_PRF_METADATA,
       GetAfniModelPrfOutputs,
-      GetAfniModelPrfParameters,
       get_afni_model_prf,
       get_afni_model_prf_execute,
       get_afni_model_prf_params,

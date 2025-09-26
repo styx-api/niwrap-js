@@ -12,49 +12,16 @@ const MRI_EDIT_SEGMENTATION_METADATA: Metadata = {
 
 
 interface MriEditSegmentationParameters {
-    "@type": "freesurfer.mri_edit_segmentation";
+    "@type"?: "freesurfer/mri_edit_segmentation";
     "input_segmentation": InputPathType;
     "t1_volume": InputPathType;
     "output_segmentation": string;
 }
+type MriEditSegmentationParametersTagged = Required<Pick<MriEditSegmentationParameters, '@type'>> & MriEditSegmentationParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_edit_segmentation": mri_edit_segmentation_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_edit_segmentation": mri_edit_segmentation_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_edit_segmentation(...)`.
+ * Output object returned when calling `MriEditSegmentationParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mri_edit_segmentation_params(
     input_segmentation: InputPathType,
     t1_volume: InputPathType,
     output_segmentation: string,
-): MriEditSegmentationParameters {
+): MriEditSegmentationParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_edit_segmentation" as const,
+        "@type": "freesurfer/mri_edit_segmentation" as const,
         "input_segmentation": input_segmentation,
         "t1_volume": t1_volume,
         "output_segmentation": output_segmentation,
@@ -193,7 +160,6 @@ function mri_edit_segmentation(
 export {
       MRI_EDIT_SEGMENTATION_METADATA,
       MriEditSegmentationOutputs,
-      MriEditSegmentationParameters,
       mri_edit_segmentation,
       mri_edit_segmentation_execute,
       mri_edit_segmentation_params,

@@ -12,48 +12,15 @@ const SEGMENT_SUBJECT_T1_AUTO_ESTIMATE_ALVEUS_ML_METADATA: Metadata = {
 
 
 interface SegmentSubjectT1AutoEstimateAlveusMlParameters {
-    "@type": "freesurfer.segmentSubjectT1_autoEstimateAlveusML";
+    "@type"?: "freesurfer/segmentSubjectT1_autoEstimateAlveusML";
     "t1_file": InputPathType;
     "output_folder": string;
 }
+type SegmentSubjectT1AutoEstimateAlveusMlParametersTagged = Required<Pick<SegmentSubjectT1AutoEstimateAlveusMlParameters, '@type'>> & SegmentSubjectT1AutoEstimateAlveusMlParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.segmentSubjectT1_autoEstimateAlveusML": segment_subject_t1_auto_estimate_alveus_ml_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.segmentSubjectT1_autoEstimateAlveusML": segment_subject_t1_auto_estimate_alveus_ml_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `segment_subject_t1_auto_estimate_alveus_ml(...)`.
+ * Output object returned when calling `SegmentSubjectT1AutoEstimateAlveusMlParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface SegmentSubjectT1AutoEstimateAlveusMlOutputs {
 function segment_subject_t1_auto_estimate_alveus_ml_params(
     t1_file: InputPathType,
     output_folder: string,
-): SegmentSubjectT1AutoEstimateAlveusMlParameters {
+): SegmentSubjectT1AutoEstimateAlveusMlParametersTagged {
     const params = {
-        "@type": "freesurfer.segmentSubjectT1_autoEstimateAlveusML" as const,
+        "@type": "freesurfer/segmentSubjectT1_autoEstimateAlveusML" as const,
         "t1_file": t1_file,
         "output_folder": output_folder,
     };
@@ -186,7 +153,6 @@ function segment_subject_t1_auto_estimate_alveus_ml(
 export {
       SEGMENT_SUBJECT_T1_AUTO_ESTIMATE_ALVEUS_ML_METADATA,
       SegmentSubjectT1AutoEstimateAlveusMlOutputs,
-      SegmentSubjectT1AutoEstimateAlveusMlParameters,
       segment_subject_t1_auto_estimate_alveus_ml,
       segment_subject_t1_auto_estimate_alveus_ml_execute,
       segment_subject_t1_auto_estimate_alveus_ml_params,

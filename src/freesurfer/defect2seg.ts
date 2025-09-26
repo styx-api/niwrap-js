@@ -12,7 +12,7 @@ const DEFECT2SEG_METADATA: Metadata = {
 
 
 interface Defect2segParameters {
-    "@type": "freesurfer.defect2seg";
+    "@type"?: "freesurfer/defect2seg";
     "output_seg": string;
     "template": InputPathType;
     "left_hemisphere"?: Array<string> | null | undefined;
@@ -23,44 +23,11 @@ interface Defect2segParameters {
     "cortex": boolean;
     "no_cortex": boolean;
 }
+type Defect2segParametersTagged = Required<Pick<Defect2segParameters, '@type'>> & Defect2segParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.defect2seg": defect2seg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.defect2seg": defect2seg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `defect2seg(...)`.
+ * Output object returned when calling `Defect2segParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function defect2seg_params(
     rh_only: boolean = false,
     cortex: boolean = false,
     no_cortex: boolean = false,
-): Defect2segParameters {
+): Defect2segParametersTagged {
     const params = {
-        "@type": "freesurfer.defect2seg" as const,
+        "@type": "freesurfer/defect2seg" as const,
         "output_seg": output_seg,
         "template": template,
         "lh_only": lh_only,
@@ -164,16 +131,16 @@ function defect2seg_cargs(
             (params["subject"] ?? null)
         );
     }
-    if ((params["lh_only"] ?? null)) {
+    if ((params["lh_only"] ?? false)) {
         cargs.push("--lh-only");
     }
-    if ((params["rh_only"] ?? null)) {
+    if ((params["rh_only"] ?? false)) {
         cargs.push("--rh-only");
     }
-    if ((params["cortex"] ?? null)) {
+    if ((params["cortex"] ?? false)) {
         cargs.push("--cortex");
     }
-    if ((params["no_cortex"] ?? null)) {
+    if ((params["no_cortex"] ?? false)) {
         cargs.push("--no-cortex");
     }
     return cargs;
@@ -270,7 +237,6 @@ function defect2seg(
 export {
       DEFECT2SEG_METADATA,
       Defect2segOutputs,
-      Defect2segParameters,
       defect2seg,
       defect2seg_execute,
       defect2seg_params,

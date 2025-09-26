@@ -12,7 +12,7 @@ const FEAT2SEGSTATS_METADATA: Metadata = {
 
 
 interface Feat2segstatsParameters {
-    "@type": "freesurfer.feat2segstats";
+    "@type"?: "freesurfer/feat2segstats";
     "feat_dir": string;
     "featdirfile"?: InputPathType | null | undefined;
     "seg_vol"?: string | null | undefined;
@@ -34,44 +34,11 @@ interface Feat2segstatsParameters {
     "debug_flag": boolean;
     "nolog_flag": boolean;
 }
+type Feat2segstatsParametersTagged = Required<Pick<Feat2segstatsParameters, '@type'>> & Feat2segstatsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.feat2segstats": feat2segstats_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.feat2segstats": feat2segstats_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `feat2segstats(...)`.
+ * Output object returned when calling `Feat2segstatsParameters(...)`.
  *
  * @interface
  */
@@ -134,9 +101,9 @@ function feat2segstats_params(
     help_flag: boolean = false,
     debug_flag: boolean = false,
     nolog_flag: boolean = false,
-): Feat2segstatsParameters {
+): Feat2segstatsParametersTagged {
     const params = {
-        "@type": "freesurfer.feat2segstats" as const,
+        "@type": "freesurfer/feat2segstats" as const,
         "feat_dir": feat_dir,
         "aseg_flag": aseg_flag,
         "aparc_aseg_flag": aparc_aseg_flag,
@@ -206,10 +173,10 @@ function feat2segstats_cargs(
             (params["seg_vol"] ?? null)
         );
     }
-    if ((params["aseg_flag"] ?? null)) {
+    if ((params["aseg_flag"] ?? false)) {
         cargs.push("--aseg");
     }
-    if ((params["aparc_aseg_flag"] ?? null)) {
+    if ((params["aparc_aseg_flag"] ?? false)) {
         cargs.push("--aparc+aseg");
     }
     if ((params["ctab"] ?? null) !== null) {
@@ -218,19 +185,19 @@ function feat2segstats_cargs(
             execution.inputFile((params["ctab"] ?? null))
         );
     }
-    if ((params["all_segs_flag"] ?? null)) {
+    if ((params["all_segs_flag"] ?? false)) {
         cargs.push("--all-segs");
     }
-    if ((params["copes_flag"] ?? null)) {
+    if ((params["copes_flag"] ?? false)) {
         cargs.push("--copes");
     }
-    if ((params["varcopes_flag"] ?? null)) {
+    if ((params["varcopes_flag"] ?? false)) {
         cargs.push("--varcopes");
     }
-    if ((params["zstats_flag"] ?? null)) {
+    if ((params["zstats_flag"] ?? false)) {
         cargs.push("--zstats");
     }
-    if ((params["pes_flag"] ?? null)) {
+    if ((params["pes_flag"] ?? false)) {
         cargs.push("--pes");
     }
     if ((params["rvar"] ?? null) !== null) {
@@ -261,16 +228,16 @@ function feat2segstats_cargs(
         "--stat",
         (params["stat"] ?? null)
     );
-    if ((params["version_flag"] ?? null)) {
+    if ((params["version_flag"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["nolog_flag"] ?? null)) {
+    if ((params["nolog_flag"] ?? false)) {
         cargs.push("--nolog");
     }
     return cargs;
@@ -389,7 +356,6 @@ function feat2segstats(
 export {
       FEAT2SEGSTATS_METADATA,
       Feat2segstatsOutputs,
-      Feat2segstatsParameters,
       feat2segstats,
       feat2segstats_execute,
       feat2segstats_params,

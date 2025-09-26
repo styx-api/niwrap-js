@@ -12,7 +12,7 @@ const MRIS_AA_SHRINKWRAP_METADATA: Metadata = {
 
 
 interface MrisAaShrinkwrapParameters {
-    "@type": "freesurfer.mris_AA_shrinkwrap";
+    "@type"?: "freesurfer/mris_AA_shrinkwrap";
     "t1_vol": InputPathType;
     "pd_vol": InputPathType;
     "output_dir": string;
@@ -21,43 +21,11 @@ interface MrisAaShrinkwrapParameters {
     "average_curvature"?: number | null | undefined;
     "white_only": boolean;
 }
+type MrisAaShrinkwrapParametersTagged = Required<Pick<MrisAaShrinkwrapParameters, '@type'>> & MrisAaShrinkwrapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_AA_shrinkwrap": mris_aa_shrinkwrap_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_aa_shrinkwrap(...)`.
+ * Output object returned when calling `MrisAaShrinkwrapParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +58,9 @@ function mris_aa_shrinkwrap_params(
     create_curvature_area: boolean = false,
     average_curvature: number | null = null,
     white_only: boolean = false,
-): MrisAaShrinkwrapParameters {
+): MrisAaShrinkwrapParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_AA_shrinkwrap" as const,
+        "@type": "freesurfer/mris_AA_shrinkwrap" as const,
         "t1_vol": t1_vol,
         "pd_vol": pd_vol,
         "output_dir": output_dir,
@@ -124,10 +92,10 @@ function mris_aa_shrinkwrap_cargs(
     cargs.push(execution.inputFile((params["t1_vol"] ?? null)));
     cargs.push(execution.inputFile((params["pd_vol"] ?? null)));
     cargs.push((params["output_dir"] ?? null));
-    if ((params["omit_self_intersection"] ?? null)) {
+    if ((params["omit_self_intersection"] ?? false)) {
         cargs.push("-q");
     }
-    if ((params["create_curvature_area"] ?? null)) {
+    if ((params["create_curvature_area"] ?? false)) {
         cargs.push("-c");
     }
     if ((params["average_curvature"] ?? null) !== null) {
@@ -136,7 +104,7 @@ function mris_aa_shrinkwrap_cargs(
             String((params["average_curvature"] ?? null))
         );
     }
-    if ((params["white_only"] ?? null)) {
+    if ((params["white_only"] ?? false)) {
         cargs.push("-whiteonly");
     }
     return cargs;
@@ -228,7 +196,6 @@ function mris_aa_shrinkwrap(
 export {
       MRIS_AA_SHRINKWRAP_METADATA,
       MrisAaShrinkwrapOutputs,
-      MrisAaShrinkwrapParameters,
       mris_aa_shrinkwrap,
       mris_aa_shrinkwrap_execute,
       mris_aa_shrinkwrap_params,

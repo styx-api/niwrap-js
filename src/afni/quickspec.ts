@@ -12,7 +12,7 @@ const QUICKSPEC_METADATA: Metadata = {
 
 
 interface QuickspecParameters {
-    "@type": "afni.quickspec";
+    "@type"?: "afni/quickspec";
     "tn": Array<string>;
     "tsn": Array<string>;
     "tsnad"?: Array<string> | null | undefined;
@@ -21,44 +21,11 @@ interface QuickspecParameters {
     "spec"?: string | null | undefined;
     "help": boolean;
 }
+type QuickspecParametersTagged = Required<Pick<QuickspecParameters, '@type'>> & QuickspecParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.quickspec": quickspec_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.quickspec": quickspec_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `quickspec(...)`.
+ * Output object returned when calling `QuickspecParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function quickspec_params(
     tsnadl: Array<string> | null = null,
     spec: string | null = null,
     help: boolean = false,
-): QuickspecParameters {
+): QuickspecParametersTagged {
     const params = {
-        "@type": "afni.quickspec" as const,
+        "@type": "afni/quickspec" as const,
         "tn": tn,
         "tsn": tsn,
         "help": help,
@@ -164,7 +131,7 @@ function quickspec_cargs(
             (params["spec"] ?? null)
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -257,7 +224,6 @@ function quickspec(
 export {
       QUICKSPEC_METADATA,
       QuickspecOutputs,
-      QuickspecParameters,
       quickspec,
       quickspec_execute,
       quickspec_params,

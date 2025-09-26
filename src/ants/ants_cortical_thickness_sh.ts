@@ -12,7 +12,7 @@ const ANTS_CORTICAL_THICKNESS_SH_METADATA: Metadata = {
 
 
 interface AntsCorticalThicknessShParameters {
-    "@type": "ants.antsCorticalThickness.sh";
+    "@type"?: "ants/antsCorticalThickness.sh";
     "image_dimension": 2 | 3;
     "anatomical_image": InputPathType;
     "brain_template": InputPathType;
@@ -39,44 +39,11 @@ interface AntsCorticalThicknessShParameters {
     "script_stage_to_run"?: number | null | undefined;
     "test_debug_mode"?: number | null | undefined;
 }
+type AntsCorticalThicknessShParametersTagged = Required<Pick<AntsCorticalThicknessShParameters, '@type'>> & AntsCorticalThicknessShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.antsCorticalThickness.sh": ants_cortical_thickness_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.antsCorticalThickness.sh": ants_cortical_thickness_sh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ants_cortical_thickness_sh(...)`.
+ * Output object returned when calling `AntsCorticalThicknessShParameters(...)`.
  *
  * @interface
  */
@@ -161,9 +128,9 @@ function ants_cortical_thickness_sh_params(
     atropos_iterations: number | null = null,
     script_stage_to_run: number | null = null,
     test_debug_mode: number | null = null,
-): AntsCorticalThicknessShParameters {
+): AntsCorticalThicknessShParametersTagged {
     const params = {
-        "@type": "ants.antsCorticalThickness.sh" as const,
+        "@type": "ants/antsCorticalThickness.sh" as const,
         "image_dimension": image_dimension,
         "anatomical_image": anatomical_image,
         "brain_template": brain_template,
@@ -513,7 +480,6 @@ function ants_cortical_thickness_sh(
 export {
       ANTS_CORTICAL_THICKNESS_SH_METADATA,
       AntsCorticalThicknessShOutputs,
-      AntsCorticalThicknessShParameters,
       ants_cortical_thickness_sh,
       ants_cortical_thickness_sh_execute,
       ants_cortical_thickness_sh_params,

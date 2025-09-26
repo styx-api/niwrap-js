@@ -12,7 +12,7 @@ const BAYCEST_METADATA: Metadata = {
 
 
 interface BaycestParameters {
-    "@type": "fsl.baycest";
+    "@type"?: "fsl/baycest";
     "data_file": InputPathType;
     "mask_file": InputPathType;
     "output_dir": string;
@@ -22,44 +22,11 @@ interface BaycestParameters {
     "spatial_flag": boolean;
     "t12prior_flag": boolean;
 }
+type BaycestParametersTagged = Required<Pick<BaycestParameters, '@type'>> & BaycestParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.baycest": baycest_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.baycest": baycest_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `baycest(...)`.
+ * Output object returned when calling `BaycestParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function baycest_params(
     ptrain_file: InputPathType,
     spatial_flag: boolean = false,
     t12prior_flag: boolean = false,
-): BaycestParameters {
+): BaycestParametersTagged {
     const params = {
-        "@type": "fsl.baycest" as const,
+        "@type": "fsl/baycest" as const,
         "data_file": data_file,
         "mask_file": mask_file,
         "output_dir": output_dir,
@@ -134,10 +101,10 @@ function baycest_cargs(
     cargs.push(["--pools=", execution.inputFile((params["pools_file"] ?? null))].join(''));
     cargs.push(["--spec=", execution.inputFile((params["spec_file"] ?? null))].join(''));
     cargs.push(["--ptrain=", execution.inputFile((params["ptrain_file"] ?? null))].join(''));
-    if ((params["spatial_flag"] ?? null)) {
+    if ((params["spatial_flag"] ?? false)) {
         cargs.push("--spatial");
     }
-    if ((params["t12prior_flag"] ?? null)) {
+    if ((params["t12prior_flag"] ?? false)) {
         cargs.push("--t12prior");
     }
     return cargs;
@@ -232,7 +199,6 @@ function baycest(
 export {
       BAYCEST_METADATA,
       BaycestOutputs,
-      BaycestParameters,
       baycest,
       baycest_execute,
       baycest_params,

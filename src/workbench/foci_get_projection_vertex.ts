@@ -12,50 +12,17 @@ const FOCI_GET_PROJECTION_VERTEX_METADATA: Metadata = {
 
 
 interface FociGetProjectionVertexParameters {
-    "@type": "workbench.foci-get-projection-vertex";
+    "@type"?: "workbench/foci-get-projection-vertex";
     "foci": InputPathType;
     "surface": InputPathType;
     "metric_out": string;
     "opt_name_name"?: string | null | undefined;
 }
+type FociGetProjectionVertexParametersTagged = Required<Pick<FociGetProjectionVertexParameters, '@type'>> & FociGetProjectionVertexParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.foci-get-projection-vertex": foci_get_projection_vertex_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.foci-get-projection-vertex": foci_get_projection_vertex_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `foci_get_projection_vertex(...)`.
+ * Output object returned when calling `FociGetProjectionVertexParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function foci_get_projection_vertex_params(
     surface: InputPathType,
     metric_out: string,
     opt_name_name: string | null = null,
-): FociGetProjectionVertexParameters {
+): FociGetProjectionVertexParametersTagged {
     const params = {
-        "@type": "workbench.foci-get-projection-vertex" as const,
+        "@type": "workbench/foci-get-projection-vertex" as const,
         "foci": foci,
         "surface": surface,
         "metric_out": metric_out,
@@ -212,7 +179,6 @@ function foci_get_projection_vertex(
 export {
       FOCI_GET_PROJECTION_VERTEX_METADATA,
       FociGetProjectionVertexOutputs,
-      FociGetProjectionVertexParameters,
       foci_get_projection_vertex,
       foci_get_projection_vertex_execute,
       foci_get_projection_vertex_params,

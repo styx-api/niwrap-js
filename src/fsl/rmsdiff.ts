@@ -12,49 +12,17 @@ const RMSDIFF_METADATA: Metadata = {
 
 
 interface RmsdiffParameters {
-    "@type": "fsl.rmsdiff";
+    "@type"?: "fsl/rmsdiff";
     "matrixfile1": InputPathType;
     "matrixfile2": InputPathType;
     "refvol": InputPathType;
     "mask"?: InputPathType | null | undefined;
 }
+type RmsdiffParametersTagged = Required<Pick<RmsdiffParameters, '@type'>> & RmsdiffParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.rmsdiff": rmsdiff_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `rmsdiff(...)`.
+ * Output object returned when calling `RmsdiffParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function rmsdiff_params(
     matrixfile2: InputPathType,
     refvol: InputPathType,
     mask: InputPathType | null = null,
-): RmsdiffParameters {
+): RmsdiffParametersTagged {
     const params = {
-        "@type": "fsl.rmsdiff" as const,
+        "@type": "fsl/rmsdiff" as const,
         "matrixfile1": matrixfile1,
         "matrixfile2": matrixfile2,
         "refvol": refvol,
@@ -198,7 +166,6 @@ function rmsdiff(
 export {
       RMSDIFF_METADATA,
       RmsdiffOutputs,
-      RmsdiffParameters,
       rmsdiff,
       rmsdiff_execute,
       rmsdiff_params,

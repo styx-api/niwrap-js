@@ -12,47 +12,14 @@ const FS_TUTORIAL_DATA_METADATA: Metadata = {
 
 
 interface FsTutorialDataParameters {
-    "@type": "freesurfer.fs_tutorial_data";
+    "@type"?: "freesurfer/fs_tutorial_data";
     "rsync_options"?: Array<string> | null | undefined;
 }
+type FsTutorialDataParametersTagged = Required<Pick<FsTutorialDataParameters, '@type'>> & FsTutorialDataParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fs_tutorial_data": fs_tutorial_data_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.fs_tutorial_data": fs_tutorial_data_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fs_tutorial_data(...)`.
+ * Output object returned when calling `FsTutorialDataParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface FsTutorialDataOutputs {
  */
 function fs_tutorial_data_params(
     rsync_options: Array<string> | null = null,
-): FsTutorialDataParameters {
+): FsTutorialDataParametersTagged {
     const params = {
-        "@type": "freesurfer.fs_tutorial_data" as const,
+        "@type": "freesurfer/fs_tutorial_data" as const,
     };
     if (rsync_options !== null) {
         params["rsync_options"] = rsync_options;
@@ -183,7 +150,6 @@ function fs_tutorial_data(
 export {
       FS_TUTORIAL_DATA_METADATA,
       FsTutorialDataOutputs,
-      FsTutorialDataParameters,
       fs_tutorial_data,
       fs_tutorial_data_execute,
       fs_tutorial_data_params,

@@ -12,50 +12,17 @@ const SURFACE_GENERATE_INFLATED_METADATA: Metadata = {
 
 
 interface SurfaceGenerateInflatedParameters {
-    "@type": "workbench.surface-generate-inflated";
+    "@type"?: "workbench/surface-generate-inflated";
     "anatomical_surface_in": InputPathType;
     "inflated_surface_out": string;
     "very_inflated_surface_out": string;
     "opt_iterations_scale_iterations_scale_value"?: number | null | undefined;
 }
+type SurfaceGenerateInflatedParametersTagged = Required<Pick<SurfaceGenerateInflatedParameters, '@type'>> & SurfaceGenerateInflatedParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-generate-inflated": surface_generate_inflated_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-generate-inflated": surface_generate_inflated_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_generate_inflated(...)`.
+ * Output object returned when calling `SurfaceGenerateInflatedParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +57,9 @@ function surface_generate_inflated_params(
     inflated_surface_out: string,
     very_inflated_surface_out: string,
     opt_iterations_scale_iterations_scale_value: number | null = null,
-): SurfaceGenerateInflatedParameters {
+): SurfaceGenerateInflatedParametersTagged {
     const params = {
-        "@type": "workbench.surface-generate-inflated" as const,
+        "@type": "workbench/surface-generate-inflated" as const,
         "anatomical_surface_in": anatomical_surface_in,
         "inflated_surface_out": inflated_surface_out,
         "very_inflated_surface_out": very_inflated_surface_out,
@@ -217,7 +184,6 @@ function surface_generate_inflated(
 export {
       SURFACE_GENERATE_INFLATED_METADATA,
       SurfaceGenerateInflatedOutputs,
-      SurfaceGenerateInflatedParameters,
       surface_generate_inflated,
       surface_generate_inflated_execute,
       surface_generate_inflated_params,

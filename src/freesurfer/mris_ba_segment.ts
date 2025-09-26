@@ -12,50 +12,17 @@ const MRIS_BA_SEGMENT_METADATA: Metadata = {
 
 
 interface MrisBaSegmentParameters {
-    "@type": "freesurfer.mris_BA_segment";
+    "@type"?: "freesurfer/mris_BA_segment";
     "surface": InputPathType;
     "profiles": InputPathType;
     "prior_label": InputPathType;
     "output_label": string;
 }
+type MrisBaSegmentParametersTagged = Required<Pick<MrisBaSegmentParameters, '@type'>> & MrisBaSegmentParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_BA_segment": mris_ba_segment_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_BA_segment": mris_ba_segment_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_ba_segment(...)`.
+ * Output object returned when calling `MrisBaSegmentParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mris_ba_segment_params(
     profiles: InputPathType,
     prior_label: InputPathType,
     output_label: string,
-): MrisBaSegmentParameters {
+): MrisBaSegmentParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_BA_segment" as const,
+        "@type": "freesurfer/mris_BA_segment" as const,
         "surface": surface,
         "profiles": profiles,
         "prior_label": prior_label,
@@ -200,7 +167,6 @@ function mris_ba_segment(
 export {
       MRIS_BA_SEGMENT_METADATA,
       MrisBaSegmentOutputs,
-      MrisBaSegmentParameters,
       mris_ba_segment,
       mris_ba_segment_execute,
       mris_ba_segment_params,

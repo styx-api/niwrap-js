@@ -12,7 +12,7 @@ const VOLUME_SET_SPACE_METADATA: Metadata = {
 
 
 interface VolumeSetSpacePlumbParameters {
-    "@type": "workbench.volume-set-space.plumb";
+    "@type"?: "plumb";
     "axis_order": string;
     "x_spacing": number;
     "y_spacing": number;
@@ -21,10 +21,11 @@ interface VolumeSetSpacePlumbParameters {
     "y_offset": number;
     "z_offset": number;
 }
+type VolumeSetSpacePlumbParametersTagged = Required<Pick<VolumeSetSpacePlumbParameters, '@type'>> & VolumeSetSpacePlumbParameters;
 
 
 interface VolumeSetSpaceSformParameters {
-    "@type": "workbench.volume-set-space.sform";
+    "@type"?: "sform";
     "xi_spacing": number;
     "xj_spacing": number;
     "xk_spacing": number;
@@ -38,59 +39,26 @@ interface VolumeSetSpaceSformParameters {
     "zk_spacing": number;
     "z_offset": number;
 }
+type VolumeSetSpaceSformParametersTagged = Required<Pick<VolumeSetSpaceSformParameters, '@type'>> & VolumeSetSpaceSformParameters;
 
 
 interface VolumeSetSpaceFileParameters {
-    "@type": "workbench.volume-set-space.file";
+    "@type"?: "file";
     "volume_ref": string;
     "opt_ignore_dims": boolean;
 }
+type VolumeSetSpaceFileParametersTagged = Required<Pick<VolumeSetSpaceFileParameters, '@type'>> & VolumeSetSpaceFileParameters;
 
 
 interface VolumeSetSpaceParameters {
-    "@type": "workbench.volume-set-space";
+    "@type"?: "workbench/volume-set-space";
     "volume_in": InputPathType;
     "volume_out": string;
     "plumb"?: VolumeSetSpacePlumbParameters | null | undefined;
     "sform"?: VolumeSetSpaceSformParameters | null | undefined;
     "file"?: VolumeSetSpaceFileParameters | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-set-space": volume_set_space_cargs,
-        "workbench.volume-set-space.plumb": volume_set_space_plumb_cargs,
-        "workbench.volume-set-space.sform": volume_set_space_sform_cargs,
-        "workbench.volume-set-space.file": volume_set_space_file_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type VolumeSetSpaceParametersTagged = Required<Pick<VolumeSetSpaceParameters, '@type'>> & VolumeSetSpaceParameters;
 
 
 /**
@@ -114,9 +82,9 @@ function volume_set_space_plumb_params(
     x_offset: number,
     y_offset: number,
     z_offset: number,
-): VolumeSetSpacePlumbParameters {
+): VolumeSetSpacePlumbParametersTagged {
     const params = {
-        "@type": "workbench.volume-set-space.plumb" as const,
+        "@type": "plumb" as const,
         "axis_order": axis_order,
         "x_spacing": x_spacing,
         "y_spacing": y_spacing,
@@ -185,9 +153,9 @@ function volume_set_space_sform_params(
     zj_spacing: number,
     zk_spacing: number,
     z_offset: number,
-): VolumeSetSpaceSformParameters {
+): VolumeSetSpaceSformParametersTagged {
     const params = {
-        "@type": "workbench.volume-set-space.sform" as const,
+        "@type": "sform" as const,
         "xi_spacing": xi_spacing,
         "xj_spacing": xj_spacing,
         "xk_spacing": xk_spacing,
@@ -246,9 +214,9 @@ function volume_set_space_sform_cargs(
 function volume_set_space_file_params(
     volume_ref: string,
     opt_ignore_dims: boolean = false,
-): VolumeSetSpaceFileParameters {
+): VolumeSetSpaceFileParametersTagged {
     const params = {
-        "@type": "workbench.volume-set-space.file" as const,
+        "@type": "file" as const,
         "volume_ref": volume_ref,
         "opt_ignore_dims": opt_ignore_dims,
     };
@@ -271,7 +239,7 @@ function volume_set_space_file_cargs(
     const cargs: string[] = [];
     cargs.push("-file");
     cargs.push((params["volume_ref"] ?? null));
-    if ((params["opt_ignore_dims"] ?? null)) {
+    if ((params["opt_ignore_dims"] ?? false)) {
         cargs.push("-ignore-dims");
     }
     return cargs;
@@ -279,7 +247,7 @@ function volume_set_space_file_cargs(
 
 
 /**
- * Output object returned when calling `volume_set_space(...)`.
+ * Output object returned when calling `VolumeSetSpaceParameters(...)`.
  *
  * @interface
  */
@@ -308,9 +276,9 @@ function volume_set_space_params(
     plumb: VolumeSetSpacePlumbParameters | null = null,
     sform: VolumeSetSpaceSformParameters | null = null,
     file: VolumeSetSpaceFileParameters | null = null,
-): VolumeSetSpaceParameters {
+): VolumeSetSpaceParametersTagged {
     const params = {
-        "@type": "workbench.volume-set-space" as const,
+        "@type": "workbench/volume-set-space" as const,
         "volume_in": volume_in,
         "volume_out": volume_out,
     };
@@ -345,13 +313,13 @@ function volume_set_space_cargs(
     cargs.push(execution.inputFile((params["volume_in"] ?? null)));
     cargs.push((params["volume_out"] ?? null));
     if ((params["plumb"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["plumb"] ?? null)["@type"])((params["plumb"] ?? null), execution));
+        cargs.push(...volume_set_space_plumb_cargs((params["plumb"] ?? null), execution));
     }
     if ((params["sform"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["sform"] ?? null)["@type"])((params["sform"] ?? null), execution));
+        cargs.push(...volume_set_space_sform_cargs((params["sform"] ?? null), execution));
     }
     if ((params["file"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["file"] ?? null)["@type"])((params["file"] ?? null), execution));
+        cargs.push(...volume_set_space_file_cargs((params["file"] ?? null), execution));
     }
     return cargs;
 }
@@ -441,11 +409,7 @@ function volume_set_space(
 
 export {
       VOLUME_SET_SPACE_METADATA,
-      VolumeSetSpaceFileParameters,
       VolumeSetSpaceOutputs,
-      VolumeSetSpaceParameters,
-      VolumeSetSpacePlumbParameters,
-      VolumeSetSpaceSformParameters,
       volume_set_space,
       volume_set_space_execute,
       volume_set_space_file_params,

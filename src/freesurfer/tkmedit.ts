@@ -12,47 +12,15 @@ const TKMEDIT_METADATA: Metadata = {
 
 
 interface TkmeditParameters {
-    "@type": "freesurfer.tkmedit";
+    "@type"?: "freesurfer/tkmedit";
     "input_volume": InputPathType;
     "options"?: string | null | undefined;
 }
+type TkmeditParametersTagged = Required<Pick<TkmeditParameters, '@type'>> & TkmeditParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.tkmedit": tkmedit_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tkmedit(...)`.
+ * Output object returned when calling `TkmeditParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface TkmeditOutputs {
 function tkmedit_params(
     input_volume: InputPathType,
     options: string | null = null,
-): TkmeditParameters {
+): TkmeditParametersTagged {
     const params = {
-        "@type": "freesurfer.tkmedit" as const,
+        "@type": "freesurfer/tkmedit" as const,
         "input_volume": input_volume,
     };
     if (options !== null) {
@@ -184,7 +152,6 @@ function tkmedit(
 export {
       TKMEDIT_METADATA,
       TkmeditOutputs,
-      TkmeditParameters,
       tkmedit,
       tkmedit_execute,
       tkmedit_params,

@@ -12,49 +12,16 @@ const MRI_REFINE_SEG_METADATA: Metadata = {
 
 
 interface MriRefineSegParameters {
-    "@type": "freesurfer.mri_refine_seg";
+    "@type"?: "freesurfer/mri_refine_seg";
     "input_segmentation": InputPathType;
     "output_segmentation": string;
     "debug": boolean;
 }
+type MriRefineSegParametersTagged = Required<Pick<MriRefineSegParameters, '@type'>> & MriRefineSegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_refine_seg": mri_refine_seg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_refine_seg": mri_refine_seg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_refine_seg(...)`.
+ * Output object returned when calling `MriRefineSegParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mri_refine_seg_params(
     input_segmentation: InputPathType,
     output_segmentation: string,
     debug: boolean = false,
-): MriRefineSegParameters {
+): MriRefineSegParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_refine_seg" as const,
+        "@type": "freesurfer/mri_refine_seg" as const,
         "input_segmentation": input_segmentation,
         "output_segmentation": output_segmentation,
         "debug": debug,
@@ -116,7 +83,7 @@ function mri_refine_seg_cargs(
         "-o",
         (params["output_segmentation"] ?? null)
     );
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -201,7 +168,6 @@ function mri_refine_seg(
 export {
       MRI_REFINE_SEG_METADATA,
       MriRefineSegOutputs,
-      MriRefineSegParameters,
       mri_refine_seg,
       mri_refine_seg_execute,
       mri_refine_seg_params,

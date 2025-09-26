@@ -12,7 +12,7 @@ const POST_RECON_ALL_METADATA: Metadata = {
 
 
 interface PostReconAllParameters {
-    "@type": "freesurfer.post-recon-all";
+    "@type"?: "freesurfer/post-recon-all";
     "subject": string;
     "subfields": boolean;
     "no_subfields": boolean;
@@ -34,43 +34,11 @@ interface PostReconAllParameters {
     "force": boolean;
     "exit_on_error": boolean;
 }
+type PostReconAllParametersTagged = Required<Pick<PostReconAllParameters, '@type'>> & PostReconAllParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.post-recon-all": post_recon_all_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `post_recon_all(...)`.
+ * Output object returned when calling `PostReconAllParameters(...)`.
  *
  * @interface
  */
@@ -129,9 +97,9 @@ function post_recon_all_params(
     threads: number | null = null,
     force: boolean = false,
     exit_on_error: boolean = false,
-): PostReconAllParameters {
+): PostReconAllParametersTagged {
     const params = {
-        "@type": "freesurfer.post-recon-all" as const,
+        "@type": "freesurfer/post-recon-all" as const,
         "subject": subject,
         "subfields": subfields,
         "no_subfields": no_subfields,
@@ -177,52 +145,52 @@ function post_recon_all_cargs(
         "-all",
         (params["subject"] ?? null)
     );
-    if ((params["subfields"] ?? null)) {
+    if ((params["subfields"] ?? false)) {
         cargs.push("--subfields");
     }
-    if ((params["no_subfields"] ?? null)) {
+    if ((params["no_subfields"] ?? false)) {
         cargs.push("--no-subfields");
     }
-    if ((params["subregions"] ?? null)) {
+    if ((params["subregions"] ?? false)) {
         cargs.push("--subregions");
     }
-    if ((params["no_subregions"] ?? null)) {
+    if ((params["no_subregions"] ?? false)) {
         cargs.push("--no-subregions");
     }
-    if ((params["cvs"] ?? null)) {
+    if ((params["cvs"] ?? false)) {
         cargs.push("--cvs");
     }
-    if ((params["no_cvs"] ?? null)) {
+    if ((params["no_cvs"] ?? false)) {
         cargs.push("--no-cvs");
     }
-    if ((params["qcache"] ?? null)) {
+    if ((params["qcache"] ?? false)) {
         cargs.push("--qcache");
     }
-    if ((params["no_qcache"] ?? null)) {
+    if ((params["no_qcache"] ?? false)) {
         cargs.push("--no-qcache");
     }
-    if ((params["no_sclimbic"] ?? null)) {
+    if ((params["no_sclimbic"] ?? false)) {
         cargs.push("--no-sclimbic");
     }
-    if ((params["no_hthsu"] ?? null)) {
+    if ((params["no_hthsu"] ?? false)) {
         cargs.push("--no-hthsu");
     }
-    if ((params["no_synthstrip"] ?? null)) {
+    if ((params["no_synthstrip"] ?? false)) {
         cargs.push("--no-synthstrip");
     }
-    if ((params["no_synthseg"] ?? null)) {
+    if ((params["no_synthseg"] ?? false)) {
         cargs.push("--no-synthseg");
     }
-    if ((params["no_qastats"] ?? null)) {
+    if ((params["no_qastats"] ?? false)) {
         cargs.push("--no-qastats");
     }
-    if ((params["no_samseg"] ?? null)) {
+    if ((params["no_samseg"] ?? false)) {
         cargs.push("--no-samseg");
     }
-    if ((params["no_xhemi"] ?? null)) {
+    if ((params["no_xhemi"] ?? false)) {
         cargs.push("--no-xhemi");
     }
-    if ((params["no_cos7"] ?? null)) {
+    if ((params["no_cos7"] ?? false)) {
         cargs.push("--no-cos7");
     }
     if ((params["threads"] ?? null) !== null) {
@@ -231,10 +199,10 @@ function post_recon_all_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("--force");
     }
-    if ((params["exit_on_error"] ?? null)) {
+    if ((params["exit_on_error"] ?? false)) {
         cargs.push("--exit-on-error");
     }
     return cargs;
@@ -352,7 +320,6 @@ function post_recon_all(
 export {
       POST_RECON_ALL_METADATA,
       PostReconAllOutputs,
-      PostReconAllParameters,
       post_recon_all,
       post_recon_all_execute,
       post_recon_all_params,

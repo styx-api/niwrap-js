@@ -12,48 +12,16 @@ const SURFACE_AFFINE_REGRESSION_METADATA: Metadata = {
 
 
 interface SurfaceAffineRegressionParameters {
-    "@type": "workbench.surface-affine-regression";
+    "@type"?: "workbench/surface-affine-regression";
     "source": InputPathType;
     "target": InputPathType;
     "affine_out": string;
 }
+type SurfaceAffineRegressionParametersTagged = Required<Pick<SurfaceAffineRegressionParameters, '@type'>> & SurfaceAffineRegressionParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-affine-regression": surface_affine_regression_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_affine_regression(...)`.
+ * Output object returned when calling `SurfaceAffineRegressionParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function surface_affine_regression_params(
     source: InputPathType,
     target: InputPathType,
     affine_out: string,
-): SurfaceAffineRegressionParameters {
+): SurfaceAffineRegressionParametersTagged {
     const params = {
-        "@type": "workbench.surface-affine-regression" as const,
+        "@type": "workbench/surface-affine-regression" as const,
         "source": source,
         "target": target,
         "affine_out": affine_out,
@@ -192,7 +160,6 @@ function surface_affine_regression(
 export {
       SURFACE_AFFINE_REGRESSION_METADATA,
       SurfaceAffineRegressionOutputs,
-      SurfaceAffineRegressionParameters,
       surface_affine_regression,
       surface_affine_regression_execute,
       surface_affine_regression_params,

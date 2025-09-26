@@ -12,7 +12,7 @@ const INVWARP_METADATA: Metadata = {
 
 
 interface InvwarpParameters {
-    "@type": "fsl.invwarp";
+    "@type"?: "fsl/invwarp";
     "warp": InputPathType;
     "out_img": string;
     "ref_img": InputPathType;
@@ -23,44 +23,11 @@ interface InvwarpParameters {
     "jacobian_max"?: number | null | undefined;
     "debug": boolean;
 }
+type InvwarpParametersTagged = Required<Pick<InvwarpParameters, '@type'>> & InvwarpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.invwarp": invwarp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.invwarp": invwarp_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `invwarp(...)`.
+ * Output object returned when calling `InvwarpParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function invwarp_params(
     jacobian_min: number | null = null,
     jacobian_max: number | null = null,
     debug: boolean = false,
-): InvwarpParameters {
+): InvwarpParametersTagged {
     const params = {
-        "@type": "fsl.invwarp" as const,
+        "@type": "fsl/invwarp" as const,
         "warp": warp,
         "out_img": out_img,
         "ref_img": ref_img,
@@ -139,13 +106,13 @@ function invwarp_cargs(
     cargs.push(["--warp=", execution.inputFile((params["warp"] ?? null))].join(''));
     cargs.push(["--out=", (params["out_img"] ?? null)].join(''));
     cargs.push(["--ref=", execution.inputFile((params["ref_img"] ?? null))].join(''));
-    if ((params["absolute"] ?? null)) {
+    if ((params["absolute"] ?? false)) {
         cargs.push("--abs");
     }
-    if ((params["relative"] ?? null)) {
+    if ((params["relative"] ?? false)) {
         cargs.push("--rel");
     }
-    if ((params["noconstraint"] ?? null)) {
+    if ((params["noconstraint"] ?? false)) {
         cargs.push("--noconstraint");
     }
     if ((params["jacobian_min"] ?? null) !== null) {
@@ -154,7 +121,7 @@ function invwarp_cargs(
     if ((params["jacobian_max"] ?? null) !== null) {
         cargs.push(["--jmax=", String((params["jacobian_max"] ?? null))].join(''));
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -253,7 +220,6 @@ function invwarp(
 export {
       INVWARP_METADATA,
       InvwarpOutputs,
-      InvwarpParameters,
       invwarp,
       invwarp_execute,
       invwarp_params,

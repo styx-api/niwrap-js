@@ -12,7 +12,7 @@ const MRI_SEGMENT_HYPOTHALAMIC_SUBUNITS_METADATA: Metadata = {
 
 
 interface MriSegmentHypothalamicSubunitsParameters {
-    "@type": "freesurfer.mri_segment_hypothalamic_subunits";
+    "@type"?: "freesurfer/mri_segment_hypothalamic_subunits";
     "subjects"?: Array<string> | null | undefined;
     "subjects_dir"?: string | null | undefined;
     "write_posteriors": boolean;
@@ -25,44 +25,11 @@ interface MriSegmentHypothalamicSubunitsParameters {
     "threads"?: number | null | undefined;
     "cpu": boolean;
 }
+type MriSegmentHypothalamicSubunitsParametersTagged = Required<Pick<MriSegmentHypothalamicSubunitsParameters, '@type'>> & MriSegmentHypothalamicSubunitsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_segment_hypothalamic_subunits": mri_segment_hypothalamic_subunits_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_segment_hypothalamic_subunits": mri_segment_hypothalamic_subunits_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_segment_hypothalamic_subunits(...)`.
+ * Output object returned when calling `MriSegmentHypothalamicSubunitsParameters(...)`.
  *
  * @interface
  */
@@ -119,9 +86,9 @@ function mri_segment_hypothalamic_subunits_params(
     crop_size: Array<number> | null = null,
     threads: number | null = null,
     cpu: boolean = false,
-): MriSegmentHypothalamicSubunitsParameters {
+): MriSegmentHypothalamicSubunitsParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_segment_hypothalamic_subunits" as const,
+        "@type": "freesurfer/mri_segment_hypothalamic_subunits" as const,
         "write_posteriors": write_posteriors,
         "cpu": cpu,
     };
@@ -182,7 +149,7 @@ function mri_segment_hypothalamic_subunits_cargs(
             (params["subjects_dir"] ?? null)
         );
     }
-    if ((params["write_posteriors"] ?? null)) {
+    if ((params["write_posteriors"] ?? false)) {
         cargs.push("--write_posteriors");
     }
     if ((params["image_input"] ?? null) !== null) {
@@ -227,7 +194,7 @@ function mri_segment_hypothalamic_subunits_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["cpu"] ?? null)) {
+    if ((params["cpu"] ?? false)) {
         cargs.push("--cpu");
     }
     return cargs;
@@ -331,7 +298,6 @@ function mri_segment_hypothalamic_subunits(
 export {
       MRI_SEGMENT_HYPOTHALAMIC_SUBUNITS_METADATA,
       MriSegmentHypothalamicSubunitsOutputs,
-      MriSegmentHypothalamicSubunitsParameters,
       mri_segment_hypothalamic_subunits,
       mri_segment_hypothalamic_subunits_execute,
       mri_segment_hypothalamic_subunits_params,

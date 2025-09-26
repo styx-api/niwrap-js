@@ -12,7 +12,7 @@ const V__SUMA_MAKE_SPEC_FS_METADATA: Metadata = {
 
 
 interface VSumaMakeSpecFsParameters {
-    "@type": "afni.@SUMA_Make_Spec_FS";
+    "@type"?: "afni/@SUMA_Make_Spec_FS";
     "subject_id": string;
     "debug"?: number | null | undefined;
     "fs_setup": boolean;
@@ -30,44 +30,11 @@ interface VSumaMakeSpecFsParameters {
     "ldpref"?: string | null | undefined;
     "no_ld": boolean;
 }
+type VSumaMakeSpecFsParametersTagged = Required<Pick<VSumaMakeSpecFsParameters, '@type'>> & VSumaMakeSpecFsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@SUMA_Make_Spec_FS": v__suma_make_spec_fs_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@SUMA_Make_Spec_FS": v__suma_make_spec_fs_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__suma_make_spec_fs(...)`.
+ * Output object returned when calling `VSumaMakeSpecFsParameters(...)`.
  *
  * @interface
  */
@@ -122,9 +89,9 @@ function v__suma_make_spec_fs_params(
     ld: number | null = null,
     ldpref: string | null = null,
     no_ld: boolean = false,
-): VSumaMakeSpecFsParameters {
+): VSumaMakeSpecFsParametersTagged {
     const params = {
-        "@type": "afni.@SUMA_Make_Spec_FS" as const,
+        "@type": "afni/@SUMA_Make_Spec_FS" as const,
         "subject_id": subject_id,
         "fs_setup": fs_setup,
         "make_rank_dsets": make_rank_dsets,
@@ -186,7 +153,7 @@ function v__suma_make_spec_fs_cargs(
             String((params["debug"] ?? null))
         );
     }
-    if ((params["fs_setup"] ?? null)) {
+    if ((params["fs_setup"] ?? false)) {
         cargs.push("-fs_setup");
     }
     if ((params["filesystem_path"] ?? null) !== null) {
@@ -207,19 +174,19 @@ function v__suma_make_spec_fs_cargs(
             ...(params["extra_fs_dsets"] ?? null)
         );
     }
-    if ((params["make_rank_dsets"] ?? null)) {
+    if ((params["make_rank_dsets"] ?? false)) {
         cargs.push("-make_rank_dsets");
     }
-    if ((params["use_mgz"] ?? null)) {
+    if ((params["use_mgz"] ?? false)) {
         cargs.push("-use_mgz");
     }
-    if ((params["neuro"] ?? null)) {
+    if ((params["neuro"] ?? false)) {
         cargs.push("-neuro");
     }
-    if ((params["gnifti"] ?? null)) {
+    if ((params["gnifti"] ?? false)) {
         cargs.push("-GNIFTI");
     }
-    if ((params["nifti"] ?? null)) {
+    if ((params["nifti"] ?? false)) {
         cargs.push("-NIFTI");
     }
     if ((params["inflate"] ?? null) !== null) {
@@ -246,7 +213,7 @@ function v__suma_make_spec_fs_cargs(
             (params["ldpref"] ?? null)
         );
     }
-    if ((params["no_ld"] ?? null)) {
+    if ((params["no_ld"] ?? false)) {
         cargs.push("-no_ld");
     }
     return cargs;
@@ -356,7 +323,6 @@ function v__suma_make_spec_fs(
 
 export {
       VSumaMakeSpecFsOutputs,
-      VSumaMakeSpecFsParameters,
       V__SUMA_MAKE_SPEC_FS_METADATA,
       v__suma_make_spec_fs,
       v__suma_make_spec_fs_execute,

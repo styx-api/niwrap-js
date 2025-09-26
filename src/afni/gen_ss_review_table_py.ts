@@ -12,7 +12,7 @@ const GEN_SS_REVIEW_TABLE_PY_METADATA: Metadata = {
 
 
 interface GenSsReviewTablePyParameters {
-    "@type": "afni.gen_ss_review_table.py";
+    "@type"?: "afni/gen_ss_review_table.py";
     "infiles": Array<InputPathType>;
     "write_table"?: InputPathType | null | undefined;
     "write_outliers"?: InputPathType | null | undefined;
@@ -28,44 +28,11 @@ interface GenSsReviewTablePyParameters {
     "show_missing": boolean;
     "verbosity"?: number | null | undefined;
 }
+type GenSsReviewTablePyParametersTagged = Required<Pick<GenSsReviewTablePyParameters, '@type'>> & GenSsReviewTablePyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.gen_ss_review_table.py": gen_ss_review_table_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.gen_ss_review_table.py": gen_ss_review_table_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `gen_ss_review_table_py(...)`.
+ * Output object returned when calling `GenSsReviewTablePyParameters(...)`.
  *
  * @interface
  */
@@ -120,9 +87,9 @@ function gen_ss_review_table_py_params(
     report_outliers_fill_style: string | null = null,
     show_missing: boolean = false,
     verbosity: number | null = null,
-): GenSsReviewTablePyParameters {
+): GenSsReviewTablePyParametersTagged {
     const params = {
-        "@type": "afni.gen_ss_review_table.py" as const,
+        "@type": "afni/gen_ss_review_table.py" as const,
         "infiles": infiles,
         "overwrite": overwrite,
         "empty_is_outlier": empty_is_outlier,
@@ -183,10 +150,10 @@ function gen_ss_review_table_py_cargs(
             execution.inputFile((params["write_outliers"] ?? null))
         );
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("-overwrite");
     }
-    if ((params["empty_is_outlier"] ?? null)) {
+    if ((params["empty_is_outlier"] ?? false)) {
         cargs.push("-empty_is_outlier");
     }
     if ((params["outlier_sep"] ?? null) !== null) {
@@ -201,13 +168,13 @@ function gen_ss_review_table_py_cargs(
             (params["separator"] ?? null)
         );
     }
-    if ((params["showlabs"] ?? null)) {
+    if ((params["showlabs"] ?? false)) {
         cargs.push("-showlabs");
     }
-    if ((params["show_infiles"] ?? null)) {
+    if ((params["show_infiles"] ?? false)) {
         cargs.push("-show_infiles");
     }
-    if ((params["show_keepers"] ?? null)) {
+    if ((params["show_keepers"] ?? false)) {
         cargs.push("-show_keepers");
     }
     if ((params["report_outliers"] ?? null) !== null) {
@@ -222,7 +189,7 @@ function gen_ss_review_table_py_cargs(
             (params["report_outliers_fill_style"] ?? null)
         );
     }
-    if ((params["show_missing"] ?? null)) {
+    if ((params["show_missing"] ?? false)) {
         cargs.push("-show_missing");
     }
     if ((params["verbosity"] ?? null) !== null) {
@@ -336,7 +303,6 @@ function gen_ss_review_table_py(
 export {
       GEN_SS_REVIEW_TABLE_PY_METADATA,
       GenSsReviewTablePyOutputs,
-      GenSsReviewTablePyParameters,
       gen_ss_review_table_py,
       gen_ss_review_table_py_execute,
       gen_ss_review_table_py_params,

@@ -12,7 +12,7 @@ const V__ADD_EDGE_METADATA: Metadata = {
 
 
 interface VAddEdgeParameters {
-    "@type": "afni.@AddEdge";
+    "@type"?: "afni/@AddEdge";
     "input_files": Array<InputPathType>;
     "examine_list"?: string | null | undefined;
     "ax_mont"?: string | null | undefined;
@@ -29,44 +29,11 @@ interface VAddEdgeParameters {
     "auto": boolean;
     "no_auto": boolean;
 }
+type VAddEdgeParametersTagged = Required<Pick<VAddEdgeParameters, '@type'>> & VAddEdgeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@AddEdge": v__add_edge_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@AddEdge": v__add_edge_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__add_edge(...)`.
+ * Output object returned when calling `VAddEdgeParameters(...)`.
  *
  * @interface
  */
@@ -131,9 +98,9 @@ function v__add_edge_params(
     auto_record: boolean = false,
     auto: boolean = false,
     no_auto: boolean = false,
-): VAddEdgeParameters {
+): VAddEdgeParametersTagged {
     const params = {
-        "@type": "afni.@AddEdge" as const,
+        "@type": "afni/@AddEdge" as const,
         "input_files": input_files,
         "no_layout": no_layout,
         "single_edge": single_edge,
@@ -213,7 +180,7 @@ function v__add_edge_cargs(
             (params["layout_file"] ?? null)
         );
     }
-    if ((params["no_layout"] ?? null)) {
+    if ((params["no_layout"] ?? false)) {
         cargs.push("-no_layout");
     }
     if ((params["edge_percentile"] ?? null) !== null) {
@@ -222,7 +189,7 @@ function v__add_edge_cargs(
             String((params["edge_percentile"] ?? null))
         );
     }
-    if ((params["single_edge"] ?? null)) {
+    if ((params["single_edge"] ?? false)) {
         cargs.push("-single_edge");
     }
     if ((params["opacity"] ?? null) !== null) {
@@ -231,19 +198,19 @@ function v__add_edge_cargs(
             String((params["opacity"] ?? null))
         );
     }
-    if ((params["keep_temp"] ?? null)) {
+    if ((params["keep_temp"] ?? false)) {
         cargs.push("-keep_temp");
     }
-    if ((params["no_deoblique"] ?? null)) {
+    if ((params["no_deoblique"] ?? false)) {
         cargs.push("-no_deoblique");
     }
-    if ((params["auto_record"] ?? null)) {
+    if ((params["auto_record"] ?? false)) {
         cargs.push("-auto_record");
     }
-    if ((params["auto"] ?? null)) {
+    if ((params["auto"] ?? false)) {
         cargs.push("-auto");
     }
-    if ((params["no_auto"] ?? null)) {
+    if ((params["no_auto"] ?? false)) {
         cargs.push("-no_auto");
     }
     return cargs;
@@ -354,7 +321,6 @@ function v__add_edge(
 
 export {
       VAddEdgeOutputs,
-      VAddEdgeParameters,
       V__ADD_EDGE_METADATA,
       v__add_edge,
       v__add_edge_execute,

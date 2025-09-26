@@ -12,7 +12,7 @@ const TCALC_METADATA: Metadata = {
 
 
 interface TcalcParameters {
-    "@type": "fsl.tcalc";
+    "@type"?: "fsl/tcalc";
     "input_image": InputPathType;
     "output_image": string;
     "echo_time"?: number | null | undefined;
@@ -29,44 +29,11 @@ interface TcalcParameters {
     "save_flag": boolean;
     "verbose_flag": boolean;
 }
+type TcalcParametersTagged = Required<Pick<TcalcParameters, '@type'>> & TcalcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.tcalc": tcalc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.tcalc": tcalc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tcalc(...)`.
+ * Output object returned when calling `TcalcParameters(...)`.
  *
  * @interface
  */
@@ -123,9 +90,9 @@ function tcalc_params(
     noise_sigma: number | null = null,
     save_flag: boolean = false,
     verbose_flag: boolean = false,
-): TcalcParameters {
+): TcalcParametersTagged {
     const params = {
-        "@type": "fsl.tcalc" as const,
+        "@type": "fsl/tcalc" as const,
         "input_image": input_image,
         "output_image": output_image,
         "save_flag": save_flag,
@@ -250,10 +217,10 @@ function tcalc_cargs(
             String((params["noise_sigma"] ?? null))
         );
     }
-    if ((params["save_flag"] ?? null)) {
+    if ((params["save_flag"] ?? false)) {
         cargs.push("--save");
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("--verbose");
     }
     return cargs;
@@ -363,7 +330,6 @@ function tcalc(
 export {
       TCALC_METADATA,
       TcalcOutputs,
-      TcalcParameters,
       tcalc,
       tcalc_execute,
       tcalc_params,

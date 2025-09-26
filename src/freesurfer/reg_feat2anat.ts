@@ -12,7 +12,7 @@ const REG_FEAT2ANAT_METADATA: Metadata = {
 
 
 interface RegFeat2anatParameters {
-    "@type": "freesurfer.reg-feat2anat";
+    "@type"?: "freesurfer/reg-feat2anat";
     "feat_dir": string;
     "subject_id": string;
     "overwrite_exf2std": boolean;
@@ -30,44 +30,11 @@ interface RegFeat2anatParameters {
     "fmov"?: string | null | undefined;
     "debug": boolean;
 }
+type RegFeat2anatParametersTagged = Required<Pick<RegFeat2anatParameters, '@type'>> & RegFeat2anatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.reg-feat2anat": reg_feat2anat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.reg-feat2anat": reg_feat2anat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `reg_feat2anat(...)`.
+ * Output object returned when calling `RegFeat2anatParameters(...)`.
  *
  * @interface
  */
@@ -150,9 +117,9 @@ function reg_feat2anat_params(
     no_inorm: boolean = false,
     fmov: string | null = null,
     debug: boolean = false,
-): RegFeat2anatParameters {
+): RegFeat2anatParametersTagged {
     const params = {
-        "@type": "freesurfer.reg-feat2anat" as const,
+        "@type": "freesurfer/reg-feat2anat" as const,
         "feat_dir": feat_dir,
         "subject_id": subject_id,
         "overwrite_exf2std": overwrite_exf2std,
@@ -210,10 +177,10 @@ function reg_feat2anat_cargs(
         "--subject",
         (params["subject_id"] ?? null)
     );
-    if ((params["overwrite_exf2std"] ?? null)) {
+    if ((params["overwrite_exf2std"] ?? false)) {
         cargs.push("--overwrite-exf2std");
     }
-    if ((params["manual"] ?? null)) {
+    if ((params["manual"] ?? false)) {
         cargs.push("--manual");
     }
     if ((params["manxfm_type"] ?? null) !== null) {
@@ -246,7 +213,7 @@ function reg_feat2anat_cargs(
             String((params["max_angle"] ?? null))
         );
     }
-    if ((params["bet"] ?? null)) {
+    if ((params["bet"] ?? false)) {
         cargs.push("--bet");
     }
     if ((params["title"] ?? null) !== null) {
@@ -255,13 +222,13 @@ function reg_feat2anat_cargs(
             (params["title"] ?? null)
         );
     }
-    if ((params["no_bbr"] ?? null)) {
+    if ((params["no_bbr"] ?? false)) {
         cargs.push("--no-bbr");
     }
-    if ((params["spm"] ?? null)) {
+    if ((params["spm"] ?? false)) {
         cargs.push("--spm");
     }
-    if ((params["no_inorm"] ?? null)) {
+    if ((params["no_inorm"] ?? false)) {
         cargs.push("--no-inorm");
     }
     if ((params["fmov"] ?? null) !== null) {
@@ -270,7 +237,7 @@ function reg_feat2anat_cargs(
             (params["fmov"] ?? null)
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -388,7 +355,6 @@ function reg_feat2anat(
 export {
       REG_FEAT2ANAT_METADATA,
       RegFeat2anatOutputs,
-      RegFeat2anatParameters,
       reg_feat2anat,
       reg_feat2anat_execute,
       reg_feat2anat_params,

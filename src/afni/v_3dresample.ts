@@ -12,7 +12,7 @@ const V_3DRESAMPLE_METADATA: Metadata = {
 
 
 interface V3dresampleParameters {
-    "@type": "afni.3dresample";
+    "@type"?: "afni/3dresample";
     "in_file": InputPathType;
     "master"?: InputPathType | null | undefined;
     "orientation"?: "AIL" | "AIR" | "ASL" | "ASR" | "PIL" | "PIR" | "PSL" | "PSR" | "ALI" | "ALS" | "ARI" | "ARS" | "PLI" | "PLS" | "PRI" | "PRS" | "IAL" | "IAR" | "IPL" | "IPR" | "SAL" | "SAR" | "SPL" | "SPR" | "ILA" | "ILP" | "IRA" | "IRP" | "SLA" | "SLP" | "SRA" | "SRP" | "LAI" | "LAS" | "LPI" | "LPS" | "RAI" | "RAS" | "RPI" | "RPS" | "LIA" | "LIP" | "LSA" | "LSP" | "RIA" | "RIP" | "RSA" | "RSP" | null | undefined;
@@ -21,44 +21,11 @@ interface V3dresampleParameters {
     "resample_mode"?: "NN" | "Li" | "Cu" | "Bk" | null | undefined;
     "voxel_size"?: Array<number> | null | undefined;
 }
+type V3dresampleParametersTagged = Required<Pick<V3dresampleParameters, '@type'>> & V3dresampleParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dresample": v_3dresample_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dresample": v_3dresample_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dresample(...)`.
+ * Output object returned when calling `V3dresampleParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function v_3dresample_params(
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     resample_mode: "NN" | "Li" | "Cu" | "Bk" | null = null,
     voxel_size: Array<number> | null = null,
-): V3dresampleParameters {
+): V3dresampleParametersTagged {
     const params = {
-        "@type": "afni.3dresample" as const,
+        "@type": "afni/3dresample" as const,
         "in_file": in_file,
         "prefix": prefix,
     };
@@ -258,7 +225,6 @@ function v_3dresample(
 
 export {
       V3dresampleOutputs,
-      V3dresampleParameters,
       V_3DRESAMPLE_METADATA,
       v_3dresample,
       v_3dresample_execute,

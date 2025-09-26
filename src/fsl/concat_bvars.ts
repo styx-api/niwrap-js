@@ -12,48 +12,15 @@ const CONCAT_BVARS_METADATA: Metadata = {
 
 
 interface ConcatBvarsParameters {
-    "@type": "fsl.concat_bvars";
+    "@type"?: "fsl/concat_bvars";
     "output_bvars": string;
     "input_bvars": Array<InputPathType>;
 }
+type ConcatBvarsParametersTagged = Required<Pick<ConcatBvarsParameters, '@type'>> & ConcatBvarsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.concat_bvars": concat_bvars_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.concat_bvars": concat_bvars_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `concat_bvars(...)`.
+ * Output object returned when calling `ConcatBvarsParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface ConcatBvarsOutputs {
 function concat_bvars_params(
     output_bvars: string,
     input_bvars: Array<InputPathType>,
-): ConcatBvarsParameters {
+): ConcatBvarsParametersTagged {
     const params = {
-        "@type": "fsl.concat_bvars" as const,
+        "@type": "fsl/concat_bvars" as const,
         "output_bvars": output_bvars,
         "input_bvars": input_bvars,
     };
@@ -186,7 +153,6 @@ function concat_bvars(
 export {
       CONCAT_BVARS_METADATA,
       ConcatBvarsOutputs,
-      ConcatBvarsParameters,
       concat_bvars,
       concat_bvars_execute,
       concat_bvars_params,

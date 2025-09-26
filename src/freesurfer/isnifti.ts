@@ -12,46 +12,14 @@ const ISNIFTI_METADATA: Metadata = {
 
 
 interface IsniftiParameters {
-    "@type": "freesurfer.isnifti";
+    "@type"?: "freesurfer/isnifti";
     "infile": InputPathType;
 }
+type IsniftiParametersTagged = Required<Pick<IsniftiParameters, '@type'>> & IsniftiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.isnifti": isnifti_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `isnifti(...)`.
+ * Output object returned when calling `IsniftiParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface IsniftiOutputs {
  */
 function isnifti_params(
     infile: InputPathType,
-): IsniftiParameters {
+): IsniftiParametersTagged {
     const params = {
-        "@type": "freesurfer.isnifti" as const,
+        "@type": "freesurfer/isnifti" as const,
         "infile": infile,
     };
     return params;
@@ -173,7 +141,6 @@ function isnifti(
 export {
       ISNIFTI_METADATA,
       IsniftiOutputs,
-      IsniftiParameters,
       isnifti,
       isnifti_execute,
       isnifti_params,

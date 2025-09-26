@@ -12,7 +12,7 @@ const WMSASEG_METADATA: Metadata = {
 
 
 interface WmsasegParameters {
-    "@type": "freesurfer.wmsaseg";
+    "@type"?: "freesurfer/wmsaseg";
     "subject": string;
     "source_orig"?: string | null | undefined;
     "source_long": boolean;
@@ -25,44 +25,11 @@ interface WmsasegParameters {
     "halo1": boolean;
     "halo2": boolean;
 }
+type WmsasegParametersTagged = Required<Pick<WmsasegParameters, '@type'>> & WmsasegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.wmsaseg": wmsaseg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.wmsaseg": wmsaseg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `wmsaseg(...)`.
+ * Output object returned when calling `WmsasegParameters(...)`.
  *
  * @interface
  */
@@ -111,9 +78,9 @@ function wmsaseg_params(
     reg_only: boolean = false,
     halo1: boolean = false,
     halo2: boolean = false,
-): WmsasegParameters {
+): WmsasegParametersTagged {
     const params = {
-        "@type": "freesurfer.wmsaseg" as const,
+        "@type": "freesurfer/wmsaseg" as const,
         "subject": subject,
         "source_long": source_long,
         "no_reg": no_reg,
@@ -160,7 +127,7 @@ function wmsaseg_cargs(
             (params["source_orig"] ?? null)
         );
     }
-    if ((params["source_long"] ?? null)) {
+    if ((params["source_long"] ?? false)) {
         cargs.push("--s+long");
     }
     if ((params["output_subdir"] ?? null) !== null) {
@@ -175,22 +142,22 @@ function wmsaseg_cargs(
             execution.inputFile((params["gca_file"] ?? null))
         );
     }
-    if ((params["no_reg"] ?? null)) {
+    if ((params["no_reg"] ?? false)) {
         cargs.push("--no-reg");
     }
-    if ((params["no_canorm"] ?? null)) {
+    if ((params["no_canorm"] ?? false)) {
         cargs.push("--no-canorm");
     }
-    if ((params["init_spm"] ?? null)) {
+    if ((params["init_spm"] ?? false)) {
         cargs.push("--init-spm");
     }
-    if ((params["reg_only"] ?? null)) {
+    if ((params["reg_only"] ?? false)) {
         cargs.push("--reg-only");
     }
-    if ((params["halo1"] ?? null)) {
+    if ((params["halo1"] ?? false)) {
         cargs.push("--halo1");
     }
-    if ((params["halo2"] ?? null)) {
+    if ((params["halo2"] ?? false)) {
         cargs.push("--halo2");
     }
     return cargs;
@@ -292,7 +259,6 @@ function wmsaseg(
 export {
       WMSASEG_METADATA,
       WmsasegOutputs,
-      WmsasegParameters,
       wmsaseg,
       wmsaseg_execute,
       wmsaseg_params,

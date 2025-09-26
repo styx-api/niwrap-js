@@ -12,51 +12,18 @@ const SURFACE_CORTEX_LAYER_METADATA: Metadata = {
 
 
 interface SurfaceCortexLayerParameters {
-    "@type": "workbench.surface-cortex-layer";
+    "@type"?: "workbench/surface-cortex-layer";
     "white_surface": InputPathType;
     "pial_surface": InputPathType;
     "location": number;
     "out_surface": string;
     "opt_placement_out_placement_metric"?: string | null | undefined;
 }
+type SurfaceCortexLayerParametersTagged = Required<Pick<SurfaceCortexLayerParameters, '@type'>> & SurfaceCortexLayerParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-cortex-layer": surface_cortex_layer_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-cortex-layer": surface_cortex_layer_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_cortex_layer(...)`.
+ * Output object returned when calling `SurfaceCortexLayerParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +60,9 @@ function surface_cortex_layer_params(
     location: number,
     out_surface: string,
     opt_placement_out_placement_metric: string | null = null,
-): SurfaceCortexLayerParameters {
+): SurfaceCortexLayerParametersTagged {
     const params = {
-        "@type": "workbench.surface-cortex-layer" as const,
+        "@type": "workbench/surface-cortex-layer" as const,
         "white_surface": white_surface,
         "pial_surface": pial_surface,
         "location": location,
@@ -224,7 +191,6 @@ function surface_cortex_layer(
 export {
       SURFACE_CORTEX_LAYER_METADATA,
       SurfaceCortexLayerOutputs,
-      SurfaceCortexLayerParameters,
       surface_cortex_layer,
       surface_cortex_layer_execute,
       surface_cortex_layer_params,

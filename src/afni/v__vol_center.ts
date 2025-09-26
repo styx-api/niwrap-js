@@ -12,47 +12,15 @@ const V__VOL_CENTER_METADATA: Metadata = {
 
 
 interface VVolCenterParameters {
-    "@type": "afni.@VolCenter";
+    "@type"?: "afni/@VolCenter";
     "dset": InputPathType;
     "orient"?: string | null | undefined;
 }
+type VVolCenterParametersTagged = Required<Pick<VVolCenterParameters, '@type'>> & VVolCenterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@VolCenter": v__vol_center_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__vol_center(...)`.
+ * Output object returned when calling `VVolCenterParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface VVolCenterOutputs {
 function v__vol_center_params(
     dset: InputPathType,
     orient: string | null = null,
-): VVolCenterParameters {
+): VVolCenterParametersTagged {
     const params = {
-        "@type": "afni.@VolCenter" as const,
+        "@type": "afni/@VolCenter" as const,
         "dset": dset,
     };
     if (orient !== null) {
@@ -189,7 +157,6 @@ function v__vol_center(
 
 export {
       VVolCenterOutputs,
-      VVolCenterParameters,
       V__VOL_CENTER_METADATA,
       v__vol_center,
       v__vol_center_execute,

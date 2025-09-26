@@ -12,7 +12,7 @@ const SPMREGISTER_METADATA: Metadata = {
 
 
 interface SpmregisterParameters {
-    "@type": "freesurfer.spmregister";
+    "@type"?: "freesurfer/spmregister";
     "subjid": string;
     "mov": string;
     "reg": string;
@@ -27,44 +27,11 @@ interface SpmregisterParameters {
     "version": boolean;
     "help": boolean;
 }
+type SpmregisterParametersTagged = Required<Pick<SpmregisterParameters, '@type'>> & SpmregisterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.spmregister": spmregister_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.spmregister": spmregister_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `spmregister(...)`.
+ * Output object returned when calling `SpmregisterParameters(...)`.
  *
  * @interface
  */
@@ -117,9 +84,9 @@ function spmregister_params(
     nocleanup: boolean = false,
     version: boolean = false,
     help: boolean = false,
-): SpmregisterParameters {
+): SpmregisterParametersTagged {
     const params = {
-        "@type": "freesurfer.spmregister" as const,
+        "@type": "freesurfer/spmregister" as const,
         "subjid": subjid,
         "mov": mov,
         "reg": reg,
@@ -180,7 +147,7 @@ function spmregister_cargs(
             String((params["frame"] ?? null))
         );
     }
-    if ((params["mid_frame"] ?? null)) {
+    if ((params["mid_frame"] ?? false)) {
         cargs.push("--mid-frame");
     }
     if ((params["template_out"] ?? null) !== null) {
@@ -195,7 +162,7 @@ function spmregister_cargs(
             (params["fsvol"] ?? null)
         );
     }
-    if ((params["force_ras"] ?? null)) {
+    if ((params["force_ras"] ?? false)) {
         cargs.push("--force-ras");
     }
     if ((params["outvol"] ?? null) !== null) {
@@ -210,13 +177,13 @@ function spmregister_cargs(
             (params["tmpdir"] ?? null)
         );
     }
-    if ((params["nocleanup"] ?? null)) {
+    if ((params["nocleanup"] ?? false)) {
         cargs.push("--nocleanup");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -322,7 +289,6 @@ function spmregister(
 export {
       SPMREGISTER_METADATA,
       SpmregisterOutputs,
-      SpmregisterParameters,
       spmregister,
       spmregister_execute,
       spmregister_params,

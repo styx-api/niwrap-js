@@ -12,50 +12,18 @@ const MRI_PARSE_SDCMDIR_METADATA: Metadata = {
 
 
 interface MriParseSdcmdirParameters {
-    "@type": "freesurfer.mri_parse_sdcmdir";
+    "@type"?: "freesurfer/mri_parse_sdcmdir";
     "sdicomdir": string;
     "outfile"?: string | null | undefined;
     "sortbyrun": boolean;
     "summarize": boolean;
     "dwi": boolean;
 }
+type MriParseSdcmdirParametersTagged = Required<Pick<MriParseSdcmdirParameters, '@type'>> & MriParseSdcmdirParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_parse_sdcmdir": mri_parse_sdcmdir_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_parse_sdcmdir(...)`.
+ * Output object returned when calling `MriParseSdcmdirParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function mri_parse_sdcmdir_params(
     sortbyrun: boolean = false,
     summarize: boolean = false,
     dwi: boolean = false,
-): MriParseSdcmdirParameters {
+): MriParseSdcmdirParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_parse_sdcmdir" as const,
+        "@type": "freesurfer/mri_parse_sdcmdir" as const,
         "sdicomdir": sdicomdir,
         "sortbyrun": sortbyrun,
         "summarize": summarize,
@@ -123,13 +91,13 @@ function mri_parse_sdcmdir_cargs(
             (params["outfile"] ?? null)
         );
     }
-    if ((params["sortbyrun"] ?? null)) {
+    if ((params["sortbyrun"] ?? false)) {
         cargs.push("--sortbyrun");
     }
-    if ((params["summarize"] ?? null)) {
+    if ((params["summarize"] ?? false)) {
         cargs.push("--summarize");
     }
-    if ((params["dwi"] ?? null)) {
+    if ((params["dwi"] ?? false)) {
         cargs.push("--dwi");
     }
     return cargs;
@@ -217,7 +185,6 @@ function mri_parse_sdcmdir(
 export {
       MRI_PARSE_SDCMDIR_METADATA,
       MriParseSdcmdirOutputs,
-      MriParseSdcmdirParameters,
       mri_parse_sdcmdir,
       mri_parse_sdcmdir_execute,
       mri_parse_sdcmdir_params,

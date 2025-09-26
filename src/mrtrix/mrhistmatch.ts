@@ -12,14 +12,15 @@ const MRHISTMATCH_METADATA: Metadata = {
 
 
 interface MrhistmatchConfigParameters {
-    "@type": "mrtrix.mrhistmatch.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MrhistmatchConfigParametersTagged = Required<Pick<MrhistmatchConfigParameters, '@type'>> & MrhistmatchConfigParameters;
 
 
 interface MrhistmatchParameters {
-    "@type": "mrtrix.mrhistmatch";
+    "@type"?: "mrtrix/mrhistmatch";
     "mask_input"?: InputPathType | null | undefined;
     "mask_target"?: InputPathType | null | undefined;
     "bins"?: number | null | undefined;
@@ -36,41 +37,7 @@ interface MrhistmatchParameters {
     "target": InputPathType;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.mrhistmatch": mrhistmatch_cargs,
-        "mrtrix.mrhistmatch.config": mrhistmatch_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.mrhistmatch": mrhistmatch_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MrhistmatchParametersTagged = Required<Pick<MrhistmatchParameters, '@type'>> & MrhistmatchParameters;
 
 
 /**
@@ -84,9 +51,9 @@ function dynOutputs(
 function mrhistmatch_config_params(
     key: string,
     value: string,
-): MrhistmatchConfigParameters {
+): MrhistmatchConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.mrhistmatch.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -115,7 +82,7 @@ function mrhistmatch_config_cargs(
 
 
 /**
- * Output object returned when calling `mrhistmatch(...)`.
+ * Output object returned when calling `MrhistmatchParameters(...)`.
  *
  * @interface
  */
@@ -168,9 +135,9 @@ function mrhistmatch_params(
     config: Array<MrhistmatchConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrhistmatchParameters {
+): MrhistmatchParametersTagged {
     const params = {
-        "@type": "mrtrix.mrhistmatch" as const,
+        "@type": "mrtrix/mrhistmatch" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -233,16 +200,16 @@ function mrhistmatch_cargs(
             String((params["bins"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -252,12 +219,12 @@ function mrhistmatch_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => mrhistmatch_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push((params["type"] ?? null));
@@ -383,9 +350,7 @@ function mrhistmatch(
 
 export {
       MRHISTMATCH_METADATA,
-      MrhistmatchConfigParameters,
       MrhistmatchOutputs,
-      MrhistmatchParameters,
       mrhistmatch,
       mrhistmatch_config_params,
       mrhistmatch_execute,

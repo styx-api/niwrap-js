@@ -12,50 +12,17 @@ const METRIC_REMOVE_ISLANDS_METADATA: Metadata = {
 
 
 interface MetricRemoveIslandsParameters {
-    "@type": "workbench.metric-remove-islands";
+    "@type"?: "workbench/metric-remove-islands";
     "surface": InputPathType;
     "metric_in": InputPathType;
     "metric_out": string;
     "opt_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
+type MetricRemoveIslandsParametersTagged = Required<Pick<MetricRemoveIslandsParameters, '@type'>> & MetricRemoveIslandsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-remove-islands": metric_remove_islands_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.metric-remove-islands": metric_remove_islands_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `metric_remove_islands(...)`.
+ * Output object returned when calling `MetricRemoveIslandsParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function metric_remove_islands_params(
     metric_in: InputPathType,
     metric_out: string,
     opt_corrected_areas_area_metric: InputPathType | null = null,
-): MetricRemoveIslandsParameters {
+): MetricRemoveIslandsParametersTagged {
     const params = {
-        "@type": "workbench.metric-remove-islands" as const,
+        "@type": "workbench/metric-remove-islands" as const,
         "surface": surface,
         "metric_in": metric_in,
         "metric_out": metric_out,
@@ -212,7 +179,6 @@ function metric_remove_islands(
 export {
       METRIC_REMOVE_ISLANDS_METADATA,
       MetricRemoveIslandsOutputs,
-      MetricRemoveIslandsParameters,
       metric_remove_islands,
       metric_remove_islands_execute,
       metric_remove_islands_params,

@@ -12,7 +12,7 @@ const ANTS_INTRODUCTION_SH_METADATA: Metadata = {
 
 
 interface AntsIntroductionShParameters {
-    "@type": "ants.antsIntroduction.sh";
+    "@type"?: "ants/antsIntroduction.sh";
     "image_dimension": 2 | 3;
     "reference_image": InputPathType;
     "input_image": InputPathType;
@@ -25,43 +25,11 @@ interface AntsIntroductionShParameters {
     "similarity_metric"?: string | null | undefined;
     "transformation_model"?: string | null | undefined;
 }
+type AntsIntroductionShParametersTagged = Required<Pick<AntsIntroductionShParameters, '@type'>> & AntsIntroductionShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.antsIntroduction.sh": ants_introduction_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ants_introduction_sh(...)`.
+ * Output object returned when calling `AntsIntroductionShParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +70,9 @@ function ants_introduction_sh_params(
     quality_check: 0 | 1 | null = null,
     similarity_metric: string | null = null,
     transformation_model: string | null = null,
-): AntsIntroductionShParameters {
+): AntsIntroductionShParametersTagged {
     const params = {
-        "@type": "ants.antsIntroduction.sh" as const,
+        "@type": "ants/antsIntroduction.sh" as const,
         "image_dimension": image_dimension,
         "reference_image": reference_image,
         "input_image": input_image,
@@ -308,7 +276,6 @@ function ants_introduction_sh(
 export {
       ANTS_INTRODUCTION_SH_METADATA,
       AntsIntroductionShOutputs,
-      AntsIntroductionShParameters,
       ants_introduction_sh,
       ants_introduction_sh_execute,
       ants_introduction_sh_params,

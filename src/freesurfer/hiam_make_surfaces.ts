@@ -12,47 +12,15 @@ const HIAM_MAKE_SURFACES_METADATA: Metadata = {
 
 
 interface HiamMakeSurfacesParameters {
-    "@type": "freesurfer.hiam_make_surfaces";
+    "@type"?: "freesurfer/hiam_make_surfaces";
     "subject_name": string;
     "structure": "RA" | "LA" | "RH" | "LH";
 }
+type HiamMakeSurfacesParametersTagged = Required<Pick<HiamMakeSurfacesParameters, '@type'>> & HiamMakeSurfacesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.hiam_make_surfaces": hiam_make_surfaces_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `hiam_make_surfaces(...)`.
+ * Output object returned when calling `HiamMakeSurfacesParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface HiamMakeSurfacesOutputs {
 function hiam_make_surfaces_params(
     subject_name: string,
     structure: "RA" | "LA" | "RH" | "LH",
-): HiamMakeSurfacesParameters {
+): HiamMakeSurfacesParametersTagged {
     const params = {
-        "@type": "freesurfer.hiam_make_surfaces" as const,
+        "@type": "freesurfer/hiam_make_surfaces" as const,
         "subject_name": subject_name,
         "structure": structure,
     };
@@ -180,7 +148,6 @@ function hiam_make_surfaces(
 export {
       HIAM_MAKE_SURFACES_METADATA,
       HiamMakeSurfacesOutputs,
-      HiamMakeSurfacesParameters,
       hiam_make_surfaces,
       hiam_make_surfaces_execute,
       hiam_make_surfaces_params,

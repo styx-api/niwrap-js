@@ -12,7 +12,7 @@ const V_3D_ERRTS_CORMAT_METADATA: Metadata = {
 
 
 interface V3dErrtsCormatParameters {
-    "@type": "afni.3dErrtsCormat";
+    "@type"?: "afni/3dErrtsCormat";
     "dset": InputPathType;
     "concat"?: string | null | undefined;
     "input"?: InputPathType | null | undefined;
@@ -20,44 +20,11 @@ interface V3dErrtsCormatParameters {
     "maxlag"?: number | null | undefined;
     "polort"?: number | null | undefined;
 }
+type V3dErrtsCormatParametersTagged = Required<Pick<V3dErrtsCormatParameters, '@type'>> & V3dErrtsCormatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dErrtsCormat": v_3d_errts_cormat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dErrtsCormat": v_3d_errts_cormat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_errts_cormat(...)`.
+ * Output object returned when calling `V3dErrtsCormatParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function v_3d_errts_cormat_params(
     mask: InputPathType | null = null,
     maxlag: number | null = null,
     polort: number | null = null,
-): V3dErrtsCormatParameters {
+): V3dErrtsCormatParametersTagged {
     const params = {
-        "@type": "afni.3dErrtsCormat" as const,
+        "@type": "afni/3dErrtsCormat" as const,
         "dset": dset,
     };
     if (concat !== null) {
@@ -248,7 +215,6 @@ function v_3d_errts_cormat(
 
 export {
       V3dErrtsCormatOutputs,
-      V3dErrtsCormatParameters,
       V_3D_ERRTS_CORMAT_METADATA,
       v_3d_errts_cormat,
       v_3d_errts_cormat_execute,

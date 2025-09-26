@@ -12,7 +12,7 @@ const MRIS_NITERS2FWHM_METADATA: Metadata = {
 
 
 interface MrisNiters2fwhmParameters {
-    "@type": "freesurfer.mris_niters2fwhm";
+    "@type"?: "freesurfer/mris_niters2fwhm";
     "subject": string;
     "hemi": string;
     "surf": string;
@@ -23,43 +23,11 @@ interface MrisNiters2fwhmParameters {
     "help": boolean;
     "version": boolean;
 }
+type MrisNiters2fwhmParametersTagged = Required<Pick<MrisNiters2fwhmParameters, '@type'>> & MrisNiters2fwhmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_niters2fwhm": mris_niters2fwhm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_niters2fwhm(...)`.
+ * Output object returned when calling `MrisNiters2fwhmParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +64,9 @@ function mris_niters2fwhm_params(
     checkopts: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): MrisNiters2fwhmParameters {
+): MrisNiters2fwhmParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_niters2fwhm" as const,
+        "@type": "freesurfer/mris_niters2fwhm" as const,
         "subject": subject,
         "hemi": hemi,
         "surf": surf,
@@ -147,16 +115,16 @@ function mris_niters2fwhm_cargs(
         "--niters",
         String((params["niters"] ?? null))
     );
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["checkopts"] ?? null)) {
+    if ((params["checkopts"] ?? false)) {
         cargs.push("--checkopts");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -252,7 +220,6 @@ function mris_niters2fwhm(
 export {
       MRIS_NITERS2FWHM_METADATA,
       MrisNiters2fwhmOutputs,
-      MrisNiters2fwhmParameters,
       mris_niters2fwhm,
       mris_niters2fwhm_execute,
       mris_niters2fwhm_params,

@@ -12,50 +12,17 @@ const MRIS_COMPUTE_LAYER_INTENSITIES_METADATA: Metadata = {
 
 
 interface MrisComputeLayerIntensitiesParameters {
-    "@type": "freesurfer.mris_compute_layer_intensities";
+    "@type"?: "freesurfer/mris_compute_layer_intensities";
     "input_intensity_volume": InputPathType;
     "layer_volume_fractions_file": InputPathType;
     "input_surface": InputPathType;
     "output_overlay": string;
 }
+type MrisComputeLayerIntensitiesParametersTagged = Required<Pick<MrisComputeLayerIntensitiesParameters, '@type'>> & MrisComputeLayerIntensitiesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_compute_layer_intensities": mris_compute_layer_intensities_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_compute_layer_intensities": mris_compute_layer_intensities_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_compute_layer_intensities(...)`.
+ * Output object returned when calling `MrisComputeLayerIntensitiesParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mris_compute_layer_intensities_params(
     layer_volume_fractions_file: InputPathType,
     input_surface: InputPathType,
     output_overlay: string,
-): MrisComputeLayerIntensitiesParameters {
+): MrisComputeLayerIntensitiesParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_compute_layer_intensities" as const,
+        "@type": "freesurfer/mris_compute_layer_intensities" as const,
         "input_intensity_volume": input_intensity_volume,
         "layer_volume_fractions_file": layer_volume_fractions_file,
         "input_surface": input_surface,
@@ -200,7 +167,6 @@ function mris_compute_layer_intensities(
 export {
       MRIS_COMPUTE_LAYER_INTENSITIES_METADATA,
       MrisComputeLayerIntensitiesOutputs,
-      MrisComputeLayerIntensitiesParameters,
       mris_compute_layer_intensities,
       mris_compute_layer_intensities_execute,
       mris_compute_layer_intensities_params,

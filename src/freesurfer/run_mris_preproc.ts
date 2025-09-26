@@ -12,47 +12,15 @@ const RUN_MRIS_PREPROC_METADATA: Metadata = {
 
 
 interface RunMrisPreprocParameters {
-    "@type": "freesurfer.run_mris_preproc";
+    "@type"?: "freesurfer/run_mris_preproc";
     "qdec_table": InputPathType;
     "target_average"?: string | null | undefined;
 }
+type RunMrisPreprocParametersTagged = Required<Pick<RunMrisPreprocParameters, '@type'>> & RunMrisPreprocParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.run_mris_preproc": run_mris_preproc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `run_mris_preproc(...)`.
+ * Output object returned when calling `RunMrisPreprocParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface RunMrisPreprocOutputs {
 function run_mris_preproc_params(
     qdec_table: InputPathType,
     target_average: string | null = null,
-): RunMrisPreprocParameters {
+): RunMrisPreprocParametersTagged {
     const params = {
-        "@type": "freesurfer.run_mris_preproc" as const,
+        "@type": "freesurfer/run_mris_preproc" as const,
         "qdec_table": qdec_table,
     };
     if (target_average !== null) {
@@ -184,7 +152,6 @@ function run_mris_preproc(
 export {
       RUN_MRIS_PREPROC_METADATA,
       RunMrisPreprocOutputs,
-      RunMrisPreprocParameters,
       run_mris_preproc,
       run_mris_preproc_execute,
       run_mris_preproc_params,

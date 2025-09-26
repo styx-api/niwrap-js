@@ -12,7 +12,7 @@ const MAP_CENTRAL_SULCUS_METADATA: Metadata = {
 
 
 interface MapCentralSulcusParameters {
-    "@type": "freesurfer.map_central_sulcus";
+    "@type"?: "freesurfer/map_central_sulcus";
     "subjid": string;
     "process_directive": string;
     "hemi_flag"?: string | null | undefined;
@@ -50,44 +50,11 @@ interface MapCentralSulcusParameters {
     "mail_username"?: string | null | undefined;
     "threads"?: number | null | undefined;
 }
+type MapCentralSulcusParametersTagged = Required<Pick<MapCentralSulcusParameters, '@type'>> & MapCentralSulcusParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.map_central_sulcus": map_central_sulcus_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.map_central_sulcus": map_central_sulcus_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `map_central_sulcus(...)`.
+ * Output object returned when calling `MapCentralSulcusParameters(...)`.
  *
  * @interface
  */
@@ -186,9 +153,9 @@ function map_central_sulcus_params(
     schwartzya3t_atlas: boolean = false,
     mail_username: string | null = null,
     threads: number | null = null,
-): MapCentralSulcusParameters {
+): MapCentralSulcusParametersTagged {
     const params = {
-        "@type": "freesurfer.map_central_sulcus" as const,
+        "@type": "freesurfer/map_central_sulcus" as const,
         "subjid": subjid,
         "process_directive": process_directive,
         "xopts_use": xopts_use,
@@ -293,13 +260,13 @@ function map_central_sulcus_cargs(
             execution.inputFile((params["expert_prefs_file"] ?? null))
         );
     }
-    if ((params["xopts_use"] ?? null)) {
+    if ((params["xopts_use"] ?? false)) {
         cargs.push("-xopts-use");
     }
-    if ((params["xopts_clean"] ?? null)) {
+    if ((params["xopts_clean"] ?? false)) {
         cargs.push("-xopts-clean");
     }
-    if ((params["xopts_overwrite"] ?? null)) {
+    if ((params["xopts_overwrite"] ?? false)) {
         cargs.push("-xopts-overwrite");
     }
     if ((params["watershed_cmd"] ?? null) !== null) {
@@ -314,19 +281,19 @@ function map_central_sulcus_cargs(
             execution.inputFile((params["xmask_file"] ?? null))
         );
     }
-    if ((params["wsless"] ?? null)) {
+    if ((params["wsless"] ?? false)) {
         cargs.push("-wsless");
     }
-    if ((params["wsmore"] ?? null)) {
+    if ((params["wsmore"] ?? false)) {
         cargs.push("-wsmore");
     }
-    if ((params["wsatlas"] ?? null)) {
+    if ((params["wsatlas"] ?? false)) {
         cargs.push("-wsatlas");
     }
-    if ((params["no_wsatlas"] ?? null)) {
+    if ((params["no_wsatlas"] ?? false)) {
         cargs.push("-no-wsatlas");
     }
-    if ((params["no_wsgcaatlas"] ?? null)) {
+    if ((params["no_wsgcaatlas"] ?? false)) {
         cargs.push("-no-wsgcaatlas");
     }
     if ((params["wsthresh"] ?? null) !== null) {
@@ -377,13 +344,13 @@ function map_central_sulcus_cargs(
             String((params["norm2_n"] ?? null))
         );
     }
-    if ((params["cm_flag"] ?? null)) {
+    if ((params["cm_flag"] ?? false)) {
         cargs.push("-cm");
     }
-    if ((params["no_fix_with_ga"] ?? null)) {
+    if ((params["no_fix_with_ga"] ?? false)) {
         cargs.push("-no-fix-with-ga");
     }
-    if ((params["fix_diag_only"] ?? null)) {
+    if ((params["fix_diag_only"] ?? false)) {
         cargs.push("-fix-diag-only");
     }
     if ((params["seg_wlo"] ?? null) !== null) {
@@ -398,25 +365,25 @@ function map_central_sulcus_cargs(
             String((params["seg_ghi"] ?? null))
         );
     }
-    if ((params["nothicken"] ?? null)) {
+    if ((params["nothicken"] ?? false)) {
         cargs.push("-nothicken");
     }
-    if ((params["no_ca_align_after"] ?? null)) {
+    if ((params["no_ca_align_after"] ?? false)) {
         cargs.push("-no-ca-align-after");
     }
-    if ((params["no_ca_align"] ?? null)) {
+    if ((params["no_ca_align"] ?? false)) {
         cargs.push("-no-ca-align");
     }
-    if ((params["deface"] ?? null)) {
+    if ((params["deface"] ?? false)) {
         cargs.push("-deface");
     }
-    if ((params["mprage"] ?? null)) {
+    if ((params["mprage"] ?? false)) {
         cargs.push("-mprage");
     }
-    if ((params["washu_mprage"] ?? null)) {
+    if ((params["washu_mprage"] ?? false)) {
         cargs.push("-washu_mprage");
     }
-    if ((params["schwartzya3t_atlas"] ?? null)) {
+    if ((params["schwartzya3t_atlas"] ?? false)) {
         cargs.push("-schwartzya3t-atlas");
     }
     if ((params["mail_username"] ?? null) !== null) {
@@ -580,7 +547,6 @@ function map_central_sulcus(
 export {
       MAP_CENTRAL_SULCUS_METADATA,
       MapCentralSulcusOutputs,
-      MapCentralSulcusParameters,
       map_central_sulcus,
       map_central_sulcus_execute,
       map_central_sulcus_params,

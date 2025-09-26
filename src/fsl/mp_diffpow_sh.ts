@@ -12,48 +12,15 @@ const MP_DIFFPOW_SH_METADATA: Metadata = {
 
 
 interface MpDiffpowShParameters {
-    "@type": "fsl.mp_diffpow.sh";
+    "@type"?: "fsl/mp_diffpow.sh";
     "reg_file": InputPathType;
     "diff_reg_file": string;
 }
+type MpDiffpowShParametersTagged = Required<Pick<MpDiffpowShParameters, '@type'>> & MpDiffpowShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.mp_diffpow.sh": mp_diffpow_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.mp_diffpow.sh": mp_diffpow_sh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mp_diffpow_sh(...)`.
+ * Output object returned when calling `MpDiffpowShParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface MpDiffpowShOutputs {
 function mp_diffpow_sh_params(
     reg_file: InputPathType,
     diff_reg_file: string,
-): MpDiffpowShParameters {
+): MpDiffpowShParametersTagged {
     const params = {
-        "@type": "fsl.mp_diffpow.sh" as const,
+        "@type": "fsl/mp_diffpow.sh" as const,
         "reg_file": reg_file,
         "diff_reg_file": diff_reg_file,
     };
@@ -186,7 +153,6 @@ function mp_diffpow_sh(
 export {
       MP_DIFFPOW_SH_METADATA,
       MpDiffpowShOutputs,
-      MpDiffpowShParameters,
       mp_diffpow_sh,
       mp_diffpow_sh_execute,
       mp_diffpow_sh_params,

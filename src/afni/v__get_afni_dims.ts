@@ -12,47 +12,14 @@ const V__GET_AFNI_DIMS_METADATA: Metadata = {
 
 
 interface VGetAfniDimsParameters {
-    "@type": "afni.@GetAfniDims";
+    "@type"?: "afni/@GetAfniDims";
     "input_dset": InputPathType;
 }
+type VGetAfniDimsParametersTagged = Required<Pick<VGetAfniDimsParameters, '@type'>> & VGetAfniDimsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@GetAfniDims": v__get_afni_dims_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@GetAfniDims": v__get_afni_dims_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__get_afni_dims(...)`.
+ * Output object returned when calling `VGetAfniDimsParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface VGetAfniDimsOutputs {
  */
 function v__get_afni_dims_params(
     input_dset: InputPathType,
-): VGetAfniDimsParameters {
+): VGetAfniDimsParametersTagged {
     const params = {
-        "@type": "afni.@GetAfniDims" as const,
+        "@type": "afni/@GetAfniDims" as const,
         "input_dset": input_dset,
     };
     return params;
@@ -178,7 +145,6 @@ function v__get_afni_dims(
 
 export {
       VGetAfniDimsOutputs,
-      VGetAfniDimsParameters,
       V__GET_AFNI_DIMS_METADATA,
       v__get_afni_dims,
       v__get_afni_dims_execute,

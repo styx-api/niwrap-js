@@ -12,50 +12,17 @@ const MRI_FUSE_INTENSITY_IMAGES_METADATA: Metadata = {
 
 
 interface MriFuseIntensityImagesParameters {
-    "@type": "freesurfer.mri_fuse_intensity_images";
+    "@type"?: "freesurfer/mri_fuse_intensity_images";
     "longitudinal_time_point_file": InputPathType;
     "input_volume": InputPathType;
     "transform_file": InputPathType;
     "output_volume": string;
 }
+type MriFuseIntensityImagesParametersTagged = Required<Pick<MriFuseIntensityImagesParameters, '@type'>> & MriFuseIntensityImagesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_fuse_intensity_images": mri_fuse_intensity_images_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_fuse_intensity_images": mri_fuse_intensity_images_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_fuse_intensity_images(...)`.
+ * Output object returned when calling `MriFuseIntensityImagesParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mri_fuse_intensity_images_params(
     input_volume: InputPathType,
     transform_file: InputPathType,
     output_volume: string,
-): MriFuseIntensityImagesParameters {
+): MriFuseIntensityImagesParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_fuse_intensity_images" as const,
+        "@type": "freesurfer/mri_fuse_intensity_images" as const,
         "longitudinal_time_point_file": longitudinal_time_point_file,
         "input_volume": input_volume,
         "transform_file": transform_file,
@@ -200,7 +167,6 @@ function mri_fuse_intensity_images(
 export {
       MRI_FUSE_INTENSITY_IMAGES_METADATA,
       MriFuseIntensityImagesOutputs,
-      MriFuseIntensityImagesParameters,
       mri_fuse_intensity_images,
       mri_fuse_intensity_images_execute,
       mri_fuse_intensity_images_params,

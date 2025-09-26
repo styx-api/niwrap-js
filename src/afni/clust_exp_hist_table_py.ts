@@ -12,50 +12,17 @@ const CLUST_EXP_HIST_TABLE_PY_METADATA: Metadata = {
 
 
 interface ClustExpHistTablePyParameters {
-    "@type": "afni.ClustExp_HistTable.py";
+    "@type"?: "afni/ClustExp_HistTable.py";
     "stat_dset": InputPathType;
     "prefix"?: string | null | undefined;
     "session"?: string | null | undefined;
     "overwrite": boolean;
 }
+type ClustExpHistTablePyParametersTagged = Required<Pick<ClustExpHistTablePyParameters, '@type'>> & ClustExpHistTablePyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.ClustExp_HistTable.py": clust_exp_hist_table_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.ClustExp_HistTable.py": clust_exp_hist_table_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `clust_exp_hist_table_py(...)`.
+ * Output object returned when calling `ClustExpHistTablePyParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function clust_exp_hist_table_py_params(
     prefix: string | null = null,
     session: string | null = null,
     overwrite: boolean = false,
-): ClustExpHistTablePyParameters {
+): ClustExpHistTablePyParametersTagged {
     const params = {
-        "@type": "afni.ClustExp_HistTable.py" as const,
+        "@type": "afni/ClustExp_HistTable.py" as const,
         "stat_dset": stat_dset,
         "overwrite": overwrite,
     };
@@ -132,7 +99,7 @@ function clust_exp_hist_table_py_cargs(
             (params["session"] ?? null)
         );
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("-overwrite");
     }
     return cargs;
@@ -219,7 +186,6 @@ function clust_exp_hist_table_py(
 export {
       CLUST_EXP_HIST_TABLE_PY_METADATA,
       ClustExpHistTablePyOutputs,
-      ClustExpHistTablePyParameters,
       clust_exp_hist_table_py,
       clust_exp_hist_table_py_execute,
       clust_exp_hist_table_py_params,

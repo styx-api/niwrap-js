@@ -12,49 +12,16 @@ const MRI_RELABEL_HYPOINTENSITIES_METADATA: Metadata = {
 
 
 interface MriRelabelHypointensitiesParameters {
-    "@type": "freesurfer.mri_relabel_hypointensities";
+    "@type"?: "freesurfer/mri_relabel_hypointensities";
     "input_aseg": InputPathType;
     "surface_directory": string;
     "output_aseg": string;
 }
+type MriRelabelHypointensitiesParametersTagged = Required<Pick<MriRelabelHypointensitiesParameters, '@type'>> & MriRelabelHypointensitiesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_relabel_hypointensities": mri_relabel_hypointensities_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_relabel_hypointensities": mri_relabel_hypointensities_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_relabel_hypointensities(...)`.
+ * Output object returned when calling `MriRelabelHypointensitiesParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mri_relabel_hypointensities_params(
     input_aseg: InputPathType,
     surface_directory: string,
     output_aseg: string,
-): MriRelabelHypointensitiesParameters {
+): MriRelabelHypointensitiesParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_relabel_hypointensities" as const,
+        "@type": "freesurfer/mri_relabel_hypointensities" as const,
         "input_aseg": input_aseg,
         "surface_directory": surface_directory,
         "output_aseg": output_aseg,
@@ -193,7 +160,6 @@ function mri_relabel_hypointensities(
 export {
       MRI_RELABEL_HYPOINTENSITIES_METADATA,
       MriRelabelHypointensitiesOutputs,
-      MriRelabelHypointensitiesParameters,
       mri_relabel_hypointensities,
       mri_relabel_hypointensities_execute,
       mri_relabel_hypointensities_params,

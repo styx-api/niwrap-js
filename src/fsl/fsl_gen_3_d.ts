@@ -12,48 +12,15 @@ const FSL_GEN_3_D_METADATA: Metadata = {
 
 
 interface FslGen3DParameters {
-    "@type": "fsl.fsl_gen_3D";
+    "@type"?: "fsl/fsl_gen_3D";
     "infile": InputPathType;
     "outfile": InputPathType;
 }
+type FslGen3DParametersTagged = Required<Pick<FslGen3DParameters, '@type'>> & FslGen3DParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fsl_gen_3D": fsl_gen_3_d_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fsl_gen_3D": fsl_gen_3_d_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsl_gen_3_d(...)`.
+ * Output object returned when calling `FslGen3DParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface FslGen3DOutputs {
 function fsl_gen_3_d_params(
     infile: InputPathType,
     outfile: InputPathType,
-): FslGen3DParameters {
+): FslGen3DParametersTagged {
     const params = {
-        "@type": "fsl.fsl_gen_3D" as const,
+        "@type": "fsl/fsl_gen_3D" as const,
         "infile": infile,
         "outfile": outfile,
     };
@@ -186,7 +153,6 @@ function fsl_gen_3_d(
 export {
       FSL_GEN_3_D_METADATA,
       FslGen3DOutputs,
-      FslGen3DParameters,
       fsl_gen_3_d,
       fsl_gen_3_d_execute,
       fsl_gen_3_d_params,

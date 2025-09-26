@@ -12,38 +12,43 @@ const EXTRACT_REGION_FROM_IMAGE_METADATA: Metadata = {
 
 
 interface ExtractRegionFromImageRegionMinMaxIndexParameters {
-    "@type": "ants.ExtractRegionFromImage.region_min_max_index";
+    "@type"?: "region_min_max_index";
     "min_index": string;
     "max_index": string;
 }
+type ExtractRegionFromImageRegionMinMaxIndexParametersTagged = Required<Pick<ExtractRegionFromImageRegionMinMaxIndexParameters, '@type'>> & ExtractRegionFromImageRegionMinMaxIndexParameters;
 
 
 interface ExtractRegionFromImageRegionLabelParameters {
-    "@type": "ants.ExtractRegionFromImage.region_label";
+    "@type"?: "region_label";
     "label": string;
 }
+type ExtractRegionFromImageRegionLabelParametersTagged = Required<Pick<ExtractRegionFromImageRegionLabelParameters, '@type'>> & ExtractRegionFromImageRegionLabelParameters;
 
 
 interface ExtractRegionFromImageRegionDomainImageParameters {
-    "@type": "ants.ExtractRegionFromImage.region_domain_image";
+    "@type"?: "region_domain_image";
     "domain_image": InputPathType;
 }
+type ExtractRegionFromImageRegionDomainImageParametersTagged = Required<Pick<ExtractRegionFromImageRegionDomainImageParameters, '@type'>> & ExtractRegionFromImageRegionDomainImageParameters;
 
 
 interface ExtractRegionFromImageRegionLabelWithImageParameters {
-    "@type": "ants.ExtractRegionFromImage.region_label_with_image";
+    "@type"?: "region_label_with_image";
     "label": string;
     "label_image": InputPathType;
 }
+type ExtractRegionFromImageRegionLabelWithImageParametersTagged = Required<Pick<ExtractRegionFromImageRegionLabelWithImageParameters, '@type'>> & ExtractRegionFromImageRegionLabelWithImageParameters;
 
 
 interface ExtractRegionFromImageParameters {
-    "@type": "ants.ExtractRegionFromImage";
+    "@type"?: "ants/ExtractRegionFromImage";
     "image_dimension": number;
     "input_image": InputPathType;
     "output_image": string;
-    "region_specification": ExtractRegionFromImageRegionMinMaxIndexParameters | ExtractRegionFromImageRegionLabelParameters | ExtractRegionFromImageRegionDomainImageParameters | ExtractRegionFromImageRegionLabelWithImageParameters;
+    "region_specification": ExtractRegionFromImageRegionMinMaxIndexParametersTagged | ExtractRegionFromImageRegionLabelParametersTagged | ExtractRegionFromImageRegionDomainImageParametersTagged | ExtractRegionFromImageRegionLabelWithImageParametersTagged;
 }
+type ExtractRegionFromImageParametersTagged = Required<Pick<ExtractRegionFromImageParameters, '@type'>> & ExtractRegionFromImageParameters;
 
 
 /**
@@ -53,15 +58,14 @@ interface ExtractRegionFromImageParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function extract_region_from_image_region_specification_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "ants.ExtractRegionFromImage": extract_region_from_image_cargs,
-        "ants.ExtractRegionFromImage.region_min_max_index": extract_region_from_image_region_min_max_index_cargs,
-        "ants.ExtractRegionFromImage.region_label": extract_region_from_image_region_label_cargs,
-        "ants.ExtractRegionFromImage.region_domain_image": extract_region_from_image_region_domain_image_cargs,
-        "ants.ExtractRegionFromImage.region_label_with_image": extract_region_from_image_region_label_with_image_cargs,
+        "region_min_max_index": extract_region_from_image_region_min_max_index_cargs,
+        "region_label": extract_region_from_image_region_label_cargs,
+        "region_domain_image": extract_region_from_image_region_domain_image_cargs,
+        "region_label_with_image": extract_region_from_image_region_label_with_image_cargs,
     };
     return cargsFuncs[t];
 }
@@ -74,11 +78,10 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function extract_region_from_image_region_specification_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "ants.ExtractRegionFromImage": extract_region_from_image_outputs,
     };
     return outputsFuncs[t];
 }
@@ -95,9 +98,9 @@ function dynOutputs(
 function extract_region_from_image_region_min_max_index_params(
     min_index: string,
     max_index: string,
-): ExtractRegionFromImageRegionMinMaxIndexParameters {
+): ExtractRegionFromImageRegionMinMaxIndexParametersTagged {
     const params = {
-        "@type": "ants.ExtractRegionFromImage.region_min_max_index" as const,
+        "@type": "region_min_max_index" as const,
         "min_index": min_index,
         "max_index": max_index,
     };
@@ -133,9 +136,9 @@ function extract_region_from_image_region_min_max_index_cargs(
  */
 function extract_region_from_image_region_label_params(
     label: string,
-): ExtractRegionFromImageRegionLabelParameters {
+): ExtractRegionFromImageRegionLabelParametersTagged {
     const params = {
-        "@type": "ants.ExtractRegionFromImage.region_label" as const,
+        "@type": "region_label" as const,
         "label": label,
     };
     return params;
@@ -169,9 +172,9 @@ function extract_region_from_image_region_label_cargs(
  */
 function extract_region_from_image_region_domain_image_params(
     domain_image: InputPathType,
-): ExtractRegionFromImageRegionDomainImageParameters {
+): ExtractRegionFromImageRegionDomainImageParametersTagged {
     const params = {
-        "@type": "ants.ExtractRegionFromImage.region_domain_image" as const,
+        "@type": "region_domain_image" as const,
         "domain_image": domain_image,
     };
     return params;
@@ -207,9 +210,9 @@ function extract_region_from_image_region_domain_image_cargs(
 function extract_region_from_image_region_label_with_image_params(
     label: string,
     label_image: InputPathType,
-): ExtractRegionFromImageRegionLabelWithImageParameters {
+): ExtractRegionFromImageRegionLabelWithImageParametersTagged {
     const params = {
-        "@type": "ants.ExtractRegionFromImage.region_label_with_image" as const,
+        "@type": "region_label_with_image" as const,
         "label": label,
         "label_image": label_image,
     };
@@ -238,7 +241,7 @@ function extract_region_from_image_region_label_with_image_cargs(
 
 
 /**
- * Output object returned when calling `extract_region_from_image(...)`.
+ * Output object returned when calling `ExtractRegionFromImageParameters(...)`.
  *
  * @interface
  */
@@ -268,10 +271,10 @@ function extract_region_from_image_params(
     image_dimension: number,
     input_image: InputPathType,
     output_image: string,
-    region_specification: ExtractRegionFromImageRegionMinMaxIndexParameters | ExtractRegionFromImageRegionLabelParameters | ExtractRegionFromImageRegionDomainImageParameters | ExtractRegionFromImageRegionLabelWithImageParameters,
-): ExtractRegionFromImageParameters {
+    region_specification: ExtractRegionFromImageRegionMinMaxIndexParametersTagged | ExtractRegionFromImageRegionLabelParametersTagged | ExtractRegionFromImageRegionDomainImageParametersTagged | ExtractRegionFromImageRegionLabelWithImageParametersTagged,
+): ExtractRegionFromImageParametersTagged {
     const params = {
-        "@type": "ants.ExtractRegionFromImage" as const,
+        "@type": "ants/ExtractRegionFromImage" as const,
         "image_dimension": image_dimension,
         "input_image": input_image,
         "output_image": output_image,
@@ -298,7 +301,7 @@ function extract_region_from_image_cargs(
     cargs.push(String((params["image_dimension"] ?? null)));
     cargs.push(execution.inputFile((params["input_image"] ?? null)));
     cargs.push((params["output_image"] ?? null));
-    cargs.push(...dynCargs((params["region_specification"] ?? null)["@type"])((params["region_specification"] ?? null), execution));
+    cargs.push(...extract_region_from_image_region_specification_cargs_dyn_fn((params["region_specification"] ?? null)["@type"])((params["region_specification"] ?? null), execution));
     return cargs;
 }
 
@@ -372,7 +375,7 @@ function extract_region_from_image(
     image_dimension: number,
     input_image: InputPathType,
     output_image: string,
-    region_specification: ExtractRegionFromImageRegionMinMaxIndexParameters | ExtractRegionFromImageRegionLabelParameters | ExtractRegionFromImageRegionDomainImageParameters | ExtractRegionFromImageRegionLabelWithImageParameters,
+    region_specification: ExtractRegionFromImageRegionMinMaxIndexParametersTagged | ExtractRegionFromImageRegionLabelParametersTagged | ExtractRegionFromImageRegionDomainImageParametersTagged | ExtractRegionFromImageRegionLabelWithImageParametersTagged,
     runner: Runner | null = null,
 ): ExtractRegionFromImageOutputs {
     const params = extract_region_from_image_params(image_dimension, input_image, output_image, region_specification)
@@ -383,11 +386,6 @@ function extract_region_from_image(
 export {
       EXTRACT_REGION_FROM_IMAGE_METADATA,
       ExtractRegionFromImageOutputs,
-      ExtractRegionFromImageParameters,
-      ExtractRegionFromImageRegionDomainImageParameters,
-      ExtractRegionFromImageRegionLabelParameters,
-      ExtractRegionFromImageRegionLabelWithImageParameters,
-      ExtractRegionFromImageRegionMinMaxIndexParameters,
       extract_region_from_image,
       extract_region_from_image_execute,
       extract_region_from_image_params,

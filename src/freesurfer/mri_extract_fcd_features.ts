@@ -12,49 +12,17 @@ const MRI_EXTRACT_FCD_FEATURES_METADATA: Metadata = {
 
 
 interface MriExtractFcdFeaturesParameters {
-    "@type": "freesurfer.mri_extract_fcd_features";
+    "@type"?: "freesurfer/mri_extract_fcd_features";
     "subject": string;
     "hemi": string;
     "output_file": InputPathType;
     "subjects_dir"?: string | null | undefined;
 }
+type MriExtractFcdFeaturesParametersTagged = Required<Pick<MriExtractFcdFeaturesParameters, '@type'>> & MriExtractFcdFeaturesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_extract_fcd_features": mri_extract_fcd_features_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_extract_fcd_features(...)`.
+ * Output object returned when calling `MriExtractFcdFeaturesParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function mri_extract_fcd_features_params(
     hemi: string,
     output_file: InputPathType,
     subjects_dir: string | null = null,
-): MriExtractFcdFeaturesParameters {
+): MriExtractFcdFeaturesParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_extract_fcd_features" as const,
+        "@type": "freesurfer/mri_extract_fcd_features" as const,
         "subject": subject,
         "hemi": hemi,
         "output_file": output_file,
@@ -201,7 +169,6 @@ function mri_extract_fcd_features(
 export {
       MRI_EXTRACT_FCD_FEATURES_METADATA,
       MriExtractFcdFeaturesOutputs,
-      MriExtractFcdFeaturesParameters,
       mri_extract_fcd_features,
       mri_extract_fcd_features_execute,
       mri_extract_fcd_features_params,

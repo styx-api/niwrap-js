@@ -12,7 +12,7 @@ const V__SUMA_ALIGN_TO_EXPERIMENT_METADATA: Metadata = {
 
 
 interface VSumaAlignToExperimentParameters {
-    "@type": "afni.@SUMA_AlignToExperiment";
+    "@type"?: "afni/@SUMA_AlignToExperiment";
     "exp_anat": InputPathType;
     "surf_anat": InputPathType;
     "dxyz"?: number | null | undefined;
@@ -34,44 +34,11 @@ interface VSumaAlignToExperimentParameters {
     "keep_tmp": boolean;
     "overwrite_resp"?: string | null | undefined;
 }
+type VSumaAlignToExperimentParametersTagged = Required<Pick<VSumaAlignToExperimentParameters, '@type'>> & VSumaAlignToExperimentParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@SUMA_AlignToExperiment": v__suma_align_to_experiment_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@SUMA_AlignToExperiment": v__suma_align_to_experiment_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__suma_align_to_experiment(...)`.
+ * Output object returned when calling `VSumaAlignToExperimentParameters(...)`.
  *
  * @interface
  */
@@ -138,9 +105,9 @@ function v__suma_align_to_experiment_params(
     echo: boolean = false,
     keep_tmp: boolean = false,
     overwrite_resp: string | null = null,
-): VSumaAlignToExperimentParameters {
+): VSumaAlignToExperimentParametersTagged {
     const params = {
-        "@type": "afni.@SUMA_AlignToExperiment" as const,
+        "@type": "afni/@SUMA_AlignToExperiment" as const,
         "exp_anat": exp_anat,
         "surf_anat": surf_anat,
         "wd": wd,
@@ -222,10 +189,10 @@ function v__suma_align_to_experiment_cargs(
             String((params["out_dxyz"] ?? null))
         );
     }
-    if ((params["wd"] ?? null)) {
+    if ((params["wd"] ?? false)) {
         cargs.push("-wd");
     }
-    if ((params["al"] ?? null)) {
+    if ((params["al"] ?? false)) {
         cargs.push("-al");
     }
     if ((params["al_opt"] ?? null) !== null) {
@@ -234,7 +201,7 @@ function v__suma_align_to_experiment_cargs(
             (params["al_opt"] ?? null)
         );
     }
-    if ((params["ok_change_view"] ?? null)) {
+    if ((params["ok_change_view"] ?? false)) {
         cargs.push("-ok_change_view");
     }
     if ((params["strip_skull"] ?? null) !== null) {
@@ -249,7 +216,7 @@ function v__suma_align_to_experiment_cargs(
             (params["skull_strip_opt"] ?? null)
         );
     }
-    if ((params["align_centers"] ?? null)) {
+    if ((params["align_centers"] ?? false)) {
         cargs.push("-align_centers");
     }
     if ((params["init_xform"] ?? null) !== null) {
@@ -282,13 +249,13 @@ function v__suma_align_to_experiment_cargs(
             (params["followers_interp"] ?? null)
         );
     }
-    if ((params["atlas_followers"] ?? null)) {
+    if ((params["atlas_followers"] ?? false)) {
         cargs.push("-atlas_followers");
     }
-    if ((params["echo"] ?? null)) {
+    if ((params["echo"] ?? false)) {
         cargs.push("-echo");
     }
-    if ((params["keep_tmp"] ?? null)) {
+    if ((params["keep_tmp"] ?? false)) {
         cargs.push("-keep_tmp");
     }
     if ((params["overwrite_resp"] ?? null) !== null) {
@@ -413,7 +380,6 @@ function v__suma_align_to_experiment(
 
 export {
       VSumaAlignToExperimentOutputs,
-      VSumaAlignToExperimentParameters,
       V__SUMA_ALIGN_TO_EXPERIMENT_METADATA,
       v__suma_align_to_experiment,
       v__suma_align_to_experiment_execute,

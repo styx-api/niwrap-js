@@ -12,7 +12,7 @@ const SURF_PROJ_METADATA: Metadata = {
 
 
 interface SurfProjParameters {
-    "@type": "fsl.surf_proj";
+    "@type"?: "fsl/surf_proj";
     "data": InputPathType;
     "surface": InputPathType;
     "output_file": string;
@@ -24,44 +24,11 @@ interface SurfProjParameters {
     "operation"?: string | null | undefined;
     "surface_output"?: string | null | undefined;
 }
+type SurfProjParametersTagged = Required<Pick<SurfProjParameters, '@type'>> & SurfProjParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.surf_proj": surf_proj_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.surf_proj": surf_proj_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surf_proj(...)`.
+ * Output object returned when calling `SurfProjParameters(...)`.
  *
  * @interface
  */
@@ -108,9 +75,9 @@ function surf_proj_params(
     direction: number | null = null,
     operation: string | null = null,
     surface_output: string | null = null,
-): SurfProjParameters {
+): SurfProjParametersTagged {
     const params = {
-        "@type": "fsl.surf_proj" as const,
+        "@type": "fsl/surf_proj" as const,
         "data": data,
         "surface": surface,
         "output_file": output_file,
@@ -305,7 +272,6 @@ function surf_proj(
 export {
       SURF_PROJ_METADATA,
       SurfProjOutputs,
-      SurfProjParameters,
       surf_proj,
       surf_proj_execute,
       surf_proj_params,

@@ -12,49 +12,16 @@ const V_1D_FLAG_MOTION_METADATA: Metadata = {
 
 
 interface V1dFlagMotionParameters {
-    "@type": "afni.1dFlagMotion";
+    "@type"?: "afni/1dFlagMotion";
     "input_motion_file": InputPathType;
     "max_translation"?: number | null | undefined;
     "max_rotation"?: number | null | undefined;
 }
+type V1dFlagMotionParametersTagged = Required<Pick<V1dFlagMotionParameters, '@type'>> & V1dFlagMotionParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dFlagMotion": v_1d_flag_motion_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.1dFlagMotion": v_1d_flag_motion_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1d_flag_motion(...)`.
+ * Output object returned when calling `V1dFlagMotionParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function v_1d_flag_motion_params(
     input_motion_file: InputPathType,
     max_translation: number | null = null,
     max_rotation: number | null = null,
-): V1dFlagMotionParameters {
+): V1dFlagMotionParametersTagged {
     const params = {
-        "@type": "afni.1dFlagMotion" as const,
+        "@type": "afni/1dFlagMotion" as const,
         "input_motion_file": input_motion_file,
     };
     if (max_translation !== null) {
@@ -206,7 +173,6 @@ function v_1d_flag_motion(
 
 export {
       V1dFlagMotionOutputs,
-      V1dFlagMotionParameters,
       V_1D_FLAG_MOTION_METADATA,
       v_1d_flag_motion,
       v_1d_flag_motion_execute,

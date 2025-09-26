@@ -12,47 +12,14 @@ const IM2NIML_METADATA: Metadata = {
 
 
 interface Im2nimlParameters {
-    "@type": "afni.im2niml";
+    "@type"?: "afni/im2niml";
     "input_files": Array<InputPathType>;
 }
+type Im2nimlParametersTagged = Required<Pick<Im2nimlParameters, '@type'>> & Im2nimlParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.im2niml": im2niml_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.im2niml": im2niml_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `im2niml(...)`.
+ * Output object returned when calling `Im2nimlParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface Im2nimlOutputs {
  */
 function im2niml_params(
     input_files: Array<InputPathType>,
-): Im2nimlParameters {
+): Im2nimlParametersTagged {
     const params = {
-        "@type": "afni.im2niml" as const,
+        "@type": "afni/im2niml" as const,
         "input_files": input_files,
     };
     return params;
@@ -179,7 +146,6 @@ function im2niml(
 export {
       IM2NIML_METADATA,
       Im2nimlOutputs,
-      Im2nimlParameters,
       im2niml,
       im2niml_execute,
       im2niml_params,

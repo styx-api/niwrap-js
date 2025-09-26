@@ -12,49 +12,16 @@ const LABELS_DISJOINT_METADATA: Metadata = {
 
 
 interface LabelsDisjointParameters {
-    "@type": "freesurfer.labels_disjoint";
+    "@type"?: "freesurfer/labels_disjoint";
     "label1": InputPathType;
     "label2": InputPathType;
     "outputname": string;
 }
+type LabelsDisjointParametersTagged = Required<Pick<LabelsDisjointParameters, '@type'>> & LabelsDisjointParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.labels_disjoint": labels_disjoint_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.labels_disjoint": labels_disjoint_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `labels_disjoint(...)`.
+ * Output object returned when calling `LabelsDisjointParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function labels_disjoint_params(
     label1: InputPathType,
     label2: InputPathType,
     outputname: string,
-): LabelsDisjointParameters {
+): LabelsDisjointParametersTagged {
     const params = {
-        "@type": "freesurfer.labels_disjoint" as const,
+        "@type": "freesurfer/labels_disjoint" as const,
         "label1": label1,
         "label2": label2,
         "outputname": outputname,
@@ -193,7 +160,6 @@ function labels_disjoint(
 export {
       LABELS_DISJOINT_METADATA,
       LabelsDisjointOutputs,
-      LabelsDisjointParameters,
       labels_disjoint,
       labels_disjoint_execute,
       labels_disjoint_params,

@@ -12,50 +12,17 @@ const ZERO_LT_4DFP_METADATA: Metadata = {
 
 
 interface ZeroLt4dfpParameters {
-    "@type": "freesurfer.zero_lt_4dfp";
+    "@type"?: "freesurfer/zero_lt_4dfp";
     "flt_value": number;
     "file_4dfp": InputPathType;
     "outroot"?: string | null | undefined;
     "endianness"?: string | null | undefined;
 }
+type ZeroLt4dfpParametersTagged = Required<Pick<ZeroLt4dfpParameters, '@type'>> & ZeroLt4dfpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.zero_lt_4dfp": zero_lt_4dfp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.zero_lt_4dfp": zero_lt_4dfp_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `zero_lt_4dfp(...)`.
+ * Output object returned when calling `ZeroLt4dfpParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function zero_lt_4dfp_params(
     file_4dfp: InputPathType,
     outroot: string | null = null,
     endianness: string | null = null,
-): ZeroLt4dfpParameters {
+): ZeroLt4dfpParametersTagged {
     const params = {
-        "@type": "freesurfer.zero_lt_4dfp" as const,
+        "@type": "freesurfer/zero_lt_4dfp" as const,
         "flt_value": flt_value,
         "file_4dfp": file_4dfp,
     };
@@ -211,7 +178,6 @@ function zero_lt_4dfp(
 export {
       ZERO_LT_4DFP_METADATA,
       ZeroLt4dfpOutputs,
-      ZeroLt4dfpParameters,
       zero_lt_4dfp,
       zero_lt_4dfp_execute,
       zero_lt_4dfp_params,

@@ -12,7 +12,7 @@ const CREATE_WARPED_GRID_IMAGE_METADATA: Metadata = {
 
 
 interface CreateWarpedGridImageParameters {
-    "@type": "ants.CreateWarpedGridImage";
+    "@type"?: "ants/CreateWarpedGridImage";
     "image_dimension": number;
     "deformation_field": InputPathType;
     "output_image": string;
@@ -20,44 +20,11 @@ interface CreateWarpedGridImageParameters {
     "grid_spacing"?: string | null | undefined;
     "grid_sigma"?: string | null | undefined;
 }
+type CreateWarpedGridImageParametersTagged = Required<Pick<CreateWarpedGridImageParameters, '@type'>> & CreateWarpedGridImageParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.CreateWarpedGridImage": create_warped_grid_image_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.CreateWarpedGridImage": create_warped_grid_image_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `create_warped_grid_image(...)`.
+ * Output object returned when calling `CreateWarpedGridImageParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function create_warped_grid_image_params(
     directions: string | null = null,
     grid_spacing: string | null = null,
     grid_sigma: string | null = null,
-): CreateWarpedGridImageParameters {
+): CreateWarpedGridImageParametersTagged {
     const params = {
-        "@type": "ants.CreateWarpedGridImage" as const,
+        "@type": "ants/CreateWarpedGridImage" as const,
         "image_dimension": image_dimension,
         "deformation_field": deformation_field,
         "output_image": output_image,
@@ -226,7 +193,6 @@ function create_warped_grid_image(
 export {
       CREATE_WARPED_GRID_IMAGE_METADATA,
       CreateWarpedGridImageOutputs,
-      CreateWarpedGridImageParameters,
       create_warped_grid_image,
       create_warped_grid_image_execute,
       create_warped_grid_image_params,

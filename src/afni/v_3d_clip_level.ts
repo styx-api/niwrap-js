@@ -12,49 +12,17 @@ const V_3D_CLIP_LEVEL_METADATA: Metadata = {
 
 
 interface V3dClipLevelParameters {
-    "@type": "afni.3dClipLevel";
+    "@type"?: "afni/3dClipLevel";
     "dataset": InputPathType;
     "mfrac"?: number | null | undefined;
     "doall": boolean;
     "grad"?: string | null | undefined;
 }
+type V3dClipLevelParametersTagged = Required<Pick<V3dClipLevelParameters, '@type'>> & V3dClipLevelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dClipLevel": v_3d_clip_level_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_clip_level(...)`.
+ * Output object returned when calling `V3dClipLevelParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function v_3d_clip_level_params(
     mfrac: number | null = null,
     doall: boolean = false,
     grad: string | null = null,
-): V3dClipLevelParameters {
+): V3dClipLevelParametersTagged {
     const params = {
-        "@type": "afni.3dClipLevel" as const,
+        "@type": "afni/3dClipLevel" as const,
         "dataset": dataset,
         "doall": doall,
     };
@@ -118,7 +86,7 @@ function v_3d_clip_level_cargs(
             String((params["mfrac"] ?? null))
         );
     }
-    if ((params["doall"] ?? null)) {
+    if ((params["doall"] ?? false)) {
         cargs.push("-doall");
     }
     if ((params["grad"] ?? null) !== null) {
@@ -209,7 +177,6 @@ function v_3d_clip_level(
 
 export {
       V3dClipLevelOutputs,
-      V3dClipLevelParameters,
       V_3D_CLIP_LEVEL_METADATA,
       v_3d_clip_level,
       v_3d_clip_level_execute,

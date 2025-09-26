@@ -12,7 +12,7 @@ const V_3DDOT_METADATA: Metadata = {
 
 
 interface V3ddotParameters {
-    "@type": "afni.3ddot";
+    "@type"?: "afni/3ddot";
     "input_datasets": Array<InputPathType>;
     "mask"?: InputPathType | null | undefined;
     "mrange"?: Array<number> | null | undefined;
@@ -29,44 +29,11 @@ interface V3ddotParameters {
     "1D": boolean;
     "NIML": boolean;
 }
+type V3ddotParametersTagged = Required<Pick<V3ddotParameters, '@type'>> & V3ddotParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3ddot": v_3ddot_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3ddot": v_3ddot_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3ddot(...)`.
+ * Output object returned when calling `V3ddotParameters(...)`.
  *
  * @interface
  */
@@ -119,9 +86,9 @@ function v_3ddot_params(
     full: boolean = false,
     v_1_d: boolean = false,
     niml: boolean = false,
-): V3ddotParameters {
+): V3ddotParametersTagged {
     const params = {
-        "@type": "afni.3ddot" as const,
+        "@type": "afni/3ddot" as const,
         "input_datasets": input_datasets,
         "demean": demean,
         "docor": docor,
@@ -173,40 +140,40 @@ function v_3ddot_cargs(
             ...(params["mrange"] ?? null).map(String)
         );
     }
-    if ((params["demean"] ?? null)) {
+    if ((params["demean"] ?? false)) {
         cargs.push("-demean");
     }
-    if ((params["docor"] ?? null)) {
+    if ((params["docor"] ?? false)) {
         cargs.push("-docor");
     }
-    if ((params["dodot"] ?? null)) {
+    if ((params["dodot"] ?? false)) {
         cargs.push("-dodot");
     }
-    if ((params["docoef"] ?? null)) {
+    if ((params["docoef"] ?? false)) {
         cargs.push("-docoef");
     }
-    if ((params["dosums"] ?? null)) {
+    if ((params["dosums"] ?? false)) {
         cargs.push("-dosums");
     }
-    if ((params["doeta2"] ?? null)) {
+    if ((params["doeta2"] ?? false)) {
         cargs.push("-doeta2");
     }
-    if ((params["dodice"] ?? null)) {
+    if ((params["dodice"] ?? false)) {
         cargs.push("-dodice");
     }
-    if ((params["show_labels"] ?? null)) {
+    if ((params["show_labels"] ?? false)) {
         cargs.push("-show_labels");
     }
-    if ((params["upper"] ?? null)) {
+    if ((params["upper"] ?? false)) {
         cargs.push("-upper");
     }
-    if ((params["full"] ?? null)) {
+    if ((params["full"] ?? false)) {
         cargs.push("-full");
     }
-    if ((params["1D"] ?? null)) {
+    if ((params["1D"] ?? false)) {
         cargs.push("-1D");
     }
-    if ((params["NIML"] ?? null)) {
+    if ((params["NIML"] ?? false)) {
         cargs.push("-NIML");
     }
     return cargs;
@@ -314,7 +281,6 @@ function v_3ddot(
 
 export {
       V3ddotOutputs,
-      V3ddotParameters,
       V_3DDOT_METADATA,
       v_3ddot,
       v_3ddot_execute,

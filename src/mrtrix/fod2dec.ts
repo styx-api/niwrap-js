@@ -12,14 +12,15 @@ const FOD2DEC_METADATA: Metadata = {
 
 
 interface Fod2decConfigParameters {
-    "@type": "mrtrix.fod2dec.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Fod2decConfigParametersTagged = Required<Pick<Fod2decConfigParameters, '@type'>> & Fod2decConfigParameters;
 
 
 interface Fod2decParameters {
-    "@type": "mrtrix.fod2dec";
+    "@type"?: "mrtrix/fod2dec";
     "mask"?: InputPathType | null | undefined;
     "contrast"?: InputPathType | null | undefined;
     "lum": boolean;
@@ -38,41 +39,7 @@ interface Fod2decParameters {
     "input": InputPathType;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.fod2dec": fod2dec_cargs,
-        "mrtrix.fod2dec.config": fod2dec_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.fod2dec": fod2dec_outputs,
-    };
-    return outputsFuncs[t];
-}
+type Fod2decParametersTagged = Required<Pick<Fod2decParameters, '@type'>> & Fod2decParameters;
 
 
 /**
@@ -86,9 +53,9 @@ function dynOutputs(
 function fod2dec_config_params(
     key: string,
     value: string,
-): Fod2decConfigParameters {
+): Fod2decConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.fod2dec.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -117,7 +84,7 @@ function fod2dec_config_cargs(
 
 
 /**
- * Output object returned when calling `fod2dec(...)`.
+ * Output object returned when calling `Fod2decParameters(...)`.
  *
  * @interface
  */
@@ -177,9 +144,9 @@ function fod2dec_params(
     config: Array<Fod2decConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Fod2decParameters {
+): Fod2decParametersTagged {
     const params = {
-        "@type": "mrtrix.fod2dec" as const,
+        "@type": "mrtrix/fod2dec" as const,
         "lum": lum,
         "no_weight": no_weight,
         "info": info,
@@ -242,7 +209,7 @@ function fod2dec_cargs(
             execution.inputFile((params["contrast"] ?? null))
         );
     }
-    if ((params["lum"] ?? null)) {
+    if ((params["lum"] ?? false)) {
         cargs.push("-lum");
     }
     if ((params["lum_coefs"] ?? null) !== null) {
@@ -263,19 +230,19 @@ function fod2dec_cargs(
             String((params["threshold"] ?? null))
         );
     }
-    if ((params["no_weight"] ?? null)) {
+    if ((params["no_weight"] ?? false)) {
         cargs.push("-no_weight");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -285,12 +252,12 @@ function fod2dec_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => fod2dec_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -423,9 +390,7 @@ function fod2dec(
 
 export {
       FOD2DEC_METADATA,
-      Fod2decConfigParameters,
       Fod2decOutputs,
-      Fod2decParameters,
       fod2dec,
       fod2dec_config_params,
       fod2dec_execute,

@@ -12,7 +12,7 @@ const RUN_SAMSEG_METADATA: Metadata = {
 
 
 interface RunSamsegParameters {
-    "@type": "freesurfer.run_samseg";
+    "@type"?: "freesurfer/run_samseg";
     "output_dir": string;
     "input_files": Array<InputPathType>;
     "input_mode"?: Array<string> | null | undefined;
@@ -46,43 +46,11 @@ interface RunSamsegParameters {
     "save_warp": boolean;
     "movie": boolean;
 }
+type RunSamsegParametersTagged = Required<Pick<RunSamsegParameters, '@type'>> & RunSamsegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.run_samseg": run_samseg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `run_samseg(...)`.
+ * Output object returned when calling `RunSamsegParameters(...)`.
  *
  * @interface
  */
@@ -165,9 +133,9 @@ function run_samseg_params(
     save_mesh: boolean = false,
     save_warp: boolean = false,
     movie: boolean = false,
-): RunSamsegParameters {
+): RunSamsegParametersTagged {
     const params = {
-        "@type": "freesurfer.run_samseg" as const,
+        "@type": "freesurfer/run_samseg" as const,
         "output_dir": output_dir,
         "input_files": input_files,
         "reg_only": reg_only,
@@ -279,7 +247,7 @@ function run_samseg_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["reg_only"] ?? null)) {
+    if ((params["reg_only"] ?? false)) {
         cargs.push("--reg-only");
     }
     if ((params["reg_file"] ?? null) !== null) {
@@ -306,7 +274,7 @@ function run_samseg_cargs(
             execution.inputFile((params["gmm_file"] ?? null))
         );
     }
-    if ((params["ignore_unknown"] ?? null)) {
+    if ((params["ignore_unknown"] ?? false)) {
         cargs.push("--ignore-unknown");
     }
     if ((params["options_file"] ?? null) !== null) {
@@ -315,7 +283,7 @@ function run_samseg_cargs(
             execution.inputFile((params["options_file"] ?? null))
         );
     }
-    if ((params["pallidum_separate"] ?? null)) {
+    if ((params["pallidum_separate"] ?? false)) {
         cargs.push("--pallidum-separate");
     }
     if ((params["mesh_stiffness"] ?? null) !== null) {
@@ -336,7 +304,7 @@ function run_samseg_cargs(
             String((params["bias_field_smoothing_kernel"] ?? null))
         );
     }
-    if ((params["lesion"] ?? null)) {
+    if ((params["lesion"] ?? false)) {
         cargs.push("--lesion");
     }
     if ((params["threshold"] ?? null) !== null) {
@@ -393,7 +361,7 @@ function run_samseg_cargs(
             (params["dissection_photo"] ?? null)
         );
     }
-    if ((params["history"] ?? null)) {
+    if ((params["history"] ?? false)) {
         cargs.push("--history");
     }
     if ((params["save_posteriors"] ?? null) !== null) {
@@ -402,19 +370,19 @@ function run_samseg_cargs(
             ...(params["save_posteriors"] ?? null)
         );
     }
-    if ((params["save_probabilities"] ?? null)) {
+    if ((params["save_probabilities"] ?? false)) {
         cargs.push("--save-probabilities");
     }
-    if ((params["showfigs"] ?? null)) {
+    if ((params["showfigs"] ?? false)) {
         cargs.push("--showfigs");
     }
-    if ((params["save_mesh"] ?? null)) {
+    if ((params["save_mesh"] ?? false)) {
         cargs.push("--save-mesh");
     }
-    if ((params["save_warp"] ?? null)) {
+    if ((params["save_warp"] ?? false)) {
         cargs.push("--save-warp");
     }
-    if ((params["movie"] ?? null)) {
+    if ((params["movie"] ?? false)) {
         cargs.push("--movie");
     }
     return cargs;
@@ -556,7 +524,6 @@ function run_samseg(
 export {
       RUN_SAMSEG_METADATA,
       RunSamsegOutputs,
-      RunSamsegParameters,
       run_samseg,
       run_samseg_execute,
       run_samseg_params,

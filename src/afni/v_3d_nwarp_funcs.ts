@@ -12,7 +12,7 @@ const V_3D_NWARP_FUNCS_METADATA: Metadata = {
 
 
 interface V3dNwarpFuncsParameters {
-    "@type": "afni.3dNwarpFuncs";
+    "@type"?: "afni/3dNwarpFuncs";
     "input_warp": InputPathType;
     "output_prefix": string;
     "bulk_flag": boolean;
@@ -20,44 +20,11 @@ interface V3dNwarpFuncsParameters {
     "vorticity_flag": boolean;
     "all_flag": boolean;
 }
+type V3dNwarpFuncsParametersTagged = Required<Pick<V3dNwarpFuncsParameters, '@type'>> & V3dNwarpFuncsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dNwarpFuncs": v_3d_nwarp_funcs_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dNwarpFuncs": v_3d_nwarp_funcs_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_nwarp_funcs(...)`.
+ * Output object returned when calling `V3dNwarpFuncsParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function v_3d_nwarp_funcs_params(
     shear_flag: boolean = false,
     vorticity_flag: boolean = false,
     all_flag: boolean = false,
-): V3dNwarpFuncsParameters {
+): V3dNwarpFuncsParametersTagged {
     const params = {
-        "@type": "afni.3dNwarpFuncs" as const,
+        "@type": "afni/3dNwarpFuncs" as const,
         "input_warp": input_warp,
         "output_prefix": output_prefix,
         "bulk_flag": bulk_flag,
@@ -128,16 +95,16 @@ function v_3d_nwarp_funcs_cargs(
         "-prefix",
         (params["output_prefix"] ?? null)
     );
-    if ((params["bulk_flag"] ?? null)) {
+    if ((params["bulk_flag"] ?? false)) {
         cargs.push("-bulk");
     }
-    if ((params["shear_flag"] ?? null)) {
+    if ((params["shear_flag"] ?? false)) {
         cargs.push("-shear");
     }
-    if ((params["vorticity_flag"] ?? null)) {
+    if ((params["vorticity_flag"] ?? false)) {
         cargs.push("-vorticity");
     }
-    if ((params["all_flag"] ?? null)) {
+    if ((params["all_flag"] ?? false)) {
         cargs.push("-all");
     }
     return cargs;
@@ -227,7 +194,6 @@ function v_3d_nwarp_funcs(
 
 export {
       V3dNwarpFuncsOutputs,
-      V3dNwarpFuncsParameters,
       V_3D_NWARP_FUNCS_METADATA,
       v_3d_nwarp_funcs,
       v_3d_nwarp_funcs_execute,

@@ -12,7 +12,7 @@ const DMRI_ANATOMI_CUTS_METADATA: Metadata = {
 
 
 interface DmriAnatomiCutsParameters {
-    "@type": "freesurfer.dmri_AnatomiCuts";
+    "@type"?: "freesurfer/dmri_AnatomiCuts";
     "segmentation_file": InputPathType;
     "fiber_file": InputPathType;
     "clusters": number;
@@ -21,44 +21,11 @@ interface DmriAnatomiCutsParameters {
     "output_folder": string;
     "direction_flag": "s" | "d" | "a" | "o";
 }
+type DmriAnatomiCutsParametersTagged = Required<Pick<DmriAnatomiCutsParameters, '@type'>> & DmriAnatomiCutsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dmri_AnatomiCuts": dmri_anatomi_cuts_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.dmri_AnatomiCuts": dmri_anatomi_cuts_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dmri_anatomi_cuts(...)`.
+ * Output object returned when calling `DmriAnatomiCutsParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function dmri_anatomi_cuts_params(
     fibers_eigen: number,
     output_folder: string,
     direction_flag: "s" | "d" | "a" | "o",
-): DmriAnatomiCutsParameters {
+): DmriAnatomiCutsParametersTagged {
     const params = {
-        "@type": "freesurfer.dmri_AnatomiCuts" as const,
+        "@type": "freesurfer/dmri_AnatomiCuts" as const,
         "segmentation_file": segmentation_file,
         "fiber_file": fiber_file,
         "clusters": clusters,
@@ -242,7 +209,6 @@ function dmri_anatomi_cuts(
 export {
       DMRI_ANATOMI_CUTS_METADATA,
       DmriAnatomiCutsOutputs,
-      DmriAnatomiCutsParameters,
       dmri_anatomi_cuts,
       dmri_anatomi_cuts_execute,
       dmri_anatomi_cuts_params,

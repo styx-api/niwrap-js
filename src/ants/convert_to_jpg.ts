@@ -12,48 +12,15 @@ const CONVERT_TO_JPG_METADATA: Metadata = {
 
 
 interface ConvertToJpgParameters {
-    "@type": "ants.ConvertToJpg";
+    "@type"?: "ants/ConvertToJpg";
     "infile": InputPathType;
     "outfile": string;
 }
+type ConvertToJpgParametersTagged = Required<Pick<ConvertToJpgParameters, '@type'>> & ConvertToJpgParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.ConvertToJpg": convert_to_jpg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.ConvertToJpg": convert_to_jpg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `convert_to_jpg(...)`.
+ * Output object returned when calling `ConvertToJpgParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface ConvertToJpgOutputs {
 function convert_to_jpg_params(
     infile: InputPathType,
     outfile: string,
-): ConvertToJpgParameters {
+): ConvertToJpgParametersTagged {
     const params = {
-        "@type": "ants.ConvertToJpg" as const,
+        "@type": "ants/ConvertToJpg" as const,
         "infile": infile,
         "outfile": outfile,
     };
@@ -186,7 +153,6 @@ function convert_to_jpg(
 export {
       CONVERT_TO_JPG_METADATA,
       ConvertToJpgOutputs,
-      ConvertToJpgParameters,
       convert_to_jpg,
       convert_to_jpg_execute,
       convert_to_jpg_params,

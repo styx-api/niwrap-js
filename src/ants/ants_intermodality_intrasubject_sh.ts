@@ -12,7 +12,7 @@ const ANTS_INTERMODALITY_INTRASUBJECT_SH_METADATA: Metadata = {
 
 
 interface AntsIntermodalityIntrasubjectShParameters {
-    "@type": "ants.antsIntermodalityIntrasubject.sh";
+    "@type"?: "ants/antsIntermodalityIntrasubject.sh";
     "dimension": number;
     "anatomical_t1_image": InputPathType;
     "anatomical_reference_image"?: InputPathType | null | undefined;
@@ -26,44 +26,11 @@ interface AntsIntermodalityIntrasubjectShParameters {
     "auxiliary_scalar_images"?: InputPathType | null | undefined;
     "auxiliary_dt_image"?: InputPathType | null | undefined;
 }
+type AntsIntermodalityIntrasubjectShParametersTagged = Required<Pick<AntsIntermodalityIntrasubjectShParameters, '@type'>> & AntsIntermodalityIntrasubjectShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.antsIntermodalityIntrasubject.sh": ants_intermodality_intrasubject_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.antsIntermodalityIntrasubject.sh": ants_intermodality_intrasubject_sh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ants_intermodality_intrasubject_sh(...)`.
+ * Output object returned when calling `AntsIntermodalityIntrasubjectShParameters(...)`.
  *
  * @interface
  */
@@ -118,9 +85,9 @@ function ants_intermodality_intrasubject_sh_params(
     labels_in_template_space: InputPathType | null = null,
     auxiliary_scalar_images: InputPathType | null = null,
     auxiliary_dt_image: InputPathType | null = null,
-): AntsIntermodalityIntrasubjectShParameters {
+): AntsIntermodalityIntrasubjectShParametersTagged {
     const params = {
-        "@type": "ants.antsIntermodalityIntrasubject.sh" as const,
+        "@type": "ants/antsIntermodalityIntrasubject.sh" as const,
         "dimension": dimension,
         "anatomical_t1_image": anatomical_t1_image,
         "scalar_image_to_match": scalar_image_to_match,
@@ -322,7 +289,6 @@ function ants_intermodality_intrasubject_sh(
 export {
       ANTS_INTERMODALITY_INTRASUBJECT_SH_METADATA,
       AntsIntermodalityIntrasubjectShOutputs,
-      AntsIntermodalityIntrasubjectShParameters,
       ants_intermodality_intrasubject_sh,
       ants_intermodality_intrasubject_sh_execute,
       ants_intermodality_intrasubject_sh_params,

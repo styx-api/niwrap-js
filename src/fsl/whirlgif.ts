@@ -12,7 +12,7 @@ const WHIRLGIF_METADATA: Metadata = {
 
 
 interface WhirlgifParameters {
-    "@type": "fsl.whirlgif";
+    "@type"?: "fsl/whirlgif";
     "outfile"?: InputPathType | null | undefined;
     "loop_count"?: number | null | undefined;
     "delay_time"?: number | null | undefined;
@@ -20,44 +20,11 @@ interface WhirlgifParameters {
     "list_file"?: InputPathType | null | undefined;
     "input_files": Array<InputPathType>;
 }
+type WhirlgifParametersTagged = Required<Pick<WhirlgifParameters, '@type'>> & WhirlgifParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.whirlgif": whirlgif_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.whirlgif": whirlgif_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `whirlgif(...)`.
+ * Output object returned when calling `WhirlgifParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function whirlgif_params(
     delay_time: number | null = null,
     disp_flag: "none" | "back" | "prev" | "not" | null = null,
     list_file: InputPathType | null = null,
-): WhirlgifParameters {
+): WhirlgifParametersTagged {
     const params = {
-        "@type": "fsl.whirlgif" as const,
+        "@type": "fsl/whirlgif" as const,
         "input_files": input_files,
     };
     if (outfile !== null) {
@@ -249,7 +216,6 @@ function whirlgif(
 export {
       WHIRLGIF_METADATA,
       WhirlgifOutputs,
-      WhirlgifParameters,
       whirlgif,
       whirlgif_execute,
       whirlgif_params,

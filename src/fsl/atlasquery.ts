@@ -12,7 +12,7 @@ const ATLASQUERY_METADATA: Metadata = {
 
 
 interface AtlasqueryParameters {
-    "@type": "fsl.atlasquery";
+    "@type"?: "fsl/atlasquery";
     "dumpatlases_flag": boolean;
     "atlas"?: string | null | undefined;
     "coord"?: string | null | undefined;
@@ -20,43 +20,11 @@ interface AtlasqueryParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
+type AtlasqueryParametersTagged = Required<Pick<AtlasqueryParameters, '@type'>> & AtlasqueryParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.atlasquery": atlasquery_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `atlasquery(...)`.
+ * Output object returned when calling `AtlasqueryParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function atlasquery_params(
     mask: InputPathType | null = null,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): AtlasqueryParameters {
+): AtlasqueryParametersTagged {
     const params = {
-        "@type": "fsl.atlasquery" as const,
+        "@type": "fsl/atlasquery" as const,
         "dumpatlases_flag": dumpatlases_flag,
         "verbose_flag": verbose_flag,
         "help_flag": help_flag,
@@ -121,7 +89,7 @@ function atlasquery_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("atlasquery");
-    if ((params["dumpatlases_flag"] ?? null)) {
+    if ((params["dumpatlases_flag"] ?? false)) {
         cargs.push("--dumpatlases");
     }
     if ((params["atlas"] ?? null) !== null) {
@@ -142,10 +110,10 @@ function atlasquery_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-V");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -235,7 +203,6 @@ function atlasquery(
 export {
       ATLASQUERY_METADATA,
       AtlasqueryOutputs,
-      AtlasqueryParameters,
       atlasquery,
       atlasquery_execute,
       atlasquery_params,

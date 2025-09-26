@@ -12,7 +12,7 @@ const REG_RESAMPLE_METADATA: Metadata = {
 
 
 interface RegResampleParameters {
-    "@type": "niftyreg.reg_resample";
+    "@type"?: "niftyreg/reg_resample";
     "reference_image": InputPathType;
     "floating_image": InputPathType;
     "affine_transform"?: InputPathType | null | undefined;
@@ -24,44 +24,11 @@ interface RegResampleParameters {
     "nearest_neighbor": boolean;
     "linear_interpolation": boolean;
 }
+type RegResampleParametersTagged = Required<Pick<RegResampleParameters, '@type'>> & RegResampleParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "niftyreg.reg_resample": reg_resample_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "niftyreg.reg_resample": reg_resample_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `reg_resample(...)`.
+ * Output object returned when calling `RegResampleParameters(...)`.
  *
  * @interface
  */
@@ -108,9 +75,9 @@ function reg_resample_params(
     resampled_blank: string | null = null,
     nearest_neighbor: boolean = false,
     linear_interpolation: boolean = false,
-): RegResampleParameters {
+): RegResampleParametersTagged {
     const params = {
-        "@type": "niftyreg.reg_resample" as const,
+        "@type": "niftyreg/reg_resample" as const,
         "reference_image": reference_image,
         "floating_image": floating_image,
         "nearest_neighbor": nearest_neighbor,
@@ -196,10 +163,10 @@ function reg_resample_cargs(
             (params["resampled_blank"] ?? null)
         );
     }
-    if ((params["nearest_neighbor"] ?? null)) {
+    if ((params["nearest_neighbor"] ?? false)) {
         cargs.push("-NN");
     }
-    if ((params["linear_interpolation"] ?? null)) {
+    if ((params["linear_interpolation"] ?? false)) {
         cargs.push("-LIN");
     }
     return cargs;
@@ -299,7 +266,6 @@ function reg_resample(
 export {
       REG_RESAMPLE_METADATA,
       RegResampleOutputs,
-      RegResampleParameters,
       reg_resample,
       reg_resample_execute,
       reg_resample_params,

@@ -12,49 +12,16 @@ const PERFUSION_SUBTRACT_METADATA: Metadata = {
 
 
 interface PerfusionSubtractParameters {
-    "@type": "fsl.perfusion_subtract";
+    "@type"?: "fsl/perfusion_subtract";
     "four_d_input": InputPathType;
     "four_d_output": string;
     "control_first_flag": boolean;
 }
+type PerfusionSubtractParametersTagged = Required<Pick<PerfusionSubtractParameters, '@type'>> & PerfusionSubtractParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.perfusion_subtract": perfusion_subtract_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.perfusion_subtract": perfusion_subtract_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `perfusion_subtract(...)`.
+ * Output object returned when calling `PerfusionSubtractParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function perfusion_subtract_params(
     four_d_input: InputPathType,
     four_d_output: string,
     control_first_flag: boolean = false,
-): PerfusionSubtractParameters {
+): PerfusionSubtractParametersTagged {
     const params = {
-        "@type": "fsl.perfusion_subtract" as const,
+        "@type": "fsl/perfusion_subtract" as const,
         "four_d_input": four_d_input,
         "four_d_output": four_d_output,
         "control_first_flag": control_first_flag,
@@ -110,7 +77,7 @@ function perfusion_subtract_cargs(
     cargs.push("perfusion_subtract");
     cargs.push(execution.inputFile((params["four_d_input"] ?? null)));
     cargs.push((params["four_d_output"] ?? null));
-    if ((params["control_first_flag"] ?? null)) {
+    if ((params["control_first_flag"] ?? false)) {
         cargs.push("-c");
     }
     return cargs;
@@ -195,7 +162,6 @@ function perfusion_subtract(
 export {
       PERFUSION_SUBTRACT_METADATA,
       PerfusionSubtractOutputs,
-      PerfusionSubtractParameters,
       perfusion_subtract,
       perfusion_subtract_execute,
       perfusion_subtract_params,

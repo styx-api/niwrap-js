@@ -12,50 +12,17 @@ const SURFACE_CURVATURE_METADATA: Metadata = {
 
 
 interface SurfaceCurvatureParameters {
-    "@type": "ants.SurfaceCurvature";
+    "@type"?: "ants/SurfaceCurvature";
     "filename_in": InputPathType;
     "filename_out": string;
     "sigma": number;
     "option": number;
 }
+type SurfaceCurvatureParametersTagged = Required<Pick<SurfaceCurvatureParameters, '@type'>> & SurfaceCurvatureParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.SurfaceCurvature": surface_curvature_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.SurfaceCurvature": surface_curvature_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_curvature(...)`.
+ * Output object returned when calling `SurfaceCurvatureParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function surface_curvature_params(
     filename_out: string,
     sigma: number,
     option: number,
-): SurfaceCurvatureParameters {
+): SurfaceCurvatureParametersTagged {
     const params = {
-        "@type": "ants.SurfaceCurvature" as const,
+        "@type": "ants/SurfaceCurvature" as const,
         "filename_in": filename_in,
         "filename_out": filename_out,
         "sigma": sigma,
@@ -200,7 +167,6 @@ function surface_curvature(
 export {
       SURFACE_CURVATURE_METADATA,
       SurfaceCurvatureOutputs,
-      SurfaceCurvatureParameters,
       surface_curvature,
       surface_curvature_execute,
       surface_curvature_params,

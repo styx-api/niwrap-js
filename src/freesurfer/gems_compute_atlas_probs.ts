@@ -12,7 +12,7 @@ const GEMS_COMPUTE_ATLAS_PROBS_METADATA: Metadata = {
 
 
 interface GemsComputeAtlasProbsParameters {
-    "@type": "freesurfer.gems_compute_atlas_probs";
+    "@type"?: "freesurfer/gems_compute_atlas_probs";
     "subjects_dir": string;
     "mesh_collections": Array<string>;
     "out_dir": string;
@@ -30,43 +30,11 @@ interface GemsComputeAtlasProbsParameters {
     "labels_file"?: string | null | undefined;
     "samseg_subdir"?: string | null | undefined;
 }
+type GemsComputeAtlasProbsParametersTagged = Required<Pick<GemsComputeAtlasProbsParameters, '@type'>> & GemsComputeAtlasProbsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.gems_compute_atlas_probs": gems_compute_atlas_probs_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `gems_compute_atlas_probs(...)`.
+ * Output object returned when calling `GemsComputeAtlasProbsParameters(...)`.
  *
  * @interface
  */
@@ -117,9 +85,9 @@ function gems_compute_atlas_probs_params(
     subjects_file: string | null = null,
     labels_file: string | null = null,
     samseg_subdir: string | null = null,
-): GemsComputeAtlasProbsParameters {
+): GemsComputeAtlasProbsParametersTagged {
     const params = {
-        "@type": "freesurfer.gems_compute_atlas_probs" as const,
+        "@type": "freesurfer/gems_compute_atlas_probs" as const,
         "subjects_dir": subjects_dir,
         "mesh_collections": mesh_collections,
         "out_dir": out_dir,
@@ -187,7 +155,7 @@ function gems_compute_atlas_probs_cargs(
             (params["segmentations_dir"] ?? null)
         );
     }
-    if ((params["gt_from_fs"] ?? null)) {
+    if ((params["gt_from_fs"] ?? false)) {
         cargs.push("--gt-from-FS");
     }
     if ((params["segmentation_name"] ?? null) !== null) {
@@ -196,7 +164,7 @@ function gems_compute_atlas_probs_cargs(
             (params["segmentation_name"] ?? null)
         );
     }
-    if ((params["multi_structure"] ?? null)) {
+    if ((params["multi_structure"] ?? false)) {
         cargs.push("--multi-structure");
     }
     if ((params["labels"] ?? null) !== null) {
@@ -205,7 +173,7 @@ function gems_compute_atlas_probs_cargs(
             ...(params["labels"] ?? null)
         );
     }
-    if ((params["from_samseg"] ?? null)) {
+    if ((params["from_samseg"] ?? false)) {
         cargs.push("--from-samseg");
     }
     if ((params["em_iterations"] ?? null) !== null) {
@@ -214,13 +182,13 @@ function gems_compute_atlas_probs_cargs(
             String((params["em_iterations"] ?? null))
         );
     }
-    if ((params["show_figs"] ?? null)) {
+    if ((params["show_figs"] ?? false)) {
         cargs.push("--show-figs");
     }
-    if ((params["save_figs"] ?? null)) {
+    if ((params["save_figs"] ?? false)) {
         cargs.push("--save-figs");
     }
-    if ((params["save_average_figs"] ?? null)) {
+    if ((params["save_average_figs"] ?? false)) {
         cargs.push("--save-average-figs");
     }
     if ((params["subjects_file"] ?? null) !== null) {
@@ -348,7 +316,6 @@ function gems_compute_atlas_probs(
 export {
       GEMS_COMPUTE_ATLAS_PROBS_METADATA,
       GemsComputeAtlasProbsOutputs,
-      GemsComputeAtlasProbsParameters,
       gems_compute_atlas_probs,
       gems_compute_atlas_probs_execute,
       gems_compute_atlas_probs_params,

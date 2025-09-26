@@ -12,7 +12,7 @@ const MAKE_STIM_TIMES_PY_METADATA: Metadata = {
 
 
 interface MakeStimTimesPyParameters {
-    "@type": "afni.make_stim_times.py";
+    "@type"?: "afni/make_stim_times.py";
     "files": Array<InputPathType>;
     "prefix": string;
     "tr": number;
@@ -26,44 +26,11 @@ interface MakeStimTimesPyParameters {
     "show_valid_opts": boolean;
     "verbose"?: number | null | undefined;
 }
+type MakeStimTimesPyParametersTagged = Required<Pick<MakeStimTimesPyParameters, '@type'>> & MakeStimTimesPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.make_stim_times.py": make_stim_times_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.make_stim_times.py": make_stim_times_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `make_stim_times_py(...)`.
+ * Output object returned when calling `MakeStimTimesPyParameters(...)`.
  *
  * @interface
  */
@@ -118,9 +85,9 @@ function make_stim_times_py_params(
     amplitudes: boolean = false,
     show_valid_opts: boolean = false,
     verbose: number | null = null,
-): MakeStimTimesPyParameters {
+): MakeStimTimesPyParametersTagged {
     const params = {
-        "@type": "afni.make_stim_times.py" as const,
+        "@type": "afni/make_stim_times.py" as const,
         "files": files,
         "prefix": prefix,
         "tr": tr,
@@ -192,13 +159,13 @@ function make_stim_times_py_cargs(
             ...(params["labels"] ?? null)
         );
     }
-    if ((params["no_consec_events"] ?? null)) {
+    if ((params["no_consec_events"] ?? false)) {
         cargs.push("-no_consec");
     }
-    if ((params["amplitudes"] ?? null)) {
+    if ((params["amplitudes"] ?? false)) {
         cargs.push("-amplitudes");
     }
-    if ((params["show_valid_opts"] ?? null)) {
+    if ((params["show_valid_opts"] ?? false)) {
         cargs.push("-show_valid_opts");
     }
     if ((params["verbose"] ?? null) !== null) {
@@ -309,7 +276,6 @@ function make_stim_times_py(
 export {
       MAKE_STIM_TIMES_PY_METADATA,
       MakeStimTimesPyOutputs,
-      MakeStimTimesPyParameters,
       make_stim_times_py,
       make_stim_times_py_execute,
       make_stim_times_py_params,

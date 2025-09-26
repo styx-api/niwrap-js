@@ -12,49 +12,17 @@ const MRI_APARC2WMSEG_METADATA: Metadata = {
 
 
 interface MriAparc2wmsegParameters {
-    "@type": "freesurfer.mri_aparc2wmseg";
+    "@type"?: "freesurfer/mri_aparc2wmseg";
     "subject": string;
     "wmseg_file": string;
     "help": boolean;
     "version": boolean;
 }
+type MriAparc2wmsegParametersTagged = Required<Pick<MriAparc2wmsegParameters, '@type'>> & MriAparc2wmsegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_aparc2wmseg": mri_aparc2wmseg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_aparc2wmseg(...)`.
+ * Output object returned when calling `MriAparc2wmsegParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function mri_aparc2wmseg_params(
     wmseg_file: string,
     help: boolean = false,
     version: boolean = false,
-): MriAparc2wmsegParameters {
+): MriAparc2wmsegParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_aparc2wmseg" as const,
+        "@type": "freesurfer/mri_aparc2wmseg" as const,
         "subject": subject,
         "wmseg_file": wmseg_file,
         "help": help,
@@ -115,10 +83,10 @@ function mri_aparc2wmseg_cargs(
         "--wmseg",
         (params["wmseg_file"] ?? null)
     );
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -204,7 +172,6 @@ function mri_aparc2wmseg(
 export {
       MRI_APARC2WMSEG_METADATA,
       MriAparc2wmsegOutputs,
-      MriAparc2wmsegParameters,
       mri_aparc2wmseg,
       mri_aparc2wmseg_execute,
       mri_aparc2wmseg_params,

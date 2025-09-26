@@ -12,49 +12,17 @@ const ZTOP_METADATA: Metadata = {
 
 
 interface ZtopParameters {
-    "@type": "fsl.ztop";
+    "@type"?: "fsl/ztop";
     "z_score": number;
     "tail_flag": boolean;
     "grf_flag": boolean;
     "number_of_resels"?: number | null | undefined;
 }
+type ZtopParametersTagged = Required<Pick<ZtopParameters, '@type'>> & ZtopParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.ztop": ztop_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ztop(...)`.
+ * Output object returned when calling `ZtopParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function ztop_params(
     tail_flag: boolean = false,
     grf_flag: boolean = false,
     number_of_resels: number | null = null,
-): ZtopParameters {
+): ZtopParametersTagged {
     const params = {
-        "@type": "fsl.ztop" as const,
+        "@type": "fsl/ztop" as const,
         "z_score": z_score,
         "tail_flag": tail_flag,
         "grf_flag": grf_flag,
@@ -110,10 +78,10 @@ function ztop_cargs(
     const cargs: string[] = [];
     cargs.push("ztop");
     cargs.push(String((params["z_score"] ?? null)));
-    if ((params["tail_flag"] ?? null)) {
+    if ((params["tail_flag"] ?? false)) {
         cargs.push("-2");
     }
-    if ((params["grf_flag"] ?? null)) {
+    if ((params["grf_flag"] ?? false)) {
         cargs.push("-g");
     }
     if ((params["number_of_resels"] ?? null) !== null) {
@@ -202,7 +170,6 @@ function ztop(
 export {
       ZTOP_METADATA,
       ZtopOutputs,
-      ZtopParameters,
       ztop,
       ztop_execute,
       ztop_params,

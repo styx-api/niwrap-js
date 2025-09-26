@@ -12,47 +12,15 @@ const MRIS_VOLUME_METADATA: Metadata = {
 
 
 interface MrisVolumeParameters {
-    "@type": "freesurfer.mris_volume";
+    "@type"?: "freesurfer/mris_volume";
     "surface_file": InputPathType;
     "verbose_flag": boolean;
 }
+type MrisVolumeParametersTagged = Required<Pick<MrisVolumeParameters, '@type'>> & MrisVolumeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_volume": mris_volume_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_volume(...)`.
+ * Output object returned when calling `MrisVolumeParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface MrisVolumeOutputs {
 function mris_volume_params(
     surface_file: InputPathType,
     verbose_flag: boolean = false,
-): MrisVolumeParameters {
+): MrisVolumeParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_volume" as const,
+        "@type": "freesurfer/mris_volume" as const,
         "surface_file": surface_file,
         "verbose_flag": verbose_flag,
     };
@@ -100,7 +68,7 @@ function mris_volume_cargs(
     const cargs: string[] = [];
     cargs.push("mris_volume");
     cargs.push(execution.inputFile((params["surface_file"] ?? null)));
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
     return cargs;
@@ -182,7 +150,6 @@ function mris_volume(
 export {
       MRIS_VOLUME_METADATA,
       MrisVolumeOutputs,
-      MrisVolumeParameters,
       mris_volume,
       mris_volume_execute,
       mris_volume_params,

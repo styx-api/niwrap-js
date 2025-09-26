@@ -12,63 +12,28 @@ const METRIC_CONVERT_METADATA: Metadata = {
 
 
 interface MetricConvertToNiftiParameters {
-    "@type": "workbench.metric-convert.to_nifti";
+    "@type"?: "to_nifti";
     "metric_in": InputPathType;
     "nifti_out": string;
 }
+type MetricConvertToNiftiParametersTagged = Required<Pick<MetricConvertToNiftiParameters, '@type'>> & MetricConvertToNiftiParameters;
 
 
 interface MetricConvertFromNiftiParameters {
-    "@type": "workbench.metric-convert.from_nifti";
+    "@type"?: "from_nifti";
     "nifti_in": InputPathType;
     "surface_in": InputPathType;
     "metric_out": string;
 }
+type MetricConvertFromNiftiParametersTagged = Required<Pick<MetricConvertFromNiftiParameters, '@type'>> & MetricConvertFromNiftiParameters;
 
 
 interface MetricConvertParameters {
-    "@type": "workbench.metric-convert";
+    "@type"?: "workbench/metric-convert";
     "to_nifti"?: MetricConvertToNiftiParameters | null | undefined;
     "from_nifti"?: MetricConvertFromNiftiParameters | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-convert": metric_convert_cargs,
-        "workbench.metric-convert.to_nifti": metric_convert_to_nifti_cargs,
-        "workbench.metric-convert.from_nifti": metric_convert_from_nifti_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.metric-convert": metric_convert_outputs,
-        "workbench.metric-convert.to_nifti": metric_convert_to_nifti_outputs,
-        "workbench.metric-convert.from_nifti": metric_convert_from_nifti_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MetricConvertParametersTagged = Required<Pick<MetricConvertParameters, '@type'>> & MetricConvertParameters;
 
 
 /**
@@ -99,9 +64,9 @@ interface MetricConvertToNiftiOutputs {
 function metric_convert_to_nifti_params(
     metric_in: InputPathType,
     nifti_out: string,
-): MetricConvertToNiftiParameters {
+): MetricConvertToNiftiParametersTagged {
     const params = {
-        "@type": "workbench.metric-convert.to_nifti" as const,
+        "@type": "to_nifti" as const,
         "metric_in": metric_in,
         "nifti_out": nifti_out,
     };
@@ -179,9 +144,9 @@ function metric_convert_from_nifti_params(
     nifti_in: InputPathType,
     surface_in: InputPathType,
     metric_out: string,
-): MetricConvertFromNiftiParameters {
+): MetricConvertFromNiftiParametersTagged {
     const params = {
-        "@type": "workbench.metric-convert.from_nifti" as const,
+        "@type": "from_nifti" as const,
         "nifti_in": nifti_in,
         "surface_in": surface_in,
         "metric_out": metric_out,
@@ -232,7 +197,7 @@ function metric_convert_from_nifti_outputs(
 
 
 /**
- * Output object returned when calling `metric_convert(...)`.
+ * Output object returned when calling `MetricConvertParameters(...)`.
  *
  * @interface
  */
@@ -263,9 +228,9 @@ interface MetricConvertOutputs {
 function metric_convert_params(
     to_nifti: MetricConvertToNiftiParameters | null = null,
     from_nifti: MetricConvertFromNiftiParameters | null = null,
-): MetricConvertParameters {
+): MetricConvertParametersTagged {
     const params = {
-        "@type": "workbench.metric-convert" as const,
+        "@type": "workbench/metric-convert" as const,
     };
     if (to_nifti !== null) {
         params["to_nifti"] = to_nifti;
@@ -293,10 +258,10 @@ function metric_convert_cargs(
     cargs.push("wb_command");
     cargs.push("-metric-convert");
     if ((params["to_nifti"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["to_nifti"] ?? null)["@type"])((params["to_nifti"] ?? null), execution));
+        cargs.push(...metric_convert_to_nifti_cargs((params["to_nifti"] ?? null), execution));
     }
     if ((params["from_nifti"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["from_nifti"] ?? null)["@type"])((params["from_nifti"] ?? null), execution));
+        cargs.push(...metric_convert_from_nifti_cargs((params["from_nifti"] ?? null), execution));
     }
     return cargs;
 }
@@ -316,8 +281,8 @@ function metric_convert_outputs(
 ): MetricConvertOutputs {
     const ret: MetricConvertOutputs = {
         root: execution.outputFile("."),
-        to_nifti: (params["to_nifti"] ?? null) ? (dynOutputs((params["to_nifti"] ?? null)["@type"])?.((params["to_nifti"] ?? null), execution) ?? null) : null,
-        from_nifti: (params["from_nifti"] ?? null) ? (dynOutputs((params["from_nifti"] ?? null)["@type"])?.((params["from_nifti"] ?? null), execution) ?? null) : null,
+        to_nifti: (params["to_nifti"] ?? null) ? (metric_convert_to_nifti_outputs((params["to_nifti"] ?? null), execution) ?? null) : null,
+        from_nifti: (params["from_nifti"] ?? null) ? (metric_convert_from_nifti_outputs((params["from_nifti"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }
@@ -383,11 +348,8 @@ function metric_convert(
 export {
       METRIC_CONVERT_METADATA,
       MetricConvertFromNiftiOutputs,
-      MetricConvertFromNiftiParameters,
       MetricConvertOutputs,
-      MetricConvertParameters,
       MetricConvertToNiftiOutputs,
-      MetricConvertToNiftiParameters,
       metric_convert,
       metric_convert_execute,
       metric_convert_from_nifti_params,

@@ -12,50 +12,17 @@ const MRIS_REMOVE_VARIANCE_METADATA: Metadata = {
 
 
 interface MrisRemoveVarianceParameters {
-    "@type": "freesurfer.mris_remove_variance";
+    "@type"?: "freesurfer/mris_remove_variance";
     "input_surface_file": InputPathType;
     "curvature_file": InputPathType;
     "curvature_file_to_remove": InputPathType;
     "output_curvature_file": string;
 }
+type MrisRemoveVarianceParametersTagged = Required<Pick<MrisRemoveVarianceParameters, '@type'>> & MrisRemoveVarianceParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_remove_variance": mris_remove_variance_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_remove_variance": mris_remove_variance_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_remove_variance(...)`.
+ * Output object returned when calling `MrisRemoveVarianceParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mris_remove_variance_params(
     curvature_file: InputPathType,
     curvature_file_to_remove: InputPathType,
     output_curvature_file: string,
-): MrisRemoveVarianceParameters {
+): MrisRemoveVarianceParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_remove_variance" as const,
+        "@type": "freesurfer/mris_remove_variance" as const,
         "input_surface_file": input_surface_file,
         "curvature_file": curvature_file,
         "curvature_file_to_remove": curvature_file_to_remove,
@@ -200,7 +167,6 @@ function mris_remove_variance(
 export {
       MRIS_REMOVE_VARIANCE_METADATA,
       MrisRemoveVarianceOutputs,
-      MrisRemoveVarianceParameters,
       mris_remove_variance,
       mris_remove_variance_execute,
       mris_remove_variance_params,

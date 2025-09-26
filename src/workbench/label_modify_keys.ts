@@ -12,50 +12,17 @@ const LABEL_MODIFY_KEYS_METADATA: Metadata = {
 
 
 interface LabelModifyKeysParameters {
-    "@type": "workbench.label-modify-keys";
+    "@type"?: "workbench/label-modify-keys";
     "label_in": InputPathType;
     "remap_file": string;
     "label_out": string;
     "opt_column_column"?: string | null | undefined;
 }
+type LabelModifyKeysParametersTagged = Required<Pick<LabelModifyKeysParameters, '@type'>> & LabelModifyKeysParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.label-modify-keys": label_modify_keys_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.label-modify-keys": label_modify_keys_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `label_modify_keys(...)`.
+ * Output object returned when calling `LabelModifyKeysParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function label_modify_keys_params(
     remap_file: string,
     label_out: string,
     opt_column_column: string | null = null,
-): LabelModifyKeysParameters {
+): LabelModifyKeysParametersTagged {
     const params = {
-        "@type": "workbench.label-modify-keys" as const,
+        "@type": "workbench/label-modify-keys" as const,
         "label_in": label_in,
         "remap_file": remap_file,
         "label_out": label_out,
@@ -224,7 +191,6 @@ function label_modify_keys(
 export {
       LABEL_MODIFY_KEYS_METADATA,
       LabelModifyKeysOutputs,
-      LabelModifyKeysParameters,
       label_modify_keys,
       label_modify_keys_execute,
       label_modify_keys_params,

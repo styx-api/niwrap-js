@@ -12,46 +12,14 @@ const BEDPOSTX_DATACHECK_METADATA: Metadata = {
 
 
 interface BedpostxDatacheckParameters {
-    "@type": "fsl.bedpostx_datacheck";
+    "@type"?: "fsl/bedpostx_datacheck";
     "data_dir": string;
 }
+type BedpostxDatacheckParametersTagged = Required<Pick<BedpostxDatacheckParameters, '@type'>> & BedpostxDatacheckParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.bedpostx_datacheck": bedpostx_datacheck_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `bedpostx_datacheck(...)`.
+ * Output object returned when calling `BedpostxDatacheckParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface BedpostxDatacheckOutputs {
  */
 function bedpostx_datacheck_params(
     data_dir: string,
-): BedpostxDatacheckParameters {
+): BedpostxDatacheckParametersTagged {
     const params = {
-        "@type": "fsl.bedpostx_datacheck" as const,
+        "@type": "fsl/bedpostx_datacheck" as const,
         "data_dir": data_dir,
     };
     return params;
@@ -173,7 +141,6 @@ function bedpostx_datacheck(
 export {
       BEDPOSTX_DATACHECK_METADATA,
       BedpostxDatacheckOutputs,
-      BedpostxDatacheckParameters,
       bedpostx_datacheck,
       bedpostx_datacheck_execute,
       bedpostx_datacheck_params,

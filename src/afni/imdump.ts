@@ -12,47 +12,14 @@ const IMDUMP_METADATA: Metadata = {
 
 
 interface ImdumpParameters {
-    "@type": "afni.imdump";
+    "@type"?: "afni/imdump";
     "input_image": InputPathType;
 }
+type ImdumpParametersTagged = Required<Pick<ImdumpParameters, '@type'>> & ImdumpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.imdump": imdump_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.imdump": imdump_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `imdump(...)`.
+ * Output object returned when calling `ImdumpParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface ImdumpOutputs {
  */
 function imdump_params(
     input_image: InputPathType,
-): ImdumpParameters {
+): ImdumpParametersTagged {
     const params = {
-        "@type": "afni.imdump" as const,
+        "@type": "afni/imdump" as const,
         "input_image": input_image,
     };
     return params;
@@ -179,7 +146,6 @@ function imdump(
 export {
       IMDUMP_METADATA,
       ImdumpOutputs,
-      ImdumpParameters,
       imdump,
       imdump_execute,
       imdump_params,

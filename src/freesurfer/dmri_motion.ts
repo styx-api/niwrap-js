@@ -12,7 +12,7 @@ const DMRI_MOTION_METADATA: Metadata = {
 
 
 interface DmriMotionParameters {
-    "@type": "freesurfer.dmri_motion";
+    "@type"?: "freesurfer/dmri_motion";
     "outfile": InputPathType;
     "outf"?: InputPathType | null | undefined;
     "mat"?: InputPathType | null | undefined;
@@ -25,44 +25,11 @@ interface DmriMotionParameters {
     "help": boolean;
     "version": boolean;
 }
+type DmriMotionParametersTagged = Required<Pick<DmriMotionParameters, '@type'>> & DmriMotionParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dmri_motion": dmri_motion_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.dmri_motion": dmri_motion_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dmri_motion(...)`.
+ * Output object returned when calling `DmriMotionParameters(...)`.
  *
  * @interface
  */
@@ -111,9 +78,9 @@ function dmri_motion_params(
     checkopts: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): DmriMotionParameters {
+): DmriMotionParametersTagged {
     const params = {
-        "@type": "freesurfer.dmri_motion" as const,
+        "@type": "freesurfer/dmri_motion" as const,
         "outfile": outfile,
         "debug": debug,
         "checkopts": checkopts,
@@ -196,16 +163,16 @@ function dmri_motion_cargs(
             String((params["diffusivity"] ?? null))
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["checkopts"] ?? null)) {
+    if ((params["checkopts"] ?? false)) {
         cargs.push("--checkopts");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -307,7 +274,6 @@ function dmri_motion(
 export {
       DMRI_MOTION_METADATA,
       DmriMotionOutputs,
-      DmriMotionParameters,
       dmri_motion,
       dmri_motion_execute,
       dmri_motion_params,

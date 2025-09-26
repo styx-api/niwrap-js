@@ -12,49 +12,17 @@ const MATCH_SMOOTHING_METADATA: Metadata = {
 
 
 interface MatchSmoothingParameters {
-    "@type": "fsl.match_smoothing";
+    "@type"?: "fsl/match_smoothing";
     "example_func": InputPathType;
     "func_smoothing_FWHM": number;
     "example_structural": InputPathType;
     "standard_space_resolution": number;
 }
+type MatchSmoothingParametersTagged = Required<Pick<MatchSmoothingParameters, '@type'>> & MatchSmoothingParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.match_smoothing": match_smoothing_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `match_smoothing(...)`.
+ * Output object returned when calling `MatchSmoothingParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function match_smoothing_params(
     func_smoothing_fwhm: number,
     example_structural: InputPathType,
     standard_space_resolution: number,
-): MatchSmoothingParameters {
+): MatchSmoothingParametersTagged {
     const params = {
-        "@type": "fsl.match_smoothing" as const,
+        "@type": "fsl/match_smoothing" as const,
         "example_func": example_func,
         "func_smoothing_FWHM": func_smoothing_fwhm,
         "example_structural": example_structural,
@@ -194,7 +162,6 @@ function match_smoothing(
 export {
       MATCH_SMOOTHING_METADATA,
       MatchSmoothingOutputs,
-      MatchSmoothingParameters,
       match_smoothing,
       match_smoothing_execute,
       match_smoothing_params,

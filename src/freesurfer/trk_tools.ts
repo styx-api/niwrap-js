@@ -12,7 +12,7 @@ const TRK_TOOLS_METADATA: Metadata = {
 
 
 interface TrkToolsParameters {
-    "@type": "freesurfer.trk_tools";
+    "@type"?: "freesurfer/trk_tools";
     "reference_image": InputPathType;
     "input_trk": InputPathType;
     "output_trk"?: string | null | undefined;
@@ -20,44 +20,11 @@ interface TrkToolsParameters {
     "update_header": boolean;
     "output_vtk"?: string | null | undefined;
 }
+type TrkToolsParametersTagged = Required<Pick<TrkToolsParameters, '@type'>> & TrkToolsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.trk_tools": trk_tools_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.trk_tools": trk_tools_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `trk_tools(...)`.
+ * Output object returned when calling `TrkToolsParameters(...)`.
  *
  * @interface
  */
@@ -100,9 +67,9 @@ function trk_tools_params(
     output_image: string | null = null,
     update_header: boolean = false,
     output_vtk: string | null = null,
-): TrkToolsParameters {
+): TrkToolsParametersTagged {
     const params = {
-        "@type": "freesurfer.trk_tools" as const,
+        "@type": "freesurfer/trk_tools" as const,
         "reference_image": reference_image,
         "input_trk": input_trk,
         "update_header": update_header,
@@ -154,7 +121,7 @@ function trk_tools_cargs(
             (params["output_image"] ?? null)
         );
     }
-    if ((params["update_header"] ?? null)) {
+    if ((params["update_header"] ?? false)) {
         cargs.push("-u");
     }
     if ((params["output_vtk"] ?? null) !== null) {
@@ -253,7 +220,6 @@ function trk_tools(
 export {
       TRK_TOOLS_METADATA,
       TrkToolsOutputs,
-      TrkToolsParameters,
       trk_tools,
       trk_tools_execute,
       trk_tools_params,

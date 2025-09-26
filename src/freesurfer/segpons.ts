@@ -12,7 +12,7 @@ const SEGPONS_METADATA: Metadata = {
 
 
 interface SegponsParameters {
-    "@type": "freesurfer.segpons";
+    "@type"?: "freesurfer/segpons";
     "subject": string;
     "aseg": boolean;
     "apas": boolean;
@@ -20,44 +20,11 @@ interface SegponsParameters {
     "no_refine": boolean;
     "pons152_mask"?: InputPathType | null | undefined;
 }
+type SegponsParametersTagged = Required<Pick<SegponsParameters, '@type'>> & SegponsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.segpons": segpons_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.segpons": segpons_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `segpons(...)`.
+ * Output object returned when calling `SegponsParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function segpons_params(
     seg: InputPathType | null = null,
     no_refine: boolean = false,
     pons152_mask: InputPathType | null = null,
-): SegponsParameters {
+): SegponsParametersTagged {
     const params = {
-        "@type": "freesurfer.segpons" as const,
+        "@type": "freesurfer/segpons" as const,
         "subject": subject,
         "aseg": aseg,
         "apas": apas,
@@ -128,10 +95,10 @@ function segpons_cargs(
         "-s",
         (params["subject"] ?? null)
     );
-    if ((params["aseg"] ?? null)) {
+    if ((params["aseg"] ?? false)) {
         cargs.push("--aseg");
     }
-    if ((params["apas"] ?? null)) {
+    if ((params["apas"] ?? false)) {
         cargs.push("--apas");
     }
     if ((params["seg"] ?? null) !== null) {
@@ -140,7 +107,7 @@ function segpons_cargs(
             execution.inputFile((params["seg"] ?? null))
         );
     }
-    if ((params["no_refine"] ?? null)) {
+    if ((params["no_refine"] ?? false)) {
         cargs.push("--no-refine");
     }
     if ((params["pons152_mask"] ?? null) !== null) {
@@ -237,7 +204,6 @@ function segpons(
 export {
       SEGPONS_METADATA,
       SegponsOutputs,
-      SegponsParameters,
       segpons,
       segpons_execute,
       segpons_params,

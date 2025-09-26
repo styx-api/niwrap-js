@@ -12,7 +12,7 @@ const FILM_CIFTI_METADATA: Metadata = {
 
 
 interface FilmCiftiParameters {
-    "@type": "fsl.film_cifti";
+    "@type"?: "fsl/film_cifti";
     "input_filename": InputPathType;
     "basename": string;
     "left_surface": InputPathType;
@@ -23,44 +23,11 @@ interface FilmCiftiParameters {
     "surface_extent"?: number | null | undefined;
     "film_options"?: string | null | undefined;
 }
+type FilmCiftiParametersTagged = Required<Pick<FilmCiftiParameters, '@type'>> & FilmCiftiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.film_cifti": film_cifti_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.film_cifti": film_cifti_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `film_cifti(...)`.
+ * Output object returned when calling `FilmCiftiParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function film_cifti_params(
     surface_sigma: number | null = null,
     surface_extent: number | null = null,
     film_options: string | null = null,
-): FilmCiftiParameters {
+): FilmCiftiParametersTagged {
     const params = {
-        "@type": "fsl.film_cifti" as const,
+        "@type": "fsl/film_cifti" as const,
         "input_filename": input_filename,
         "basename": basename,
         "left_surface": left_surface,
@@ -282,7 +249,6 @@ function film_cifti(
 export {
       FILM_CIFTI_METADATA,
       FilmCiftiOutputs,
-      FilmCiftiParameters,
       film_cifti,
       film_cifti_execute,
       film_cifti_params,

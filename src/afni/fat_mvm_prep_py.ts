@@ -12,7 +12,7 @@ const FAT_MVM_PREP_PY_METADATA: Metadata = {
 
 
 interface FatMvmPrepPyParameters {
-    "@type": "afni.fat_mvm_prep.py";
+    "@type"?: "afni/fat_mvm_prep.py";
     "prefix": string;
     "csv_file": InputPathType;
     "matrix_files"?: string | null | undefined;
@@ -21,44 +21,11 @@ interface FatMvmPrepPyParameters {
     "na_warn_off": boolean;
     "extern_labels_no": boolean;
 }
+type FatMvmPrepPyParametersTagged = Required<Pick<FatMvmPrepPyParameters, '@type'>> & FatMvmPrepPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.fat_mvm_prep.py": fat_mvm_prep_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.fat_mvm_prep.py": fat_mvm_prep_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fat_mvm_prep_py(...)`.
+ * Output object returned when calling `FatMvmPrepPyParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +66,9 @@ function fat_mvm_prep_py_params(
     unionize_rois: boolean = false,
     na_warn_off: boolean = false,
     extern_labels_no: boolean = false,
-): FatMvmPrepPyParameters {
+): FatMvmPrepPyParametersTagged {
     const params = {
-        "@type": "afni.fat_mvm_prep.py" as const,
+        "@type": "afni/fat_mvm_prep.py" as const,
         "prefix": prefix,
         "csv_file": csv_file,
         "unionize_rois": unionize_rois,
@@ -152,13 +119,13 @@ function fat_mvm_prep_py_cargs(
             execution.inputFile((params["list_match"] ?? null))
         );
     }
-    if ((params["unionize_rois"] ?? null)) {
+    if ((params["unionize_rois"] ?? false)) {
         cargs.push("-u");
     }
-    if ((params["na_warn_off"] ?? null)) {
+    if ((params["na_warn_off"] ?? false)) {
         cargs.push("-N");
     }
-    if ((params["extern_labels_no"] ?? null)) {
+    if ((params["extern_labels_no"] ?? false)) {
         cargs.push("-E");
     }
     return cargs;
@@ -252,7 +219,6 @@ function fat_mvm_prep_py(
 export {
       FAT_MVM_PREP_PY_METADATA,
       FatMvmPrepPyOutputs,
-      FatMvmPrepPyParameters,
       fat_mvm_prep_py,
       fat_mvm_prep_py_execute,
       fat_mvm_prep_py_params,

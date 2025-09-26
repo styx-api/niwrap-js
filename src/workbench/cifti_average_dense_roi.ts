@@ -12,20 +12,22 @@ const CIFTI_AVERAGE_DENSE_ROI_METADATA: Metadata = {
 
 
 interface CiftiAverageDenseRoiCiftiRoiParameters {
-    "@type": "workbench.cifti-average-dense-roi.cifti_roi";
+    "@type"?: "cifti_roi";
     "roi_cifti": InputPathType;
     "opt_in_memory": boolean;
 }
+type CiftiAverageDenseRoiCiftiRoiParametersTagged = Required<Pick<CiftiAverageDenseRoiCiftiRoiParameters, '@type'>> & CiftiAverageDenseRoiCiftiRoiParameters;
 
 
 interface CiftiAverageDenseRoiCiftiParameters {
-    "@type": "workbench.cifti-average-dense-roi.cifti";
+    "@type"?: "cifti";
     "cifti_in": InputPathType;
 }
+type CiftiAverageDenseRoiCiftiParametersTagged = Required<Pick<CiftiAverageDenseRoiCiftiParameters, '@type'>> & CiftiAverageDenseRoiCiftiParameters;
 
 
 interface CiftiAverageDenseRoiParameters {
-    "@type": "workbench.cifti-average-dense-roi";
+    "@type"?: "workbench/cifti-average-dense-roi";
     "cifti_out": string;
     "cifti_roi"?: CiftiAverageDenseRoiCiftiRoiParameters | null | undefined;
     "opt_left_roi_roi_metric"?: InputPathType | null | undefined;
@@ -37,42 +39,7 @@ interface CiftiAverageDenseRoiParameters {
     "opt_cerebellum_area_surf_cerebellum_surf"?: InputPathType | null | undefined;
     "cifti"?: Array<CiftiAverageDenseRoiCiftiParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-average-dense-roi": cifti_average_dense_roi_cargs,
-        "workbench.cifti-average-dense-roi.cifti_roi": cifti_average_dense_roi_cifti_roi_cargs,
-        "workbench.cifti-average-dense-roi.cifti": cifti_average_dense_roi_cifti_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-average-dense-roi": cifti_average_dense_roi_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiAverageDenseRoiParametersTagged = Required<Pick<CiftiAverageDenseRoiParameters, '@type'>> & CiftiAverageDenseRoiParameters;
 
 
 /**
@@ -86,9 +53,9 @@ function dynOutputs(
 function cifti_average_dense_roi_cifti_roi_params(
     roi_cifti: InputPathType,
     opt_in_memory: boolean = false,
-): CiftiAverageDenseRoiCiftiRoiParameters {
+): CiftiAverageDenseRoiCiftiRoiParametersTagged {
     const params = {
-        "@type": "workbench.cifti-average-dense-roi.cifti_roi" as const,
+        "@type": "cifti_roi" as const,
         "roi_cifti": roi_cifti,
         "opt_in_memory": opt_in_memory,
     };
@@ -111,7 +78,7 @@ function cifti_average_dense_roi_cifti_roi_cargs(
     const cargs: string[] = [];
     cargs.push("-cifti-roi");
     cargs.push(execution.inputFile((params["roi_cifti"] ?? null)));
-    if ((params["opt_in_memory"] ?? null)) {
+    if ((params["opt_in_memory"] ?? false)) {
         cargs.push("-in-memory");
     }
     return cargs;
@@ -127,9 +94,9 @@ function cifti_average_dense_roi_cifti_roi_cargs(
  */
 function cifti_average_dense_roi_cifti_params(
     cifti_in: InputPathType,
-): CiftiAverageDenseRoiCiftiParameters {
+): CiftiAverageDenseRoiCiftiParametersTagged {
     const params = {
-        "@type": "workbench.cifti-average-dense-roi.cifti" as const,
+        "@type": "cifti" as const,
         "cifti_in": cifti_in,
     };
     return params;
@@ -156,7 +123,7 @@ function cifti_average_dense_roi_cifti_cargs(
 
 
 /**
- * Output object returned when calling `cifti_average_dense_roi(...)`.
+ * Output object returned when calling `CiftiAverageDenseRoiParameters(...)`.
  *
  * @interface
  */
@@ -199,9 +166,9 @@ function cifti_average_dense_roi_params(
     opt_right_area_surf_right_surf: InputPathType | null = null,
     opt_cerebellum_area_surf_cerebellum_surf: InputPathType | null = null,
     cifti: Array<CiftiAverageDenseRoiCiftiParameters> | null = null,
-): CiftiAverageDenseRoiParameters {
+): CiftiAverageDenseRoiParametersTagged {
     const params = {
-        "@type": "workbench.cifti-average-dense-roi" as const,
+        "@type": "workbench/cifti-average-dense-roi" as const,
         "cifti_out": cifti_out,
     };
     if (cifti_roi !== null) {
@@ -252,7 +219,7 @@ function cifti_average_dense_roi_cargs(
     cargs.push("-cifti-average-dense-roi");
     cargs.push((params["cifti_out"] ?? null));
     if ((params["cifti_roi"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["cifti_roi"] ?? null)["@type"])((params["cifti_roi"] ?? null), execution));
+        cargs.push(...cifti_average_dense_roi_cifti_roi_cargs((params["cifti_roi"] ?? null), execution));
     }
     if ((params["opt_left_roi_roi_metric"] ?? null) !== null) {
         cargs.push(
@@ -297,7 +264,7 @@ function cifti_average_dense_roi_cargs(
         );
     }
     if ((params["cifti"] ?? null) !== null) {
-        cargs.push(...(params["cifti"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["cifti"] ?? null).map(s => cifti_average_dense_roi_cifti_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -398,10 +365,7 @@ function cifti_average_dense_roi(
 
 export {
       CIFTI_AVERAGE_DENSE_ROI_METADATA,
-      CiftiAverageDenseRoiCiftiParameters,
-      CiftiAverageDenseRoiCiftiRoiParameters,
       CiftiAverageDenseRoiOutputs,
-      CiftiAverageDenseRoiParameters,
       cifti_average_dense_roi,
       cifti_average_dense_roi_cifti_params,
       cifti_average_dense_roi_cifti_roi_params,

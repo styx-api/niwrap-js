@@ -12,7 +12,7 @@ const MRI_COMPUTE_LAYER_FRACTIONS_METADATA: Metadata = {
 
 
 interface MriComputeLayerFractionsParameters {
-    "@type": "freesurfer.mri_compute_layer_fractions";
+    "@type"?: "freesurfer/mri_compute_layer_fractions";
     "reg_file": InputPathType;
     "input_volume": InputPathType;
     "output_stem": string;
@@ -28,44 +28,11 @@ interface MriComputeLayerFractionsParameters {
     "random_file"?: InputPathType | null | undefined;
     "identity_file"?: string | null | undefined;
 }
+type MriComputeLayerFractionsParametersTagged = Required<Pick<MriComputeLayerFractionsParameters, '@type'>> & MriComputeLayerFractionsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_compute_layer_fractions": mri_compute_layer_fractions_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_compute_layer_fractions": mri_compute_layer_fractions_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_compute_layer_fractions(...)`.
+ * Output object returned when calling `MriComputeLayerFractionsParameters(...)`.
  *
  * @interface
  */
@@ -120,9 +87,9 @@ function mri_compute_layer_fractions_params(
     thickness: number | null = null,
     random_file: InputPathType | null = null,
     identity_file: string | null = null,
-): MriComputeLayerFractionsParameters {
+): MriComputeLayerFractionsParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_compute_layer_fractions" as const,
+        "@type": "freesurfer/mri_compute_layer_fractions" as const,
         "reg_file": reg_file,
         "input_volume": input_volume,
         "output_stem": output_stem,
@@ -190,10 +157,10 @@ function mri_compute_layer_fractions_cargs(
     if ((params["target_volume"] ?? null) !== null) {
         cargs.push(execution.inputFile((params["target_volume"] ?? null)));
     }
-    if ((params["hemi_flag"] ?? null)) {
+    if ((params["hemi_flag"] ?? false)) {
         cargs.push("-hemi");
     }
-    if ((params["fs_names_flag"] ?? null)) {
+    if ((params["fs_names_flag"] ?? false)) {
         cargs.push("-FS_names");
     }
     if ((params["subject_id"] ?? null) !== null) {
@@ -208,7 +175,7 @@ function mri_compute_layer_fractions_cargs(
             String((params["n_layers"] ?? null))
         );
     }
-    if ((params["synth_flag"] ?? null)) {
+    if ((params["synth_flag"] ?? false)) {
         cargs.push("-synth");
     }
     if ((params["thickness"] ?? null) !== null) {
@@ -331,7 +298,6 @@ function mri_compute_layer_fractions(
 export {
       MRI_COMPUTE_LAYER_FRACTIONS_METADATA,
       MriComputeLayerFractionsOutputs,
-      MriComputeLayerFractionsParameters,
       mri_compute_layer_fractions,
       mri_compute_layer_fractions_execute,
       mri_compute_layer_fractions_params,

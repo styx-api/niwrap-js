@@ -12,7 +12,7 @@ const UNPACKMINCDIR_METADATA: Metadata = {
 
 
 interface UnpackmincdirParameters {
-    "@type": "freesurfer.unpackmincdir";
+    "@type"?: "freesurfer/unpackmincdir";
     "source_directory": string;
     "target_directory": string;
     "scan_sequence_info"?: string | null | undefined;
@@ -22,43 +22,11 @@ interface UnpackmincdirParameters {
     "no_copy": boolean;
     "umask"?: string | null | undefined;
 }
+type UnpackmincdirParametersTagged = Required<Pick<UnpackmincdirParameters, '@type'>> & UnpackmincdirParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.unpackmincdir": unpackmincdir_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `unpackmincdir(...)`.
+ * Output object returned when calling `UnpackmincdirParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +61,9 @@ function unpackmincdir_params(
     minc_only: boolean = false,
     no_copy: boolean = false,
     umask: string | null = null,
-): UnpackmincdirParameters {
+): UnpackmincdirParametersTagged {
     const params = {
-        "@type": "freesurfer.unpackmincdir" as const,
+        "@type": "freesurfer/unpackmincdir" as const,
         "source_directory": source_directory,
         "target_directory": target_directory,
         "minc_only": minc_only,
@@ -157,10 +125,10 @@ function unpackmincdir_cargs(
             (params["functional_subdirectory"] ?? null)
         );
     }
-    if ((params["minc_only"] ?? null)) {
+    if ((params["minc_only"] ?? false)) {
         cargs.push("-minconly");
     }
-    if ((params["no_copy"] ?? null)) {
+    if ((params["no_copy"] ?? false)) {
         cargs.push("-nocopy");
     }
     if ((params["umask"] ?? null) !== null) {
@@ -260,7 +228,6 @@ function unpackmincdir(
 export {
       UNPACKMINCDIR_METADATA,
       UnpackmincdirOutputs,
-      UnpackmincdirParameters,
       unpackmincdir,
       unpackmincdir_execute,
       unpackmincdir_params,

@@ -12,50 +12,17 @@ const SURFACE_APPLY_WARPFIELD_METADATA: Metadata = {
 
 
 interface SurfaceApplyWarpfieldParameters {
-    "@type": "workbench.surface-apply-warpfield";
+    "@type"?: "workbench/surface-apply-warpfield";
     "in_surf": InputPathType;
     "warpfield": string;
     "out_surf": string;
     "opt_fnirt_forward_warp"?: string | null | undefined;
 }
+type SurfaceApplyWarpfieldParametersTagged = Required<Pick<SurfaceApplyWarpfieldParameters, '@type'>> & SurfaceApplyWarpfieldParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-apply-warpfield": surface_apply_warpfield_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-apply-warpfield": surface_apply_warpfield_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_apply_warpfield(...)`.
+ * Output object returned when calling `SurfaceApplyWarpfieldParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function surface_apply_warpfield_params(
     warpfield: string,
     out_surf: string,
     opt_fnirt_forward_warp: string | null = null,
-): SurfaceApplyWarpfieldParameters {
+): SurfaceApplyWarpfieldParametersTagged {
     const params = {
-        "@type": "workbench.surface-apply-warpfield" as const,
+        "@type": "workbench/surface-apply-warpfield" as const,
         "in_surf": in_surf,
         "warpfield": warpfield,
         "out_surf": out_surf,
@@ -216,7 +183,6 @@ function surface_apply_warpfield(
 export {
       SURFACE_APPLY_WARPFIELD_METADATA,
       SurfaceApplyWarpfieldOutputs,
-      SurfaceApplyWarpfieldParameters,
       surface_apply_warpfield,
       surface_apply_warpfield_execute,
       surface_apply_warpfield_params,

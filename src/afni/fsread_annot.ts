@@ -12,7 +12,7 @@ const FSREAD_ANNOT_METADATA: Metadata = {
 
 
 interface FsreadAnnotParameters {
-    "@type": "afni.FSread_annot";
+    "@type"?: "afni/FSread_annot";
     "infile": InputPathType;
     "hemi"?: string | null | undefined;
     "fscmap"?: InputPathType | null | undefined;
@@ -25,44 +25,11 @@ interface FsreadAnnotParameters {
     "dset"?: string | null | undefined;
     "help": boolean;
 }
+type FsreadAnnotParametersTagged = Required<Pick<FsreadAnnotParameters, '@type'>> & FsreadAnnotParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.FSread_annot": fsread_annot_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.FSread_annot": fsread_annot_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsread_annot(...)`.
+ * Output object returned when calling `FsreadAnnotParameters(...)`.
  *
  * @interface
  */
@@ -119,9 +86,9 @@ function fsread_annot_params(
     show_fscmap: boolean = false,
     dset: string | null = null,
     help: boolean = false,
-): FsreadAnnotParameters {
+): FsreadAnnotParametersTagged {
     const params = {
-        "@type": "afni.FSread_annot" as const,
+        "@type": "afni/FSread_annot" as const,
         "infile": infile,
         "show_fscmap": show_fscmap,
         "help": help,
@@ -214,7 +181,7 @@ function fsread_annot_cargs(
             (params["cmap_1d"] ?? null)
         );
     }
-    if ((params["show_fscmap"] ?? null)) {
+    if ((params["show_fscmap"] ?? false)) {
         cargs.push("-show_FScmap");
     }
     if ((params["dset"] ?? null) !== null) {
@@ -223,7 +190,7 @@ function fsread_annot_cargs(
             (params["dset"] ?? null)
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -327,7 +294,6 @@ function fsread_annot(
 export {
       FSREAD_ANNOT_METADATA,
       FsreadAnnotOutputs,
-      FsreadAnnotParameters,
       fsread_annot,
       fsread_annot_execute,
       fsread_annot_params,

@@ -12,7 +12,7 @@ const V_3D_ROIMAKER_METADATA: Metadata = {
 
 
 interface V3dRoimakerParameters {
-    "@type": "afni.3dROIMaker";
+    "@type"?: "afni/3dROIMaker";
     "inset": InputPathType;
     "thresh": number;
     "prefix": string;
@@ -34,44 +34,11 @@ interface V3dRoimakerParameters {
     "preinfl_inflate"?: number | null | undefined;
     "dump_no_labtab": boolean;
 }
+type V3dRoimakerParametersTagged = Required<Pick<V3dRoimakerParameters, '@type'>> & V3dRoimakerParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dROIMaker": v_3d_roimaker_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dROIMaker": v_3d_roimaker_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_roimaker(...)`.
+ * Output object returned when calling `V3dRoimakerParameters(...)`.
  *
  * @interface
  */
@@ -138,9 +105,9 @@ function v_3d_roimaker_params(
     preinfl_inset: InputPathType | null = null,
     preinfl_inflate: number | null = null,
     dump_no_labtab: boolean = false,
-): V3dRoimakerParameters {
+): V3dRoimakerParametersTagged {
     const params = {
-        "@type": "afni.3dROIMaker" as const,
+        "@type": "afni/3dROIMaker" as const,
         "inset": inset,
         "thresh": thresh,
         "prefix": prefix,
@@ -241,7 +208,7 @@ function v_3d_roimaker_cargs(
             String((params["inflate"] ?? null))
         );
     }
-    if ((params["trim_off_wm"] ?? null)) {
+    if ((params["trim_off_wm"] ?? false)) {
         cargs.push("-trim_off_wm");
     }
     if ((params["wm_skel"] ?? null) !== null) {
@@ -256,10 +223,10 @@ function v_3d_roimaker_cargs(
             String((params["skel_thr"] ?? null))
         );
     }
-    if ((params["skel_stop"] ?? null)) {
+    if ((params["skel_stop"] ?? false)) {
         cargs.push("-skel_stop");
     }
-    if ((params["skel_stop_strict"] ?? null)) {
+    if ((params["skel_stop_strict"] ?? false)) {
         cargs.push("-skel_stop_strict");
     }
     if ((params["csf_skel"] ?? null) !== null) {
@@ -274,10 +241,10 @@ function v_3d_roimaker_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["neigh_upto_vert"] ?? null)) {
+    if ((params["neigh_upto_vert"] ?? false)) {
         cargs.push("-neigh_upto_vert");
     }
-    if ((params["nifti"] ?? null)) {
+    if ((params["nifti"] ?? false)) {
         cargs.push("-nifti");
     }
     if ((params["preinfl_inset"] ?? null) !== null) {
@@ -292,7 +259,7 @@ function v_3d_roimaker_cargs(
             String((params["preinfl_inflate"] ?? null))
         );
     }
-    if ((params["dump_no_labtab"] ?? null)) {
+    if ((params["dump_no_labtab"] ?? false)) {
         cargs.push("-dump_no_labtab");
     }
     return cargs;
@@ -411,7 +378,6 @@ function v_3d_roimaker(
 
 export {
       V3dRoimakerOutputs,
-      V3dRoimakerParameters,
       V_3D_ROIMAKER_METADATA,
       v_3d_roimaker,
       v_3d_roimaker_execute,

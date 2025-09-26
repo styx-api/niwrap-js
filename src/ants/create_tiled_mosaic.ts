@@ -12,7 +12,7 @@ const CREATE_TILED_MOSAIC_METADATA: Metadata = {
 
 
 interface CreateTiledMosaicParameters {
-    "@type": "ants.CreateTiledMosaic";
+    "@type"?: "ants/CreateTiledMosaic";
     "input_image": InputPathType;
     "rgb_image"?: InputPathType | null | undefined;
     "mask_image"?: InputPathType | null | undefined;
@@ -26,44 +26,11 @@ interface CreateTiledMosaicParameters {
     "flip_slice"?: string | null | undefined;
     "permute_axes"?: 0 | 1 | null | undefined;
 }
+type CreateTiledMosaicParametersTagged = Required<Pick<CreateTiledMosaicParameters, '@type'>> & CreateTiledMosaicParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.CreateTiledMosaic": create_tiled_mosaic_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.CreateTiledMosaic": create_tiled_mosaic_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `create_tiled_mosaic(...)`.
+ * Output object returned when calling `CreateTiledMosaicParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function create_tiled_mosaic_params(
     slices: string | null = null,
     flip_slice: string | null = null,
     permute_axes: 0 | 1 | null = null,
-): CreateTiledMosaicParameters {
+): CreateTiledMosaicParametersTagged {
     const params = {
-        "@type": "ants.CreateTiledMosaic" as const,
+        "@type": "ants/CreateTiledMosaic" as const,
         "input_image": input_image,
         "output": output,
     };
@@ -332,7 +299,6 @@ function create_tiled_mosaic(
 export {
       CREATE_TILED_MOSAIC_METADATA,
       CreateTiledMosaicOutputs,
-      CreateTiledMosaicParameters,
       create_tiled_mosaic,
       create_tiled_mosaic_execute,
       create_tiled_mosaic_params,

@@ -12,7 +12,7 @@ const V_3D_PAR2_AFNI_PL_METADATA: Metadata = {
 
 
 interface V3dPar2AfniPlParameters {
-    "@type": "afni.3dPAR2AFNI.pl";
+    "@type"?: "afni/3dPAR2AFNI.pl";
     "input_file": InputPathType;
     "skip_outliers_test": boolean;
     "output_nifti": boolean;
@@ -24,44 +24,11 @@ interface V3dPar2AfniPlParameters {
     "byte_swap_4": boolean;
     "help_flag": boolean;
 }
+type V3dPar2AfniPlParametersTagged = Required<Pick<V3dPar2AfniPlParameters, '@type'>> & V3dPar2AfniPlParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dPAR2AFNI.pl": v_3d_par2_afni_pl_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dPAR2AFNI.pl": v_3d_par2_afni_pl_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_par2_afni_pl(...)`.
+ * Output object returned when calling `V3dPar2AfniPlParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function v_3d_par2_afni_pl_params(
     byte_swap_2: boolean = false,
     byte_swap_4: boolean = false,
     help_flag: boolean = false,
-): V3dPar2AfniPlParameters {
+): V3dPar2AfniPlParametersTagged {
     const params = {
-        "@type": "afni.3dPAR2AFNI.pl" as const,
+        "@type": "afni/3dPAR2AFNI.pl" as const,
         "input_file": input_file,
         "skip_outliers_test": skip_outliers_test,
         "output_nifti": output_nifti,
@@ -139,13 +106,13 @@ function v_3d_par2_afni_pl_cargs(
     const cargs: string[] = [];
     cargs.push("3dPAR2AFNI.pl");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
-    if ((params["skip_outliers_test"] ?? null)) {
+    if ((params["skip_outliers_test"] ?? false)) {
         cargs.push("-s");
     }
-    if ((params["output_nifti"] ?? null)) {
+    if ((params["output_nifti"] ?? false)) {
         cargs.push("-n");
     }
-    if ((params["output_analyze"] ?? null)) {
+    if ((params["output_analyze"] ?? false)) {
         cargs.push("-a");
     }
     if ((params["output_dir"] ?? null) !== null) {
@@ -154,19 +121,19 @@ function v_3d_par2_afni_pl_cargs(
             (params["output_dir"] ?? null)
         );
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["gzip_files"] ?? null)) {
+    if ((params["gzip_files"] ?? false)) {
         cargs.push("-g");
     }
-    if ((params["byte_swap_2"] ?? null)) {
+    if ((params["byte_swap_2"] ?? false)) {
         cargs.push("-2");
     }
-    if ((params["byte_swap_4"] ?? null)) {
+    if ((params["byte_swap_4"] ?? false)) {
         cargs.push("-4");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -264,7 +231,6 @@ function v_3d_par2_afni_pl(
 
 export {
       V3dPar2AfniPlOutputs,
-      V3dPar2AfniPlParameters,
       V_3D_PAR2_AFNI_PL_METADATA,
       v_3d_par2_afni_pl,
       v_3d_par2_afni_pl_execute,

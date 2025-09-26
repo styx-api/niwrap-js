@@ -12,7 +12,7 @@ const UN_WARP_EPI_PY_METADATA: Metadata = {
 
 
 interface UnWarpEpiPyParameters {
-    "@type": "afni.unWarpEPI.py";
+    "@type"?: "afni/unWarpEPI.py";
     "forward": InputPathType;
     "reverse": InputPathType;
     "anat4warp": InputPathType;
@@ -20,43 +20,11 @@ interface UnWarpEpiPyParameters {
     "subjID": string;
     "giant_move": boolean;
 }
+type UnWarpEpiPyParametersTagged = Required<Pick<UnWarpEpiPyParameters, '@type'>> & UnWarpEpiPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.unWarpEPI.py": un_warp_epi_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `un_warp_epi_py(...)`.
+ * Output object returned when calling `UnWarpEpiPyParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function un_warp_epi_py_params(
     data: string,
     subj_id: string,
     giant_move: boolean = false,
-): UnWarpEpiPyParameters {
+): UnWarpEpiPyParametersTagged {
     const params = {
-        "@type": "afni.unWarpEPI.py" as const,
+        "@type": "afni/unWarpEPI.py" as const,
         "forward": forward,
         "reverse": reverse,
         "anat4warp": anat4warp,
@@ -135,7 +103,7 @@ function un_warp_epi_py_cargs(
         "-s",
         (params["subjID"] ?? null)
     );
-    if ((params["giant_move"] ?? null)) {
+    if ((params["giant_move"] ?? false)) {
         cargs.push("-g");
     }
     return cargs;
@@ -225,7 +193,6 @@ function un_warp_epi_py(
 export {
       UN_WARP_EPI_PY_METADATA,
       UnWarpEpiPyOutputs,
-      UnWarpEpiPyParameters,
       un_warp_epi_py,
       un_warp_epi_py_execute,
       un_warp_epi_py_params,

@@ -12,7 +12,7 @@ const V_3D_TFITTER_METADATA: Metadata = {
 
 
 interface V3dTfitterParameters {
-    "@type": "afni.3dTfitter";
+    "@type"?: "afni/3dTfitter";
     "RHS": string;
     "LHS"?: Array<string> | null | undefined;
     "polort"?: number | null | undefined;
@@ -32,44 +32,11 @@ interface V3dTfitterParameters {
     "mask"?: string | null | undefined;
     "quiet": boolean;
 }
+type V3dTfitterParametersTagged = Required<Pick<V3dTfitterParameters, '@type'>> & V3dTfitterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dTfitter": v_3d_tfitter_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dTfitter": v_3d_tfitter_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_tfitter(...)`.
+ * Output object returned when calling `V3dTfitterParameters(...)`.
  *
  * @interface
  */
@@ -136,9 +103,9 @@ function v_3d_tfitter_params(
     errsum: string | null = null,
     mask: string | null = null,
     quiet: boolean = false,
-): V3dTfitterParameters {
+): V3dTfitterParametersTagged {
     const params = {
-        "@type": "afni.3dTfitter" as const,
+        "@type": "afni/3dTfitter" as const,
         "RHS": rhs,
         "lsqfit": lsqfit,
         "l1fit": l1fit,
@@ -232,10 +199,10 @@ function v_3d_tfitter_cargs(
             ...(params["FALTUNG"] ?? null)
         );
     }
-    if ((params["lsqfit"] ?? null)) {
+    if ((params["lsqfit"] ?? false)) {
         cargs.push("-lsqfit");
     }
-    if ((params["l1fit"] ?? null)) {
+    if ((params["l1fit"] ?? false)) {
         cargs.push("-l1fit");
     }
     if ((params["l2lasso"] ?? null) !== null) {
@@ -298,7 +265,7 @@ function v_3d_tfitter_cargs(
             (params["mask"] ?? null)
         );
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
     return cargs;
@@ -426,7 +393,6 @@ function v_3d_tfitter(
 
 export {
       V3dTfitterOutputs,
-      V3dTfitterParameters,
       V_3D_TFITTER_METADATA,
       v_3d_tfitter,
       v_3d_tfitter_execute,

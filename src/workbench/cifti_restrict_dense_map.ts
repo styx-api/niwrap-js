@@ -12,7 +12,7 @@ const CIFTI_RESTRICT_DENSE_MAP_METADATA: Metadata = {
 
 
 interface CiftiRestrictDenseMapParameters {
-    "@type": "workbench.cifti-restrict-dense-map";
+    "@type"?: "workbench/cifti-restrict-dense-map";
     "cifti_in": InputPathType;
     "direction": string;
     "cifti_out": string;
@@ -22,44 +22,11 @@ interface CiftiRestrictDenseMapParameters {
     "opt_cerebellum_roi_roi_metric"?: InputPathType | null | undefined;
     "opt_vol_roi_roi_vol"?: InputPathType | null | undefined;
 }
+type CiftiRestrictDenseMapParametersTagged = Required<Pick<CiftiRestrictDenseMapParameters, '@type'>> & CiftiRestrictDenseMapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-restrict-dense-map": cifti_restrict_dense_map_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-restrict-dense-map": cifti_restrict_dense_map_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `cifti_restrict_dense_map(...)`.
+ * Output object returned when calling `CiftiRestrictDenseMapParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function cifti_restrict_dense_map_params(
     opt_right_roi_roi_metric: InputPathType | null = null,
     opt_cerebellum_roi_roi_metric: InputPathType | null = null,
     opt_vol_roi_roi_vol: InputPathType | null = null,
-): CiftiRestrictDenseMapParameters {
+): CiftiRestrictDenseMapParametersTagged {
     const params = {
-        "@type": "workbench.cifti-restrict-dense-map" as const,
+        "@type": "workbench/cifti-restrict-dense-map" as const,
         "cifti_in": cifti_in,
         "direction": direction,
         "cifti_out": cifti_out,
@@ -268,7 +235,6 @@ function cifti_restrict_dense_map(
 export {
       CIFTI_RESTRICT_DENSE_MAP_METADATA,
       CiftiRestrictDenseMapOutputs,
-      CiftiRestrictDenseMapParameters,
       cifti_restrict_dense_map,
       cifti_restrict_dense_map_execute,
       cifti_restrict_dense_map_params,

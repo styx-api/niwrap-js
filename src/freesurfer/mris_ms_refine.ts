@@ -12,7 +12,7 @@ const MRIS_MS_REFINE_METADATA: Metadata = {
 
 
 interface MrisMsRefineParameters {
-    "@type": "freesurfer.mris_ms_refine";
+    "@type"?: "freesurfer/mris_ms_refine";
     "subject_name": string;
     "hemisphere": string;
     "xform": InputPathType;
@@ -23,44 +23,11 @@ interface MrisMsRefineParameters {
     "average_curvature"?: number | null | undefined;
     "white_only": boolean;
 }
+type MrisMsRefineParametersTagged = Required<Pick<MrisMsRefineParameters, '@type'>> & MrisMsRefineParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_ms_refine": mris_ms_refine_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_ms_refine": mris_ms_refine_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_ms_refine(...)`.
+ * Output object returned when calling `MrisMsRefineParameters(...)`.
  *
  * @interface
  */
@@ -113,9 +80,9 @@ function mris_ms_refine_params(
     create_curvature_files: boolean = false,
     average_curvature: number | null = null,
     white_only: boolean = false,
-): MrisMsRefineParameters {
+): MrisMsRefineParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_ms_refine" as const,
+        "@type": "freesurfer/mris_ms_refine" as const,
         "subject_name": subject_name,
         "hemisphere": hemisphere,
         "xform": xform,
@@ -151,10 +118,10 @@ function mris_ms_refine_cargs(
     cargs.push(execution.inputFile((params["xform"] ?? null)));
     cargs.push(...(params["flash_files"] ?? null).map(f => execution.inputFile(f)));
     cargs.push(execution.inputFile((params["residuals"] ?? null)));
-    if ((params["omit_self_intersection"] ?? null)) {
+    if ((params["omit_self_intersection"] ?? false)) {
         cargs.push("-q");
     }
-    if ((params["create_curvature_files"] ?? null)) {
+    if ((params["create_curvature_files"] ?? false)) {
         cargs.push("-c");
     }
     if ((params["average_curvature"] ?? null) !== null) {
@@ -163,7 +130,7 @@ function mris_ms_refine_cargs(
             String((params["average_curvature"] ?? null))
         );
     }
-    if ((params["white_only"] ?? null)) {
+    if ((params["white_only"] ?? false)) {
         cargs.push("-whiteonly");
     }
     return cargs;
@@ -263,7 +230,6 @@ function mris_ms_refine(
 export {
       MRIS_MS_REFINE_METADATA,
       MrisMsRefineOutputs,
-      MrisMsRefineParameters,
       mris_ms_refine,
       mris_ms_refine_execute,
       mris_ms_refine_params,

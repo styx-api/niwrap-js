@@ -12,7 +12,7 @@ const MAKE_FOLDING_ATLAS_METADATA: Metadata = {
 
 
 interface MakeFoldingAtlasParameters {
-    "@type": "freesurfer.make_folding_atlas";
+    "@type"?: "freesurfer/make_folding_atlas";
     "subjlistfile"?: InputPathType | null | undefined;
     "fsgdfile"?: InputPathType | null | undefined;
     "subjects"?: Array<string> | null | undefined;
@@ -34,43 +34,11 @@ interface MakeFoldingAtlasParameters {
     "threads"?: number | null | undefined;
     "slurm_account"?: string | null | undefined;
 }
+type MakeFoldingAtlasParametersTagged = Required<Pick<MakeFoldingAtlasParameters, '@type'>> & MakeFoldingAtlasParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.make_folding_atlas": make_folding_atlas_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `make_folding_atlas(...)`.
+ * Output object returned when calling `MakeFoldingAtlasParameters(...)`.
  *
  * @interface
  */
@@ -129,9 +97,9 @@ function make_folding_atlas_params(
     no_template_only: boolean = false,
     threads: number | null = null,
     slurm_account: string | null = null,
-): MakeFoldingAtlasParameters {
+): MakeFoldingAtlasParametersTagged {
     const params = {
-        "@type": "freesurfer.make_folding_atlas" as const,
+        "@type": "freesurfer/make_folding_atlas" as const,
         "xhemi": xhemi,
         "no_annot_template": no_annot_template,
         "left_hemisphere": left_hemisphere,
@@ -221,7 +189,7 @@ function make_folding_atlas_cargs(
             String((params["max_iterations"] ?? null))
         );
     }
-    if ((params["xhemi"] ?? null)) {
+    if ((params["xhemi"] ?? false)) {
         cargs.push("--xhemi");
     }
     if ((params["init_surf_reg"] ?? null) !== null) {
@@ -236,16 +204,16 @@ function make_folding_atlas_cargs(
             (params["init_subject"] ?? null)
         );
     }
-    if ((params["no_annot_template"] ?? null)) {
+    if ((params["no_annot_template"] ?? false)) {
         cargs.push("--no-annot-template");
     }
-    if ((params["left_hemisphere"] ?? null)) {
+    if ((params["left_hemisphere"] ?? false)) {
         cargs.push("--lh");
     }
-    if ((params["right_hemisphere"] ?? null)) {
+    if ((params["right_hemisphere"] ?? false)) {
         cargs.push("--rh");
     }
-    if ((params["lhrh"] ?? null)) {
+    if ((params["lhrh"] ?? false)) {
         cargs.push("--lhrh");
     }
     if ((params["ico_order"] ?? null) !== null) {
@@ -254,19 +222,19 @@ function make_folding_atlas_cargs(
             String((params["ico_order"] ?? null))
         );
     }
-    if ((params["no_vol_on_last"] ?? null)) {
+    if ((params["no_vol_on_last"] ?? false)) {
         cargs.push("--no-vol-on-last");
     }
-    if ((params["vol"] ?? null)) {
+    if ((params["vol"] ?? false)) {
         cargs.push("--vol");
     }
-    if ((params["init"] ?? null)) {
+    if ((params["init"] ?? false)) {
         cargs.push("--init");
     }
-    if ((params["short_sleep"] ?? null)) {
+    if ((params["short_sleep"] ?? false)) {
         cargs.push("--short-sleep");
     }
-    if ((params["no_template_only"] ?? null)) {
+    if ((params["no_template_only"] ?? false)) {
         cargs.push("--no-template-only");
     }
     if ((params["threads"] ?? null) !== null) {
@@ -396,7 +364,6 @@ function make_folding_atlas(
 export {
       MAKE_FOLDING_ATLAS_METADATA,
       MakeFoldingAtlasOutputs,
-      MakeFoldingAtlasParameters,
       make_folding_atlas,
       make_folding_atlas_execute,
       make_folding_atlas_params,

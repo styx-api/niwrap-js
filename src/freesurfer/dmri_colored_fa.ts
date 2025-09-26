@@ -12,48 +12,15 @@ const DMRI_COLORED_FA_METADATA: Metadata = {
 
 
 interface DmriColoredFaParameters {
-    "@type": "freesurfer.dmri_coloredFA";
+    "@type"?: "freesurfer/dmri_coloredFA";
     "input_volume": InputPathType;
     "output_volume": string;
 }
+type DmriColoredFaParametersTagged = Required<Pick<DmriColoredFaParameters, '@type'>> & DmriColoredFaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dmri_coloredFA": dmri_colored_fa_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.dmri_coloredFA": dmri_colored_fa_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dmri_colored_fa(...)`.
+ * Output object returned when calling `DmriColoredFaParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface DmriColoredFaOutputs {
 function dmri_colored_fa_params(
     input_volume: InputPathType,
     output_volume: string = "colored_FA",
-): DmriColoredFaParameters {
+): DmriColoredFaParametersTagged {
     const params = {
-        "@type": "freesurfer.dmri_coloredFA" as const,
+        "@type": "freesurfer/dmri_coloredFA" as const,
         "input_volume": input_volume,
         "output_volume": output_volume,
     };
@@ -105,7 +72,7 @@ function dmri_colored_fa_cargs(
     const cargs: string[] = [];
     cargs.push("dmri_coloredFA");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
-    cargs.push((params["output_volume"] ?? null));
+    cargs.push((params["output_volume"] ?? "colored_FA"));
     return cargs;
 }
 
@@ -124,7 +91,7 @@ function dmri_colored_fa_outputs(
 ): DmriColoredFaOutputs {
     const ret: DmriColoredFaOutputs = {
         root: execution.outputFile("."),
-        output_colored_fa: execution.outputFile([(params["output_volume"] ?? null), ".nii.gz"].join('')),
+        output_colored_fa: execution.outputFile([(params["output_volume"] ?? "colored_FA"), ".nii.gz"].join('')),
     };
     return ret;
 }
@@ -186,7 +153,6 @@ function dmri_colored_fa(
 export {
       DMRI_COLORED_FA_METADATA,
       DmriColoredFaOutputs,
-      DmriColoredFaParameters,
       dmri_colored_fa,
       dmri_colored_fa_execute,
       dmri_colored_fa_params,

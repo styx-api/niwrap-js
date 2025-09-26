@@ -12,7 +12,7 @@ const V_3D_SPACE_TIME_CORR_METADATA: Metadata = {
 
 
 interface V3dSpaceTimeCorrParameters {
-    "@type": "afni.3dSpaceTimeCorr";
+    "@type"?: "afni/3dSpaceTimeCorr";
     "insetA": InputPathType;
     "insetB": InputPathType;
     "prefix": string;
@@ -21,44 +21,11 @@ interface V3dSpaceTimeCorrParameters {
     "freeze_insetA_ijk"?: Array<number> | null | undefined;
     "freeze_insetA_xyz"?: Array<number> | null | undefined;
 }
+type V3dSpaceTimeCorrParametersTagged = Required<Pick<V3dSpaceTimeCorrParameters, '@type'>> & V3dSpaceTimeCorrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dSpaceTimeCorr": v_3d_space_time_corr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dSpaceTimeCorr": v_3d_space_time_corr_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_space_time_corr(...)`.
+ * Output object returned when calling `V3dSpaceTimeCorrParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function v_3d_space_time_corr_params(
     out_zcorr: boolean = false,
     freeze_inset_a_ijk: Array<number> | null = null,
     freeze_inset_a_xyz: Array<number> | null = null,
-): V3dSpaceTimeCorrParameters {
+): V3dSpaceTimeCorrParametersTagged {
     const params = {
-        "@type": "afni.3dSpaceTimeCorr" as const,
+        "@type": "afni/3dSpaceTimeCorr" as const,
         "insetA": inset_a,
         "insetB": inset_b,
         "prefix": prefix,
@@ -148,7 +115,7 @@ function v_3d_space_time_corr_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["out_Zcorr"] ?? null)) {
+    if ((params["out_Zcorr"] ?? false)) {
         cargs.push("-out_Zcorr");
     }
     if ((params["freeze_insetA_ijk"] ?? null) !== null) {
@@ -252,7 +219,6 @@ function v_3d_space_time_corr(
 
 export {
       V3dSpaceTimeCorrOutputs,
-      V3dSpaceTimeCorrParameters,
       V_3D_SPACE_TIME_CORR_METADATA,
       v_3d_space_time_corr,
       v_3d_space_time_corr_execute,

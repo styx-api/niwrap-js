@@ -12,7 +12,7 @@ const V__COMPUTE_GCOR_METADATA: Metadata = {
 
 
 interface VComputeGcorParameters {
-    "@type": "afni.@compute_gcor";
+    "@type"?: "afni/@compute_gcor";
     "input": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "corr_vol_prefix"?: string | null | undefined;
@@ -21,44 +21,11 @@ interface VComputeGcorParameters {
     "save_tmp": boolean;
     "verbose"?: number | null | undefined;
 }
+type VComputeGcorParametersTagged = Required<Pick<VComputeGcorParameters, '@type'>> & VComputeGcorParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@compute_gcor": v__compute_gcor_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@compute_gcor": v__compute_gcor_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__compute_gcor(...)`.
+ * Output object returned when calling `VComputeGcorParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +66,9 @@ function v__compute_gcor_params(
     no_demean: boolean = false,
     save_tmp: boolean = false,
     verbose: number | null = null,
-): VComputeGcorParameters {
+): VComputeGcorParametersTagged {
     const params = {
-        "@type": "afni.@compute_gcor" as const,
+        "@type": "afni/@compute_gcor" as const,
         "input": input,
         "no_demean": no_demean,
         "save_tmp": save_tmp,
@@ -152,10 +119,10 @@ function v__compute_gcor_cargs(
             String((params["initial_trs"] ?? null))
         );
     }
-    if ((params["no_demean"] ?? null)) {
+    if ((params["no_demean"] ?? false)) {
         cargs.push("-no_demean");
     }
-    if ((params["save_tmp"] ?? null)) {
+    if ((params["save_tmp"] ?? false)) {
         cargs.push("-savetmp");
     }
     if ((params["verbose"] ?? null) !== null) {
@@ -254,7 +221,6 @@ function v__compute_gcor(
 
 export {
       VComputeGcorOutputs,
-      VComputeGcorParameters,
       V__COMPUTE_GCOR_METADATA,
       v__compute_gcor,
       v__compute_gcor_execute,

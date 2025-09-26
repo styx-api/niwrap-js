@@ -12,46 +12,14 @@ const MRI_GCAB_TRAIN_METADATA: Metadata = {
 
 
 interface MriGcabTrainParameters {
-    "@type": "freesurfer.mri_gcab_train";
+    "@type"?: "freesurfer/mri_gcab_train";
     "removed_info"?: string | null | undefined;
 }
+type MriGcabTrainParametersTagged = Required<Pick<MriGcabTrainParameters, '@type'>> & MriGcabTrainParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_gcab_train": mri_gcab_train_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_gcab_train(...)`.
+ * Output object returned when calling `MriGcabTrainParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface MriGcabTrainOutputs {
  */
 function mri_gcab_train_params(
     removed_info: string | null = null,
-): MriGcabTrainParameters {
+): MriGcabTrainParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_gcab_train" as const,
+        "@type": "freesurfer/mri_gcab_train" as const,
     };
     if (removed_info !== null) {
         params["removed_info"] = removed_info;
@@ -177,7 +145,6 @@ function mri_gcab_train(
 export {
       MRI_GCAB_TRAIN_METADATA,
       MriGcabTrainOutputs,
-      MriGcabTrainParameters,
       mri_gcab_train,
       mri_gcab_train_execute,
       mri_gcab_train_params,

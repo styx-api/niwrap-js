@@ -12,7 +12,7 @@ const V_3D_RANKIZER_METADATA: Metadata = {
 
 
 interface V3dRankizerParameters {
-    "@type": "afni.3dRankizer";
+    "@type"?: "afni/3dRankizer";
     "dataset": InputPathType;
     "base_rank"?: number | null | undefined;
     "mask"?: InputPathType | null | undefined;
@@ -20,44 +20,11 @@ interface V3dRankizerParameters {
     "percentize": boolean;
     "percentize_mask": boolean;
 }
+type V3dRankizerParametersTagged = Required<Pick<V3dRankizerParameters, '@type'>> & V3dRankizerParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dRankizer": v_3d_rankizer_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dRankizer": v_3d_rankizer_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_rankizer(...)`.
+ * Output object returned when calling `V3dRankizerParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function v_3d_rankizer_params(
     mask: InputPathType | null = null,
     percentize: boolean = false,
     percentize_mask: boolean = false,
-): V3dRankizerParameters {
+): V3dRankizerParametersTagged {
     const params = {
-        "@type": "afni.3dRankizer" as const,
+        "@type": "afni/3dRankizer" as const,
         "dataset": dataset,
         "prefix": prefix,
         "percentize": percentize,
@@ -141,10 +108,10 @@ function v_3d_rankizer_cargs(
         "-prefix",
         (params["prefix"] ?? null)
     );
-    if ((params["percentize"] ?? null)) {
+    if ((params["percentize"] ?? false)) {
         cargs.push("-percentize");
     }
-    if ((params["percentize_mask"] ?? null)) {
+    if ((params["percentize_mask"] ?? false)) {
         cargs.push("-percentize_mask");
     }
     return cargs;
@@ -234,7 +201,6 @@ function v_3d_rankizer(
 
 export {
       V3dRankizerOutputs,
-      V3dRankizerParameters,
       V_3D_RANKIZER_METADATA,
       v_3d_rankizer,
       v_3d_rankizer_execute,

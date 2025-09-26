@@ -12,38 +12,43 @@ const FIXELFILTER_METADATA: Metadata = {
 
 
 interface FixelfilterConfigParameters {
-    "@type": "mrtrix.fixelfilter.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type FixelfilterConfigParametersTagged = Required<Pick<FixelfilterConfigParameters, '@type'>> & FixelfilterConfigParameters;
 
 
 interface FixelfilterVariousStringParameters {
-    "@type": "mrtrix.fixelfilter.VariousString";
+    "@type"?: "VariousString";
     "obj": string;
 }
+type FixelfilterVariousStringParametersTagged = Required<Pick<FixelfilterVariousStringParameters, '@type'>> & FixelfilterVariousStringParameters;
 
 
 interface FixelfilterVariousFileParameters {
-    "@type": "mrtrix.fixelfilter.VariousFile";
+    "@type"?: "VariousFile";
     "obj": InputPathType;
 }
+type FixelfilterVariousFileParametersTagged = Required<Pick<FixelfilterVariousFileParameters, '@type'>> & FixelfilterVariousFileParameters;
 
 
 interface FixelfilterVariousString1Parameters {
-    "@type": "mrtrix.fixelfilter.VariousString";
+    "@type"?: "VariousString_1";
     "obj": string;
 }
+type FixelfilterVariousString1ParametersTagged = Required<Pick<FixelfilterVariousString1Parameters, '@type'>> & FixelfilterVariousString1Parameters;
 
 
 interface FixelfilterVariousFile1Parameters {
-    "@type": "mrtrix.fixelfilter.VariousFile";
+    "@type"?: "VariousFile_1";
     "obj": InputPathType;
 }
+type FixelfilterVariousFile1ParametersTagged = Required<Pick<FixelfilterVariousFile1Parameters, '@type'>> & FixelfilterVariousFile1Parameters;
 
 
 interface FixelfilterParameters {
-    "@type": "mrtrix.fixelfilter";
+    "@type"?: "mrtrix/fixelfilter";
     "matrix": InputPathType;
     "threshold_value"?: number | null | undefined;
     "threshold_connectivity"?: number | null | undefined;
@@ -58,10 +63,11 @@ interface FixelfilterParameters {
     "config"?: Array<FixelfilterConfigParameters> | null | undefined;
     "help": boolean;
     "version": boolean;
-    "input": FixelfilterVariousStringParameters | FixelfilterVariousFileParameters;
+    "input": FixelfilterVariousStringParametersTagged | FixelfilterVariousFileParametersTagged;
     "filter": string;
-    "output": FixelfilterVariousString1Parameters | FixelfilterVariousFile1Parameters;
+    "output": FixelfilterVariousString1ParametersTagged | FixelfilterVariousFile1ParametersTagged;
 }
+type FixelfilterParametersTagged = Required<Pick<FixelfilterParameters, '@type'>> & FixelfilterParameters;
 
 
 /**
@@ -71,16 +77,12 @@ interface FixelfilterParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function fixelfilter_input_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "mrtrix.fixelfilter": fixelfilter_cargs,
-        "mrtrix.fixelfilter.config": fixelfilter_config_cargs,
-        "mrtrix.fixelfilter.VariousString": fixelfilter_various_string_cargs,
-        "mrtrix.fixelfilter.VariousFile": fixelfilter_various_file_cargs,
-        "mrtrix.fixelfilter.VariousString": fixelfilter_various_string_1_cargs,
-        "mrtrix.fixelfilter.VariousFile": fixelfilter_various_file_1_cargs,
+        "VariousString": fixelfilter_various_string_cargs,
+        "VariousFile": fixelfilter_various_file_cargs,
     };
     return cargsFuncs[t];
 }
@@ -93,7 +95,41 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function fixelfilter_input_outputs_dyn_fn(
+    t: string,
+): Function | undefined {
+    const outputsFuncs = {
+    };
+    return outputsFuncs[t];
+}
+
+
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
+function fixelfilter_output_cargs_dyn_fn(
+    t: string,
+): Function | undefined {
+    const cargsFuncs = {
+        "VariousString_1": fixelfilter_various_string_1_cargs,
+        "VariousFile_1": fixelfilter_various_file_1_cargs,
+    };
+    return cargsFuncs[t];
+}
+
+
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
+function fixelfilter_output_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
@@ -113,9 +149,9 @@ function dynOutputs(
 function fixelfilter_config_params(
     key: string,
     value: string,
-): FixelfilterConfigParameters {
+): FixelfilterConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.fixelfilter.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -152,9 +188,9 @@ function fixelfilter_config_cargs(
  */
 function fixelfilter_various_string_params(
     obj: string,
-): FixelfilterVariousStringParameters {
+): FixelfilterVariousStringParametersTagged {
     const params = {
-        "@type": "mrtrix.fixelfilter.VariousString" as const,
+        "@type": "VariousString" as const,
         "obj": obj,
     };
     return params;
@@ -188,9 +224,9 @@ function fixelfilter_various_string_cargs(
  */
 function fixelfilter_various_file_params(
     obj: InputPathType,
-): FixelfilterVariousFileParameters {
+): FixelfilterVariousFileParametersTagged {
     const params = {
-        "@type": "mrtrix.fixelfilter.VariousFile" as const,
+        "@type": "VariousFile" as const,
         "obj": obj,
     };
     return params;
@@ -224,9 +260,9 @@ function fixelfilter_various_file_cargs(
  */
 function fixelfilter_various_string_1_params(
     obj: string,
-): FixelfilterVariousString1Parameters {
+): FixelfilterVariousString1ParametersTagged {
     const params = {
-        "@type": "mrtrix.fixelfilter.VariousString" as const,
+        "@type": "VariousString_1" as const,
         "obj": obj,
     };
     return params;
@@ -260,9 +296,9 @@ function fixelfilter_various_string_1_cargs(
  */
 function fixelfilter_various_file_1_params(
     obj: InputPathType,
-): FixelfilterVariousFile1Parameters {
+): FixelfilterVariousFile1ParametersTagged {
     const params = {
-        "@type": "mrtrix.fixelfilter.VariousFile" as const,
+        "@type": "VariousFile_1" as const,
         "obj": obj,
     };
     return params;
@@ -288,7 +324,7 @@ function fixelfilter_various_file_1_cargs(
 
 
 /**
- * Output object returned when calling `fixelfilter(...)`.
+ * Output object returned when calling `FixelfilterParameters(...)`.
  *
  * @interface
  */
@@ -325,9 +361,9 @@ interface FixelfilterOutputs {
  */
 function fixelfilter_params(
     matrix: InputPathType,
-    input: FixelfilterVariousStringParameters | FixelfilterVariousFileParameters,
+    input: FixelfilterVariousStringParametersTagged | FixelfilterVariousFileParametersTagged,
     filter: string,
-    output: FixelfilterVariousString1Parameters | FixelfilterVariousFile1Parameters,
+    output: FixelfilterVariousString1ParametersTagged | FixelfilterVariousFile1ParametersTagged,
     threshold_value: number | null = null,
     threshold_connectivity: number | null = null,
     fwhm: number | null = null,
@@ -341,9 +377,9 @@ function fixelfilter_params(
     config: Array<FixelfilterConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): FixelfilterParameters {
+): FixelfilterParametersTagged {
     const params = {
-        "@type": "mrtrix.fixelfilter" as const,
+        "@type": "mrtrix/fixelfilter" as const,
         "matrix": matrix,
         "info": info,
         "quiet": quiet,
@@ -428,16 +464,16 @@ function fixelfilter_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -447,17 +483,17 @@ function fixelfilter_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => fixelfilter_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
-    cargs.push(...dynCargs((params["input"] ?? null)["@type"])((params["input"] ?? null), execution));
+    cargs.push(...fixelfilter_input_cargs_dyn_fn((params["input"] ?? null)["@type"])((params["input"] ?? null), execution));
     cargs.push((params["filter"] ?? null));
-    cargs.push(...dynCargs((params["output"] ?? null)["@type"])((params["output"] ?? null), execution));
+    cargs.push(...fixelfilter_output_cargs_dyn_fn((params["output"] ?? null)["@type"])((params["output"] ?? null), execution));
     return cargs;
 }
 
@@ -553,9 +589,9 @@ function fixelfilter_execute(
  */
 function fixelfilter(
     matrix: InputPathType,
-    input: FixelfilterVariousStringParameters | FixelfilterVariousFileParameters,
+    input: FixelfilterVariousStringParametersTagged | FixelfilterVariousFileParametersTagged,
     filter: string,
-    output: FixelfilterVariousString1Parameters | FixelfilterVariousFile1Parameters,
+    output: FixelfilterVariousString1ParametersTagged | FixelfilterVariousFile1ParametersTagged,
     threshold_value: number | null = null,
     threshold_connectivity: number | null = null,
     fwhm: number | null = null,
@@ -578,13 +614,7 @@ function fixelfilter(
 
 export {
       FIXELFILTER_METADATA,
-      FixelfilterConfigParameters,
       FixelfilterOutputs,
-      FixelfilterParameters,
-      FixelfilterVariousFile1Parameters,
-      FixelfilterVariousFileParameters,
-      FixelfilterVariousString1Parameters,
-      FixelfilterVariousStringParameters,
       fixelfilter,
       fixelfilter_config_params,
       fixelfilter_execute,

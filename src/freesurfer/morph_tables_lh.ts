@@ -12,48 +12,15 @@ const MORPH_TABLES_LH_METADATA: Metadata = {
 
 
 interface MorphTablesLhParameters {
-    "@type": "freesurfer.morph_tables-lh";
+    "@type"?: "freesurfer/morph_tables-lh";
     "input_file": InputPathType;
     "some_flag": boolean;
 }
+type MorphTablesLhParametersTagged = Required<Pick<MorphTablesLhParameters, '@type'>> & MorphTablesLhParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.morph_tables-lh": morph_tables_lh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.morph_tables-lh": morph_tables_lh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `morph_tables_lh(...)`.
+ * Output object returned when calling `MorphTablesLhParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface MorphTablesLhOutputs {
 function morph_tables_lh_params(
     input_file: InputPathType,
     some_flag: boolean = false,
-): MorphTablesLhParameters {
+): MorphTablesLhParametersTagged {
     const params = {
-        "@type": "freesurfer.morph_tables-lh" as const,
+        "@type": "freesurfer/morph_tables-lh" as const,
         "input_file": input_file,
         "some_flag": some_flag,
     };
@@ -108,7 +75,7 @@ function morph_tables_lh_cargs(
         "-lh",
         execution.inputFile((params["input_file"] ?? null))
     );
-    if ((params["some_flag"] ?? null)) {
+    if ((params["some_flag"] ?? false)) {
         cargs.push("--some-flag");
     }
     return cargs;
@@ -191,7 +158,6 @@ function morph_tables_lh(
 export {
       MORPH_TABLES_LH_METADATA,
       MorphTablesLhOutputs,
-      MorphTablesLhParameters,
       morph_tables_lh,
       morph_tables_lh_execute,
       morph_tables_lh_params,

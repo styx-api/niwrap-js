@@ -12,7 +12,7 @@ const V_1DGRAYPLOT_METADATA: Metadata = {
 
 
 interface V1dgrayplotParameters {
-    "@type": "afni.1dgrayplot";
+    "@type"?: "afni/1dgrayplot";
     "tsfile": InputPathType;
     "install": boolean;
     "ignore"?: number | null | undefined;
@@ -21,43 +21,11 @@ interface V1dgrayplotParameters {
     "use"?: number | null | undefined;
     "ps": boolean;
 }
+type V1dgrayplotParametersTagged = Required<Pick<V1dgrayplotParameters, '@type'>> & V1dgrayplotParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dgrayplot": v_1dgrayplot_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1dgrayplot(...)`.
+ * Output object returned when calling `V1dgrayplotParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +58,9 @@ function v_1dgrayplot_params(
     sep: boolean = false,
     use: number | null = null,
     ps: boolean = false,
-): V1dgrayplotParameters {
+): V1dgrayplotParametersTagged {
     const params = {
-        "@type": "afni.1dgrayplot" as const,
+        "@type": "afni/1dgrayplot" as const,
         "tsfile": tsfile,
         "install": install,
         "flip": flip,
@@ -124,7 +92,7 @@ function v_1dgrayplot_cargs(
     const cargs: string[] = [];
     cargs.push("1dgrayplot");
     cargs.push(execution.inputFile((params["tsfile"] ?? null)));
-    if ((params["install"] ?? null)) {
+    if ((params["install"] ?? false)) {
         cargs.push("-install");
     }
     if ((params["ignore"] ?? null) !== null) {
@@ -133,10 +101,10 @@ function v_1dgrayplot_cargs(
             String((params["ignore"] ?? null))
         );
     }
-    if ((params["flip"] ?? null)) {
+    if ((params["flip"] ?? false)) {
         cargs.push("-flip");
     }
-    if ((params["sep"] ?? null)) {
+    if ((params["sep"] ?? false)) {
         cargs.push("-sep");
     }
     if ((params["use"] ?? null) !== null) {
@@ -145,7 +113,7 @@ function v_1dgrayplot_cargs(
             String((params["use"] ?? null))
         );
     }
-    if ((params["ps"] ?? null)) {
+    if ((params["ps"] ?? false)) {
         cargs.push("-ps");
     }
     return cargs;
@@ -236,7 +204,6 @@ function v_1dgrayplot(
 
 export {
       V1dgrayplotOutputs,
-      V1dgrayplotParameters,
       V_1DGRAYPLOT_METADATA,
       v_1dgrayplot,
       v_1dgrayplot_execute,

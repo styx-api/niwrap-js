@@ -12,7 +12,7 @@ const PRELUDE_METADATA: Metadata = {
 
 
 interface PreludeParameters {
-    "@type": "fsl.prelude";
+    "@type"?: "fsl/prelude";
     "output_unwrap": string;
     "output_unwrap_alias": InputPathType;
     "complex_phase"?: InputPathType | null | undefined;
@@ -44,44 +44,11 @@ interface PreludeParameters {
     "help": boolean;
     "help_alias": boolean;
 }
+type PreludeParametersTagged = Required<Pick<PreludeParameters, '@type'>> & PreludeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.prelude": prelude_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.prelude": prelude_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `prelude(...)`.
+ * Output object returned when calling `PreludeParameters(...)`.
  *
  * @interface
  */
@@ -176,9 +143,9 @@ function prelude_params(
     verbose_alias: boolean = false,
     help: boolean = false,
     help_alias: boolean = false,
-): PreludeParameters {
+): PreludeParametersTagged {
     const params = {
-        "@type": "fsl.prelude" as const,
+        "@type": "fsl/prelude" as const,
         "output_unwrap": output_unwrap,
         "output_unwrap_alias": output_unwrap_alias,
         "label_slices": label_slices,
@@ -314,19 +281,19 @@ function prelude_cargs(
             String((params["num_phase_split"] ?? null))
         );
     }
-    if ((params["label_slices"] ?? null)) {
+    if ((params["label_slices"] ?? false)) {
         cargs.push("--labelslices");
     }
-    if ((params["slice_processing"] ?? null)) {
+    if ((params["slice_processing"] ?? false)) {
         cargs.push("-s");
     }
-    if ((params["slice_processing_alias"] ?? null)) {
+    if ((params["slice_processing_alias"] ?? false)) {
         cargs.push("--slices");
     }
-    if ((params["force_3d"] ?? null)) {
+    if ((params["force_3d"] ?? false)) {
         cargs.push("-f");
     }
-    if ((params["force_3d_alias"] ?? null)) {
+    if ((params["force_3d_alias"] ?? false)) {
         cargs.push("--force3D");
     }
     if ((params["threshold"] ?? null) !== null) {
@@ -395,19 +362,19 @@ function prelude_cargs(
             execution.inputFile((params["save_labels_alias"] ?? null))
         );
     }
-    if ((params["remove_ramps"] ?? null)) {
+    if ((params["remove_ramps"] ?? false)) {
         cargs.push("--removeramps");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["verbose_alias"] ?? null)) {
+    if ((params["verbose_alias"] ?? false)) {
         cargs.push("--verbose");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["help_alias"] ?? null)) {
+    if ((params["help_alias"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -549,7 +516,6 @@ function prelude(
 export {
       PRELUDE_METADATA,
       PreludeOutputs,
-      PreludeParameters,
       prelude,
       prelude_execute,
       prelude_params,

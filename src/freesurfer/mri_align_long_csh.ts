@@ -12,47 +12,14 @@ const MRI_ALIGN_LONG_CSH_METADATA: Metadata = {
 
 
 interface MriAlignLongCshParameters {
-    "@type": "freesurfer.mri_align_long.csh";
+    "@type"?: "freesurfer/mri_align_long.csh";
     "base_id": string;
 }
+type MriAlignLongCshParametersTagged = Required<Pick<MriAlignLongCshParameters, '@type'>> & MriAlignLongCshParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_align_long.csh": mri_align_long_csh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_align_long.csh": mri_align_long_csh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_align_long_csh(...)`.
+ * Output object returned when calling `MriAlignLongCshParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +48,9 @@ interface MriAlignLongCshOutputs {
  */
 function mri_align_long_csh_params(
     base_id: string,
-): MriAlignLongCshParameters {
+): MriAlignLongCshParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_align_long.csh" as const,
+        "@type": "freesurfer/mri_align_long.csh" as const,
         "base_id": base_id,
     };
     return params;
@@ -184,7 +151,6 @@ function mri_align_long_csh(
 export {
       MRI_ALIGN_LONG_CSH_METADATA,
       MriAlignLongCshOutputs,
-      MriAlignLongCshParameters,
       mri_align_long_csh,
       mri_align_long_csh_execute,
       mri_align_long_csh_params,

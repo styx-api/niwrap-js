@@ -12,14 +12,15 @@ const FIXEL2SH_METADATA: Metadata = {
 
 
 interface Fixel2shConfigParameters {
-    "@type": "mrtrix.fixel2sh.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Fixel2shConfigParametersTagged = Required<Pick<Fixel2shConfigParameters, '@type'>> & Fixel2shConfigParameters;
 
 
 interface Fixel2shParameters {
-    "@type": "mrtrix.fixel2sh";
+    "@type"?: "mrtrix/fixel2sh";
     "lmax"?: number | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -32,41 +33,7 @@ interface Fixel2shParameters {
     "fixel_in": InputPathType;
     "sh_out": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.fixel2sh": fixel2sh_cargs,
-        "mrtrix.fixel2sh.config": fixel2sh_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.fixel2sh": fixel2sh_outputs,
-    };
-    return outputsFuncs[t];
-}
+type Fixel2shParametersTagged = Required<Pick<Fixel2shParameters, '@type'>> & Fixel2shParameters;
 
 
 /**
@@ -80,9 +47,9 @@ function dynOutputs(
 function fixel2sh_config_params(
     key: string,
     value: string,
-): Fixel2shConfigParameters {
+): Fixel2shConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.fixel2sh.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -111,7 +78,7 @@ function fixel2sh_config_cargs(
 
 
 /**
- * Output object returned when calling `fixel2sh(...)`.
+ * Output object returned when calling `Fixel2shParameters(...)`.
  *
  * @interface
  */
@@ -156,9 +123,9 @@ function fixel2sh_params(
     config: Array<Fixel2shConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Fixel2shParameters {
+): Fixel2shParametersTagged {
     const params = {
-        "@type": "mrtrix.fixel2sh" as const,
+        "@type": "mrtrix/fixel2sh" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -201,16 +168,16 @@ function fixel2sh_cargs(
             String((params["lmax"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -220,12 +187,12 @@ function fixel2sh_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => fixel2sh_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["fixel_in"] ?? null)));
@@ -345,9 +312,7 @@ function fixel2sh(
 
 export {
       FIXEL2SH_METADATA,
-      Fixel2shConfigParameters,
       Fixel2shOutputs,
-      Fixel2shParameters,
       fixel2sh,
       fixel2sh_config_params,
       fixel2sh_execute,

@@ -12,41 +12,45 @@ const CIFTI_SEPARATE_METADATA: Metadata = {
 
 
 interface CiftiSeparateVolumeAllParameters {
-    "@type": "workbench.cifti-separate.volume_all";
+    "@type"?: "volume_all";
     "volume_out": string;
     "opt_roi_roi_out"?: string | null | undefined;
     "opt_label_label_out"?: string | null | undefined;
     "opt_crop": boolean;
 }
+type CiftiSeparateVolumeAllParametersTagged = Required<Pick<CiftiSeparateVolumeAllParameters, '@type'>> & CiftiSeparateVolumeAllParameters;
 
 
 interface CiftiSeparateLabelParameters {
-    "@type": "workbench.cifti-separate.label";
+    "@type"?: "label";
     "structure": string;
     "label_out": string;
     "opt_roi_roi_out"?: string | null | undefined;
 }
+type CiftiSeparateLabelParametersTagged = Required<Pick<CiftiSeparateLabelParameters, '@type'>> & CiftiSeparateLabelParameters;
 
 
 interface CiftiSeparateMetricParameters {
-    "@type": "workbench.cifti-separate.metric";
+    "@type"?: "metric";
     "structure": string;
     "metric_out": string;
     "opt_roi_roi_out"?: string | null | undefined;
 }
+type CiftiSeparateMetricParametersTagged = Required<Pick<CiftiSeparateMetricParameters, '@type'>> & CiftiSeparateMetricParameters;
 
 
 interface CiftiSeparateVolumeParameters {
-    "@type": "workbench.cifti-separate.volume";
+    "@type"?: "volume";
     "structure": string;
     "volume_out": string;
     "opt_roi_roi_out"?: string | null | undefined;
     "opt_crop": boolean;
 }
+type CiftiSeparateVolumeParametersTagged = Required<Pick<CiftiSeparateVolumeParameters, '@type'>> & CiftiSeparateVolumeParameters;
 
 
 interface CiftiSeparateParameters {
-    "@type": "workbench.cifti-separate";
+    "@type"?: "workbench/cifti-separate";
     "cifti_in": InputPathType;
     "direction": string;
     "volume_all"?: CiftiSeparateVolumeAllParameters | null | undefined;
@@ -54,48 +58,7 @@ interface CiftiSeparateParameters {
     "metric"?: Array<CiftiSeparateMetricParameters> | null | undefined;
     "volume"?: Array<CiftiSeparateVolumeParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-separate": cifti_separate_cargs,
-        "workbench.cifti-separate.volume_all": cifti_separate_volume_all_cargs,
-        "workbench.cifti-separate.label": cifti_separate_label_cargs,
-        "workbench.cifti-separate.metric": cifti_separate_metric_cargs,
-        "workbench.cifti-separate.volume": cifti_separate_volume_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-separate": cifti_separate_outputs,
-        "workbench.cifti-separate.volume_all": cifti_separate_volume_all_outputs,
-        "workbench.cifti-separate.label": cifti_separate_label_outputs,
-        "workbench.cifti-separate.metric": cifti_separate_metric_outputs,
-        "workbench.cifti-separate.volume": cifti_separate_volume_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiSeparateParametersTagged = Required<Pick<CiftiSeparateParameters, '@type'>> & CiftiSeparateParameters;
 
 
 /**
@@ -138,9 +101,9 @@ function cifti_separate_volume_all_params(
     opt_roi_roi_out: string | null = null,
     opt_label_label_out: string | null = null,
     opt_crop: boolean = false,
-): CiftiSeparateVolumeAllParameters {
+): CiftiSeparateVolumeAllParametersTagged {
     const params = {
-        "@type": "workbench.cifti-separate.volume_all" as const,
+        "@type": "volume_all" as const,
         "volume_out": volume_out,
         "opt_crop": opt_crop,
     };
@@ -181,7 +144,7 @@ function cifti_separate_volume_all_cargs(
             (params["opt_label_label_out"] ?? null)
         );
     }
-    if ((params["opt_crop"] ?? null)) {
+    if ((params["opt_crop"] ?? false)) {
         cargs.push("-crop");
     }
     return cargs;
@@ -244,9 +207,9 @@ function cifti_separate_label_params(
     structure: string,
     label_out: string,
     opt_roi_roi_out: string | null = null,
-): CiftiSeparateLabelParameters {
+): CiftiSeparateLabelParametersTagged {
     const params = {
-        "@type": "workbench.cifti-separate.label" as const,
+        "@type": "label" as const,
         "structure": structure,
         "label_out": label_out,
     };
@@ -338,9 +301,9 @@ function cifti_separate_metric_params(
     structure: string,
     metric_out: string,
     opt_roi_roi_out: string | null = null,
-): CiftiSeparateMetricParameters {
+): CiftiSeparateMetricParametersTagged {
     const params = {
-        "@type": "workbench.cifti-separate.metric" as const,
+        "@type": "metric" as const,
         "structure": structure,
         "metric_out": metric_out,
     };
@@ -434,9 +397,9 @@ function cifti_separate_volume_params(
     volume_out: string,
     opt_roi_roi_out: string | null = null,
     opt_crop: boolean = false,
-): CiftiSeparateVolumeParameters {
+): CiftiSeparateVolumeParametersTagged {
     const params = {
-        "@type": "workbench.cifti-separate.volume" as const,
+        "@type": "volume" as const,
         "structure": structure,
         "volume_out": volume_out,
         "opt_crop": opt_crop,
@@ -470,7 +433,7 @@ function cifti_separate_volume_cargs(
             (params["opt_roi_roi_out"] ?? null)
         );
     }
-    if ((params["opt_crop"] ?? null)) {
+    if ((params["opt_crop"] ?? false)) {
         cargs.push("-crop");
     }
     return cargs;
@@ -499,7 +462,7 @@ function cifti_separate_volume_outputs(
 
 
 /**
- * Output object returned when calling `cifti_separate(...)`.
+ * Output object returned when calling `CiftiSeparateParameters(...)`.
  *
  * @interface
  */
@@ -546,9 +509,9 @@ function cifti_separate_params(
     label: Array<CiftiSeparateLabelParameters> | null = null,
     metric: Array<CiftiSeparateMetricParameters> | null = null,
     volume: Array<CiftiSeparateVolumeParameters> | null = null,
-): CiftiSeparateParameters {
+): CiftiSeparateParametersTagged {
     const params = {
-        "@type": "workbench.cifti-separate" as const,
+        "@type": "workbench/cifti-separate" as const,
         "cifti_in": cifti_in,
         "direction": direction,
     };
@@ -586,16 +549,16 @@ function cifti_separate_cargs(
     cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
     cargs.push((params["direction"] ?? null));
     if ((params["volume_all"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["volume_all"] ?? null)["@type"])((params["volume_all"] ?? null), execution));
+        cargs.push(...cifti_separate_volume_all_cargs((params["volume_all"] ?? null), execution));
     }
     if ((params["label"] ?? null) !== null) {
-        cargs.push(...(params["label"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["label"] ?? null).map(s => cifti_separate_label_cargs(s, execution)).flat());
     }
     if ((params["metric"] ?? null) !== null) {
-        cargs.push(...(params["metric"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["metric"] ?? null).map(s => cifti_separate_metric_cargs(s, execution)).flat());
     }
     if ((params["volume"] ?? null) !== null) {
-        cargs.push(...(params["volume"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["volume"] ?? null).map(s => cifti_separate_volume_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -615,10 +578,10 @@ function cifti_separate_outputs(
 ): CiftiSeparateOutputs {
     const ret: CiftiSeparateOutputs = {
         root: execution.outputFile("."),
-        volume_all: (params["volume_all"] ?? null) ? (dynOutputs((params["volume_all"] ?? null)["@type"])?.((params["volume_all"] ?? null), execution) ?? null) : null,
-        label: (params["label"] ?? null) ? (params["label"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null) : null,
-        metric: (params["metric"] ?? null) ? (params["metric"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null) : null,
-        volume: (params["volume"] ?? null) ? (params["volume"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null) : null,
+        volume_all: (params["volume_all"] ?? null) ? (cifti_separate_volume_all_outputs((params["volume_all"] ?? null), execution) ?? null) : null,
+        label: (params["label"] ?? null) ? (params["label"] ?? null).map(i => cifti_separate_label_outputs(i, execution) ?? null) : null,
+        metric: (params["metric"] ?? null) ? (params["metric"] ?? null).map(i => cifti_separate_metric_outputs(i, execution) ?? null) : null,
+        volume: (params["volume"] ?? null) ? (params["volume"] ?? null).map(i => cifti_separate_volume_outputs(i, execution) ?? null) : null,
     };
     return ret;
 }
@@ -768,15 +731,10 @@ function cifti_separate(
 export {
       CIFTI_SEPARATE_METADATA,
       CiftiSeparateLabelOutputs,
-      CiftiSeparateLabelParameters,
       CiftiSeparateMetricOutputs,
-      CiftiSeparateMetricParameters,
       CiftiSeparateOutputs,
-      CiftiSeparateParameters,
       CiftiSeparateVolumeAllOutputs,
-      CiftiSeparateVolumeAllParameters,
       CiftiSeparateVolumeOutputs,
-      CiftiSeparateVolumeParameters,
       cifti_separate,
       cifti_separate_execute,
       cifti_separate_label_params,

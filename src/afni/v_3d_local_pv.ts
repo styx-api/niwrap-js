@@ -12,7 +12,7 @@ const V_3D_LOCAL_PV_METADATA: Metadata = {
 
 
 interface V3dLocalPvParameters {
-    "@type": "afni.3dLocalPV";
+    "@type"?: "afni/3dLocalPV";
     "input_dataset": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "automask": boolean;
@@ -25,44 +25,11 @@ interface V3dLocalPvParameters {
     "vnorm": boolean;
     "vproj"?: string | null | undefined;
 }
+type V3dLocalPvParametersTagged = Required<Pick<V3dLocalPvParameters, '@type'>> & V3dLocalPvParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dLocalPV": v_3d_local_pv_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dLocalPV": v_3d_local_pv_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_local_pv(...)`.
+ * Output object returned when calling `V3dLocalPvParameters(...)`.
  *
  * @interface
  */
@@ -115,9 +82,9 @@ function v_3d_local_pv_params(
     polort: number | null = null,
     vnorm: boolean = false,
     vproj: string | null = null,
-): V3dLocalPvParameters {
+): V3dLocalPvParametersTagged {
     const params = {
-        "@type": "afni.3dLocalPV" as const,
+        "@type": "afni/3dLocalPV" as const,
         "input_dataset": input_dataset,
         "automask": automask,
         "despike": despike,
@@ -169,7 +136,7 @@ function v_3d_local_pv_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     if ((params["prefix"] ?? null) !== null) {
@@ -196,7 +163,7 @@ function v_3d_local_pv_cargs(
             (params["neighborhood"] ?? null)
         );
     }
-    if ((params["despike"] ?? null)) {
+    if ((params["despike"] ?? false)) {
         cargs.push("-despike");
     }
     if ((params["polort"] ?? null) !== null) {
@@ -205,7 +172,7 @@ function v_3d_local_pv_cargs(
             String((params["polort"] ?? null))
         );
     }
-    if ((params["vnorm"] ?? null)) {
+    if ((params["vnorm"] ?? false)) {
         cargs.push("-vnorm");
     }
     if ((params["vproj"] ?? null) !== null) {
@@ -313,7 +280,6 @@ function v_3d_local_pv(
 
 export {
       V3dLocalPvOutputs,
-      V3dLocalPvParameters,
       V_3D_LOCAL_PV_METADATA,
       v_3d_local_pv,
       v_3d_local_pv_execute,

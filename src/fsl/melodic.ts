@@ -12,7 +12,7 @@ const MELODIC_METADATA: Metadata = {
 
 
 interface MelodicParameters {
-    "@type": "fsl.melodic";
+    "@type"?: "fsl/melodic";
     "input_file": InputPathType;
     "output_directory"?: string | null | undefined;
     "mask_file"?: InputPathType | null | undefined;
@@ -63,44 +63,11 @@ interface MelodicParameters {
     "report_maps"?: string | null | undefined;
     "keep_meanvol": boolean;
 }
+type MelodicParametersTagged = Required<Pick<MelodicParameters, '@type'>> & MelodicParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.melodic": melodic_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.melodic": melodic_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `melodic(...)`.
+ * Output object returned when calling `MelodicParameters(...)`.
  *
  * @interface
  */
@@ -237,9 +204,9 @@ function melodic_params(
     debug: boolean = false,
     report_maps: string | null = null,
     keep_meanvol: boolean = false,
-): MelodicParameters {
+): MelodicParametersTagged {
     const params = {
-        "@type": "fsl.melodic" as const,
+        "@type": "fsl/melodic" as const,
         "input_file": input_file,
         "generate_report": generate_report,
         "cifti_io": cifti_io,
@@ -382,22 +349,22 @@ function melodic_cargs(
             String((params["dimensionality_reduction"] ?? null))
         );
     }
-    if ((params["generate_report"] ?? null)) {
+    if ((params["generate_report"] ?? false)) {
         cargs.push("--report");
     }
-    if ((params["cifti_io"] ?? null)) {
+    if ((params["cifti_io"] ?? false)) {
         cargs.push("--CIFTI");
     }
-    if ((params["variance_normalization"] ?? null)) {
+    if ((params["variance_normalization"] ?? false)) {
         cargs.push("--vn");
     }
-    if ((params["no_masking"] ?? null)) {
+    if ((params["no_masking"] ?? false)) {
         cargs.push("--nomask");
     }
-    if ((params["update_masking"] ?? null)) {
+    if ((params["update_masking"] ?? false)) {
         cargs.push("--update_mask");
     }
-    if ((params["no_bet"] ?? null)) {
+    if ((params["no_bet"] ?? false)) {
         cargs.push("--nobet");
     }
     if ((params["bg_threshold"] ?? null) !== null) {
@@ -412,10 +379,10 @@ function melodic_cargs(
             (params["dimest_technique"] ?? null)
         );
     }
-    if ((params["separate_variance_normalization"] ?? null)) {
+    if ((params["separate_variance_normalization"] ?? false)) {
         cargs.push("--sep_vn");
     }
-    if ((params["disable_migp"] ?? null)) {
+    if ((params["disable_migp"] ?? false)) {
         cargs.push("--disableMigp");
     }
     if ((params["num_internal_eigenmaps"] ?? null) !== null) {
@@ -424,7 +391,7 @@ function melodic_cargs(
             String((params["num_internal_eigenmaps"] ?? null))
         );
     }
-    if ((params["migp_shuffle"] ?? null)) {
+    if ((params["migp_shuffle"] ?? false)) {
         cargs.push("--migp_shuffle");
     }
     if ((params["migp_factor"] ?? null) !== null) {
@@ -481,7 +448,7 @@ function melodic_cargs(
             String((params["mm_threshold"] ?? null))
         );
     }
-    if ((params["no_mixture_modeling"] ?? null)) {
+    if ((params["no_mixture_modeling"] ?? false)) {
         cargs.push("--no_mm");
     }
     if ((params["ic_components_file"] ?? null) !== null) {
@@ -520,7 +487,7 @@ function melodic_cargs(
             String((params["tr_seconds"] ?? null))
         );
     }
-    if ((params["log_power_calc"] ?? null)) {
+    if ((params["log_power_calc"] ?? false)) {
         cargs.push("--logPower");
     }
     if ((params["time_domain_design_matrix"] ?? null) !== null) {
@@ -547,34 +514,34 @@ function melodic_cargs(
             execution.inputFile((params["subject_domain_t_contrast_matrix"] ?? null))
         );
     }
-    if ((params["output_unmixing_matrix"] ?? null)) {
+    if ((params["output_unmixing_matrix"] ?? false)) {
         cargs.push("--Ounmix");
     }
-    if ((params["output_stats"] ?? null)) {
+    if ((params["output_stats"] ?? false)) {
         cargs.push("--Ostats");
     }
-    if ((params["output_pca"] ?? null)) {
+    if ((params["output_pca"] ?? false)) {
         cargs.push("--Opca");
     }
-    if ((params["output_whitening"] ?? null)) {
+    if ((params["output_whitening"] ?? false)) {
         cargs.push("--Owhite");
     }
-    if ((params["output_original_ics"] ?? null)) {
+    if ((params["output_original_ics"] ?? false)) {
         cargs.push("--Oorig");
     }
-    if ((params["output_mean_volume"] ?? null)) {
+    if ((params["output_mean_volume"] ?? false)) {
         cargs.push("--Omean");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-V");
     }
-    if ((params["copyright"] ?? null)) {
+    if ((params["copyright"] ?? false)) {
         cargs.push("--copyright");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     if ((params["report_maps"] ?? null) !== null) {
@@ -583,7 +550,7 @@ function melodic_cargs(
             (params["report_maps"] ?? null)
         );
     }
-    if ((params["keep_meanvol"] ?? null)) {
+    if ((params["keep_meanvol"] ?? false)) {
         cargs.push("--keep_meanvol");
     }
     return cargs;
@@ -764,7 +731,6 @@ function melodic(
 export {
       MELODIC_METADATA,
       MelodicOutputs,
-      MelodicParameters,
       melodic,
       melodic_execute,
       melodic_params,

@@ -12,48 +12,15 @@ const MRI_TRAIN_METADATA: Metadata = {
 
 
 interface MriTrainParameters {
-    "@type": "freesurfer.mri_train";
+    "@type"?: "freesurfer/mri_train";
     "training_file": InputPathType;
     "output_file": string;
 }
+type MriTrainParametersTagged = Required<Pick<MriTrainParameters, '@type'>> & MriTrainParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_train": mri_train_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_train": mri_train_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_train(...)`.
+ * Output object returned when calling `MriTrainParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface MriTrainOutputs {
 function mri_train_params(
     training_file: InputPathType,
     output_file: string,
-): MriTrainParameters {
+): MriTrainParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_train" as const,
+        "@type": "freesurfer/mri_train" as const,
         "training_file": training_file,
         "output_file": output_file,
     };
@@ -186,7 +153,6 @@ function mri_train(
 export {
       MRI_TRAIN_METADATA,
       MriTrainOutputs,
-      MriTrainParameters,
       mri_train,
       mri_train_execute,
       mri_train_params,

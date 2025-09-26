@@ -12,14 +12,15 @@ const TSFMULT_METADATA: Metadata = {
 
 
 interface TsfmultConfigParameters {
-    "@type": "mrtrix.tsfmult.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type TsfmultConfigParametersTagged = Required<Pick<TsfmultConfigParameters, '@type'>> & TsfmultConfigParameters;
 
 
 interface TsfmultParameters {
-    "@type": "mrtrix.tsfmult";
+    "@type"?: "mrtrix/tsfmult";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -31,41 +32,7 @@ interface TsfmultParameters {
     "input1": InputPathType;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.tsfmult": tsfmult_cargs,
-        "mrtrix.tsfmult.config": tsfmult_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.tsfmult": tsfmult_outputs,
-    };
-    return outputsFuncs[t];
-}
+type TsfmultParametersTagged = Required<Pick<TsfmultParameters, '@type'>> & TsfmultParameters;
 
 
 /**
@@ -79,9 +46,9 @@ function dynOutputs(
 function tsfmult_config_params(
     key: string,
     value: string,
-): TsfmultConfigParameters {
+): TsfmultConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.tsfmult.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -110,7 +77,7 @@ function tsfmult_config_cargs(
 
 
 /**
- * Output object returned when calling `tsfmult(...)`.
+ * Output object returned when calling `TsfmultParameters(...)`.
  *
  * @interface
  */
@@ -153,9 +120,9 @@ function tsfmult_params(
     config: Array<TsfmultConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TsfmultParameters {
+): TsfmultParametersTagged {
     const params = {
-        "@type": "mrtrix.tsfmult" as const,
+        "@type": "mrtrix/tsfmult" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -189,16 +156,16 @@ function tsfmult_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("tsfmult");
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -208,12 +175,12 @@ function tsfmult_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => tsfmult_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input1"] ?? null)));
@@ -325,9 +292,7 @@ function tsfmult(
 
 export {
       TSFMULT_METADATA,
-      TsfmultConfigParameters,
       TsfmultOutputs,
-      TsfmultParameters,
       tsfmult,
       tsfmult_config_params,
       tsfmult_execute,

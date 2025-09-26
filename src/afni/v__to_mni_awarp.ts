@@ -12,47 +12,15 @@ const V__TO_MNI_AWARP_METADATA: Metadata = {
 
 
 interface VToMniAwarpParameters {
-    "@type": "afni.@toMNI_Awarp";
+    "@type"?: "afni/@toMNI_Awarp";
     "directory": string;
     "datasets": Array<InputPathType>;
 }
+type VToMniAwarpParametersTagged = Required<Pick<VToMniAwarpParameters, '@type'>> & VToMniAwarpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@toMNI_Awarp": v__to_mni_awarp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__to_mni_awarp(...)`.
+ * Output object returned when calling `VToMniAwarpParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface VToMniAwarpOutputs {
 function v__to_mni_awarp_params(
     directory: string,
     datasets: Array<InputPathType>,
-): VToMniAwarpParameters {
+): VToMniAwarpParametersTagged {
     const params = {
-        "@type": "afni.@toMNI_Awarp" as const,
+        "@type": "afni/@toMNI_Awarp" as const,
         "directory": directory,
         "datasets": datasets,
     };
@@ -179,7 +147,6 @@ function v__to_mni_awarp(
 
 export {
       VToMniAwarpOutputs,
-      VToMniAwarpParameters,
       V__TO_MNI_AWARP_METADATA,
       v__to_mni_awarp,
       v__to_mni_awarp_execute,

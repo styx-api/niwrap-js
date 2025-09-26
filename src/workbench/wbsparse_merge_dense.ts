@@ -12,51 +12,19 @@ const WBSPARSE_MERGE_DENSE_METADATA: Metadata = {
 
 
 interface WbsparseMergeDenseWbsparseParameters {
-    "@type": "workbench.wbsparse-merge-dense.wbsparse";
+    "@type"?: "wbsparse";
     "wbsparse_in": string;
 }
+type WbsparseMergeDenseWbsparseParametersTagged = Required<Pick<WbsparseMergeDenseWbsparseParameters, '@type'>> & WbsparseMergeDenseWbsparseParameters;
 
 
 interface WbsparseMergeDenseParameters {
-    "@type": "workbench.wbsparse-merge-dense";
+    "@type"?: "workbench/wbsparse-merge-dense";
     "direction": string;
     "wbsparse_out": string;
     "wbsparse"?: Array<WbsparseMergeDenseWbsparseParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.wbsparse-merge-dense": wbsparse_merge_dense_cargs,
-        "workbench.wbsparse-merge-dense.wbsparse": wbsparse_merge_dense_wbsparse_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type WbsparseMergeDenseParametersTagged = Required<Pick<WbsparseMergeDenseParameters, '@type'>> & WbsparseMergeDenseParameters;
 
 
 /**
@@ -68,9 +36,9 @@ function dynOutputs(
  */
 function wbsparse_merge_dense_wbsparse_params(
     wbsparse_in: string,
-): WbsparseMergeDenseWbsparseParameters {
+): WbsparseMergeDenseWbsparseParametersTagged {
     const params = {
-        "@type": "workbench.wbsparse-merge-dense.wbsparse" as const,
+        "@type": "wbsparse" as const,
         "wbsparse_in": wbsparse_in,
     };
     return params;
@@ -97,7 +65,7 @@ function wbsparse_merge_dense_wbsparse_cargs(
 
 
 /**
- * Output object returned when calling `wbsparse_merge_dense(...)`.
+ * Output object returned when calling `WbsparseMergeDenseParameters(...)`.
  *
  * @interface
  */
@@ -122,9 +90,9 @@ function wbsparse_merge_dense_params(
     direction: string,
     wbsparse_out: string,
     wbsparse: Array<WbsparseMergeDenseWbsparseParameters> | null = null,
-): WbsparseMergeDenseParameters {
+): WbsparseMergeDenseParametersTagged {
     const params = {
-        "@type": "workbench.wbsparse-merge-dense" as const,
+        "@type": "workbench/wbsparse-merge-dense" as const,
         "direction": direction,
         "wbsparse_out": wbsparse_out,
     };
@@ -153,7 +121,7 @@ function wbsparse_merge_dense_cargs(
     cargs.push((params["direction"] ?? null));
     cargs.push((params["wbsparse_out"] ?? null));
     if ((params["wbsparse"] ?? null) !== null) {
-        cargs.push(...(params["wbsparse"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["wbsparse"] ?? null).map(s => wbsparse_merge_dense_wbsparse_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -240,8 +208,6 @@ function wbsparse_merge_dense(
 export {
       WBSPARSE_MERGE_DENSE_METADATA,
       WbsparseMergeDenseOutputs,
-      WbsparseMergeDenseParameters,
-      WbsparseMergeDenseWbsparseParameters,
       wbsparse_merge_dense,
       wbsparse_merge_dense_execute,
       wbsparse_merge_dense_params,

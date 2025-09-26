@@ -12,7 +12,7 @@ const V__ALIGN_PARTIAL_OBLIQUE_METADATA: Metadata = {
 
 
 interface VAlignPartialObliqueParameters {
-    "@type": "afni.@align_partial_oblique";
+    "@type"?: "afni/@align_partial_oblique";
     "base": InputPathType;
     "input": InputPathType;
     "suffix"?: string | null | undefined;
@@ -23,44 +23,11 @@ interface VAlignPartialObliqueParameters {
     "dy"?: number | null | undefined;
     "dz"?: number | null | undefined;
 }
+type VAlignPartialObliqueParametersTagged = Required<Pick<VAlignPartialObliqueParameters, '@type'>> & VAlignPartialObliqueParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@align_partial_oblique": v__align_partial_oblique_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@align_partial_oblique": v__align_partial_oblique_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__align_partial_oblique(...)`.
+ * Output object returned when calling `VAlignPartialObliqueParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function v__align_partial_oblique_params(
     dx: number | null = null,
     dy: number | null = null,
     dz: number | null = null,
-): VAlignPartialObliqueParameters {
+): VAlignPartialObliqueParametersTagged {
     const params = {
-        "@type": "afni.@align_partial_oblique" as const,
+        "@type": "afni/@align_partial_oblique" as const,
         "base": base,
         "input": input,
         "keep_tmp": keep_tmp,
@@ -156,10 +123,10 @@ function v__align_partial_oblique_cargs(
             (params["suffix"] ?? null)
         );
     }
-    if ((params["keep_tmp"] ?? null)) {
+    if ((params["keep_tmp"] ?? false)) {
         cargs.push("-keep_tmp");
     }
-    if ((params["clean"] ?? null)) {
+    if ((params["clean"] ?? false)) {
         cargs.push("-clean");
     }
     if ((params["dxyz"] ?? null) !== null) {
@@ -279,7 +246,6 @@ function v__align_partial_oblique(
 
 export {
       VAlignPartialObliqueOutputs,
-      VAlignPartialObliqueParameters,
       V__ALIGN_PARTIAL_OBLIQUE_METADATA,
       v__align_partial_oblique,
       v__align_partial_oblique_execute,

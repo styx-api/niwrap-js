@@ -12,7 +12,7 @@ const MRIS_LABEL_MODE_METADATA: Metadata = {
 
 
 interface MrisLabelModeParameters {
-    "@type": "freesurfer.mris_label_mode";
+    "@type"?: "freesurfer/mris_label_mode";
     "input_curv_file": InputPathType;
     "hemi": string;
     "surface": string;
@@ -22,43 +22,11 @@ interface MrisLabelModeParameters {
     "statistics_cond"?: string | null | undefined;
     "output_directory"?: string | null | undefined;
 }
+type MrisLabelModeParametersTagged = Required<Pick<MrisLabelModeParameters, '@type'>> & MrisLabelModeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_label_mode": mris_label_mode_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_label_mode(...)`.
+ * Output object returned when calling `MrisLabelModeParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +61,9 @@ function mris_label_mode_params(
     summary_statistics: boolean = false,
     statistics_cond: string | null = null,
     output_directory: string | null = null,
-): MrisLabelModeParameters {
+): MrisLabelModeParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_label_mode" as const,
+        "@type": "freesurfer/mris_label_mode" as const,
         "input_curv_file": input_curv_file,
         "hemi": hemi,
         "surface": surface,
@@ -132,7 +100,7 @@ function mris_label_mode_cargs(
     cargs.push((params["surface"] ?? null));
     cargs.push(...(params["subject"] ?? null));
     cargs.push((params["output_curv_file"] ?? null));
-    if ((params["summary_statistics"] ?? null)) {
+    if ((params["summary_statistics"] ?? false)) {
         cargs.push("-s");
     }
     if ((params["statistics_cond"] ?? null) !== null) {
@@ -235,7 +203,6 @@ function mris_label_mode(
 export {
       MRIS_LABEL_MODE_METADATA,
       MrisLabelModeOutputs,
-      MrisLabelModeParameters,
       mris_label_mode,
       mris_label_mode_execute,
       mris_label_mode_params,

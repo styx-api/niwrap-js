@@ -12,7 +12,7 @@ const MRIS_PLACE_SURFACE_METADATA: Metadata = {
 
 
 interface MrisPlaceSurfaceParameters {
-    "@type": "freesurfer.mris_place_surface";
+    "@type"?: "freesurfer/mris_place_surface";
     "output_surface": string;
     "input_surface": string;
     "autodetect_gray_white_stats": string;
@@ -58,43 +58,11 @@ interface MrisPlaceSurfaceParameters {
     "white_border_low_factor"?: number | null | undefined;
     "fill_lateral_ventricles"?: Array<number> | null | undefined;
 }
+type MrisPlaceSurfaceParametersTagged = Required<Pick<MrisPlaceSurfaceParameters, '@type'>> & MrisPlaceSurfaceParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_place_surface": mris_place_surface_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_place_surface(...)`.
+ * Output object returned when calling `MrisPlaceSurfaceParameters(...)`.
  *
  * @interface
  */
@@ -201,9 +169,9 @@ function mris_place_surface_params(
     first_peak_d2: boolean = false,
     white_border_low_factor: number | null = null,
     fill_lateral_ventricles: Array<number> | null = null,
-): MrisPlaceSurfaceParameters {
+): MrisPlaceSurfaceParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_place_surface" as const,
+        "@type": "freesurfer/mris_place_surface" as const,
         "output_surface": output_surface,
         "input_surface": input_surface,
         "autodetect_gray_white_stats": autodetect_gray_white_stats,
@@ -351,7 +319,7 @@ function mris_place_surface_cargs(
             (params["out_volume_only"] ?? null)
         );
     }
-    if ((params["restore_255"] ?? null)) {
+    if ((params["restore_255"] ?? false)) {
         cargs.push("--restore-255");
     }
     if ((params["segmentation"] ?? null) !== null) {
@@ -372,7 +340,7 @@ function mris_place_surface_cargs(
             String((params["nsmooth"] ?? null))
         );
     }
-    if ((params["smooth_after_rip"] ?? null)) {
+    if ((params["smooth_after_rip"] ?? false)) {
         cargs.push("--smooth-after-rip");
     }
     if ((params["max_cbv_dist"] ?? null) !== null) {
@@ -387,25 +355,25 @@ function mris_place_surface_cargs(
             (params["rip_label"] ?? null)
         );
     }
-    if ((params["rip_midline"] ?? null)) {
+    if ((params["rip_midline"] ?? false)) {
         cargs.push("--rip-midline");
     }
-    if ((params["rip_bg"] ?? null)) {
+    if ((params["rip_bg"] ?? false)) {
         cargs.push("--rip-bg");
     }
-    if ((params["rip_bg_no_annot"] ?? null)) {
+    if ((params["rip_bg_no_annot"] ?? false)) {
         cargs.push("--rip-bg-no-annot");
     }
-    if ((params["no_rip_freeze"] ?? null)) {
+    if ((params["no_rip_freeze"] ?? false)) {
         cargs.push("--no-rip-freeze");
     }
-    if ((params["rip_wmsa"] ?? null)) {
+    if ((params["rip_wmsa"] ?? false)) {
         cargs.push("--rip-wmsa");
     }
-    if ((params["rip_lesion"] ?? null)) {
+    if ((params["rip_lesion"] ?? false)) {
         cargs.push("--rip-lesion");
     }
-    if ((params["no_rip"] ?? null)) {
+    if ((params["no_rip"] ?? false)) {
         cargs.push("--no-rip");
     }
     if ((params["rip_overlay"] ?? null) !== null) {
@@ -450,7 +418,7 @@ function mris_place_surface_cargs(
             (params["multimodal_input"] ?? null)
         );
     }
-    if ((params["mm_refine"] ?? null)) {
+    if ((params["mm_refine"] ?? false)) {
         cargs.push("--mm-refine");
     }
     if ((params["pin_medial_wall"] ?? null) !== null) {
@@ -459,7 +427,7 @@ function mris_place_surface_cargs(
             (params["pin_medial_wall"] ?? null)
         );
     }
-    if ((params["no_intensity_proc"] ?? null)) {
+    if ((params["no_intensity_proc"] ?? false)) {
         cargs.push("--no-intensity-proc");
     }
     if ((params["debug_vertex"] ?? null) !== null) {
@@ -486,7 +454,7 @@ function mris_place_surface_cargs(
             (params["target_surf"] ?? null)
         );
     }
-    if ((params["stop_mask"] ?? null)) {
+    if ((params["stop_mask"] ?? false)) {
         cargs.push("--stop");
     }
     if ((params["mm_intensity_limits"] ?? null) !== null) {
@@ -501,10 +469,10 @@ function mris_place_surface_cargs(
             (params["cover_seg"] ?? null)
         );
     }
-    if ((params["first_peak_d1"] ?? null)) {
+    if ((params["first_peak_d1"] ?? false)) {
         cargs.push("--first-peak-d1");
     }
-    if ((params["first_peak_d2"] ?? null)) {
+    if ((params["first_peak_d2"] ?? false)) {
         cargs.push("--first-peak-d2");
     }
     if ((params["white_border_low_factor"] ?? null) !== null) {
@@ -682,7 +650,6 @@ function mris_place_surface(
 export {
       MRIS_PLACE_SURFACE_METADATA,
       MrisPlaceSurfaceOutputs,
-      MrisPlaceSurfaceParameters,
       mris_place_surface,
       mris_place_surface_execute,
       mris_place_surface_params,

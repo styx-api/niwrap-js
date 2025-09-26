@@ -12,7 +12,7 @@ const ANNOT2STD_METADATA: Metadata = {
 
 
 interface Annot2stdParameters {
-    "@type": "freesurfer.annot2std";
+    "@type"?: "freesurfer/annot2std";
     "output_annot_path": string;
     "subjects": Array<string>;
     "fsgd_file"?: InputPathType | null | undefined;
@@ -32,44 +32,11 @@ interface Annot2stdParameters {
     "help": boolean;
     "version": boolean;
 }
+type Annot2stdParametersTagged = Required<Pick<Annot2stdParameters, '@type'>> & Annot2stdParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.annot2std": annot2std_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.annot2std": annot2std_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `annot2std(...)`.
+ * Output object returned when calling `Annot2stdParameters(...)`.
  *
  * @interface
  */
@@ -136,9 +103,9 @@ function annot2std_params(
     stack: string | null = null,
     help: boolean = false,
     version: boolean = false,
-): Annot2stdParameters {
+): Annot2stdParametersTagged {
     const params = {
-        "@type": "freesurfer.annot2std" as const,
+        "@type": "freesurfer/annot2std" as const,
         "output_annot_path": output_annot_path,
         "subjects": subjects,
         "left_hemisphere": left_hemisphere,
@@ -220,13 +187,13 @@ function annot2std_cargs(
             (params["target"] ?? null)
         );
     }
-    if ((params["left_hemisphere"] ?? null)) {
+    if ((params["left_hemisphere"] ?? false)) {
         cargs.push("--lh");
     }
-    if ((params["right_hemisphere"] ?? null)) {
+    if ((params["right_hemisphere"] ?? false)) {
         cargs.push("--rh");
     }
-    if ((params["xhemi"] ?? null)) {
+    if ((params["xhemi"] ?? false)) {
         cargs.push("--xhemi");
     }
     if ((params["surfreg"] ?? null) !== null) {
@@ -253,10 +220,10 @@ function annot2std_cargs(
             (params["annotname"] ?? null)
         );
     }
-    if ((params["aparc"] ?? null)) {
+    if ((params["aparc"] ?? false)) {
         cargs.push("--aparc");
     }
-    if ((params["a2009s"] ?? null)) {
+    if ((params["a2009s"] ?? false)) {
         cargs.push("--a2009s");
     }
     if ((params["segmentation"] ?? null) !== null) {
@@ -271,10 +238,10 @@ function annot2std_cargs(
             (params["stack"] ?? null)
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -391,7 +358,6 @@ function annot2std(
 export {
       ANNOT2STD_METADATA,
       Annot2stdOutputs,
-      Annot2stdParameters,
       annot2std,
       annot2std_execute,
       annot2std_params,

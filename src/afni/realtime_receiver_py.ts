@@ -12,7 +12,7 @@ const REALTIME_RECEIVER_PY_METADATA: Metadata = {
 
 
 interface RealtimeReceiverPyParameters {
-    "@type": "afni.realtime_receiver.py";
+    "@type"?: "afni/realtime_receiver.py";
     "show_data"?: "yes" | "no" | null | undefined;
     "write_text_data"?: string | null | undefined;
     "data_choice"?: "motion" | "motion_norm" | "all_extras" | "diff_ratio" | null | undefined;
@@ -26,43 +26,11 @@ interface RealtimeReceiverPyParameters {
     "tcp_port"?: number | null | undefined;
     "verbosity"?: number | null | undefined;
 }
+type RealtimeReceiverPyParametersTagged = Required<Pick<RealtimeReceiverPyParameters, '@type'>> & RealtimeReceiverPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.realtime_receiver.py": realtime_receiver_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `realtime_receiver_py(...)`.
+ * Output object returned when calling `RealtimeReceiverPyParameters(...)`.
  *
  * @interface
  */
@@ -105,9 +73,9 @@ function realtime_receiver_py_params(
     swap: boolean = false,
     tcp_port: number | null = null,
     verbosity: number | null = null,
-): RealtimeReceiverPyParameters {
+): RealtimeReceiverPyParametersTagged {
     const params = {
-        "@type": "afni.realtime_receiver.py" as const,
+        "@type": "afni/realtime_receiver.py" as const,
         "show_comm_times": show_comm_times,
         "show_demo_data": show_demo_data,
         "swap": swap,
@@ -199,13 +167,13 @@ function realtime_receiver_py_cargs(
             (params["extras_on_one_line"] ?? null)
         );
     }
-    if ((params["show_comm_times"] ?? null)) {
+    if ((params["show_comm_times"] ?? false)) {
         cargs.push("-show_comm_times");
     }
-    if ((params["show_demo_data"] ?? null)) {
+    if ((params["show_demo_data"] ?? false)) {
         cargs.push("-show_demo_data");
     }
-    if ((params["swap"] ?? null)) {
+    if ((params["swap"] ?? false)) {
         cargs.push("-swap");
     }
     if ((params["tcp_port"] ?? null) !== null) {
@@ -319,7 +287,6 @@ function realtime_receiver_py(
 export {
       REALTIME_RECEIVER_PY_METADATA,
       RealtimeReceiverPyOutputs,
-      RealtimeReceiverPyParameters,
       realtime_receiver_py,
       realtime_receiver_py_execute,
       realtime_receiver_py_params,

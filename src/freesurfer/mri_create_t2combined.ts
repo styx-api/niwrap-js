@@ -12,7 +12,7 @@ const MRI_CREATE_T2COMBINED_METADATA: Metadata = {
 
 
 interface MriCreateT2combinedParameters {
-    "@type": "freesurfer.mri_create_t2combined";
+    "@type"?: "freesurfer/mri_create_t2combined";
     "subjid": string;
     "t1wb": InputPathType;
     "t2upper": InputPathType;
@@ -21,44 +21,11 @@ interface MriCreateT2combinedParameters {
     "t2combined": string;
     "show": boolean;
 }
+type MriCreateT2combinedParametersTagged = Required<Pick<MriCreateT2combinedParameters, '@type'>> & MriCreateT2combinedParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_create_t2combined": mri_create_t2combined_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_create_t2combined": mri_create_t2combined_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_create_t2combined(...)`.
+ * Output object returned when calling `MriCreateT2combinedParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +66,9 @@ function mri_create_t2combined_params(
     t2combined: string,
     t2middle: InputPathType | null = null,
     show: boolean = false,
-): MriCreateT2combinedParameters {
+): MriCreateT2combinedParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_create_t2combined" as const,
+        "@type": "freesurfer/mri_create_t2combined" as const,
         "subjid": subjid,
         "t1wb": t1wb,
         "t2upper": t2upper,
@@ -138,7 +105,7 @@ function mri_create_t2combined_cargs(
     }
     cargs.push(execution.inputFile((params["t2lower"] ?? null)));
     cargs.push((params["t2combined"] ?? null));
-    if ((params["show"] ?? null)) {
+    if ((params["show"] ?? false)) {
         cargs.push("show");
     }
     return cargs;
@@ -232,7 +199,6 @@ function mri_create_t2combined(
 export {
       MRI_CREATE_T2COMBINED_METADATA,
       MriCreateT2combinedOutputs,
-      MriCreateT2combinedParameters,
       mri_create_t2combined,
       mri_create_t2combined_execute,
       mri_create_t2combined_params,

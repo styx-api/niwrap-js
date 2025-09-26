@@ -12,52 +12,19 @@ const CIFTI_MERGE_PARCELS_METADATA: Metadata = {
 
 
 interface CiftiMergeParcelsCiftiParameters {
-    "@type": "workbench.cifti-merge-parcels.cifti";
+    "@type"?: "cifti";
     "cifti_in": InputPathType;
 }
+type CiftiMergeParcelsCiftiParametersTagged = Required<Pick<CiftiMergeParcelsCiftiParameters, '@type'>> & CiftiMergeParcelsCiftiParameters;
 
 
 interface CiftiMergeParcelsParameters {
-    "@type": "workbench.cifti-merge-parcels";
+    "@type"?: "workbench/cifti-merge-parcels";
     "direction": string;
     "cifti_out": string;
     "cifti"?: Array<CiftiMergeParcelsCiftiParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-merge-parcels": cifti_merge_parcels_cargs,
-        "workbench.cifti-merge-parcels.cifti": cifti_merge_parcels_cifti_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-merge-parcels": cifti_merge_parcels_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiMergeParcelsParametersTagged = Required<Pick<CiftiMergeParcelsParameters, '@type'>> & CiftiMergeParcelsParameters;
 
 
 /**
@@ -69,9 +36,9 @@ function dynOutputs(
  */
 function cifti_merge_parcels_cifti_params(
     cifti_in: InputPathType,
-): CiftiMergeParcelsCiftiParameters {
+): CiftiMergeParcelsCiftiParametersTagged {
     const params = {
-        "@type": "workbench.cifti-merge-parcels.cifti" as const,
+        "@type": "cifti" as const,
         "cifti_in": cifti_in,
     };
     return params;
@@ -98,7 +65,7 @@ function cifti_merge_parcels_cifti_cargs(
 
 
 /**
- * Output object returned when calling `cifti_merge_parcels(...)`.
+ * Output object returned when calling `CiftiMergeParcelsParameters(...)`.
  *
  * @interface
  */
@@ -127,9 +94,9 @@ function cifti_merge_parcels_params(
     direction: string,
     cifti_out: string,
     cifti: Array<CiftiMergeParcelsCiftiParameters> | null = null,
-): CiftiMergeParcelsParameters {
+): CiftiMergeParcelsParametersTagged {
     const params = {
-        "@type": "workbench.cifti-merge-parcels" as const,
+        "@type": "workbench/cifti-merge-parcels" as const,
         "direction": direction,
         "cifti_out": cifti_out,
     };
@@ -158,7 +125,7 @@ function cifti_merge_parcels_cargs(
     cargs.push((params["direction"] ?? null));
     cargs.push((params["cifti_out"] ?? null));
     if ((params["cifti"] ?? null) !== null) {
-        cargs.push(...(params["cifti"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["cifti"] ?? null).map(s => cifti_merge_parcels_cifti_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -245,9 +212,7 @@ function cifti_merge_parcels(
 
 export {
       CIFTI_MERGE_PARCELS_METADATA,
-      CiftiMergeParcelsCiftiParameters,
       CiftiMergeParcelsOutputs,
-      CiftiMergeParcelsParameters,
       cifti_merge_parcels,
       cifti_merge_parcels_cifti_params,
       cifti_merge_parcels_execute,

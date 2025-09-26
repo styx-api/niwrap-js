@@ -12,7 +12,7 @@ const V_3D_INTRACRANIAL_METADATA: Metadata = {
 
 
 interface V3dIntracranialParameters {
-    "@type": "afni.3dIntracranial";
+    "@type"?: "afni/3dIntracranial";
     "infile": InputPathType;
     "prefix": string;
     "min_val"?: number | null | undefined;
@@ -23,44 +23,11 @@ interface V3dIntracranialParameters {
     "mask": boolean;
     "quiet": boolean;
 }
+type V3dIntracranialParametersTagged = Required<Pick<V3dIntracranialParameters, '@type'>> & V3dIntracranialParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dIntracranial": v_3d_intracranial_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dIntracranial": v_3d_intracranial_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_intracranial(...)`.
+ * Output object returned when calling `V3dIntracranialParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function v_3d_intracranial_params(
     no_smooth: boolean = false,
     mask: boolean = false,
     quiet: boolean = false,
-): V3dIntracranialParameters {
+): V3dIntracranialParametersTagged {
     const params = {
-        "@type": "afni.3dIntracranial" as const,
+        "@type": "afni/3dIntracranial" as const,
         "infile": infile,
         "prefix": prefix,
         "no_smooth": no_smooth,
@@ -172,13 +139,13 @@ function v_3d_intracranial_cargs(
             String((params["max_conn"] ?? null))
         );
     }
-    if ((params["no_smooth"] ?? null)) {
+    if ((params["no_smooth"] ?? false)) {
         cargs.push("-nosmooth");
     }
-    if ((params["mask"] ?? null)) {
+    if ((params["mask"] ?? false)) {
         cargs.push("-mask");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
     return cargs;
@@ -274,7 +241,6 @@ function v_3d_intracranial(
 
 export {
       V3dIntracranialOutputs,
-      V3dIntracranialParameters,
       V_3D_INTRACRANIAL_METADATA,
       v_3d_intracranial,
       v_3d_intracranial_execute,

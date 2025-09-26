@@ -12,49 +12,17 @@ const FS_UPDATE_METADATA: Metadata = {
 
 
 interface FsUpdateParameters {
-    "@type": "freesurfer.fs_update";
+    "@type"?: "freesurfer/fs_update";
     "update_path"?: string | null | undefined;
     "help_short": boolean;
     "help_medium": boolean;
     "help_long": boolean;
 }
+type FsUpdateParametersTagged = Required<Pick<FsUpdateParameters, '@type'>> & FsUpdateParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fs_update": fs_update_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fs_update(...)`.
+ * Output object returned when calling `FsUpdateParameters(...)`.
  *
  * @interface
  */
@@ -79,9 +47,9 @@ function fs_update_params(
     help_short: boolean = false,
     help_medium: boolean = false,
     help_long: boolean = false,
-): FsUpdateParameters {
+): FsUpdateParametersTagged {
     const params = {
-        "@type": "freesurfer.fs_update" as const,
+        "@type": "freesurfer/fs_update" as const,
         "help_short": help_short,
         "help_medium": help_medium,
         "help_long": help_long,
@@ -110,13 +78,13 @@ function fs_update_cargs(
     if ((params["update_path"] ?? null) !== null) {
         cargs.push((params["update_path"] ?? null));
     }
-    if ((params["help_short"] ?? null)) {
+    if ((params["help_short"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["help_medium"] ?? null)) {
+    if ((params["help_medium"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["help_long"] ?? null)) {
+    if ((params["help_long"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -200,7 +168,6 @@ function fs_update(
 export {
       FS_UPDATE_METADATA,
       FsUpdateOutputs,
-      FsUpdateParameters,
       fs_update,
       fs_update_execute,
       fs_update_params,

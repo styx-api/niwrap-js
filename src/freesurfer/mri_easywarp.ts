@@ -12,51 +12,18 @@ const MRI_EASYWARP_METADATA: Metadata = {
 
 
 interface MriEasywarpParameters {
-    "@type": "freesurfer.mri_easywarp";
+    "@type"?: "freesurfer/mri_easywarp";
     "input_image": InputPathType;
     "output_image": string;
     "deformation_field"?: InputPathType | null | undefined;
     "nearest_neighbor": boolean;
     "num_threads"?: number | null | undefined;
 }
+type MriEasywarpParametersTagged = Required<Pick<MriEasywarpParameters, '@type'>> & MriEasywarpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_easywarp": mri_easywarp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_easywarp": mri_easywarp_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_easywarp(...)`.
+ * Output object returned when calling `MriEasywarpParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function mri_easywarp_params(
     deformation_field: InputPathType | null = null,
     nearest_neighbor: boolean = false,
     num_threads: number | null = null,
-): MriEasywarpParameters {
+): MriEasywarpParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_easywarp" as const,
+        "@type": "freesurfer/mri_easywarp" as const,
         "input_image": input_image,
         "output_image": output_image,
         "nearest_neighbor": nearest_neighbor,
@@ -134,7 +101,7 @@ function mri_easywarp_cargs(
             execution.inputFile((params["deformation_field"] ?? null))
         );
     }
-    if ((params["nearest_neighbor"] ?? null)) {
+    if ((params["nearest_neighbor"] ?? false)) {
         cargs.push("--nearest");
     }
     if ((params["num_threads"] ?? null) !== null) {
@@ -229,7 +196,6 @@ function mri_easywarp(
 export {
       MRI_EASYWARP_METADATA,
       MriEasywarpOutputs,
-      MriEasywarpParameters,
       mri_easywarp,
       mri_easywarp_execute,
       mri_easywarp_params,

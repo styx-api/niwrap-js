@@ -12,49 +12,16 @@ const CONNECTED_COMPONENTS_METADATA: Metadata = {
 
 
 interface ConnectedComponentsParameters {
-    "@type": "freesurfer.connected_components";
+    "@type"?: "freesurfer/connected_components";
     "input_image": InputPathType;
     "output_image": string;
     "threshold"?: number | null | undefined;
 }
+type ConnectedComponentsParametersTagged = Required<Pick<ConnectedComponentsParameters, '@type'>> & ConnectedComponentsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.connected_components": connected_components_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.connected_components": connected_components_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `connected_components(...)`.
+ * Output object returned when calling `ConnectedComponentsParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function connected_components_params(
     input_image: InputPathType,
     output_image: string = "output_labelled_image",
     threshold: number | null = null,
-): ConnectedComponentsParameters {
+): ConnectedComponentsParametersTagged {
     const params = {
-        "@type": "freesurfer.connected_components" as const,
+        "@type": "freesurfer/connected_components" as const,
         "input_image": input_image,
         "output_image": output_image,
     };
@@ -113,7 +80,7 @@ function connected_components_cargs(
     cargs.push(execution.inputFile((params["input_image"] ?? null)));
     cargs.push(
         "-o",
-        (params["output_image"] ?? null)
+        (params["output_image"] ?? "output_labelled_image")
     );
     if ((params["threshold"] ?? null) !== null) {
         cargs.push(
@@ -139,7 +106,7 @@ function connected_components_outputs(
 ): ConnectedComponentsOutputs {
     const ret: ConnectedComponentsOutputs = {
         root: execution.outputFile("."),
-        output_labelled_image_file: execution.outputFile([(params["output_image"] ?? null), ".nii.gz"].join('')),
+        output_labelled_image_file: execution.outputFile([(params["output_image"] ?? "output_labelled_image"), ".nii.gz"].join('')),
     };
     return ret;
 }
@@ -203,7 +170,6 @@ function connected_components(
 export {
       CONNECTED_COMPONENTS_METADATA,
       ConnectedComponentsOutputs,
-      ConnectedComponentsParameters,
       connected_components,
       connected_components_execute,
       connected_components_params,

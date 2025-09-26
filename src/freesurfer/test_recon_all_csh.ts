@@ -12,7 +12,7 @@ const TEST_RECON_ALL_CSH_METADATA: Metadata = {
 
 
 interface TestReconAllCshParameters {
-    "@type": "freesurfer.test_recon-all.csh";
+    "@type"?: "freesurfer/test_recon-all.csh";
     "reference_subj_source_dir"?: string | null | undefined;
     "reference_subjid"?: string | null | undefined;
     "test_subject_dest_dir"?: string | null | undefined;
@@ -20,44 +20,11 @@ interface TestReconAllCshParameters {
     "freesurfer_home"?: string | null | undefined;
     "norecon": boolean;
 }
+type TestReconAllCshParametersTagged = Required<Pick<TestReconAllCshParameters, '@type'>> & TestReconAllCshParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.test_recon-all.csh": test_recon_all_csh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.test_recon-all.csh": test_recon_all_csh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `test_recon_all_csh(...)`.
+ * Output object returned when calling `TestReconAllCshParameters(...)`.
  *
  * @interface
  */
@@ -124,9 +91,9 @@ function test_recon_all_csh_params(
     test_subjid: string | null = null,
     freesurfer_home: string | null = null,
     norecon: boolean = false,
-): TestReconAllCshParameters {
+): TestReconAllCshParametersTagged {
     const params = {
-        "@type": "freesurfer.test_recon-all.csh" as const,
+        "@type": "freesurfer/test_recon-all.csh" as const,
         "norecon": norecon,
     };
     if (reference_subj_source_dir !== null) {
@@ -192,7 +159,7 @@ function test_recon_all_csh_cargs(
             (params["freesurfer_home"] ?? null)
         );
     }
-    if ((params["norecon"] ?? null)) {
+    if ((params["norecon"] ?? false)) {
         cargs.push("-norecon");
     }
     return cargs;
@@ -291,7 +258,6 @@ function test_recon_all_csh(
 export {
       TEST_RECON_ALL_CSH_METADATA,
       TestReconAllCshOutputs,
-      TestReconAllCshParameters,
       test_recon_all_csh,
       test_recon_all_csh_execute,
       test_recon_all_csh_params,

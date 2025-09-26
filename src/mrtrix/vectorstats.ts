@@ -12,20 +12,22 @@ const VECTORSTATS_METADATA: Metadata = {
 
 
 interface VectorstatsColumnParameters {
-    "@type": "mrtrix.vectorstats.column";
+    "@type"?: "column";
     "path": InputPathType;
 }
+type VectorstatsColumnParametersTagged = Required<Pick<VectorstatsColumnParameters, '@type'>> & VectorstatsColumnParameters;
 
 
 interface VectorstatsConfigParameters {
-    "@type": "mrtrix.vectorstats.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type VectorstatsConfigParametersTagged = Required<Pick<VectorstatsConfigParameters, '@type'>> & VectorstatsConfigParameters;
 
 
 interface VectorstatsParameters {
-    "@type": "mrtrix.vectorstats";
+    "@type"?: "mrtrix/vectorstats";
     "notest": boolean;
     "errors"?: string | null | undefined;
     "exchange_within"?: InputPathType | null | undefined;
@@ -50,41 +52,7 @@ interface VectorstatsParameters {
     "contrast": InputPathType;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.vectorstats": vectorstats_cargs,
-        "mrtrix.vectorstats.column": vectorstats_column_cargs,
-        "mrtrix.vectorstats.config": vectorstats_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type VectorstatsParametersTagged = Required<Pick<VectorstatsParameters, '@type'>> & VectorstatsParameters;
 
 
 /**
@@ -96,9 +64,9 @@ function dynOutputs(
  */
 function vectorstats_column_params(
     path: InputPathType,
-): VectorstatsColumnParameters {
+): VectorstatsColumnParametersTagged {
     const params = {
-        "@type": "mrtrix.vectorstats.column" as const,
+        "@type": "column" as const,
         "path": path,
     };
     return params;
@@ -135,9 +103,9 @@ function vectorstats_column_cargs(
 function vectorstats_config_params(
     key: string,
     value: string,
-): VectorstatsConfigParameters {
+): VectorstatsConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.vectorstats.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -166,7 +134,7 @@ function vectorstats_config_cargs(
 
 
 /**
- * Output object returned when calling `vectorstats(...)`.
+ * Output object returned when calling `VectorstatsParameters(...)`.
  *
  * @interface
  */
@@ -231,9 +199,9 @@ function vectorstats_params(
     config: Array<VectorstatsConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): VectorstatsParameters {
+): VectorstatsParametersTagged {
     const params = {
-        "@type": "mrtrix.vectorstats" as const,
+        "@type": "mrtrix/vectorstats" as const,
         "notest": notest,
         "strong": strong,
         "fonly": fonly,
@@ -296,7 +264,7 @@ function vectorstats_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("vectorstats");
-    if ((params["notest"] ?? null)) {
+    if ((params["notest"] ?? false)) {
         cargs.push("-notest");
     }
     if ((params["errors"] ?? null) !== null) {
@@ -317,7 +285,7 @@ function vectorstats_cargs(
             execution.inputFile((params["exchange_whole"] ?? null))
         );
     }
-    if ((params["strong"] ?? null)) {
+    if ((params["strong"] ?? false)) {
         cargs.push("-strong");
     }
     if ((params["nshuffles"] ?? null) !== null) {
@@ -344,22 +312,22 @@ function vectorstats_cargs(
             execution.inputFile((params["ftests"] ?? null))
         );
     }
-    if ((params["fonly"] ?? null)) {
+    if ((params["fonly"] ?? false)) {
         cargs.push("-fonly");
     }
     if ((params["column"] ?? null) !== null) {
-        cargs.push(...(params["column"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["column"] ?? null).map(s => vectorstats_column_cargs(s, execution)).flat());
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -369,12 +337,12 @@ function vectorstats_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => vectorstats_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -517,10 +485,7 @@ function vectorstats(
 
 export {
       VECTORSTATS_METADATA,
-      VectorstatsColumnParameters,
-      VectorstatsConfigParameters,
       VectorstatsOutputs,
-      VectorstatsParameters,
       vectorstats,
       vectorstats_column_params,
       vectorstats_config_params,

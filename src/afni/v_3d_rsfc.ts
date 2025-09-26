@@ -12,7 +12,7 @@ const V_3D_RSFC_METADATA: Metadata = {
 
 
 interface V3dRsfcParameters {
-    "@type": "afni.3dRSFC";
+    "@type"?: "afni/3dRSFC";
     "fbot": number;
     "ftop": number;
     "input_dataset": InputPathType;
@@ -38,44 +38,11 @@ interface V3dRsfcParameters {
     "notrans": boolean;
     "nosat": boolean;
 }
+type V3dRsfcParametersTagged = Required<Pick<V3dRsfcParameters, '@type'>> & V3dRsfcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dRSFC": v_3d_rsfc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dRSFC": v_3d_rsfc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_rsfc(...)`.
+ * Output object returned when calling `V3dRsfcParameters(...)`.
  *
  * @interface
  */
@@ -150,9 +117,9 @@ function v_3d_rsfc_params(
     bp_at_end: boolean = false,
     notrans: boolean = false,
     nosat: boolean = false,
-): V3dRsfcParameters {
+): V3dRsfcParametersTagged {
     const params = {
-        "@type": "afni.3dRSFC" as const,
+        "@type": "afni/3dRSFC" as const,
         "fbot": fbot,
         "ftop": ftop,
         "input_dataset": input_dataset,
@@ -219,7 +186,7 @@ function v_3d_rsfc_cargs(
     cargs.push(String((params["fbot"] ?? null)));
     cargs.push(String((params["ftop"] ?? null)));
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
-    if ((params["despike"] ?? null)) {
+    if ((params["despike"] ?? false)) {
         cargs.push("-despike");
     }
     if ((params["ort_file"] ?? null) !== null) {
@@ -234,7 +201,7 @@ function v_3d_rsfc_cargs(
             execution.inputFile((params["dsort_file"] ?? null))
         );
     }
-    if ((params["nodetrend"] ?? null)) {
+    if ((params["nodetrend"] ?? false)) {
         cargs.push("-nodetrend");
     }
     if ((params["time_step"] ?? null) !== null) {
@@ -249,7 +216,7 @@ function v_3d_rsfc_cargs(
             String((params["nfft"] ?? null))
         );
     }
-    if ((params["norm"] ?? null)) {
+    if ((params["norm"] ?? false)) {
         cargs.push("-norm");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -258,7 +225,7 @@ function v_3d_rsfc_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     if ((params["blur"] ?? null) !== null) {
@@ -291,25 +258,25 @@ function v_3d_rsfc_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["no_rs_out"] ?? null)) {
+    if ((params["no_rs_out"] ?? false)) {
         cargs.push("-no_rs_out");
     }
-    if ((params["un_bandpass_out"] ?? null)) {
+    if ((params["un_bandpass_out"] ?? false)) {
         cargs.push("-un_bp_out");
     }
-    if ((params["no_rsfa"] ?? null)) {
+    if ((params["no_rsfa"] ?? false)) {
         cargs.push("-no_rsfa");
     }
-    if ((params["bp_at_end"] ?? null)) {
+    if ((params["bp_at_end"] ?? false)) {
         cargs.push("-bp_at_end");
     }
-    if ((params["notrans"] ?? null)) {
+    if ((params["notrans"] ?? false)) {
         cargs.push("-notrans");
     }
-    if ((params["nosat"] ?? null)) {
+    if ((params["nosat"] ?? false)) {
         cargs.push("-nosat");
     }
     return cargs;
@@ -436,7 +403,6 @@ function v_3d_rsfc(
 
 export {
       V3dRsfcOutputs,
-      V3dRsfcParameters,
       V_3D_RSFC_METADATA,
       v_3d_rsfc,
       v_3d_rsfc_execute,

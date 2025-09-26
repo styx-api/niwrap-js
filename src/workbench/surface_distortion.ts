@@ -12,20 +12,22 @@ const SURFACE_DISTORTION_METADATA: Metadata = {
 
 
 interface SurfaceDistortionSmoothParameters {
-    "@type": "workbench.surface-distortion.smooth";
+    "@type"?: "smooth";
     "sigma": number;
     "opt_fwhm": boolean;
 }
+type SurfaceDistortionSmoothParametersTagged = Required<Pick<SurfaceDistortionSmoothParameters, '@type'>> & SurfaceDistortionSmoothParameters;
 
 
 interface SurfaceDistortionLocalAffineMethodParameters {
-    "@type": "workbench.surface-distortion.local_affine_method";
+    "@type"?: "local_affine_method";
     "opt_log2": boolean;
 }
+type SurfaceDistortionLocalAffineMethodParametersTagged = Required<Pick<SurfaceDistortionLocalAffineMethodParameters, '@type'>> & SurfaceDistortionLocalAffineMethodParameters;
 
 
 interface SurfaceDistortionParameters {
-    "@type": "workbench.surface-distortion";
+    "@type"?: "workbench/surface-distortion";
     "surface_reference": InputPathType;
     "surface_distorted": InputPathType;
     "metric_out": string;
@@ -34,42 +36,7 @@ interface SurfaceDistortionParameters {
     "opt_edge_method": boolean;
     "local_affine_method"?: SurfaceDistortionLocalAffineMethodParameters | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-distortion": surface_distortion_cargs,
-        "workbench.surface-distortion.smooth": surface_distortion_smooth_cargs,
-        "workbench.surface-distortion.local_affine_method": surface_distortion_local_affine_method_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-distortion": surface_distortion_outputs,
-    };
-    return outputsFuncs[t];
-}
+type SurfaceDistortionParametersTagged = Required<Pick<SurfaceDistortionParameters, '@type'>> & SurfaceDistortionParameters;
 
 
 /**
@@ -83,9 +50,9 @@ function dynOutputs(
 function surface_distortion_smooth_params(
     sigma: number,
     opt_fwhm: boolean = false,
-): SurfaceDistortionSmoothParameters {
+): SurfaceDistortionSmoothParametersTagged {
     const params = {
-        "@type": "workbench.surface-distortion.smooth" as const,
+        "@type": "smooth" as const,
         "sigma": sigma,
         "opt_fwhm": opt_fwhm,
     };
@@ -108,7 +75,7 @@ function surface_distortion_smooth_cargs(
     const cargs: string[] = [];
     cargs.push("-smooth");
     cargs.push(String((params["sigma"] ?? null)));
-    if ((params["opt_fwhm"] ?? null)) {
+    if ((params["opt_fwhm"] ?? false)) {
         cargs.push("-fwhm");
     }
     return cargs;
@@ -124,9 +91,9 @@ function surface_distortion_smooth_cargs(
  */
 function surface_distortion_local_affine_method_params(
     opt_log2: boolean = false,
-): SurfaceDistortionLocalAffineMethodParameters {
+): SurfaceDistortionLocalAffineMethodParametersTagged {
     const params = {
-        "@type": "workbench.surface-distortion.local_affine_method" as const,
+        "@type": "local_affine_method" as const,
         "opt_log2": opt_log2,
     };
     return params;
@@ -147,7 +114,7 @@ function surface_distortion_local_affine_method_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("-local-affine-method");
-    if ((params["opt_log2"] ?? null)) {
+    if ((params["opt_log2"] ?? false)) {
         cargs.push("-log2");
     }
     return cargs;
@@ -155,7 +122,7 @@ function surface_distortion_local_affine_method_cargs(
 
 
 /**
- * Output object returned when calling `surface_distortion(...)`.
+ * Output object returned when calling `SurfaceDistortionParameters(...)`.
  *
  * @interface
  */
@@ -192,9 +159,9 @@ function surface_distortion_params(
     opt_caret5_method: boolean = false,
     opt_edge_method: boolean = false,
     local_affine_method: SurfaceDistortionLocalAffineMethodParameters | null = null,
-): SurfaceDistortionParameters {
+): SurfaceDistortionParametersTagged {
     const params = {
-        "@type": "workbench.surface-distortion" as const,
+        "@type": "workbench/surface-distortion" as const,
         "surface_reference": surface_reference,
         "surface_distorted": surface_distorted,
         "metric_out": metric_out,
@@ -230,16 +197,16 @@ function surface_distortion_cargs(
     cargs.push(execution.inputFile((params["surface_distorted"] ?? null)));
     cargs.push((params["metric_out"] ?? null));
     if ((params["smooth"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["smooth"] ?? null)["@type"])((params["smooth"] ?? null), execution));
+        cargs.push(...surface_distortion_smooth_cargs((params["smooth"] ?? null), execution));
     }
-    if ((params["opt_caret5_method"] ?? null)) {
+    if ((params["opt_caret5_method"] ?? false)) {
         cargs.push("-caret5-method");
     }
-    if ((params["opt_edge_method"] ?? null)) {
+    if ((params["opt_edge_method"] ?? false)) {
         cargs.push("-edge-method");
     }
     if ((params["local_affine_method"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["local_affine_method"] ?? null)["@type"])((params["local_affine_method"] ?? null), execution));
+        cargs.push(...surface_distortion_local_affine_method_cargs((params["local_affine_method"] ?? null), execution));
     }
     return cargs;
 }
@@ -346,10 +313,7 @@ function surface_distortion(
 
 export {
       SURFACE_DISTORTION_METADATA,
-      SurfaceDistortionLocalAffineMethodParameters,
       SurfaceDistortionOutputs,
-      SurfaceDistortionParameters,
-      SurfaceDistortionSmoothParameters,
       surface_distortion,
       surface_distortion_execute,
       surface_distortion_local_affine_method_params,

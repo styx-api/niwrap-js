@@ -12,42 +12,47 @@ const VOLUME_RESAMPLE_METADATA: Metadata = {
 
 
 interface VolumeResampleFlirtParameters {
-    "@type": "workbench.volume-resample.affine.flirt";
+    "@type"?: "flirt";
     "source_volume": string;
     "target_volume": string;
 }
+type VolumeResampleFlirtParametersTagged = Required<Pick<VolumeResampleFlirtParameters, '@type'>> & VolumeResampleFlirtParameters;
 
 
 interface VolumeResampleAffineParameters {
-    "@type": "workbench.volume-resample.affine";
+    "@type"?: "affine";
     "affine": string;
     "flirt"?: VolumeResampleFlirtParameters | null | undefined;
 }
+type VolumeResampleAffineParametersTagged = Required<Pick<VolumeResampleAffineParameters, '@type'>> & VolumeResampleAffineParameters;
 
 
 interface VolumeResampleFlirt1Parameters {
-    "@type": "workbench.volume-resample.affine_series.flirt";
+    "@type"?: "flirt_1";
     "source_volume": string;
     "target_volume": string;
 }
+type VolumeResampleFlirt1ParametersTagged = Required<Pick<VolumeResampleFlirt1Parameters, '@type'>> & VolumeResampleFlirt1Parameters;
 
 
 interface VolumeResampleAffineSeriesParameters {
-    "@type": "workbench.volume-resample.affine_series";
+    "@type"?: "affine_series";
     "affine_series": string;
     "flirt"?: VolumeResampleFlirt1Parameters | null | undefined;
 }
+type VolumeResampleAffineSeriesParametersTagged = Required<Pick<VolumeResampleAffineSeriesParameters, '@type'>> & VolumeResampleAffineSeriesParameters;
 
 
 interface VolumeResampleWarpParameters {
-    "@type": "workbench.volume-resample.warp";
+    "@type"?: "warp";
     "warpfield": string;
     "opt_fnirt_source_volume"?: string | null | undefined;
 }
+type VolumeResampleWarpParametersTagged = Required<Pick<VolumeResampleWarpParameters, '@type'>> & VolumeResampleWarpParameters;
 
 
 interface VolumeResampleParameters {
-    "@type": "workbench.volume-resample";
+    "@type"?: "workbench/volume-resample";
     "volume_in": InputPathType;
     "volume_space": string;
     "method": string;
@@ -56,45 +61,7 @@ interface VolumeResampleParameters {
     "affine_series"?: Array<VolumeResampleAffineSeriesParameters> | null | undefined;
     "warp"?: Array<VolumeResampleWarpParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-resample": volume_resample_cargs,
-        "workbench.volume-resample.affine": volume_resample_affine_cargs,
-        "workbench.volume-resample.affine.flirt": volume_resample_flirt_cargs,
-        "workbench.volume-resample.affine_series": volume_resample_affine_series_cargs,
-        "workbench.volume-resample.affine_series.flirt": volume_resample_flirt_1_cargs,
-        "workbench.volume-resample.warp": volume_resample_warp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-resample": volume_resample_outputs,
-    };
-    return outputsFuncs[t];
-}
+type VolumeResampleParametersTagged = Required<Pick<VolumeResampleParameters, '@type'>> & VolumeResampleParameters;
 
 
 /**
@@ -108,9 +75,9 @@ function dynOutputs(
 function volume_resample_flirt_params(
     source_volume: string,
     target_volume: string,
-): VolumeResampleFlirtParameters {
+): VolumeResampleFlirtParametersTagged {
     const params = {
-        "@type": "workbench.volume-resample.affine.flirt" as const,
+        "@type": "flirt" as const,
         "source_volume": source_volume,
         "target_volume": target_volume,
     };
@@ -149,9 +116,9 @@ function volume_resample_flirt_cargs(
 function volume_resample_affine_params(
     affine: string,
     flirt: VolumeResampleFlirtParameters | null = null,
-): VolumeResampleAffineParameters {
+): VolumeResampleAffineParametersTagged {
     const params = {
-        "@type": "workbench.volume-resample.affine" as const,
+        "@type": "affine" as const,
         "affine": affine,
     };
     if (flirt !== null) {
@@ -177,7 +144,7 @@ function volume_resample_affine_cargs(
     cargs.push("-affine");
     cargs.push((params["affine"] ?? null));
     if ((params["flirt"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["flirt"] ?? null)["@type"])((params["flirt"] ?? null), execution));
+        cargs.push(...volume_resample_flirt_cargs((params["flirt"] ?? null), execution));
     }
     return cargs;
 }
@@ -194,9 +161,9 @@ function volume_resample_affine_cargs(
 function volume_resample_flirt_1_params(
     source_volume: string,
     target_volume: string,
-): VolumeResampleFlirt1Parameters {
+): VolumeResampleFlirt1ParametersTagged {
     const params = {
-        "@type": "workbench.volume-resample.affine_series.flirt" as const,
+        "@type": "flirt_1" as const,
         "source_volume": source_volume,
         "target_volume": target_volume,
     };
@@ -235,9 +202,9 @@ function volume_resample_flirt_1_cargs(
 function volume_resample_affine_series_params(
     affine_series: string,
     flirt: VolumeResampleFlirt1Parameters | null = null,
-): VolumeResampleAffineSeriesParameters {
+): VolumeResampleAffineSeriesParametersTagged {
     const params = {
-        "@type": "workbench.volume-resample.affine_series" as const,
+        "@type": "affine_series" as const,
         "affine_series": affine_series,
     };
     if (flirt !== null) {
@@ -263,7 +230,7 @@ function volume_resample_affine_series_cargs(
     cargs.push("-affine-series");
     cargs.push((params["affine_series"] ?? null));
     if ((params["flirt"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["flirt"] ?? null)["@type"])((params["flirt"] ?? null), execution));
+        cargs.push(...volume_resample_flirt_1_cargs((params["flirt"] ?? null), execution));
     }
     return cargs;
 }
@@ -280,9 +247,9 @@ function volume_resample_affine_series_cargs(
 function volume_resample_warp_params(
     warpfield: string,
     opt_fnirt_source_volume: string | null = null,
-): VolumeResampleWarpParameters {
+): VolumeResampleWarpParametersTagged {
     const params = {
-        "@type": "workbench.volume-resample.warp" as const,
+        "@type": "warp" as const,
         "warpfield": warpfield,
     };
     if (opt_fnirt_source_volume !== null) {
@@ -318,7 +285,7 @@ function volume_resample_warp_cargs(
 
 
 /**
- * Output object returned when calling `volume_resample(...)`.
+ * Output object returned when calling `VolumeResampleParameters(...)`.
  *
  * @interface
  */
@@ -355,9 +322,9 @@ function volume_resample_params(
     affine: Array<VolumeResampleAffineParameters> | null = null,
     affine_series: Array<VolumeResampleAffineSeriesParameters> | null = null,
     warp: Array<VolumeResampleWarpParameters> | null = null,
-): VolumeResampleParameters {
+): VolumeResampleParametersTagged {
     const params = {
-        "@type": "workbench.volume-resample" as const,
+        "@type": "workbench/volume-resample" as const,
         "volume_in": volume_in,
         "volume_space": volume_space,
         "method": method,
@@ -396,13 +363,13 @@ function volume_resample_cargs(
     cargs.push((params["method"] ?? null));
     cargs.push((params["volume_out"] ?? null));
     if ((params["affine"] ?? null) !== null) {
-        cargs.push(...(params["affine"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["affine"] ?? null).map(s => volume_resample_affine_cargs(s, execution)).flat());
     }
     if ((params["affine_series"] ?? null) !== null) {
-        cargs.push(...(params["affine_series"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["affine_series"] ?? null).map(s => volume_resample_affine_series_cargs(s, execution)).flat());
     }
     if ((params["warp"] ?? null) !== null) {
-        cargs.push(...(params["warp"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["warp"] ?? null).map(s => volume_resample_warp_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -505,13 +472,7 @@ function volume_resample(
 
 export {
       VOLUME_RESAMPLE_METADATA,
-      VolumeResampleAffineParameters,
-      VolumeResampleAffineSeriesParameters,
-      VolumeResampleFlirt1Parameters,
-      VolumeResampleFlirtParameters,
       VolumeResampleOutputs,
-      VolumeResampleParameters,
-      VolumeResampleWarpParameters,
       volume_resample,
       volume_resample_affine_params,
       volume_resample_affine_series_params,

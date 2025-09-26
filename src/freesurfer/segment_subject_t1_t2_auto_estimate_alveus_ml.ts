@@ -12,50 +12,17 @@ const SEGMENT_SUBJECT_T1_T2_AUTO_ESTIMATE_ALVEUS_ML_METADATA: Metadata = {
 
 
 interface SegmentSubjectT1T2AutoEstimateAlveusMlParameters {
-    "@type": "freesurfer.segmentSubjectT1T2_autoEstimateAlveusML";
+    "@type"?: "freesurfer/segmentSubjectT1T2_autoEstimateAlveusML";
     "input_t1": InputPathType;
     "input_t2": InputPathType;
     "output_directory": string;
     "other_options"?: string | null | undefined;
 }
+type SegmentSubjectT1T2AutoEstimateAlveusMlParametersTagged = Required<Pick<SegmentSubjectT1T2AutoEstimateAlveusMlParameters, '@type'>> & SegmentSubjectT1T2AutoEstimateAlveusMlParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.segmentSubjectT1T2_autoEstimateAlveusML": segment_subject_t1_t2_auto_estimate_alveus_ml_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.segmentSubjectT1T2_autoEstimateAlveusML": segment_subject_t1_t2_auto_estimate_alveus_ml_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `segment_subject_t1_t2_auto_estimate_alveus_ml(...)`.
+ * Output object returned when calling `SegmentSubjectT1T2AutoEstimateAlveusMlParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function segment_subject_t1_t2_auto_estimate_alveus_ml_params(
     input_t2: InputPathType,
     output_directory: string,
     other_options: string | null = null,
-): SegmentSubjectT1T2AutoEstimateAlveusMlParameters {
+): SegmentSubjectT1T2AutoEstimateAlveusMlParametersTagged {
     const params = {
-        "@type": "freesurfer.segmentSubjectT1T2_autoEstimateAlveusML" as const,
+        "@type": "freesurfer/segmentSubjectT1T2_autoEstimateAlveusML" as const,
         "input_t1": input_t1,
         "input_t2": input_t2,
         "output_directory": output_directory,
@@ -204,7 +171,6 @@ function segment_subject_t1_t2_auto_estimate_alveus_ml(
 export {
       SEGMENT_SUBJECT_T1_T2_AUTO_ESTIMATE_ALVEUS_ML_METADATA,
       SegmentSubjectT1T2AutoEstimateAlveusMlOutputs,
-      SegmentSubjectT1T2AutoEstimateAlveusMlParameters,
       segment_subject_t1_t2_auto_estimate_alveus_ml,
       segment_subject_t1_t2_auto_estimate_alveus_ml_execute,
       segment_subject_t1_t2_auto_estimate_alveus_ml_params,

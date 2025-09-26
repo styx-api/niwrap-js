@@ -12,50 +12,17 @@ const SRATIO_METADATA: Metadata = {
 
 
 interface SratioParameters {
-    "@type": "freesurfer.sratio";
+    "@type"?: "freesurfer/sratio";
     "value_a": number;
     "value_b": number;
     "abs_flag": boolean;
     "mask_threshold"?: number | null | undefined;
 }
+type SratioParametersTagged = Required<Pick<SratioParameters, '@type'>> & SratioParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.sratio": sratio_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.sratio": sratio_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `sratio(...)`.
+ * Output object returned when calling `SratioParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function sratio_params(
     value_b: number,
     abs_flag: boolean = false,
     mask_threshold: number | null = null,
-): SratioParameters {
+): SratioParametersTagged {
     const params = {
-        "@type": "freesurfer.sratio" as const,
+        "@type": "freesurfer/sratio" as const,
         "value_a": value_a,
         "value_b": value_b,
         "abs_flag": abs_flag,
@@ -116,7 +83,7 @@ function sratio_cargs(
     cargs.push("sratio");
     cargs.push(String((params["value_a"] ?? null)));
     cargs.push(String((params["value_b"] ?? null)));
-    if ((params["abs_flag"] ?? null)) {
+    if ((params["abs_flag"] ?? false)) {
         cargs.push("--abs");
     }
     if ((params["mask_threshold"] ?? null) !== null) {
@@ -209,7 +176,6 @@ function sratio(
 export {
       SRATIO_METADATA,
       SratioOutputs,
-      SratioParameters,
       sratio,
       sratio_execute,
       sratio_params,

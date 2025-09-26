@@ -12,50 +12,17 @@ const SET_SPACING_METADATA: Metadata = {
 
 
 interface SetSpacingParameters {
-    "@type": "ants.SetSpacing";
+    "@type"?: "ants/SetSpacing";
     "dimension": number;
     "input_file": InputPathType;
     "output_file": string;
     "spacing": Array<number>;
 }
+type SetSpacingParametersTagged = Required<Pick<SetSpacingParameters, '@type'>> & SetSpacingParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.SetSpacing": set_spacing_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.SetSpacing": set_spacing_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `set_spacing(...)`.
+ * Output object returned when calling `SetSpacingParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function set_spacing_params(
     input_file: InputPathType,
     output_file: string,
     spacing: Array<number>,
-): SetSpacingParameters {
+): SetSpacingParametersTagged {
     const params = {
-        "@type": "ants.SetSpacing" as const,
+        "@type": "ants/SetSpacing" as const,
         "dimension": dimension,
         "input_file": input_file,
         "output_file": output_file,
@@ -200,7 +167,6 @@ function set_spacing(
 export {
       SET_SPACING_METADATA,
       SetSpacingOutputs,
-      SetSpacingParameters,
       set_spacing,
       set_spacing_execute,
       set_spacing_params,

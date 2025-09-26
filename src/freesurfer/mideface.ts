@@ -12,7 +12,7 @@ const MIDEFACE_METADATA: Metadata = {
 
 
 interface MidefaceParameters {
-    "@type": "freesurfer.mideface";
+    "@type"?: "freesurfer/mideface";
     "input_volume": InputPathType;
     "output_volume": string;
     "facemask"?: InputPathType | null | undefined;
@@ -44,44 +44,11 @@ interface MidefaceParameters {
     "check_volume"?: InputPathType | null | undefined;
     "check_output_file"?: InputPathType | null | undefined;
 }
+type MidefaceParametersTagged = Required<Pick<MidefaceParameters, '@type'>> & MidefaceParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mideface": mideface_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mideface": mideface_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mideface(...)`.
+ * Output object returned when calling `MidefaceParameters(...)`.
  *
  * @interface
  */
@@ -168,9 +135,9 @@ function mideface_params(
     apply_volume: string | null = null,
     check_volume: InputPathType | null = null,
     check_output_file: InputPathType | null = null,
-): MidefaceParameters {
+): MidefaceParametersTagged {
     const params = {
-        "@type": "freesurfer.mideface" as const,
+        "@type": "freesurfer/mideface" as const,
         "input_volume": input_volume,
         "output_volume": output_volume,
         "samseg_fast": samseg_fast,
@@ -296,10 +263,10 @@ function mideface_cargs(
             (params["samseg_json"] ?? null)
         );
     }
-    if ((params["samseg_fast"] ?? null)) {
+    if ((params["samseg_fast"] ?? false)) {
         cargs.push("--samseg-fast");
     }
-    if ((params["no_samseg_fast"] ?? null)) {
+    if ((params["no_samseg_fast"] ?? false)) {
         cargs.push("--no-samseg-fast");
     }
     if ((params["init_reg"] ?? null) !== null) {
@@ -320,7 +287,7 @@ function mideface_cargs(
             ...(params["fill_const"] ?? null).map(String)
         );
     }
-    if ((params["fill_zero"] ?? null)) {
+    if ((params["fill_zero"] ?? false)) {
         cargs.push("--fill-zero");
     }
     if ((params["fhi"] ?? null) !== null) {
@@ -329,16 +296,16 @@ function mideface_cargs(
             String((params["fhi"] ?? null))
         );
     }
-    if ((params["no_ears"] ?? null)) {
+    if ((params["no_ears"] ?? false)) {
         cargs.push("--no-ears");
     }
-    if ((params["back_of_head"] ?? null)) {
+    if ((params["back_of_head"] ?? false)) {
         cargs.push("--back-of-head");
     }
-    if ((params["forehead"] ?? null)) {
+    if ((params["forehead"] ?? false)) {
         cargs.push("--forehead");
     }
-    if ((params["pics"] ?? null)) {
+    if ((params["pics"] ?? false)) {
         cargs.push("--pics");
     }
     if ((params["code"] ?? null) !== null) {
@@ -353,7 +320,7 @@ function mideface_cargs(
             (params["image_convert"] ?? null)
         );
     }
-    if ((params["no_post"] ?? null)) {
+    if ((params["no_post"] ?? false)) {
         cargs.push("--no-post");
     }
     if ((params["threads"] ?? null) !== null) {
@@ -362,7 +329,7 @@ function mideface_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("--force");
     }
     if ((params["output_format"] ?? null) !== null) {
@@ -544,7 +511,6 @@ function mideface(
 export {
       MIDEFACE_METADATA,
       MidefaceOutputs,
-      MidefaceParameters,
       mideface,
       mideface_execute,
       mideface_params,

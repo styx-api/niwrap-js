@@ -12,7 +12,7 @@ const V_3D_TSTAT_METADATA: Metadata = {
 
 
 interface V3dTstatParameters {
-    "@type": "afni.3dTstat";
+    "@type"?: "afni/3dTstat";
     "in_file": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "num_threads"?: number | null | undefined;
@@ -75,44 +75,11 @@ interface V3dTstatParameters {
     "mrange"?: string | null | undefined;
     "cmask"?: string | null | undefined;
 }
+type V3dTstatParametersTagged = Required<Pick<V3dTstatParameters, '@type'>> & V3dTstatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dTstat": v_3d_tstat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dTstat": v_3d_tstat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_tstat(...)`.
+ * Output object returned when calling `V3dTstatParameters(...)`.
  *
  * @interface
  */
@@ -257,9 +224,9 @@ function v_3d_tstat_params(
     mask_mset: InputPathType | null = null,
     mrange: string | null = null,
     cmask: string | null = null,
-): V3dTstatParameters {
+): V3dTstatParametersTagged {
     const params = {
-        "@type": "afni.3dTstat" as const,
+        "@type": "afni/3dTstat" as const,
         "in_file": in_file,
         "sum": sum,
         "abssum": abssum,
@@ -376,151 +343,151 @@ function v_3d_tstat_cargs(
     if ((params["outputtype"] ?? null) !== null) {
         cargs.push((params["outputtype"] ?? null));
     }
-    if ((params["sum"] ?? null)) {
+    if ((params["sum"] ?? false)) {
         cargs.push("-sum");
     }
-    if ((params["abssum"] ?? null)) {
+    if ((params["abssum"] ?? false)) {
         cargs.push("-abssum");
     }
-    if ((params["sos"] ?? null)) {
+    if ((params["sos"] ?? false)) {
         cargs.push("-sos");
     }
-    if ((params["l2norm"] ?? null)) {
+    if ((params["l2norm"] ?? false)) {
         cargs.push("-l2norm");
     }
-    if ((params["mean"] ?? null)) {
+    if ((params["mean"] ?? false)) {
         cargs.push("-mean");
     }
-    if ((params["slope"] ?? null)) {
+    if ((params["slope"] ?? false)) {
         cargs.push("-slope");
     }
-    if ((params["stdev"] ?? null)) {
+    if ((params["stdev"] ?? false)) {
         cargs.push("-stdev");
     }
-    if ((params["stdevNOD"] ?? null)) {
+    if ((params["stdevNOD"] ?? false)) {
         cargs.push("-stdevNOD");
     }
-    if ((params["cvar"] ?? null)) {
+    if ((params["cvar"] ?? false)) {
         cargs.push("-cvar");
     }
-    if ((params["cvarNOD"] ?? null)) {
+    if ((params["cvarNOD"] ?? false)) {
         cargs.push("-cvarNOD");
     }
-    if ((params["cvarinv"] ?? null)) {
+    if ((params["cvarinv"] ?? false)) {
         cargs.push("-cvarinv");
     }
-    if ((params["cvarinvNOD"] ?? null)) {
+    if ((params["cvarinvNOD"] ?? false)) {
         cargs.push("-cvarinvNOD");
     }
-    if ((params["tsnr"] ?? null)) {
+    if ((params["tsnr"] ?? false)) {
         cargs.push("-tsnr");
     }
-    if ((params["MAD"] ?? null)) {
+    if ((params["MAD"] ?? false)) {
         cargs.push("-MAD");
     }
-    if ((params["DW"] ?? null)) {
+    if ((params["DW"] ?? false)) {
         cargs.push("-DW");
     }
-    if ((params["median"] ?? null)) {
+    if ((params["median"] ?? false)) {
         cargs.push("-median");
     }
-    if ((params["nzmedian"] ?? null)) {
+    if ((params["nzmedian"] ?? false)) {
         cargs.push("-nzmedian");
     }
-    if ((params["nzstdev"] ?? null)) {
+    if ((params["nzstdev"] ?? false)) {
         cargs.push("-nzstdev");
     }
-    if ((params["bmv"] ?? null)) {
+    if ((params["bmv"] ?? false)) {
         cargs.push("-bmv");
     }
-    if ((params["MSSD"] ?? null)) {
+    if ((params["MSSD"] ?? false)) {
         cargs.push("-MSSD");
     }
-    if ((params["MSSDsqrt"] ?? null)) {
+    if ((params["MSSDsqrt"] ?? false)) {
         cargs.push("-MSSDsqrt");
     }
-    if ((params["MASDx"] ?? null)) {
+    if ((params["MASDx"] ?? false)) {
         cargs.push("-MASDx");
     }
-    if ((params["min"] ?? null)) {
+    if ((params["min"] ?? false)) {
         cargs.push("-min");
     }
-    if ((params["max"] ?? null)) {
+    if ((params["max"] ?? false)) {
         cargs.push("-max");
     }
-    if ((params["absmax"] ?? null)) {
+    if ((params["absmax"] ?? false)) {
         cargs.push("-absmax");
     }
-    if ((params["signed_absmax"] ?? null)) {
+    if ((params["signed_absmax"] ?? false)) {
         cargs.push("-signed_absmax");
     }
-    if ((params["percentile"] ?? null)) {
+    if ((params["percentile"] ?? false)) {
         cargs.push("-percentile");
     }
-    if ((params["argmin"] ?? null)) {
+    if ((params["argmin"] ?? false)) {
         cargs.push("-argmin");
     }
-    if ((params["argmin1"] ?? null)) {
+    if ((params["argmin1"] ?? false)) {
         cargs.push("-argmin1");
     }
-    if ((params["argmax"] ?? null)) {
+    if ((params["argmax"] ?? false)) {
         cargs.push("-argmax");
     }
-    if ((params["argmax1"] ?? null)) {
+    if ((params["argmax1"] ?? false)) {
         cargs.push("-argmax1");
     }
-    if ((params["argabsmax"] ?? null)) {
+    if ((params["argabsmax"] ?? false)) {
         cargs.push("-argabsmax");
     }
-    if ((params["argabsmax1"] ?? null)) {
+    if ((params["argabsmax1"] ?? false)) {
         cargs.push("-argabsmax1");
     }
-    if ((params["duration"] ?? null)) {
+    if ((params["duration"] ?? false)) {
         cargs.push("-duration");
     }
-    if ((params["onset"] ?? null)) {
+    if ((params["onset"] ?? false)) {
         cargs.push("-onset");
     }
-    if ((params["offset"] ?? null)) {
+    if ((params["offset"] ?? false)) {
         cargs.push("-offset");
     }
-    if ((params["centroid"] ?? null)) {
+    if ((params["centroid"] ?? false)) {
         cargs.push("-centroid");
     }
-    if ((params["centduration"] ?? null)) {
+    if ((params["centduration"] ?? false)) {
         cargs.push("-centduration");
     }
-    if ((params["nzmean"] ?? null)) {
+    if ((params["nzmean"] ?? false)) {
         cargs.push("-nzmean");
     }
-    if ((params["zcount"] ?? null)) {
+    if ((params["zcount"] ?? false)) {
         cargs.push("-zcount");
     }
-    if ((params["nzcount"] ?? null)) {
+    if ((params["nzcount"] ?? false)) {
         cargs.push("-nzcount");
     }
-    if ((params["autocorr"] ?? null)) {
+    if ((params["autocorr"] ?? false)) {
         cargs.push("-autocorr");
     }
-    if ((params["autoreg"] ?? null)) {
+    if ((params["autoreg"] ?? false)) {
         cargs.push("-autoreg");
     }
-    if ((params["accumulate"] ?? null)) {
+    if ((params["accumulate"] ?? false)) {
         cargs.push("-accumulate");
     }
-    if ((params["centromean"] ?? null)) {
+    if ((params["centromean"] ?? false)) {
         cargs.push("-centromean");
     }
-    if ((params["skewness"] ?? null)) {
+    if ((params["skewness"] ?? false)) {
         cargs.push("-skewness");
     }
-    if ((params["kurtosis"] ?? null)) {
+    if ((params["kurtosis"] ?? false)) {
         cargs.push("-kurtosis");
     }
-    if ((params["firstvalue"] ?? null)) {
+    if ((params["firstvalue"] ?? false)) {
         cargs.push("-firstvalue");
     }
-    if ((params["tdiff"] ?? null)) {
+    if ((params["tdiff"] ?? false)) {
         cargs.push("-tdiff");
     }
     if ((params["prefix"] ?? null) !== null) {
@@ -535,7 +502,7 @@ function v_3d_tstat_cargs(
             (params["datum"] ?? null)
         );
     }
-    if ((params["nscale"] ?? null)) {
+    if ((params["nscale"] ?? false)) {
         cargs.push("-nscale");
     }
     if ((params["basepercent"] ?? null) !== null) {
@@ -759,7 +726,6 @@ function v_3d_tstat(
 
 export {
       V3dTstatOutputs,
-      V3dTstatParameters,
       V_3D_TSTAT_METADATA,
       v_3d_tstat,
       v_3d_tstat_execute,

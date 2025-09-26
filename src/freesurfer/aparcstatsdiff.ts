@@ -12,7 +12,7 @@ const APARCSTATSDIFF_METADATA: Metadata = {
 
 
 interface AparcstatsdiffParameters {
-    "@type": "freesurfer.aparcstatsdiff";
+    "@type"?: "freesurfer/aparcstatsdiff";
     "subj1": string;
     "subj2": string;
     "hemi": string;
@@ -20,44 +20,11 @@ interface AparcstatsdiffParameters {
     "meas": string;
     "outdir"?: string | null | undefined;
 }
+type AparcstatsdiffParametersTagged = Required<Pick<AparcstatsdiffParameters, '@type'>> & AparcstatsdiffParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.aparcstatsdiff": aparcstatsdiff_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.aparcstatsdiff": aparcstatsdiff_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `aparcstatsdiff(...)`.
+ * Output object returned when calling `AparcstatsdiffParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function aparcstatsdiff_params(
     parc: string,
     meas: string,
     outdir: string | null = null,
-): AparcstatsdiffParameters {
+): AparcstatsdiffParametersTagged {
     const params = {
-        "@type": "freesurfer.aparcstatsdiff" as const,
+        "@type": "freesurfer/aparcstatsdiff" as const,
         "subj1": subj1,
         "subj2": subj2,
         "hemi": hemi,
@@ -218,7 +185,6 @@ function aparcstatsdiff(
 export {
       APARCSTATSDIFF_METADATA,
       AparcstatsdiffOutputs,
-      AparcstatsdiffParameters,
       aparcstatsdiff,
       aparcstatsdiff_execute,
       aparcstatsdiff_params,

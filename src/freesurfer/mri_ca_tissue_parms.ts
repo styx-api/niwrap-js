@@ -12,50 +12,17 @@ const MRI_CA_TISSUE_PARMS_METADATA: Metadata = {
 
 
 interface MriCaTissueParmsParameters {
-    "@type": "freesurfer.mri_ca_tissue_parms";
+    "@type"?: "freesurfer/mri_ca_tissue_parms";
     "subjects": Array<string>;
     "output_file": string;
     "spacing_flag": boolean;
     "gradient_flag": boolean;
 }
+type MriCaTissueParmsParametersTagged = Required<Pick<MriCaTissueParmsParameters, '@type'>> & MriCaTissueParmsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_ca_tissue_parms": mri_ca_tissue_parms_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_ca_tissue_parms": mri_ca_tissue_parms_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_ca_tissue_parms(...)`.
+ * Output object returned when calling `MriCaTissueParmsParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mri_ca_tissue_parms_params(
     output_file: string,
     spacing_flag: boolean = false,
     gradient_flag: boolean = false,
-): MriCaTissueParmsParameters {
+): MriCaTissueParmsParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_ca_tissue_parms" as const,
+        "@type": "freesurfer/mri_ca_tissue_parms" as const,
         "subjects": subjects,
         "output_file": output_file,
         "spacing_flag": spacing_flag,
@@ -114,10 +81,10 @@ function mri_ca_tissue_parms_cargs(
     cargs.push("mri_ca_tissue_parms");
     cargs.push(...(params["subjects"] ?? null));
     cargs.push((params["output_file"] ?? null));
-    if ((params["spacing_flag"] ?? null)) {
+    if ((params["spacing_flag"] ?? false)) {
         cargs.push("-spacing");
     }
-    if ((params["gradient_flag"] ?? null)) {
+    if ((params["gradient_flag"] ?? false)) {
         cargs.push("-gradient");
     }
     return cargs;
@@ -204,7 +171,6 @@ function mri_ca_tissue_parms(
 export {
       MRI_CA_TISSUE_PARMS_METADATA,
       MriCaTissueParmsOutputs,
-      MriCaTissueParmsParameters,
       mri_ca_tissue_parms,
       mri_ca_tissue_parms_execute,
       mri_ca_tissue_parms_params,

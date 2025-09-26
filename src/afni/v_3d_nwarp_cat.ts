@@ -12,7 +12,7 @@ const V_3D_NWARP_CAT_METADATA: Metadata = {
 
 
 interface V3dNwarpCatParameters {
-    "@type": "afni.3dNwarpCat";
+    "@type"?: "afni/3dNwarpCat";
     "interpolation"?: string | null | undefined;
     "verbosity": boolean;
     "output_prefix": string;
@@ -23,44 +23,11 @@ interface V3dNwarpCatParameters {
     "invert_final_warp": boolean;
     "extra_padding"?: number | null | undefined;
 }
+type V3dNwarpCatParametersTagged = Required<Pick<V3dNwarpCatParameters, '@type'>> & V3dNwarpCatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dNwarpCat": v_3d_nwarp_cat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dNwarpCat": v_3d_nwarp_cat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_nwarp_cat(...)`.
+ * Output object returned when calling `V3dNwarpCatParameters(...)`.
  *
  * @interface
  */
@@ -105,9 +72,9 @@ function v_3d_nwarp_cat_params(
     additional_warps: Array<InputPathType> | null = null,
     invert_final_warp: boolean = false,
     extra_padding: number | null = null,
-): V3dNwarpCatParameters {
+): V3dNwarpCatParametersTagged {
     const params = {
-        "@type": "afni.3dNwarpCat" as const,
+        "@type": "afni/3dNwarpCat" as const,
         "verbosity": verbosity,
         "output_prefix": output_prefix,
         "warp1": warp1,
@@ -150,7 +117,7 @@ function v_3d_nwarp_cat_cargs(
             (params["interpolation"] ?? null)
         );
     }
-    if ((params["verbosity"] ?? null)) {
+    if ((params["verbosity"] ?? false)) {
         cargs.push("-verb");
     }
     cargs.push(
@@ -174,7 +141,7 @@ function v_3d_nwarp_cat_cargs(
     if ((params["additional_warps"] ?? null) !== null) {
         cargs.push(...(params["additional_warps"] ?? null).map(f => execution.inputFile(f)));
     }
-    if ((params["invert_final_warp"] ?? null)) {
+    if ((params["invert_final_warp"] ?? false)) {
         cargs.push("-iwarp");
     }
     if ((params["extra_padding"] ?? null) !== null) {
@@ -277,7 +244,6 @@ function v_3d_nwarp_cat(
 
 export {
       V3dNwarpCatOutputs,
-      V3dNwarpCatParameters,
       V_3D_NWARP_CAT_METADATA,
       v_3d_nwarp_cat,
       v_3d_nwarp_cat_execute,

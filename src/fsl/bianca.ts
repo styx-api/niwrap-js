@@ -12,7 +12,7 @@ const BIANCA_METADATA: Metadata = {
 
 
 interface BiancaParameters {
-    "@type": "fsl.bianca";
+    "@type"?: "fsl/bianca";
     "master_file": InputPathType;
     "label_feature_num": number;
     "brain_mask_feature_num": number;
@@ -31,44 +31,11 @@ interface BiancaParameters {
     "verbose_flag": boolean;
     "out_name"?: string | null | undefined;
 }
+type BiancaParametersTagged = Required<Pick<BiancaParameters, '@type'>> & BiancaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.bianca": bianca_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.bianca": bianca_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `bianca(...)`.
+ * Output object returned when calling `BiancaParameters(...)`.
  *
  * @interface
  */
@@ -125,9 +92,9 @@ function bianca_params(
     save_classifier_data: string | null = null,
     verbose_flag: boolean = false,
     out_name: string | null = null,
-): BiancaParameters {
+): BiancaParametersTagged {
     const params = {
-        "@type": "fsl.bianca" as const,
+        "@type": "fsl/bianca" as const,
         "master_file": master_file,
         "label_feature_num": label_feature_num,
         "brain_mask_feature_num": brain_mask_feature_num,
@@ -205,7 +172,7 @@ function bianca_cargs(
     if ((params["patch_sizes"] ?? null) !== null) {
         cargs.push(["--patchsizes=", (params["patch_sizes"] ?? null)].join(''));
     }
-    if ((params["patch_3d"] ?? null)) {
+    if ((params["patch_3d"] ?? false)) {
         cargs.push("--patch3D");
     }
     if ((params["select_pts"] ?? null) !== null) {
@@ -223,7 +190,7 @@ function bianca_cargs(
     if ((params["save_classifier_data"] ?? null) !== null) {
         cargs.push(["--saveclassifierdata=", (params["save_classifier_data"] ?? null)].join(''));
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
     if ((params["out_name"] ?? null) !== null) {
@@ -342,7 +309,6 @@ function bianca(
 export {
       BIANCA_METADATA,
       BiancaOutputs,
-      BiancaParameters,
       bianca,
       bianca_execute,
       bianca_params,

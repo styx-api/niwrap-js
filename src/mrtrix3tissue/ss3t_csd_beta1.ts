@@ -12,21 +12,23 @@ const SS3T_CSD_BETA1_METADATA: Metadata = {
 
 
 interface Ss3tCsdBeta1ConfigParameters {
-    "@type": "mrtrix3tissue.ss3t_csd_beta1.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Ss3tCsdBeta1ConfigParametersTagged = Required<Pick<Ss3tCsdBeta1ConfigParameters, '@type'>> & Ss3tCsdBeta1ConfigParameters;
 
 
 interface Ss3tCsdBeta1ResponseOdfParameters {
-    "@type": "mrtrix3tissue.ss3t_csd_beta1.response_odf";
+    "@type"?: "response_odf";
     "response": InputPathType;
     "odf": string;
 }
+type Ss3tCsdBeta1ResponseOdfParametersTagged = Required<Pick<Ss3tCsdBeta1ResponseOdfParameters, '@type'>> & Ss3tCsdBeta1ResponseOdfParameters;
 
 
 interface Ss3tCsdBeta1Parameters {
-    "@type": "mrtrix3tissue.ss3t_csd_beta1";
+    "@type"?: "mrtrix3tissue/ss3t_csd_beta1";
     "mask"?: InputPathType | null | undefined;
     "bzero_pct"?: number | null | undefined;
     "niter"?: number | null | undefined;
@@ -41,43 +43,7 @@ interface Ss3tCsdBeta1Parameters {
     "dwi": InputPathType;
     "response_odf": Array<Ss3tCsdBeta1ResponseOdfParameters>;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix3tissue.ss3t_csd_beta1": ss3t_csd_beta1_cargs,
-        "mrtrix3tissue.ss3t_csd_beta1.config": ss3t_csd_beta1_config_cargs,
-        "mrtrix3tissue.ss3t_csd_beta1.response_odf": ss3t_csd_beta1_response_odf_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix3tissue.ss3t_csd_beta1": ss3t_csd_beta1_outputs,
-        "mrtrix3tissue.ss3t_csd_beta1.response_odf": ss3t_csd_beta1_response_odf_outputs,
-    };
-    return outputsFuncs[t];
-}
+type Ss3tCsdBeta1ParametersTagged = Required<Pick<Ss3tCsdBeta1Parameters, '@type'>> & Ss3tCsdBeta1Parameters;
 
 
 /**
@@ -91,9 +57,9 @@ function dynOutputs(
 function ss3t_csd_beta1_config_params(
     key: string,
     value: string,
-): Ss3tCsdBeta1ConfigParameters {
+): Ss3tCsdBeta1ConfigParametersTagged {
     const params = {
-        "@type": "mrtrix3tissue.ss3t_csd_beta1.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -149,9 +115,9 @@ interface Ss3tCsdBeta1ResponseOdfOutputs {
 function ss3t_csd_beta1_response_odf_params(
     response: InputPathType,
     odf: string,
-): Ss3tCsdBeta1ResponseOdfParameters {
+): Ss3tCsdBeta1ResponseOdfParametersTagged {
     const params = {
-        "@type": "mrtrix3tissue.ss3t_csd_beta1.response_odf" as const,
+        "@type": "response_odf" as const,
         "response": response,
         "odf": odf,
     };
@@ -199,7 +165,7 @@ function ss3t_csd_beta1_response_odf_outputs(
 
 
 /**
- * Output object returned when calling `ss3t_csd_beta1(...)`.
+ * Output object returned when calling `Ss3tCsdBeta1Parameters(...)`.
  *
  * @interface
  */
@@ -248,9 +214,9 @@ function ss3t_csd_beta1_params(
     config: Array<Ss3tCsdBeta1ConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Ss3tCsdBeta1Parameters {
+): Ss3tCsdBeta1ParametersTagged {
     const params = {
-        "@type": "mrtrix3tissue.ss3t_csd_beta1" as const,
+        "@type": "mrtrix3tissue/ss3t_csd_beta1" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -311,16 +277,16 @@ function ss3t_csd_beta1_cargs(
             String((params["niter"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -330,16 +296,16 @@ function ss3t_csd_beta1_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => ss3t_csd_beta1_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["dwi"] ?? null)));
-    cargs.push(...(params["response_odf"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+    cargs.push(...(params["response_odf"] ?? null).map(s => ss3t_csd_beta1_response_odf_cargs(s, execution)).flat());
     return cargs;
 }
 
@@ -358,7 +324,7 @@ function ss3t_csd_beta1_outputs(
 ): Ss3tCsdBeta1Outputs {
     const ret: Ss3tCsdBeta1Outputs = {
         root: execution.outputFile("."),
-        response_odf: (params["response_odf"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null),
+        response_odf: (params["response_odf"] ?? null).map(i => ss3t_csd_beta1_response_odf_outputs(i, execution) ?? null),
     };
     return ret;
 }
@@ -445,11 +411,8 @@ function ss3t_csd_beta1(
 
 export {
       SS3T_CSD_BETA1_METADATA,
-      Ss3tCsdBeta1ConfigParameters,
       Ss3tCsdBeta1Outputs,
-      Ss3tCsdBeta1Parameters,
       Ss3tCsdBeta1ResponseOdfOutputs,
-      Ss3tCsdBeta1ResponseOdfParameters,
       ss3t_csd_beta1,
       ss3t_csd_beta1_config_params,
       ss3t_csd_beta1_execute,

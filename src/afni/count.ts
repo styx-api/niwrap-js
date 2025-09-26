@@ -12,7 +12,7 @@ const COUNT_METADATA: Metadata = {
 
 
 interface CountParameters {
-    "@type": "afni.count";
+    "@type"?: "afni/count";
     "bot": string;
     "top": string;
     "step"?: string | null | undefined;
@@ -28,43 +28,11 @@ interface CountParameters {
     "comma": boolean;
     "skipnmodm"?: string | null | undefined;
 }
+type CountParametersTagged = Required<Pick<CountParameters, '@type'>> & CountParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.count": count_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `count(...)`.
+ * Output object returned when calling `CountParameters(...)`.
  *
  * @interface
  */
@@ -111,9 +79,9 @@ function count_params(
     scale: number | null = null,
     comma: boolean = false,
     skipnmodm: string | null = null,
-): CountParameters {
+): CountParametersTagged {
     const params = {
-        "@type": "afni.count" as const,
+        "@type": "afni/count" as const,
         "bot": bot,
         "top": top,
         "column": column,
@@ -184,7 +152,7 @@ function count_cargs(
             (params["sseed"] ?? null)
         );
     }
-    if ((params["column"] ?? null)) {
+    if ((params["column"] ?? false)) {
         cargs.push("-column");
     }
     if ((params["digits"] ?? null) !== null) {
@@ -223,7 +191,7 @@ function count_cargs(
             String((params["scale"] ?? null))
         );
     }
-    if ((params["comma"] ?? null)) {
+    if ((params["comma"] ?? false)) {
         cargs.push("-comma");
     }
     if ((params["skipnmodm"] ?? null) !== null) {
@@ -335,7 +303,6 @@ function count(
 export {
       COUNT_METADATA,
       CountOutputs,
-      CountParameters,
       count,
       count_execute,
       count_params,

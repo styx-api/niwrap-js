@@ -12,51 +12,18 @@ const ADJUNCT_MAKE_SCRIPT_AND_RST_PY_METADATA: Metadata = {
 
 
 interface AdjunctMakeScriptAndRstPyParameters {
-    "@type": "afni.adjunct_make_script_and_rst.py";
+    "@type"?: "afni/adjunct_make_script_and_rst.py";
     "input_script": InputPathType;
     "prefix_rst": string;
     "prefix_script": string;
     "reflink": string;
     "execute_script": boolean;
 }
+type AdjunctMakeScriptAndRstPyParametersTagged = Required<Pick<AdjunctMakeScriptAndRstPyParameters, '@type'>> & AdjunctMakeScriptAndRstPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.adjunct_make_script_and_rst.py": adjunct_make_script_and_rst_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.adjunct_make_script_and_rst.py": adjunct_make_script_and_rst_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `adjunct_make_script_and_rst_py(...)`.
+ * Output object returned when calling `AdjunctMakeScriptAndRstPyParameters(...)`.
  *
  * @interface
  */
@@ -97,9 +64,9 @@ function adjunct_make_script_and_rst_py_params(
     prefix_script: string,
     reflink: string,
     execute_script: boolean = false,
-): AdjunctMakeScriptAndRstPyParameters {
+): AdjunctMakeScriptAndRstPyParametersTagged {
     const params = {
-        "@type": "afni.adjunct_make_script_and_rst.py" as const,
+        "@type": "afni/adjunct_make_script_and_rst.py" as const,
         "input_script": input_script,
         "prefix_rst": prefix_rst,
         "prefix_script": prefix_script,
@@ -140,7 +107,7 @@ function adjunct_make_script_and_rst_py_cargs(
         "--reflink",
         (params["reflink"] ?? null)
     );
-    if ((params["execute_script"] ?? null)) {
+    if ((params["execute_script"] ?? false)) {
         cargs.push("--execute_script");
     }
     return cargs;
@@ -231,7 +198,6 @@ function adjunct_make_script_and_rst_py(
 export {
       ADJUNCT_MAKE_SCRIPT_AND_RST_PY_METADATA,
       AdjunctMakeScriptAndRstPyOutputs,
-      AdjunctMakeScriptAndRstPyParameters,
       adjunct_make_script_and_rst_py,
       adjunct_make_script_and_rst_py_execute,
       adjunct_make_script_and_rst_py_params,

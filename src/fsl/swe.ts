@@ -12,7 +12,7 @@ const SWE_METADATA: Metadata = {
 
 
 interface SweParameters {
-    "@type": "fsl.swe";
+    "@type"?: "fsl/swe";
     "input_file": InputPathType;
     "output_root": string;
     "design_mat": InputPathType;
@@ -48,44 +48,11 @@ interface SweParameters {
     "voxelwise_evs"?: Array<InputPathType> | null | undefined;
     "glm_output": boolean;
 }
+type SweParametersTagged = Required<Pick<SweParameters, '@type'>> & SweParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.swe": swe_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.swe": swe_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `swe(...)`.
+ * Output object returned when calling `SweParameters(...)`.
  *
  * @interface
  */
@@ -204,9 +171,9 @@ function swe_params(
     voxelwise_ev: Array<number> | null = null,
     voxelwise_evs: Array<InputPathType> | null = null,
     glm_output: boolean = false,
-): SweParameters {
+): SweParametersTagged {
     const params = {
-        "@type": "fsl.swe" as const,
+        "@type": "fsl/swe" as const,
         "input_file": input_file,
         "output_root": output_root,
         "design_mat": design_mat,
@@ -320,13 +287,13 @@ function swe_cargs(
             execution.inputFile((params["fcon"] ?? null))
         );
     }
-    if ((params["modified"] ?? null)) {
+    if ((params["modified"] ?? false)) {
         cargs.push("--modified");
     }
-    if ((params["wild_bootstrap"] ?? null)) {
+    if ((params["wild_bootstrap"] ?? false)) {
         cargs.push("--wb");
     }
-    if ((params["logp"] ?? null)) {
+    if ((params["logp"] ?? false)) {
         cargs.push("--logp");
     }
     if ((params["nboot"] ?? null) !== null) {
@@ -335,16 +302,16 @@ function swe_cargs(
             String((params["nboot"] ?? null))
         );
     }
-    if ((params["corrp"] ?? null)) {
+    if ((params["corrp"] ?? false)) {
         cargs.push("-x");
     }
-    if ((params["fonly"] ?? null)) {
+    if ((params["fonly"] ?? false)) {
         cargs.push("--fonly");
     }
-    if ((params["tfce"] ?? null)) {
+    if ((params["tfce"] ?? false)) {
         cargs.push("-T");
     }
-    if ((params["tfce_2d"] ?? null)) {
+    if ((params["tfce_2d"] ?? false)) {
         cargs.push("--T2");
     }
     if ((params["cluster_t"] ?? null) !== null) {
@@ -371,25 +338,25 @@ function swe_cargs(
             String((params["cluster_f_mass"] ?? null))
         );
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("--quiet");
     }
-    if ((params["raw"] ?? null)) {
+    if ((params["raw"] ?? false)) {
         cargs.push("-R");
     }
-    if ((params["equiv"] ?? null)) {
+    if ((params["equiv"] ?? false)) {
         cargs.push("-E");
     }
-    if ((params["dof"] ?? null)) {
+    if ((params["dof"] ?? false)) {
         cargs.push("-D");
     }
-    if ((params["uncorr_p"] ?? null)) {
+    if ((params["uncorr_p"] ?? false)) {
         cargs.push("--uncorrp");
     }
-    if ((params["null_dist"] ?? null)) {
+    if ((params["null_dist"] ?? false)) {
         cargs.push("-N");
     }
-    if ((params["no_rc_mask"] ?? null)) {
+    if ((params["no_rc_mask"] ?? false)) {
         cargs.push("--norcmask");
     }
     if ((params["seed"] ?? null) !== null) {
@@ -434,7 +401,7 @@ function swe_cargs(
             ...(params["voxelwise_evs"] ?? null).map(f => execution.inputFile(f))
         );
     }
-    if ((params["glm_output"] ?? null)) {
+    if ((params["glm_output"] ?? false)) {
         cargs.push("--glm_output");
     }
     return cargs;
@@ -588,7 +555,6 @@ function swe(
 export {
       SWE_METADATA,
       SweOutputs,
-      SweParameters,
       swe,
       swe_execute,
       swe_params,

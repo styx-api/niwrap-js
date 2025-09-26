@@ -12,7 +12,7 @@ const V_3D_QWARP_METADATA: Metadata = {
 
 
 interface V3dQwarpParameters {
-    "@type": "afni.3dQwarp";
+    "@type"?: "afni/3dQwarp";
     "base_dataset": InputPathType;
     "source_dataset": InputPathType;
     "prefix": string;
@@ -34,44 +34,11 @@ interface V3dQwarpParameters {
     "verbose": boolean;
     "quiet": boolean;
 }
+type V3dQwarpParametersTagged = Required<Pick<V3dQwarpParameters, '@type'>> & V3dQwarpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dQwarp": v_3d_qwarp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dQwarp": v_3d_qwarp_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_qwarp(...)`.
+ * Output object returned when calling `V3dQwarpParameters(...)`.
  *
  * @interface
  */
@@ -142,9 +109,9 @@ function v_3d_qwarp_params(
     maxlev: number | null = null,
     verbose: boolean = false,
     quiet: boolean = false,
-): V3dQwarpParameters {
+): V3dQwarpParametersTagged {
     const params = {
-        "@type": "afni.3dQwarp" as const,
+        "@type": "afni/3dQwarp" as const,
         "base_dataset": base_dataset,
         "source_dataset": source_dataset,
         "prefix": prefix,
@@ -191,43 +158,43 @@ function v_3d_qwarp_cargs(
     cargs.push(execution.inputFile((params["base_dataset"] ?? null)));
     cargs.push(execution.inputFile((params["source_dataset"] ?? null)));
     cargs.push((params["prefix"] ?? null));
-    if ((params["no_warp"] ?? null)) {
+    if ((params["no_warp"] ?? false)) {
         cargs.push("-nowarp");
     }
-    if ((params["inverse_warp"] ?? null)) {
+    if ((params["inverse_warp"] ?? false)) {
         cargs.push("-iwarp");
     }
-    if ((params["no_dataset"] ?? null)) {
+    if ((params["no_dataset"] ?? false)) {
         cargs.push("-nodset");
     }
-    if ((params["a_warp"] ?? null)) {
+    if ((params["a_warp"] ?? false)) {
         cargs.push("-awarp");
     }
-    if ((params["pcl"] ?? null)) {
+    if ((params["pcl"] ?? false)) {
         cargs.push("-pcl");
     }
-    if ((params["pear"] ?? null)) {
+    if ((params["pear"] ?? false)) {
         cargs.push("-pear");
     }
-    if ((params["hel"] ?? null)) {
+    if ((params["hel"] ?? false)) {
         cargs.push("-hel");
     }
-    if ((params["mi"] ?? null)) {
+    if ((params["mi"] ?? false)) {
         cargs.push("-mi");
     }
-    if ((params["nmi"] ?? null)) {
+    if ((params["nmi"] ?? false)) {
         cargs.push("-nmi");
     }
-    if ((params["lpc"] ?? null)) {
+    if ((params["lpc"] ?? false)) {
         cargs.push("-lpc");
     }
-    if ((params["lpa"] ?? null)) {
+    if ((params["lpa"] ?? false)) {
         cargs.push("-lpa");
     }
-    if ((params["noneg"] ?? null)) {
+    if ((params["noneg"] ?? false)) {
         cargs.push("-noneg");
     }
-    if ((params["nopenalty"] ?? null)) {
+    if ((params["nopenalty"] ?? false)) {
         cargs.push("-nopenalty");
     }
     if ((params["minpatch"] ?? null) !== null) {
@@ -242,10 +209,10 @@ function v_3d_qwarp_cargs(
             String((params["maxlev"] ?? null))
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
     return cargs;
@@ -365,7 +332,6 @@ function v_3d_qwarp(
 
 export {
       V3dQwarpOutputs,
-      V3dQwarpParameters,
       V_3D_QWARP_METADATA,
       v_3d_qwarp,
       v_3d_qwarp_execute,

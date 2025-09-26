@@ -12,51 +12,18 @@ const MRI_SYNTHSR_HYPERFINE_METADATA: Metadata = {
 
 
 interface MriSynthsrHyperfineParameters {
-    "@type": "freesurfer.mri_synthsr_hyperfine";
+    "@type"?: "freesurfer/mri_synthsr_hyperfine";
     "t1_image": InputPathType;
     "t2_image": InputPathType;
     "output": string;
     "threads"?: number | null | undefined;
     "cpu": boolean;
 }
+type MriSynthsrHyperfineParametersTagged = Required<Pick<MriSynthsrHyperfineParameters, '@type'>> & MriSynthsrHyperfineParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_synthsr_hyperfine": mri_synthsr_hyperfine_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_synthsr_hyperfine": mri_synthsr_hyperfine_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_synthsr_hyperfine(...)`.
+ * Output object returned when calling `MriSynthsrHyperfineParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function mri_synthsr_hyperfine_params(
     output: string,
     threads: number | null = null,
     cpu: boolean = false,
-): MriSynthsrHyperfineParameters {
+): MriSynthsrHyperfineParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_synthsr_hyperfine" as const,
+        "@type": "freesurfer/mri_synthsr_hyperfine" as const,
         "t1_image": t1_image,
         "t2_image": t2_image,
         "output": output,
@@ -136,7 +103,7 @@ function mri_synthsr_hyperfine_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["cpu"] ?? null)) {
+    if ((params["cpu"] ?? false)) {
         cargs.push("--cpu");
     }
     return cargs;
@@ -225,7 +192,6 @@ function mri_synthsr_hyperfine(
 export {
       MRI_SYNTHSR_HYPERFINE_METADATA,
       MriSynthsrHyperfineOutputs,
-      MriSynthsrHyperfineParameters,
       mri_synthsr_hyperfine,
       mri_synthsr_hyperfine_execute,
       mri_synthsr_hyperfine_params,

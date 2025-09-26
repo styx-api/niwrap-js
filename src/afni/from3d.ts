@@ -12,7 +12,7 @@ const FROM3D_METADATA: Metadata = {
 
 
 interface From3dParameters {
-    "@type": "afni.from3d";
+    "@type"?: "afni/from3d";
     "verbose": boolean;
     "nsize": boolean;
     "raw": boolean;
@@ -24,43 +24,11 @@ interface From3dParameters {
     "input": InputPathType;
     "prefix": string;
 }
+type From3dParametersTagged = Required<Pick<From3dParameters, '@type'>> & From3dParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.from3d": from3d_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `from3d(...)`.
+ * Output object returned when calling `From3dParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +67,9 @@ function from3d_params(
     zlast: number | null = null,
     tfirst: number | null = null,
     tlast: number | null = null,
-): From3dParameters {
+): From3dParametersTagged {
     const params = {
-        "@type": "afni.from3d" as const,
+        "@type": "afni/from3d" as const,
         "verbose": verbose,
         "nsize": nsize,
         "raw": raw,
@@ -139,16 +107,16 @@ function from3d_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("from3d");
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["nsize"] ?? null)) {
+    if ((params["nsize"] ?? false)) {
         cargs.push("-nsize");
     }
-    if ((params["raw"] ?? null)) {
+    if ((params["raw"] ?? false)) {
         cargs.push("-raw");
     }
-    if ((params["float"] ?? null)) {
+    if ((params["float"] ?? false)) {
         cargs.push("-float");
     }
     if ((params["zfirst"] ?? null) !== null) {
@@ -278,7 +246,6 @@ function from3d(
 export {
       FROM3D_METADATA,
       From3dOutputs,
-      From3dParameters,
       from3d,
       from3d_execute,
       from3d_params,

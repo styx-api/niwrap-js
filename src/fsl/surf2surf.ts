@@ -12,7 +12,7 @@ const SURF2SURF_METADATA: Metadata = {
 
 
 interface Surf2surfParameters {
-    "@type": "fsl.surf2surf";
+    "@type"?: "fsl/surf2surf";
     "input_surface": InputPathType;
     "output_surface": InputPathType;
     "input_convention"?: string | null | undefined;
@@ -23,43 +23,11 @@ interface Surf2surfParameters {
     "output_type"?: string | null | undefined;
     "output_values"?: string | null | undefined;
 }
+type Surf2surfParametersTagged = Required<Pick<Surf2surfParameters, '@type'>> & Surf2surfParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.surf2surf": surf2surf_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surf2surf(...)`.
+ * Output object returned when calling `Surf2surfParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +64,9 @@ function surf2surf_params(
     transform: InputPathType | null = null,
     output_type: string | null = null,
     output_values: string | null = null,
-): Surf2surfParameters {
+): Surf2surfParametersTagged {
     const params = {
-        "@type": "fsl.surf2surf" as const,
+        "@type": "fsl/surf2surf" as const,
         "input_surface": input_surface,
         "output_surface": output_surface,
     };
@@ -278,7 +246,6 @@ function surf2surf(
 export {
       SURF2SURF_METADATA,
       Surf2surfOutputs,
-      Surf2surfParameters,
       surf2surf,
       surf2surf_execute,
       surf2surf_params,

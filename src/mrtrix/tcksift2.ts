@@ -12,14 +12,15 @@ const TCKSIFT2_METADATA: Metadata = {
 
 
 interface Tcksift2ConfigParameters {
-    "@type": "mrtrix.tcksift2.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Tcksift2ConfigParametersTagged = Required<Pick<Tcksift2ConfigParameters, '@type'>> & Tcksift2ConfigParameters;
 
 
 interface Tcksift2Parameters {
-    "@type": "mrtrix.tcksift2";
+    "@type"?: "mrtrix/tcksift2";
     "proc_mask"?: InputPathType | null | undefined;
     "act"?: InputPathType | null | undefined;
     "fd_scale_gm": boolean;
@@ -55,41 +56,7 @@ interface Tcksift2Parameters {
     "in_fod": InputPathType;
     "out_weights": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.tcksift2": tcksift2_cargs,
-        "mrtrix.tcksift2.config": tcksift2_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.tcksift2": tcksift2_outputs,
-    };
-    return outputsFuncs[t];
-}
+type Tcksift2ParametersTagged = Required<Pick<Tcksift2Parameters, '@type'>> & Tcksift2Parameters;
 
 
 /**
@@ -103,9 +70,9 @@ function dynOutputs(
 function tcksift2_config_params(
     key: string,
     value: string,
-): Tcksift2ConfigParameters {
+): Tcksift2ConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.tcksift2.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -134,7 +101,7 @@ function tcksift2_config_cargs(
 
 
 /**
- * Output object returned when calling `tcksift2(...)`.
+ * Output object returned when calling `Tcksift2Parameters(...)`.
  *
  * @interface
  */
@@ -237,9 +204,9 @@ function tcksift2_params(
     config: Array<Tcksift2ConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Tcksift2Parameters {
+): Tcksift2ParametersTagged {
     const params = {
-        "@type": "mrtrix.tcksift2" as const,
+        "@type": "mrtrix/tcksift2" as const,
         "fd_scale_gm": fd_scale_gm,
         "no_dilate_lut": no_dilate_lut,
         "make_null_lobes": make_null_lobes,
@@ -343,16 +310,16 @@ function tcksift2_cargs(
             execution.inputFile((params["act"] ?? null))
         );
     }
-    if ((params["fd_scale_gm"] ?? null)) {
+    if ((params["fd_scale_gm"] ?? false)) {
         cargs.push("-fd_scale_gm");
     }
-    if ((params["no_dilate_lut"] ?? null)) {
+    if ((params["no_dilate_lut"] ?? false)) {
         cargs.push("-no_dilate_lut");
     }
-    if ((params["make_null_lobes"] ?? null)) {
+    if ((params["make_null_lobes"] ?? false)) {
         cargs.push("-make_null_lobes");
     }
-    if ((params["remove_untracked"] ?? null)) {
+    if ((params["remove_untracked"] ?? false)) {
         cargs.push("-remove_untracked");
     }
     if ((params["fd_thresh"] ?? null) !== null) {
@@ -373,7 +340,7 @@ function tcksift2_cargs(
             (params["out_mu"] ?? null)
         );
     }
-    if ((params["output_debug"] ?? null)) {
+    if ((params["output_debug"] ?? false)) {
         cargs.push("-output_debug");
     }
     if ((params["out_coeffs"] ?? null) !== null) {
@@ -448,19 +415,19 @@ function tcksift2_cargs(
             String((params["min_cf_decrease"] ?? null))
         );
     }
-    if ((params["linear"] ?? null)) {
+    if ((params["linear"] ?? false)) {
         cargs.push("-linear");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -470,12 +437,12 @@ function tcksift2_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => tcksift2_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["in_tracks"] ?? null)));
@@ -645,9 +612,7 @@ function tcksift2(
 
 export {
       TCKSIFT2_METADATA,
-      Tcksift2ConfigParameters,
       Tcksift2Outputs,
-      Tcksift2Parameters,
       tcksift2,
       tcksift2_config_params,
       tcksift2_execute,

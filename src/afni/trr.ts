@@ -12,7 +12,7 @@ const TRR_METADATA: Metadata = {
 
 
 interface TrrParameters {
-    "@type": "afni.TRR";
+    "@type"?: "afni/TRR";
     "prefix": string;
     "chains"?: number | null | undefined;
     "iterations"?: number | null | undefined;
@@ -32,44 +32,11 @@ interface TrrParameters {
     "debug": boolean;
     "verbose"?: number | null | undefined;
 }
+type TrrParametersTagged = Required<Pick<TrrParameters, '@type'>> & TrrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.TRR": trr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.TRR": trr_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `trr(...)`.
+ * Output object returned when calling `TrrParameters(...)`.
  *
  * @interface
  */
@@ -136,9 +103,9 @@ function trr_params(
     within_chain_parallelization: number | null = null,
     debug: boolean = false,
     verbose: number | null = null,
-): TrrParameters {
+): TrrParametersTagged {
     const params = {
-        "@type": "afni.TRR" as const,
+        "@type": "afni/TRR" as const,
         "prefix": prefix,
         "response_var": response_var,
         "subject_var": subject_var,
@@ -290,7 +257,7 @@ function trr_cargs(
             String((params["within_chain_parallelization"] ?? null))
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-dbgArgs");
     }
     if ((params["verbose"] ?? null) !== null) {
@@ -413,7 +380,6 @@ function trr(
 export {
       TRR_METADATA,
       TrrOutputs,
-      TrrParameters,
       trr,
       trr_execute,
       trr_params,

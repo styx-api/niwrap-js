@@ -12,14 +12,15 @@ const FIXELCORRESPONDENCE_METADATA: Metadata = {
 
 
 interface FixelcorrespondenceConfigParameters {
-    "@type": "mrtrix.fixelcorrespondence.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type FixelcorrespondenceConfigParametersTagged = Required<Pick<FixelcorrespondenceConfigParameters, '@type'>> & FixelcorrespondenceConfigParameters;
 
 
 interface FixelcorrespondenceParameters {
-    "@type": "mrtrix.fixelcorrespondence";
+    "@type"?: "mrtrix/fixelcorrespondence";
     "angle"?: number | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -34,40 +35,7 @@ interface FixelcorrespondenceParameters {
     "output_directory": string;
     "output_data": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.fixelcorrespondence": fixelcorrespondence_cargs,
-        "mrtrix.fixelcorrespondence.config": fixelcorrespondence_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type FixelcorrespondenceParametersTagged = Required<Pick<FixelcorrespondenceParameters, '@type'>> & FixelcorrespondenceParameters;
 
 
 /**
@@ -81,9 +49,9 @@ function dynOutputs(
 function fixelcorrespondence_config_params(
     key: string,
     value: string,
-): FixelcorrespondenceConfigParameters {
+): FixelcorrespondenceConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.fixelcorrespondence.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -112,7 +80,7 @@ function fixelcorrespondence_config_cargs(
 
 
 /**
- * Output object returned when calling `fixelcorrespondence(...)`.
+ * Output object returned when calling `FixelcorrespondenceParameters(...)`.
  *
  * @interface
  */
@@ -157,9 +125,9 @@ function fixelcorrespondence_params(
     config: Array<FixelcorrespondenceConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): FixelcorrespondenceParameters {
+): FixelcorrespondenceParametersTagged {
     const params = {
-        "@type": "mrtrix.fixelcorrespondence" as const,
+        "@type": "mrtrix/fixelcorrespondence" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -204,16 +172,16 @@ function fixelcorrespondence_cargs(
             String((params["angle"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -223,12 +191,12 @@ function fixelcorrespondence_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => fixelcorrespondence_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["subject_data"] ?? null)));
@@ -347,9 +315,7 @@ function fixelcorrespondence(
 
 export {
       FIXELCORRESPONDENCE_METADATA,
-      FixelcorrespondenceConfigParameters,
       FixelcorrespondenceOutputs,
-      FixelcorrespondenceParameters,
       fixelcorrespondence,
       fixelcorrespondence_config_params,
       fixelcorrespondence_execute,

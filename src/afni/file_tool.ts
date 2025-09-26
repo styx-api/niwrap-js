@@ -12,7 +12,7 @@ const FILE_TOOL_METADATA: Metadata = {
 
 
 interface FileToolParameters {
-    "@type": "afni.file_tool";
+    "@type"?: "afni/file_tool";
     "help": boolean;
     "version": boolean;
     "hist": boolean;
@@ -56,44 +56,11 @@ interface FileToolParameters {
     "disp_real4": boolean;
     "swap_bytes": boolean;
 }
+type FileToolParametersTagged = Required<Pick<FileToolParameters, '@type'>> & FileToolParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.file_tool": file_tool_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.file_tool": file_tool_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `file_tool(...)`.
+ * Output object returned when calling `FileToolParameters(...)`.
  *
  * @interface
  */
@@ -200,9 +167,9 @@ function file_tool_params(
     disp_int4: boolean = false,
     disp_real4: boolean = false,
     swap_bytes: boolean = false,
-): FileToolParameters {
+): FileToolParametersTagged {
     const params = {
-        "@type": "afni.file_tool" as const,
+        "@type": "afni/file_tool" as const,
         "help": help,
         "version": version,
         "hist": hist,
@@ -280,13 +247,13 @@ function file_tool_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("file_tool");
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
-    if ((params["hist"] ?? null)) {
+    if ((params["hist"] ?? false)) {
         cargs.push("-hist");
     }
     if ((params["debug"] ?? null) !== null) {
@@ -299,49 +266,49 @@ function file_tool_cargs(
         "-infiles",
         ...(params["infiles"] ?? null).map(f => execution.inputFile(f))
     );
-    if ((params["ge_all"] ?? null)) {
+    if ((params["ge_all"] ?? false)) {
         cargs.push("-ge_all");
     }
-    if ((params["ge_header"] ?? null)) {
+    if ((params["ge_header"] ?? false)) {
         cargs.push("-ge_header");
     }
-    if ((params["ge_extras"] ?? null)) {
+    if ((params["ge_extras"] ?? false)) {
         cargs.push("-ge_extras");
     }
-    if ((params["ge_uv17"] ?? null)) {
+    if ((params["ge_uv17"] ?? false)) {
         cargs.push("-ge_uv17");
     }
-    if ((params["ge_run"] ?? null)) {
+    if ((params["ge_run"] ?? false)) {
         cargs.push("-ge_run");
     }
-    if ((params["ge_off"] ?? null)) {
+    if ((params["ge_off"] ?? false)) {
         cargs.push("-ge_off");
     }
-    if ((params["ge4_all"] ?? null)) {
+    if ((params["ge4_all"] ?? false)) {
         cargs.push("-ge4_all");
     }
-    if ((params["ge4_image"] ?? null)) {
+    if ((params["ge4_image"] ?? false)) {
         cargs.push("-ge4_image");
     }
-    if ((params["ge4_series"] ?? null)) {
+    if ((params["ge4_series"] ?? false)) {
         cargs.push("-ge4_series");
     }
-    if ((params["ge4_study"] ?? null)) {
+    if ((params["ge4_study"] ?? false)) {
         cargs.push("-ge4_study");
     }
-    if ((params["def_ana_hdr"] ?? null)) {
+    if ((params["def_ana_hdr"] ?? false)) {
         cargs.push("-def_ana_hdr");
     }
-    if ((params["diff_ana_hdrs"] ?? null)) {
+    if ((params["diff_ana_hdrs"] ?? false)) {
         cargs.push("-diff_ana_hdrs");
     }
-    if ((params["disp_ana_hdr"] ?? null)) {
+    if ((params["disp_ana_hdr"] ?? false)) {
         cargs.push("-disp_ana_hdr");
     }
-    if ((params["hex"] ?? null)) {
+    if ((params["hex"] ?? false)) {
         cargs.push("-hex");
     }
-    if ((params["mod_ana_hdr"] ?? null)) {
+    if ((params["mod_ana_hdr"] ?? false)) {
         cargs.push("-mod_ana_hdr");
     }
     if ((params["mod_field"] ?? null) !== null) {
@@ -356,19 +323,19 @@ function file_tool_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("-overwrite");
     }
-    if ((params["show_bad_all"] ?? null)) {
+    if ((params["show_bad_all"] ?? false)) {
         cargs.push("-show_bad_all");
     }
-    if ((params["show_bad_backslash"] ?? null)) {
+    if ((params["show_bad_backslash"] ?? false)) {
         cargs.push("-show_bad_backslash");
     }
-    if ((params["show_bad_char"] ?? null)) {
+    if ((params["show_bad_char"] ?? false)) {
         cargs.push("-show_bad_char");
     }
-    if ((params["show_file_type"] ?? null)) {
+    if ((params["show_file_type"] ?? false)) {
         cargs.push("-show_file_type");
     }
     if ((params["fix_rich_quotes"] ?? null) !== null) {
@@ -377,7 +344,7 @@ function file_tool_cargs(
             (params["fix_rich_quotes"] ?? null)
         );
     }
-    if ((params["test"] ?? null)) {
+    if ((params["test"] ?? false)) {
         cargs.push("-test");
     }
     if ((params["length"] ?? null) !== null) {
@@ -404,31 +371,31 @@ function file_tool_cargs(
             String((params["offset"] ?? null))
         );
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["disp_hex"] ?? null)) {
+    if ((params["disp_hex"] ?? false)) {
         cargs.push("-disp_hex");
     }
-    if ((params["disp_hex1"] ?? null)) {
+    if ((params["disp_hex1"] ?? false)) {
         cargs.push("-disp_hex1");
     }
-    if ((params["disp_hex2"] ?? null)) {
+    if ((params["disp_hex2"] ?? false)) {
         cargs.push("-disp_hex2");
     }
-    if ((params["disp_hex4"] ?? null)) {
+    if ((params["disp_hex4"] ?? false)) {
         cargs.push("-disp_hex4");
     }
-    if ((params["disp_int2"] ?? null)) {
+    if ((params["disp_int2"] ?? false)) {
         cargs.push("-disp_int2");
     }
-    if ((params["disp_int4"] ?? null)) {
+    if ((params["disp_int4"] ?? false)) {
         cargs.push("-disp_int4");
     }
-    if ((params["disp_real4"] ?? null)) {
+    if ((params["disp_real4"] ?? false)) {
         cargs.push("-disp_real4");
     }
-    if ((params["swap_bytes"] ?? null)) {
+    if ((params["swap_bytes"] ?? false)) {
         cargs.push("-swap_bytes");
     }
     return cargs;
@@ -591,7 +558,6 @@ function file_tool(
 export {
       FILE_TOOL_METADATA,
       FileToolOutputs,
-      FileToolParameters,
       file_tool,
       file_tool_execute,
       file_tool_params,

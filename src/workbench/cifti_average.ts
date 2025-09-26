@@ -12,62 +12,29 @@ const CIFTI_AVERAGE_METADATA: Metadata = {
 
 
 interface CiftiAverageExcludeOutliersParameters {
-    "@type": "workbench.cifti-average.exclude_outliers";
+    "@type"?: "exclude_outliers";
     "sigma_below": number;
     "sigma_above": number;
 }
+type CiftiAverageExcludeOutliersParametersTagged = Required<Pick<CiftiAverageExcludeOutliersParameters, '@type'>> & CiftiAverageExcludeOutliersParameters;
 
 
 interface CiftiAverageCiftiParameters {
-    "@type": "workbench.cifti-average.cifti";
+    "@type"?: "cifti";
     "cifti_in": InputPathType;
     "opt_weight_weight"?: number | null | undefined;
 }
+type CiftiAverageCiftiParametersTagged = Required<Pick<CiftiAverageCiftiParameters, '@type'>> & CiftiAverageCiftiParameters;
 
 
 interface CiftiAverageParameters {
-    "@type": "workbench.cifti-average";
+    "@type"?: "workbench/cifti-average";
     "cifti_out": string;
     "exclude_outliers"?: CiftiAverageExcludeOutliersParameters | null | undefined;
     "opt_mem_limit_limit_gb"?: number | null | undefined;
     "cifti"?: Array<CiftiAverageCiftiParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-average": cifti_average_cargs,
-        "workbench.cifti-average.exclude_outliers": cifti_average_exclude_outliers_cargs,
-        "workbench.cifti-average.cifti": cifti_average_cifti_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-average": cifti_average_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiAverageParametersTagged = Required<Pick<CiftiAverageParameters, '@type'>> & CiftiAverageParameters;
 
 
 /**
@@ -81,9 +48,9 @@ function dynOutputs(
 function cifti_average_exclude_outliers_params(
     sigma_below: number,
     sigma_above: number,
-): CiftiAverageExcludeOutliersParameters {
+): CiftiAverageExcludeOutliersParametersTagged {
     const params = {
-        "@type": "workbench.cifti-average.exclude_outliers" as const,
+        "@type": "exclude_outliers" as const,
         "sigma_below": sigma_below,
         "sigma_above": sigma_above,
     };
@@ -122,9 +89,9 @@ function cifti_average_exclude_outliers_cargs(
 function cifti_average_cifti_params(
     cifti_in: InputPathType,
     opt_weight_weight: number | null = null,
-): CiftiAverageCiftiParameters {
+): CiftiAverageCiftiParametersTagged {
     const params = {
-        "@type": "workbench.cifti-average.cifti" as const,
+        "@type": "cifti" as const,
         "cifti_in": cifti_in,
     };
     if (opt_weight_weight !== null) {
@@ -160,7 +127,7 @@ function cifti_average_cifti_cargs(
 
 
 /**
- * Output object returned when calling `cifti_average(...)`.
+ * Output object returned when calling `CiftiAverageParameters(...)`.
  *
  * @interface
  */
@@ -191,9 +158,9 @@ function cifti_average_params(
     exclude_outliers: CiftiAverageExcludeOutliersParameters | null = null,
     opt_mem_limit_limit_gb: number | null = null,
     cifti: Array<CiftiAverageCiftiParameters> | null = null,
-): CiftiAverageParameters {
+): CiftiAverageParametersTagged {
     const params = {
-        "@type": "workbench.cifti-average" as const,
+        "@type": "workbench/cifti-average" as const,
         "cifti_out": cifti_out,
     };
     if (exclude_outliers !== null) {
@@ -226,7 +193,7 @@ function cifti_average_cargs(
     cargs.push("-cifti-average");
     cargs.push((params["cifti_out"] ?? null));
     if ((params["exclude_outliers"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["exclude_outliers"] ?? null)["@type"])((params["exclude_outliers"] ?? null), execution));
+        cargs.push(...cifti_average_exclude_outliers_cargs((params["exclude_outliers"] ?? null), execution));
     }
     if ((params["opt_mem_limit_limit_gb"] ?? null) !== null) {
         cargs.push(
@@ -235,7 +202,7 @@ function cifti_average_cargs(
         );
     }
     if ((params["cifti"] ?? null) !== null) {
-        cargs.push(...(params["cifti"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["cifti"] ?? null).map(s => cifti_average_cifti_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -324,10 +291,7 @@ function cifti_average(
 
 export {
       CIFTI_AVERAGE_METADATA,
-      CiftiAverageCiftiParameters,
-      CiftiAverageExcludeOutliersParameters,
       CiftiAverageOutputs,
-      CiftiAverageParameters,
       cifti_average,
       cifti_average_cifti_params,
       cifti_average_exclude_outliers_params,

@@ -12,47 +12,14 @@ const DICOM_TO_RAW_METADATA: Metadata = {
 
 
 interface DicomToRawParameters {
-    "@type": "afni.dicom_to_raw";
+    "@type"?: "afni/dicom_to_raw";
     "input_dicom": InputPathType;
 }
+type DicomToRawParametersTagged = Required<Pick<DicomToRawParameters, '@type'>> & DicomToRawParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.dicom_to_raw": dicom_to_raw_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.dicom_to_raw": dicom_to_raw_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dicom_to_raw(...)`.
+ * Output object returned when calling `DicomToRawParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface DicomToRawOutputs {
  */
 function dicom_to_raw_params(
     input_dicom: InputPathType,
-): DicomToRawParameters {
+): DicomToRawParametersTagged {
     const params = {
-        "@type": "afni.dicom_to_raw" as const,
+        "@type": "afni/dicom_to_raw" as const,
         "input_dicom": input_dicom,
     };
     return params;
@@ -179,7 +146,6 @@ function dicom_to_raw(
 export {
       DICOM_TO_RAW_METADATA,
       DicomToRawOutputs,
-      DicomToRawParameters,
       dicom_to_raw,
       dicom_to_raw_execute,
       dicom_to_raw_params,

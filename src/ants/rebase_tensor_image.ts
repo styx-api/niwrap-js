@@ -12,51 +12,18 @@ const REBASE_TENSOR_IMAGE_METADATA: Metadata = {
 
 
 interface RebaseTensorImageParameters {
-    "@type": "ants.RebaseTensorImage";
+    "@type"?: "ants/RebaseTensorImage";
     "dimension": number;
     "infile": InputPathType;
     "outfile": InputPathType;
     "method": "PHYSICAL" | "LOCAL";
     "reference"?: InputPathType | null | undefined;
 }
+type RebaseTensorImageParametersTagged = Required<Pick<RebaseTensorImageParameters, '@type'>> & RebaseTensorImageParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.RebaseTensorImage": rebase_tensor_image_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.RebaseTensorImage": rebase_tensor_image_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `rebase_tensor_image(...)`.
+ * Output object returned when calling `RebaseTensorImageParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function rebase_tensor_image_params(
     outfile: InputPathType,
     method: "PHYSICAL" | "LOCAL",
     reference: InputPathType | null = null,
-): RebaseTensorImageParameters {
+): RebaseTensorImageParametersTagged {
     const params = {
-        "@type": "ants.RebaseTensorImage" as const,
+        "@type": "ants/RebaseTensorImage" as const,
         "dimension": dimension,
         "infile": infile,
         "outfile": outfile,
@@ -211,7 +178,6 @@ function rebase_tensor_image(
 export {
       REBASE_TENSOR_IMAGE_METADATA,
       RebaseTensorImageOutputs,
-      RebaseTensorImageParameters,
       rebase_tensor_image,
       rebase_tensor_image_execute,
       rebase_tensor_image_params,

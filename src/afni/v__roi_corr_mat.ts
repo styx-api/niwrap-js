@@ -12,7 +12,7 @@ const V__ROI_CORR_MAT_METADATA: Metadata = {
 
 
 interface VRoiCorrMatParameters {
-    "@type": "afni.@ROI_Corr_Mat";
+    "@type"?: "afni/@ROI_Corr_Mat";
     "ts_vol": InputPathType;
     "roi_vol": InputPathType;
     "prefix": string;
@@ -24,44 +24,11 @@ interface VRoiCorrMatParameters {
     "echo": boolean;
     "verb": boolean;
 }
+type VRoiCorrMatParametersTagged = Required<Pick<VRoiCorrMatParameters, '@type'>> & VRoiCorrMatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@ROI_Corr_Mat": v__roi_corr_mat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@ROI_Corr_Mat": v__roi_corr_mat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__roi_corr_mat(...)`.
+ * Output object returned when calling `VRoiCorrMatParameters(...)`.
  *
  * @interface
  */
@@ -108,9 +75,9 @@ function v__roi_corr_mat_params(
     keep_tmp: boolean = false,
     echo: boolean = false,
     verb: boolean = false,
-): VRoiCorrMatParameters {
+): VRoiCorrMatParametersTagged {
     const params = {
-        "@type": "afni.@ROI_Corr_Mat" as const,
+        "@type": "afni/@ROI_Corr_Mat" as const,
         "ts_vol": ts_vol,
         "roi_vol": roi_vol,
         "prefix": prefix,
@@ -162,7 +129,7 @@ function v__roi_corr_mat_cargs(
             execution.inputFile((params["roisel"] ?? null))
         );
     }
-    if ((params["zval"] ?? null)) {
+    if ((params["zval"] ?? false)) {
         cargs.push("-zval");
     }
     if ((params["mat_opt"] ?? null) !== null) {
@@ -171,16 +138,16 @@ function v__roi_corr_mat_cargs(
             (params["mat_opt"] ?? null)
         );
     }
-    if ((params["dirty"] ?? null)) {
+    if ((params["dirty"] ?? false)) {
         cargs.push("-dirty");
     }
-    if ((params["keep_tmp"] ?? null)) {
+    if ((params["keep_tmp"] ?? false)) {
         cargs.push("-keep_tmp");
     }
-    if ((params["echo"] ?? null)) {
+    if ((params["echo"] ?? false)) {
         cargs.push("-echo");
     }
-    if ((params["verb"] ?? null)) {
+    if ((params["verb"] ?? false)) {
         cargs.push("-verb");
     }
     return cargs;
@@ -279,7 +246,6 @@ function v__roi_corr_mat(
 
 export {
       VRoiCorrMatOutputs,
-      VRoiCorrMatParameters,
       V__ROI_CORR_MAT_METADATA,
       v__roi_corr_mat,
       v__roi_corr_mat_execute,

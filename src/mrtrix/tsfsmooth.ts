@@ -12,14 +12,15 @@ const TSFSMOOTH_METADATA: Metadata = {
 
 
 interface TsfsmoothConfigParameters {
-    "@type": "mrtrix.tsfsmooth.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type TsfsmoothConfigParametersTagged = Required<Pick<TsfsmoothConfigParameters, '@type'>> & TsfsmoothConfigParameters;
 
 
 interface TsfsmoothParameters {
-    "@type": "mrtrix.tsfsmooth";
+    "@type"?: "mrtrix/tsfsmooth";
     "stdev"?: number | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -32,41 +33,7 @@ interface TsfsmoothParameters {
     "input": InputPathType;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.tsfsmooth": tsfsmooth_cargs,
-        "mrtrix.tsfsmooth.config": tsfsmooth_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.tsfsmooth": tsfsmooth_outputs,
-    };
-    return outputsFuncs[t];
-}
+type TsfsmoothParametersTagged = Required<Pick<TsfsmoothParameters, '@type'>> & TsfsmoothParameters;
 
 
 /**
@@ -80,9 +47,9 @@ function dynOutputs(
 function tsfsmooth_config_params(
     key: string,
     value: string,
-): TsfsmoothConfigParameters {
+): TsfsmoothConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.tsfsmooth.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -111,7 +78,7 @@ function tsfsmooth_config_cargs(
 
 
 /**
- * Output object returned when calling `tsfsmooth(...)`.
+ * Output object returned when calling `TsfsmoothParameters(...)`.
  *
  * @interface
  */
@@ -156,9 +123,9 @@ function tsfsmooth_params(
     config: Array<TsfsmoothConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TsfsmoothParameters {
+): TsfsmoothParametersTagged {
     const params = {
-        "@type": "mrtrix.tsfsmooth" as const,
+        "@type": "mrtrix/tsfsmooth" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -201,16 +168,16 @@ function tsfsmooth_cargs(
             String((params["stdev"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -220,12 +187,12 @@ function tsfsmooth_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => tsfsmooth_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -339,9 +306,7 @@ function tsfsmooth(
 
 export {
       TSFSMOOTH_METADATA,
-      TsfsmoothConfigParameters,
       TsfsmoothOutputs,
-      TsfsmoothParameters,
       tsfsmooth,
       tsfsmooth_config_params,
       tsfsmooth_execute,

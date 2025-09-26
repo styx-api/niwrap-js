@@ -12,7 +12,7 @@ const SERIAL_HELPER_METADATA: Metadata = {
 
 
 interface SerialHelperParameters {
-    "@type": "afni.serial_helper";
+    "@type"?: "afni/serial_helper";
     "serial_port": string;
     "sock_num"?: number | null | undefined;
     "mp_max"?: number | null | undefined;
@@ -26,43 +26,11 @@ interface SerialHelperParameters {
     "no_serial": boolean;
     "version": boolean;
 }
+type SerialHelperParametersTagged = Required<Pick<SerialHelperParameters, '@type'>> & SerialHelperParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.serial_helper": serial_helper_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `serial_helper(...)`.
+ * Output object returned when calling `SerialHelperParameters(...)`.
  *
  * @interface
  */
@@ -105,9 +73,9 @@ function serial_helper_params(
     hist: boolean = false,
     no_serial: boolean = false,
     version: boolean = false,
-): SerialHelperParameters {
+): SerialHelperParametersTagged {
     const params = {
-        "@type": "afni.serial_helper" as const,
+        "@type": "afni/serial_helper" as const,
         "serial_port": serial_port,
         "show_times": show_times,
         "help": help,
@@ -191,19 +159,19 @@ function serial_helper_cargs(
             String((params["debug"] ?? null))
         );
     }
-    if ((params["show_times"] ?? null)) {
+    if ((params["show_times"] ?? false)) {
         cargs.push("-show_times");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["hist"] ?? null)) {
+    if ((params["hist"] ?? false)) {
         cargs.push("-hist");
     }
-    if ((params["no_serial"] ?? null)) {
+    if ((params["no_serial"] ?? false)) {
         cargs.push("-no_serial");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     return cargs;
@@ -305,7 +273,6 @@ function serial_helper(
 export {
       SERIAL_HELPER_METADATA,
       SerialHelperOutputs,
-      SerialHelperParameters,
       serial_helper,
       serial_helper_execute,
       serial_helper_params,

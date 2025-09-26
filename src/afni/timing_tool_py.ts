@@ -12,7 +12,7 @@ const TIMING_TOOL_PY_METADATA: Metadata = {
 
 
 interface TimingToolPyParameters {
-    "@type": "afni.timing_tool.py";
+    "@type"?: "afni/timing_tool.py";
     "timing_file"?: InputPathType | null | undefined;
     "output_file"?: string | null | undefined;
     "run_length"?: Array<number> | null | undefined;
@@ -33,44 +33,11 @@ interface TimingToolPyParameters {
     "truncate_times": boolean;
     "multi_timing_event_list"?: string | null | undefined;
 }
+type TimingToolPyParametersTagged = Required<Pick<TimingToolPyParameters, '@type'>> & TimingToolPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.timing_tool.py": timing_tool_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.timing_tool.py": timing_tool_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `timing_tool_py(...)`.
+ * Output object returned when calling `TimingToolPyParameters(...)`.
  *
  * @interface
  */
@@ -135,9 +102,9 @@ function timing_tool_py_params(
     round_times_frac: number | null = null,
     truncate_times: boolean = false,
     multi_timing_event_list: string | null = null,
-): TimingToolPyParameters {
+): TimingToolPyParametersTagged {
     const params = {
-        "@type": "afni.timing_tool.py" as const,
+        "@type": "afni/timing_tool.py" as const,
         "sort": sort,
         "multi_show_isi_stats": multi_show_isi_stats,
         "multi_show_timing": multi_show_timing,
@@ -240,7 +207,7 @@ function timing_tool_py_cargs(
             execution.inputFile((params["extend_file"] ?? null))
         );
     }
-    if ((params["sort"] ?? null)) {
+    if ((params["sort"] ?? false)) {
         cargs.push("-sort");
     }
     if ((params["scale_data"] ?? null) !== null) {
@@ -273,13 +240,13 @@ function timing_tool_py_cargs(
             ...(params["multi_timing_files"] ?? null).map(f => execution.inputFile(f))
         );
     }
-    if ((params["multi_show_isi_stats"] ?? null)) {
+    if ((params["multi_show_isi_stats"] ?? false)) {
         cargs.push("-multi_show_isi_stats");
     }
-    if ((params["multi_show_timing"] ?? null)) {
+    if ((params["multi_show_timing"] ?? false)) {
         cargs.push("-multi_show_timing_ele");
     }
-    if ((params["show_timing"] ?? null)) {
+    if ((params["show_timing"] ?? false)) {
         cargs.push("-show_timing_ele");
     }
     if ((params["multi_stim_duration"] ?? null) !== null) {
@@ -294,7 +261,7 @@ function timing_tool_py_cargs(
             String((params["round_times_frac"] ?? null))
         );
     }
-    if ((params["truncate_times"] ?? null)) {
+    if ((params["truncate_times"] ?? false)) {
         cargs.push("-truncate_times");
     }
     if ((params["multi_timing_event_list"] ?? null) !== null) {
@@ -418,7 +385,6 @@ function timing_tool_py(
 export {
       TIMING_TOOL_PY_METADATA,
       TimingToolPyOutputs,
-      TimingToolPyParameters,
       timing_tool_py,
       timing_tool_py_execute,
       timing_tool_py_params,

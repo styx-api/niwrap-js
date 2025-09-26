@@ -12,56 +12,23 @@ const VOLUME_MATH_METADATA: Metadata = {
 
 
 interface VolumeMathVarParameters {
-    "@type": "workbench.volume-math.var";
+    "@type"?: "var";
     "name": string;
     "volume": InputPathType;
     "opt_subvolume_subvol"?: string | null | undefined;
     "opt_repeat": boolean;
 }
+type VolumeMathVarParametersTagged = Required<Pick<VolumeMathVarParameters, '@type'>> & VolumeMathVarParameters;
 
 
 interface VolumeMathParameters {
-    "@type": "workbench.volume-math";
+    "@type"?: "workbench/volume-math";
     "expression": string;
     "volume_out": string;
     "opt_fixnan_replace"?: number | null | undefined;
     "var"?: Array<VolumeMathVarParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-math": volume_math_cargs,
-        "workbench.volume-math.var": volume_math_var_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-math": volume_math_outputs,
-    };
-    return outputsFuncs[t];
-}
+type VolumeMathParametersTagged = Required<Pick<VolumeMathParameters, '@type'>> & VolumeMathParameters;
 
 
 /**
@@ -79,9 +46,9 @@ function volume_math_var_params(
     volume: InputPathType,
     opt_subvolume_subvol: string | null = null,
     opt_repeat: boolean = false,
-): VolumeMathVarParameters {
+): VolumeMathVarParametersTagged {
     const params = {
-        "@type": "workbench.volume-math.var" as const,
+        "@type": "var" as const,
         "name": name,
         "volume": volume,
         "opt_repeat": opt_repeat,
@@ -115,7 +82,7 @@ function volume_math_var_cargs(
             (params["opt_subvolume_subvol"] ?? null)
         );
     }
-    if ((params["opt_repeat"] ?? null)) {
+    if ((params["opt_repeat"] ?? false)) {
         cargs.push("-repeat");
     }
     return cargs;
@@ -123,7 +90,7 @@ function volume_math_var_cargs(
 
 
 /**
- * Output object returned when calling `volume_math(...)`.
+ * Output object returned when calling `VolumeMathParameters(...)`.
  *
  * @interface
  */
@@ -154,9 +121,9 @@ function volume_math_params(
     volume_out: string,
     opt_fixnan_replace: number | null = null,
     var_: Array<VolumeMathVarParameters> | null = null,
-): VolumeMathParameters {
+): VolumeMathParametersTagged {
     const params = {
-        "@type": "workbench.volume-math" as const,
+        "@type": "workbench/volume-math" as const,
         "expression": expression,
         "volume_out": volume_out,
     };
@@ -194,7 +161,7 @@ function volume_math_cargs(
         );
     }
     if ((params["var"] ?? null) !== null) {
-        cargs.push(...(params["var"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["var"] ?? null).map(s => volume_math_var_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -358,8 +325,6 @@ function volume_math(
 export {
       VOLUME_MATH_METADATA,
       VolumeMathOutputs,
-      VolumeMathParameters,
-      VolumeMathVarParameters,
       volume_math,
       volume_math_execute,
       volume_math_params,

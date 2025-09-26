@@ -12,7 +12,7 @@ const MRIS_REMESH_METADATA: Metadata = {
 
 
 interface MrisRemeshParameters {
-    "@type": "freesurfer.mris_remesh";
+    "@type"?: "freesurfer/mris_remesh";
     "input": InputPathType;
     "output": string;
     "edge_length"?: number | null | undefined;
@@ -21,44 +21,11 @@ interface MrisRemeshParameters {
     "remesh": boolean;
     "iterations"?: number | null | undefined;
 }
+type MrisRemeshParametersTagged = Required<Pick<MrisRemeshParameters, '@type'>> & MrisRemeshParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_remesh": mris_remesh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_remesh": mris_remesh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_remesh(...)`.
+ * Output object returned when calling `MrisRemeshParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function mris_remesh_params(
     face_area: number | null = null,
     remesh: boolean = false,
     iterations: number | null = null,
-): MrisRemeshParameters {
+): MrisRemeshParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_remesh" as const,
+        "@type": "freesurfer/mris_remesh" as const,
         "input": input,
         "output": output,
         "remesh": remesh,
@@ -158,7 +125,7 @@ function mris_remesh_cargs(
             String((params["face_area"] ?? null))
         );
     }
-    if ((params["remesh"] ?? null)) {
+    if ((params["remesh"] ?? false)) {
         cargs.push("--remesh");
     }
     if ((params["iterations"] ?? null) !== null) {
@@ -257,7 +224,6 @@ function mris_remesh(
 export {
       MRIS_REMESH_METADATA,
       MrisRemeshOutputs,
-      MrisRemeshParameters,
       mris_remesh,
       mris_remesh_execute,
       mris_remesh_params,

@@ -12,7 +12,7 @@ const TO3D_METADATA: Metadata = {
 
 
 interface To3dParameters {
-    "@type": "afni.to3d";
+    "@type"?: "afni/to3d";
     "input_files": Array<InputPathType>;
     "type"?: "spgr" | "fse" | "epan" | "anat" | "ct" | "spct" | "pet" | "mra" | "bmap" | "diff" | "omri" | "abuc" | "fim" | "fith" | "fico" | "fitt" | "fift" | "fizt" | "fict" | "fibt" | "fibn" | "figt" | "fipt" | "fbuc" | null | undefined;
     "statpar"?: Array<number> | null | undefined;
@@ -54,44 +54,11 @@ interface To3dParameters {
     "xtwarns_flag": boolean;
     "quit_on_err_flag": boolean;
 }
+type To3dParametersTagged = Required<Pick<To3dParameters, '@type'>> & To3dParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.to3d": to3d_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.to3d": to3d_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `to3d(...)`.
+ * Output object returned when calling `To3dParameters(...)`.
  *
  * @interface
  */
@@ -202,9 +169,9 @@ function to3d_params(
     ncolors: number | null = null,
     xtwarns_flag: boolean = false,
     quit_on_err_flag: boolean = false,
-): To3dParameters {
+): To3dParametersTagged {
     const params = {
-        "@type": "afni.to3d" as const,
+        "@type": "afni/to3d" as const,
         "input_files": input_files,
         "nosave_flag": nosave_flag,
         "nowritebrik_flag": nowritebrik_flag,
@@ -349,10 +316,10 @@ function to3d_cargs(
             execution.inputFile((params["anatparent"] ?? null))
         );
     }
-    if ((params["nosave_flag"] ?? null)) {
+    if ((params["nosave_flag"] ?? false)) {
         cargs.push("-nosave");
     }
-    if ((params["nowritebrik_flag"] ?? null)) {
+    if ((params["nowritebrik_flag"] ?? false)) {
         cargs.push("-nowritebrik");
     }
     if ((params["view"] ?? null) !== null) {
@@ -439,10 +406,10 @@ function to3d_cargs(
             String((params["global_scaling_factor"] ?? null))
         );
     }
-    if ((params["nofloatscan_flag"] ?? null)) {
+    if ((params["nofloatscan_flag"] ?? false)) {
         cargs.push("-nofloatscan");
     }
-    if ((params["in1_flag"] ?? null)) {
+    if ((params["in1_flag"] ?? false)) {
         cargs.push("-in:1");
     }
     if ((params["orient"] ?? null) !== null) {
@@ -451,10 +418,10 @@ function to3d_cargs(
             (params["orient"] ?? null)
         );
     }
-    if ((params["skip_outliers_flag"] ?? null)) {
+    if ((params["skip_outliers_flag"] ?? false)) {
         cargs.push("-skip_outliers");
     }
-    if ((params["text_outliers_flag"] ?? null)) {
+    if ((params["text_outliers_flag"] ?? false)) {
         cargs.push("-text_outliers");
     }
     if ((params["save_outliers"] ?? null) !== null) {
@@ -463,25 +430,25 @@ function to3d_cargs(
             (params["save_outliers"] ?? null)
         );
     }
-    if ((params["assume_dicom_mosaic_flag"] ?? null)) {
+    if ((params["assume_dicom_mosaic_flag"] ?? false)) {
         cargs.push("-assume_dicom_mosaic");
     }
-    if ((params["oblique_origin_flag"] ?? null)) {
+    if ((params["oblique_origin_flag"] ?? false)) {
         cargs.push("-oblique_origin");
     }
-    if ((params["reverse_list_flag"] ?? null)) {
+    if ((params["reverse_list_flag"] ?? false)) {
         cargs.push("-reverse_list");
     }
-    if ((params["use_last_elem_flag"] ?? null)) {
+    if ((params["use_last_elem_flag"] ?? false)) {
         cargs.push("-use_last_elem");
     }
-    if ((params["use_old_mosaic_code_flag"] ?? null)) {
+    if ((params["use_old_mosaic_code_flag"] ?? false)) {
         cargs.push("-use_old_mosaic_code");
     }
-    if ((params["ushort2float_flag"] ?? null)) {
+    if ((params["ushort2float_flag"] ?? false)) {
         cargs.push("-ushort2float");
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-verb");
     }
     if ((params["gamma"] ?? null) !== null) {
@@ -496,10 +463,10 @@ function to3d_cargs(
             String((params["ncolors"] ?? null))
         );
     }
-    if ((params["xtwarns_flag"] ?? null)) {
+    if ((params["xtwarns_flag"] ?? false)) {
         cargs.push("-xtwarns");
     }
-    if ((params["quit_on_err_flag"] ?? null)) {
+    if ((params["quit_on_err_flag"] ?? false)) {
         cargs.push("-quit_on_err");
     }
     return cargs;
@@ -660,7 +627,6 @@ function to3d(
 export {
       TO3D_METADATA,
       To3dOutputs,
-      To3dParameters,
       to3d,
       to3d_execute,
       to3d_params,

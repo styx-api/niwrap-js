@@ -12,7 +12,7 @@ const V_1D_TOOL_PY_METADATA: Metadata = {
 
 
 interface V1dToolPyParameters {
-    "@type": "afni.1d_tool.py";
+    "@type"?: "afni/1d_tool.py";
     "infile": InputPathType;
     "write"?: string | null | undefined;
     "select_cols"?: string | null | undefined;
@@ -27,44 +27,11 @@ interface V1dToolPyParameters {
     "reverse": boolean;
     "show_max_displace": boolean;
 }
+type V1dToolPyParametersTagged = Required<Pick<V1dToolPyParameters, '@type'>> & V1dToolPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1d_tool.py": v_1d_tool_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.1d_tool.py": v_1d_tool_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1d_tool_py(...)`.
+ * Output object returned when calling `V1dToolPyParameters(...)`.
  *
  * @interface
  */
@@ -113,9 +80,9 @@ function v_1d_tool_py_params(
     transpose: boolean = false,
     reverse: boolean = false,
     show_max_displace: boolean = false,
-): V1dToolPyParameters {
+): V1dToolPyParametersTagged {
     const params = {
-        "@type": "afni.1d_tool.py" as const,
+        "@type": "afni/1d_tool.py" as const,
         "infile": infile,
         "show_rows_cols": show_rows_cols,
         "transpose": transpose,
@@ -216,16 +183,16 @@ function v_1d_tool_py_cargs(
             (params["set_run_lengths"] ?? null)
         );
     }
-    if ((params["show_rows_cols"] ?? null)) {
+    if ((params["show_rows_cols"] ?? false)) {
         cargs.push("-show_rows_cols");
     }
-    if ((params["transpose"] ?? null)) {
+    if ((params["transpose"] ?? false)) {
         cargs.push("-transpose");
     }
-    if ((params["reverse"] ?? null)) {
+    if ((params["reverse"] ?? false)) {
         cargs.push("-reverse");
     }
-    if ((params["show_max_displace"] ?? null)) {
+    if ((params["show_max_displace"] ?? false)) {
         cargs.push("-show_max_displace");
     }
     return cargs;
@@ -329,7 +296,6 @@ function v_1d_tool_py(
 
 export {
       V1dToolPyOutputs,
-      V1dToolPyParameters,
       V_1D_TOOL_PY_METADATA,
       v_1d_tool_py,
       v_1d_tool_py_execute,

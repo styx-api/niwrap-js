@@ -12,7 +12,7 @@ const MRI_FDR_METADATA: Metadata = {
 
 
 interface MriFdrParameters {
-    "@type": "freesurfer.mri_fdr";
+    "@type"?: "freesurfer/mri_fdr";
     "input_files": Array<string>;
     "fdr_value": number;
     "default_frame"?: number | null | undefined;
@@ -24,43 +24,11 @@ interface MriFdrParameters {
     "debug": boolean;
     "check_options": boolean;
 }
+type MriFdrParametersTagged = Required<Pick<MriFdrParameters, '@type'>> & MriFdrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_fdr": mri_fdr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_fdr(...)`.
+ * Output object returned when calling `MriFdrParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +67,9 @@ function mri_fdr_params(
     threshold_file: string | null = null,
     debug: boolean = false,
     check_options: boolean = false,
-): MriFdrParameters {
+): MriFdrParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_fdr" as const,
+        "@type": "freesurfer/mri_fdr" as const,
         "input_files": input_files,
         "fdr_value": fdr_value,
         "positive_only": positive_only,
@@ -149,16 +117,16 @@ function mri_fdr_cargs(
             String((params["default_frame"] ?? null))
         );
     }
-    if ((params["positive_only"] ?? null)) {
+    if ((params["positive_only"] ?? false)) {
         cargs.push("--pos");
     }
-    if ((params["negative_only"] ?? null)) {
+    if ((params["negative_only"] ?? false)) {
         cargs.push("--neg");
     }
-    if ((params["all_voxels"] ?? null)) {
+    if ((params["all_voxels"] ?? false)) {
         cargs.push("--abs");
     }
-    if ((params["raw_p_values"] ?? null)) {
+    if ((params["raw_p_values"] ?? false)) {
         cargs.push("--no-log10p");
     }
     if ((params["threshold_file"] ?? null) !== null) {
@@ -167,10 +135,10 @@ function mri_fdr_cargs(
             (params["threshold_file"] ?? null)
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["check_options"] ?? null)) {
+    if ((params["check_options"] ?? false)) {
         cargs.push("--checkopts");
     }
     return cargs;
@@ -268,7 +236,6 @@ function mri_fdr(
 export {
       MRI_FDR_METADATA,
       MriFdrOutputs,
-      MriFdrParameters,
       mri_fdr,
       mri_fdr_execute,
       mri_fdr_params,

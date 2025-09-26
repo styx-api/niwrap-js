@@ -12,7 +12,7 @@ const TKREGISTER2_CMDL_METADATA: Metadata = {
 
 
 interface Tkregister2CmdlParameters {
-    "@type": "freesurfer.tkregister2_cmdl";
+    "@type"?: "freesurfer/tkregister2_cmdl";
     "movable_volume": InputPathType;
     "target_volume": InputPathType;
     "fstarg_flag": boolean;
@@ -74,43 +74,11 @@ interface Tkregister2CmdlParameters {
     "rot"?: Array<number> | null | undefined;
     "conf_targ_flag": boolean;
 }
+type Tkregister2CmdlParametersTagged = Required<Pick<Tkregister2CmdlParameters, '@type'>> & Tkregister2CmdlParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.tkregister2_cmdl": tkregister2_cmdl_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tkregister2_cmdl(...)`.
+ * Output object returned when calling `Tkregister2CmdlParameters(...)`.
  *
  * @interface
  */
@@ -249,9 +217,9 @@ function tkregister2_cmdl_params(
     trans: Array<number> | null = null,
     rot: Array<number> | null = null,
     conf_targ_flag: boolean = false,
-): Tkregister2CmdlParameters {
+): Tkregister2CmdlParametersTagged {
     const params = {
-        "@type": "freesurfer.tkregister2_cmdl" as const,
+        "@type": "freesurfer/tkregister2_cmdl" as const,
         "movable_volume": movable_volume,
         "target_volume": target_volume,
         "fstarg_flag": fstarg_flag,
@@ -413,7 +381,7 @@ function tkregister2_cmdl_cargs(
         "--targ",
         execution.inputFile((params["target_volume"] ?? null))
     );
-    if ((params["fstarg_flag"] ?? null)) {
+    if ((params["fstarg_flag"] ?? false)) {
         cargs.push("--fstarg");
     }
     if ((params["reg_file"] ?? null) !== null) {
@@ -422,19 +390,19 @@ function tkregister2_cmdl_cargs(
             execution.inputFile((params["reg_file"] ?? null))
         );
     }
-    if ((params["check_reg_flag"] ?? null)) {
+    if ((params["check_reg_flag"] ?? false)) {
         cargs.push("--check-reg");
     }
-    if ((params["regheader_flag"] ?? null)) {
+    if ((params["regheader_flag"] ?? false)) {
         cargs.push("--regheader");
     }
-    if ((params["regheader_center_flag"] ?? null)) {
+    if ((params["regheader_center_flag"] ?? false)) {
         cargs.push("--regheader-center");
     }
-    if ((params["fsl_targ_flag"] ?? null)) {
+    if ((params["fsl_targ_flag"] ?? false)) {
         cargs.push("--fsl-targ");
     }
-    if ((params["fsl_targ_lr_flag"] ?? null)) {
+    if ((params["fsl_targ_lr_flag"] ?? false)) {
         cargs.push("--fsl-targ-lr");
     }
     if ((params["gca_subject"] ?? null) !== null) {
@@ -449,7 +417,7 @@ function tkregister2_cmdl_cargs(
             (params["gca_skull_subject"] ?? null)
         );
     }
-    if ((params["no_zero_cras_flag"] ?? null)) {
+    if ((params["no_zero_cras_flag"] ?? false)) {
         cargs.push("--no-zero-cras");
     }
     if ((params["movbright"] ?? null) !== null) {
@@ -458,7 +426,7 @@ function tkregister2_cmdl_cargs(
             String((params["movbright"] ?? null))
         );
     }
-    if ((params["no_inorm_flag"] ?? null)) {
+    if ((params["no_inorm_flag"] ?? false)) {
         cargs.push("--no-inorm");
     }
     if ((params["fmov"] ?? null) !== null) {
@@ -467,7 +435,7 @@ function tkregister2_cmdl_cargs(
             String((params["fmov"] ?? null))
         );
     }
-    if ((params["fmov_targ_flag"] ?? null)) {
+    if ((params["fmov_targ_flag"] ?? false)) {
         cargs.push("--fmov-targ");
     }
     if ((params["plane"] ?? null) !== null) {
@@ -512,13 +480,13 @@ function tkregister2_cmdl_cargs(
             ...(params["surf_rgb"] ?? null).map(String)
         );
     }
-    if ((params["lh_only_flag"] ?? null)) {
+    if ((params["lh_only_flag"] ?? false)) {
         cargs.push("--lh-only");
     }
-    if ((params["rh_only_flag"] ?? null)) {
+    if ((params["rh_only_flag"] ?? false)) {
         cargs.push("--rh-only");
     }
-    if ((params["fstal_flag"] ?? null)) {
+    if ((params["fstal_flag"] ?? false)) {
         cargs.push("--fstal");
     }
     if ((params["talxfmname"] ?? null) !== null) {
@@ -587,7 +555,7 @@ function tkregister2_cmdl_cargs(
             execution.inputFile((params["ltaout"] ?? null))
         );
     }
-    if ((params["ltaout_inv_flag"] ?? null)) {
+    if ((params["ltaout_inv_flag"] ?? false)) {
         cargs.push("--ltaout-inv");
     }
     if ((params["feat"] ?? null) !== null) {
@@ -602,7 +570,7 @@ function tkregister2_cmdl_cargs(
             (params["fsfeat"] ?? null)
         );
     }
-    if ((params["identity_flag"] ?? null)) {
+    if ((params["identity_flag"] ?? false)) {
         cargs.push("--identity");
     }
     if ((params["subject_id"] ?? null) !== null) {
@@ -617,7 +585,7 @@ function tkregister2_cmdl_cargs(
             (params["subjects_dir"] ?? null)
         );
     }
-    if ((params["nofix_flag"] ?? null)) {
+    if ((params["nofix_flag"] ?? false)) {
         cargs.push("--nofix");
     }
     if ((params["float2int"] ?? null) !== null) {
@@ -632,7 +600,7 @@ function tkregister2_cmdl_cargs(
             (params["title"] ?? null)
         );
     }
-    if ((params["tag_flag"] ?? null)) {
+    if ((params["tag_flag"] ?? false)) {
         cargs.push("--tag");
     }
     if ((params["mov_orientation"] ?? null) !== null) {
@@ -653,7 +621,7 @@ function tkregister2_cmdl_cargs(
             ...(params["int"] ?? null)
         );
     }
-    if ((params["double_window_size_flag"] ?? null)) {
+    if ((params["double_window_size_flag"] ?? false)) {
         cargs.push("--2");
     }
     if ((params["window_scale"] ?? null) !== null) {
@@ -668,13 +636,13 @@ function tkregister2_cmdl_cargs(
             execution.inputFile((params["det"] ?? null))
         );
     }
-    if ((params["aseg_flag"] ?? null)) {
+    if ((params["aseg_flag"] ?? false)) {
         cargs.push("--aseg");
     }
-    if ((params["aparc_flag"] ?? null)) {
+    if ((params["aparc_flag"] ?? false)) {
         cargs.push("--aparc+aseg");
     }
-    if ((params["wmparc_flag"] ?? null)) {
+    if ((params["wmparc_flag"] ?? false)) {
         cargs.push("--wmparc");
     }
     if ((params["gdiagno"] ?? null) !== null) {
@@ -695,7 +663,7 @@ function tkregister2_cmdl_cargs(
             ...(params["rot"] ?? null).map(String)
         );
     }
-    if ((params["conf_targ_flag"] ?? null)) {
+    if ((params["conf_targ_flag"] ?? false)) {
         cargs.push("--conf-targ");
     }
     return cargs;
@@ -893,7 +861,6 @@ function tkregister2_cmdl(
 export {
       TKREGISTER2_CMDL_METADATA,
       Tkregister2CmdlOutputs,
-      Tkregister2CmdlParameters,
       tkregister2_cmdl,
       tkregister2_cmdl_execute,
       tkregister2_cmdl_params,

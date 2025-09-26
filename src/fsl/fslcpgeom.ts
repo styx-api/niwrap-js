@@ -12,48 +12,16 @@ const FSLCPGEOM_METADATA: Metadata = {
 
 
 interface FslcpgeomParameters {
-    "@type": "fsl.fslcpgeom";
+    "@type"?: "fsl/fslcpgeom";
     "source_file": InputPathType;
     "destination_file": InputPathType;
     "dimensions_flag": boolean;
 }
+type FslcpgeomParametersTagged = Required<Pick<FslcpgeomParameters, '@type'>> & FslcpgeomParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslcpgeom": fslcpgeom_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslcpgeom(...)`.
+ * Output object returned when calling `FslcpgeomParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function fslcpgeom_params(
     source_file: InputPathType,
     destination_file: InputPathType,
     dimensions_flag: boolean = false,
-): FslcpgeomParameters {
+): FslcpgeomParametersTagged {
     const params = {
-        "@type": "fsl.fslcpgeom" as const,
+        "@type": "fsl/fslcpgeom" as const,
         "source_file": source_file,
         "destination_file": destination_file,
         "dimensions_flag": dimensions_flag,
@@ -105,7 +73,7 @@ function fslcpgeom_cargs(
     cargs.push("fslcpgeom");
     cargs.push(execution.inputFile((params["source_file"] ?? null)));
     cargs.push(execution.inputFile((params["destination_file"] ?? null)));
-    if ((params["dimensions_flag"] ?? null)) {
+    if ((params["dimensions_flag"] ?? false)) {
         cargs.push("-d");
     }
     return cargs;
@@ -189,7 +157,6 @@ function fslcpgeom(
 export {
       FSLCPGEOM_METADATA,
       FslcpgeomOutputs,
-      FslcpgeomParameters,
       fslcpgeom,
       fslcpgeom_execute,
       fslcpgeom_params,

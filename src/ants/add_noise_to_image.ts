@@ -12,51 +12,18 @@ const ADD_NOISE_TO_IMAGE_METADATA: Metadata = {
 
 
 interface AddNoiseToImageParameters {
-    "@type": "ants.AddNoiseToImage";
+    "@type"?: "ants/AddNoiseToImage";
     "image_dimensionality"?: 2 | 3 | 4 | null | undefined;
     "input_image": InputPathType;
     "noise_model": "AdditiveGaussian" | "SaltAndPepper" | "Shot" | "Speckle";
     "output": string;
     "verbose"?: 0 | 1 | null | undefined;
 }
+type AddNoiseToImageParametersTagged = Required<Pick<AddNoiseToImageParameters, '@type'>> & AddNoiseToImageParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.AddNoiseToImage": add_noise_to_image_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.AddNoiseToImage": add_noise_to_image_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `add_noise_to_image(...)`.
+ * Output object returned when calling `AddNoiseToImageParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function add_noise_to_image_params(
     output: string,
     image_dimensionality: 2 | 3 | 4 | null = null,
     verbose: 0 | 1 | null = null,
-): AddNoiseToImageParameters {
+): AddNoiseToImageParametersTagged {
     const params = {
-        "@type": "ants.AddNoiseToImage" as const,
+        "@type": "ants/AddNoiseToImage" as const,
         "input_image": input_image,
         "noise_model": noise_model,
         "output": output,
@@ -230,7 +197,6 @@ function add_noise_to_image(
 export {
       ADD_NOISE_TO_IMAGE_METADATA,
       AddNoiseToImageOutputs,
-      AddNoiseToImageParameters,
       add_noise_to_image,
       add_noise_to_image_execute,
       add_noise_to_image_params,

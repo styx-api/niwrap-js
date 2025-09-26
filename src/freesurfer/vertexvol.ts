@@ -12,7 +12,7 @@ const VERTEXVOL_METADATA: Metadata = {
 
 
 interface VertexvolParameters {
-    "@type": "freesurfer.vertexvol";
+    "@type"?: "freesurfer/vertexvol";
     "subject": string;
     "left_hemisphere": boolean;
     "right_hemisphere": boolean;
@@ -20,44 +20,11 @@ interface VertexvolParameters {
     "use_th3": boolean;
     "no_th3": boolean;
 }
+type VertexvolParametersTagged = Required<Pick<VertexvolParameters, '@type'>> & VertexvolParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.vertexvol": vertexvol_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.vertexvol": vertexvol_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `vertexvol(...)`.
+ * Output object returned when calling `VertexvolParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function vertexvol_params(
     output_file: string | null = null,
     use_th3: boolean = false,
     no_th3: boolean = false,
-): VertexvolParameters {
+): VertexvolParametersTagged {
     const params = {
-        "@type": "freesurfer.vertexvol" as const,
+        "@type": "freesurfer/vertexvol" as const,
         "subject": subject,
         "left_hemisphere": left_hemisphere,
         "right_hemisphere": right_hemisphere,
@@ -126,10 +93,10 @@ function vertexvol_cargs(
         "--s",
         (params["subject"] ?? null)
     );
-    if ((params["left_hemisphere"] ?? null)) {
+    if ((params["left_hemisphere"] ?? false)) {
         cargs.push("--lh");
     }
-    if ((params["right_hemisphere"] ?? null)) {
+    if ((params["right_hemisphere"] ?? false)) {
         cargs.push("--rh");
     }
     if ((params["output_file"] ?? null) !== null) {
@@ -138,10 +105,10 @@ function vertexvol_cargs(
             (params["output_file"] ?? null)
         );
     }
-    if ((params["use_th3"] ?? null)) {
+    if ((params["use_th3"] ?? false)) {
         cargs.push("--th3");
     }
-    if ((params["no_th3"] ?? null)) {
+    if ((params["no_th3"] ?? false)) {
         cargs.push("--no-th3");
     }
     return cargs;
@@ -232,7 +199,6 @@ function vertexvol(
 export {
       VERTEXVOL_METADATA,
       VertexvolOutputs,
-      VertexvolParameters,
       vertexvol,
       vertexvol_execute,
       vertexvol_params,

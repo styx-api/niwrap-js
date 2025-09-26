@@ -12,7 +12,7 @@ const V_1DSOUND_METADATA: Metadata = {
 
 
 interface V1dsoundParameters {
-    "@type": "afni.1dsound";
+    "@type"?: "afni/1dsound";
     "tsfile": InputPathType;
     "prefix"?: string | null | undefined;
     "encoding_16PCM": boolean;
@@ -25,44 +25,11 @@ interface V1dsoundParameters {
     "despike_option": boolean;
     "play_option": boolean;
 }
+type V1dsoundParametersTagged = Required<Pick<V1dsoundParameters, '@type'>> & V1dsoundParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dsound": v_1dsound_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.1dsound": v_1dsound_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1dsound(...)`.
+ * Output object returned when calling `V1dsoundParameters(...)`.
  *
  * @interface
  */
@@ -107,9 +74,9 @@ function v_1dsound_params(
     notewave_option: string | null = null,
     despike_option: boolean = false,
     play_option: boolean = false,
-): V1dsoundParameters {
+): V1dsoundParametersTagged {
     const params = {
-        "@type": "afni.1dsound" as const,
+        "@type": "afni/1dsound" as const,
         "tsfile": tsfile,
         "encoding_16PCM": encoding_16_pcm,
         "encoding_8PCM": encoding_8_pcm,
@@ -153,13 +120,13 @@ function v_1dsound_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["encoding_16PCM"] ?? null)) {
+    if ((params["encoding_16PCM"] ?? false)) {
         cargs.push("-16PCM");
     }
-    if ((params["encoding_8PCM"] ?? null)) {
+    if ((params["encoding_8PCM"] ?? false)) {
         cargs.push("-8PCM");
     }
-    if ((params["encoding_8ulaw"] ?? null)) {
+    if ((params["encoding_8ulaw"] ?? false)) {
         cargs.push("-8ulaw");
     }
     if ((params["tper_option"] ?? null) !== null) {
@@ -168,10 +135,10 @@ function v_1dsound_cargs(
             String((params["tper_option"] ?? null))
         );
     }
-    if ((params["fm_option"] ?? null)) {
+    if ((params["fm_option"] ?? false)) {
         cargs.push("-FM");
     }
-    if ((params["notes_option"] ?? null)) {
+    if ((params["notes_option"] ?? false)) {
         cargs.push("-notes");
     }
     if ((params["notewave_option"] ?? null) !== null) {
@@ -180,10 +147,10 @@ function v_1dsound_cargs(
             (params["notewave_option"] ?? null)
         );
     }
-    if ((params["despike_option"] ?? null)) {
+    if ((params["despike_option"] ?? false)) {
         cargs.push("-despike");
     }
-    if ((params["play_option"] ?? null)) {
+    if ((params["play_option"] ?? false)) {
         cargs.push("-play");
     }
     return cargs;
@@ -283,7 +250,6 @@ function v_1dsound(
 
 export {
       V1dsoundOutputs,
-      V1dsoundParameters,
       V_1DSOUND_METADATA,
       v_1dsound,
       v_1dsound_execute,

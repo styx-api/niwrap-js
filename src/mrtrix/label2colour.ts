@@ -12,14 +12,15 @@ const LABEL2COLOUR_METADATA: Metadata = {
 
 
 interface Label2colourConfigParameters {
-    "@type": "mrtrix.label2colour.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Label2colourConfigParametersTagged = Required<Pick<Label2colourConfigParameters, '@type'>> & Label2colourConfigParameters;
 
 
 interface Label2colourParameters {
-    "@type": "mrtrix.label2colour";
+    "@type"?: "mrtrix/label2colour";
     "lut"?: InputPathType | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -32,41 +33,7 @@ interface Label2colourParameters {
     "nodes_in": InputPathType;
     "colour_out": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.label2colour": label2colour_cargs,
-        "mrtrix.label2colour.config": label2colour_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.label2colour": label2colour_outputs,
-    };
-    return outputsFuncs[t];
-}
+type Label2colourParametersTagged = Required<Pick<Label2colourParameters, '@type'>> & Label2colourParameters;
 
 
 /**
@@ -80,9 +47,9 @@ function dynOutputs(
 function label2colour_config_params(
     key: string,
     value: string,
-): Label2colourConfigParameters {
+): Label2colourConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.label2colour.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -111,7 +78,7 @@ function label2colour_config_cargs(
 
 
 /**
- * Output object returned when calling `label2colour(...)`.
+ * Output object returned when calling `Label2colourParameters(...)`.
  *
  * @interface
  */
@@ -156,9 +123,9 @@ function label2colour_params(
     config: Array<Label2colourConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Label2colourParameters {
+): Label2colourParametersTagged {
     const params = {
-        "@type": "mrtrix.label2colour" as const,
+        "@type": "mrtrix/label2colour" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -201,16 +168,16 @@ function label2colour_cargs(
             execution.inputFile((params["lut"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -220,12 +187,12 @@ function label2colour_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => label2colour_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["nodes_in"] ?? null)));
@@ -339,9 +306,7 @@ function label2colour(
 
 export {
       LABEL2COLOUR_METADATA,
-      Label2colourConfigParameters,
       Label2colourOutputs,
-      Label2colourParameters,
       label2colour,
       label2colour_config_params,
       label2colour_execute,

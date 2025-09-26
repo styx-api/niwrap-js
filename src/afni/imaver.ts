@@ -12,49 +12,16 @@ const IMAVER_METADATA: Metadata = {
 
 
 interface ImaverParameters {
-    "@type": "afni.imaver";
+    "@type"?: "afni/imaver";
     "out_ave"?: string | null | undefined;
     "out_sig"?: string | null | undefined;
     "input_images": Array<InputPathType>;
 }
+type ImaverParametersTagged = Required<Pick<ImaverParameters, '@type'>> & ImaverParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.imaver": imaver_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.imaver": imaver_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `imaver(...)`.
+ * Output object returned when calling `ImaverParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +54,9 @@ function imaver_params(
     input_images: Array<InputPathType>,
     out_ave: string | null = null,
     out_sig: string | null = null,
-): ImaverParameters {
+): ImaverParametersTagged {
     const params = {
-        "@type": "afni.imaver" as const,
+        "@type": "afni/imaver" as const,
         "input_images": input_images,
     };
     if (out_ave !== null) {
@@ -206,7 +173,6 @@ function imaver(
 export {
       IMAVER_METADATA,
       ImaverOutputs,
-      ImaverParameters,
       imaver,
       imaver_execute,
       imaver_params,

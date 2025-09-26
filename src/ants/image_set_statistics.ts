@@ -12,7 +12,7 @@ const IMAGE_SET_STATISTICS_METADATA: Metadata = {
 
 
 interface ImageSetStatisticsParameters {
-    "@type": "ants.ImageSetStatistics";
+    "@type"?: "ants/ImageSetStatistics";
     "image_dimension": number;
     "controls_list": InputPathType;
     "output_image": string;
@@ -20,44 +20,11 @@ interface ImageSetStatisticsParameters {
     "roi"?: InputPathType | null | undefined;
     "imagelist2"?: InputPathType | null | undefined;
 }
+type ImageSetStatisticsParametersTagged = Required<Pick<ImageSetStatisticsParameters, '@type'>> & ImageSetStatisticsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.ImageSetStatistics": image_set_statistics_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.ImageSetStatistics": image_set_statistics_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `image_set_statistics(...)`.
+ * Output object returned when calling `ImageSetStatisticsParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function image_set_statistics_params(
     which_stat: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7,
     roi: InputPathType | null = null,
     imagelist2: InputPathType | null = null,
-): ImageSetStatisticsParameters {
+): ImageSetStatisticsParametersTagged {
     const params = {
-        "@type": "ants.ImageSetStatistics" as const,
+        "@type": "ants/ImageSetStatistics" as const,
         "image_dimension": image_dimension,
         "controls_list": controls_list,
         "output_image": output_image,
@@ -237,7 +204,6 @@ function image_set_statistics(
 export {
       IMAGE_SET_STATISTICS_METADATA,
       ImageSetStatisticsOutputs,
-      ImageSetStatisticsParameters,
       image_set_statistics,
       image_set_statistics_execute,
       image_set_statistics_params,

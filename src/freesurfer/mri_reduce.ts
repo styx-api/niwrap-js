@@ -12,48 +12,15 @@ const MRI_REDUCE_METADATA: Metadata = {
 
 
 interface MriReduceParameters {
-    "@type": "freesurfer.mri_reduce";
+    "@type"?: "freesurfer/mri_reduce";
     "input_file": InputPathType;
     "output_file": string;
 }
+type MriReduceParametersTagged = Required<Pick<MriReduceParameters, '@type'>> & MriReduceParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_reduce": mri_reduce_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_reduce": mri_reduce_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_reduce(...)`.
+ * Output object returned when calling `MriReduceParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface MriReduceOutputs {
 function mri_reduce_params(
     input_file: InputPathType,
     output_file: string,
-): MriReduceParameters {
+): MriReduceParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_reduce" as const,
+        "@type": "freesurfer/mri_reduce" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -186,7 +153,6 @@ function mri_reduce(
 export {
       MRI_REDUCE_METADATA,
       MriReduceOutputs,
-      MriReduceParameters,
       mri_reduce,
       mri_reduce_execute,
       mri_reduce_params,

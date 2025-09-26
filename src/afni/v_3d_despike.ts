@@ -12,48 +12,15 @@ const V_3D_DESPIKE_METADATA: Metadata = {
 
 
 interface V3dDespikeParameters {
-    "@type": "afni.3dDespike";
+    "@type"?: "afni/3dDespike";
     "prefix"?: string | null | undefined;
     "in_file": InputPathType;
 }
+type V3dDespikeParametersTagged = Required<Pick<V3dDespikeParameters, '@type'>> & V3dDespikeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dDespike": v_3d_despike_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dDespike": v_3d_despike_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_despike(...)`.
+ * Output object returned when calling `V3dDespikeParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface V3dDespikeOutputs {
 function v_3d_despike_params(
     in_file: InputPathType,
     prefix: string | null = null,
-): V3dDespikeParameters {
+): V3dDespikeParametersTagged {
     const params = {
-        "@type": "afni.3dDespike" as const,
+        "@type": "afni/3dDespike" as const,
         "in_file": in_file,
     };
     if (prefix !== null) {
@@ -192,7 +159,6 @@ function v_3d_despike(
 
 export {
       V3dDespikeOutputs,
-      V3dDespikeParameters,
       V_3D_DESPIKE_METADATA,
       v_3d_despike,
       v_3d_despike_execute,

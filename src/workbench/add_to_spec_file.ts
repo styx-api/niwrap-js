@@ -12,48 +12,16 @@ const ADD_TO_SPEC_FILE_METADATA: Metadata = {
 
 
 interface AddToSpecFileParameters {
-    "@type": "workbench.add-to-spec-file";
+    "@type"?: "workbench/add-to-spec-file";
     "specfile": string;
     "structure": string;
     "filename": string;
 }
+type AddToSpecFileParametersTagged = Required<Pick<AddToSpecFileParameters, '@type'>> & AddToSpecFileParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.add-to-spec-file": add_to_spec_file_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `add_to_spec_file(...)`.
+ * Output object returned when calling `AddToSpecFileParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function add_to_spec_file_params(
     specfile: string,
     structure: string,
     filename: string,
-): AddToSpecFileParameters {
+): AddToSpecFileParametersTagged {
     const params = {
-        "@type": "workbench.add-to-spec-file" as const,
+        "@type": "workbench/add-to-spec-file" as const,
         "specfile": specfile,
         "structure": structure,
         "filename": filename,
@@ -262,7 +230,6 @@ function add_to_spec_file(
 export {
       ADD_TO_SPEC_FILE_METADATA,
       AddToSpecFileOutputs,
-      AddToSpecFileParameters,
       add_to_spec_file,
       add_to_spec_file_execute,
       add_to_spec_file_params,

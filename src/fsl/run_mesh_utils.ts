@@ -12,7 +12,7 @@ const RUN_MESH_UTILS_METADATA: Metadata = {
 
 
 interface RunMeshUtilsParameters {
-    "@type": "fsl.run_mesh_utils";
+    "@type"?: "fsl/run_mesh_utils";
     "base_mesh": InputPathType;
     "output_image": string;
     "input_image"?: InputPathType | null | undefined;
@@ -31,44 +31,11 @@ interface RunMeshUtilsParameters {
     "verbose": boolean;
     "help": boolean;
 }
+type RunMeshUtilsParametersTagged = Required<Pick<RunMeshUtilsParameters, '@type'>> & RunMeshUtilsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.run_mesh_utils": run_mesh_utils_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.run_mesh_utils": run_mesh_utils_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `run_mesh_utils(...)`.
+ * Output object returned when calling `RunMeshUtilsParameters(...)`.
  *
  * @interface
  */
@@ -125,9 +92,9 @@ function run_mesh_utils_params(
     inverse: boolean = false,
     verbose: boolean = false,
     help: boolean = false,
-): RunMeshUtilsParameters {
+): RunMeshUtilsParametersTagged {
     const params = {
-        "@type": "fsl.run_mesh_utils" as const,
+        "@type": "fsl/run_mesh_utils" as const,
         "base_mesh": base_mesh,
         "output_image": output_image,
         "do_uncentre_model": do_uncentre_model,
@@ -201,13 +168,13 @@ function run_mesh_utils_cargs(
             execution.inputFile((params["weighting_image_force"] ?? null))
         );
     }
-    if ((params["do_uncentre_model"] ?? null)) {
+    if ((params["do_uncentre_model"] ?? false)) {
         cargs.push("--doUnCentreModel");
     }
-    if ((params["do_subtract_constant_from_scalars"] ?? null)) {
+    if ((params["do_subtract_constant_from_scalars"] ?? false)) {
         cargs.push("--doSubtractConstantFromScalars");
     }
-    if ((params["do_vertex_scalars_to_image_volume"] ?? null)) {
+    if ((params["do_vertex_scalars_to_image_volume"] ?? false)) {
         cargs.push("--doVertexScalarsToImageVolume");
     }
     if ((params["base_mesh2"] ?? null) !== null) {
@@ -216,7 +183,7 @@ function run_mesh_utils_cargs(
             execution.inputFile((params["base_mesh2"] ?? null))
         );
     }
-    if ((params["use_sc2"] ?? null)) {
+    if ((params["use_sc2"] ?? false)) {
         cargs.push("--useSc2");
     }
     if ((params["flirt_matrix"] ?? null) !== null) {
@@ -225,7 +192,7 @@ function run_mesh_utils_cargs(
             execution.inputFile((params["flirt_matrix"] ?? null))
         );
     }
-    if ((params["do_mesh_reg"] ?? null)) {
+    if ((params["do_mesh_reg"] ?? false)) {
         cargs.push("--doMeshReg");
     }
     if ((params["threshold"] ?? null) !== null) {
@@ -240,13 +207,13 @@ function run_mesh_utils_cargs(
             String((params["degrees_of_freedom"] ?? null))
         );
     }
-    if ((params["inverse"] ?? null)) {
+    if ((params["inverse"] ?? false)) {
         cargs.push("--inverse");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -359,7 +326,6 @@ function run_mesh_utils(
 export {
       RUN_MESH_UTILS_METADATA,
       RunMeshUtilsOutputs,
-      RunMeshUtilsParameters,
       run_mesh_utils,
       run_mesh_utils_execute,
       run_mesh_utils_params,

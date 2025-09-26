@@ -12,7 +12,7 @@ const FABBER_CEST_METADATA: Metadata = {
 
 
 interface FabberCestParameters {
-    "@type": "fsl.fabber_cest";
+    "@type"?: "fsl/fabber_cest";
     "output": string;
     "method": string;
     "model": string;
@@ -50,44 +50,11 @@ interface FabberCestParameters {
     "optfile"?: InputPathType | null | undefined;
     "debug": boolean;
 }
+type FabberCestParametersTagged = Required<Pick<FabberCestParameters, '@type'>> & FabberCestParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fabber_cest": fabber_cest_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fabber_cest": fabber_cest_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fabber_cest(...)`.
+ * Output object returned when calling `FabberCestParameters(...)`.
  *
  * @interface
  */
@@ -226,9 +193,9 @@ function fabber_cest_params(
     save_free_energy: boolean = false,
     optfile: InputPathType | null = null,
     debug: boolean = false,
-): FabberCestParameters {
+): FabberCestParametersTagged {
     const params = {
-        "@type": "fsl.fabber_cest" as const,
+        "@type": "fsl/fabber_cest" as const,
         "output": output,
         "method": method,
         "model": model,
@@ -320,22 +287,22 @@ function fabber_cest_cargs(
         "--data",
         execution.inputFile((params["data"] ?? null))
     );
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["listmethods"] ?? null)) {
+    if ((params["listmethods"] ?? false)) {
         cargs.push("--listmethods");
     }
-    if ((params["listmodels"] ?? null)) {
+    if ((params["listmodels"] ?? false)) {
         cargs.push("--listmodels");
     }
-    if ((params["listparams"] ?? null)) {
+    if ((params["listparams"] ?? false)) {
         cargs.push("--listparams");
     }
-    if ((params["descparams"] ?? null)) {
+    if ((params["descparams"] ?? false)) {
         cargs.push("--descparams");
     }
-    if ((params["listoutputs"] ?? null)) {
+    if ((params["listoutputs"] ?? false)) {
         cargs.push("--listoutputs");
     }
     if ((params["evaluate"] ?? null) !== null) {
@@ -356,13 +323,13 @@ function fabber_cest_cargs(
             String((params["evaluate_nt"] ?? null))
         );
     }
-    if ((params["simple_output"] ?? null)) {
+    if ((params["simple_output"] ?? false)) {
         cargs.push("--simple-output");
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("--overwrite");
     }
-    if ((params["link_to_latest"] ?? null)) {
+    if ((params["link_to_latest"] ?? false)) {
         cargs.push("--link-to-latest");
     }
     if ((params["loadmodels"] ?? null) !== null) {
@@ -401,40 +368,40 @@ function fabber_cest_cargs(
             execution.inputFile((params["suppdata"] ?? null))
         );
     }
-    if ((params["dump_param_names"] ?? null)) {
+    if ((params["dump_param_names"] ?? false)) {
         cargs.push("--dump-param-names");
     }
-    if ((params["save_model_fit"] ?? null)) {
+    if ((params["save_model_fit"] ?? false)) {
         cargs.push("--save-model-fit");
     }
-    if ((params["save_residuals"] ?? null)) {
+    if ((params["save_residuals"] ?? false)) {
         cargs.push("--save-residuals");
     }
-    if ((params["save_model_extras"] ?? null)) {
+    if ((params["save_model_extras"] ?? false)) {
         cargs.push("--save-model-extras");
     }
-    if ((params["save_mvn"] ?? null)) {
+    if ((params["save_mvn"] ?? false)) {
         cargs.push("--save-mvn");
     }
-    if ((params["save_mean"] ?? null)) {
+    if ((params["save_mean"] ?? false)) {
         cargs.push("--save-mean");
     }
-    if ((params["save_std"] ?? null)) {
+    if ((params["save_std"] ?? false)) {
         cargs.push("--save-std");
     }
-    if ((params["save_var"] ?? null)) {
+    if ((params["save_var"] ?? false)) {
         cargs.push("--save-var");
     }
-    if ((params["save_zstat"] ?? null)) {
+    if ((params["save_zstat"] ?? false)) {
         cargs.push("--save-zstat");
     }
-    if ((params["save_noise_mean"] ?? null)) {
+    if ((params["save_noise_mean"] ?? false)) {
         cargs.push("--save-noise-mean");
     }
-    if ((params["save_noise_std"] ?? null)) {
+    if ((params["save_noise_std"] ?? false)) {
         cargs.push("--save-noise-std");
     }
-    if ((params["save_free_energy"] ?? null)) {
+    if ((params["save_free_energy"] ?? false)) {
         cargs.push("--save-free-energy");
     }
     if ((params["optfile"] ?? null) !== null) {
@@ -443,7 +410,7 @@ function fabber_cest_cargs(
             execution.inputFile((params["optfile"] ?? null))
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -605,7 +572,6 @@ function fabber_cest(
 export {
       FABBER_CEST_METADATA,
       FabberCestOutputs,
-      FabberCestParameters,
       fabber_cest,
       fabber_cest_execute,
       fabber_cest_params,

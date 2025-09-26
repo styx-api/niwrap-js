@@ -12,48 +12,16 @@ const DMRI_VIOLIN_PLOTS_METADATA: Metadata = {
 
 
 interface DmriViolinPlotsParameters {
-    "@type": "freesurfer.dmri_violinPlots";
+    "@type"?: "freesurfer/dmri_violinPlots";
     "input_directory": string;
     "labels": InputPathType;
     "structure": string;
 }
+type DmriViolinPlotsParametersTagged = Required<Pick<DmriViolinPlotsParameters, '@type'>> & DmriViolinPlotsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dmri_violinPlots": dmri_violin_plots_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dmri_violin_plots(...)`.
+ * Output object returned when calling `DmriViolinPlotsParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function dmri_violin_plots_params(
     input_directory: string,
     labels: InputPathType,
     structure: string,
-): DmriViolinPlotsParameters {
+): DmriViolinPlotsParametersTagged {
     const params = {
-        "@type": "freesurfer.dmri_violinPlots" as const,
+        "@type": "freesurfer/dmri_violinPlots" as const,
         "input_directory": input_directory,
         "labels": labels,
         "structure": structure,
@@ -196,7 +164,6 @@ function dmri_violin_plots(
 export {
       DMRI_VIOLIN_PLOTS_METADATA,
       DmriViolinPlotsOutputs,
-      DmriViolinPlotsParameters,
       dmri_violin_plots,
       dmri_violin_plots_execute,
       dmri_violin_plots_params,

@@ -12,7 +12,7 @@ const V__MEASURE_BB_THICK_METADATA: Metadata = {
 
 
 interface VMeasureBbThickParameters {
-    "@type": "afni.@measure_bb_thick";
+    "@type"?: "afni/@measure_bb_thick";
     "maskset": InputPathType;
     "surfset": InputPathType;
     "outdir"?: string | null | undefined;
@@ -26,44 +26,11 @@ interface VMeasureBbThickParameters {
     "balls_only": boolean;
     "surfsmooth_method"?: string | null | undefined;
 }
+type VMeasureBbThickParametersTagged = Required<Pick<VMeasureBbThickParameters, '@type'>> & VMeasureBbThickParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@measure_bb_thick": v__measure_bb_thick_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@measure_bb_thick": v__measure_bb_thick_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__measure_bb_thick(...)`.
+ * Output object returned when calling `VMeasureBbThickParameters(...)`.
  *
  * @interface
  */
@@ -142,9 +109,9 @@ function v__measure_bb_thick_params(
     keep_temp_files: boolean = false,
     balls_only: boolean = false,
     surfsmooth_method: string | null = null,
-): VMeasureBbThickParameters {
+): VMeasureBbThickParametersTagged {
     const params = {
-        "@type": "afni.@measure_bb_thick" as const,
+        "@type": "afni/@measure_bb_thick" as const,
         "maskset": maskset,
         "surfset": surfset,
         "keep_temp_files": keep_temp_files,
@@ -242,10 +209,10 @@ function v__measure_bb_thick_cargs(
             String((params["depth_search"] ?? null))
         );
     }
-    if ((params["keep_temp_files"] ?? null)) {
+    if ((params["keep_temp_files"] ?? false)) {
         cargs.push("-keep_temp_files");
     }
-    if ((params["balls_only"] ?? null)) {
+    if ((params["balls_only"] ?? false)) {
         cargs.push("-balls_only");
     }
     if ((params["surfsmooth_method"] ?? null) !== null) {
@@ -361,7 +328,6 @@ function v__measure_bb_thick(
 
 export {
       VMeasureBbThickOutputs,
-      VMeasureBbThickParameters,
       V__MEASURE_BB_THICK_METADATA,
       v__measure_bb_thick,
       v__measure_bb_thick_execute,

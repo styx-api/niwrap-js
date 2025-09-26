@@ -12,21 +12,23 @@ const METRIC_REGRESSION_METADATA: Metadata = {
 
 
 interface MetricRegressionRemoveParameters {
-    "@type": "workbench.metric-regression.remove";
+    "@type"?: "remove";
     "metric": InputPathType;
     "opt_remove_column_column"?: string | null | undefined;
 }
+type MetricRegressionRemoveParametersTagged = Required<Pick<MetricRegressionRemoveParameters, '@type'>> & MetricRegressionRemoveParameters;
 
 
 interface MetricRegressionKeepParameters {
-    "@type": "workbench.metric-regression.keep";
+    "@type"?: "keep";
     "metric": InputPathType;
     "opt_keep_column_column"?: string | null | undefined;
 }
+type MetricRegressionKeepParametersTagged = Required<Pick<MetricRegressionKeepParameters, '@type'>> & MetricRegressionKeepParameters;
 
 
 interface MetricRegressionParameters {
-    "@type": "workbench.metric-regression";
+    "@type"?: "workbench/metric-regression";
     "metric_in": InputPathType;
     "metric_out": string;
     "opt_roi_roi_metric"?: InputPathType | null | undefined;
@@ -34,42 +36,7 @@ interface MetricRegressionParameters {
     "remove"?: Array<MetricRegressionRemoveParameters> | null | undefined;
     "keep"?: Array<MetricRegressionKeepParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-regression": metric_regression_cargs,
-        "workbench.metric-regression.remove": metric_regression_remove_cargs,
-        "workbench.metric-regression.keep": metric_regression_keep_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.metric-regression": metric_regression_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MetricRegressionParametersTagged = Required<Pick<MetricRegressionParameters, '@type'>> & MetricRegressionParameters;
 
 
 /**
@@ -83,9 +50,9 @@ function dynOutputs(
 function metric_regression_remove_params(
     metric: InputPathType,
     opt_remove_column_column: string | null = null,
-): MetricRegressionRemoveParameters {
+): MetricRegressionRemoveParametersTagged {
     const params = {
-        "@type": "workbench.metric-regression.remove" as const,
+        "@type": "remove" as const,
         "metric": metric,
     };
     if (opt_remove_column_column !== null) {
@@ -131,9 +98,9 @@ function metric_regression_remove_cargs(
 function metric_regression_keep_params(
     metric: InputPathType,
     opt_keep_column_column: string | null = null,
-): MetricRegressionKeepParameters {
+): MetricRegressionKeepParametersTagged {
     const params = {
-        "@type": "workbench.metric-regression.keep" as const,
+        "@type": "keep" as const,
         "metric": metric,
     };
     if (opt_keep_column_column !== null) {
@@ -169,7 +136,7 @@ function metric_regression_keep_cargs(
 
 
 /**
- * Output object returned when calling `metric_regression(...)`.
+ * Output object returned when calling `MetricRegressionParameters(...)`.
  *
  * @interface
  */
@@ -204,9 +171,9 @@ function metric_regression_params(
     opt_column_column: string | null = null,
     remove: Array<MetricRegressionRemoveParameters> | null = null,
     keep: Array<MetricRegressionKeepParameters> | null = null,
-): MetricRegressionParameters {
+): MetricRegressionParametersTagged {
     const params = {
-        "@type": "workbench.metric-regression" as const,
+        "@type": "workbench/metric-regression" as const,
         "metric_in": metric_in,
         "metric_out": metric_out,
     };
@@ -256,10 +223,10 @@ function metric_regression_cargs(
         );
     }
     if ((params["remove"] ?? null) !== null) {
-        cargs.push(...(params["remove"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["remove"] ?? null).map(s => metric_regression_remove_cargs(s, execution)).flat());
     }
     if ((params["keep"] ?? null) !== null) {
-        cargs.push(...(params["keep"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["keep"] ?? null).map(s => metric_regression_keep_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -352,10 +319,7 @@ function metric_regression(
 
 export {
       METRIC_REGRESSION_METADATA,
-      MetricRegressionKeepParameters,
       MetricRegressionOutputs,
-      MetricRegressionParameters,
-      MetricRegressionRemoveParameters,
       metric_regression,
       metric_regression_execute,
       metric_regression_keep_params,

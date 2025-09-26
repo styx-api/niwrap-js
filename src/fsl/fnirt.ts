@@ -12,7 +12,7 @@ const FNIRT_METADATA: Metadata = {
 
 
 interface FnirtParameters {
-    "@type": "fsl.fnirt";
+    "@type"?: "fsl/fnirt";
     "affine_file"?: InputPathType | null | undefined;
     "config_file"?: "T1_2_MNI152_2mm" | "FA_2_FMRIB58_1mm" | null | undefined;
     "field_file"?: InputPathType | null | undefined;
@@ -25,44 +25,11 @@ interface FnirtParameters {
     "refmask_file"?: InputPathType | null | undefined;
     "warped_file"?: InputPathType | null | undefined;
 }
+type FnirtParametersTagged = Required<Pick<FnirtParameters, '@type'>> & FnirtParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fnirt": fnirt_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fnirt": fnirt_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fnirt(...)`.
+ * Output object returned when calling `FnirtParameters(...)`.
  *
  * @interface
  */
@@ -127,9 +94,9 @@ function fnirt_params(
     modulatedref_file: string | null = null,
     refmask_file: InputPathType | null = null,
     warped_file: InputPathType | null = null,
-): FnirtParameters {
+): FnirtParametersTagged {
     const params = {
-        "@type": "fsl.fnirt" as const,
+        "@type": "fsl/fnirt" as const,
         "in_file": in_file,
         "ref_file": ref_file,
     };
@@ -310,7 +277,6 @@ function fnirt(
 export {
       FNIRT_METADATA,
       FnirtOutputs,
-      FnirtParameters,
       fnirt,
       fnirt_execute,
       fnirt_params,

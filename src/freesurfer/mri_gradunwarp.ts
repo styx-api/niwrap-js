@@ -12,7 +12,7 @@ const MRI_GRADUNWARP_METADATA: Metadata = {
 
 
 interface MriGradunwarpParameters {
-    "@type": "freesurfer.mri_gradunwarp";
+    "@type"?: "freesurfer/mri_gradunwarp";
     "gradient_coeff"?: InputPathType | null | undefined;
     "load_transtbl"?: InputPathType | null | undefined;
     "input_file": InputPathType;
@@ -25,44 +25,11 @@ interface MriGradunwarpParameters {
     "version": boolean;
     "help": boolean;
 }
+type MriGradunwarpParametersTagged = Required<Pick<MriGradunwarpParameters, '@type'>> & MriGradunwarpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_gradunwarp": mri_gradunwarp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_gradunwarp": mri_gradunwarp_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_gradunwarp(...)`.
+ * Output object returned when calling `MriGradunwarpParameters(...)`.
  *
  * @interface
  */
@@ -111,9 +78,9 @@ function mri_gradunwarp_params(
     checkopts: boolean = false,
     version: boolean = false,
     help: boolean = false,
-): MriGradunwarpParameters {
+): MriGradunwarpParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_gradunwarp" as const,
+        "@type": "freesurfer/mri_gradunwarp" as const,
         "input_file": input_file,
         "save_transtbl_only": save_transtbl_only,
         "checkopts": checkopts,
@@ -184,7 +151,7 @@ function mri_gradunwarp_cargs(
             (params["out_transtbl"] ?? null)
         );
     }
-    if ((params["save_transtbl_only"] ?? null)) {
+    if ((params["save_transtbl_only"] ?? false)) {
         cargs.push("--save_transtbl_only");
     }
     if ((params["interpolation_type"] ?? null) !== null) {
@@ -199,13 +166,13 @@ function mri_gradunwarp_cargs(
             String((params["nthreads"] ?? null))
         );
     }
-    if ((params["checkopts"] ?? null)) {
+    if ((params["checkopts"] ?? false)) {
         cargs.push("--checkopts");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -307,7 +274,6 @@ function mri_gradunwarp(
 export {
       MRI_GRADUNWARP_METADATA,
       MriGradunwarpOutputs,
-      MriGradunwarpParameters,
       mri_gradunwarp,
       mri_gradunwarp_execute,
       mri_gradunwarp_params,

@@ -12,47 +12,15 @@ const MRIS_EXTRACT_PATCHES_METADATA: Metadata = {
 
 
 interface MrisExtractPatchesParameters {
-    "@type": "freesurfer.mris_extract_patches";
+    "@type"?: "freesurfer/mris_extract_patches";
     "subject": string;
     "output_dir": string;
 }
+type MrisExtractPatchesParametersTagged = Required<Pick<MrisExtractPatchesParameters, '@type'>> & MrisExtractPatchesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_extract_patches": mris_extract_patches_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_extract_patches(...)`.
+ * Output object returned when calling `MrisExtractPatchesParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface MrisExtractPatchesOutputs {
 function mris_extract_patches_params(
     subject: string,
     output_dir: string,
-): MrisExtractPatchesParameters {
+): MrisExtractPatchesParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_extract_patches" as const,
+        "@type": "freesurfer/mris_extract_patches" as const,
         "subject": subject,
         "output_dir": output_dir,
     };
@@ -180,7 +148,6 @@ function mris_extract_patches(
 export {
       MRIS_EXTRACT_PATCHES_METADATA,
       MrisExtractPatchesOutputs,
-      MrisExtractPatchesParameters,
       mris_extract_patches,
       mris_extract_patches_execute,
       mris_extract_patches_params,

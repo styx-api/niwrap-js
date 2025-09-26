@@ -12,7 +12,7 @@ const MRI_ENTOWM_SEG_METADATA: Metadata = {
 
 
 interface MriEntowmSegParameters {
-    "@type": "freesurfer.mri_entowm_seg";
+    "@type"?: "freesurfer/mri_entowm_seg";
     "input_image"?: InputPathType | null | undefined;
     "output_segmentation"?: string | null | undefined;
     "recon_subjects"?: Array<string> | null | undefined;
@@ -39,44 +39,11 @@ interface MriEntowmSegParameters {
     "no_cite_sclimbic": boolean;
     "nchannels"?: number | null | undefined;
 }
+type MriEntowmSegParametersTagged = Required<Pick<MriEntowmSegParameters, '@type'>> & MriEntowmSegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_entowm_seg": mri_entowm_seg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_entowm_seg": mri_entowm_seg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_entowm_seg(...)`.
+ * Output object returned when calling `MriEntowmSegParameters(...)`.
  *
  * @interface
  */
@@ -161,9 +128,9 @@ function mri_entowm_seg_params(
     output_base: string | null = null,
     no_cite_sclimbic: boolean = false,
     nchannels: number | null = null,
-): MriEntowmSegParameters {
+): MriEntowmSegParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_entowm_seg" as const,
+        "@type": "freesurfer/mri_entowm_seg" as const,
         "conform": conform,
         "etiv": etiv,
         "write_posteriors": write_posteriors,
@@ -260,10 +227,10 @@ function mri_entowm_seg_cargs(
             (params["subjects_directory"] ?? null)
         );
     }
-    if ((params["conform"] ?? null)) {
+    if ((params["conform"] ?? false)) {
         cargs.push("--conform");
     }
-    if ((params["etiv"] ?? null)) {
+    if ((params["etiv"] ?? false)) {
         cargs.push("--etiv");
     }
     if ((params["tal"] ?? null) !== null) {
@@ -272,13 +239,13 @@ function mri_entowm_seg_cargs(
             (params["tal"] ?? null)
         );
     }
-    if ((params["write_posteriors"] ?? null)) {
+    if ((params["write_posteriors"] ?? false)) {
         cargs.push("--write_posteriors");
     }
-    if ((params["write_volumes"] ?? null)) {
+    if ((params["write_volumes"] ?? false)) {
         cargs.push("--write_volumes");
     }
-    if ((params["write_qa_stats"] ?? null)) {
+    if ((params["write_qa_stats"] ?? false)) {
         cargs.push("--write_qa_stats");
     }
     if ((params["exclude_labels"] ?? null) !== null) {
@@ -287,10 +254,10 @@ function mri_entowm_seg_cargs(
             ...(params["exclude_labels"] ?? null)
         );
     }
-    if ((params["keep_ac"] ?? null)) {
+    if ((params["keep_ac"] ?? false)) {
         cargs.push("--keep_ac");
     }
-    if ((params["vox_count_volumes"] ?? null)) {
+    if ((params["vox_count_volumes"] ?? false)) {
         cargs.push("--vox-count-volumes");
     }
     if ((params["model_weights"] ?? null) !== null) {
@@ -311,10 +278,10 @@ function mri_entowm_seg_cargs(
             (params["population_stats"] ?? null)
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["vmp"] ?? null)) {
+    if ((params["vmp"] ?? false)) {
         cargs.push("--vmp");
     }
     if ((params["threads"] ?? null) !== null) {
@@ -323,7 +290,7 @@ function mri_entowm_seg_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["seven_tesla"] ?? null)) {
+    if ((params["seven_tesla"] ?? false)) {
         cargs.push("--7T");
     }
     if ((params["percentile"] ?? null) !== null) {
@@ -344,7 +311,7 @@ function mri_entowm_seg_cargs(
             (params["output_base"] ?? null)
         );
     }
-    if ((params["no_cite_sclimbic"] ?? null)) {
+    if ((params["no_cite_sclimbic"] ?? false)) {
         cargs.push("--no-cite-sclimbic");
     }
     if ((params["nchannels"] ?? null) !== null) {
@@ -482,7 +449,6 @@ function mri_entowm_seg(
 export {
       MRI_ENTOWM_SEG_METADATA,
       MriEntowmSegOutputs,
-      MriEntowmSegParameters,
       mri_entowm_seg,
       mri_entowm_seg_execute,
       mri_entowm_seg_params,

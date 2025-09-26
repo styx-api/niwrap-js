@@ -12,47 +12,15 @@ const MRIS_MAP_CUTS_METADATA: Metadata = {
 
 
 interface MrisMapCutsParameters {
-    "@type": "freesurfer.mris_map_cuts";
+    "@type"?: "freesurfer/mris_map_cuts";
     "input_patch": InputPathType;
     "output_patch": string;
 }
+type MrisMapCutsParametersTagged = Required<Pick<MrisMapCutsParameters, '@type'>> & MrisMapCutsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_map_cuts": mris_map_cuts_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_map_cuts(...)`.
+ * Output object returned when calling `MrisMapCutsParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface MrisMapCutsOutputs {
 function mris_map_cuts_params(
     input_patch: InputPathType,
     output_patch: string,
-): MrisMapCutsParameters {
+): MrisMapCutsParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_map_cuts" as const,
+        "@type": "freesurfer/mris_map_cuts" as const,
         "input_patch": input_patch,
         "output_patch": output_patch,
     };
@@ -180,7 +148,6 @@ function mris_map_cuts(
 export {
       MRIS_MAP_CUTS_METADATA,
       MrisMapCutsOutputs,
-      MrisMapCutsParameters,
       mris_map_cuts,
       mris_map_cuts_execute,
       mris_map_cuts_params,

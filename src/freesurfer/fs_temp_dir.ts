@@ -12,48 +12,15 @@ const FS_TEMP_DIR_METADATA: Metadata = {
 
 
 interface FsTempDirParameters {
-    "@type": "freesurfer.fs_temp_dir";
+    "@type"?: "freesurfer/fs_temp_dir";
     "base_directory"?: string | null | undefined;
     "scratch": boolean;
 }
+type FsTempDirParametersTagged = Required<Pick<FsTempDirParameters, '@type'>> & FsTempDirParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fs_temp_dir": fs_temp_dir_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.fs_temp_dir": fs_temp_dir_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fs_temp_dir(...)`.
+ * Output object returned when calling `FsTempDirParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface FsTempDirOutputs {
 function fs_temp_dir_params(
     base_directory: string | null = null,
     scratch: boolean = false,
-): FsTempDirParameters {
+): FsTempDirParametersTagged {
     const params = {
-        "@type": "freesurfer.fs_temp_dir" as const,
+        "@type": "freesurfer/fs_temp_dir" as const,
         "scratch": scratch,
     };
     if (base_directory !== null) {
@@ -112,7 +79,7 @@ function fs_temp_dir_cargs(
             (params["base_directory"] ?? null)
         );
     }
-    if ((params["scratch"] ?? null)) {
+    if ((params["scratch"] ?? false)) {
         cargs.push("--scratch");
     }
     return cargs;
@@ -195,7 +162,6 @@ function fs_temp_dir(
 export {
       FS_TEMP_DIR_METADATA,
       FsTempDirOutputs,
-      FsTempDirParameters,
       fs_temp_dir,
       fs_temp_dir_execute,
       fs_temp_dir_params,

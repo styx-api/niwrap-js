@@ -12,51 +12,18 @@ const TBSS_FILL_METADATA: Metadata = {
 
 
 interface TbssFillParameters {
-    "@type": "fsl.tbss_fill";
+    "@type"?: "fsl/tbss_fill";
     "stats_image": InputPathType;
     "threshold": number;
     "mean_fa": InputPathType;
     "output": string;
     "include_negative_flag": boolean;
 }
+type TbssFillParametersTagged = Required<Pick<TbssFillParameters, '@type'>> & TbssFillParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.tbss_fill": tbss_fill_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.tbss_fill": tbss_fill_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tbss_fill(...)`.
+ * Output object returned when calling `TbssFillParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function tbss_fill_params(
     mean_fa: InputPathType,
     output: string,
     include_negative_flag: boolean = false,
-): TbssFillParameters {
+): TbssFillParametersTagged {
     const params = {
-        "@type": "fsl.tbss_fill" as const,
+        "@type": "fsl/tbss_fill" as const,
         "stats_image": stats_image,
         "threshold": threshold,
         "mean_fa": mean_fa,
@@ -120,7 +87,7 @@ function tbss_fill_cargs(
     cargs.push(String((params["threshold"] ?? null)));
     cargs.push(execution.inputFile((params["mean_fa"] ?? null)));
     cargs.push((params["output"] ?? null));
-    if ((params["include_negative_flag"] ?? null)) {
+    if ((params["include_negative_flag"] ?? false)) {
         cargs.push("-n");
     }
     return cargs;
@@ -209,7 +176,6 @@ function tbss_fill(
 export {
       TBSS_FILL_METADATA,
       TbssFillOutputs,
-      TbssFillParameters,
       tbss_fill,
       tbss_fill_execute,
       tbss_fill_params,

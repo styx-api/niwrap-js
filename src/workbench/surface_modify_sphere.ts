@@ -12,50 +12,17 @@ const SURFACE_MODIFY_SPHERE_METADATA: Metadata = {
 
 
 interface SurfaceModifySphereParameters {
-    "@type": "workbench.surface-modify-sphere";
+    "@type"?: "workbench/surface-modify-sphere";
     "sphere_in": InputPathType;
     "radius": number;
     "sphere_out": string;
     "opt_recenter": boolean;
 }
+type SurfaceModifySphereParametersTagged = Required<Pick<SurfaceModifySphereParameters, '@type'>> & SurfaceModifySphereParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-modify-sphere": surface_modify_sphere_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-modify-sphere": surface_modify_sphere_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_modify_sphere(...)`.
+ * Output object returned when calling `SurfaceModifySphereParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function surface_modify_sphere_params(
     radius: number,
     sphere_out: string,
     opt_recenter: boolean = false,
-): SurfaceModifySphereParameters {
+): SurfaceModifySphereParametersTagged {
     const params = {
-        "@type": "workbench.surface-modify-sphere" as const,
+        "@type": "workbench/surface-modify-sphere" as const,
         "sphere_in": sphere_in,
         "radius": radius,
         "sphere_out": sphere_out,
@@ -116,7 +83,7 @@ function surface_modify_sphere_cargs(
     cargs.push(execution.inputFile((params["sphere_in"] ?? null)));
     cargs.push(String((params["radius"] ?? null)));
     cargs.push((params["sphere_out"] ?? null));
-    if ((params["opt_recenter"] ?? null)) {
+    if ((params["opt_recenter"] ?? false)) {
         cargs.push("-recenter");
     }
     return cargs;
@@ -211,7 +178,6 @@ function surface_modify_sphere(
 export {
       SURFACE_MODIFY_SPHERE_METADATA,
       SurfaceModifySphereOutputs,
-      SurfaceModifySphereParameters,
       surface_modify_sphere,
       surface_modify_sphere_execute,
       surface_modify_sphere_params,

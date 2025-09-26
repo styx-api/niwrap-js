@@ -12,47 +12,15 @@ const RECONBATCHJOBS_METADATA: Metadata = {
 
 
 interface ReconbatchjobsParameters {
-    "@type": "freesurfer.reconbatchjobs";
+    "@type"?: "freesurfer/reconbatchjobs";
     "logfile": string;
     "cmdfiles": Array<string>;
 }
+type ReconbatchjobsParametersTagged = Required<Pick<ReconbatchjobsParameters, '@type'>> & ReconbatchjobsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.reconbatchjobs": reconbatchjobs_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `reconbatchjobs(...)`.
+ * Output object returned when calling `ReconbatchjobsParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface ReconbatchjobsOutputs {
 function reconbatchjobs_params(
     logfile: string,
     cmdfiles: Array<string>,
-): ReconbatchjobsParameters {
+): ReconbatchjobsParametersTagged {
     const params = {
-        "@type": "freesurfer.reconbatchjobs" as const,
+        "@type": "freesurfer/reconbatchjobs" as const,
         "logfile": logfile,
         "cmdfiles": cmdfiles,
     };
@@ -180,7 +148,6 @@ function reconbatchjobs(
 export {
       RECONBATCHJOBS_METADATA,
       ReconbatchjobsOutputs,
-      ReconbatchjobsParameters,
       reconbatchjobs,
       reconbatchjobs_execute,
       reconbatchjobs_params,

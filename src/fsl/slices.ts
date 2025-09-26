@@ -12,50 +12,18 @@ const SLICES_METADATA: Metadata = {
 
 
 interface SlicesParameters {
-    "@type": "fsl.slices";
+    "@type"?: "fsl/slices";
     "primary_input": InputPathType;
     "secondary_input"?: InputPathType | null | undefined;
     "scale_factor"?: number | null | undefined;
     "intensity_range"?: Array<number> | null | undefined;
     "output_gif"?: string | null | undefined;
 }
+type SlicesParametersTagged = Required<Pick<SlicesParameters, '@type'>> & SlicesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.slices": slices_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `slices(...)`.
+ * Output object returned when calling `SlicesParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function slices_params(
     scale_factor: number | null = null,
     intensity_range: Array<number> | null = null,
     output_gif: string | null = null,
-): SlicesParameters {
+): SlicesParametersTagged {
     const params = {
-        "@type": "fsl.slices" as const,
+        "@type": "fsl/slices" as const,
         "primary_input": primary_input,
     };
     if (secondary_input !== null) {
@@ -226,7 +194,6 @@ function slices(
 export {
       SLICES_METADATA,
       SlicesOutputs,
-      SlicesParameters,
       slices,
       slices_execute,
       slices_params,

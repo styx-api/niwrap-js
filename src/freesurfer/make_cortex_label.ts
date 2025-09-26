@@ -12,50 +12,17 @@ const MAKE_CORTEX_LABEL_METADATA: Metadata = {
 
 
 interface MakeCortexLabelParameters {
-    "@type": "freesurfer.make_cortex_label";
+    "@type"?: "freesurfer/make_cortex_label";
     "subject": string;
     "hemi"?: string | null | undefined;
     "use_a2009s": boolean;
     "output_name"?: string | null | undefined;
 }
+type MakeCortexLabelParametersTagged = Required<Pick<MakeCortexLabelParameters, '@type'>> & MakeCortexLabelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.make_cortex_label": make_cortex_label_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.make_cortex_label": make_cortex_label_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `make_cortex_label(...)`.
+ * Output object returned when calling `MakeCortexLabelParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +57,9 @@ function make_cortex_label_params(
     hemi: string | null = null,
     use_a2009s: boolean = false,
     output_name: string | null = null,
-): MakeCortexLabelParameters {
+): MakeCortexLabelParametersTagged {
     const params = {
-        "@type": "freesurfer.make_cortex_label" as const,
+        "@type": "freesurfer/make_cortex_label" as const,
         "subject": subject,
         "use_a2009s": use_a2009s,
     };
@@ -130,7 +97,7 @@ function make_cortex_label_cargs(
             (params["hemi"] ?? null)
         );
     }
-    if ((params["use_a2009s"] ?? null)) {
+    if ((params["use_a2009s"] ?? false)) {
         cargs.push("--a2009s");
     }
     if ((params["output_name"] ?? null) !== null) {
@@ -224,7 +191,6 @@ function make_cortex_label(
 export {
       MAKE_CORTEX_LABEL_METADATA,
       MakeCortexLabelOutputs,
-      MakeCortexLabelParameters,
       make_cortex_label,
       make_cortex_label_execute,
       make_cortex_label_params,

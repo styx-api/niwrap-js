@@ -12,49 +12,16 @@ const VIENA_QUANT_METADATA: Metadata = {
 
 
 interface VienaQuantParameters {
-    "@type": "fsl.viena_quant";
+    "@type"?: "fsl/viena_quant";
     "input1": InputPathType;
     "input2": InputPathType;
     "ventricle_mask": InputPathType;
 }
+type VienaQuantParametersTagged = Required<Pick<VienaQuantParameters, '@type'>> & VienaQuantParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.viena_quant": viena_quant_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.viena_quant": viena_quant_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `viena_quant(...)`.
+ * Output object returned when calling `VienaQuantParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function viena_quant_params(
     input1: InputPathType,
     input2: InputPathType,
     ventricle_mask: InputPathType,
-): VienaQuantParameters {
+): VienaQuantParametersTagged {
     const params = {
-        "@type": "fsl.viena_quant" as const,
+        "@type": "fsl/viena_quant" as const,
         "input1": input1,
         "input2": input2,
         "ventricle_mask": ventricle_mask,
@@ -193,7 +160,6 @@ function viena_quant(
 export {
       VIENA_QUANT_METADATA,
       VienaQuantOutputs,
-      VienaQuantParameters,
       viena_quant,
       viena_quant_execute,
       viena_quant_params,

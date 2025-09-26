@@ -12,7 +12,7 @@ const V_1DEVAL_METADATA: Metadata = {
 
 
 interface V1devalParameters {
-    "@type": "afni.1deval";
+    "@type"?: "afni/1deval";
     "del"?: number | null | undefined;
     "start"?: number | null | undefined;
     "num"?: number | null | undefined;
@@ -22,44 +22,11 @@ interface V1devalParameters {
     "symbol_values"?: Array<string> | null | undefined;
     "expression": string;
 }
+type V1devalParametersTagged = Required<Pick<V1devalParameters, '@type'>> & V1devalParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1deval": v_1deval_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.1deval": v_1deval_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1deval(...)`.
+ * Output object returned when calling `V1devalParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function v_1deval_params(
     v_1_d: boolean = false,
     symbols: Array<InputPathType> | null = null,
     symbol_values: Array<string> | null = null,
-): V1devalParameters {
+): V1devalParametersTagged {
     const params = {
-        "@type": "afni.1deval" as const,
+        "@type": "afni/1deval" as const,
         "1D": v_1_d,
         "expression": expression,
     };
@@ -164,7 +131,7 @@ function v_1deval_cargs(
             execution.inputFile((params["index"] ?? null))
         );
     }
-    if ((params["1D"] ?? null)) {
+    if ((params["1D"] ?? false)) {
         cargs.push("-1D:");
     }
     if ((params["symbols"] ?? null) !== null) {
@@ -274,7 +241,6 @@ function v_1deval(
 
 export {
       V1devalOutputs,
-      V1devalParameters,
       V_1DEVAL_METADATA,
       v_1deval,
       v_1deval_execute,

@@ -12,7 +12,7 @@ const V__SCALE_VOLUME_METADATA: Metadata = {
 
 
 interface VScaleVolumeParameters {
-    "@type": "afni.@ScaleVolume";
+    "@type"?: "afni/@ScaleVolume";
     "input_dset": InputPathType;
     "prefix": string;
     "val_clip"?: Array<number> | null | undefined;
@@ -22,44 +22,11 @@ interface VScaleVolumeParameters {
     "norm": boolean;
     "mask"?: InputPathType | null | undefined;
 }
+type VScaleVolumeParametersTagged = Required<Pick<VScaleVolumeParameters, '@type'>> & VScaleVolumeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@ScaleVolume": v__scale_volume_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@ScaleVolume": v__scale_volume_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__scale_volume(...)`.
+ * Output object returned when calling `VScaleVolumeParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function v__scale_volume_params(
     scale_by_median: boolean = false,
     norm: boolean = false,
     mask: InputPathType | null = null,
-): VScaleVolumeParameters {
+): VScaleVolumeParametersTagged {
     const params = {
-        "@type": "afni.@ScaleVolume" as const,
+        "@type": "afni/@ScaleVolume" as const,
         "input_dset": input_dset,
         "prefix": prefix,
         "scale_by_mean": scale_by_mean,
@@ -148,13 +115,13 @@ function v__scale_volume_cargs(
             ...(params["perc_clip"] ?? null).map(String)
         );
     }
-    if ((params["scale_by_mean"] ?? null)) {
+    if ((params["scale_by_mean"] ?? false)) {
         cargs.push("-scale_by_mean");
     }
-    if ((params["scale_by_median"] ?? null)) {
+    if ((params["scale_by_median"] ?? false)) {
         cargs.push("-scale_by_median");
     }
-    if ((params["norm"] ?? null)) {
+    if ((params["norm"] ?? false)) {
         cargs.push("-norm");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -254,7 +221,6 @@ function v__scale_volume(
 
 export {
       VScaleVolumeOutputs,
-      VScaleVolumeParameters,
       V__SCALE_VOLUME_METADATA,
       v__scale_volume,
       v__scale_volume_execute,

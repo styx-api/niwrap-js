@@ -12,7 +12,7 @@ const MRI_ROBUST_TEMPLATE_METADATA: Metadata = {
 
 
 interface MriRobustTemplateParameters {
-    "@type": "freesurfer.mri_robust_template";
+    "@type"?: "freesurfer/mri_robust_template";
     "mov_files": Array<InputPathType>;
     "template_file": string;
     "sat_value"?: number | null | undefined;
@@ -51,44 +51,11 @@ interface MriRobustTemplateParameters {
     "frobnorm_thresh"?: number | null | undefined;
     "debug_flag": boolean;
 }
+type MriRobustTemplateParametersTagged = Required<Pick<MriRobustTemplateParameters, '@type'>> & MriRobustTemplateParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_robust_template": mri_robust_template_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_robust_template": mri_robust_template_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_robust_template(...)`.
+ * Output object returned when calling `MriRobustTemplateParameters(...)`.
  *
  * @interface
  */
@@ -197,9 +164,9 @@ function mri_robust_template_params(
     res_thresh: number | null = null,
     frobnorm_thresh: number | null = null,
     debug_flag: boolean = false,
-): MriRobustTemplateParameters {
+): MriRobustTemplateParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_robust_template" as const,
+        "@type": "freesurfer/mri_robust_template" as const,
         "mov_files": mov_files,
         "template_file": template_file,
         "satit_flag": satit_flag,
@@ -308,7 +275,7 @@ function mri_robust_template_cargs(
             String((params["sat_value"] ?? null))
         );
     }
-    if ((params["satit_flag"] ?? null)) {
+    if ((params["satit_flag"] ?? false)) {
         cargs.push("--satit");
     }
     if ((params["lta_files"] ?? null) !== null) {
@@ -335,7 +302,7 @@ function mri_robust_template_cargs(
             ...(params["weights_files"] ?? null)
         );
     }
-    if ((params["oneminusw_flag"] ?? null)) {
+    if ((params["oneminusw_flag"] ?? false)) {
         cargs.push("--oneminusw");
     }
     if ((params["average_type"] ?? null) !== null) {
@@ -350,13 +317,13 @@ function mri_robust_template_cargs(
             String((params["inittp"] ?? null))
         );
     }
-    if ((params["fixtp_flag"] ?? null)) {
+    if ((params["fixtp_flag"] ?? false)) {
         cargs.push("--fixtp");
     }
-    if ((params["iscale_flag"] ?? null)) {
+    if ((params["iscale_flag"] ?? false)) {
         cargs.push("--iscale");
     }
-    if ((params["iscaleonly_flag"] ?? null)) {
+    if ((params["iscaleonly_flag"] ?? false)) {
         cargs.push("--iscaleonly");
     }
     if ((params["iscalein_files"] ?? null) !== null) {
@@ -371,10 +338,10 @@ function mri_robust_template_cargs(
             ...(params["iscaleout_files"] ?? null)
         );
     }
-    if ((params["transonly_flag"] ?? null)) {
+    if ((params["transonly_flag"] ?? false)) {
         cargs.push("--transonly");
     }
-    if ((params["affine_flag"] ?? null)) {
+    if ((params["affine_flag"] ?? false)) {
         cargs.push("--affine");
     }
     if ((params["ixforms_files"] ?? null) !== null) {
@@ -389,13 +356,13 @@ function mri_robust_template_cargs(
             ...(params["masks_files"] ?? null)
         );
     }
-    if ((params["vox2vox_flag"] ?? null)) {
+    if ((params["vox2vox_flag"] ?? false)) {
         cargs.push("--vox2vox");
     }
-    if ((params["leastsquares_flag"] ?? null)) {
+    if ((params["leastsquares_flag"] ?? false)) {
         cargs.push("--leastsquares");
     }
-    if ((params["noit_flag"] ?? null)) {
+    if ((params["noit_flag"] ?? false)) {
         cargs.push("--noit");
     }
     if ((params["maxit"] ?? null) !== null) {
@@ -434,19 +401,19 @@ function mri_robust_template_cargs(
             String((params["subsample"] ?? null))
         );
     }
-    if ((params["nomulti_flag"] ?? null)) {
+    if ((params["nomulti_flag"] ?? false)) {
         cargs.push("--nomulti");
     }
-    if ((params["floattype_flag"] ?? null)) {
+    if ((params["floattype_flag"] ?? false)) {
         cargs.push("--floattype");
     }
-    if ((params["finalnearest_flag"] ?? null)) {
+    if ((params["finalnearest_flag"] ?? false)) {
         cargs.push("--finalnearest");
     }
-    if ((params["doubleprec_flag"] ?? null)) {
+    if ((params["doubleprec_flag"] ?? false)) {
         cargs.push("--doubleprec");
     }
-    if ((params["cras_flag"] ?? null)) {
+    if ((params["cras_flag"] ?? false)) {
         cargs.push("--cras");
     }
     if ((params["res_thresh"] ?? null) !== null) {
@@ -461,7 +428,7 @@ function mri_robust_template_cargs(
             String((params["frobnorm_thresh"] ?? null))
         );
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -617,7 +584,6 @@ function mri_robust_template(
 export {
       MRI_ROBUST_TEMPLATE_METADATA,
       MriRobustTemplateOutputs,
-      MriRobustTemplateParameters,
       mri_robust_template,
       mri_robust_template_execute,
       mri_robust_template_params,

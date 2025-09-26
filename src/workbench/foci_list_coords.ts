@@ -12,48 +12,16 @@ const FOCI_LIST_COORDS_METADATA: Metadata = {
 
 
 interface FociListCoordsParameters {
-    "@type": "workbench.foci-list-coords";
+    "@type"?: "workbench/foci-list-coords";
     "foci_file": InputPathType;
     "coord_file_out": string;
     "opt_names_out_names_file_out"?: string | null | undefined;
 }
+type FociListCoordsParametersTagged = Required<Pick<FociListCoordsParameters, '@type'>> & FociListCoordsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.foci-list-coords": foci_list_coords_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `foci_list_coords(...)`.
+ * Output object returned when calling `FociListCoordsParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function foci_list_coords_params(
     foci_file: InputPathType,
     coord_file_out: string,
     opt_names_out_names_file_out: string | null = null,
-): FociListCoordsParameters {
+): FociListCoordsParametersTagged {
     const params = {
-        "@type": "workbench.foci-list-coords" as const,
+        "@type": "workbench/foci-list-coords" as const,
         "foci_file": foci_file,
         "coord_file_out": coord_file_out,
     };
@@ -199,7 +167,6 @@ function foci_list_coords(
 export {
       FOCI_LIST_COORDS_METADATA,
       FociListCoordsOutputs,
-      FociListCoordsParameters,
       foci_list_coords,
       foci_list_coords_execute,
       foci_list_coords_params,

@@ -12,50 +12,17 @@ const MRIS_LEFT_RIGHT_REGISTER_METADATA: Metadata = {
 
 
 interface MrisLeftRightRegisterParameters {
-    "@type": "freesurfer.mris_left_right_register";
+    "@type"?: "freesurfer/mris_left_right_register";
     "lh_sphere": InputPathType;
     "rh_sphere": InputPathType;
     "lh_sphere_left_right": string;
     "rh_sphere_left_right": string;
 }
+type MrisLeftRightRegisterParametersTagged = Required<Pick<MrisLeftRightRegisterParameters, '@type'>> & MrisLeftRightRegisterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_left_right_register": mris_left_right_register_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_left_right_register": mris_left_right_register_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_left_right_register(...)`.
+ * Output object returned when calling `MrisLeftRightRegisterParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +57,9 @@ function mris_left_right_register_params(
     rh_sphere: InputPathType,
     lh_sphere_left_right: string,
     rh_sphere_left_right: string,
-): MrisLeftRightRegisterParameters {
+): MrisLeftRightRegisterParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_left_right_register" as const,
+        "@type": "freesurfer/mris_left_right_register" as const,
         "lh_sphere": lh_sphere,
         "rh_sphere": rh_sphere,
         "lh_sphere_left_right": lh_sphere_left_right,
@@ -205,7 +172,6 @@ function mris_left_right_register(
 export {
       MRIS_LEFT_RIGHT_REGISTER_METADATA,
       MrisLeftRightRegisterOutputs,
-      MrisLeftRightRegisterParameters,
       mris_left_right_register,
       mris_left_right_register_execute,
       mris_left_right_register_params,

@@ -12,14 +12,15 @@ const AMP2RESPONSE_METADATA: Metadata = {
 
 
 interface Amp2responseConfigParameters {
-    "@type": "mrtrix.amp2response.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Amp2responseConfigParametersTagged = Required<Pick<Amp2responseConfigParameters, '@type'>> & Amp2responseConfigParameters;
 
 
 interface Amp2responseParameters {
-    "@type": "mrtrix.amp2response";
+    "@type"?: "mrtrix/amp2response";
     "isotropic": boolean;
     "noconstraint": boolean;
     "directions"?: InputPathType | null | undefined;
@@ -38,41 +39,7 @@ interface Amp2responseParameters {
     "directions_1": InputPathType;
     "response": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.amp2response": amp2response_cargs,
-        "mrtrix.amp2response.config": amp2response_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.amp2response": amp2response_outputs,
-    };
-    return outputsFuncs[t];
-}
+type Amp2responseParametersTagged = Required<Pick<Amp2responseParameters, '@type'>> & Amp2responseParameters;
 
 
 /**
@@ -86,9 +53,9 @@ function dynOutputs(
 function amp2response_config_params(
     key: string,
     value: string,
-): Amp2responseConfigParameters {
+): Amp2responseConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.amp2response.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -117,7 +84,7 @@ function amp2response_config_cargs(
 
 
 /**
- * Output object returned when calling `amp2response(...)`.
+ * Output object returned when calling `Amp2responseParameters(...)`.
  *
  * @interface
  */
@@ -175,9 +142,9 @@ function amp2response_params(
     config: Array<Amp2responseConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Amp2responseParameters {
+): Amp2responseParametersTagged {
     const params = {
-        "@type": "mrtrix.amp2response" as const,
+        "@type": "mrtrix/amp2response" as const,
         "isotropic": isotropic,
         "noconstraint": noconstraint,
         "info": info,
@@ -224,10 +191,10 @@ function amp2response_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("amp2response");
-    if ((params["isotropic"] ?? null)) {
+    if ((params["isotropic"] ?? false)) {
         cargs.push("-isotropic");
     }
-    if ((params["noconstraint"] ?? null)) {
+    if ((params["noconstraint"] ?? false)) {
         cargs.push("-noconstraint");
     }
     if ((params["directions"] ?? null) !== null) {
@@ -248,16 +215,16 @@ function amp2response_cargs(
             (params["lmax"] ?? null).map(String).join(",")
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -267,12 +234,12 @@ function amp2response_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => amp2response_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["amps"] ?? null)));
@@ -405,9 +372,7 @@ function amp2response(
 
 export {
       AMP2RESPONSE_METADATA,
-      Amp2responseConfigParameters,
       Amp2responseOutputs,
-      Amp2responseParameters,
       amp2response,
       amp2response_config_params,
       amp2response_execute,

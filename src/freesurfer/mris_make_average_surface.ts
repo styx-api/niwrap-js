@@ -12,7 +12,7 @@ const MRIS_MAKE_AVERAGE_SURFACE_METADATA: Metadata = {
 
 
 interface MrisMakeAverageSurfaceParameters {
-    "@type": "freesurfer.mris_make_average_surface";
+    "@type"?: "freesurfer/mris_make_average_surface";
     "hemi": string;
     "outsurfname": string;
     "cansurfname": string;
@@ -29,44 +29,11 @@ interface MrisMakeAverageSurfaceParameters {
     "simple"?: Array<string> | null | undefined;
     "diagno"?: number | null | undefined;
 }
+type MrisMakeAverageSurfaceParametersTagged = Required<Pick<MrisMakeAverageSurfaceParameters, '@type'>> & MrisMakeAverageSurfaceParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_make_average_surface": mris_make_average_surface_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_make_average_surface": mris_make_average_surface_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_make_average_surface(...)`.
+ * Output object returned when calling `MrisMakeAverageSurfaceParameters(...)`.
  *
  * @interface
  */
@@ -119,9 +86,9 @@ function mris_make_average_surface_params(
     surf2surf_flag: boolean = false,
     simple: Array<string> | null = null,
     diagno: number | null = null,
-): MrisMakeAverageSurfaceParameters {
+): MrisMakeAverageSurfaceParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_make_average_surface" as const,
+        "@type": "freesurfer/mris_make_average_surface" as const,
         "hemi": hemi,
         "outsurfname": outsurfname,
         "cansurfname": cansurfname,
@@ -189,7 +156,7 @@ function mris_make_average_surface_cargs(
             (params["sdir_out"] ?? null)
         );
     }
-    if ((params["nonorm_flag"] ?? null)) {
+    if ((params["nonorm_flag"] ?? false)) {
         cargs.push("-nonorm");
     }
     if ((params["icoorder"] ?? null) !== null) {
@@ -216,7 +183,7 @@ function mris_make_average_surface_cargs(
             (params["surfname"] ?? null)
         );
     }
-    if ((params["surf2surf_flag"] ?? null)) {
+    if ((params["surf2surf_flag"] ?? false)) {
         cargs.push("-surf2surf");
     }
     if ((params["simple"] ?? null) !== null) {
@@ -337,7 +304,6 @@ function mris_make_average_surface(
 export {
       MRIS_MAKE_AVERAGE_SURFACE_METADATA,
       MrisMakeAverageSurfaceOutputs,
-      MrisMakeAverageSurfaceParameters,
       mris_make_average_surface,
       mris_make_average_surface_execute,
       mris_make_average_surface_params,

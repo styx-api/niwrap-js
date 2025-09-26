@@ -12,49 +12,16 @@ const COLUMN_CAT_METADATA: Metadata = {
 
 
 interface ColumnCatParameters {
-    "@type": "afni.column_cat";
+    "@type"?: "afni/column_cat";
     "line_number"?: number | null | undefined;
     "separator_string"?: string | null | undefined;
     "input_files": Array<InputPathType>;
 }
+type ColumnCatParametersTagged = Required<Pick<ColumnCatParameters, '@type'>> & ColumnCatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.column_cat": column_cat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.column_cat": column_cat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `column_cat(...)`.
+ * Output object returned when calling `ColumnCatParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function column_cat_params(
     input_files: Array<InputPathType>,
     line_number: number | null = null,
     separator_string: string | null = null,
-): ColumnCatParameters {
+): ColumnCatParametersTagged {
     const params = {
-        "@type": "afni.column_cat" as const,
+        "@type": "afni/column_cat" as const,
         "input_files": input_files,
     };
     if (line_number !== null) {
@@ -207,7 +174,6 @@ function column_cat(
 export {
       COLUMN_CAT_METADATA,
       ColumnCatOutputs,
-      ColumnCatParameters,
       column_cat,
       column_cat_execute,
       column_cat_params,

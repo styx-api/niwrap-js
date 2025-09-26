@@ -12,46 +12,14 @@ const MRIS_TALAIRACH_METADATA: Metadata = {
 
 
 interface MrisTalairachParameters {
-    "@type": "freesurfer.mris_talairach";
+    "@type"?: "freesurfer/mris_talairach";
     "input_image": InputPathType;
 }
+type MrisTalairachParametersTagged = Required<Pick<MrisTalairachParameters, '@type'>> & MrisTalairachParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_talairach": mris_talairach_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_talairach(...)`.
+ * Output object returned when calling `MrisTalairachParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface MrisTalairachOutputs {
  */
 function mris_talairach_params(
     input_image: InputPathType,
-): MrisTalairachParameters {
+): MrisTalairachParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_talairach" as const,
+        "@type": "freesurfer/mris_talairach" as const,
         "input_image": input_image,
     };
     return params;
@@ -173,7 +141,6 @@ function mris_talairach(
 export {
       MRIS_TALAIRACH_METADATA,
       MrisTalairachOutputs,
-      MrisTalairachParameters,
       mris_talairach,
       mris_talairach_execute,
       mris_talairach_params,

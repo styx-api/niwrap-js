@@ -12,7 +12,7 @@ const FAT_PROC_MAP_TO_DTI_METADATA: Metadata = {
 
 
 interface FatProcMapToDtiParameters {
-    "@type": "afni.fat_proc_map_to_dti";
+    "@type"?: "afni/fat_proc_map_to_dti";
     "source": InputPathType;
     "base": InputPathType;
     "prefix": string;
@@ -26,43 +26,11 @@ interface FatProcMapToDtiParameters {
     "no_cmd_out": boolean;
     "no_clean": boolean;
 }
+type FatProcMapToDtiParametersTagged = Required<Pick<FatProcMapToDtiParameters, '@type'>> & FatProcMapToDtiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.fat_proc_map_to_dti": fat_proc_map_to_dti_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fat_proc_map_to_dti(...)`.
+ * Output object returned when calling `FatProcMapToDtiParameters(...)`.
  *
  * @interface
  */
@@ -105,9 +73,9 @@ function fat_proc_map_to_dti_params(
     workdir: string | null = null,
     no_cmd_out: boolean = false,
     no_clean: boolean = false,
-): FatProcMapToDtiParameters {
+): FatProcMapToDtiParametersTagged {
     const params = {
-        "@type": "afni.fat_proc_map_to_dti" as const,
+        "@type": "afni/fat_proc_map_to_dti" as const,
         "source": source,
         "base": base,
         "prefix": prefix,
@@ -207,10 +175,10 @@ function fat_proc_map_to_dti_cargs(
             (params["workdir"] ?? null)
         );
     }
-    if ((params["no_cmd_out"] ?? null)) {
+    if ((params["no_cmd_out"] ?? false)) {
         cargs.push("-no_cmd_out");
     }
-    if ((params["no_clean"] ?? null)) {
+    if ((params["no_clean"] ?? false)) {
         cargs.push("-no_clean");
     }
     return cargs;
@@ -312,7 +280,6 @@ function fat_proc_map_to_dti(
 export {
       FAT_PROC_MAP_TO_DTI_METADATA,
       FatProcMapToDtiOutputs,
-      FatProcMapToDtiParameters,
       fat_proc_map_to_dti,
       fat_proc_map_to_dti_execute,
       fat_proc_map_to_dti_params,

@@ -12,7 +12,7 @@ const VOLUME_SMOOTHING_METADATA: Metadata = {
 
 
 interface VolumeSmoothingParameters {
-    "@type": "workbench.volume-smoothing";
+    "@type"?: "workbench/volume-smoothing";
     "volume_in": InputPathType;
     "kernel": number;
     "volume_out": string;
@@ -21,44 +21,11 @@ interface VolumeSmoothingParameters {
     "opt_fix_zeros": boolean;
     "opt_subvolume_subvol"?: string | null | undefined;
 }
+type VolumeSmoothingParametersTagged = Required<Pick<VolumeSmoothingParameters, '@type'>> & VolumeSmoothingParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-smoothing": volume_smoothing_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-smoothing": volume_smoothing_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `volume_smoothing(...)`.
+ * Output object returned when calling `VolumeSmoothingParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function volume_smoothing_params(
     opt_roi_roivol: InputPathType | null = null,
     opt_fix_zeros: boolean = false,
     opt_subvolume_subvol: string | null = null,
-): VolumeSmoothingParameters {
+): VolumeSmoothingParametersTagged {
     const params = {
-        "@type": "workbench.volume-smoothing" as const,
+        "@type": "workbench/volume-smoothing" as const,
         "volume_in": volume_in,
         "kernel": kernel,
         "volume_out": volume_out,
@@ -132,7 +99,7 @@ function volume_smoothing_cargs(
     cargs.push(execution.inputFile((params["volume_in"] ?? null)));
     cargs.push(String((params["kernel"] ?? null)));
     cargs.push((params["volume_out"] ?? null));
-    if ((params["opt_fwhm"] ?? null)) {
+    if ((params["opt_fwhm"] ?? false)) {
         cargs.push("-fwhm");
     }
     if ((params["opt_roi_roivol"] ?? null) !== null) {
@@ -141,7 +108,7 @@ function volume_smoothing_cargs(
             execution.inputFile((params["opt_roi_roivol"] ?? null))
         );
     }
-    if ((params["opt_fix_zeros"] ?? null)) {
+    if ((params["opt_fix_zeros"] ?? false)) {
         cargs.push("-fix-zeros");
     }
     if ((params["opt_subvolume_subvol"] ?? null) !== null) {
@@ -248,7 +215,6 @@ function volume_smoothing(
 export {
       VOLUME_SMOOTHING_METADATA,
       VolumeSmoothingOutputs,
-      VolumeSmoothingParameters,
       volume_smoothing,
       volume_smoothing_execute,
       volume_smoothing_params,

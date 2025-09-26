@@ -12,7 +12,7 @@ const SWI_PROCESS_METADATA: Metadata = {
 
 
 interface SwiProcessParameters {
-    "@type": "freesurfer.swi_process";
+    "@type"?: "freesurfer/swi_process";
     "magnitude_image": InputPathType;
     "phase_image": InputPathType;
     "swi_output": string;
@@ -25,44 +25,11 @@ interface SwiProcessParameters {
     "mip_level"?: number | null | undefined;
     "phase_mask_method"?: string | null | undefined;
 }
+type SwiProcessParametersTagged = Required<Pick<SwiProcessParameters, '@type'>> & SwiProcessParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.swi_process": swi_process_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.swi_process": swi_process_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `swi_process(...)`.
+ * Output object returned when calling `SwiProcessParameters(...)`.
  *
  * @interface
  */
@@ -107,9 +74,9 @@ function swi_process_params(
     phase_multiplications: number | null = null,
     mip_level: number | null = null,
     phase_mask_method: string | null = null,
-): SwiProcessParameters {
+): SwiProcessParametersTagged {
     const params = {
-        "@type": "freesurfer.swi_process" as const,
+        "@type": "freesurfer/swi_process" as const,
         "magnitude_image": magnitude_image,
         "phase_image": phase_image,
         "swi_output": swi_output,
@@ -305,7 +272,6 @@ function swi_process(
 export {
       SWI_PROCESS_METADATA,
       SwiProcessOutputs,
-      SwiProcessParameters,
       swi_process,
       swi_process_execute,
       swi_process_params,

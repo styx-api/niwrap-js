@@ -12,7 +12,7 @@ const V_3D_LME_METADATA: Metadata = {
 
 
 interface V3dLmeParameters {
-    "@type": "afni.3dLME";
+    "@type"?: "afni/3dLME";
     "PREFIX": string;
     "MODEL": string;
     "DATA_TABLE": string;
@@ -44,44 +44,11 @@ interface V3dLmeParameters {
     "SHOW_OPTIONS_FLAG": boolean;
     "SS_TYPE"?: number | null | undefined;
 }
+type V3dLmeParametersTagged = Required<Pick<V3dLmeParameters, '@type'>> & V3dLmeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dLME": v_3d_lme_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dLME": v_3d_lme_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_lme(...)`.
+ * Output object returned when calling `V3dLmeParameters(...)`.
  *
  * @interface
  */
@@ -164,9 +131,9 @@ function v_3d_lme_params(
     rio_flag: boolean = false,
     show_options_flag: boolean = false,
     ss_type: number | null = null,
-): V3dLmeParameters {
+): V3dLmeParametersTagged {
     const params = {
-        "@type": "afni.3dLME" as const,
+        "@type": "afni/3dLME" as const,
         "PREFIX": prefix,
         "MODEL": model,
         "DATA_TABLE": data_table,
@@ -270,7 +237,7 @@ function v_3d_lme_cargs(
             ...(params["BOUNDS"] ?? null).map(String)
         );
     }
-    if ((params["CIO_FLAG"] ?? null)) {
+    if ((params["CIO_FLAG"] ?? false)) {
         cargs.push("-cio");
     }
     if ((params["COR_STR"] ?? null) !== null) {
@@ -285,7 +252,7 @@ function v_3d_lme_cargs(
             String((params["CUTOFF"] ?? null))
         );
     }
-    if ((params["DBG_ARGS_FLAG"] ?? null)) {
+    if ((params["DBG_ARGS_FLAG"] ?? false)) {
         cargs.push("-dbgArgs");
     }
     if ((params["JOBS"] ?? null) !== null) {
@@ -318,19 +285,19 @@ function v_3d_lme_cargs(
             (params["GLF_CODE"] ?? null)
         );
     }
-    if ((params["ICC_FLAG"] ?? null)) {
+    if ((params["ICC_FLAG"] ?? false)) {
         cargs.push("-ICC");
     }
-    if ((params["ICCB_FLAG"] ?? null)) {
+    if ((params["ICCB_FLAG"] ?? false)) {
         cargs.push("-ICCb");
     }
-    if ((params["LOG_LIK_FLAG"] ?? null)) {
+    if ((params["LOG_LIK_FLAG"] ?? false)) {
         cargs.push("-logLik");
     }
-    if ((params["LOGIT_FLAG"] ?? null)) {
+    if ((params["LOGIT_FLAG"] ?? false)) {
         cargs.push("-LOGIT");
     }
-    if ((params["ML_FLAG"] ?? null)) {
+    if ((params["ML_FLAG"] ?? false)) {
         cargs.push("-ML");
     }
     if ((params["QVARS_CENTERS"] ?? null) !== null) {
@@ -387,10 +354,10 @@ function v_3d_lme_cargs(
             (params["REPREFIX"] ?? null)
         );
     }
-    if ((params["RIO_FLAG"] ?? null)) {
+    if ((params["RIO_FLAG"] ?? false)) {
         cargs.push("-Rio");
     }
-    if ((params["SHOW_OPTIONS_FLAG"] ?? null)) {
+    if ((params["SHOW_OPTIONS_FLAG"] ?? false)) {
         cargs.push("-show_allowed_options");
     }
     if ((params["SS_TYPE"] ?? null) !== null) {
@@ -534,7 +501,6 @@ function v_3d_lme(
 
 export {
       V3dLmeOutputs,
-      V3dLmeParameters,
       V_3D_LME_METADATA,
       v_3d_lme,
       v_3d_lme_execute,

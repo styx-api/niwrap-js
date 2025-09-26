@@ -12,7 +12,7 @@ const MRI_SURF2SURF_METADATA: Metadata = {
 
 
 interface MriSurf2surfParameters {
-    "@type": "freesurfer.mri_surf2surf";
+    "@type"?: "freesurfer/mri_surf2surf";
     "src_subject": string;
     "sval_path"?: InputPathType | null | undefined;
     "sval_xyz"?: string | null | undefined;
@@ -70,44 +70,11 @@ interface MriSurf2surfParameters {
     "rms"?: InputPathType | null | undefined;
     "rms_mask"?: InputPathType | null | undefined;
 }
+type MriSurf2surfParametersTagged = Required<Pick<MriSurf2surfParameters, '@type'>> & MriSurf2surfParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_surf2surf": mri_surf2surf_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_surf2surf": mri_surf2surf_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_surf2surf(...)`.
+ * Output object returned when calling `MriSurf2surfParameters(...)`.
  *
  * @interface
  */
@@ -246,9 +213,9 @@ function mri_surf2surf_params(
     reg_diff: string | null = null,
     rms: InputPathType | null = null,
     rms_mask: InputPathType | null = null,
-): MriSurf2surfParameters {
+): MriSurf2surfParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_surf2surf" as const,
+        "@type": "freesurfer/mri_surf2surf" as const,
         "src_subject": src_subject,
         "trg_subject": trg_subject,
         "dual_hemi": dual_hemi,
@@ -548,10 +515,10 @@ function mri_surf2surf_cargs(
             (params["trg_hemi"] ?? null)
         );
     }
-    if ((params["dual_hemi"] ?? null)) {
+    if ((params["dual_hemi"] ?? false)) {
         cargs.push("--dual-hemi");
     }
-    if ((params["jac"] ?? null)) {
+    if ((params["jac"] ?? false)) {
         cargs.push("--jac");
     }
     if ((params["surfreg"] ?? null) !== null) {
@@ -608,10 +575,10 @@ function mri_surf2surf_cargs(
             String((params["nsmooth_out"] ?? null))
         );
     }
-    if ((params["cortex"] ?? null)) {
+    if ((params["cortex"] ?? false)) {
         cargs.push("--cortex");
     }
-    if ((params["no_cortex"] ?? null)) {
+    if ((params["no_cortex"] ?? false)) {
         cargs.push("--no-cortex");
     }
     if ((params["label_src"] ?? null) !== null) {
@@ -638,7 +605,7 @@ function mri_surf2surf_cargs(
             String((params["div"] ?? null))
         );
     }
-    if ((params["reshape"] ?? null)) {
+    if ((params["reshape"] ?? false)) {
         cargs.push("--reshape");
     }
     if ((params["reshape_factor"] ?? null) !== null) {
@@ -647,19 +614,19 @@ function mri_surf2surf_cargs(
             String((params["reshape_factor"] ?? null))
         );
     }
-    if ((params["reshape3d"] ?? null)) {
+    if ((params["reshape3d"] ?? false)) {
         cargs.push("--reshape3d");
     }
-    if ((params["split"] ?? null)) {
+    if ((params["split"] ?? false)) {
         cargs.push("--split");
     }
-    if ((params["synth"] ?? null)) {
+    if ((params["synth"] ?? false)) {
         cargs.push("--synth");
     }
-    if ((params["ones"] ?? null)) {
+    if ((params["ones"] ?? false)) {
         cargs.push("--ones");
     }
-    if ((params["normvar"] ?? null)) {
+    if ((params["normvar"] ?? false)) {
         cargs.push("--normvar");
     }
     if ((params["seed"] ?? null) !== null) {
@@ -668,10 +635,10 @@ function mri_surf2surf_cargs(
             String((params["seed"] ?? null))
         );
     }
-    if ((params["prune"] ?? null)) {
+    if ((params["prune"] ?? false)) {
         cargs.push("--prune");
     }
-    if ((params["no_prune"] ?? null)) {
+    if ((params["no_prune"] ?? false)) {
         cargs.push("--no-prune");
     }
     if ((params["proj_surf"] ?? null) !== null) {
@@ -893,7 +860,6 @@ function mri_surf2surf(
 export {
       MRI_SURF2SURF_METADATA,
       MriSurf2surfOutputs,
-      MriSurf2surfParameters,
       mri_surf2surf,
       mri_surf2surf_execute,
       mri_surf2surf_params,

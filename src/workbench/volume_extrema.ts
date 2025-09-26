@@ -12,21 +12,23 @@ const VOLUME_EXTREMA_METADATA: Metadata = {
 
 
 interface VolumeExtremaPresmoothParameters {
-    "@type": "workbench.volume-extrema.presmooth";
+    "@type"?: "presmooth";
     "kernel": number;
     "opt_fwhm": boolean;
 }
+type VolumeExtremaPresmoothParametersTagged = Required<Pick<VolumeExtremaPresmoothParameters, '@type'>> & VolumeExtremaPresmoothParameters;
 
 
 interface VolumeExtremaThresholdParameters {
-    "@type": "workbench.volume-extrema.threshold";
+    "@type"?: "threshold";
     "low": number;
     "high": number;
 }
+type VolumeExtremaThresholdParametersTagged = Required<Pick<VolumeExtremaThresholdParameters, '@type'>> & VolumeExtremaThresholdParameters;
 
 
 interface VolumeExtremaParameters {
-    "@type": "workbench.volume-extrema";
+    "@type"?: "workbench/volume-extrema";
     "volume_in": InputPathType;
     "distance": number;
     "volume_out": string;
@@ -39,42 +41,7 @@ interface VolumeExtremaParameters {
     "opt_only_minima": boolean;
     "opt_subvolume_subvolume"?: string | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-extrema": volume_extrema_cargs,
-        "workbench.volume-extrema.presmooth": volume_extrema_presmooth_cargs,
-        "workbench.volume-extrema.threshold": volume_extrema_threshold_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-extrema": volume_extrema_outputs,
-    };
-    return outputsFuncs[t];
-}
+type VolumeExtremaParametersTagged = Required<Pick<VolumeExtremaParameters, '@type'>> & VolumeExtremaParameters;
 
 
 /**
@@ -88,9 +55,9 @@ function dynOutputs(
 function volume_extrema_presmooth_params(
     kernel: number,
     opt_fwhm: boolean = false,
-): VolumeExtremaPresmoothParameters {
+): VolumeExtremaPresmoothParametersTagged {
     const params = {
-        "@type": "workbench.volume-extrema.presmooth" as const,
+        "@type": "presmooth" as const,
         "kernel": kernel,
         "opt_fwhm": opt_fwhm,
     };
@@ -113,7 +80,7 @@ function volume_extrema_presmooth_cargs(
     const cargs: string[] = [];
     cargs.push("-presmooth");
     cargs.push(String((params["kernel"] ?? null)));
-    if ((params["opt_fwhm"] ?? null)) {
+    if ((params["opt_fwhm"] ?? false)) {
         cargs.push("-fwhm");
     }
     return cargs;
@@ -131,9 +98,9 @@ function volume_extrema_presmooth_cargs(
 function volume_extrema_threshold_params(
     low: number,
     high: number,
-): VolumeExtremaThresholdParameters {
+): VolumeExtremaThresholdParametersTagged {
     const params = {
-        "@type": "workbench.volume-extrema.threshold" as const,
+        "@type": "threshold" as const,
         "low": low,
         "high": high,
     };
@@ -162,7 +129,7 @@ function volume_extrema_threshold_cargs(
 
 
 /**
- * Output object returned when calling `volume_extrema(...)`.
+ * Output object returned when calling `VolumeExtremaParameters(...)`.
  *
  * @interface
  */
@@ -207,9 +174,9 @@ function volume_extrema_params(
     opt_only_maxima: boolean = false,
     opt_only_minima: boolean = false,
     opt_subvolume_subvolume: string | null = null,
-): VolumeExtremaParameters {
+): VolumeExtremaParametersTagged {
     const params = {
-        "@type": "workbench.volume-extrema" as const,
+        "@type": "workbench/volume-extrema" as const,
         "volume_in": volume_in,
         "distance": distance,
         "volume_out": volume_out,
@@ -253,7 +220,7 @@ function volume_extrema_cargs(
     cargs.push(String((params["distance"] ?? null)));
     cargs.push((params["volume_out"] ?? null));
     if ((params["presmooth"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["presmooth"] ?? null)["@type"])((params["presmooth"] ?? null), execution));
+        cargs.push(...volume_extrema_presmooth_cargs((params["presmooth"] ?? null), execution));
     }
     if ((params["opt_roi_roi_volume"] ?? null) !== null) {
         cargs.push(
@@ -262,18 +229,18 @@ function volume_extrema_cargs(
         );
     }
     if ((params["threshold"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["threshold"] ?? null)["@type"])((params["threshold"] ?? null), execution));
+        cargs.push(...volume_extrema_threshold_cargs((params["threshold"] ?? null), execution));
     }
-    if ((params["opt_sum_subvols"] ?? null)) {
+    if ((params["opt_sum_subvols"] ?? false)) {
         cargs.push("-sum-subvols");
     }
-    if ((params["opt_consolidate_mode"] ?? null)) {
+    if ((params["opt_consolidate_mode"] ?? false)) {
         cargs.push("-consolidate-mode");
     }
-    if ((params["opt_only_maxima"] ?? null)) {
+    if ((params["opt_only_maxima"] ?? false)) {
         cargs.push("-only-maxima");
     }
-    if ((params["opt_only_minima"] ?? null)) {
+    if ((params["opt_only_minima"] ?? false)) {
         cargs.push("-only-minima");
     }
     if ((params["opt_subvolume_subvolume"] ?? null) !== null) {
@@ -396,9 +363,6 @@ function volume_extrema(
 export {
       VOLUME_EXTREMA_METADATA,
       VolumeExtremaOutputs,
-      VolumeExtremaParameters,
-      VolumeExtremaPresmoothParameters,
-      VolumeExtremaThresholdParameters,
       volume_extrema,
       volume_extrema_execute,
       volume_extrema_params,

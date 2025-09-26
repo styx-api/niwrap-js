@@ -12,47 +12,14 @@ const FEAT_METADATA: Metadata = {
 
 
 interface FeatParameters {
-    "@type": "fsl.feat";
+    "@type"?: "fsl/feat";
     "design_file": InputPathType;
 }
+type FeatParametersTagged = Required<Pick<FeatParameters, '@type'>> & FeatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.feat": feat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.feat": feat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `feat(...)`.
+ * Output object returned when calling `FeatParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface FeatOutputs {
  */
 function feat_params(
     design_file: InputPathType,
-): FeatParameters {
+): FeatParametersTagged {
     const params = {
-        "@type": "fsl.feat" as const,
+        "@type": "fsl/feat" as const,
         "design_file": design_file,
     };
     return params;
@@ -179,7 +146,6 @@ function feat(
 export {
       FEAT_METADATA,
       FeatOutputs,
-      FeatParameters,
       feat,
       feat_execute,
       feat_params,

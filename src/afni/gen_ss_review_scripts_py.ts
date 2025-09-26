@@ -12,7 +12,7 @@ const GEN_SS_REVIEW_SCRIPTS_PY_METADATA: Metadata = {
 
 
 interface GenSsReviewScriptsPyParameters {
-    "@type": "afni.gen_ss_review_scripts.py";
+    "@type"?: "afni/gen_ss_review_scripts.py";
     "subject_id"?: string | null | undefined;
     "rm_trs"?: number | null | undefined;
     "num_stim"?: number | null | undefined;
@@ -33,44 +33,11 @@ interface GenSsReviewScriptsPyParameters {
     "uvars_json"?: InputPathType | null | undefined;
     "init_uvars_json"?: InputPathType | null | undefined;
 }
+type GenSsReviewScriptsPyParametersTagged = Required<Pick<GenSsReviewScriptsPyParameters, '@type'>> & GenSsReviewScriptsPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.gen_ss_review_scripts.py": gen_ss_review_scripts_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.gen_ss_review_scripts.py": gen_ss_review_scripts_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `gen_ss_review_scripts_py(...)`.
+ * Output object returned when calling `GenSsReviewScriptsPyParameters(...)`.
  *
  * @interface
  */
@@ -139,9 +106,9 @@ function gen_ss_review_scripts_py_params(
     verbosity: number | null = null,
     uvars_json: InputPathType | null = null,
     init_uvars_json: InputPathType | null = null,
-): GenSsReviewScriptsPyParameters {
+): GenSsReviewScriptsPyParametersTagged {
     const params = {
-        "@type": "afni.gen_ss_review_scripts.py" as const,
+        "@type": "afni/gen_ss_review_scripts.py" as const,
     };
     if (subject_id !== null) {
         params["subject_id"] = subject_id;
@@ -448,7 +415,6 @@ function gen_ss_review_scripts_py(
 export {
       GEN_SS_REVIEW_SCRIPTS_PY_METADATA,
       GenSsReviewScriptsPyOutputs,
-      GenSsReviewScriptsPyParameters,
       gen_ss_review_scripts_py,
       gen_ss_review_scripts_py_execute,
       gen_ss_review_scripts_py_params,

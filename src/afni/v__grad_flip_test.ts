@@ -12,7 +12,7 @@ const V__GRAD_FLIP_TEST_METADATA: Metadata = {
 
 
 interface VGradFlipTestParameters {
-    "@type": "afni.@GradFlipTest";
+    "@type"?: "afni/@GradFlipTest";
     "dwi": InputPathType;
     "grad_row_vec"?: InputPathType | null | undefined;
     "grad_col_vec"?: InputPathType | null | undefined;
@@ -28,44 +28,11 @@ interface VGradFlipTestParameters {
     "wdir"?: string | null | undefined;
     "do_clean": boolean;
 }
+type VGradFlipTestParametersTagged = Required<Pick<VGradFlipTestParameters, '@type'>> & VGradFlipTestParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@GradFlipTest": v__grad_flip_test_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@GradFlipTest": v__grad_flip_test_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__grad_flip_test(...)`.
+ * Output object returned when calling `VGradFlipTestParameters(...)`.
  *
  * @interface
  */
@@ -120,9 +87,9 @@ function v__grad_flip_test_params(
     scale_out_1000: boolean = false,
     wdir: string | null = null,
     do_clean: boolean = false,
-): VGradFlipTestParameters {
+): VGradFlipTestParametersTagged {
     const params = {
-        "@type": "afni.@GradFlipTest" as const,
+        "@type": "afni/@GradFlipTest" as const,
         "dwi": dwi,
         "scale_out_1000": scale_out_1000,
         "do_clean": do_clean,
@@ -242,7 +209,7 @@ function v__grad_flip_test_cargs(
             String((params["check_abs_min"] ?? null))
         );
     }
-    if ((params["scale_out_1000"] ?? null)) {
+    if ((params["scale_out_1000"] ?? false)) {
         cargs.push("-scale_out_1000");
     }
     if ((params["wdir"] ?? null) !== null) {
@@ -251,7 +218,7 @@ function v__grad_flip_test_cargs(
             (params["wdir"] ?? null)
         );
     }
-    if ((params["do_clean"] ?? null)) {
+    if ((params["do_clean"] ?? false)) {
         cargs.push("-do_clean");
     }
     return cargs;
@@ -358,7 +325,6 @@ function v__grad_flip_test(
 
 export {
       VGradFlipTestOutputs,
-      VGradFlipTestParameters,
       V__GRAD_FLIP_TEST_METADATA,
       v__grad_flip_test,
       v__grad_flip_test_execute,

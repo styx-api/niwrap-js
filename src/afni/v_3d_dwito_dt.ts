@@ -12,7 +12,7 @@ const V_3D_DWITO_DT_METADATA: Metadata = {
 
 
 interface V3dDwitoDtParameters {
-    "@type": "afni.3dDWItoDT";
+    "@type"?: "afni/3dDWItoDT";
     "gradient_file": InputPathType;
     "dataset": InputPathType;
     "prefix"?: string | null | undefined;
@@ -40,43 +40,11 @@ interface V3dDwitoDtParameters {
     "opt"?: string | null | undefined;
     "mean_b0": boolean;
 }
+type V3dDwitoDtParametersTagged = Required<Pick<V3dDwitoDtParameters, '@type'>> & V3dDwitoDtParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dDWItoDT": v_3d_dwito_dt_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_dwito_dt(...)`.
+ * Output object returned when calling `V3dDwitoDtParameters(...)`.
  *
  * @interface
  */
@@ -147,9 +115,9 @@ function v_3d_dwito_dt_params(
     csf_fa: number | null = null,
     opt: string | null = null,
     mean_b0: boolean = false,
-): V3dDwitoDtParameters {
+): V3dDwitoDtParametersTagged {
     const params = {
-        "@type": "afni.3dDWItoDT" as const,
+        "@type": "afni/3dDWItoDT" as const,
         "gradient_file": gradient_file,
         "dataset": dataset,
         "automask": automask,
@@ -231,7 +199,7 @@ function v_3d_dwito_dt_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -258,7 +226,7 @@ function v_3d_dwito_dt_cargs(
             execution.inputFile((params["bmatrix_FULL"] ?? null))
         );
     }
-    if ((params["scale_out_1000"] ?? null)) {
+    if ((params["scale_out_1000"] ?? false)) {
         cargs.push("-scale_out_1000");
     }
     if ((params["bmax_ref"] ?? null) !== null) {
@@ -267,13 +235,13 @@ function v_3d_dwito_dt_cargs(
             String((params["bmax_ref"] ?? null))
         );
     }
-    if ((params["nonlinear"] ?? null)) {
+    if ((params["nonlinear"] ?? false)) {
         cargs.push("-nonlinear");
     }
-    if ((params["linear"] ?? null)) {
+    if ((params["linear"] ?? false)) {
         cargs.push("-linear");
     }
-    if ((params["reweight"] ?? null)) {
+    if ((params["reweight"] ?? false)) {
         cargs.push("-reweight");
     }
     if ((params["max_iter"] ?? null) !== null) {
@@ -288,13 +256,13 @@ function v_3d_dwito_dt_cargs(
             String((params["max_iter_rw"] ?? null))
         );
     }
-    if ((params["eigs"] ?? null)) {
+    if ((params["eigs"] ?? false)) {
         cargs.push("-eigs");
     }
-    if ((params["debug_briks"] ?? null)) {
+    if ((params["debug_briks"] ?? false)) {
         cargs.push("-debug_briks");
     }
-    if ((params["cumulative_wts"] ?? null)) {
+    if ((params["cumulative_wts"] ?? false)) {
         cargs.push("-cumulative_wts");
     }
     if ((params["verbose"] ?? null) !== null) {
@@ -309,7 +277,7 @@ function v_3d_dwito_dt_cargs(
             String((params["drive_afni"] ?? null))
         );
     }
-    if ((params["sep_dsets"] ?? null)) {
+    if ((params["sep_dsets"] ?? false)) {
         cargs.push("-sep_dsets");
     }
     if ((params["csf_val"] ?? null) !== null) {
@@ -336,7 +304,7 @@ function v_3d_dwito_dt_cargs(
             (params["opt"] ?? null)
         );
     }
-    if ((params["mean_b0"] ?? null)) {
+    if ((params["mean_b0"] ?? false)) {
         cargs.push("-mean_b0");
     }
     return cargs;
@@ -465,7 +433,6 @@ function v_3d_dwito_dt(
 
 export {
       V3dDwitoDtOutputs,
-      V3dDwitoDtParameters,
       V_3D_DWITO_DT_METADATA,
       v_3d_dwito_dt,
       v_3d_dwito_dt_execute,

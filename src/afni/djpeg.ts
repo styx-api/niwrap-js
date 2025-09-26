@@ -12,7 +12,7 @@ const DJPEG_METADATA: Metadata = {
 
 
 interface DjpegParameters {
-    "@type": "afni.djpeg";
+    "@type"?: "afni/djpeg";
     "input_file": InputPathType;
     "output_file": string;
     "gray": boolean;
@@ -21,44 +21,11 @@ interface DjpegParameters {
     "pseudo_pixel_ratio": boolean;
     "crop_region"?: string | null | undefined;
 }
+type DjpegParametersTagged = Required<Pick<DjpegParameters, '@type'>> & DjpegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.djpeg": djpeg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.djpeg": djpeg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `djpeg(...)`.
+ * Output object returned when calling `DjpegParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function djpeg_params(
     one_pixel_height: boolean = false,
     pseudo_pixel_ratio: boolean = false,
     crop_region: string | null = null,
-): DjpegParameters {
+): DjpegParametersTagged {
     const params = {
-        "@type": "afni.djpeg" as const,
+        "@type": "afni/djpeg" as const,
         "input_file": input_file,
         "output_file": output_file,
         "gray": gray,
@@ -128,16 +95,16 @@ function djpeg_cargs(
     cargs.push("djpeg");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
     cargs.push((params["output_file"] ?? null));
-    if ((params["gray"] ?? null)) {
+    if ((params["gray"] ?? false)) {
         cargs.push("-grayscale");
     }
-    if ((params["fast_dct"] ?? null)) {
+    if ((params["fast_dct"] ?? false)) {
         cargs.push("-fast");
     }
-    if ((params["one_pixel_height"] ?? null)) {
+    if ((params["one_pixel_height"] ?? false)) {
         cargs.push("-onepixel");
     }
-    if ((params["pseudo_pixel_ratio"] ?? null)) {
+    if ((params["pseudo_pixel_ratio"] ?? false)) {
         cargs.push("-236");
     }
     if ((params["crop_region"] ?? null) !== null) {
@@ -236,7 +203,6 @@ function djpeg(
 export {
       DJPEG_METADATA,
       DjpegOutputs,
-      DjpegParameters,
       djpeg,
       djpeg_execute,
       djpeg_params,

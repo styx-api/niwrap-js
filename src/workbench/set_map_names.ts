@@ -12,53 +12,21 @@ const SET_MAP_NAMES_METADATA: Metadata = {
 
 
 interface SetMapNamesMapParameters {
-    "@type": "workbench.set-map-names.map";
+    "@type"?: "map";
     "index": number;
     "new_name": string;
 }
+type SetMapNamesMapParametersTagged = Required<Pick<SetMapNamesMapParameters, '@type'>> & SetMapNamesMapParameters;
 
 
 interface SetMapNamesParameters {
-    "@type": "workbench.set-map-names";
+    "@type"?: "workbench/set-map-names";
     "data_file": string;
     "opt_name_file_file"?: string | null | undefined;
     "opt_from_data_file_file"?: string | null | undefined;
     "map"?: Array<SetMapNamesMapParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.set-map-names": set_map_names_cargs,
-        "workbench.set-map-names.map": set_map_names_map_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type SetMapNamesParametersTagged = Required<Pick<SetMapNamesParameters, '@type'>> & SetMapNamesParameters;
 
 
 /**
@@ -72,9 +40,9 @@ function dynOutputs(
 function set_map_names_map_params(
     index: number,
     new_name: string,
-): SetMapNamesMapParameters {
+): SetMapNamesMapParametersTagged {
     const params = {
-        "@type": "workbench.set-map-names.map" as const,
+        "@type": "map" as const,
         "index": index,
         "new_name": new_name,
     };
@@ -103,7 +71,7 @@ function set_map_names_map_cargs(
 
 
 /**
- * Output object returned when calling `set_map_names(...)`.
+ * Output object returned when calling `SetMapNamesParameters(...)`.
  *
  * @interface
  */
@@ -130,9 +98,9 @@ function set_map_names_params(
     opt_name_file_file: string | null = null,
     opt_from_data_file_file: string | null = null,
     map: Array<SetMapNamesMapParameters> | null = null,
-): SetMapNamesParameters {
+): SetMapNamesParametersTagged {
     const params = {
-        "@type": "workbench.set-map-names" as const,
+        "@type": "workbench/set-map-names" as const,
         "data_file": data_file,
     };
     if (opt_name_file_file !== null) {
@@ -177,7 +145,7 @@ function set_map_names_cargs(
         );
     }
     if ((params["map"] ?? null) !== null) {
-        cargs.push(...(params["map"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["map"] ?? null).map(s => set_map_names_map_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -265,9 +233,7 @@ function set_map_names(
 
 export {
       SET_MAP_NAMES_METADATA,
-      SetMapNamesMapParameters,
       SetMapNamesOutputs,
-      SetMapNamesParameters,
       set_map_names,
       set_map_names_execute,
       set_map_names_map_params,

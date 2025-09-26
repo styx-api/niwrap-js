@@ -12,7 +12,7 @@ const MBA_METADATA: Metadata = {
 
 
 interface MbaParameters {
-    "@type": "afni.MBA";
+    "@type"?: "afni/MBA";
     "prefix": string;
     "chains"?: number | null | undefined;
     "iterations"?: number | null | undefined;
@@ -29,44 +29,11 @@ interface MbaParameters {
     "dbgArgs": boolean;
     "help": boolean;
 }
+type MbaParametersTagged = Required<Pick<MbaParameters, '@type'>> & MbaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.MBA": mba_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.MBA": mba_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mba(...)`.
+ * Output object returned when calling `MbaParameters(...)`.
  *
  * @interface
  */
@@ -127,9 +94,9 @@ function mba_params(
     se: string | null = null,
     dbg_args: boolean = false,
     help: boolean = false,
-): MbaParameters {
+): MbaParametersTagged {
     const params = {
-        "@type": "afni.MBA" as const,
+        "@type": "afni/MBA" as const,
         "prefix": prefix,
         "data_table": data_table,
         "dbgArgs": dbg_args,
@@ -257,10 +224,10 @@ function mba_cargs(
             (params["se"] ?? null)
         );
     }
-    if ((params["dbgArgs"] ?? null)) {
+    if ((params["dbgArgs"] ?? false)) {
         cargs.push("-dbgArgs");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -371,7 +338,6 @@ function mba(
 export {
       MBA_METADATA,
       MbaOutputs,
-      MbaParameters,
       mba,
       mba_execute,
       mba_params,

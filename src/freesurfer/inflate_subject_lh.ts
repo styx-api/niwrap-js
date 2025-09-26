@@ -12,47 +12,15 @@ const INFLATE_SUBJECT_LH_METADATA: Metadata = {
 
 
 interface InflateSubjectLhParameters {
-    "@type": "freesurfer.inflate_subject-lh";
+    "@type"?: "freesurfer/inflate_subject-lh";
     "input_folder": string;
     "hostname_flag": boolean;
 }
+type InflateSubjectLhParametersTagged = Required<Pick<InflateSubjectLhParameters, '@type'>> & InflateSubjectLhParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.inflate_subject-lh": inflate_subject_lh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `inflate_subject_lh(...)`.
+ * Output object returned when calling `InflateSubjectLhParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface InflateSubjectLhOutputs {
 function inflate_subject_lh_params(
     input_folder: string,
     hostname_flag: boolean = false,
-): InflateSubjectLhParameters {
+): InflateSubjectLhParametersTagged {
     const params = {
-        "@type": "freesurfer.inflate_subject-lh" as const,
+        "@type": "freesurfer/inflate_subject-lh" as const,
         "input_folder": input_folder,
         "hostname_flag": hostname_flag,
     };
@@ -103,7 +71,7 @@ function inflate_subject_lh_cargs(
         "-lh",
         (params["input_folder"] ?? null)
     );
-    if ((params["hostname_flag"] ?? null)) {
+    if ((params["hostname_flag"] ?? false)) {
         cargs.push("hostname");
     }
     return cargs;
@@ -185,7 +153,6 @@ function inflate_subject_lh(
 export {
       INFLATE_SUBJECT_LH_METADATA,
       InflateSubjectLhOutputs,
-      InflateSubjectLhParameters,
       inflate_subject_lh,
       inflate_subject_lh_execute,
       inflate_subject_lh_params,

@@ -12,7 +12,7 @@ const V_3DAXIALIZE_METADATA: Metadata = {
 
 
 interface V3daxializeParameters {
-    "@type": "afni.3daxialize";
+    "@type"?: "afni/3daxialize";
     "infile": InputPathType;
     "prefix"?: string | null | undefined;
     "verb": boolean;
@@ -22,44 +22,11 @@ interface V3daxializeParameters {
     "orient_code"?: string | null | undefined;
     "frugal": boolean;
 }
+type V3daxializeParametersTagged = Required<Pick<V3daxializeParameters, '@type'>> & V3daxializeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3daxialize": v_3daxialize_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3daxialize": v_3daxialize_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3daxialize(...)`.
+ * Output object returned when calling `V3daxializeParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function v_3daxialize_params(
     axial: boolean = false,
     orient_code: string | null = null,
     frugal: boolean = false,
-): V3daxializeParameters {
+): V3daxializeParametersTagged {
     const params = {
-        "@type": "afni.3daxialize" as const,
+        "@type": "afni/3daxialize" as const,
         "infile": infile,
         "verb": verb,
         "sagittal": sagittal,
@@ -139,16 +106,16 @@ function v_3daxialize_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["verb"] ?? null)) {
+    if ((params["verb"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["sagittal"] ?? null)) {
+    if ((params["sagittal"] ?? false)) {
         cargs.push("-sagittal");
     }
-    if ((params["coronal"] ?? null)) {
+    if ((params["coronal"] ?? false)) {
         cargs.push("-coronal");
     }
-    if ((params["axial"] ?? null)) {
+    if ((params["axial"] ?? false)) {
         cargs.push("-axial");
     }
     if ((params["orient_code"] ?? null) !== null) {
@@ -157,7 +124,7 @@ function v_3daxialize_cargs(
             (params["orient_code"] ?? null)
         );
     }
-    if ((params["frugal"] ?? null)) {
+    if ((params["frugal"] ?? false)) {
         cargs.push("-frugal");
     }
     return cargs;
@@ -251,7 +218,6 @@ function v_3daxialize(
 
 export {
       V3daxializeOutputs,
-      V3daxializeParameters,
       V_3DAXIALIZE_METADATA,
       v_3daxialize,
       v_3daxialize_execute,

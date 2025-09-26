@@ -12,47 +12,14 @@ const STEM2FNAME_METADATA: Metadata = {
 
 
 interface Stem2fnameParameters {
-    "@type": "freesurfer.stem2fname";
+    "@type"?: "freesurfer/stem2fname";
     "stem": string;
 }
+type Stem2fnameParametersTagged = Required<Pick<Stem2fnameParameters, '@type'>> & Stem2fnameParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.stem2fname": stem2fname_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.stem2fname": stem2fname_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `stem2fname(...)`.
+ * Output object returned when calling `Stem2fnameParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface Stem2fnameOutputs {
  */
 function stem2fname_params(
     stem: string,
-): Stem2fnameParameters {
+): Stem2fnameParametersTagged {
     const params = {
-        "@type": "freesurfer.stem2fname" as const,
+        "@type": "freesurfer/stem2fname" as const,
         "stem": stem,
     };
     return params;
@@ -179,7 +146,6 @@ function stem2fname(
 export {
       STEM2FNAME_METADATA,
       Stem2fnameOutputs,
-      Stem2fnameParameters,
       stem2fname,
       stem2fname_execute,
       stem2fname_params,

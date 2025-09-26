@@ -12,7 +12,7 @@ const V_3D_DECONVOLVE_METADATA: Metadata = {
 
 
 interface V3dDeconvolveParameters {
-    "@type": "afni.3dDeconvolve";
+    "@type"?: "afni/3dDeconvolve";
     "input_dataset": InputPathType;
     "mask_dataset"?: InputPathType | null | undefined;
     "num_stimts"?: number | null | undefined;
@@ -29,44 +29,11 @@ interface V3dDeconvolveParameters {
     "x1D"?: string | null | undefined;
     "jobs"?: number | null | undefined;
 }
+type V3dDeconvolveParametersTagged = Required<Pick<V3dDeconvolveParameters, '@type'>> & V3dDeconvolveParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dDeconvolve": v_3d_deconvolve_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dDeconvolve": v_3d_deconvolve_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_deconvolve(...)`.
+ * Output object returned when calling `V3dDeconvolveParameters(...)`.
  *
  * @interface
  */
@@ -135,9 +102,9 @@ function v_3d_deconvolve_params(
     cbucket: string | null = null,
     x1_d: string | null = null,
     jobs: number | null = null,
-): V3dDeconvolveParameters {
+): V3dDeconvolveParametersTagged {
     const params = {
-        "@type": "afni.3dDeconvolve" as const,
+        "@type": "afni/3dDeconvolve" as const,
         "input_dataset": input_dataset,
         "stim_base": stim_base,
         "fout": fout,
@@ -222,7 +189,7 @@ function v_3d_deconvolve_cargs(
             (params["stim_label"] ?? null)
         );
     }
-    if ((params["stim_base"] ?? null)) {
+    if ((params["stim_base"] ?? false)) {
         cargs.push("-stim_base");
     }
     if ((params["stim_times"] ?? null) !== null) {
@@ -243,10 +210,10 @@ function v_3d_deconvolve_cargs(
             (params["fitts"] ?? null)
         );
     }
-    if ((params["fout"] ?? null)) {
+    if ((params["fout"] ?? false)) {
         cargs.push("-fout");
     }
-    if ((params["tout"] ?? null)) {
+    if ((params["tout"] ?? false)) {
         cargs.push("-tout");
     }
     if ((params["bucket"] ?? null) !== null) {
@@ -382,7 +349,6 @@ function v_3d_deconvolve(
 
 export {
       V3dDeconvolveOutputs,
-      V3dDeconvolveParameters,
       V_3D_DECONVOLVE_METADATA,
       v_3d_deconvolve,
       v_3d_deconvolve_execute,

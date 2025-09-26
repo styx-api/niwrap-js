@@ -12,7 +12,7 @@ const SIENA_DIFF_METADATA: Metadata = {
 
 
 interface SienaDiffParameters {
-    "@type": "fsl.siena_diff";
+    "@type"?: "fsl/siena_diff";
     "input1_basename": string;
     "input2_basename": string;
     "debug_flag": boolean;
@@ -22,43 +22,11 @@ interface SienaDiffParameters {
     "apply_std_mask_flag": boolean;
     "segment_options"?: string | null | undefined;
 }
+type SienaDiffParametersTagged = Required<Pick<SienaDiffParameters, '@type'>> & SienaDiffParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.siena_diff": siena_diff_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `siena_diff(...)`.
+ * Output object returned when calling `SienaDiffParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +61,9 @@ function siena_diff_params(
     ignore_z_flow_flag: boolean = false,
     apply_std_mask_flag: boolean = false,
     segment_options: string | null = null,
-): SienaDiffParameters {
+): SienaDiffParametersTagged {
     const params = {
-        "@type": "fsl.siena_diff" as const,
+        "@type": "fsl/siena_diff" as const,
         "input1_basename": input1_basename,
         "input2_basename": input2_basename,
         "debug_flag": debug_flag,
@@ -129,10 +97,10 @@ function siena_diff_cargs(
     cargs.push("siena_diff");
     cargs.push((params["input1_basename"] ?? null));
     cargs.push((params["input2_basename"] ?? null));
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("-d");
     }
-    if ((params["no_seg_flag"] ?? null)) {
+    if ((params["no_seg_flag"] ?? false)) {
         cargs.push("-2");
     }
     if ((params["self_corr_factor"] ?? null) !== null) {
@@ -141,10 +109,10 @@ function siena_diff_cargs(
             String((params["self_corr_factor"] ?? null))
         );
     }
-    if ((params["ignore_z_flow_flag"] ?? null)) {
+    if ((params["ignore_z_flow_flag"] ?? false)) {
         cargs.push("-i");
     }
-    if ((params["apply_std_mask_flag"] ?? null)) {
+    if ((params["apply_std_mask_flag"] ?? false)) {
         cargs.push("-m");
     }
     if ((params["segment_options"] ?? null) !== null) {
@@ -244,7 +212,6 @@ function siena_diff(
 export {
       SIENA_DIFF_METADATA,
       SienaDiffOutputs,
-      SienaDiffParameters,
       siena_diff,
       siena_diff_execute,
       siena_diff_params,

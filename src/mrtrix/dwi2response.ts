@@ -12,7 +12,7 @@ const DWI2RESPONSE_METADATA: Metadata = {
 
 
 interface Dwi2responseDhollanderParameters {
-    "@type": "mrtrix.dwi2response.dhollander";
+    "@type"?: "dhollander";
     "input": InputPathType;
     "out_sfwm": string;
     "out_gm": string;
@@ -24,29 +24,32 @@ interface Dwi2responseDhollanderParameters {
     "csf"?: number | null | undefined;
     "wm_algo"?: "fa" | "tax" | "tournier" | null | undefined;
 }
+type Dwi2responseDhollanderParametersTagged = Required<Pick<Dwi2responseDhollanderParameters, '@type'>> & Dwi2responseDhollanderParameters;
 
 
 interface Dwi2responseFaParameters {
-    "@type": "mrtrix.dwi2response.fa";
+    "@type"?: "fa";
     "input": InputPathType;
     "output": string;
     "erode"?: number | null | undefined;
     "number"?: number | null | undefined;
     "threshold"?: number | null | undefined;
 }
+type Dwi2responseFaParametersTagged = Required<Pick<Dwi2responseFaParameters, '@type'>> & Dwi2responseFaParameters;
 
 
 interface Dwi2responseManualParameters {
-    "@type": "mrtrix.dwi2response.manual";
+    "@type"?: "manual";
     "input": InputPathType;
     "in_voxels": InputPathType;
     "output": string;
     "dirs"?: InputPathType | null | undefined;
 }
+type Dwi2responseManualParametersTagged = Required<Pick<Dwi2responseManualParameters, '@type'>> & Dwi2responseManualParameters;
 
 
 interface Dwi2responseMsmt5ttParameters {
-    "@type": "mrtrix.dwi2response.msmt_5tt";
+    "@type"?: "msmt_5tt";
     "input": InputPathType;
     "in_5tt": InputPathType;
     "out_wm": string;
@@ -58,20 +61,22 @@ interface Dwi2responseMsmt5ttParameters {
     "wm_algo"?: "fa" | "tax" | "tournier" | null | undefined;
     "sfwm_fa_threshold"?: number | null | undefined;
 }
+type Dwi2responseMsmt5ttParametersTagged = Required<Pick<Dwi2responseMsmt5ttParameters, '@type'>> & Dwi2responseMsmt5ttParameters;
 
 
 interface Dwi2responseTaxParameters {
-    "@type": "mrtrix.dwi2response.tax";
+    "@type"?: "tax";
     "input": InputPathType;
     "output": string;
     "peak_ratio"?: number | null | undefined;
     "max_iters"?: number | null | undefined;
     "convergence"?: number | null | undefined;
 }
+type Dwi2responseTaxParametersTagged = Required<Pick<Dwi2responseTaxParameters, '@type'>> & Dwi2responseTaxParameters;
 
 
 interface Dwi2responseTournierParameters {
-    "@type": "mrtrix.dwi2response.tournier";
+    "@type"?: "tournier";
     "input": InputPathType;
     "output": string;
     "number"?: number | null | undefined;
@@ -79,25 +84,28 @@ interface Dwi2responseTournierParameters {
     "dilate"?: number | null | undefined;
     "max_iters"?: number | null | undefined;
 }
+type Dwi2responseTournierParametersTagged = Required<Pick<Dwi2responseTournierParameters, '@type'>> & Dwi2responseTournierParameters;
 
 
 interface Dwi2responseFslgradParameters {
-    "@type": "mrtrix.dwi2response.fslgrad";
+    "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
+type Dwi2responseFslgradParametersTagged = Required<Pick<Dwi2responseFslgradParameters, '@type'>> & Dwi2responseFslgradParameters;
 
 
 interface Dwi2responseConfigParameters {
-    "@type": "mrtrix.dwi2response.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Dwi2responseConfigParametersTagged = Required<Pick<Dwi2responseConfigParameters, '@type'>> & Dwi2responseConfigParameters;
 
 
 interface Dwi2responseParameters {
-    "@type": "mrtrix.dwi2response";
-    "algorithm": Dwi2responseDhollanderParameters | Dwi2responseFaParameters | Dwi2responseManualParameters | Dwi2responseMsmt5ttParameters | Dwi2responseTaxParameters | Dwi2responseTournierParameters;
+    "@type"?: "mrtrix/dwi2response";
+    "algorithm": Dwi2responseDhollanderParametersTagged | Dwi2responseFaParametersTagged | Dwi2responseManualParametersTagged | Dwi2responseMsmt5ttParametersTagged | Dwi2responseTaxParametersTagged | Dwi2responseTournierParametersTagged;
     "grad"?: InputPathType | null | undefined;
     "fslgrad"?: Dwi2responseFslgradParameters | null | undefined;
     "mask"?: InputPathType | null | undefined;
@@ -116,6 +124,7 @@ interface Dwi2responseParameters {
     "help": boolean;
     "version": boolean;
 }
+type Dwi2responseParametersTagged = Required<Pick<Dwi2responseParameters, '@type'>> & Dwi2responseParameters;
 
 
 /**
@@ -125,19 +134,16 @@ interface Dwi2responseParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function dwi2response_algorithm_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "mrtrix.dwi2response": dwi2response_cargs,
-        "mrtrix.dwi2response.dhollander": dwi2response_dhollander_cargs,
-        "mrtrix.dwi2response.fa": dwi2response_fa_cargs,
-        "mrtrix.dwi2response.manual": dwi2response_manual_cargs,
-        "mrtrix.dwi2response.msmt_5tt": dwi2response_msmt_5tt_cargs,
-        "mrtrix.dwi2response.tax": dwi2response_tax_cargs,
-        "mrtrix.dwi2response.tournier": dwi2response_tournier_cargs,
-        "mrtrix.dwi2response.fslgrad": dwi2response_fslgrad_cargs,
-        "mrtrix.dwi2response.config": dwi2response_config_cargs,
+        "dhollander": dwi2response_dhollander_cargs,
+        "fa": dwi2response_fa_cargs,
+        "manual": dwi2response_manual_cargs,
+        "msmt_5tt": dwi2response_msmt_5tt_cargs,
+        "tax": dwi2response_tax_cargs,
+        "tournier": dwi2response_tournier_cargs,
     };
     return cargsFuncs[t];
 }
@@ -150,17 +156,16 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function dwi2response_algorithm_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "mrtrix.dwi2response": dwi2response_outputs,
-        "mrtrix.dwi2response.dhollander": dwi2response_dhollander_outputs,
-        "mrtrix.dwi2response.fa": dwi2response_fa_outputs,
-        "mrtrix.dwi2response.manual": dwi2response_manual_outputs,
-        "mrtrix.dwi2response.msmt_5tt": dwi2response_msmt_5tt_outputs,
-        "mrtrix.dwi2response.tax": dwi2response_tax_outputs,
-        "mrtrix.dwi2response.tournier": dwi2response_tournier_outputs,
+        "dhollander": dwi2response_dhollander_outputs,
+        "fa": dwi2response_fa_outputs,
+        "manual": dwi2response_manual_outputs,
+        "msmt_5tt": dwi2response_msmt_5tt_outputs,
+        "tax": dwi2response_tax_outputs,
+        "tournier": dwi2response_tournier_outputs,
     };
     return outputsFuncs[t];
 }
@@ -218,9 +223,9 @@ function dwi2response_dhollander_params(
     gm: number | null = null,
     csf: number | null = null,
     wm_algo: "fa" | "tax" | "tournier" | null = null,
-): Dwi2responseDhollanderParameters {
+): Dwi2responseDhollanderParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2response.dhollander" as const,
+        "@type": "dhollander" as const,
         "input": input,
         "out_sfwm": out_sfwm,
         "out_gm": out_gm,
@@ -362,9 +367,9 @@ function dwi2response_fa_params(
     erode: number | null = null,
     number_: number | null = null,
     threshold: number | null = null,
-): Dwi2responseFaParameters {
+): Dwi2responseFaParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2response.fa" as const,
+        "@type": "fa" as const,
         "input": input,
         "output": output,
     };
@@ -471,9 +476,9 @@ function dwi2response_manual_params(
     in_voxels: InputPathType,
     output: string,
     dirs: InputPathType | null = null,
-): Dwi2responseManualParameters {
+): Dwi2responseManualParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2response.manual" as const,
+        "@type": "manual" as const,
         "input": input,
         "in_voxels": in_voxels,
         "output": output,
@@ -584,9 +589,9 @@ function dwi2response_msmt_5tt_params(
     pvf: number | null = null,
     wm_algo: "fa" | "tax" | "tournier" | null = null,
     sfwm_fa_threshold: number | null = null,
-): Dwi2responseMsmt5ttParameters {
+): Dwi2responseMsmt5ttParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2response.msmt_5tt" as const,
+        "@type": "msmt_5tt" as const,
         "input": input,
         "in_5tt": in_5tt,
         "out_wm": out_wm,
@@ -721,9 +726,9 @@ function dwi2response_tax_params(
     peak_ratio: number | null = null,
     max_iters: number | null = null,
     convergence: number | null = null,
-): Dwi2responseTaxParameters {
+): Dwi2responseTaxParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2response.tax" as const,
+        "@type": "tax" as const,
         "input": input,
         "output": output,
     };
@@ -834,9 +839,9 @@ function dwi2response_tournier_params(
     iter_voxels: number | null = null,
     dilate: number | null = null,
     max_iters: number | null = null,
-): Dwi2responseTournierParameters {
+): Dwi2responseTournierParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2response.tournier" as const,
+        "@type": "tournier" as const,
         "input": input,
         "output": output,
     };
@@ -931,9 +936,9 @@ function dwi2response_tournier_outputs(
 function dwi2response_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
-): Dwi2responseFslgradParameters {
+): Dwi2responseFslgradParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2response.fslgrad" as const,
+        "@type": "fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -972,9 +977,9 @@ function dwi2response_fslgrad_cargs(
 function dwi2response_config_params(
     key: string,
     value: string,
-): Dwi2responseConfigParameters {
+): Dwi2responseConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2response.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -1003,7 +1008,7 @@ function dwi2response_config_cargs(
 
 
 /**
- * Output object returned when calling `dwi2response(...)`.
+ * Output object returned when calling `Dwi2responseParameters(...)`.
  *
  * @interface
  */
@@ -1044,7 +1049,7 @@ interface Dwi2responseOutputs {
  * @returns Parameter dictionary
  */
 function dwi2response_params(
-    algorithm: Dwi2responseDhollanderParameters | Dwi2responseFaParameters | Dwi2responseManualParameters | Dwi2responseMsmt5ttParameters | Dwi2responseTaxParameters | Dwi2responseTournierParameters,
+    algorithm: Dwi2responseDhollanderParametersTagged | Dwi2responseFaParametersTagged | Dwi2responseManualParametersTagged | Dwi2responseMsmt5ttParametersTagged | Dwi2responseTaxParametersTagged | Dwi2responseTournierParametersTagged,
     grad: InputPathType | null = null,
     fslgrad: Dwi2responseFslgradParameters | null = null,
     mask: InputPathType | null = null,
@@ -1062,9 +1067,9 @@ function dwi2response_params(
     config: Array<Dwi2responseConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Dwi2responseParameters {
+): Dwi2responseParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2response" as const,
+        "@type": "mrtrix/dwi2response" as const,
         "algorithm": algorithm,
         "nocleanup": nocleanup,
         "info": info,
@@ -1122,7 +1127,7 @@ function dwi2response_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("dwi2response");
-    cargs.push(...dynCargs((params["algorithm"] ?? null)["@type"])((params["algorithm"] ?? null), execution));
+    cargs.push(...dwi2response_algorithm_cargs_dyn_fn((params["algorithm"] ?? null)["@type"])((params["algorithm"] ?? null), execution));
     if ((params["grad"] ?? null) !== null) {
         cargs.push(
             "-grad",
@@ -1130,7 +1135,7 @@ function dwi2response_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
+        cargs.push(...dwi2response_fslgrad_cargs((params["fslgrad"] ?? null), execution));
     }
     if ((params["mask"] ?? null) !== null) {
         cargs.push(
@@ -1156,7 +1161,7 @@ function dwi2response_cargs(
             (params["lmax"] ?? null).map(String).join(",")
         );
     }
-    if ((params["nocleanup"] ?? null)) {
+    if ((params["nocleanup"] ?? false)) {
         cargs.push("-nocleanup");
     }
     if ((params["scratch"] ?? null) !== null) {
@@ -1171,16 +1176,16 @@ function dwi2response_cargs(
             (params["continue"] ?? null)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -1190,12 +1195,12 @@ function dwi2response_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dwi2response_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     return cargs;
@@ -1216,7 +1221,7 @@ function dwi2response_outputs(
 ): Dwi2responseOutputs {
     const ret: Dwi2responseOutputs = {
         root: execution.outputFile("."),
-        algorithm: dynOutputs((params["algorithm"] ?? null)["@type"])?.((params["algorithm"] ?? null), execution),
+        algorithm: dwi2response_algorithm_outputs_dyn_fn((params["algorithm"] ?? null)["@type"])?.((params["algorithm"] ?? null), execution),
     };
     return ret;
 }
@@ -1286,7 +1291,7 @@ function dwi2response_execute(
  * @returns NamedTuple of outputs (described in `Dwi2responseOutputs`).
  */
 function dwi2response(
-    algorithm: Dwi2responseDhollanderParameters | Dwi2responseFaParameters | Dwi2responseManualParameters | Dwi2responseMsmt5ttParameters | Dwi2responseTaxParameters | Dwi2responseTournierParameters,
+    algorithm: Dwi2responseDhollanderParametersTagged | Dwi2responseFaParametersTagged | Dwi2responseManualParametersTagged | Dwi2responseMsmt5ttParametersTagged | Dwi2responseTaxParametersTagged | Dwi2responseTournierParametersTagged,
     grad: InputPathType | null = null,
     fslgrad: Dwi2responseFslgradParameters | null = null,
     mask: InputPathType | null = null,
@@ -1313,22 +1318,13 @@ function dwi2response(
 
 export {
       DWI2RESPONSE_METADATA,
-      Dwi2responseConfigParameters,
       Dwi2responseDhollanderOutputs,
-      Dwi2responseDhollanderParameters,
       Dwi2responseFaOutputs,
-      Dwi2responseFaParameters,
-      Dwi2responseFslgradParameters,
       Dwi2responseManualOutputs,
-      Dwi2responseManualParameters,
       Dwi2responseMsmt5ttOutputs,
-      Dwi2responseMsmt5ttParameters,
       Dwi2responseOutputs,
-      Dwi2responseParameters,
       Dwi2responseTaxOutputs,
-      Dwi2responseTaxParameters,
       Dwi2responseTournierOutputs,
-      Dwi2responseTournierParameters,
       dwi2response,
       dwi2response_config_params,
       dwi2response_dhollander_params,

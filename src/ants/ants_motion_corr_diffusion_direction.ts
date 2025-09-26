@@ -12,51 +12,18 @@ const ANTS_MOTION_CORR_DIFFUSION_DIRECTION_METADATA: Metadata = {
 
 
 interface AntsMotionCorrDiffusionDirectionParameters {
-    "@type": "ants.antsMotionCorrDiffusionDirection";
+    "@type"?: "ants/antsMotionCorrDiffusionDirection";
     "scheme": InputPathType;
     "bvec": InputPathType;
     "physical": InputPathType;
     "moco": InputPathType;
     "output": string;
 }
+type AntsMotionCorrDiffusionDirectionParametersTagged = Required<Pick<AntsMotionCorrDiffusionDirectionParameters, '@type'>> & AntsMotionCorrDiffusionDirectionParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.antsMotionCorrDiffusionDirection": ants_motion_corr_diffusion_direction_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.antsMotionCorrDiffusionDirection": ants_motion_corr_diffusion_direction_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ants_motion_corr_diffusion_direction(...)`.
+ * Output object returned when calling `AntsMotionCorrDiffusionDirectionParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function ants_motion_corr_diffusion_direction_params(
     physical: InputPathType,
     moco: InputPathType,
     output: string,
-): AntsMotionCorrDiffusionDirectionParameters {
+): AntsMotionCorrDiffusionDirectionParametersTagged {
     const params = {
-        "@type": "ants.antsMotionCorrDiffusionDirection" as const,
+        "@type": "ants/antsMotionCorrDiffusionDirection" as const,
         "scheme": scheme,
         "bvec": bvec,
         "physical": physical,
@@ -222,7 +189,6 @@ function ants_motion_corr_diffusion_direction(
 export {
       ANTS_MOTION_CORR_DIFFUSION_DIRECTION_METADATA,
       AntsMotionCorrDiffusionDirectionOutputs,
-      AntsMotionCorrDiffusionDirectionParameters,
       ants_motion_corr_diffusion_direction,
       ants_motion_corr_diffusion_direction_execute,
       ants_motion_corr_diffusion_direction_params,

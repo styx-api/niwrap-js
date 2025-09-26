@@ -12,7 +12,7 @@ const IMGREG_4DFP_METADATA: Metadata = {
 
 
 interface Imgreg4dfpParameters {
-    "@type": "freesurfer.imgreg_4dfp";
+    "@type"?: "freesurfer/imgreg_4dfp";
     "target_image": InputPathType;
     "target_mask": string;
     "source_image": InputPathType;
@@ -20,43 +20,11 @@ interface Imgreg4dfpParameters {
     "t4file": string;
     "mode": string;
 }
+type Imgreg4dfpParametersTagged = Required<Pick<Imgreg4dfpParameters, '@type'>> & Imgreg4dfpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.imgreg_4dfp": imgreg_4dfp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `imgreg_4dfp(...)`.
+ * Output object returned when calling `Imgreg4dfpParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function imgreg_4dfp_params(
     mode: string,
     target_mask: string = "none",
     source_mask: string = "none",
-): Imgreg4dfpParameters {
+): Imgreg4dfpParametersTagged {
     const params = {
-        "@type": "freesurfer.imgreg_4dfp" as const,
+        "@type": "freesurfer/imgreg_4dfp" as const,
         "target_image": target_image,
         "target_mask": target_mask,
         "source_image": source_image,
@@ -116,9 +84,9 @@ function imgreg_4dfp_cargs(
     const cargs: string[] = [];
     cargs.push("imgreg_4dfp");
     cargs.push(execution.inputFile((params["target_image"] ?? null)));
-    cargs.push((params["target_mask"] ?? null));
+    cargs.push((params["target_mask"] ?? "none"));
     cargs.push(execution.inputFile((params["source_image"] ?? null)));
-    cargs.push((params["source_mask"] ?? null));
+    cargs.push((params["source_mask"] ?? "none"));
     cargs.push((params["t4file"] ?? null));
     cargs.push((params["mode"] ?? null));
     return cargs;
@@ -208,7 +176,6 @@ function imgreg_4dfp(
 export {
       IMGREG_4DFP_METADATA,
       Imgreg4dfpOutputs,
-      Imgreg4dfpParameters,
       imgreg_4dfp,
       imgreg_4dfp_execute,
       imgreg_4dfp_params,

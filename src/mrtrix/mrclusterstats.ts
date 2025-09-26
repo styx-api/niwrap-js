@@ -12,20 +12,22 @@ const MRCLUSTERSTATS_METADATA: Metadata = {
 
 
 interface MrclusterstatsColumnParameters {
-    "@type": "mrtrix.mrclusterstats.column";
+    "@type"?: "column";
     "path": InputPathType;
 }
+type MrclusterstatsColumnParametersTagged = Required<Pick<MrclusterstatsColumnParameters, '@type'>> & MrclusterstatsColumnParameters;
 
 
 interface MrclusterstatsConfigParameters {
-    "@type": "mrtrix.mrclusterstats.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MrclusterstatsConfigParametersTagged = Required<Pick<MrclusterstatsConfigParameters, '@type'>> & MrclusterstatsConfigParameters;
 
 
 interface MrclusterstatsParameters {
-    "@type": "mrtrix.mrclusterstats";
+    "@type"?: "mrtrix/mrclusterstats";
     "notest": boolean;
     "errors"?: string | null | undefined;
     "exchange_within"?: InputPathType | null | undefined;
@@ -60,41 +62,7 @@ interface MrclusterstatsParameters {
     "mask": InputPathType;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.mrclusterstats": mrclusterstats_cargs,
-        "mrtrix.mrclusterstats.column": mrclusterstats_column_cargs,
-        "mrtrix.mrclusterstats.config": mrclusterstats_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type MrclusterstatsParametersTagged = Required<Pick<MrclusterstatsParameters, '@type'>> & MrclusterstatsParameters;
 
 
 /**
@@ -106,9 +74,9 @@ function dynOutputs(
  */
 function mrclusterstats_column_params(
     path: InputPathType,
-): MrclusterstatsColumnParameters {
+): MrclusterstatsColumnParametersTagged {
     const params = {
-        "@type": "mrtrix.mrclusterstats.column" as const,
+        "@type": "column" as const,
         "path": path,
     };
     return params;
@@ -145,9 +113,9 @@ function mrclusterstats_column_cargs(
 function mrclusterstats_config_params(
     key: string,
     value: string,
-): MrclusterstatsConfigParameters {
+): MrclusterstatsConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.mrclusterstats.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -176,7 +144,7 @@ function mrclusterstats_config_cargs(
 
 
 /**
- * Output object returned when calling `mrclusterstats(...)`.
+ * Output object returned when calling `MrclusterstatsParameters(...)`.
  *
  * @interface
  */
@@ -261,9 +229,9 @@ function mrclusterstats_params(
     config: Array<MrclusterstatsConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrclusterstatsParameters {
+): MrclusterstatsParametersTagged {
     const params = {
-        "@type": "mrtrix.mrclusterstats" as const,
+        "@type": "mrtrix/mrclusterstats" as const,
         "notest": notest,
         "strong": strong,
         "nonstationarity": nonstationarity,
@@ -350,7 +318,7 @@ function mrclusterstats_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("mrclusterstats");
-    if ((params["notest"] ?? null)) {
+    if ((params["notest"] ?? false)) {
         cargs.push("-notest");
     }
     if ((params["errors"] ?? null) !== null) {
@@ -371,7 +339,7 @@ function mrclusterstats_cargs(
             execution.inputFile((params["exchange_whole"] ?? null))
         );
     }
-    if ((params["strong"] ?? null)) {
+    if ((params["strong"] ?? false)) {
         cargs.push("-strong");
     }
     if ((params["nshuffles"] ?? null) !== null) {
@@ -386,7 +354,7 @@ function mrclusterstats_cargs(
             execution.inputFile((params["permutations"] ?? null))
         );
     }
-    if ((params["nonstationarity"] ?? null)) {
+    if ((params["nonstationarity"] ?? false)) {
         cargs.push("-nonstationarity");
     }
     if ((params["skew_nonstationarity"] ?? null) !== null) {
@@ -437,11 +405,11 @@ function mrclusterstats_cargs(
             execution.inputFile((params["ftests"] ?? null))
         );
     }
-    if ((params["fonly"] ?? null)) {
+    if ((params["fonly"] ?? false)) {
         cargs.push("-fonly");
     }
     if ((params["column"] ?? null) !== null) {
-        cargs.push(...(params["column"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["column"] ?? null).map(s => mrclusterstats_column_cargs(s, execution)).flat());
     }
     if ((params["threshold"] ?? null) !== null) {
         cargs.push(
@@ -449,19 +417,19 @@ function mrclusterstats_cargs(
             String((params["threshold"] ?? null))
         );
     }
-    if ((params["connectivity"] ?? null)) {
+    if ((params["connectivity"] ?? false)) {
         cargs.push("-connectivity");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -471,12 +439,12 @@ function mrclusterstats_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => mrclusterstats_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -644,10 +612,7 @@ function mrclusterstats(
 
 export {
       MRCLUSTERSTATS_METADATA,
-      MrclusterstatsColumnParameters,
-      MrclusterstatsConfigParameters,
       MrclusterstatsOutputs,
-      MrclusterstatsParameters,
       mrclusterstats,
       mrclusterstats_column_params,
       mrclusterstats_config_params,

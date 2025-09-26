@@ -12,7 +12,7 @@ const RANDOMISE_METADATA: Metadata = {
 
 
 interface RandomiseParameters {
-    "@type": "fsl.randomise";
+    "@type"?: "fsl/randomise";
     "in_file": InputPathType;
     "base_name"?: string | null | undefined;
     "design_mat"?: InputPathType | null | undefined;
@@ -42,44 +42,11 @@ interface RandomiseParameters {
     "vox_p_values": boolean;
     "x_block_labels"?: InputPathType | null | undefined;
 }
+type RandomiseParametersTagged = Required<Pick<RandomiseParameters, '@type'>> & RandomiseParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.randomise": randomise_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.randomise": randomise_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `randomise(...)`.
+ * Output object returned when calling `RandomiseParameters(...)`.
  *
  * @interface
  */
@@ -178,9 +145,9 @@ function randomise_params(
     var_smooth: number | null = null,
     vox_p_values: boolean = false,
     x_block_labels: InputPathType | null = null,
-): RandomiseParameters {
+): RandomiseParametersTagged {
     const params = {
-        "@type": "fsl.randomise" as const,
+        "@type": "fsl/randomise" as const,
         "in_file": in_file,
         "demean": demean,
         "f_only": f_only,
@@ -296,7 +263,7 @@ function randomise_cargs(
             String((params["cm_thresh"] ?? null))
         );
     }
-    if ((params["demean"] ?? null)) {
+    if ((params["demean"] ?? false)) {
         cargs.push("-D");
     }
     if ((params["f_c_thresh"] ?? null) !== null) {
@@ -311,7 +278,7 @@ function randomise_cargs(
             String((params["f_cm_thresh"] ?? null))
         );
     }
-    if ((params["f_only"] ?? null)) {
+    if ((params["f_only"] ?? false)) {
         cargs.push("--fonly");
     }
     if ((params["fcon"] ?? null) !== null) {
@@ -332,31 +299,31 @@ function randomise_cargs(
             String((params["num_perm"] ?? null))
         );
     }
-    if ((params["one_sample_group_mean"] ?? null)) {
+    if ((params["one_sample_group_mean"] ?? false)) {
         cargs.push("-1");
     }
     if ((params["output_type"] ?? null) !== null) {
         cargs.push((params["output_type"] ?? null));
     }
-    if ((params["p_vec_n_dist_files"] ?? null)) {
+    if ((params["p_vec_n_dist_files"] ?? false)) {
         cargs.push("-P");
     }
-    if ((params["raw_stats_imgs"] ?? null)) {
+    if ((params["raw_stats_imgs"] ?? false)) {
         cargs.push("-R");
     }
     if ((params["seed"] ?? null) !== null) {
         cargs.push(["--seed=", String((params["seed"] ?? null))].join(''));
     }
-    if ((params["show_info_parallel_mode"] ?? null)) {
+    if ((params["show_info_parallel_mode"] ?? false)) {
         cargs.push("-Q");
     }
-    if ((params["show_total_perms"] ?? null)) {
+    if ((params["show_total_perms"] ?? false)) {
         cargs.push("-q");
     }
-    if ((params["tfce"] ?? null)) {
+    if ((params["tfce"] ?? false)) {
         cargs.push("-T");
     }
-    if ((params["tfce2D"] ?? null)) {
+    if ((params["tfce2D"] ?? false)) {
         cargs.push("--T2");
     }
     if ((params["tfce_C"] ?? null) !== null) {
@@ -374,7 +341,7 @@ function randomise_cargs(
             String((params["var_smooth"] ?? null))
         );
     }
-    if ((params["vox_p_values"] ?? null)) {
+    if ((params["vox_p_values"] ?? false)) {
         cargs.push("-x");
     }
     if ((params["x_block_labels"] ?? null) !== null) {
@@ -520,7 +487,6 @@ function randomise(
 export {
       RANDOMISE_METADATA,
       RandomiseOutputs,
-      RandomiseParameters,
       randomise,
       randomise_execute,
       randomise_params,

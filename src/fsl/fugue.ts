@@ -12,7 +12,7 @@ const FUGUE_METADATA: Metadata = {
 
 
 interface FugueParameters {
-    "@type": "fsl.fugue";
+    "@type"?: "fsl/fugue";
     "asym_se_time"?: number | null | undefined;
     "despike_2dfilter": boolean;
     "despike_threshold"?: number | null | undefined;
@@ -47,44 +47,11 @@ interface FugueParameters {
     "unwarped_file"?: string | null | undefined;
     "warped_file"?: string | null | undefined;
 }
+type FugueParametersTagged = Required<Pick<FugueParameters, '@type'>> & FugueParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fugue": fugue_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fugue": fugue_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fugue(...)`.
+ * Output object returned when calling `FugueParameters(...)`.
  *
  * @interface
  */
@@ -185,9 +152,9 @@ function fugue_params(
     unwarp_direction: "x" | "y" | "z" | "x-" | "y-" | "z-" | null = null,
     unwarped_file: string | null = null,
     warped_file: string | null = null,
-): FugueParameters {
+): FugueParametersTagged {
     const params = {
-        "@type": "fsl.fugue" as const,
+        "@type": "fsl/fugue" as const,
         "despike_2dfilter": despike_2dfilter,
         "forward_warping": forward_warping,
         "icorr": icorr,
@@ -281,7 +248,7 @@ function fugue_cargs(
     if ((params["asym_se_time"] ?? null) !== null) {
         cargs.push(["--asym=", String((params["asym_se_time"] ?? null))].join(''));
     }
-    if ((params["despike_2dfilter"] ?? null)) {
+    if ((params["despike_2dfilter"] ?? false)) {
         cargs.push("--despike");
     }
     if ((params["despike_threshold"] ?? null) !== null) {
@@ -299,16 +266,16 @@ function fugue_cargs(
     if ((params["fmap_out_file"] ?? null) !== null) {
         cargs.push(["--savefmap=", (params["fmap_out_file"] ?? null)].join(''));
     }
-    if ((params["forward_warping"] ?? null)) {
+    if ((params["forward_warping"] ?? false)) {
         cargs.push("--forward_warping");
     }
     if ((params["fourier_order"] ?? null) !== null) {
         cargs.push(["--fourier=", String((params["fourier_order"] ?? null))].join(''));
     }
-    if ((params["icorr"] ?? null)) {
+    if ((params["icorr"] ?? false)) {
         cargs.push("--icorr");
     }
-    if ((params["icorr_only"] ?? null)) {
+    if ((params["icorr_only"] ?? false)) {
         cargs.push("--icorronly");
     }
     if ((params["in_file"] ?? null) !== null) {
@@ -317,25 +284,25 @@ function fugue_cargs(
     if ((params["mask_file"] ?? null) !== null) {
         cargs.push(["--mask=", execution.inputFile((params["mask_file"] ?? null))].join(''));
     }
-    if ((params["median_2dfilter"] ?? null)) {
+    if ((params["median_2dfilter"] ?? false)) {
         cargs.push("--median");
     }
-    if ((params["no_extend"] ?? null)) {
+    if ((params["no_extend"] ?? false)) {
         cargs.push("--noextend");
     }
-    if ((params["no_gap_fill"] ?? null)) {
+    if ((params["no_gap_fill"] ?? false)) {
         cargs.push("--nofill");
     }
-    if ((params["nokspace"] ?? null)) {
+    if ((params["nokspace"] ?? false)) {
         cargs.push("--nokspace");
     }
     if ((params["output_type"] ?? null) !== null) {
         cargs.push((params["output_type"] ?? null));
     }
-    if ((params["pava"] ?? null)) {
+    if ((params["pava"] ?? false)) {
         cargs.push("--pava");
     }
-    if ((params["phase_conjugate"] ?? null)) {
+    if ((params["phase_conjugate"] ?? false)) {
         cargs.push("--phaseconj");
     }
     if ((params["phasemap_in_file"] ?? null) !== null) {
@@ -344,16 +311,16 @@ function fugue_cargs(
     if ((params["poly_order"] ?? null) !== null) {
         cargs.push(["--poly=", String((params["poly_order"] ?? null))].join(''));
     }
-    if ((params["save_fmap"] ?? null)) {
+    if ((params["save_fmap"] ?? false)) {
         cargs.push("--save_fmap");
     }
-    if ((params["save_shift"] ?? null)) {
+    if ((params["save_shift"] ?? false)) {
         cargs.push("--save_shift");
     }
-    if ((params["save_unmasked_fmap"] ?? null)) {
+    if ((params["save_unmasked_fmap"] ?? false)) {
         cargs.push("--unmaskfmap");
     }
-    if ((params["save_unmasked_shift"] ?? null)) {
+    if ((params["save_unmasked_shift"] ?? false)) {
         cargs.push("--unmaskshift");
     }
     if ((params["shift_in_file"] ?? null) !== null) {
@@ -522,7 +489,6 @@ function fugue(
 export {
       FUGUE_METADATA,
       FugueOutputs,
-      FugueParameters,
       fugue,
       fugue_execute,
       fugue_params,

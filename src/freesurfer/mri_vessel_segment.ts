@@ -12,51 +12,18 @@ const MRI_VESSEL_SEGMENT_METADATA: Metadata = {
 
 
 interface MriVesselSegmentParameters {
-    "@type": "freesurfer.mri_vessel_segment";
+    "@type"?: "freesurfer/mri_vessel_segment";
     "t1_image": InputPathType;
     "t2_image": InputPathType;
     "aseg_file": InputPathType;
     "output_file": string;
     "shape_flag": boolean;
 }
+type MriVesselSegmentParametersTagged = Required<Pick<MriVesselSegmentParameters, '@type'>> & MriVesselSegmentParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_vessel_segment": mri_vessel_segment_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_vessel_segment": mri_vessel_segment_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_vessel_segment(...)`.
+ * Output object returned when calling `MriVesselSegmentParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function mri_vessel_segment_params(
     aseg_file: InputPathType,
     output_file: string,
     shape_flag: boolean = false,
-): MriVesselSegmentParameters {
+): MriVesselSegmentParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_vessel_segment" as const,
+        "@type": "freesurfer/mri_vessel_segment" as const,
         "t1_image": t1_image,
         "t2_image": t2_image,
         "aseg_file": aseg_file,
@@ -132,7 +99,7 @@ function mri_vessel_segment_cargs(
         "-o",
         (params["output_file"] ?? null)
     );
-    if ((params["shape_flag"] ?? null)) {
+    if ((params["shape_flag"] ?? false)) {
         cargs.push("--shape");
     }
     return cargs;
@@ -221,7 +188,6 @@ function mri_vessel_segment(
 export {
       MRI_VESSEL_SEGMENT_METADATA,
       MriVesselSegmentOutputs,
-      MriVesselSegmentParameters,
       mri_vessel_segment,
       mri_vessel_segment_execute,
       mri_vessel_segment_params,

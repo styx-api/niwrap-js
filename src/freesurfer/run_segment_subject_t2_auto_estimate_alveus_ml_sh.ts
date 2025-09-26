@@ -12,47 +12,15 @@ const RUN_SEGMENT_SUBJECT_T2_AUTO_ESTIMATE_ALVEUS_ML_SH_METADATA: Metadata = {
 
 
 interface RunSegmentSubjectT2AutoEstimateAlveusMlShParameters {
-    "@type": "freesurfer.run_segmentSubjectT2_autoEstimateAlveusML.sh";
+    "@type"?: "freesurfer/run_segmentSubjectT2_autoEstimateAlveusML.sh";
     "deployed_mcr_root": string;
     "arguments"?: Array<string> | null | undefined;
 }
+type RunSegmentSubjectT2AutoEstimateAlveusMlShParametersTagged = Required<Pick<RunSegmentSubjectT2AutoEstimateAlveusMlShParameters, '@type'>> & RunSegmentSubjectT2AutoEstimateAlveusMlShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.run_segmentSubjectT2_autoEstimateAlveusML.sh": run_segment_subject_t2_auto_estimate_alveus_ml_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `run_segment_subject_t2_auto_estimate_alveus_ml_sh(...)`.
+ * Output object returned when calling `RunSegmentSubjectT2AutoEstimateAlveusMlShParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface RunSegmentSubjectT2AutoEstimateAlveusMlShOutputs {
 function run_segment_subject_t2_auto_estimate_alveus_ml_sh_params(
     deployed_mcr_root: string,
     arguments_: Array<string> | null = null,
-): RunSegmentSubjectT2AutoEstimateAlveusMlShParameters {
+): RunSegmentSubjectT2AutoEstimateAlveusMlShParametersTagged {
     const params = {
-        "@type": "freesurfer.run_segmentSubjectT2_autoEstimateAlveusML.sh" as const,
+        "@type": "freesurfer/run_segmentSubjectT2_autoEstimateAlveusML.sh" as const,
         "deployed_mcr_root": deployed_mcr_root,
     };
     if (arguments_ !== null) {
@@ -184,7 +152,6 @@ function run_segment_subject_t2_auto_estimate_alveus_ml_sh(
 export {
       RUN_SEGMENT_SUBJECT_T2_AUTO_ESTIMATE_ALVEUS_ML_SH_METADATA,
       RunSegmentSubjectT2AutoEstimateAlveusMlShOutputs,
-      RunSegmentSubjectT2AutoEstimateAlveusMlShParameters,
       run_segment_subject_t2_auto_estimate_alveus_ml_sh,
       run_segment_subject_t2_auto_estimate_alveus_ml_sh_execute,
       run_segment_subject_t2_auto_estimate_alveus_ml_sh_params,

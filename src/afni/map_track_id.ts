@@ -12,7 +12,7 @@ const MAP_TRACK_ID_METADATA: Metadata = {
 
 
 interface MapTrackIdParameters {
-    "@type": "afni.map_TrackID";
+    "@type"?: "afni/map_TrackID";
     "prefix": string;
     "in_trk": InputPathType;
     "in_map": InputPathType;
@@ -22,44 +22,11 @@ interface MapTrackIdParameters {
     "line_only_num": boolean;
     "already_inv": boolean;
 }
+type MapTrackIdParametersTagged = Required<Pick<MapTrackIdParameters, '@type'>> & MapTrackIdParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.map_TrackID": map_track_id_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.map_TrackID": map_track_id_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `map_track_id(...)`.
+ * Output object returned when calling `MapTrackIdParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function map_track_id_params(
     orig_zero: boolean = false,
     line_only_num: boolean = false,
     already_inv: boolean = false,
-): MapTrackIdParameters {
+): MapTrackIdParametersTagged {
     const params = {
-        "@type": "afni.map_TrackID" as const,
+        "@type": "afni/map_TrackID" as const,
         "prefix": prefix,
         "in_trk": in_trk,
         "in_map": in_map,
@@ -144,16 +111,16 @@ function map_track_id_cargs(
         "-ref",
         execution.inputFile((params["reference"] ?? null))
     );
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["orig_zero"] ?? null)) {
+    if ((params["orig_zero"] ?? false)) {
         cargs.push("-orig_zero");
     }
-    if ((params["line_only_num"] ?? null)) {
+    if ((params["line_only_num"] ?? false)) {
         cargs.push("-line_only_num");
     }
-    if ((params["already_inv"] ?? null)) {
+    if ((params["already_inv"] ?? false)) {
         cargs.push("-already_inv");
     }
     return cargs;
@@ -248,7 +215,6 @@ function map_track_id(
 export {
       MAP_TRACK_ID_METADATA,
       MapTrackIdOutputs,
-      MapTrackIdParameters,
       map_track_id,
       map_track_id_execute,
       map_track_id_params,

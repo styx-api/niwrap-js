@@ -12,7 +12,7 @@ const VOLUME_LABEL_IMPORT_METADATA: Metadata = {
 
 
 interface VolumeLabelImportParameters {
-    "@type": "workbench.volume-label-import";
+    "@type"?: "workbench/volume-label-import";
     "input": InputPathType;
     "label_list_file": string;
     "output": string;
@@ -21,44 +21,11 @@ interface VolumeLabelImportParameters {
     "opt_subvolume_subvol"?: string | null | undefined;
     "opt_drop_unused_labels": boolean;
 }
+type VolumeLabelImportParametersTagged = Required<Pick<VolumeLabelImportParameters, '@type'>> & VolumeLabelImportParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-label-import": volume_label_import_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-label-import": volume_label_import_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `volume_label_import(...)`.
+ * Output object returned when calling `VolumeLabelImportParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function volume_label_import_params(
     opt_unlabeled_value_value: number | null = null,
     opt_subvolume_subvol: string | null = null,
     opt_drop_unused_labels: boolean = false,
-): VolumeLabelImportParameters {
+): VolumeLabelImportParametersTagged {
     const params = {
-        "@type": "workbench.volume-label-import" as const,
+        "@type": "workbench/volume-label-import" as const,
         "input": input,
         "label_list_file": label_list_file,
         "output": output,
@@ -132,7 +99,7 @@ function volume_label_import_cargs(
     cargs.push(execution.inputFile((params["input"] ?? null)));
     cargs.push((params["label_list_file"] ?? null));
     cargs.push((params["output"] ?? null));
-    if ((params["opt_discard_others"] ?? null)) {
+    if ((params["opt_discard_others"] ?? false)) {
         cargs.push("-discard-others");
     }
     if ((params["opt_unlabeled_value_value"] ?? null) !== null) {
@@ -147,7 +114,7 @@ function volume_label_import_cargs(
             (params["opt_subvolume_subvol"] ?? null)
         );
     }
-    if ((params["opt_drop_unused_labels"] ?? null)) {
+    if ((params["opt_drop_unused_labels"] ?? false)) {
         cargs.push("-drop-unused-labels");
     }
     return cargs;
@@ -260,7 +227,6 @@ function volume_label_import(
 export {
       VOLUME_LABEL_IMPORT_METADATA,
       VolumeLabelImportOutputs,
-      VolumeLabelImportParameters,
       volume_label_import,
       volume_label_import_execute,
       volume_label_import_params,

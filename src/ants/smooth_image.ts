@@ -12,7 +12,7 @@ const SMOOTH_IMAGE_METADATA: Metadata = {
 
 
 interface SmoothImageParameters {
-    "@type": "ants.SmoothImage";
+    "@type"?: "ants/SmoothImage";
     "image_dimension": number;
     "image_ext": InputPathType;
     "smoothing_sigma": string;
@@ -20,44 +20,11 @@ interface SmoothImageParameters {
     "sigma_units"?: 0 | 1 | null | undefined;
     "median_filter"?: 0 | 1 | null | undefined;
 }
+type SmoothImageParametersTagged = Required<Pick<SmoothImageParameters, '@type'>> & SmoothImageParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.SmoothImage": smooth_image_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.SmoothImage": smooth_image_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `smooth_image(...)`.
+ * Output object returned when calling `SmoothImageParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function smooth_image_params(
     out_image_ext: string,
     sigma_units: 0 | 1 | null = null,
     median_filter: 0 | 1 | null = null,
-): SmoothImageParameters {
+): SmoothImageParametersTagged {
     const params = {
-        "@type": "ants.SmoothImage" as const,
+        "@type": "ants/SmoothImage" as const,
         "image_dimension": image_dimension,
         "image_ext": image_ext,
         "smoothing_sigma": smoothing_sigma,
@@ -222,7 +189,6 @@ function smooth_image(
 export {
       SMOOTH_IMAGE_METADATA,
       SmoothImageOutputs,
-      SmoothImageParameters,
       smooth_image,
       smooth_image_execute,
       smooth_image_params,

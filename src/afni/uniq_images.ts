@@ -12,47 +12,14 @@ const UNIQ_IMAGES_METADATA: Metadata = {
 
 
 interface UniqImagesParameters {
-    "@type": "afni.uniq_images";
+    "@type"?: "afni/uniq_images";
     "input_files": Array<InputPathType>;
 }
+type UniqImagesParametersTagged = Required<Pick<UniqImagesParameters, '@type'>> & UniqImagesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.uniq_images": uniq_images_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.uniq_images": uniq_images_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `uniq_images(...)`.
+ * Output object returned when calling `UniqImagesParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface UniqImagesOutputs {
  */
 function uniq_images_params(
     input_files: Array<InputPathType>,
-): UniqImagesParameters {
+): UniqImagesParametersTagged {
     const params = {
-        "@type": "afni.uniq_images" as const,
+        "@type": "afni/uniq_images" as const,
         "input_files": input_files,
     };
     return params;
@@ -179,7 +146,6 @@ function uniq_images(
 export {
       UNIQ_IMAGES_METADATA,
       UniqImagesOutputs,
-      UniqImagesParameters,
       uniq_images,
       uniq_images_execute,
       uniq_images_params,

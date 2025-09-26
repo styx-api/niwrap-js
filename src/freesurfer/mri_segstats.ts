@@ -12,7 +12,7 @@ const MRI_SEGSTATS_METADATA: Metadata = {
 
 
 interface MriSegstatsParameters {
-    "@type": "freesurfer.mri_segstats";
+    "@type"?: "freesurfer/mri_segstats";
     "segvol": InputPathType;
     "annot_subject"?: string | null | undefined;
     "annot_hemisphere"?: string | null | undefined;
@@ -74,44 +74,11 @@ interface MriSegstatsParameters {
     "subjects_dir"?: string | null | undefined;
     "random_seed"?: number | null | undefined;
 }
+type MriSegstatsParametersTagged = Required<Pick<MriSegstatsParameters, '@type'>> & MriSegstatsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_segstats": mri_segstats_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_segstats": mri_segstats_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_segstats(...)`.
+ * Output object returned when calling `MriSegstatsParameters(...)`.
  *
  * @interface
  */
@@ -270,9 +237,9 @@ function mri_segstats_params(
     qa_stats_file: string | null = null,
     subjects_dir: string | null = null,
     random_seed: number | null = null,
-): MriSegstatsParameters {
+): MriSegstatsParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_segstats" as const,
+        "@type": "freesurfer/mri_segstats" as const,
         "segvol": segvol,
         "output_file": output_file,
         "square_input": square_input,
@@ -486,10 +453,10 @@ function mri_segstats_cargs(
             String((params["robust"] ?? null))
         );
     }
-    if ((params["square_input"] ?? null)) {
+    if ((params["square_input"] ?? false)) {
         cargs.push("--sqr");
     }
-    if ((params["sqrt_input"] ?? null)) {
+    if ((params["sqrt_input"] ?? false)) {
         cargs.push("--sqrt");
     }
     if ((params["multiply_input"] ?? null) !== null) {
@@ -504,13 +471,13 @@ function mri_segstats_cargs(
             String((params["divide_input"] ?? null))
         );
     }
-    if ((params["snr_column"] ?? null)) {
+    if ((params["snr_column"] ?? false)) {
         cargs.push("--snr");
     }
-    if ((params["absolute_value"] ?? null)) {
+    if ((params["absolute_value"] ?? false)) {
         cargs.push("--abs");
     }
-    if ((params["accumulate_mean"] ?? null)) {
+    if ((params["accumulate_mean"] ?? false)) {
         cargs.push("--accumulate");
     }
     if ((params["color_table"] ?? null) !== null) {
@@ -519,7 +486,7 @@ function mri_segstats_cargs(
             execution.inputFile((params["color_table"] ?? null))
         );
     }
-    if ((params["default_color_table"] ?? null)) {
+    if ((params["default_color_table"] ?? false)) {
         cargs.push("--ctab-default");
     }
     if ((params["gca_color_table"] ?? null) !== null) {
@@ -540,19 +507,19 @@ function mri_segstats_cargs(
             (params["exclude_ids"] ?? null)
         );
     }
-    if ((params["exclude_gm_wm"] ?? null)) {
+    if ((params["exclude_gm_wm"] ?? false)) {
         cargs.push("--excl-ctxgmwm");
     }
-    if ((params["surf_wm_vol"] ?? null)) {
+    if ((params["surf_wm_vol"] ?? false)) {
         cargs.push("--surf-wm-vol");
     }
-    if ((params["surf_ctx_vol"] ?? null)) {
+    if ((params["surf_ctx_vol"] ?? false)) {
         cargs.push("--surf-ctx-vol");
     }
-    if ((params["no_global_stats"] ?? null)) {
+    if ((params["no_global_stats"] ?? false)) {
         cargs.push("--no-global-stats");
     }
-    if ((params["empty_segments"] ?? null)) {
+    if ((params["empty_segments"] ?? false)) {
         cargs.push("--empty");
     }
     if ((params["ctab_output"] ?? null) !== null) {
@@ -585,7 +552,7 @@ function mri_segstats_cargs(
             String((params["mask_frame"] ?? null))
         );
     }
-    if ((params["invert_mask"] ?? null)) {
+    if ((params["invert_mask"] ?? false)) {
         cargs.push("--maskinvert");
     }
     if ((params["mask_erode"] ?? null) !== null) {
@@ -594,7 +561,7 @@ function mri_segstats_cargs(
             String((params["mask_erode"] ?? null))
         );
     }
-    if ((params["brain_vol_seg"] ?? null)) {
+    if ((params["brain_vol_seg"] ?? false)) {
         cargs.push("--brain-vol-from-seg");
     }
     if ((params["brain_mask_vol"] ?? null) !== null) {
@@ -603,19 +570,19 @@ function mri_segstats_cargs(
             execution.inputFile((params["brain_mask_vol"] ?? null))
         );
     }
-    if ((params["subcortical_gray"] ?? null)) {
+    if ((params["subcortical_gray"] ?? false)) {
         cargs.push("--subcortgray");
     }
-    if ((params["total_gray"] ?? null)) {
+    if ((params["total_gray"] ?? false)) {
         cargs.push("--totalgray");
     }
-    if ((params["intracranial_volume"] ?? null)) {
+    if ((params["intracranial_volume"] ?? false)) {
         cargs.push("--etiv");
     }
-    if ((params["intracranial_volume_only"] ?? null)) {
+    if ((params["intracranial_volume_only"] ?? false)) {
         cargs.push("--etiv-only");
     }
-    if ((params["old_intracranial_volume_only"] ?? null)) {
+    if ((params["old_intracranial_volume_only"] ?? false)) {
         cargs.push("--old-etiv-only");
     }
     if ((params["talairach_transform"] ?? null) !== null) {
@@ -630,7 +597,7 @@ function mri_segstats_cargs(
             (params["xfm_to_etiv"] ?? null)
         );
     }
-    if ((params["euler_hole_count"] ?? null)) {
+    if ((params["euler_hole_count"] ?? false)) {
         cargs.push("--euler");
     }
     if ((params["avg_waveform"] ?? null) !== null) {
@@ -651,7 +618,7 @@ function mri_segstats_cargs(
             (params["avg_waveform_vol"] ?? null)
         );
     }
-    if ((params["remove_avgwf_mean"] ?? null)) {
+    if ((params["remove_avgwf_mean"] ?? false)) {
         cargs.push("--avgwf-remove-mean");
     }
     if ((params["spatial_frame_avg"] ?? null) !== null) {
@@ -678,10 +645,10 @@ function mri_segstats_cargs(
             execution.inputFile((params["replace_ids_file"] ?? null))
         );
     }
-    if ((params["gtm_default_seg_merge"] ?? null)) {
+    if ((params["gtm_default_seg_merge"] ?? false)) {
         cargs.push("--gtm-default-seg-merge");
     }
-    if ((params["gtm_default_seg_merge_choroid"] ?? null)) {
+    if ((params["gtm_default_seg_merge_choroid"] ?? false)) {
         cargs.push("--gtm-default-seg-merge-choroid");
     }
     if ((params["qa_stats_file"] ?? null) !== null) {
@@ -899,7 +866,6 @@ function mri_segstats(
 export {
       MRI_SEGSTATS_METADATA,
       MriSegstatsOutputs,
-      MriSegstatsParameters,
       mri_segstats,
       mri_segstats_execute,
       mri_segstats_params,

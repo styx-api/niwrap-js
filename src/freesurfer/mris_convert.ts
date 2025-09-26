@@ -12,7 +12,7 @@ const MRIS_CONVERT_METADATA: Metadata = {
 
 
 interface MrisConvertParameters {
-    "@type": "freesurfer.mris_convert";
+    "@type"?: "freesurfer/mris_convert";
     "input_file": InputPathType;
     "second_input_file"?: InputPathType | null | undefined;
     "output_file": string;
@@ -52,44 +52,11 @@ interface MrisConvertParameters {
     "cras_add": boolean;
     "cras_subtract": boolean;
 }
+type MrisConvertParametersTagged = Required<Pick<MrisConvertParameters, '@type'>> & MrisConvertParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_convert": mris_convert_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_convert": mris_convert_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_convert(...)`.
+ * Output object returned when calling `MrisConvertParameters(...)`.
  *
  * @interface
  */
@@ -188,9 +155,9 @@ function mris_convert_params(
     label_to_mask: string | null = null,
     cras_add: boolean = false,
     cras_subtract: boolean = false,
-): MrisConvertParameters {
+): MrisConvertParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_convert" as const,
+        "@type": "freesurfer/mris_convert" as const,
         "input_file": input_file,
         "output_file": output_file,
         "patch": patch,
@@ -291,7 +258,7 @@ function mris_convert_cargs(
         cargs.push(execution.inputFile((params["second_input_file"] ?? null)));
     }
     cargs.push((params["output_file"] ?? null));
-    if ((params["patch"] ?? null)) {
+    if ((params["patch"] ?? false)) {
         cargs.push("-p");
     }
     if ((params["curv_overlay_files"] ?? null) !== null) {
@@ -318,7 +285,7 @@ function mris_convert_cargs(
             String((params["scale"] ?? null))
         );
     }
-    if ((params["rescale"] ?? null)) {
+    if ((params["rescale"] ?? false)) {
         cargs.push("-r");
     }
     if ((params["talairach_xfm"] ?? null) !== null) {
@@ -327,13 +294,13 @@ function mris_convert_cargs(
             (params["talairach_xfm"] ?? null)
         );
     }
-    if ((params["normals"] ?? null)) {
+    if ((params["normals"] ?? false)) {
         cargs.push("-n");
     }
-    if ((params["neighbors"] ?? null)) {
+    if ((params["neighbors"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["xyz"] ?? null)) {
+    if ((params["xyz"] ?? false)) {
         cargs.push("-a");
     }
     if ((params["annotation_file"] ?? null) !== null) {
@@ -366,13 +333,13 @@ function mris_convert_cargs(
             (params["label_stats_file"] ?? null)
         );
     }
-    if ((params["combine_surfs"] ?? null)) {
+    if ((params["combine_surfs"] ?? false)) {
         cargs.push("--combinesurfs");
     }
-    if ((params["merge_gifti"] ?? null)) {
+    if ((params["merge_gifti"] ?? false)) {
         cargs.push("--mergegifti");
     }
-    if ((params["split_gifti"] ?? null)) {
+    if ((params["split_gifti"] ?? false)) {
         cargs.push("--splitgifti");
     }
     if ((params["gifti_outdir"] ?? null) !== null) {
@@ -381,10 +348,10 @@ function mris_convert_cargs(
             (params["gifti_outdir"] ?? null)
         );
     }
-    if ((params["delete_cmds"] ?? null)) {
+    if ((params["delete_cmds"] ?? false)) {
         cargs.push("--delete-cmds");
     }
-    if ((params["center"] ?? null)) {
+    if ((params["center"] ?? false)) {
         cargs.push("--center");
     }
     if ((params["vol_geom"] ?? null) !== null) {
@@ -393,7 +360,7 @@ function mris_convert_cargs(
             (params["vol_geom"] ?? null)
         );
     }
-    if ((params["remove_vol_geom"] ?? null)) {
+    if ((params["remove_vol_geom"] ?? false)) {
         cargs.push("--remove-vol-geom");
     }
     if ((params["to_surf"] ?? null) !== null) {
@@ -402,16 +369,16 @@ function mris_convert_cargs(
             (params["to_surf"] ?? null)
         );
     }
-    if ((params["to_scanner"] ?? null)) {
+    if ((params["to_scanner"] ?? false)) {
         cargs.push("--to-scanner");
     }
-    if ((params["to_tkr"] ?? null)) {
+    if ((params["to_tkr"] ?? false)) {
         cargs.push("--to-tkr");
     }
-    if ((params["userealras"] ?? null)) {
+    if ((params["userealras"] ?? false)) {
         cargs.push("--userealras");
     }
-    if ((params["usesurfras"] ?? null)) {
+    if ((params["usesurfras"] ?? false)) {
         cargs.push("--usesurfras");
     }
     if ((params["upsample"] ?? null) !== null) {
@@ -444,10 +411,10 @@ function mris_convert_cargs(
             (params["label_to_mask"] ?? null)
         );
     }
-    if ((params["cras_add"] ?? null)) {
+    if ((params["cras_add"] ?? false)) {
         cargs.push("--cras_add");
     }
-    if ((params["cras_subtract"] ?? null)) {
+    if ((params["cras_subtract"] ?? false)) {
         cargs.push("--cras_subtract");
     }
     return cargs;
@@ -602,7 +569,6 @@ function mris_convert(
 export {
       MRIS_CONVERT_METADATA,
       MrisConvertOutputs,
-      MrisConvertParameters,
       mris_convert,
       mris_convert_execute,
       mris_convert_params,

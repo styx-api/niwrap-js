@@ -12,49 +12,16 @@ const MRI_NL_ALIGN_BINARY_METADATA: Metadata = {
 
 
 interface MriNlAlignBinaryParameters {
-    "@type": "freesurfer.mri_nl_align_binary";
+    "@type"?: "freesurfer/mri_nl_align_binary";
     "source_file": InputPathType;
     "target_file": InputPathType;
     "warp_file": string;
 }
+type MriNlAlignBinaryParametersTagged = Required<Pick<MriNlAlignBinaryParameters, '@type'>> & MriNlAlignBinaryParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_nl_align_binary": mri_nl_align_binary_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_nl_align_binary": mri_nl_align_binary_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_nl_align_binary(...)`.
+ * Output object returned when calling `MriNlAlignBinaryParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mri_nl_align_binary_params(
     source_file: InputPathType,
     target_file: InputPathType,
     warp_file: string,
-): MriNlAlignBinaryParameters {
+): MriNlAlignBinaryParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_nl_align_binary" as const,
+        "@type": "freesurfer/mri_nl_align_binary" as const,
         "source_file": source_file,
         "target_file": target_file,
         "warp_file": warp_file,
@@ -193,7 +160,6 @@ function mri_nl_align_binary(
 export {
       MRI_NL_ALIGN_BINARY_METADATA,
       MriNlAlignBinaryOutputs,
-      MriNlAlignBinaryParameters,
       mri_nl_align_binary,
       mri_nl_align_binary_execute,
       mri_nl_align_binary_params,

@@ -12,47 +12,15 @@ const BACKEND_AVERAGE_DENSE_ROI_METADATA: Metadata = {
 
 
 interface BackendAverageDenseRoiParameters {
-    "@type": "workbench.backend-average-dense-roi";
+    "@type"?: "workbench/backend-average-dense-roi";
     "index_list": string;
     "out_file": string;
 }
+type BackendAverageDenseRoiParametersTagged = Required<Pick<BackendAverageDenseRoiParameters, '@type'>> & BackendAverageDenseRoiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.backend-average-dense-roi": backend_average_dense_roi_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `backend_average_dense_roi(...)`.
+ * Output object returned when calling `BackendAverageDenseRoiParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface BackendAverageDenseRoiOutputs {
 function backend_average_dense_roi_params(
     index_list: string,
     out_file: string,
-): BackendAverageDenseRoiParameters {
+): BackendAverageDenseRoiParametersTagged {
     const params = {
-        "@type": "workbench.backend-average-dense-roi" as const,
+        "@type": "workbench/backend-average-dense-roi" as const,
         "index_list": index_list,
         "out_file": out_file,
     };
@@ -185,7 +153,6 @@ function backend_average_dense_roi(
 export {
       BACKEND_AVERAGE_DENSE_ROI_METADATA,
       BackendAverageDenseRoiOutputs,
-      BackendAverageDenseRoiParameters,
       backend_average_dense_roi,
       backend_average_dense_roi_execute,
       backend_average_dense_roi_params,

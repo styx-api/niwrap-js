@@ -12,7 +12,7 @@ const VOL2SUBFIELD_METADATA: Metadata = {
 
 
 interface Vol2subfieldParameters {
-    "@type": "freesurfer.vol2subfield";
+    "@type"?: "freesurfer/vol2subfield";
     "input_volume": InputPathType;
     "subfield_volume": InputPathType;
     "registration_file": InputPathType;
@@ -33,44 +33,11 @@ interface Vol2subfieldParameters {
     "preset_subfield_thalamus": boolean;
     "preset_subfield_brainstem": boolean;
 }
+type Vol2subfieldParametersTagged = Required<Pick<Vol2subfieldParameters, '@type'>> & Vol2subfieldParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.vol2subfield": vol2subfield_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.vol2subfield": vol2subfield_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `vol2subfield(...)`.
+ * Output object returned when calling `Vol2subfieldParameters(...)`.
  *
  * @interface
  */
@@ -147,9 +114,9 @@ function vol2subfield_params(
     preset_subfield_rh_hbt: boolean = false,
     preset_subfield_thalamus: boolean = false,
     preset_subfield_brainstem: boolean = false,
-): Vol2subfieldParameters {
+): Vol2subfieldParametersTagged {
     const params = {
-        "@type": "freesurfer.vol2subfield" as const,
+        "@type": "freesurfer/vol2subfield" as const,
         "input_volume": input_volume,
         "subfield_volume": subfield_volume,
         "registration_file": registration_file,
@@ -250,13 +217,13 @@ function vol2subfield_cargs(
             execution.inputFile((params["color_table"] ?? null))
         );
     }
-    if ((params["interpolation_nearest"] ?? null)) {
+    if ((params["interpolation_nearest"] ?? false)) {
         cargs.push("--nearest");
     }
-    if ((params["interpolation_trilin"] ?? null)) {
+    if ((params["interpolation_trilin"] ?? false)) {
         cargs.push("--trilin");
     }
-    if ((params["interpolation_cubic"] ?? null)) {
+    if ((params["interpolation_cubic"] ?? false)) {
         cargs.push("--cubic");
     }
     if ((params["tmp_directory"] ?? null) !== null) {
@@ -265,22 +232,22 @@ function vol2subfield_cargs(
             (params["tmp_directory"] ?? null)
         );
     }
-    if ((params["preset_subfield_lh_hippoamyg"] ?? null)) {
+    if ((params["preset_subfield_lh_hippoamyg"] ?? false)) {
         cargs.push("--lh.hippoamyg");
     }
-    if ((params["preset_subfield_rh_hippoamyg"] ?? null)) {
+    if ((params["preset_subfield_rh_hippoamyg"] ?? false)) {
         cargs.push("--rh.hippoamyg");
     }
-    if ((params["preset_subfield_lh_hbt"] ?? null)) {
+    if ((params["preset_subfield_lh_hbt"] ?? false)) {
         cargs.push("--lh.hbt");
     }
-    if ((params["preset_subfield_rh_hbt"] ?? null)) {
+    if ((params["preset_subfield_rh_hbt"] ?? false)) {
         cargs.push("--rh.hbt");
     }
-    if ((params["preset_subfield_thalamus"] ?? null)) {
+    if ((params["preset_subfield_thalamus"] ?? false)) {
         cargs.push("--thalamus");
     }
-    if ((params["preset_subfield_brainstem"] ?? null)) {
+    if ((params["preset_subfield_brainstem"] ?? false)) {
         cargs.push("--brainstem");
     }
     return cargs;
@@ -401,7 +368,6 @@ function vol2subfield(
 export {
       VOL2SUBFIELD_METADATA,
       Vol2subfieldOutputs,
-      Vol2subfieldParameters,
       vol2subfield,
       vol2subfield_execute,
       vol2subfield_params,

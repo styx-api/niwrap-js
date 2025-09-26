@@ -12,31 +12,34 @@ const TCKRESAMPLE_METADATA: Metadata = {
 
 
 interface TckresampleLineParameters {
-    "@type": "mrtrix.tckresample.line";
+    "@type"?: "line";
     "num": number;
     "start": Array<number>;
     "end": Array<number>;
 }
+type TckresampleLineParametersTagged = Required<Pick<TckresampleLineParameters, '@type'>> & TckresampleLineParameters;
 
 
 interface TckresampleArcParameters {
-    "@type": "mrtrix.tckresample.arc";
+    "@type"?: "arc";
     "num": number;
     "start": Array<number>;
     "mid": Array<number>;
     "end": Array<number>;
 }
+type TckresampleArcParametersTagged = Required<Pick<TckresampleArcParameters, '@type'>> & TckresampleArcParameters;
 
 
 interface TckresampleConfigParameters {
-    "@type": "mrtrix.tckresample.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type TckresampleConfigParametersTagged = Required<Pick<TckresampleConfigParameters, '@type'>> & TckresampleConfigParameters;
 
 
 interface TckresampleParameters {
-    "@type": "mrtrix.tckresample";
+    "@type"?: "mrtrix/tckresample";
     "upsample"?: number | null | undefined;
     "downsample"?: number | null | undefined;
     "step_size"?: number | null | undefined;
@@ -55,43 +58,7 @@ interface TckresampleParameters {
     "in_tracks": InputPathType;
     "out_tracks": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.tckresample": tckresample_cargs,
-        "mrtrix.tckresample.line": tckresample_line_cargs,
-        "mrtrix.tckresample.arc": tckresample_arc_cargs,
-        "mrtrix.tckresample.config": tckresample_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.tckresample": tckresample_outputs,
-    };
-    return outputsFuncs[t];
-}
+type TckresampleParametersTagged = Required<Pick<TckresampleParameters, '@type'>> & TckresampleParameters;
 
 
 /**
@@ -107,9 +74,9 @@ function tckresample_line_params(
     num: number,
     start: Array<number>,
     end: Array<number>,
-): TckresampleLineParameters {
+): TckresampleLineParametersTagged {
     const params = {
-        "@type": "mrtrix.tckresample.line" as const,
+        "@type": "line" as const,
         "num": num,
         "start": start,
         "end": end,
@@ -154,9 +121,9 @@ function tckresample_arc_params(
     start: Array<number>,
     mid: Array<number>,
     end: Array<number>,
-): TckresampleArcParameters {
+): TckresampleArcParametersTagged {
     const params = {
-        "@type": "mrtrix.tckresample.arc" as const,
+        "@type": "arc" as const,
         "num": num,
         "start": start,
         "mid": mid,
@@ -199,9 +166,9 @@ function tckresample_arc_cargs(
 function tckresample_config_params(
     key: string,
     value: string,
-): TckresampleConfigParameters {
+): TckresampleConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.tckresample.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -230,7 +197,7 @@ function tckresample_config_cargs(
 
 
 /**
- * Output object returned when calling `tckresample(...)`.
+ * Output object returned when calling `TckresampleParameters(...)`.
  *
  * @interface
  */
@@ -287,9 +254,9 @@ function tckresample_params(
     config: Array<TckresampleConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TckresampleParameters {
+): TckresampleParametersTagged {
     const params = {
-        "@type": "mrtrix.tckresample" as const,
+        "@type": "mrtrix/tckresample" as const,
         "endpoints": endpoints,
         "info": info,
         "quiet": quiet,
@@ -366,25 +333,25 @@ function tckresample_cargs(
             String((params["num_points"] ?? null))
         );
     }
-    if ((params["endpoints"] ?? null)) {
+    if ((params["endpoints"] ?? false)) {
         cargs.push("-endpoints");
     }
     if ((params["line"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["line"] ?? null)["@type"])((params["line"] ?? null), execution));
+        cargs.push(...tckresample_line_cargs((params["line"] ?? null), execution));
     }
     if ((params["arc"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["arc"] ?? null)["@type"])((params["arc"] ?? null), execution));
+        cargs.push(...tckresample_arc_cargs((params["arc"] ?? null), execution));
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -394,12 +361,12 @@ function tckresample_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => tckresample_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["in_tracks"] ?? null)));
@@ -529,11 +496,7 @@ function tckresample(
 
 export {
       TCKRESAMPLE_METADATA,
-      TckresampleArcParameters,
-      TckresampleConfigParameters,
-      TckresampleLineParameters,
       TckresampleOutputs,
-      TckresampleParameters,
       tckresample,
       tckresample_arc_params,
       tckresample_config_params,

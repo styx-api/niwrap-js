@@ -12,49 +12,16 @@ const ICO_SUPERSAMPLE_METADATA: Metadata = {
 
 
 interface IcoSupersampleParameters {
-    "@type": "freesurfer.ico_supersample";
+    "@type"?: "freesurfer/ico_supersample";
     "refine": boolean;
     "radius"?: number | null | undefined;
     "projection_point"?: Array<number> | null | undefined;
 }
+type IcoSupersampleParametersTagged = Required<Pick<IcoSupersampleParameters, '@type'>> & IcoSupersampleParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.ico_supersample": ico_supersample_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.ico_supersample": ico_supersample_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ico_supersample(...)`.
+ * Output object returned when calling `IcoSupersampleParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function ico_supersample_params(
     refine: boolean = false,
     radius: number | null = null,
     projection_point: Array<number> | null = null,
-): IcoSupersampleParameters {
+): IcoSupersampleParametersTagged {
     const params = {
-        "@type": "freesurfer.ico_supersample" as const,
+        "@type": "freesurfer/ico_supersample" as const,
         "refine": refine,
     };
     if (radius !== null) {
@@ -112,7 +79,7 @@ function ico_supersample_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("ico_supersample");
-    if ((params["refine"] ?? null)) {
+    if ((params["refine"] ?? false)) {
         cargs.push("-y");
     }
     if ((params["radius"] ?? null) !== null) {
@@ -203,7 +170,6 @@ function ico_supersample(
 export {
       ICO_SUPERSAMPLE_METADATA,
       IcoSupersampleOutputs,
-      IcoSupersampleParameters,
       ico_supersample,
       ico_supersample_execute,
       ico_supersample_params,

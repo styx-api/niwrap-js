@@ -12,56 +12,22 @@ const CONVERT_MATRIX4_TO_MATRIX2_METADATA: Metadata = {
 
 
 interface ConvertMatrix4ToMatrix2IndividualFibersParameters {
-    "@type": "workbench.convert-matrix4-to-matrix2.individual_fibers";
+    "@type"?: "individual_fibers";
     "fiber_1": string;
     "fiber_2": string;
     "fiber_3": string;
 }
+type ConvertMatrix4ToMatrix2IndividualFibersParametersTagged = Required<Pick<ConvertMatrix4ToMatrix2IndividualFibersParameters, '@type'>> & ConvertMatrix4ToMatrix2IndividualFibersParameters;
 
 
 interface ConvertMatrix4ToMatrix2Parameters {
-    "@type": "workbench.convert-matrix4-to-matrix2";
+    "@type"?: "workbench/convert-matrix4-to-matrix2";
     "matrix4_wbsparse": string;
     "counts_out": string;
     "opt_distances_distance_out"?: string | null | undefined;
     "individual_fibers"?: ConvertMatrix4ToMatrix2IndividualFibersParameters | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.convert-matrix4-to-matrix2": convert_matrix4_to_matrix2_cargs,
-        "workbench.convert-matrix4-to-matrix2.individual_fibers": convert_matrix4_to_matrix2_individual_fibers_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.convert-matrix4-to-matrix2": convert_matrix4_to_matrix2_outputs,
-        "workbench.convert-matrix4-to-matrix2.individual_fibers": convert_matrix4_to_matrix2_individual_fibers_outputs,
-    };
-    return outputsFuncs[t];
-}
+type ConvertMatrix4ToMatrix2ParametersTagged = Required<Pick<ConvertMatrix4ToMatrix2Parameters, '@type'>> & ConvertMatrix4ToMatrix2Parameters;
 
 
 /**
@@ -102,9 +68,9 @@ function convert_matrix4_to_matrix2_individual_fibers_params(
     fiber_1: string,
     fiber_2: string,
     fiber_3: string,
-): ConvertMatrix4ToMatrix2IndividualFibersParameters {
+): ConvertMatrix4ToMatrix2IndividualFibersParametersTagged {
     const params = {
-        "@type": "workbench.convert-matrix4-to-matrix2.individual_fibers" as const,
+        "@type": "individual_fibers" as const,
         "fiber_1": fiber_1,
         "fiber_2": fiber_2,
         "fiber_3": fiber_3,
@@ -157,7 +123,7 @@ function convert_matrix4_to_matrix2_individual_fibers_outputs(
 
 
 /**
- * Output object returned when calling `convert_matrix4_to_matrix2(...)`.
+ * Output object returned when calling `ConvertMatrix4ToMatrix2Parameters(...)`.
  *
  * @interface
  */
@@ -196,9 +162,9 @@ function convert_matrix4_to_matrix2_params(
     counts_out: string,
     opt_distances_distance_out: string | null = null,
     individual_fibers: ConvertMatrix4ToMatrix2IndividualFibersParameters | null = null,
-): ConvertMatrix4ToMatrix2Parameters {
+): ConvertMatrix4ToMatrix2ParametersTagged {
     const params = {
-        "@type": "workbench.convert-matrix4-to-matrix2" as const,
+        "@type": "workbench/convert-matrix4-to-matrix2" as const,
         "matrix4_wbsparse": matrix4_wbsparse,
         "counts_out": counts_out,
     };
@@ -236,7 +202,7 @@ function convert_matrix4_to_matrix2_cargs(
         );
     }
     if ((params["individual_fibers"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["individual_fibers"] ?? null)["@type"])((params["individual_fibers"] ?? null), execution));
+        cargs.push(...convert_matrix4_to_matrix2_individual_fibers_cargs((params["individual_fibers"] ?? null), execution));
     }
     return cargs;
 }
@@ -258,7 +224,7 @@ function convert_matrix4_to_matrix2_outputs(
         root: execution.outputFile("."),
         counts_out: execution.outputFile([(params["counts_out"] ?? null)].join('')),
         opt_distances_distance_out: ((params["opt_distances_distance_out"] ?? null) !== null) ? execution.outputFile([(params["opt_distances_distance_out"] ?? null)].join('')) : null,
-        individual_fibers: (params["individual_fibers"] ?? null) ? (dynOutputs((params["individual_fibers"] ?? null)["@type"])?.((params["individual_fibers"] ?? null), execution) ?? null) : null,
+        individual_fibers: (params["individual_fibers"] ?? null) ? (convert_matrix4_to_matrix2_individual_fibers_outputs((params["individual_fibers"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }
@@ -328,9 +294,7 @@ function convert_matrix4_to_matrix2(
 export {
       CONVERT_MATRIX4_TO_MATRIX2_METADATA,
       ConvertMatrix4ToMatrix2IndividualFibersOutputs,
-      ConvertMatrix4ToMatrix2IndividualFibersParameters,
       ConvertMatrix4ToMatrix2Outputs,
-      ConvertMatrix4ToMatrix2Parameters,
       convert_matrix4_to_matrix2,
       convert_matrix4_to_matrix2_execute,
       convert_matrix4_to_matrix2_individual_fibers_params,

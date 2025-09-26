@@ -12,49 +12,16 @@ const CIFTI_LABEL_PROBABILITY_METADATA: Metadata = {
 
 
 interface CiftiLabelProbabilityParameters {
-    "@type": "workbench.cifti-label-probability";
+    "@type"?: "workbench/cifti-label-probability";
     "label_maps": InputPathType;
     "probability_dscalar_out": string;
     "opt_exclude_unlabeled": boolean;
 }
+type CiftiLabelProbabilityParametersTagged = Required<Pick<CiftiLabelProbabilityParameters, '@type'>> & CiftiLabelProbabilityParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-label-probability": cifti_label_probability_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-label-probability": cifti_label_probability_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `cifti_label_probability(...)`.
+ * Output object returned when calling `CiftiLabelProbabilityParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function cifti_label_probability_params(
     label_maps: InputPathType,
     probability_dscalar_out: string,
     opt_exclude_unlabeled: boolean = false,
-): CiftiLabelProbabilityParameters {
+): CiftiLabelProbabilityParametersTagged {
     const params = {
-        "@type": "workbench.cifti-label-probability" as const,
+        "@type": "workbench/cifti-label-probability" as const,
         "label_maps": label_maps,
         "probability_dscalar_out": probability_dscalar_out,
         "opt_exclude_unlabeled": opt_exclude_unlabeled,
@@ -111,7 +78,7 @@ function cifti_label_probability_cargs(
     cargs.push("-cifti-label-probability");
     cargs.push(execution.inputFile((params["label_maps"] ?? null)));
     cargs.push((params["probability_dscalar_out"] ?? null));
-    if ((params["opt_exclude_unlabeled"] ?? null)) {
+    if ((params["opt_exclude_unlabeled"] ?? false)) {
         cargs.push("-exclude-unlabeled");
     }
     return cargs;
@@ -200,7 +167,6 @@ function cifti_label_probability(
 export {
       CIFTI_LABEL_PROBABILITY_METADATA,
       CiftiLabelProbabilityOutputs,
-      CiftiLabelProbabilityParameters,
       cifti_label_probability,
       cifti_label_probability_execute,
       cifti_label_probability_params,

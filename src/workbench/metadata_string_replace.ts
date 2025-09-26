@@ -12,50 +12,18 @@ const METADATA_STRING_REPLACE_METADATA: Metadata = {
 
 
 interface MetadataStringReplaceParameters {
-    "@type": "workbench.metadata-string-replace";
+    "@type"?: "workbench/metadata-string-replace";
     "input_file": string;
     "find_string": string;
     "replace_string": string;
     "output_file": string;
     "opt_case_insensitive": boolean;
 }
+type MetadataStringReplaceParametersTagged = Required<Pick<MetadataStringReplaceParameters, '@type'>> & MetadataStringReplaceParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metadata-string-replace": metadata_string_replace_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `metadata_string_replace(...)`.
+ * Output object returned when calling `MetadataStringReplaceParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function metadata_string_replace_params(
     replace_string: string,
     output_file: string,
     opt_case_insensitive: boolean = false,
-): MetadataStringReplaceParameters {
+): MetadataStringReplaceParametersTagged {
     const params = {
-        "@type": "workbench.metadata-string-replace" as const,
+        "@type": "workbench/metadata-string-replace" as const,
         "input_file": input_file,
         "find_string": find_string,
         "replace_string": replace_string,
@@ -116,7 +84,7 @@ function metadata_string_replace_cargs(
     cargs.push((params["find_string"] ?? null));
     cargs.push((params["replace_string"] ?? null));
     cargs.push((params["output_file"] ?? null));
-    if ((params["opt_case_insensitive"] ?? null)) {
+    if ((params["opt_case_insensitive"] ?? false)) {
         cargs.push("-case-insensitive");
     }
     return cargs;
@@ -208,7 +176,6 @@ function metadata_string_replace(
 export {
       METADATA_STRING_REPLACE_METADATA,
       MetadataStringReplaceOutputs,
-      MetadataStringReplaceParameters,
       metadata_string_replace,
       metadata_string_replace_execute,
       metadata_string_replace_params,

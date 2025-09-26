@@ -12,7 +12,7 @@ const EXVIVO_HEMI_PROC_METADATA: Metadata = {
 
 
 interface ExvivoHemiProcParameters {
-    "@type": "freesurfer.exvivo-hemi-proc";
+    "@type"?: "freesurfer/exvivo-hemi-proc";
     "flashdir": string;
     "outdir": string;
     "subject": string;
@@ -29,43 +29,11 @@ interface ExvivoHemiProcParameters {
     "stop_mmppsp_after"?: string | null | undefined;
     "force": boolean;
 }
+type ExvivoHemiProcParametersTagged = Required<Pick<ExvivoHemiProcParameters, '@type'>> & ExvivoHemiProcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.exvivo-hemi-proc": exvivo_hemi_proc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `exvivo_hemi_proc(...)`.
+ * Output object returned when calling `ExvivoHemiProcParameters(...)`.
  *
  * @interface
  */
@@ -114,9 +82,9 @@ function exvivo_hemi_proc_params(
     samseg_only: boolean = false,
     stop_mmppsp_after: string | null = null,
     force: boolean = false,
-): ExvivoHemiProcParameters {
+): ExvivoHemiProcParametersTagged {
     const params = {
-        "@type": "freesurfer.exvivo-hemi-proc" as const,
+        "@type": "freesurfer/exvivo-hemi-proc" as const,
         "flashdir": flashdir,
         "outdir": outdir,
         "subject": subject,
@@ -169,16 +137,16 @@ function exvivo_hemi_proc_cargs(
         "--s",
         (params["subject"] ?? null)
     );
-    if ((params["left_hemi"] ?? null)) {
+    if ((params["left_hemi"] ?? false)) {
         cargs.push("--lh");
     }
-    if ((params["right_hemi"] ?? null)) {
+    if ((params["right_hemi"] ?? false)) {
         cargs.push("--rh");
     }
-    if ((params["suptent"] ?? null)) {
+    if ((params["suptent"] ?? false)) {
         cargs.push("--suptent");
     }
-    if ((params["no_rotate"] ?? null)) {
+    if ((params["no_rotate"] ?? false)) {
         cargs.push("--no-rotate");
     }
     if ((params["t1thresh"] ?? null) !== null) {
@@ -193,16 +161,16 @@ function exvivo_hemi_proc_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["check_only"] ?? null)) {
+    if ((params["check_only"] ?? false)) {
         cargs.push("--check-only");
     }
-    if ((params["prep_only"] ?? null)) {
+    if ((params["prep_only"] ?? false)) {
         cargs.push("--prep-only");
     }
-    if ((params["mask_only"] ?? null)) {
+    if ((params["mask_only"] ?? false)) {
         cargs.push("--mask-only");
     }
-    if ((params["samseg_only"] ?? null)) {
+    if ((params["samseg_only"] ?? false)) {
         cargs.push("--samseg-only");
     }
     if ((params["stop_mmppsp_after"] ?? null) !== null) {
@@ -211,7 +179,7 @@ function exvivo_hemi_proc_cargs(
             (params["stop_mmppsp_after"] ?? null)
         );
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("--force");
     }
     return cargs;
@@ -319,7 +287,6 @@ function exvivo_hemi_proc(
 export {
       EXVIVO_HEMI_PROC_METADATA,
       ExvivoHemiProcOutputs,
-      ExvivoHemiProcParameters,
       exvivo_hemi_proc,
       exvivo_hemi_proc_execute,
       exvivo_hemi_proc_params,

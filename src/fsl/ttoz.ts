@@ -12,51 +12,18 @@ const TTOZ_METADATA: Metadata = {
 
 
 interface TtozParameters {
-    "@type": "fsl.ttoz";
+    "@type"?: "fsl/ttoz";
     "varsfile": InputPathType;
     "cbsfile": InputPathType;
     "dof": number;
     "outputvol"?: string | null | undefined;
     "help_flag": boolean;
 }
+type TtozParametersTagged = Required<Pick<TtozParameters, '@type'>> & TtozParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.ttoz": ttoz_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.ttoz": ttoz_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ttoz(...)`.
+ * Output object returned when calling `TtozParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function ttoz_params(
     dof: number,
     outputvol: string | null = null,
     help_flag: boolean = false,
-): TtozParameters {
+): TtozParametersTagged {
     const params = {
-        "@type": "fsl.ttoz" as const,
+        "@type": "fsl/ttoz" as const,
         "varsfile": varsfile,
         "cbsfile": cbsfile,
         "dof": dof,
@@ -127,7 +94,7 @@ function ttoz_cargs(
             (params["outputvol"] ?? null)
         );
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -216,7 +183,6 @@ function ttoz(
 export {
       TTOZ_METADATA,
       TtozOutputs,
-      TtozParameters,
       ttoz,
       ttoz_execute,
       ttoz_params,

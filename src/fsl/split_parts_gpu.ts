@@ -12,7 +12,7 @@ const SPLIT_PARTS_GPU_METADATA: Metadata = {
 
 
 interface SplitPartsGpuParameters {
-    "@type": "fsl.split_parts_gpu";
+    "@type"?: "fsl/split_parts_gpu";
     "datafile": InputPathType;
     "maskfile": InputPathType;
     "bvals_file": InputPathType;
@@ -22,43 +22,11 @@ interface SplitPartsGpuParameters {
     "total_num_parts": number;
     "output_directory": string;
 }
+type SplitPartsGpuParametersTagged = Required<Pick<SplitPartsGpuParameters, '@type'>> & SplitPartsGpuParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.split_parts_gpu": split_parts_gpu_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `split_parts_gpu(...)`.
+ * Output object returned when calling `SplitPartsGpuParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +61,9 @@ function split_parts_gpu_params(
     total_num_parts: number,
     output_directory: string,
     grad_file: string | null = null,
-): SplitPartsGpuParameters {
+): SplitPartsGpuParametersTagged {
     const params = {
-        "@type": "fsl.split_parts_gpu" as const,
+        "@type": "fsl/split_parts_gpu" as const,
         "datafile": datafile,
         "maskfile": maskfile,
         "bvals_file": bvals_file,
@@ -226,7 +194,6 @@ function split_parts_gpu(
 export {
       SPLIT_PARTS_GPU_METADATA,
       SplitPartsGpuOutputs,
-      SplitPartsGpuParameters,
       split_parts_gpu,
       split_parts_gpu_execute,
       split_parts_gpu_params,

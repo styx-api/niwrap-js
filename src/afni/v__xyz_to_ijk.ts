@@ -12,51 +12,18 @@ const V__XYZ_TO_IJK_METADATA: Metadata = {
 
 
 interface VXyzToIjkParameters {
-    "@type": "afni.@xyz_to_ijk";
+    "@type"?: "afni/@xyz_to_ijk";
     "inset": InputPathType;
     "x_coord": number;
     "y_coord": number;
     "z_coord": number;
     "prefix"?: string | null | undefined;
 }
+type VXyzToIjkParametersTagged = Required<Pick<VXyzToIjkParameters, '@type'>> & VXyzToIjkParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@xyz_to_ijk": v__xyz_to_ijk_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@xyz_to_ijk": v__xyz_to_ijk_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__xyz_to_ijk(...)`.
+ * Output object returned when calling `VXyzToIjkParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function v__xyz_to_ijk_params(
     y_coord: number,
     z_coord: number,
     prefix: string | null = null,
-): VXyzToIjkParameters {
+): VXyzToIjkParametersTagged {
     const params = {
-        "@type": "afni.@xyz_to_ijk" as const,
+        "@type": "afni/@xyz_to_ijk" as const,
         "inset": inset,
         "x_coord": x_coord,
         "y_coord": y_coord,
@@ -219,7 +186,6 @@ function v__xyz_to_ijk(
 
 export {
       VXyzToIjkOutputs,
-      VXyzToIjkParameters,
       V__XYZ_TO_IJK_METADATA,
       v__xyz_to_ijk,
       v__xyz_to_ijk_execute,

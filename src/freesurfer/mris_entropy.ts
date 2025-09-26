@@ -12,7 +12,7 @@ const MRIS_ENTROPY_METADATA: Metadata = {
 
 
 interface MrisEntropyParameters {
-    "@type": "freesurfer.mris_entropy";
+    "@type"?: "freesurfer/mris_entropy";
     "subject": string;
     "hemi": string;
     "wfile": InputPathType;
@@ -20,44 +20,11 @@ interface MrisEntropyParameters {
     "average_iterations"?: number | null | undefined;
     "normalize": boolean;
 }
+type MrisEntropyParametersTagged = Required<Pick<MrisEntropyParameters, '@type'>> & MrisEntropyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_entropy": mris_entropy_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_entropy": mris_entropy_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_entropy(...)`.
+ * Output object returned when calling `MrisEntropyParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function mris_entropy_params(
     curvfile: InputPathType,
     average_iterations: number | null = null,
     normalize: boolean = false,
-): MrisEntropyParameters {
+): MrisEntropyParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_entropy" as const,
+        "@type": "freesurfer/mris_entropy" as const,
         "subject": subject,
         "hemi": hemi,
         "wfile": wfile,
@@ -132,7 +99,7 @@ function mris_entropy_cargs(
             String((params["average_iterations"] ?? null))
         );
     }
-    if ((params["normalize"] ?? null)) {
+    if ((params["normalize"] ?? false)) {
         cargs.push("-n");
     }
     return cargs;
@@ -223,7 +190,6 @@ function mris_entropy(
 export {
       MRIS_ENTROPY_METADATA,
       MrisEntropyOutputs,
-      MrisEntropyParameters,
       mris_entropy,
       mris_entropy_execute,
       mris_entropy_params,

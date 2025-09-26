@@ -12,37 +12,41 @@ const CONVERT_AFFINE_METADATA: Metadata = {
 
 
 interface ConvertAffineFromWorldParameters {
-    "@type": "workbench.convert-affine.from_world";
+    "@type"?: "from_world";
     "input": string;
     "opt_inverse": boolean;
 }
+type ConvertAffineFromWorldParametersTagged = Required<Pick<ConvertAffineFromWorldParameters, '@type'>> & ConvertAffineFromWorldParameters;
 
 
 interface ConvertAffineFromFlirtParameters {
-    "@type": "workbench.convert-affine.from_flirt";
+    "@type"?: "from_flirt";
     "input": string;
     "source_volume": string;
     "target_volume": string;
 }
+type ConvertAffineFromFlirtParametersTagged = Required<Pick<ConvertAffineFromFlirtParameters, '@type'>> & ConvertAffineFromFlirtParameters;
 
 
 interface ConvertAffineToWorldParameters {
-    "@type": "workbench.convert-affine.to_world";
+    "@type"?: "to_world";
     "output": string;
     "opt_inverse": boolean;
 }
+type ConvertAffineToWorldParametersTagged = Required<Pick<ConvertAffineToWorldParameters, '@type'>> & ConvertAffineToWorldParameters;
 
 
 interface ConvertAffineToFlirtParameters {
-    "@type": "workbench.convert-affine.to_flirt";
+    "@type"?: "to_flirt";
     "output": string;
     "source_volume": string;
     "target_volume": string;
 }
+type ConvertAffineToFlirtParametersTagged = Required<Pick<ConvertAffineToFlirtParameters, '@type'>> & ConvertAffineToFlirtParameters;
 
 
 interface ConvertAffineParameters {
-    "@type": "workbench.convert-affine";
+    "@type"?: "workbench/convert-affine";
     "from_world"?: ConvertAffineFromWorldParameters | null | undefined;
     "opt_from_itk_input"?: string | null | undefined;
     "from_flirt"?: ConvertAffineFromFlirtParameters | null | undefined;
@@ -50,43 +54,7 @@ interface ConvertAffineParameters {
     "opt_to_itk_output"?: string | null | undefined;
     "to_flirt"?: Array<ConvertAffineToFlirtParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.convert-affine": convert_affine_cargs,
-        "workbench.convert-affine.from_world": convert_affine_from_world_cargs,
-        "workbench.convert-affine.from_flirt": convert_affine_from_flirt_cargs,
-        "workbench.convert-affine.to_world": convert_affine_to_world_cargs,
-        "workbench.convert-affine.to_flirt": convert_affine_to_flirt_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type ConvertAffineParametersTagged = Required<Pick<ConvertAffineParameters, '@type'>> & ConvertAffineParameters;
 
 
 /**
@@ -100,9 +68,9 @@ function dynOutputs(
 function convert_affine_from_world_params(
     input: string,
     opt_inverse: boolean = false,
-): ConvertAffineFromWorldParameters {
+): ConvertAffineFromWorldParametersTagged {
     const params = {
-        "@type": "workbench.convert-affine.from_world" as const,
+        "@type": "from_world" as const,
         "input": input,
         "opt_inverse": opt_inverse,
     };
@@ -125,7 +93,7 @@ function convert_affine_from_world_cargs(
     const cargs: string[] = [];
     cargs.push("-from-world");
     cargs.push((params["input"] ?? null));
-    if ((params["opt_inverse"] ?? null)) {
+    if ((params["opt_inverse"] ?? false)) {
         cargs.push("-inverse");
     }
     return cargs;
@@ -145,9 +113,9 @@ function convert_affine_from_flirt_params(
     input: string,
     source_volume: string,
     target_volume: string,
-): ConvertAffineFromFlirtParameters {
+): ConvertAffineFromFlirtParametersTagged {
     const params = {
-        "@type": "workbench.convert-affine.from_flirt" as const,
+        "@type": "from_flirt" as const,
         "input": input,
         "source_volume": source_volume,
         "target_volume": target_volume,
@@ -188,9 +156,9 @@ function convert_affine_from_flirt_cargs(
 function convert_affine_to_world_params(
     output: string,
     opt_inverse: boolean = false,
-): ConvertAffineToWorldParameters {
+): ConvertAffineToWorldParametersTagged {
     const params = {
-        "@type": "workbench.convert-affine.to_world" as const,
+        "@type": "to_world" as const,
         "output": output,
         "opt_inverse": opt_inverse,
     };
@@ -213,7 +181,7 @@ function convert_affine_to_world_cargs(
     const cargs: string[] = [];
     cargs.push("-to-world");
     cargs.push((params["output"] ?? null));
-    if ((params["opt_inverse"] ?? null)) {
+    if ((params["opt_inverse"] ?? false)) {
         cargs.push("-inverse");
     }
     return cargs;
@@ -233,9 +201,9 @@ function convert_affine_to_flirt_params(
     output: string,
     source_volume: string,
     target_volume: string,
-): ConvertAffineToFlirtParameters {
+): ConvertAffineToFlirtParametersTagged {
     const params = {
-        "@type": "workbench.convert-affine.to_flirt" as const,
+        "@type": "to_flirt" as const,
         "output": output,
         "source_volume": source_volume,
         "target_volume": target_volume,
@@ -266,7 +234,7 @@ function convert_affine_to_flirt_cargs(
 
 
 /**
- * Output object returned when calling `convert_affine(...)`.
+ * Output object returned when calling `ConvertAffineParameters(...)`.
  *
  * @interface
  */
@@ -297,9 +265,9 @@ function convert_affine_params(
     to_world: ConvertAffineToWorldParameters | null = null,
     opt_to_itk_output: string | null = null,
     to_flirt: Array<ConvertAffineToFlirtParameters> | null = null,
-): ConvertAffineParameters {
+): ConvertAffineParametersTagged {
     const params = {
-        "@type": "workbench.convert-affine" as const,
+        "@type": "workbench/convert-affine" as const,
     };
     if (from_world !== null) {
         params["from_world"] = from_world;
@@ -339,7 +307,7 @@ function convert_affine_cargs(
     cargs.push("wb_command");
     cargs.push("-convert-affine");
     if ((params["from_world"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["from_world"] ?? null)["@type"])((params["from_world"] ?? null), execution));
+        cargs.push(...convert_affine_from_world_cargs((params["from_world"] ?? null), execution));
     }
     if ((params["opt_from_itk_input"] ?? null) !== null) {
         cargs.push(
@@ -348,10 +316,10 @@ function convert_affine_cargs(
         );
     }
     if ((params["from_flirt"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["from_flirt"] ?? null)["@type"])((params["from_flirt"] ?? null), execution));
+        cargs.push(...convert_affine_from_flirt_cargs((params["from_flirt"] ?? null), execution));
     }
     if ((params["to_world"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["to_world"] ?? null)["@type"])((params["to_world"] ?? null), execution));
+        cargs.push(...convert_affine_to_world_cargs((params["to_world"] ?? null), execution));
     }
     if ((params["opt_to_itk_output"] ?? null) !== null) {
         cargs.push(
@@ -360,7 +328,7 @@ function convert_affine_cargs(
         );
     }
     if ((params["to_flirt"] ?? null) !== null) {
-        cargs.push(...(params["to_flirt"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["to_flirt"] ?? null).map(s => convert_affine_to_flirt_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -460,12 +428,7 @@ function convert_affine(
 
 export {
       CONVERT_AFFINE_METADATA,
-      ConvertAffineFromFlirtParameters,
-      ConvertAffineFromWorldParameters,
       ConvertAffineOutputs,
-      ConvertAffineParameters,
-      ConvertAffineToFlirtParameters,
-      ConvertAffineToWorldParameters,
       convert_affine,
       convert_affine_execute,
       convert_affine_from_flirt_params,

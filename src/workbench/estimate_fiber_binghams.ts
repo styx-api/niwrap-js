@@ -12,7 +12,7 @@ const ESTIMATE_FIBER_BINGHAMS_METADATA: Metadata = {
 
 
 interface EstimateFiberBinghamsParameters {
-    "@type": "workbench.estimate-fiber-binghams";
+    "@type"?: "workbench/estimate-fiber-binghams";
     "merged_f1samples": InputPathType;
     "merged_th1samples": InputPathType;
     "merged_ph1samples": InputPathType;
@@ -25,44 +25,11 @@ interface EstimateFiberBinghamsParameters {
     "label_volume": InputPathType;
     "cifti_out": string;
 }
+type EstimateFiberBinghamsParametersTagged = Required<Pick<EstimateFiberBinghamsParameters, '@type'>> & EstimateFiberBinghamsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.estimate-fiber-binghams": estimate_fiber_binghams_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.estimate-fiber-binghams": estimate_fiber_binghams_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `estimate_fiber_binghams(...)`.
+ * Output object returned when calling `EstimateFiberBinghamsParameters(...)`.
  *
  * @interface
  */
@@ -107,9 +74,9 @@ function estimate_fiber_binghams_params(
     merged_ph3samples: InputPathType,
     label_volume: InputPathType,
     cifti_out: string,
-): EstimateFiberBinghamsParameters {
+): EstimateFiberBinghamsParametersTagged {
     const params = {
-        "@type": "workbench.estimate-fiber-binghams" as const,
+        "@type": "workbench/estimate-fiber-binghams" as const,
         "merged_f1samples": merged_f1samples,
         "merged_th1samples": merged_th1samples,
         "merged_ph1samples": merged_ph1samples,
@@ -322,7 +289,6 @@ function estimate_fiber_binghams(
 export {
       ESTIMATE_FIBER_BINGHAMS_METADATA,
       EstimateFiberBinghamsOutputs,
-      EstimateFiberBinghamsParameters,
       estimate_fiber_binghams,
       estimate_fiber_binghams_execute,
       estimate_fiber_binghams_params,

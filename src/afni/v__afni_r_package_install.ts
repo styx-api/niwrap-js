@@ -12,7 +12,7 @@ const V__AFNI_R_PACKAGE_INSTALL_METADATA: Metadata = {
 
 
 interface VAfniRPackageInstallParameters {
-    "@type": "afni.@afni_R_package_install";
+    "@type"?: "afni/@afni_R_package_install";
     "afni": boolean;
     "shiny": boolean;
     "bayes_view": boolean;
@@ -21,44 +21,11 @@ interface VAfniRPackageInstallParameters {
     "mirror"?: string | null | undefined;
     "help": boolean;
 }
+type VAfniRPackageInstallParametersTagged = Required<Pick<VAfniRPackageInstallParameters, '@type'>> & VAfniRPackageInstallParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@afni_R_package_install": v__afni_r_package_install_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@afni_R_package_install": v__afni_r_package_install_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__afni_r_package_install(...)`.
+ * Output object returned when calling `VAfniRPackageInstallParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function v__afni_r_package_install_params(
     custom_packages: string | null = null,
     mirror: string | null = null,
     help: boolean = false,
-): VAfniRPackageInstallParameters {
+): VAfniRPackageInstallParametersTagged {
     const params = {
-        "@type": "afni.@afni_R_package_install" as const,
+        "@type": "afni/@afni_R_package_install" as const,
         "afni": afni,
         "shiny": shiny,
         "bayes_view": bayes_view,
@@ -128,16 +95,16 @@ function v__afni_r_package_install_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("@afni_R_package_install");
-    if ((params["afni"] ?? null)) {
+    if ((params["afni"] ?? false)) {
         cargs.push("-afni");
     }
-    if ((params["shiny"] ?? null)) {
+    if ((params["shiny"] ?? false)) {
         cargs.push("-shiny");
     }
-    if ((params["bayes_view"] ?? null)) {
+    if ((params["bayes_view"] ?? false)) {
         cargs.push("-bayes_view");
     }
-    if ((params["circos"] ?? null)) {
+    if ((params["circos"] ?? false)) {
         cargs.push("-circos");
     }
     if ((params["custom_packages"] ?? null) !== null) {
@@ -152,7 +119,7 @@ function v__afni_r_package_install_cargs(
             (params["mirror"] ?? null)
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -244,7 +211,6 @@ function v__afni_r_package_install(
 
 export {
       VAfniRPackageInstallOutputs,
-      VAfniRPackageInstallParameters,
       V__AFNI_R_PACKAGE_INSTALL_METADATA,
       v__afni_r_package_install,
       v__afni_r_package_install_execute,

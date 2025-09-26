@@ -12,49 +12,17 @@ const MRI_LABEL_VALS_METADATA: Metadata = {
 
 
 interface MriLabelValsParameters {
-    "@type": "freesurfer.mri_label_vals";
+    "@type"?: "freesurfer/mri_label_vals";
     "volume": InputPathType;
     "label_file": InputPathType;
     "cras_flag": boolean;
     "help_flag": boolean;
 }
+type MriLabelValsParametersTagged = Required<Pick<MriLabelValsParameters, '@type'>> & MriLabelValsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_label_vals": mri_label_vals_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_label_vals(...)`.
+ * Output object returned when calling `MriLabelValsParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function mri_label_vals_params(
     label_file: InputPathType,
     cras_flag: boolean = false,
     help_flag: boolean = false,
-): MriLabelValsParameters {
+): MriLabelValsParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_label_vals" as const,
+        "@type": "freesurfer/mri_label_vals" as const,
         "volume": volume,
         "label_file": label_file,
         "cras_flag": cras_flag,
@@ -109,10 +77,10 @@ function mri_label_vals_cargs(
     cargs.push("mri_label_vals");
     cargs.push(execution.inputFile((params["volume"] ?? null)));
     cargs.push(execution.inputFile((params["label_file"] ?? null)));
-    if ((params["cras_flag"] ?? null)) {
+    if ((params["cras_flag"] ?? false)) {
         cargs.push("-cras");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-u");
     }
     return cargs;
@@ -198,7 +166,6 @@ function mri_label_vals(
 export {
       MRI_LABEL_VALS_METADATA,
       MriLabelValsOutputs,
-      MriLabelValsParameters,
       mri_label_vals,
       mri_label_vals_execute,
       mri_label_vals_params,

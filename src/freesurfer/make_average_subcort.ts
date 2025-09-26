@@ -12,48 +12,15 @@ const MAKE_AVERAGE_SUBCORT_METADATA: Metadata = {
 
 
 interface MakeAverageSubcortParameters {
-    "@type": "freesurfer.make_average_subcort";
+    "@type"?: "freesurfer/make_average_subcort";
     "subjects": Array<string>;
     "output_volume": string;
 }
+type MakeAverageSubcortParametersTagged = Required<Pick<MakeAverageSubcortParameters, '@type'>> & MakeAverageSubcortParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.make_average_subcort": make_average_subcort_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.make_average_subcort": make_average_subcort_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `make_average_subcort(...)`.
+ * Output object returned when calling `MakeAverageSubcortParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface MakeAverageSubcortOutputs {
 function make_average_subcort_params(
     subjects: Array<string>,
     output_volume: string,
-): MakeAverageSubcortParameters {
+): MakeAverageSubcortParametersTagged {
     const params = {
-        "@type": "freesurfer.make_average_subcort" as const,
+        "@type": "freesurfer/make_average_subcort" as const,
         "subjects": subjects,
         "output_volume": output_volume,
     };
@@ -189,7 +156,6 @@ function make_average_subcort(
 export {
       MAKE_AVERAGE_SUBCORT_METADATA,
       MakeAverageSubcortOutputs,
-      MakeAverageSubcortParameters,
       make_average_subcort,
       make_average_subcort_execute,
       make_average_subcort_params,

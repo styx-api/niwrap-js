@@ -12,48 +12,16 @@ const SURFACE_CLOSEST_VERTEX_METADATA: Metadata = {
 
 
 interface SurfaceClosestVertexParameters {
-    "@type": "workbench.surface-closest-vertex";
+    "@type"?: "workbench/surface-closest-vertex";
     "surface": InputPathType;
     "coord_list_file": string;
     "vertex_list_out": string;
 }
+type SurfaceClosestVertexParametersTagged = Required<Pick<SurfaceClosestVertexParameters, '@type'>> & SurfaceClosestVertexParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-closest-vertex": surface_closest_vertex_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_closest_vertex(...)`.
+ * Output object returned when calling `SurfaceClosestVertexParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function surface_closest_vertex_params(
     surface: InputPathType,
     coord_list_file: string,
     vertex_list_out: string,
-): SurfaceClosestVertexParameters {
+): SurfaceClosestVertexParametersTagged {
     const params = {
-        "@type": "workbench.surface-closest-vertex" as const,
+        "@type": "workbench/surface-closest-vertex" as const,
         "surface": surface,
         "coord_list_file": coord_list_file,
         "vertex_list_out": vertex_list_out,
@@ -198,7 +166,6 @@ function surface_closest_vertex(
 export {
       SURFACE_CLOSEST_VERTEX_METADATA,
       SurfaceClosestVertexOutputs,
-      SurfaceClosestVertexParameters,
       surface_closest_vertex,
       surface_closest_vertex_execute,
       surface_closest_vertex_params,

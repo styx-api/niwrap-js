@@ -12,46 +12,14 @@ const RENORMALIZE_T1_SUBJECT_METADATA: Metadata = {
 
 
 interface RenormalizeT1SubjectParameters {
-    "@type": "freesurfer.renormalize_T1_subject";
+    "@type"?: "freesurfer/renormalize_T1_subject";
     "subject_dir": string;
 }
+type RenormalizeT1SubjectParametersTagged = Required<Pick<RenormalizeT1SubjectParameters, '@type'>> & RenormalizeT1SubjectParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.renormalize_T1_subject": renormalize_t1_subject_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `renormalize_t1_subject(...)`.
+ * Output object returned when calling `RenormalizeT1SubjectParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface RenormalizeT1SubjectOutputs {
  */
 function renormalize_t1_subject_params(
     subject_dir: string,
-): RenormalizeT1SubjectParameters {
+): RenormalizeT1SubjectParametersTagged {
     const params = {
-        "@type": "freesurfer.renormalize_T1_subject" as const,
+        "@type": "freesurfer/renormalize_T1_subject" as const,
         "subject_dir": subject_dir,
     };
     return params;
@@ -173,7 +141,6 @@ function renormalize_t1_subject(
 export {
       RENORMALIZE_T1_SUBJECT_METADATA,
       RenormalizeT1SubjectOutputs,
-      RenormalizeT1SubjectParameters,
       renormalize_t1_subject,
       renormalize_t1_subject_execute,
       renormalize_t1_subject_params,

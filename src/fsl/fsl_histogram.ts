@@ -12,7 +12,7 @@ const FSL_HISTOGRAM_METADATA: Metadata = {
 
 
 interface FslHistogramParameters {
-    "@type": "fsl.fsl_histogram";
+    "@type"?: "fsl/fsl_histogram";
     "input_file": InputPathType;
     "input_file_duplicate": InputPathType;
     "output_file": string;
@@ -39,44 +39,11 @@ interface FslHistogramParameters {
     "zoom_factor_duplicate"?: number | null | undefined;
     "use_gmm_flag": boolean;
 }
+type FslHistogramParametersTagged = Required<Pick<FslHistogramParameters, '@type'>> & FslHistogramParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fsl_histogram": fsl_histogram_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fsl_histogram": fsl_histogram_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsl_histogram(...)`.
+ * Output object returned when calling `FslHistogramParameters(...)`.
  *
  * @interface
  */
@@ -149,9 +116,9 @@ function fsl_histogram_params(
     zoom_factor: number | null = null,
     zoom_factor_duplicate: number | null = null,
     use_gmm_flag: boolean = false,
-): FslHistogramParameters {
+): FslHistogramParametersTagged {
     const params = {
-        "@type": "fsl.fsl_histogram" as const,
+        "@type": "fsl/fsl_histogram" as const,
         "input_file": input_file,
         "input_file_duplicate": input_file_duplicate,
         "output_file": output_file,
@@ -372,7 +339,7 @@ function fsl_histogram_cargs(
             String((params["zoom_factor_duplicate"] ?? null))
         );
     }
-    if ((params["use_gmm_flag"] ?? null)) {
+    if ((params["use_gmm_flag"] ?? false)) {
         cargs.push("--gmm");
     }
     return cargs;
@@ -501,7 +468,6 @@ function fsl_histogram(
 export {
       FSL_HISTOGRAM_METADATA,
       FslHistogramOutputs,
-      FslHistogramParameters,
       fsl_histogram,
       fsl_histogram_execute,
       fsl_histogram_params,

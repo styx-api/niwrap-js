@@ -12,7 +12,7 @@ const SURF_LAYERS_METADATA: Metadata = {
 
 
 interface SurfLayersParameters {
-    "@type": "afni.SurfLayers";
+    "@type"?: "afni/SurfLayers";
     "spec_dset"?: InputPathType | null | undefined;
     "outdir"?: string | null | undefined;
     "states"?: string | null | undefined;
@@ -24,44 +24,11 @@ interface SurfLayersParameters {
     "echo": boolean;
     "no_clean": boolean;
 }
+type SurfLayersParametersTagged = Required<Pick<SurfLayersParameters, '@type'>> & SurfLayersParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.SurfLayers": surf_layers_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.SurfLayers": surf_layers_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surf_layers(...)`.
+ * Output object returned when calling `SurfLayersParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function surf_layers_params(
     surf_intermed_pref: string | null = null,
     echo: boolean = false,
     no_clean: boolean = false,
-): SurfLayersParameters {
+): SurfLayersParametersTagged {
     const params = {
-        "@type": "afni.SurfLayers" as const,
+        "@type": "afni/SurfLayers" as const,
         "echo": echo,
         "no_clean": no_clean,
     };
@@ -200,10 +167,10 @@ function surf_layers_cargs(
             (params["surf_intermed_pref"] ?? null)
         );
     }
-    if ((params["echo"] ?? null)) {
+    if ((params["echo"] ?? false)) {
         cargs.push("-echo");
     }
-    if ((params["no_clean"] ?? null)) {
+    if ((params["no_clean"] ?? false)) {
         cargs.push("-no_clean");
     }
     return cargs;
@@ -302,7 +269,6 @@ function surf_layers(
 export {
       SURF_LAYERS_METADATA,
       SurfLayersOutputs,
-      SurfLayersParameters,
       surf_layers,
       surf_layers_execute,
       surf_layers_params,

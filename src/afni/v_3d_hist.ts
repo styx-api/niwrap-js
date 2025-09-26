@@ -12,7 +12,7 @@ const V_3D_HIST_METADATA: Metadata = {
 
 
 interface V3dHistParameters {
-    "@type": "afni.3dHist";
+    "@type"?: "afni/3dHist";
     "input": InputPathType;
     "dind_subbrick"?: number | null | undefined;
     "mask_dset"?: InputPathType | null | undefined;
@@ -34,43 +34,11 @@ interface V3dHistParameters {
     "val_at"?: string | null | undefined;
     "quiet": boolean;
 }
+type V3dHistParametersTagged = Required<Pick<V3dHistParameters, '@type'>> & V3dHistParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dHist": v_3d_hist_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_hist(...)`.
+ * Output object returned when calling `V3dHistParameters(...)`.
  *
  * @interface
  */
@@ -129,9 +97,9 @@ function v_3d_hist_params(
     voxvol: number | null = null,
     val_at: string | null = null,
     quiet: boolean = false,
-): V3dHistParameters {
+): V3dHistParametersTagged {
     const params = {
-        "@type": "afni.3dHist" as const,
+        "@type": "afni/3dHist" as const,
         "input": input,
         "ignore_out": ignore_out,
         "showhist": showhist,
@@ -270,7 +238,7 @@ function v_3d_hist_cargs(
             String((params["binwidth"] ?? null))
         );
     }
-    if ((params["ignore_out"] ?? null)) {
+    if ((params["ignore_out"] ?? false)) {
         cargs.push("-ignore_out");
     }
     if ((params["range_hist"] ?? null) !== null) {
@@ -279,7 +247,7 @@ function v_3d_hist_cargs(
             execution.inputFile((params["range_hist"] ?? null))
         );
     }
-    if ((params["showhist"] ?? null)) {
+    if ((params["showhist"] ?? false)) {
         cargs.push("-showhist");
     }
     if ((params["at_val"] ?? null) !== null) {
@@ -306,7 +274,7 @@ function v_3d_hist_cargs(
             (params["val_at"] ?? null)
         );
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
     return cargs;
@@ -423,7 +391,6 @@ function v_3d_hist(
 
 export {
       V3dHistOutputs,
-      V3dHistParameters,
       V_3D_HIST_METADATA,
       v_3d_hist,
       v_3d_hist_execute,

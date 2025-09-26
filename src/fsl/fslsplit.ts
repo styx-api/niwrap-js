@@ -12,7 +12,7 @@ const FSLSPLIT_METADATA: Metadata = {
 
 
 interface FslsplitParameters {
-    "@type": "fsl.fslsplit";
+    "@type"?: "fsl/fslsplit";
     "infile": InputPathType;
     "output_basename"?: string | null | undefined;
     "separation_x": boolean;
@@ -20,44 +20,11 @@ interface FslsplitParameters {
     "separation_z": boolean;
     "separation_time": boolean;
 }
+type FslsplitParametersTagged = Required<Pick<FslsplitParameters, '@type'>> & FslsplitParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslsplit": fslsplit_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fslsplit": fslsplit_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslsplit(...)`.
+ * Output object returned when calling `FslsplitParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function fslsplit_params(
     separation_y: boolean = false,
     separation_z: boolean = false,
     separation_time: boolean = false,
-): FslsplitParameters {
+): FslsplitParametersTagged {
     const params = {
-        "@type": "fsl.fslsplit" as const,
+        "@type": "fsl/fslsplit" as const,
         "infile": infile,
         "separation_x": separation_x,
         "separation_y": separation_y,
@@ -126,16 +93,16 @@ function fslsplit_cargs(
     if ((params["output_basename"] ?? null) !== null) {
         cargs.push((params["output_basename"] ?? null));
     }
-    if ((params["separation_x"] ?? null)) {
+    if ((params["separation_x"] ?? false)) {
         cargs.push("-x");
     }
-    if ((params["separation_y"] ?? null)) {
+    if ((params["separation_y"] ?? false)) {
         cargs.push("-y");
     }
-    if ((params["separation_z"] ?? null)) {
+    if ((params["separation_z"] ?? false)) {
         cargs.push("-z");
     }
-    if ((params["separation_time"] ?? null)) {
+    if ((params["separation_time"] ?? false)) {
         cargs.push("-t");
     }
     return cargs;
@@ -226,7 +193,6 @@ function fslsplit(
 export {
       FSLSPLIT_METADATA,
       FslsplitOutputs,
-      FslsplitParameters,
       fslsplit,
       fslsplit_execute,
       fslsplit_params,

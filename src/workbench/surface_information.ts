@@ -12,46 +12,14 @@ const SURFACE_INFORMATION_METADATA: Metadata = {
 
 
 interface SurfaceInformationParameters {
-    "@type": "workbench.surface-information";
+    "@type"?: "workbench/surface-information";
     "surface_file": InputPathType;
 }
+type SurfaceInformationParametersTagged = Required<Pick<SurfaceInformationParameters, '@type'>> & SurfaceInformationParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-information": surface_information_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_information(...)`.
+ * Output object returned when calling `SurfaceInformationParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface SurfaceInformationOutputs {
  */
 function surface_information_params(
     surface_file: InputPathType,
-): SurfaceInformationParameters {
+): SurfaceInformationParametersTagged {
     const params = {
-        "@type": "workbench.surface-information" as const,
+        "@type": "workbench/surface-information" as const,
         "surface_file": surface_file,
     };
     return params;
@@ -180,7 +148,6 @@ function surface_information(
 export {
       SURFACE_INFORMATION_METADATA,
       SurfaceInformationOutputs,
-      SurfaceInformationParameters,
       surface_information,
       surface_information_execute,
       surface_information_params,

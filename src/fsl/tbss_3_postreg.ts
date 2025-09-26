@@ -12,47 +12,15 @@ const TBSS_3_POSTREG_METADATA: Metadata = {
 
 
 interface Tbss3PostregParameters {
-    "@type": "fsl.tbss_3_postreg";
+    "@type"?: "fsl/tbss_3_postreg";
     "derive_mean_from_study": boolean;
     "use_fmrib58": boolean;
 }
+type Tbss3PostregParametersTagged = Required<Pick<Tbss3PostregParameters, '@type'>> & Tbss3PostregParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.tbss_3_postreg": tbss_3_postreg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tbss_3_postreg(...)`.
+ * Output object returned when calling `Tbss3PostregParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface Tbss3PostregOutputs {
 function tbss_3_postreg_params(
     derive_mean_from_study: boolean = false,
     use_fmrib58: boolean = false,
-): Tbss3PostregParameters {
+): Tbss3PostregParametersTagged {
     const params = {
-        "@type": "fsl.tbss_3_postreg" as const,
+        "@type": "fsl/tbss_3_postreg" as const,
         "derive_mean_from_study": derive_mean_from_study,
         "use_fmrib58": use_fmrib58,
     };
@@ -99,10 +67,10 @@ function tbss_3_postreg_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("tbss_3_postreg");
-    if ((params["derive_mean_from_study"] ?? null)) {
+    if ((params["derive_mean_from_study"] ?? false)) {
         cargs.push("-S");
     }
-    if ((params["use_fmrib58"] ?? null)) {
+    if ((params["use_fmrib58"] ?? false)) {
         cargs.push("-T");
     }
     return cargs;
@@ -184,7 +152,6 @@ function tbss_3_postreg(
 export {
       TBSS_3_POSTREG_METADATA,
       Tbss3PostregOutputs,
-      Tbss3PostregParameters,
       tbss_3_postreg,
       tbss_3_postreg_execute,
       tbss_3_postreg_params,

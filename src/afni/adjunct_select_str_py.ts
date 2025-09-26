@@ -12,48 +12,16 @@ const ADJUNCT_SELECT_STR_PY_METADATA: Metadata = {
 
 
 interface AdjunctSelectStrPyParameters {
-    "@type": "afni.adjunct_select_str.py";
+    "@type"?: "afni/adjunct_select_str.py";
     "input_file": InputPathType;
     "num_bricks": number;
     "output_file": string;
 }
+type AdjunctSelectStrPyParametersTagged = Required<Pick<AdjunctSelectStrPyParameters, '@type'>> & AdjunctSelectStrPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.adjunct_select_str.py": adjunct_select_str_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `adjunct_select_str_py(...)`.
+ * Output object returned when calling `AdjunctSelectStrPyParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function adjunct_select_str_py_params(
     input_file: InputPathType,
     num_bricks: number,
     output_file: string,
-): AdjunctSelectStrPyParameters {
+): AdjunctSelectStrPyParametersTagged {
     const params = {
-        "@type": "afni.adjunct_select_str.py" as const,
+        "@type": "afni/adjunct_select_str.py" as const,
         "input_file": input_file,
         "num_bricks": num_bricks,
         "output_file": output_file,
@@ -187,7 +155,6 @@ function adjunct_select_str_py(
 export {
       ADJUNCT_SELECT_STR_PY_METADATA,
       AdjunctSelectStrPyOutputs,
-      AdjunctSelectStrPyParameters,
       adjunct_select_str_py,
       adjunct_select_str_py_execute,
       adjunct_select_str_py_params,

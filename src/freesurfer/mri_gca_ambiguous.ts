@@ -12,48 +12,15 @@ const MRI_GCA_AMBIGUOUS_METADATA: Metadata = {
 
 
 interface MriGcaAmbiguousParameters {
-    "@type": "freesurfer.mri_gca_ambiguous";
+    "@type"?: "freesurfer/mri_gca_ambiguous";
     "gca_file": InputPathType;
     "output_volume": string;
 }
+type MriGcaAmbiguousParametersTagged = Required<Pick<MriGcaAmbiguousParameters, '@type'>> & MriGcaAmbiguousParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_gca_ambiguous": mri_gca_ambiguous_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_gca_ambiguous": mri_gca_ambiguous_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_gca_ambiguous(...)`.
+ * Output object returned when calling `MriGcaAmbiguousParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface MriGcaAmbiguousOutputs {
 function mri_gca_ambiguous_params(
     gca_file: InputPathType,
     output_volume: string,
-): MriGcaAmbiguousParameters {
+): MriGcaAmbiguousParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_gca_ambiguous" as const,
+        "@type": "freesurfer/mri_gca_ambiguous" as const,
         "gca_file": gca_file,
         "output_volume": output_volume,
     };
@@ -186,7 +153,6 @@ function mri_gca_ambiguous(
 export {
       MRI_GCA_AMBIGUOUS_METADATA,
       MriGcaAmbiguousOutputs,
-      MriGcaAmbiguousParameters,
       mri_gca_ambiguous,
       mri_gca_ambiguous_execute,
       mri_gca_ambiguous_params,

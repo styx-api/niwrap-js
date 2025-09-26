@@ -12,21 +12,23 @@ const DWI2ADC_METADATA: Metadata = {
 
 
 interface Dwi2adcFslgradParameters {
-    "@type": "mrtrix.dwi2adc.fslgrad";
+    "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
+type Dwi2adcFslgradParametersTagged = Required<Pick<Dwi2adcFslgradParameters, '@type'>> & Dwi2adcFslgradParameters;
 
 
 interface Dwi2adcConfigParameters {
-    "@type": "mrtrix.dwi2adc.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Dwi2adcConfigParametersTagged = Required<Pick<Dwi2adcConfigParameters, '@type'>> & Dwi2adcConfigParameters;
 
 
 interface Dwi2adcParameters {
-    "@type": "mrtrix.dwi2adc";
+    "@type"?: "mrtrix/dwi2adc";
     "grad"?: InputPathType | null | undefined;
     "fslgrad"?: Dwi2adcFslgradParameters | null | undefined;
     "info": boolean;
@@ -40,42 +42,7 @@ interface Dwi2adcParameters {
     "input": InputPathType;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.dwi2adc": dwi2adc_cargs,
-        "mrtrix.dwi2adc.fslgrad": dwi2adc_fslgrad_cargs,
-        "mrtrix.dwi2adc.config": dwi2adc_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.dwi2adc": dwi2adc_outputs,
-    };
-    return outputsFuncs[t];
-}
+type Dwi2adcParametersTagged = Required<Pick<Dwi2adcParameters, '@type'>> & Dwi2adcParameters;
 
 
 /**
@@ -89,9 +56,9 @@ function dynOutputs(
 function dwi2adc_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
-): Dwi2adcFslgradParameters {
+): Dwi2adcFslgradParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2adc.fslgrad" as const,
+        "@type": "fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -130,9 +97,9 @@ function dwi2adc_fslgrad_cargs(
 function dwi2adc_config_params(
     key: string,
     value: string,
-): Dwi2adcConfigParameters {
+): Dwi2adcConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2adc.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -161,7 +128,7 @@ function dwi2adc_config_cargs(
 
 
 /**
- * Output object returned when calling `dwi2adc(...)`.
+ * Output object returned when calling `Dwi2adcParameters(...)`.
  *
  * @interface
  */
@@ -208,9 +175,9 @@ function dwi2adc_params(
     config: Array<Dwi2adcConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Dwi2adcParameters {
+): Dwi2adcParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2adc" as const,
+        "@type": "mrtrix/dwi2adc" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -257,18 +224,18 @@ function dwi2adc_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
+        cargs.push(...dwi2adc_fslgrad_cargs((params["fslgrad"] ?? null), execution));
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -278,12 +245,12 @@ function dwi2adc_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dwi2adc_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -399,10 +366,7 @@ function dwi2adc(
 
 export {
       DWI2ADC_METADATA,
-      Dwi2adcConfigParameters,
-      Dwi2adcFslgradParameters,
       Dwi2adcOutputs,
-      Dwi2adcParameters,
       dwi2adc,
       dwi2adc_config_params,
       dwi2adc_execute,

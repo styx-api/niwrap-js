@@ -12,7 +12,7 @@ const WFILEMASK_METADATA: Metadata = {
 
 
 interface WfilemaskParameters {
-    "@type": "freesurfer.wfilemask";
+    "@type"?: "freesurfer/wfilemask";
     "w_file": InputPathType;
     "label_file": InputPathType;
     "output_file": string;
@@ -20,44 +20,11 @@ interface WfilemaskParameters {
     "help_flag": boolean;
     "version_flag": boolean;
 }
+type WfilemaskParametersTagged = Required<Pick<WfilemaskParameters, '@type'>> & WfilemaskParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.wfilemask": wfilemask_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.wfilemask": wfilemask_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `wfilemask(...)`.
+ * Output object returned when calling `WfilemaskParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function wfilemask_params(
     permission_mask: string | null = null,
     help_flag: boolean = false,
     version_flag: boolean = false,
-): WfilemaskParameters {
+): WfilemaskParametersTagged {
     const params = {
-        "@type": "freesurfer.wfilemask" as const,
+        "@type": "freesurfer/wfilemask" as const,
         "w_file": w_file,
         "label_file": label_file,
         "output_file": output_file,
@@ -140,10 +107,10 @@ function wfilemask_cargs(
             (params["permission_mask"] ?? null)
         );
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version_flag"] ?? null)) {
+    if ((params["version_flag"] ?? false)) {
         cargs.push("-version");
     }
     return cargs;
@@ -234,7 +201,6 @@ function wfilemask(
 export {
       WFILEMASK_METADATA,
       WfilemaskOutputs,
-      WfilemaskParameters,
       wfilemask,
       wfilemask_execute,
       wfilemask_params,

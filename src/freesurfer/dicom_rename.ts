@@ -12,50 +12,17 @@ const DICOM_RENAME_METADATA: Metadata = {
 
 
 interface DicomRenameParameters {
-    "@type": "freesurfer.dicom-rename";
+    "@type"?: "freesurfer/dicom-rename";
     "input_files": Array<InputPathType>;
     "output_base": string;
     "version": boolean;
     "help": boolean;
 }
+type DicomRenameParametersTagged = Required<Pick<DicomRenameParameters, '@type'>> & DicomRenameParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dicom-rename": dicom_rename_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.dicom-rename": dicom_rename_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dicom_rename(...)`.
+ * Output object returned when calling `DicomRenameParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function dicom_rename_params(
     output_base: string,
     version: boolean = false,
     help: boolean = false,
-): DicomRenameParameters {
+): DicomRenameParametersTagged {
     const params = {
-        "@type": "freesurfer.dicom-rename" as const,
+        "@type": "freesurfer/dicom-rename" as const,
         "input_files": input_files,
         "output_base": output_base,
         "version": version,
@@ -120,10 +87,10 @@ function dicom_rename_cargs(
         "--o",
         (params["output_base"] ?? null)
     );
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -210,7 +177,6 @@ function dicom_rename(
 export {
       DICOM_RENAME_METADATA,
       DicomRenameOutputs,
-      DicomRenameParameters,
       dicom_rename,
       dicom_rename_execute,
       dicom_rename_params,

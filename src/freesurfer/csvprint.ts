@@ -12,46 +12,14 @@ const CSVPRINT_METADATA: Metadata = {
 
 
 interface CsvprintParameters {
-    "@type": "freesurfer.csvprint";
+    "@type"?: "freesurfer/csvprint";
     "infile": InputPathType;
 }
+type CsvprintParametersTagged = Required<Pick<CsvprintParameters, '@type'>> & CsvprintParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.csvprint": csvprint_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `csvprint(...)`.
+ * Output object returned when calling `CsvprintParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface CsvprintOutputs {
  */
 function csvprint_params(
     infile: InputPathType,
-): CsvprintParameters {
+): CsvprintParametersTagged {
     const params = {
-        "@type": "freesurfer.csvprint" as const,
+        "@type": "freesurfer/csvprint" as const,
         "infile": infile,
     };
     return params;
@@ -173,7 +141,6 @@ function csvprint(
 export {
       CSVPRINT_METADATA,
       CsvprintOutputs,
-      CsvprintParameters,
       csvprint,
       csvprint_execute,
       csvprint_params,

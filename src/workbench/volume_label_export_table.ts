@@ -12,48 +12,16 @@ const VOLUME_LABEL_EXPORT_TABLE_METADATA: Metadata = {
 
 
 interface VolumeLabelExportTableParameters {
-    "@type": "workbench.volume-label-export-table";
+    "@type"?: "workbench/volume-label-export-table";
     "label_in": InputPathType;
     "map": string;
     "table_out": string;
 }
+type VolumeLabelExportTableParametersTagged = Required<Pick<VolumeLabelExportTableParameters, '@type'>> & VolumeLabelExportTableParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-label-export-table": volume_label_export_table_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `volume_label_export_table(...)`.
+ * Output object returned when calling `VolumeLabelExportTableParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function volume_label_export_table_params(
     label_in: InputPathType,
     map: string,
     table_out: string,
-): VolumeLabelExportTableParameters {
+): VolumeLabelExportTableParametersTagged {
     const params = {
-        "@type": "workbench.volume-label-export-table" as const,
+        "@type": "workbench/volume-label-export-table" as const,
         "label_in": label_in,
         "map": map,
         "table_out": table_out,
@@ -192,7 +160,6 @@ function volume_label_export_table(
 export {
       VOLUME_LABEL_EXPORT_TABLE_METADATA,
       VolumeLabelExportTableOutputs,
-      VolumeLabelExportTableParameters,
       volume_label_export_table,
       volume_label_export_table_execute,
       volume_label_export_table_params,

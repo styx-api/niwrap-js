@@ -12,48 +12,15 @@ const PRINT_HEADER_METADATA: Metadata = {
 
 
 interface PrintHeaderParameters {
-    "@type": "ants.PrintHeader";
+    "@type"?: "ants/PrintHeader";
     "image": InputPathType;
     "what_information"?: 0 | 1 | 2 | 3 | 4 | null | undefined;
 }
+type PrintHeaderParametersTagged = Required<Pick<PrintHeaderParameters, '@type'>> & PrintHeaderParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.PrintHeader": print_header_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.PrintHeader": print_header_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `print_header(...)`.
+ * Output object returned when calling `PrintHeaderParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface PrintHeaderOutputs {
 function print_header_params(
     image: InputPathType,
     what_information: 0 | 1 | 2 | 3 | 4 | null = null,
-): PrintHeaderParameters {
+): PrintHeaderParametersTagged {
     const params = {
-        "@type": "ants.PrintHeader" as const,
+        "@type": "ants/PrintHeader" as const,
         "image": image,
     };
     if (what_information !== null) {
@@ -190,7 +157,6 @@ function print_header(
 export {
       PRINT_HEADER_METADATA,
       PrintHeaderOutputs,
-      PrintHeaderParameters,
       print_header,
       print_header_execute,
       print_header_params,

@@ -12,48 +12,15 @@ const FSLPSPEC_METADATA: Metadata = {
 
 
 interface FslpspecParameters {
-    "@type": "fsl.fslpspec";
+    "@type"?: "fsl/fslpspec";
     "infile": InputPathType;
     "outfile"?: string | null | undefined;
 }
+type FslpspecParametersTagged = Required<Pick<FslpspecParameters, '@type'>> & FslpspecParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslpspec": fslpspec_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fslpspec": fslpspec_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslpspec(...)`.
+ * Output object returned when calling `FslpspecParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface FslpspecOutputs {
 function fslpspec_params(
     infile: InputPathType,
     outfile: string | null = null,
-): FslpspecParameters {
+): FslpspecParametersTagged {
     const params = {
-        "@type": "fsl.fslpspec" as const,
+        "@type": "fsl/fslpspec" as const,
         "infile": infile,
     };
     if (outfile !== null) {
@@ -190,7 +157,6 @@ function fslpspec(
 export {
       FSLPSPEC_METADATA,
       FslpspecOutputs,
-      FslpspecParameters,
       fslpspec,
       fslpspec_execute,
       fslpspec_params,

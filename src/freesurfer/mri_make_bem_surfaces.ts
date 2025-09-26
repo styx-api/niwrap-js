@@ -12,48 +12,15 @@ const MRI_MAKE_BEM_SURFACES_METADATA: Metadata = {
 
 
 interface MriMakeBemSurfacesParameters {
-    "@type": "freesurfer.mri_make_bem_surfaces";
+    "@type"?: "freesurfer/mri_make_bem_surfaces";
     "name": string;
     "mfile"?: InputPathType | null | undefined;
 }
+type MriMakeBemSurfacesParametersTagged = Required<Pick<MriMakeBemSurfacesParameters, '@type'>> & MriMakeBemSurfacesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_make_bem_surfaces": mri_make_bem_surfaces_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_make_bem_surfaces": mri_make_bem_surfaces_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_make_bem_surfaces(...)`.
+ * Output object returned when calling `MriMakeBemSurfacesParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +51,9 @@ interface MriMakeBemSurfacesOutputs {
 function mri_make_bem_surfaces_params(
     name: string,
     mfile: InputPathType | null = null,
-): MriMakeBemSurfacesParameters {
+): MriMakeBemSurfacesParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_make_bem_surfaces" as const,
+        "@type": "freesurfer/mri_make_bem_surfaces" as const,
         "name": name,
     };
     if (mfile !== null) {
@@ -195,7 +162,6 @@ function mri_make_bem_surfaces(
 export {
       MRI_MAKE_BEM_SURFACES_METADATA,
       MriMakeBemSurfacesOutputs,
-      MriMakeBemSurfacesParameters,
       mri_make_bem_surfaces,
       mri_make_bem_surfaces_execute,
       mri_make_bem_surfaces_params,

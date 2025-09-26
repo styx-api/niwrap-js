@@ -12,7 +12,7 @@ const FSL_ANAT_METADATA: Metadata = {
 
 
 interface FslAnatParameters {
-    "@type": "fsl.fsl_anat";
+    "@type"?: "fsl/fsl_anat";
     "structural_image"?: InputPathType | null | undefined;
     "existing_anat_dir"?: string | null | undefined;
     "output_dir"?: string | null | undefined;
@@ -32,44 +32,11 @@ interface FslAnatParameters {
     "bet_f_param"?: number | null | undefined;
     "nocleanup_flag": boolean;
 }
+type FslAnatParametersTagged = Required<Pick<FslAnatParameters, '@type'>> & FslAnatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fsl_anat": fsl_anat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fsl_anat": fsl_anat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsl_anat(...)`.
+ * Output object returned when calling `FslAnatParameters(...)`.
  *
  * @interface
  */
@@ -128,9 +95,9 @@ function fsl_anat_params(
     nosearch_flag: boolean = false,
     bet_f_param: number | null = null,
     nocleanup_flag: boolean = false,
-): FslAnatParameters {
+): FslAnatParametersTagged {
     const params = {
-        "@type": "fsl.fsl_anat" as const,
+        "@type": "fsl/fsl_anat" as const,
         "clobber_flag": clobber_flag,
         "strongbias_flag": strongbias_flag,
         "weakbias_flag": weakbias_flag,
@@ -198,34 +165,34 @@ function fsl_anat_cargs(
             (params["output_dir"] ?? null)
         );
     }
-    if ((params["clobber_flag"] ?? null)) {
+    if ((params["clobber_flag"] ?? false)) {
         cargs.push("--clobber");
     }
-    if ((params["strongbias_flag"] ?? null)) {
+    if ((params["strongbias_flag"] ?? false)) {
         cargs.push("--strongbias");
     }
-    if ((params["weakbias_flag"] ?? null)) {
+    if ((params["weakbias_flag"] ?? false)) {
         cargs.push("--weakbias");
     }
-    if ((params["noreorient_flag"] ?? null)) {
+    if ((params["noreorient_flag"] ?? false)) {
         cargs.push("--noreorient");
     }
-    if ((params["nocrop_flag"] ?? null)) {
+    if ((params["nocrop_flag"] ?? false)) {
         cargs.push("--nocrop");
     }
-    if ((params["nobias_flag"] ?? null)) {
+    if ((params["nobias_flag"] ?? false)) {
         cargs.push("--nobias");
     }
-    if ((params["noreg_flag"] ?? null)) {
+    if ((params["noreg_flag"] ?? false)) {
         cargs.push("--noreg");
     }
-    if ((params["nononlinreg_flag"] ?? null)) {
+    if ((params["nononlinreg_flag"] ?? false)) {
         cargs.push("--nononlinreg");
     }
-    if ((params["noseg_flag"] ?? null)) {
+    if ((params["noseg_flag"] ?? false)) {
         cargs.push("--noseg");
     }
-    if ((params["nosubcortseg_flag"] ?? null)) {
+    if ((params["nosubcortseg_flag"] ?? false)) {
         cargs.push("--nosubcortseg");
     }
     if ((params["bias_smoothing"] ?? null) !== null) {
@@ -240,7 +207,7 @@ function fsl_anat_cargs(
             (params["image_type"] ?? null)
         );
     }
-    if ((params["nosearch_flag"] ?? null)) {
+    if ((params["nosearch_flag"] ?? false)) {
         cargs.push("--nosearch");
     }
     if ((params["bet_f_param"] ?? null) !== null) {
@@ -249,7 +216,7 @@ function fsl_anat_cargs(
             String((params["bet_f_param"] ?? null))
         );
     }
-    if ((params["nocleanup_flag"] ?? null)) {
+    if ((params["nocleanup_flag"] ?? false)) {
         cargs.push("--nocleanup");
     }
     return cargs;
@@ -364,7 +331,6 @@ function fsl_anat(
 export {
       FSL_ANAT_METADATA,
       FslAnatOutputs,
-      FslAnatParameters,
       fsl_anat,
       fsl_anat_execute,
       fsl_anat_params,

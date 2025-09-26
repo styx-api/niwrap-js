@@ -12,7 +12,7 @@ const MRI_NU_CORRECT_MNI_METADATA: Metadata = {
 
 
 interface MriNuCorrectMniParameters {
-    "@type": "freesurfer.mri_nu_correct.mni";
+    "@type"?: "freesurfer/mri_nu_correct.mni";
     "input_volume": InputPathType;
     "output_volume": string;
     "iterations": number;
@@ -27,44 +27,11 @@ interface MriNuCorrectMniParameters {
     "cm_flag": boolean;
     "debug_flag": boolean;
 }
+type MriNuCorrectMniParametersTagged = Required<Pick<MriNuCorrectMniParameters, '@type'>> & MriNuCorrectMniParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_nu_correct.mni": mri_nu_correct_mni_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_nu_correct.mni": mri_nu_correct_mni_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_nu_correct_mni(...)`.
+ * Output object returned when calling `MriNuCorrectMniParameters(...)`.
  *
  * @interface
  */
@@ -113,9 +80,9 @@ function mri_nu_correct_mni_params(
     ants_n4_replace_zeros: boolean = false,
     cm_flag: boolean = false,
     debug_flag: boolean = false,
-): MriNuCorrectMniParameters {
+): MriNuCorrectMniParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_nu_correct.mni" as const,
+        "@type": "freesurfer/mri_nu_correct.mni" as const,
         "input_volume": input_volume,
         "output_volume": output_volume,
         "iterations": iterations,
@@ -192,22 +159,22 @@ function mri_nu_correct_mni_cargs(
             execution.inputFile((params["uchar_transform"] ?? null))
         );
     }
-    if ((params["ants_n3"] ?? null)) {
+    if ((params["ants_n3"] ?? false)) {
         cargs.push("--ants-n3");
     }
-    if ((params["ants_n4"] ?? null)) {
+    if ((params["ants_n4"] ?? false)) {
         cargs.push("--ants-n4");
     }
-    if ((params["no_uchar"] ?? null)) {
+    if ((params["no_uchar"] ?? false)) {
         cargs.push("--no-uchar");
     }
-    if ((params["ants_n4_replace_zeros"] ?? null)) {
+    if ((params["ants_n4_replace_zeros"] ?? false)) {
         cargs.push("--ants-n4-replace-zeros");
     }
-    if ((params["cm_flag"] ?? null)) {
+    if ((params["cm_flag"] ?? false)) {
         cargs.push("--cm");
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -312,7 +279,6 @@ function mri_nu_correct_mni(
 export {
       MRI_NU_CORRECT_MNI_METADATA,
       MriNuCorrectMniOutputs,
-      MriNuCorrectMniParameters,
       mri_nu_correct_mni,
       mri_nu_correct_mni_execute,
       mri_nu_correct_mni_params,

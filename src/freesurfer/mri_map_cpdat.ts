@@ -12,7 +12,7 @@ const MRI_MAP_CPDAT_METADATA: Metadata = {
 
 
 interface MriMapCpdatParameters {
-    "@type": "freesurfer.mri_map_cpdat";
+    "@type"?: "freesurfer/mri_map_cpdat";
     "input_file": InputPathType;
     "output_file": string;
     "lta_file"?: InputPathType | null | undefined;
@@ -20,44 +20,11 @@ interface MriMapCpdatParameters {
     "from_mni305"?: string | null | undefined;
     "subject_list_file"?: InputPathType | null | undefined;
 }
+type MriMapCpdatParametersTagged = Required<Pick<MriMapCpdatParameters, '@type'>> & MriMapCpdatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_map_cpdat": mri_map_cpdat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_map_cpdat": mri_map_cpdat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_map_cpdat(...)`.
+ * Output object returned when calling `MriMapCpdatParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function mri_map_cpdat_params(
     to_mni305: string | null = null,
     from_mni305: string | null = null,
     subject_list_file: InputPathType | null = null,
-): MriMapCpdatParameters {
+): MriMapCpdatParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_map_cpdat" as const,
+        "@type": "freesurfer/mri_map_cpdat" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -248,7 +215,6 @@ function mri_map_cpdat(
 export {
       MRI_MAP_CPDAT_METADATA,
       MriMapCpdatOutputs,
-      MriMapCpdatParameters,
       mri_map_cpdat,
       mri_map_cpdat_execute,
       mri_map_cpdat_params,

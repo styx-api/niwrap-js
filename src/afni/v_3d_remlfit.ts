@@ -12,7 +12,7 @@ const V_3D_REMLFIT_METADATA: Metadata = {
 
 
 interface V3dRemlfitParameters {
-    "@type": "afni.3dREMLfit";
+    "@type"?: "afni/3dREMLfit";
     "input_file": InputPathType;
     "regression_matrix": InputPathType;
     "baseline_files"?: Array<string> | null | undefined;
@@ -29,44 +29,11 @@ interface V3dRemlfitParameters {
     "quiet": boolean;
     "verbose": boolean;
 }
+type V3dRemlfitParametersTagged = Required<Pick<V3dRemlfitParameters, '@type'>> & V3dRemlfitParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dREMLfit": v_3d_remlfit_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dREMLfit": v_3d_remlfit_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_remlfit(...)`.
+ * Output object returned when calling `V3dRemlfitParameters(...)`.
  *
  * @interface
  */
@@ -139,9 +106,9 @@ function v_3d_remlfit_params(
     negative_corr: boolean = false,
     quiet: boolean = false,
     verbose: boolean = false,
-): V3dRemlfitParameters {
+): V3dRemlfitParametersTagged {
     const params = {
-        "@type": "afni.3dREMLfit" as const,
+        "@type": "afni/3dREMLfit" as const,
         "input_file": input_file,
         "regression_matrix": regression_matrix,
         "sort_nods": sort_nods,
@@ -202,10 +169,10 @@ function v_3d_remlfit_cargs(
             ...(params["baseline_files"] ?? null)
         );
     }
-    if ((params["sort_nods"] ?? null)) {
+    if ((params["sort_nods"] ?? false)) {
         cargs.push("-dsort_nods");
     }
-    if ((params["temp_storage"] ?? null)) {
+    if ((params["temp_storage"] ?? false)) {
         cargs.push("-usetemp");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -220,10 +187,10 @@ function v_3d_remlfit_cargs(
             (params["output_prefix"] ?? null)
         );
     }
-    if ((params["no_fdr_curve"] ?? null)) {
+    if ((params["no_fdr_curve"] ?? false)) {
         cargs.push("-noFDR");
     }
-    if ((params["go_for_it"] ?? null)) {
+    if ((params["go_for_it"] ?? false)) {
         cargs.push("-GOFORIT");
     }
     if ((params["max_a_param"] ?? null) !== null) {
@@ -244,13 +211,13 @@ function v_3d_remlfit_cargs(
             String((params["grid_param"] ?? null))
         );
     }
-    if ((params["negative_corr"] ?? null)) {
+    if ((params["negative_corr"] ?? false)) {
         cargs.push("-NEGcor");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("quiet");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
     return cargs;
@@ -363,7 +330,6 @@ function v_3d_remlfit(
 
 export {
       V3dRemlfitOutputs,
-      V3dRemlfitParameters,
       V_3D_REMLFIT_METADATA,
       v_3d_remlfit,
       v_3d_remlfit_execute,

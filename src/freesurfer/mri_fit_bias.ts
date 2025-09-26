@@ -12,7 +12,7 @@ const MRI_FIT_BIAS_METADATA: Metadata = {
 
 
 interface MriFitBiasParameters {
-    "@type": "freesurfer.mri_fit_bias";
+    "@type"?: "freesurfer/mri_fit_bias";
     "inputvol": InputPathType;
     "lpf_cutoff"?: number | null | undefined;
     "segvol": InputPathType;
@@ -26,44 +26,11 @@ interface MriFitBiasParameters {
     "debug": boolean;
     "checkopts": boolean;
 }
+type MriFitBiasParametersTagged = Required<Pick<MriFitBiasParameters, '@type'>> & MriFitBiasParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_fit_bias": mri_fit_bias_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_fit_bias": mri_fit_bias_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_fit_bias(...)`.
+ * Output object returned when calling `MriFitBiasParameters(...)`.
  *
  * @interface
  */
@@ -114,9 +81,9 @@ function mri_fit_bias_params(
     nthreads: number | null = null,
     debug: boolean = false,
     checkopts: boolean = false,
-): MriFitBiasParameters {
+): MriFitBiasParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_fit_bias" as const,
+        "@type": "freesurfer/mri_fit_bias" as const,
         "inputvol": inputvol,
         "segvol": segvol,
         "maskvol": maskvol,
@@ -208,10 +175,10 @@ function mri_fit_bias_cargs(
             String((params["nthreads"] ?? null))
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["checkopts"] ?? null)) {
+    if ((params["checkopts"] ?? false)) {
         cargs.push("--checkopts");
     }
     return cargs;
@@ -315,7 +282,6 @@ function mri_fit_bias(
 export {
       MRI_FIT_BIAS_METADATA,
       MriFitBiasOutputs,
-      MriFitBiasParameters,
       mri_fit_bias,
       mri_fit_bias_execute,
       mri_fit_bias_params,

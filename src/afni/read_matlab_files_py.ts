@@ -12,7 +12,7 @@ const READ_MATLAB_FILES_PY_METADATA: Metadata = {
 
 
 interface ReadMatlabFilesPyParameters {
-    "@type": "afni.read_matlab_files.py";
+    "@type"?: "afni/read_matlab_files.py";
     "infiles": Array<string>;
     "prefix"?: string | null | undefined;
     "overwrite": boolean;
@@ -20,44 +20,11 @@ interface ReadMatlabFilesPyParameters {
     "history": boolean;
     "version": boolean;
 }
+type ReadMatlabFilesPyParametersTagged = Required<Pick<ReadMatlabFilesPyParameters, '@type'>> & ReadMatlabFilesPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.read_matlab_files.py": read_matlab_files_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.read_matlab_files.py": read_matlab_files_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `read_matlab_files_py(...)`.
+ * Output object returned when calling `ReadMatlabFilesPyParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function read_matlab_files_py_params(
     help: boolean = false,
     history: boolean = false,
     version: boolean = false,
-): ReadMatlabFilesPyParameters {
+): ReadMatlabFilesPyParametersTagged {
     const params = {
-        "@type": "afni.read_matlab_files.py" as const,
+        "@type": "afni/read_matlab_files.py" as const,
         "infiles": infiles,
         "overwrite": overwrite,
         "help": help,
@@ -129,16 +96,16 @@ function read_matlab_files_py_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("-overwrite");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["history"] ?? null)) {
+    if ((params["history"] ?? false)) {
         cargs.push("-hist");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-ver");
     }
     return cargs;
@@ -229,7 +196,6 @@ function read_matlab_files_py(
 export {
       READ_MATLAB_FILES_PY_METADATA,
       ReadMatlabFilesPyOutputs,
-      ReadMatlabFilesPyParameters,
       read_matlab_files_py,
       read_matlab_files_py_execute,
       read_matlab_files_py_params,

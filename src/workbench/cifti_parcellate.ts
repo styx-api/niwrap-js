@@ -12,7 +12,7 @@ const CIFTI_PARCELLATE_METADATA: Metadata = {
 
 
 interface CiftiParcellateSpatialWeightsParameters {
-    "@type": "workbench.cifti-parcellate.spatial_weights";
+    "@type"?: "spatial_weights";
     "opt_left_area_surf_left_surf"?: InputPathType | null | undefined;
     "opt_right_area_surf_right_surf"?: InputPathType | null | undefined;
     "opt_cerebellum_area_surf_cerebellum_surf"?: InputPathType | null | undefined;
@@ -20,17 +20,19 @@ interface CiftiParcellateSpatialWeightsParameters {
     "opt_right_area_metric_right_metric"?: InputPathType | null | undefined;
     "opt_cerebellum_area_metric_cerebellum_metric"?: InputPathType | null | undefined;
 }
+type CiftiParcellateSpatialWeightsParametersTagged = Required<Pick<CiftiParcellateSpatialWeightsParameters, '@type'>> & CiftiParcellateSpatialWeightsParameters;
 
 
 interface CiftiParcellateExcludeOutliersParameters {
-    "@type": "workbench.cifti-parcellate.exclude_outliers";
+    "@type"?: "exclude_outliers";
     "sigma_below": number;
     "sigma_above": number;
 }
+type CiftiParcellateExcludeOutliersParametersTagged = Required<Pick<CiftiParcellateExcludeOutliersParameters, '@type'>> & CiftiParcellateExcludeOutliersParameters;
 
 
 interface CiftiParcellateParameters {
-    "@type": "workbench.cifti-parcellate";
+    "@type"?: "workbench/cifti-parcellate";
     "cifti_in": InputPathType;
     "cifti_label": InputPathType;
     "direction": string;
@@ -45,42 +47,7 @@ interface CiftiParcellateParameters {
     "opt_legacy_mode": boolean;
     "opt_include_empty": boolean;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-parcellate": cifti_parcellate_cargs,
-        "workbench.cifti-parcellate.spatial_weights": cifti_parcellate_spatial_weights_cargs,
-        "workbench.cifti-parcellate.exclude_outliers": cifti_parcellate_exclude_outliers_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-parcellate": cifti_parcellate_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiParcellateParametersTagged = Required<Pick<CiftiParcellateParameters, '@type'>> & CiftiParcellateParameters;
 
 
 /**
@@ -102,9 +69,9 @@ function cifti_parcellate_spatial_weights_params(
     opt_left_area_metric_left_metric: InputPathType | null = null,
     opt_right_area_metric_right_metric: InputPathType | null = null,
     opt_cerebellum_area_metric_cerebellum_metric: InputPathType | null = null,
-): CiftiParcellateSpatialWeightsParameters {
+): CiftiParcellateSpatialWeightsParametersTagged {
     const params = {
-        "@type": "workbench.cifti-parcellate.spatial_weights" as const,
+        "@type": "spatial_weights" as const,
     };
     if (opt_left_area_surf_left_surf !== null) {
         params["opt_left_area_surf_left_surf"] = opt_left_area_surf_left_surf;
@@ -193,9 +160,9 @@ function cifti_parcellate_spatial_weights_cargs(
 function cifti_parcellate_exclude_outliers_params(
     sigma_below: number,
     sigma_above: number,
-): CiftiParcellateExcludeOutliersParameters {
+): CiftiParcellateExcludeOutliersParametersTagged {
     const params = {
-        "@type": "workbench.cifti-parcellate.exclude_outliers" as const,
+        "@type": "exclude_outliers" as const,
         "sigma_below": sigma_below,
         "sigma_above": sigma_above,
     };
@@ -224,7 +191,7 @@ function cifti_parcellate_exclude_outliers_cargs(
 
 
 /**
- * Output object returned when calling `cifti_parcellate(...)`.
+ * Output object returned when calling `CiftiParcellateParameters(...)`.
  *
  * @interface
  */
@@ -277,9 +244,9 @@ function cifti_parcellate_params(
     opt_nonempty_mask_out_mask_out: string | null = null,
     opt_legacy_mode: boolean = false,
     opt_include_empty: boolean = false,
-): CiftiParcellateParameters {
+): CiftiParcellateParametersTagged {
     const params = {
-        "@type": "workbench.cifti-parcellate" as const,
+        "@type": "workbench/cifti-parcellate" as const,
         "cifti_in": cifti_in,
         "cifti_label": cifti_label,
         "direction": direction,
@@ -330,7 +297,7 @@ function cifti_parcellate_cargs(
     cargs.push((params["direction"] ?? null));
     cargs.push((params["cifti_out"] ?? null));
     if ((params["spatial_weights"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["spatial_weights"] ?? null)["@type"])((params["spatial_weights"] ?? null), execution));
+        cargs.push(...cifti_parcellate_spatial_weights_cargs((params["spatial_weights"] ?? null), execution));
     }
     if ((params["opt_cifti_weights_weight_cifti"] ?? null) !== null) {
         cargs.push(
@@ -345,9 +312,9 @@ function cifti_parcellate_cargs(
         );
     }
     if ((params["exclude_outliers"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["exclude_outliers"] ?? null)["@type"])((params["exclude_outliers"] ?? null), execution));
+        cargs.push(...cifti_parcellate_exclude_outliers_cargs((params["exclude_outliers"] ?? null), execution));
     }
-    if ((params["opt_only_numeric"] ?? null)) {
+    if ((params["opt_only_numeric"] ?? false)) {
         cargs.push("-only-numeric");
     }
     if ((params["opt_fill_value_value"] ?? null) !== null) {
@@ -362,10 +329,10 @@ function cifti_parcellate_cargs(
             (params["opt_nonempty_mask_out_mask_out"] ?? null)
         );
     }
-    if ((params["opt_legacy_mode"] ?? null)) {
+    if ((params["opt_legacy_mode"] ?? false)) {
         cargs.push("-legacy-mode");
     }
-    if ((params["opt_include_empty"] ?? null)) {
+    if ((params["opt_include_empty"] ?? false)) {
         cargs.push("-include-empty");
     }
     return cargs;
@@ -520,10 +487,7 @@ function cifti_parcellate(
 
 export {
       CIFTI_PARCELLATE_METADATA,
-      CiftiParcellateExcludeOutliersParameters,
       CiftiParcellateOutputs,
-      CiftiParcellateParameters,
-      CiftiParcellateSpatialWeightsParameters,
       cifti_parcellate,
       cifti_parcellate_exclude_outliers_params,
       cifti_parcellate_execute,

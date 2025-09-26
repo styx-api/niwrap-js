@@ -12,47 +12,15 @@ const IFH2HDR_METADATA: Metadata = {
 
 
 interface Ifh2hdrParameters {
-    "@type": "freesurfer.ifh2hdr";
+    "@type"?: "freesurfer/ifh2hdr";
     "input_file": InputPathType;
     "range"?: string | null | undefined;
 }
+type Ifh2hdrParametersTagged = Required<Pick<Ifh2hdrParameters, '@type'>> & Ifh2hdrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.ifh2hdr": ifh2hdr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ifh2hdr(...)`.
+ * Output object returned when calling `Ifh2hdrParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface Ifh2hdrOutputs {
 function ifh2hdr_params(
     input_file: InputPathType,
     range: string | null = null,
-): Ifh2hdrParameters {
+): Ifh2hdrParametersTagged {
     const params = {
-        "@type": "freesurfer.ifh2hdr" as const,
+        "@type": "freesurfer/ifh2hdr" as const,
         "input_file": input_file,
     };
     if (range !== null) {
@@ -187,7 +155,6 @@ function ifh2hdr(
 export {
       IFH2HDR_METADATA,
       Ifh2hdrOutputs,
-      Ifh2hdrParameters,
       ifh2hdr,
       ifh2hdr_execute,
       ifh2hdr_params,

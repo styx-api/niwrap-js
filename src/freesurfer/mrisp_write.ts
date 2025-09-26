@@ -12,7 +12,7 @@ const MRISP_WRITE_METADATA: Metadata = {
 
 
 interface MrispWriteParameters {
-    "@type": "freesurfer.mrisp_write";
+    "@type"?: "freesurfer/mrisp_write";
     "input_surface": InputPathType;
     "overlay_filename": InputPathType;
     "output_name": string;
@@ -25,44 +25,11 @@ interface MrispWriteParameters {
     "verbose_vertex"?: number | null | undefined;
     "write_diagnostics": boolean;
 }
+type MrispWriteParametersTagged = Required<Pick<MrispWriteParameters, '@type'>> & MrispWriteParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mrisp_write": mrisp_write_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mrisp_write": mrisp_write_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mrisp_write(...)`.
+ * Output object returned when calling `MrispWriteParameters(...)`.
  *
  * @interface
  */
@@ -107,9 +74,9 @@ function mrisp_write_params(
     normalize_curvature: boolean = false,
     verbose_vertex: number | null = null,
     write_diagnostics: boolean = false,
-): MrispWriteParameters {
+): MrispWriteParametersTagged {
     const params = {
-        "@type": "freesurfer.mrisp_write" as const,
+        "@type": "freesurfer/mrisp_write" as const,
         "input_surface": input_surface,
         "overlay_filename": overlay_filename,
         "output_name": output_name,
@@ -185,7 +152,7 @@ function mrisp_write_cargs(
             String((params["scale_factor"] ?? null))
         );
     }
-    if ((params["normalize_curvature"] ?? null)) {
+    if ((params["normalize_curvature"] ?? false)) {
         cargs.push("-N");
     }
     if ((params["verbose_vertex"] ?? null) !== null) {
@@ -194,7 +161,7 @@ function mrisp_write_cargs(
             String((params["verbose_vertex"] ?? null))
         );
     }
-    if ((params["write_diagnostics"] ?? null)) {
+    if ((params["write_diagnostics"] ?? false)) {
         cargs.push("-W");
     }
     return cargs;
@@ -295,7 +262,6 @@ function mrisp_write(
 export {
       MRISP_WRITE_METADATA,
       MrispWriteOutputs,
-      MrispWriteParameters,
       mrisp_write,
       mrisp_write_execute,
       mrisp_write_params,

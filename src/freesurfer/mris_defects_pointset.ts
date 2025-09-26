@@ -12,51 +12,18 @@ const MRIS_DEFECTS_POINTSET_METADATA: Metadata = {
 
 
 interface MrisDefectsPointsetParameters {
-    "@type": "freesurfer.mris_defects_pointset";
+    "@type"?: "freesurfer/mris_defects_pointset";
     "surface": InputPathType;
     "defects": InputPathType;
     "out": string;
     "label"?: InputPathType | null | undefined;
     "control": boolean;
 }
+type MrisDefectsPointsetParametersTagged = Required<Pick<MrisDefectsPointsetParameters, '@type'>> & MrisDefectsPointsetParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_defects_pointset": mris_defects_pointset_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_defects_pointset": mris_defects_pointset_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_defects_pointset(...)`.
+ * Output object returned when calling `MrisDefectsPointsetParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function mris_defects_pointset_params(
     out: string,
     label: InputPathType | null = null,
     control: boolean = false,
-): MrisDefectsPointsetParameters {
+): MrisDefectsPointsetParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_defects_pointset" as const,
+        "@type": "freesurfer/mris_defects_pointset" as const,
         "surface": surface,
         "defects": defects,
         "out": out,
@@ -136,7 +103,7 @@ function mris_defects_pointset_cargs(
             execution.inputFile((params["label"] ?? null))
         );
     }
-    if ((params["control"] ?? null)) {
+    if ((params["control"] ?? false)) {
         cargs.push("--control");
     }
     return cargs;
@@ -225,7 +192,6 @@ function mris_defects_pointset(
 export {
       MRIS_DEFECTS_POINTSET_METADATA,
       MrisDefectsPointsetOutputs,
-      MrisDefectsPointsetParameters,
       mris_defects_pointset,
       mris_defects_pointset_execute,
       mris_defects_pointset_params,

@@ -12,7 +12,7 @@ const MRIS_WARP_METADATA: Metadata = {
 
 
 interface MrisWarpParameters {
-    "@type": "freesurfer.mris_warp";
+    "@type"?: "freesurfer/mris_warp";
     "deformvol"?: string | null | undefined;
     "m3z"?: string | null | undefined;
     "regfile"?: string | null | undefined;
@@ -22,44 +22,11 @@ interface MrisWarpParameters {
     "help": boolean;
     "version": boolean;
 }
+type MrisWarpParametersTagged = Required<Pick<MrisWarpParameters, '@type'>> & MrisWarpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_warp": mris_warp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_warp": mris_warp_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_warp(...)`.
+ * Output object returned when calling `MrisWarpParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function mris_warp_params(
     abs: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): MrisWarpParameters {
+): MrisWarpParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_warp" as const,
+        "@type": "freesurfer/mris_warp" as const,
         "abs": abs,
         "help": help,
         "version": version,
@@ -168,13 +135,13 @@ function mris_warp_cargs(
             (params["out"] ?? null)
         );
     }
-    if ((params["abs"] ?? null)) {
+    if ((params["abs"] ?? false)) {
         cargs.push("--abs");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -269,7 +236,6 @@ function mris_warp(
 export {
       MRIS_WARP_METADATA,
       MrisWarpOutputs,
-      MrisWarpParameters,
       mris_warp,
       mris_warp_execute,
       mris_warp_params,

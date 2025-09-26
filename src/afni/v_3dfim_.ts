@@ -12,7 +12,7 @@ const V_3DFIM__METADATA: Metadata = {
 
 
 interface V3dfimParameters {
-    "@type": "afni.3dfim+";
+    "@type"?: "afni/3dfim+";
     "infile": InputPathType;
     "input1dfile"?: InputPathType | null | undefined;
     "maskfile"?: InputPathType | null | undefined;
@@ -26,44 +26,11 @@ interface V3dfimParameters {
     "output_params"?: Array<string> | null | undefined;
     "output_bucket"?: string | null | undefined;
 }
+type V3dfimParametersTagged = Required<Pick<V3dfimParameters, '@type'>> & V3dfimParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dfim+": v_3dfim__cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dfim+": v_3dfim__outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dfim_(...)`.
+ * Output object returned when calling `V3dfimParameters(...)`.
  *
  * @interface
  */
@@ -122,9 +89,9 @@ function v_3dfim__params(
     ort_file: InputPathType | null = null,
     output_params: Array<string> | null = null,
     output_bucket: string | null = null,
-): V3dfimParameters {
+): V3dfimParametersTagged {
     const params = {
-        "@type": "afni.3dfim+" as const,
+        "@type": "afni/3dfim+" as const,
         "infile": infile,
         "ideal_file": ideal_file,
     };
@@ -343,7 +310,6 @@ function v_3dfim_(
 
 export {
       V3dfimOutputs,
-      V3dfimParameters,
       V_3DFIM__METADATA,
       v_3dfim_,
       v_3dfim__execute,

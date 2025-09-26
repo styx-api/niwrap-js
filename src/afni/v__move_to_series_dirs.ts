@@ -12,7 +12,7 @@ const V__MOVE_TO_SERIES_DIRS_METADATA: Metadata = {
 
 
 interface VMoveToSeriesDirsParameters {
-    "@type": "afni.@move.to.series.dirs";
+    "@type"?: "afni/@move.to.series.dirs";
     "action"?: "copy" | "move" | null | undefined;
     "dprefix"?: string | null | undefined;
     "tag"?: string | null | undefined;
@@ -22,43 +22,11 @@ interface VMoveToSeriesDirsParameters {
     "ver": boolean;
     "dicom_files": Array<InputPathType>;
 }
+type VMoveToSeriesDirsParametersTagged = Required<Pick<VMoveToSeriesDirsParameters, '@type'>> & VMoveToSeriesDirsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@move.to.series.dirs": v__move_to_series_dirs_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__move_to_series_dirs(...)`.
+ * Output object returned when calling `VMoveToSeriesDirsParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +61,9 @@ function v__move_to_series_dirs_params(
     help: boolean = false,
     hist: boolean = false,
     ver: boolean = false,
-): VMoveToSeriesDirsParameters {
+): VMoveToSeriesDirsParametersTagged {
     const params = {
-        "@type": "afni.@move.to.series.dirs" as const,
+        "@type": "afni/@move.to.series.dirs" as const,
         "test": test,
         "help": help,
         "hist": hist,
@@ -147,16 +115,16 @@ function v__move_to_series_dirs_cargs(
             (params["tag"] ?? null)
         );
     }
-    if ((params["test"] ?? null)) {
+    if ((params["test"] ?? false)) {
         cargs.push("-test");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["hist"] ?? null)) {
+    if ((params["hist"] ?? false)) {
         cargs.push("-hist");
     }
-    if ((params["ver"] ?? null)) {
+    if ((params["ver"] ?? false)) {
         cargs.push("-ver");
     }
     cargs.push(...(params["dicom_files"] ?? null).map(f => execution.inputFile(f)));
@@ -250,7 +218,6 @@ function v__move_to_series_dirs(
 
 export {
       VMoveToSeriesDirsOutputs,
-      VMoveToSeriesDirsParameters,
       V__MOVE_TO_SERIES_DIRS_METADATA,
       v__move_to_series_dirs,
       v__move_to_series_dirs_execute,

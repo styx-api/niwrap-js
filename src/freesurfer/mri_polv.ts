@@ -12,48 +12,16 @@ const MRI_POLV_METADATA: Metadata = {
 
 
 interface MriPolvParameters {
-    "@type": "freesurfer.mri_polv";
+    "@type"?: "freesurfer/mri_polv";
     "window_size"?: number | null | undefined;
     "input_image": InputPathType;
     "output_image": InputPathType;
 }
+type MriPolvParametersTagged = Required<Pick<MriPolvParameters, '@type'>> & MriPolvParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_polv": mri_polv_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_polv(...)`.
+ * Output object returned when calling `MriPolvParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function mri_polv_params(
     input_image: InputPathType,
     output_image: InputPathType,
     window_size: number | null = null,
-): MriPolvParameters {
+): MriPolvParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_polv" as const,
+        "@type": "freesurfer/mri_polv" as const,
         "input_image": input_image,
         "output_image": output_image,
     };
@@ -194,7 +162,6 @@ function mri_polv(
 export {
       MRI_POLV_METADATA,
       MriPolvOutputs,
-      MriPolvParameters,
       mri_polv,
       mri_polv_execute,
       mri_polv_params,

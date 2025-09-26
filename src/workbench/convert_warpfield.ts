@@ -12,29 +12,32 @@ const CONVERT_WARPFIELD_METADATA: Metadata = {
 
 
 interface ConvertWarpfieldFromWorldParameters {
-    "@type": "workbench.convert-warpfield.from_world";
+    "@type"?: "from_world";
     "input": string;
     "opt_absolute": boolean;
 }
+type ConvertWarpfieldFromWorldParametersTagged = Required<Pick<ConvertWarpfieldFromWorldParameters, '@type'>> & ConvertWarpfieldFromWorldParameters;
 
 
 interface ConvertWarpfieldFromFnirtParameters {
-    "@type": "workbench.convert-warpfield.from_fnirt";
+    "@type"?: "from_fnirt";
     "input": string;
     "source_volume": string;
     "opt_absolute": boolean;
 }
+type ConvertWarpfieldFromFnirtParametersTagged = Required<Pick<ConvertWarpfieldFromFnirtParameters, '@type'>> & ConvertWarpfieldFromFnirtParameters;
 
 
 interface ConvertWarpfieldToFnirtParameters {
-    "@type": "workbench.convert-warpfield.to_fnirt";
+    "@type"?: "to_fnirt";
     "output": string;
     "source_volume": string;
 }
+type ConvertWarpfieldToFnirtParametersTagged = Required<Pick<ConvertWarpfieldToFnirtParameters, '@type'>> & ConvertWarpfieldToFnirtParameters;
 
 
 interface ConvertWarpfieldParameters {
-    "@type": "workbench.convert-warpfield";
+    "@type"?: "workbench/convert-warpfield";
     "from_world"?: ConvertWarpfieldFromWorldParameters | null | undefined;
     "opt_from_itk_input"?: string | null | undefined;
     "from_fnirt"?: ConvertWarpfieldFromFnirtParameters | null | undefined;
@@ -42,42 +45,7 @@ interface ConvertWarpfieldParameters {
     "opt_to_itk_output"?: string | null | undefined;
     "to_fnirt"?: Array<ConvertWarpfieldToFnirtParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.convert-warpfield": convert_warpfield_cargs,
-        "workbench.convert-warpfield.from_world": convert_warpfield_from_world_cargs,
-        "workbench.convert-warpfield.from_fnirt": convert_warpfield_from_fnirt_cargs,
-        "workbench.convert-warpfield.to_fnirt": convert_warpfield_to_fnirt_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type ConvertWarpfieldParametersTagged = Required<Pick<ConvertWarpfieldParameters, '@type'>> & ConvertWarpfieldParameters;
 
 
 /**
@@ -91,9 +59,9 @@ function dynOutputs(
 function convert_warpfield_from_world_params(
     input: string,
     opt_absolute: boolean = false,
-): ConvertWarpfieldFromWorldParameters {
+): ConvertWarpfieldFromWorldParametersTagged {
     const params = {
-        "@type": "workbench.convert-warpfield.from_world" as const,
+        "@type": "from_world" as const,
         "input": input,
         "opt_absolute": opt_absolute,
     };
@@ -116,7 +84,7 @@ function convert_warpfield_from_world_cargs(
     const cargs: string[] = [];
     cargs.push("-from-world");
     cargs.push((params["input"] ?? null));
-    if ((params["opt_absolute"] ?? null)) {
+    if ((params["opt_absolute"] ?? false)) {
         cargs.push("-absolute");
     }
     return cargs;
@@ -136,9 +104,9 @@ function convert_warpfield_from_fnirt_params(
     input: string,
     source_volume: string,
     opt_absolute: boolean = false,
-): ConvertWarpfieldFromFnirtParameters {
+): ConvertWarpfieldFromFnirtParametersTagged {
     const params = {
-        "@type": "workbench.convert-warpfield.from_fnirt" as const,
+        "@type": "from_fnirt" as const,
         "input": input,
         "source_volume": source_volume,
         "opt_absolute": opt_absolute,
@@ -163,7 +131,7 @@ function convert_warpfield_from_fnirt_cargs(
     cargs.push("-from-fnirt");
     cargs.push((params["input"] ?? null));
     cargs.push((params["source_volume"] ?? null));
-    if ((params["opt_absolute"] ?? null)) {
+    if ((params["opt_absolute"] ?? false)) {
         cargs.push("-absolute");
     }
     return cargs;
@@ -181,9 +149,9 @@ function convert_warpfield_from_fnirt_cargs(
 function convert_warpfield_to_fnirt_params(
     output: string,
     source_volume: string,
-): ConvertWarpfieldToFnirtParameters {
+): ConvertWarpfieldToFnirtParametersTagged {
     const params = {
-        "@type": "workbench.convert-warpfield.to_fnirt" as const,
+        "@type": "to_fnirt" as const,
         "output": output,
         "source_volume": source_volume,
     };
@@ -212,7 +180,7 @@ function convert_warpfield_to_fnirt_cargs(
 
 
 /**
- * Output object returned when calling `convert_warpfield(...)`.
+ * Output object returned when calling `ConvertWarpfieldParameters(...)`.
  *
  * @interface
  */
@@ -243,9 +211,9 @@ function convert_warpfield_params(
     opt_to_world_output: string | null = null,
     opt_to_itk_output: string | null = null,
     to_fnirt: Array<ConvertWarpfieldToFnirtParameters> | null = null,
-): ConvertWarpfieldParameters {
+): ConvertWarpfieldParametersTagged {
     const params = {
-        "@type": "workbench.convert-warpfield" as const,
+        "@type": "workbench/convert-warpfield" as const,
     };
     if (from_world !== null) {
         params["from_world"] = from_world;
@@ -285,7 +253,7 @@ function convert_warpfield_cargs(
     cargs.push("wb_command");
     cargs.push("-convert-warpfield");
     if ((params["from_world"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["from_world"] ?? null)["@type"])((params["from_world"] ?? null), execution));
+        cargs.push(...convert_warpfield_from_world_cargs((params["from_world"] ?? null), execution));
     }
     if ((params["opt_from_itk_input"] ?? null) !== null) {
         cargs.push(
@@ -294,7 +262,7 @@ function convert_warpfield_cargs(
         );
     }
     if ((params["from_fnirt"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["from_fnirt"] ?? null)["@type"])((params["from_fnirt"] ?? null), execution));
+        cargs.push(...convert_warpfield_from_fnirt_cargs((params["from_fnirt"] ?? null), execution));
     }
     if ((params["opt_to_world_output"] ?? null) !== null) {
         cargs.push(
@@ -309,7 +277,7 @@ function convert_warpfield_cargs(
         );
     }
     if ((params["to_fnirt"] ?? null) !== null) {
-        cargs.push(...(params["to_fnirt"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["to_fnirt"] ?? null).map(s => convert_warpfield_to_fnirt_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -413,11 +381,7 @@ function convert_warpfield(
 
 export {
       CONVERT_WARPFIELD_METADATA,
-      ConvertWarpfieldFromFnirtParameters,
-      ConvertWarpfieldFromWorldParameters,
       ConvertWarpfieldOutputs,
-      ConvertWarpfieldParameters,
-      ConvertWarpfieldToFnirtParameters,
       convert_warpfield,
       convert_warpfield_execute,
       convert_warpfield_from_fnirt_params,

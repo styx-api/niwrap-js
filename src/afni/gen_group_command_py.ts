@@ -12,7 +12,7 @@ const GEN_GROUP_COMMAND_PY_METADATA: Metadata = {
 
 
 interface GenGroupCommandPyParameters {
-    "@type": "afni.gen_group_command.py";
+    "@type"?: "afni/gen_group_command.py";
     "command_name": string;
     "datasets": Array<string>;
     "prefix"?: string | null | undefined;
@@ -26,44 +26,11 @@ interface GenGroupCommandPyParameters {
     "write_script"?: string | null | undefined;
     "other_options"?: Array<string> | null | undefined;
 }
+type GenGroupCommandPyParametersTagged = Required<Pick<GenGroupCommandPyParameters, '@type'>> & GenGroupCommandPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.gen_group_command.py": gen_group_command_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.gen_group_command.py": gen_group_command_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `gen_group_command_py(...)`.
+ * Output object returned when calling `GenGroupCommandPyParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function gen_group_command_py_params(
     verb: string | null = null,
     write_script: string | null = null,
     other_options: Array<string> | null = null,
-): GenGroupCommandPyParameters {
+): GenGroupCommandPyParametersTagged {
     const params = {
-        "@type": "afni.gen_group_command.py" as const,
+        "@type": "afni/gen_group_command.py" as const,
         "command_name": command_name,
         "datasets": datasets,
     };
@@ -332,7 +299,6 @@ function gen_group_command_py(
 export {
       GEN_GROUP_COMMAND_PY_METADATA,
       GenGroupCommandPyOutputs,
-      GenGroupCommandPyParameters,
       gen_group_command_py,
       gen_group_command_py_execute,
       gen_group_command_py_params,

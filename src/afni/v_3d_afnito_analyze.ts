@@ -12,50 +12,17 @@ const V_3D_AFNITO_ANALYZE_METADATA: Metadata = {
 
 
 interface V3dAfnitoAnalyzeParameters {
-    "@type": "afni.3dAFNItoANALYZE";
+    "@type"?: "afni/3dAFNItoANALYZE";
     "4d_option": boolean;
     "orient_option"?: string | null | undefined;
     "output_name": string;
     "afni_dataset": InputPathType;
 }
+type V3dAfnitoAnalyzeParametersTagged = Required<Pick<V3dAfnitoAnalyzeParameters, '@type'>> & V3dAfnitoAnalyzeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dAFNItoANALYZE": v_3d_afnito_analyze_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dAFNItoANALYZE": v_3d_afnito_analyze_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_afnito_analyze(...)`.
+ * Output object returned when calling `V3dAfnitoAnalyzeParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function v_3d_afnito_analyze_params(
     afni_dataset: InputPathType,
     v_4d_option: boolean = false,
     orient_option: string | null = null,
-): V3dAfnitoAnalyzeParameters {
+): V3dAfnitoAnalyzeParametersTagged {
     const params = {
-        "@type": "afni.3dAFNItoANALYZE" as const,
+        "@type": "afni/3dAFNItoANALYZE" as const,
         "4d_option": v_4d_option,
         "output_name": output_name,
         "afni_dataset": afni_dataset,
@@ -126,7 +93,7 @@ function v_3d_afnito_analyze_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("3dAFNItoANALYZE");
-    if ((params["4d_option"] ?? null)) {
+    if ((params["4d_option"] ?? false)) {
         cargs.push("-4D");
     }
     if ((params["orient_option"] ?? null) !== null) {
@@ -223,7 +190,6 @@ function v_3d_afnito_analyze(
 
 export {
       V3dAfnitoAnalyzeOutputs,
-      V3dAfnitoAnalyzeParameters,
       V_3D_AFNITO_ANALYZE_METADATA,
       v_3d_afnito_analyze,
       v_3d_afnito_analyze_execute,

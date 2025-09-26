@@ -12,7 +12,7 @@ const ABIDS_JSON_TOOL_PY_METADATA: Metadata = {
 
 
 interface AbidsJsonToolPyParameters {
-    "@type": "afni.abids_json_tool.py";
+    "@type"?: "afni/abids_json_tool.py";
     "input_file": InputPathType;
     "prefix": string;
     "txt2json": boolean;
@@ -27,43 +27,11 @@ interface AbidsJsonToolPyParameters {
     "literal_keys": boolean;
     "values_stay_str": boolean;
 }
+type AbidsJsonToolPyParametersTagged = Required<Pick<AbidsJsonToolPyParameters, '@type'>> & AbidsJsonToolPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.abids_json_tool.py": abids_json_tool_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `abids_json_tool_py(...)`.
+ * Output object returned when calling `AbidsJsonToolPyParameters(...)`.
  *
  * @interface
  */
@@ -108,9 +76,9 @@ function abids_json_tool_py_params(
     delimiter_minor: string | null = null,
     literal_keys: boolean = false,
     values_stay_str: boolean = false,
-): AbidsJsonToolPyParameters {
+): AbidsJsonToolPyParametersTagged {
     const params = {
-        "@type": "afni.abids_json_tool.py" as const,
+        "@type": "afni/abids_json_tool.py" as const,
         "input_file": input_file,
         "prefix": prefix,
         "txt2json": txt2json,
@@ -159,10 +127,10 @@ function abids_json_tool_py_cargs(
         "-prefix",
         (params["prefix"] ?? null)
     );
-    if ((params["txt2json"] ?? null)) {
+    if ((params["txt2json"] ?? false)) {
         cargs.push("-txt2json");
     }
-    if ((params["json2txt"] ?? null)) {
+    if ((params["json2txt"] ?? false)) {
         cargs.push("-json2txt");
     }
     if ((params["add_json"] ?? null) !== null) {
@@ -177,13 +145,13 @@ function abids_json_tool_py_cargs(
             (params["del_json"] ?? null)
         );
     }
-    if ((params["force_add"] ?? null)) {
+    if ((params["force_add"] ?? false)) {
         cargs.push("-f");
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("-overwrite");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     if ((params["delimiter_major"] ?? null) !== null) {
@@ -198,10 +166,10 @@ function abids_json_tool_py_cargs(
             (params["delimiter_minor"] ?? null)
         );
     }
-    if ((params["literal_keys"] ?? null)) {
+    if ((params["literal_keys"] ?? false)) {
         cargs.push("-literal_keys");
     }
-    if ((params["values_stay_str"] ?? null)) {
+    if ((params["values_stay_str"] ?? false)) {
         cargs.push("-values_stay_str");
     }
     return cargs;
@@ -305,7 +273,6 @@ function abids_json_tool_py(
 export {
       ABIDS_JSON_TOOL_PY_METADATA,
       AbidsJsonToolPyOutputs,
-      AbidsJsonToolPyParameters,
       abids_json_tool_py,
       abids_json_tool_py_execute,
       abids_json_tool_py_params,

@@ -12,7 +12,7 @@ const ASL_MFREE_METADATA: Metadata = {
 
 
 interface AslMfreeParameters {
-    "@type": "fsl.asl_mfree";
+    "@type"?: "fsl/asl_mfree";
     "datafile": InputPathType;
     "mask": InputPathType;
     "out": string;
@@ -33,44 +33,11 @@ interface AslMfreeParameters {
     "shift_factor"?: number | null | undefined;
     "verbose": boolean;
 }
+type AslMfreeParametersTagged = Required<Pick<AslMfreeParameters, '@type'>> & AslMfreeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.asl_mfree": asl_mfree_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.asl_mfree": asl_mfree_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `asl_mfree(...)`.
+ * Output object returned when calling `AslMfreeParameters(...)`.
  *
  * @interface
  */
@@ -135,9 +102,9 @@ function asl_mfree_params(
     turbo_quasar: boolean = false,
     shift_factor: number | null = null,
     verbose: boolean = false,
-): AslMfreeParameters {
+): AslMfreeParametersTagged {
     const params = {
-        "@type": "fsl.asl_mfree" as const,
+        "@type": "fsl/asl_mfree" as const,
         "datafile": datafile,
         "mask": mask,
         "out": out,
@@ -226,7 +193,7 @@ function asl_mfree_cargs(
             String((params["mthresh"] ?? null))
         );
     }
-    if ((params["tcorrect"] ?? null)) {
+    if ((params["tcorrect"] ?? false)) {
         cargs.push("--tcorrect");
     }
     if ((params["bata"] ?? null) !== null) {
@@ -241,7 +208,7 @@ function asl_mfree_cargs(
             execution.inputFile((params["batt"] ?? null))
         );
     }
-    if ((params["bat"] ?? null)) {
+    if ((params["bat"] ?? false)) {
         cargs.push("--bat");
     }
     if ((params["bat_grad_thr"] ?? null) !== null) {
@@ -262,7 +229,7 @@ function asl_mfree_cargs(
             String((params["fa"] ?? null))
         );
     }
-    if ((params["std"] ?? null)) {
+    if ((params["std"] ?? false)) {
         cargs.push("--std");
     }
     if ((params["nwb"] ?? null) !== null) {
@@ -271,7 +238,7 @@ function asl_mfree_cargs(
             String((params["nwb"] ?? null))
         );
     }
-    if ((params["turbo_quasar"] ?? null)) {
+    if ((params["turbo_quasar"] ?? false)) {
         cargs.push("--turbo_quasar");
     }
     if ((params["shift_factor"] ?? null) !== null) {
@@ -280,7 +247,7 @@ function asl_mfree_cargs(
             String((params["shift_factor"] ?? null))
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("--verbose");
     }
     return cargs;
@@ -398,7 +365,6 @@ function asl_mfree(
 export {
       ASL_MFREE_METADATA,
       AslMfreeOutputs,
-      AslMfreeParameters,
       asl_mfree,
       asl_mfree_execute,
       asl_mfree_params,

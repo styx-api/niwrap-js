@@ -12,48 +12,16 @@ const FSLVBM_1_BET_METADATA: Metadata = {
 
 
 interface Fslvbm1BetParameters {
-    "@type": "fsl.fslvbm_1_bet";
+    "@type"?: "fsl/fslvbm_1_bet";
     "default_bet": boolean;
     "increased_robustness": boolean;
     "bet_parameters"?: string | null | undefined;
 }
+type Fslvbm1BetParametersTagged = Required<Pick<Fslvbm1BetParameters, '@type'>> & Fslvbm1BetParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslvbm_1_bet": fslvbm_1_bet_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslvbm_1_bet(...)`.
+ * Output object returned when calling `Fslvbm1BetParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function fslvbm_1_bet_params(
     default_bet: boolean = false,
     increased_robustness: boolean = false,
     bet_parameters: string | null = null,
-): Fslvbm1BetParameters {
+): Fslvbm1BetParametersTagged {
     const params = {
-        "@type": "fsl.fslvbm_1_bet" as const,
+        "@type": "fsl/fslvbm_1_bet" as const,
         "default_bet": default_bet,
         "increased_robustness": increased_robustness,
     };
@@ -105,10 +73,10 @@ function fslvbm_1_bet_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("fslvbm_1_bet");
-    if ((params["default_bet"] ?? null)) {
+    if ((params["default_bet"] ?? false)) {
         cargs.push("-b");
     }
-    if ((params["increased_robustness"] ?? null)) {
+    if ((params["increased_robustness"] ?? false)) {
         cargs.push("-N");
     }
     if ((params["bet_parameters"] ?? null) !== null) {
@@ -195,7 +163,6 @@ function fslvbm_1_bet(
 export {
       FSLVBM_1_BET_METADATA,
       Fslvbm1BetOutputs,
-      Fslvbm1BetParameters,
       fslvbm_1_bet,
       fslvbm_1_bet_execute,
       fslvbm_1_bet_params,

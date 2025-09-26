@@ -12,7 +12,7 @@ const INIT_USER_DOTFILES_PY_METADATA: Metadata = {
 
 
 interface InitUserDotfilesPyParameters {
-    "@type": "afni.init_user_dotfiles.py";
+    "@type"?: "afni/init_user_dotfiles.py";
     "help": boolean;
     "help_dotfiles_all": boolean;
     "help_dotfiles_mod": boolean;
@@ -31,43 +31,11 @@ interface InitUserDotfilesPyParameters {
     "test": boolean;
     "verbosity_level"?: number | null | undefined;
 }
+type InitUserDotfilesPyParametersTagged = Required<Pick<InitUserDotfilesPyParameters, '@type'>> & InitUserDotfilesPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.init_user_dotfiles.py": init_user_dotfiles_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `init_user_dotfiles_py(...)`.
+ * Output object returned when calling `InitUserDotfilesPyParameters(...)`.
  *
  * @interface
  */
@@ -120,9 +88,9 @@ function init_user_dotfiles_py_params(
     shell_list: Array<string> | null = null,
     test: boolean = false,
     verbosity_level: number | null = null,
-): InitUserDotfilesPyParameters {
+): InitUserDotfilesPyParametersTagged {
     const params = {
-        "@type": "afni.init_user_dotfiles.py" as const,
+        "@type": "afni/init_user_dotfiles.py" as const,
         "help": help,
         "help_dotfiles_all": help_dotfiles_all,
         "help_dotfiles_mod": help_dotfiles_mod,
@@ -173,25 +141,25 @@ function init_user_dotfiles_py_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("init_user_dotfiles.py");
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["help_dotfiles_all"] ?? null)) {
+    if ((params["help_dotfiles_all"] ?? false)) {
         cargs.push("-help_dotfiles_all");
     }
-    if ((params["help_dotfiles_mod"] ?? null)) {
+    if ((params["help_dotfiles_mod"] ?? false)) {
         cargs.push("-help_dotfiles_mod");
     }
-    if ((params["help_shells"] ?? null)) {
+    if ((params["help_shells"] ?? false)) {
         cargs.push("-help_shells");
     }
-    if ((params["hist"] ?? null)) {
+    if ((params["hist"] ?? false)) {
         cargs.push("-hist");
     }
-    if ((params["show_valid_opts"] ?? null)) {
+    if ((params["show_valid_opts"] ?? false)) {
         cargs.push("-show_valid_opts");
     }
-    if ((params["ver"] ?? null)) {
+    if ((params["ver"] ?? false)) {
         cargs.push("-ver");
     }
     if ((params["dot_files_list"] ?? null) !== null) {
@@ -218,10 +186,10 @@ function init_user_dotfiles_py_cargs(
             ...(params["do_updates"] ?? null)
         );
     }
-    if ((params["dry_run"] ?? null)) {
+    if ((params["dry_run"] ?? false)) {
         cargs.push("-dry_run");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["make_backup"] ?? null) !== null) {
@@ -236,7 +204,7 @@ function init_user_dotfiles_py_cargs(
             ...(params["shell_list"] ?? null)
         );
     }
-    if ((params["test"] ?? null)) {
+    if ((params["test"] ?? false)) {
         cargs.push("-test");
     }
     if ((params["verbosity_level"] ?? null) !== null) {
@@ -354,7 +322,6 @@ function init_user_dotfiles_py(
 export {
       INIT_USER_DOTFILES_PY_METADATA,
       InitUserDotfilesPyOutputs,
-      InitUserDotfilesPyParameters,
       init_user_dotfiles_py,
       init_user_dotfiles_py_execute,
       init_user_dotfiles_py_params,

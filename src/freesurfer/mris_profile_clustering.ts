@@ -12,49 +12,16 @@ const MRIS_PROFILE_CLUSTERING_METADATA: Metadata = {
 
 
 interface MrisProfileClusteringParameters {
-    "@type": "freesurfer.mris_profileClustering";
+    "@type"?: "freesurfer/mris_profileClustering";
     "input_file": InputPathType;
     "output_file": string;
     "other_options"?: string | null | undefined;
 }
+type MrisProfileClusteringParametersTagged = Required<Pick<MrisProfileClusteringParameters, '@type'>> & MrisProfileClusteringParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_profileClustering": mris_profile_clustering_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_profileClustering": mris_profile_clustering_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_profile_clustering(...)`.
+ * Output object returned when calling `MrisProfileClusteringParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mris_profile_clustering_params(
     input_file: InputPathType,
     output_file: string,
     other_options: string | null = null,
-): MrisProfileClusteringParameters {
+): MrisProfileClusteringParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_profileClustering" as const,
+        "@type": "freesurfer/mris_profileClustering" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -197,7 +164,6 @@ function mris_profile_clustering(
 export {
       MRIS_PROFILE_CLUSTERING_METADATA,
       MrisProfileClusteringOutputs,
-      MrisProfileClusteringParameters,
       mris_profile_clustering,
       mris_profile_clustering_execute,
       mris_profile_clustering_params,

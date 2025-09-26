@@ -12,7 +12,7 @@ const SURF2_VOL_COORD_METADATA: Metadata = {
 
 
 interface Surf2VolCoordParameters {
-    "@type": "afni.Surf2VolCoord";
+    "@type"?: "afni/Surf2VolCoord";
     "surface": string;
     "grid_vol": InputPathType;
     "grid_subbrick"?: number | null | undefined;
@@ -25,44 +25,11 @@ interface Surf2VolCoordParameters {
     "verb_level"?: number | null | undefined;
     "prefix": string;
 }
+type Surf2VolCoordParametersTagged = Required<Pick<Surf2VolCoordParameters, '@type'>> & Surf2VolCoordParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.Surf2VolCoord": surf2_vol_coord_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.Surf2VolCoord": surf2_vol_coord_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surf2_vol_coord(...)`.
+ * Output object returned when calling `Surf2VolCoordParameters(...)`.
  *
  * @interface
  */
@@ -107,9 +74,9 @@ function surf2_vol_coord_params(
     lpi: boolean = false,
     rai: boolean = false,
     verb_level: number | null = null,
-): Surf2VolCoordParameters {
+): Surf2VolCoordParametersTagged {
     const params = {
-        "@type": "afni.Surf2VolCoord" as const,
+        "@type": "afni/Surf2VolCoord" as const,
         "surface": surface,
         "grid_vol": grid_vol,
         "closest_nodes": closest_nodes,
@@ -186,10 +153,10 @@ function surf2_vol_coord_cargs(
             (params["qual"] ?? null)
         );
     }
-    if ((params["lpi"] ?? null)) {
+    if ((params["lpi"] ?? false)) {
         cargs.push("-LPI");
     }
-    if ((params["rai"] ?? null)) {
+    if ((params["rai"] ?? false)) {
         cargs.push("-RAI");
     }
     if ((params["verb_level"] ?? null) !== null) {
@@ -300,7 +267,6 @@ function surf2_vol_coord(
 export {
       SURF2_VOL_COORD_METADATA,
       Surf2VolCoordOutputs,
-      Surf2VolCoordParameters,
       surf2_vol_coord,
       surf2_vol_coord_execute,
       surf2_vol_coord_params,

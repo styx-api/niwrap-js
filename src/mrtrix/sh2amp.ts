@@ -12,37 +12,41 @@ const SH2AMP_METADATA: Metadata = {
 
 
 interface Sh2ampFslgradParameters {
-    "@type": "mrtrix.sh2amp.fslgrad";
+    "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
+type Sh2ampFslgradParametersTagged = Required<Pick<Sh2ampFslgradParameters, '@type'>> & Sh2ampFslgradParameters;
 
 
 interface Sh2ampVariousStringParameters {
-    "@type": "mrtrix.sh2amp.VariousString";
+    "@type"?: "VariousString";
     "obj": string;
 }
+type Sh2ampVariousStringParametersTagged = Required<Pick<Sh2ampVariousStringParameters, '@type'>> & Sh2ampVariousStringParameters;
 
 
 interface Sh2ampVariousFileParameters {
-    "@type": "mrtrix.sh2amp.VariousFile";
+    "@type"?: "VariousFile";
     "obj": InputPathType;
 }
+type Sh2ampVariousFileParametersTagged = Required<Pick<Sh2ampVariousFileParameters, '@type'>> & Sh2ampVariousFileParameters;
 
 
 interface Sh2ampConfigParameters {
-    "@type": "mrtrix.sh2amp.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Sh2ampConfigParametersTagged = Required<Pick<Sh2ampConfigParameters, '@type'>> & Sh2ampConfigParameters;
 
 
 interface Sh2ampParameters {
-    "@type": "mrtrix.sh2amp";
+    "@type"?: "mrtrix/sh2amp";
     "nonnegative": boolean;
     "grad"?: InputPathType | null | undefined;
     "fslgrad"?: Sh2ampFslgradParameters | null | undefined;
-    "strides"?: Sh2ampVariousStringParameters | Sh2ampVariousFileParameters | null | undefined;
+    "strides"?: Sh2ampVariousStringParametersTagged | Sh2ampVariousFileParametersTagged | null | undefined;
     "datatype"?: string | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -56,6 +60,7 @@ interface Sh2ampParameters {
     "directions": InputPathType;
     "output": string;
 }
+type Sh2ampParametersTagged = Required<Pick<Sh2ampParameters, '@type'>> & Sh2ampParameters;
 
 
 /**
@@ -65,15 +70,12 @@ interface Sh2ampParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function sh2amp_strides_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "mrtrix.sh2amp": sh2amp_cargs,
-        "mrtrix.sh2amp.fslgrad": sh2amp_fslgrad_cargs,
-        "mrtrix.sh2amp.VariousString": sh2amp_various_string_cargs,
-        "mrtrix.sh2amp.VariousFile": sh2amp_various_file_cargs,
-        "mrtrix.sh2amp.config": sh2amp_config_cargs,
+        "VariousString": sh2amp_various_string_cargs,
+        "VariousFile": sh2amp_various_file_cargs,
     };
     return cargsFuncs[t];
 }
@@ -86,11 +88,10 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function sh2amp_strides_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "mrtrix.sh2amp": sh2amp_outputs,
     };
     return outputsFuncs[t];
 }
@@ -107,9 +108,9 @@ function dynOutputs(
 function sh2amp_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
-): Sh2ampFslgradParameters {
+): Sh2ampFslgradParametersTagged {
     const params = {
-        "@type": "mrtrix.sh2amp.fslgrad" as const,
+        "@type": "fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -146,9 +147,9 @@ function sh2amp_fslgrad_cargs(
  */
 function sh2amp_various_string_params(
     obj: string,
-): Sh2ampVariousStringParameters {
+): Sh2ampVariousStringParametersTagged {
     const params = {
-        "@type": "mrtrix.sh2amp.VariousString" as const,
+        "@type": "VariousString" as const,
         "obj": obj,
     };
     return params;
@@ -182,9 +183,9 @@ function sh2amp_various_string_cargs(
  */
 function sh2amp_various_file_params(
     obj: InputPathType,
-): Sh2ampVariousFileParameters {
+): Sh2ampVariousFileParametersTagged {
     const params = {
-        "@type": "mrtrix.sh2amp.VariousFile" as const,
+        "@type": "VariousFile" as const,
         "obj": obj,
     };
     return params;
@@ -220,9 +221,9 @@ function sh2amp_various_file_cargs(
 function sh2amp_config_params(
     key: string,
     value: string,
-): Sh2ampConfigParameters {
+): Sh2ampConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.sh2amp.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -251,7 +252,7 @@ function sh2amp_config_cargs(
 
 
 /**
- * Output object returned when calling `sh2amp(...)`.
+ * Output object returned when calling `Sh2ampParameters(...)`.
  *
  * @interface
  */
@@ -296,7 +297,7 @@ function sh2amp_params(
     nonnegative: boolean = false,
     grad: InputPathType | null = null,
     fslgrad: Sh2ampFslgradParameters | null = null,
-    strides: Sh2ampVariousStringParameters | Sh2ampVariousFileParameters | null = null,
+    strides: Sh2ampVariousStringParametersTagged | Sh2ampVariousFileParametersTagged | null = null,
     datatype: string | null = null,
     info: boolean = false,
     quiet: boolean = false,
@@ -306,9 +307,9 @@ function sh2amp_params(
     config: Array<Sh2ampConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Sh2ampParameters {
+): Sh2ampParametersTagged {
     const params = {
-        "@type": "mrtrix.sh2amp" as const,
+        "@type": "mrtrix/sh2amp" as const,
         "nonnegative": nonnegative,
         "info": info,
         "quiet": quiet,
@@ -356,7 +357,7 @@ function sh2amp_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("sh2amp");
-    if ((params["nonnegative"] ?? null)) {
+    if ((params["nonnegative"] ?? false)) {
         cargs.push("-nonnegative");
     }
     if ((params["grad"] ?? null) !== null) {
@@ -366,12 +367,12 @@ function sh2amp_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
+        cargs.push(...sh2amp_fslgrad_cargs((params["fslgrad"] ?? null), execution));
     }
     if ((params["strides"] ?? null) !== null) {
         cargs.push(
             "-strides",
-            ...dynCargs((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
+            ...sh2amp_strides_cargs_dyn_fn((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
         );
     }
     if ((params["datatype"] ?? null) !== null) {
@@ -380,16 +381,16 @@ function sh2amp_cargs(
             (params["datatype"] ?? null)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -399,12 +400,12 @@ function sh2amp_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => sh2amp_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -536,7 +537,7 @@ function sh2amp(
     nonnegative: boolean = false,
     grad: InputPathType | null = null,
     fslgrad: Sh2ampFslgradParameters | null = null,
-    strides: Sh2ampVariousStringParameters | Sh2ampVariousFileParameters | null = null,
+    strides: Sh2ampVariousStringParametersTagged | Sh2ampVariousFileParametersTagged | null = null,
     datatype: string | null = null,
     info: boolean = false,
     quiet: boolean = false,
@@ -555,12 +556,7 @@ function sh2amp(
 
 export {
       SH2AMP_METADATA,
-      Sh2ampConfigParameters,
-      Sh2ampFslgradParameters,
       Sh2ampOutputs,
-      Sh2ampParameters,
-      Sh2ampVariousFileParameters,
-      Sh2ampVariousStringParameters,
       sh2amp,
       sh2amp_config_params,
       sh2amp_execute,

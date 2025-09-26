@@ -12,48 +12,15 @@ const UNPACKSDCMDIR_METADATA: Metadata = {
 
 
 interface UnpacksdcmdirParameters {
-    "@type": "freesurfer.unpacksdcmdir";
+    "@type"?: "freesurfer/unpacksdcmdir";
     "input_directory": string;
     "output_directory": string;
 }
+type UnpacksdcmdirParametersTagged = Required<Pick<UnpacksdcmdirParameters, '@type'>> & UnpacksdcmdirParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.unpacksdcmdir": unpacksdcmdir_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.unpacksdcmdir": unpacksdcmdir_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `unpacksdcmdir(...)`.
+ * Output object returned when calling `UnpacksdcmdirParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface UnpacksdcmdirOutputs {
 function unpacksdcmdir_params(
     input_directory: string,
     output_directory: string,
-): UnpacksdcmdirParameters {
+): UnpacksdcmdirParametersTagged {
     const params = {
-        "@type": "freesurfer.unpacksdcmdir" as const,
+        "@type": "freesurfer/unpacksdcmdir" as const,
         "input_directory": input_directory,
         "output_directory": output_directory,
     };
@@ -186,7 +153,6 @@ function unpacksdcmdir(
 export {
       UNPACKSDCMDIR_METADATA,
       UnpacksdcmdirOutputs,
-      UnpacksdcmdirParameters,
       unpacksdcmdir,
       unpacksdcmdir_execute,
       unpacksdcmdir_params,

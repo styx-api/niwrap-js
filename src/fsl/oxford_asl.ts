@@ -12,7 +12,7 @@ const OXFORD_ASL_METADATA: Metadata = {
 
 
 interface OxfordAslParameters {
-    "@type": "fsl.oxford_asl";
+    "@type"?: "fsl/oxford_asl";
     "asl_data": InputPathType;
     "output_dir_name": string;
     "mask"?: InputPathType | null | undefined;
@@ -43,44 +43,11 @@ interface OxfordAslParameters {
     "calibration_image"?: InputPathType | null | undefined;
     "calibration_method"?: string | null | undefined;
 }
+type OxfordAslParametersTagged = Required<Pick<OxfordAslParameters, '@type'>> & OxfordAslParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.oxford_asl": oxford_asl_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.oxford_asl": oxford_asl_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `oxford_asl(...)`.
+ * Output object returned when calling `OxfordAslParameters(...)`.
  *
  * @interface
  */
@@ -161,9 +128,9 @@ function oxford_asl_params(
     tr_calibration_data: number | null = null,
     calibration_image: InputPathType | null = null,
     calibration_method: string | null = null,
-): OxfordAslParameters {
+): OxfordAslParametersTagged {
     const params = {
-        "@type": "fsl.oxford_asl" as const,
+        "@type": "fsl/oxford_asl" as const,
         "asl_data": asl_data,
         "output_dir_name": output_dir_name,
         "spatial_smoothing": spatial_smoothing,
@@ -268,13 +235,13 @@ function oxford_asl_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["spatial_smoothing"] ?? null)) {
+    if ((params["spatial_smoothing"] ?? false)) {
         cargs.push("--spatial");
     }
-    if ((params["white_paper_analysis"] ?? null)) {
+    if ((params["white_paper_analysis"] ?? false)) {
         cargs.push("--wp");
     }
-    if ((params["motion_correction"] ?? null)) {
+    if ((params["motion_correction"] ?? false)) {
         cargs.push("--mc");
     }
     if ((params["input_asl_format"] ?? null) !== null) {
@@ -301,10 +268,10 @@ function oxford_asl_cargs(
             execution.inputFile((params["ti_image"] ?? null))
         );
     }
-    if ((params["casl"] ?? null)) {
+    if ((params["casl"] ?? false)) {
         cargs.push("--casl");
     }
-    if ((params["arterial_suppression"] ?? null)) {
+    if ((params["arterial_suppression"] ?? false)) {
         cargs.push("--artsupp");
     }
     if ((params["bolus_duration"] ?? null) !== null) {
@@ -373,7 +340,7 @@ function oxford_asl_cargs(
             (params["fast_segmentation_images"] ?? null)
         );
     }
-    if ((params["sensitivity_correction"] ?? null)) {
+    if ((params["sensitivity_correction"] ?? false)) {
         cargs.push("--senscorr");
     }
     if ((params["precomputed_m0_value"] ?? null) !== null) {
@@ -540,7 +507,6 @@ function oxford_asl(
 export {
       OXFORD_ASL_METADATA,
       OxfordAslOutputs,
-      OxfordAslParameters,
       oxford_asl,
       oxford_asl_execute,
       oxford_asl_params,

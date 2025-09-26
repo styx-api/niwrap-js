@@ -12,50 +12,17 @@ const METRIC_VECTOR_TOWARD_ROI_METADATA: Metadata = {
 
 
 interface MetricVectorTowardRoiParameters {
-    "@type": "workbench.metric-vector-toward-roi";
+    "@type"?: "workbench/metric-vector-toward-roi";
     "surface": InputPathType;
     "target_roi": InputPathType;
     "metric_out": string;
     "opt_roi_roi_metric"?: InputPathType | null | undefined;
 }
+type MetricVectorTowardRoiParametersTagged = Required<Pick<MetricVectorTowardRoiParameters, '@type'>> & MetricVectorTowardRoiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-vector-toward-roi": metric_vector_toward_roi_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.metric-vector-toward-roi": metric_vector_toward_roi_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `metric_vector_toward_roi(...)`.
+ * Output object returned when calling `MetricVectorTowardRoiParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function metric_vector_toward_roi_params(
     target_roi: InputPathType,
     metric_out: string,
     opt_roi_roi_metric: InputPathType | null = null,
-): MetricVectorTowardRoiParameters {
+): MetricVectorTowardRoiParametersTagged {
     const params = {
-        "@type": "workbench.metric-vector-toward-roi" as const,
+        "@type": "workbench/metric-vector-toward-roi" as const,
         "surface": surface,
         "target_roi": target_roi,
         "metric_out": metric_out,
@@ -212,7 +179,6 @@ function metric_vector_toward_roi(
 export {
       METRIC_VECTOR_TOWARD_ROI_METADATA,
       MetricVectorTowardRoiOutputs,
-      MetricVectorTowardRoiParameters,
       metric_vector_toward_roi,
       metric_vector_toward_roi_execute,
       metric_vector_toward_roi_params,

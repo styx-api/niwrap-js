@@ -12,7 +12,7 @@ const SMOOTH_DISPLACEMENT_FIELD_METADATA: Metadata = {
 
 
 interface SmoothDisplacementFieldParameters {
-    "@type": "ants.SmoothDisplacementField";
+    "@type"?: "ants/SmoothDisplacementField";
     "image_dimension": number;
     "input_field": InputPathType;
     "output_field": string;
@@ -22,44 +22,11 @@ interface SmoothDisplacementFieldParameters {
     "estimate_inverse"?: 0 | 1 | null | undefined;
     "confidence_image"?: InputPathType | null | undefined;
 }
+type SmoothDisplacementFieldParametersTagged = Required<Pick<SmoothDisplacementFieldParameters, '@type'>> & SmoothDisplacementFieldParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.SmoothDisplacementField": smooth_displacement_field_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.SmoothDisplacementField": smooth_displacement_field_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `smooth_displacement_field(...)`.
+ * Output object returned when calling `SmoothDisplacementFieldParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +69,9 @@ function smooth_displacement_field_params(
     spline_order: number | null = null,
     estimate_inverse: 0 | 1 | null = null,
     confidence_image: InputPathType | null = null,
-): SmoothDisplacementFieldParameters {
+): SmoothDisplacementFieldParametersTagged {
     const params = {
-        "@type": "ants.SmoothDisplacementField" as const,
+        "@type": "ants/SmoothDisplacementField" as const,
         "image_dimension": image_dimension,
         "input_field": input_field,
         "output_field": output_field,
@@ -249,7 +216,6 @@ function smooth_displacement_field(
 export {
       SMOOTH_DISPLACEMENT_FIELD_METADATA,
       SmoothDisplacementFieldOutputs,
-      SmoothDisplacementFieldParameters,
       smooth_displacement_field,
       smooth_displacement_field_execute,
       smooth_displacement_field_params,

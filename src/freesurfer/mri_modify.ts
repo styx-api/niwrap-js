@@ -12,7 +12,7 @@ const MRI_MODIFY_METADATA: Metadata = {
 
 
 interface MriModifyParameters {
-    "@type": "freesurfer.mri_modify";
+    "@type"?: "freesurfer/mri_modify";
     "x_ras": Array<number>;
     "y_ras": Array<number>;
     "z_ras": Array<number>;
@@ -28,43 +28,11 @@ interface MriModifyParameters {
     "input_volume": InputPathType;
     "output_volume": string;
 }
+type MriModifyParametersTagged = Required<Pick<MriModifyParameters, '@type'>> & MriModifyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_modify": mri_modify_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_modify(...)`.
+ * Output object returned when calling `MriModifyParameters(...)`.
  *
  * @interface
  */
@@ -111,9 +79,9 @@ function mri_modify_params(
     xform: string,
     input_volume: InputPathType,
     output_volume: string,
-): MriModifyParameters {
+): MriModifyParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_modify" as const,
+        "@type": "freesurfer/mri_modify" as const,
         "x_ras": x_ras,
         "y_ras": y_ras,
         "z_ras": z_ras,
@@ -300,7 +268,6 @@ function mri_modify(
 export {
       MRI_MODIFY_METADATA,
       MriModifyOutputs,
-      MriModifyParameters,
       mri_modify,
       mri_modify_execute,
       mri_modify_params,

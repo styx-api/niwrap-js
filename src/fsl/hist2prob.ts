@@ -12,50 +12,17 @@ const HIST2PROB_METADATA: Metadata = {
 
 
 interface Hist2probParameters {
-    "@type": "fsl.hist2prob";
+    "@type"?: "fsl/hist2prob";
     "image": InputPathType;
     "size": number;
     "low_threshold": number;
     "high_threshold": number;
 }
+type Hist2probParametersTagged = Required<Pick<Hist2probParameters, '@type'>> & Hist2probParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.hist2prob": hist2prob_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.hist2prob": hist2prob_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `hist2prob(...)`.
+ * Output object returned when calling `Hist2probParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function hist2prob_params(
     size: number,
     low_threshold: number,
     high_threshold: number,
-): Hist2probParameters {
+): Hist2probParametersTagged {
     const params = {
-        "@type": "fsl.hist2prob" as const,
+        "@type": "fsl/hist2prob" as const,
         "image": image,
         "size": size,
         "low_threshold": low_threshold,
@@ -200,7 +167,6 @@ function hist2prob(
 export {
       HIST2PROB_METADATA,
       Hist2probOutputs,
-      Hist2probParameters,
       hist2prob,
       hist2prob_execute,
       hist2prob_params,

@@ -12,50 +12,17 @@ const V_3D_NORMALITY_TEST_METADATA: Metadata = {
 
 
 interface V3dNormalityTestParameters {
-    "@type": "afni.3dNormalityTest";
+    "@type"?: "afni/3dNormalityTest";
     "input": InputPathType;
     "prefix": string;
     "noexp": boolean;
     "pval": boolean;
 }
+type V3dNormalityTestParametersTagged = Required<Pick<V3dNormalityTestParameters, '@type'>> & V3dNormalityTestParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dNormalityTest": v_3d_normality_test_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dNormalityTest": v_3d_normality_test_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_normality_test(...)`.
+ * Output object returned when calling `V3dNormalityTestParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function v_3d_normality_test_params(
     prefix: string,
     noexp: boolean = false,
     pval: boolean = false,
-): V3dNormalityTestParameters {
+): V3dNormalityTestParametersTagged {
     const params = {
-        "@type": "afni.3dNormalityTest" as const,
+        "@type": "afni/3dNormalityTest" as const,
         "input": input,
         "prefix": prefix,
         "noexp": noexp,
@@ -117,10 +84,10 @@ function v_3d_normality_test_cargs(
         "-prefix",
         (params["prefix"] ?? null)
     );
-    if ((params["noexp"] ?? null)) {
+    if ((params["noexp"] ?? false)) {
         cargs.push("-noexp");
     }
-    if ((params["pval"] ?? null)) {
+    if ((params["pval"] ?? false)) {
         cargs.push("-pval");
     }
     return cargs;
@@ -206,7 +173,6 @@ function v_3d_normality_test(
 
 export {
       V3dNormalityTestOutputs,
-      V3dNormalityTestParameters,
       V_3D_NORMALITY_TEST_METADATA,
       v_3d_normality_test,
       v_3d_normality_test_execute,

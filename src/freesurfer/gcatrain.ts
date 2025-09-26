@@ -12,7 +12,7 @@ const GCATRAIN_METADATA: Metadata = {
 
 
 interface GcatrainParameters {
-    "@type": "freesurfer.gcatrain";
+    "@type"?: "freesurfer/gcatrain";
     "gcadir": string;
     "subjectlistfile": InputPathType;
     "init_subject_transform": Array<string>;
@@ -33,43 +33,11 @@ interface GcatrainParameters {
     "nu12_flag": boolean;
     "no_emreg": boolean;
 }
+type GcatrainParametersTagged = Required<Pick<GcatrainParameters, '@type'>> & GcatrainParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.gcatrain": gcatrain_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `gcatrain(...)`.
+ * Output object returned when calling `GcatrainParameters(...)`.
  *
  * @interface
  */
@@ -126,9 +94,9 @@ function gcatrain_params(
     nu10_flag: boolean = false,
     nu12_flag: boolean = false,
     no_emreg: boolean = false,
-): GcatrainParameters {
+): GcatrainParametersTagged {
     const params = {
-        "@type": "freesurfer.gcatrain" as const,
+        "@type": "freesurfer/gcatrain" as const,
         "gcadir": gcadir,
         "subjectlistfile": subjectlistfile,
         "init_subject_transform": init_subject_transform,
@@ -221,7 +189,7 @@ function gcatrain_cargs(
             (params["exclude_subject"] ?? null)
         );
     }
-    if ((params["symmetric_atlas"] ?? null)) {
+    if ((params["symmetric_atlas"] ?? false)) {
         cargs.push("--sym");
     }
     if ((params["color_table"] ?? null) !== null) {
@@ -230,28 +198,28 @@ function gcatrain_cargs(
             execution.inputFile((params["color_table"] ?? null))
         );
     }
-    if ((params["no_submit"] ?? null)) {
+    if ((params["no_submit"] ?? false)) {
         cargs.push("--no-submit");
     }
-    if ((params["mail_flag"] ?? null)) {
+    if ((params["mail_flag"] ?? false)) {
         cargs.push("--pb-m");
     }
-    if ((params["no_strict"] ?? null)) {
+    if ((params["no_strict"] ?? false)) {
         cargs.push("--no-strict");
     }
-    if ((params["gcareg_iters"] ?? null)) {
+    if ((params["gcareg_iters"] ?? false)) {
         cargs.push("--gcareg-iters");
     }
-    if ((params["prep_only"] ?? null)) {
+    if ((params["prep_only"] ?? false)) {
         cargs.push("--prep-only");
     }
-    if ((params["nu10_flag"] ?? null)) {
+    if ((params["nu10_flag"] ?? false)) {
         cargs.push("--nu10");
     }
-    if ((params["nu12_flag"] ?? null)) {
+    if ((params["nu12_flag"] ?? false)) {
         cargs.push("--nu12");
     }
-    if ((params["no_emreg"] ?? null)) {
+    if ((params["no_emreg"] ?? false)) {
         cargs.push("--no-emreg");
     }
     return cargs;
@@ -367,7 +335,6 @@ function gcatrain(
 export {
       GCATRAIN_METADATA,
       GcatrainOutputs,
-      GcatrainParameters,
       gcatrain,
       gcatrain_execute,
       gcatrain_params,

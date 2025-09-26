@@ -12,28 +12,31 @@ const FOCI_RESAMPLE_METADATA: Metadata = {
 
 
 interface FociResampleLeftSurfacesParameters {
-    "@type": "workbench.foci-resample.left_surfaces";
+    "@type"?: "left_surfaces";
     "current_surf": InputPathType;
     "new_surf": InputPathType;
 }
+type FociResampleLeftSurfacesParametersTagged = Required<Pick<FociResampleLeftSurfacesParameters, '@type'>> & FociResampleLeftSurfacesParameters;
 
 
 interface FociResampleRightSurfacesParameters {
-    "@type": "workbench.foci-resample.right_surfaces";
+    "@type"?: "right_surfaces";
     "current_surf": InputPathType;
     "new_surf": InputPathType;
 }
+type FociResampleRightSurfacesParametersTagged = Required<Pick<FociResampleRightSurfacesParameters, '@type'>> & FociResampleRightSurfacesParameters;
 
 
 interface FociResampleCerebellumSurfacesParameters {
-    "@type": "workbench.foci-resample.cerebellum_surfaces";
+    "@type"?: "cerebellum_surfaces";
     "current_surf": InputPathType;
     "new_surf": InputPathType;
 }
+type FociResampleCerebellumSurfacesParametersTagged = Required<Pick<FociResampleCerebellumSurfacesParameters, '@type'>> & FociResampleCerebellumSurfacesParameters;
 
 
 interface FociResampleParameters {
-    "@type": "workbench.foci-resample";
+    "@type"?: "workbench/foci-resample";
     "foci_in": InputPathType;
     "foci_out": string;
     "left_surfaces"?: FociResampleLeftSurfacesParameters | null | undefined;
@@ -42,43 +45,7 @@ interface FociResampleParameters {
     "opt_discard_distance_from_surface": boolean;
     "opt_restore_xyz": boolean;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.foci-resample": foci_resample_cargs,
-        "workbench.foci-resample.left_surfaces": foci_resample_left_surfaces_cargs,
-        "workbench.foci-resample.right_surfaces": foci_resample_right_surfaces_cargs,
-        "workbench.foci-resample.cerebellum_surfaces": foci_resample_cerebellum_surfaces_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.foci-resample": foci_resample_outputs,
-    };
-    return outputsFuncs[t];
-}
+type FociResampleParametersTagged = Required<Pick<FociResampleParameters, '@type'>> & FociResampleParameters;
 
 
 /**
@@ -92,9 +59,9 @@ function dynOutputs(
 function foci_resample_left_surfaces_params(
     current_surf: InputPathType,
     new_surf: InputPathType,
-): FociResampleLeftSurfacesParameters {
+): FociResampleLeftSurfacesParametersTagged {
     const params = {
-        "@type": "workbench.foci-resample.left_surfaces" as const,
+        "@type": "left_surfaces" as const,
         "current_surf": current_surf,
         "new_surf": new_surf,
     };
@@ -133,9 +100,9 @@ function foci_resample_left_surfaces_cargs(
 function foci_resample_right_surfaces_params(
     current_surf: InputPathType,
     new_surf: InputPathType,
-): FociResampleRightSurfacesParameters {
+): FociResampleRightSurfacesParametersTagged {
     const params = {
-        "@type": "workbench.foci-resample.right_surfaces" as const,
+        "@type": "right_surfaces" as const,
         "current_surf": current_surf,
         "new_surf": new_surf,
     };
@@ -174,9 +141,9 @@ function foci_resample_right_surfaces_cargs(
 function foci_resample_cerebellum_surfaces_params(
     current_surf: InputPathType,
     new_surf: InputPathType,
-): FociResampleCerebellumSurfacesParameters {
+): FociResampleCerebellumSurfacesParametersTagged {
     const params = {
-        "@type": "workbench.foci-resample.cerebellum_surfaces" as const,
+        "@type": "cerebellum_surfaces" as const,
         "current_surf": current_surf,
         "new_surf": new_surf,
     };
@@ -205,7 +172,7 @@ function foci_resample_cerebellum_surfaces_cargs(
 
 
 /**
- * Output object returned when calling `foci_resample(...)`.
+ * Output object returned when calling `FociResampleParameters(...)`.
  *
  * @interface
  */
@@ -242,9 +209,9 @@ function foci_resample_params(
     cerebellum_surfaces: FociResampleCerebellumSurfacesParameters | null = null,
     opt_discard_distance_from_surface: boolean = false,
     opt_restore_xyz: boolean = false,
-): FociResampleParameters {
+): FociResampleParametersTagged {
     const params = {
-        "@type": "workbench.foci-resample" as const,
+        "@type": "workbench/foci-resample" as const,
         "foci_in": foci_in,
         "foci_out": foci_out,
         "opt_discard_distance_from_surface": opt_discard_distance_from_surface,
@@ -281,18 +248,18 @@ function foci_resample_cargs(
     cargs.push(execution.inputFile((params["foci_in"] ?? null)));
     cargs.push((params["foci_out"] ?? null));
     if ((params["left_surfaces"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["left_surfaces"] ?? null)["@type"])((params["left_surfaces"] ?? null), execution));
+        cargs.push(...foci_resample_left_surfaces_cargs((params["left_surfaces"] ?? null), execution));
     }
     if ((params["right_surfaces"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["right_surfaces"] ?? null)["@type"])((params["right_surfaces"] ?? null), execution));
+        cargs.push(...foci_resample_right_surfaces_cargs((params["right_surfaces"] ?? null), execution));
     }
     if ((params["cerebellum_surfaces"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["cerebellum_surfaces"] ?? null)["@type"])((params["cerebellum_surfaces"] ?? null), execution));
+        cargs.push(...foci_resample_cerebellum_surfaces_cargs((params["cerebellum_surfaces"] ?? null), execution));
     }
-    if ((params["opt_discard_distance_from_surface"] ?? null)) {
+    if ((params["opt_discard_distance_from_surface"] ?? false)) {
         cargs.push("-discard-distance-from-surface");
     }
-    if ((params["opt_restore_xyz"] ?? null)) {
+    if ((params["opt_restore_xyz"] ?? false)) {
         cargs.push("-restore-xyz");
     }
     return cargs;
@@ -388,11 +355,7 @@ function foci_resample(
 
 export {
       FOCI_RESAMPLE_METADATA,
-      FociResampleCerebellumSurfacesParameters,
-      FociResampleLeftSurfacesParameters,
       FociResampleOutputs,
-      FociResampleParameters,
-      FociResampleRightSurfacesParameters,
       foci_resample,
       foci_resample_cerebellum_surfaces_params,
       foci_resample_execute,

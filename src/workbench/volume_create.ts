@@ -12,7 +12,7 @@ const VOLUME_CREATE_METADATA: Metadata = {
 
 
 interface VolumeCreatePlumbParameters {
-    "@type": "workbench.volume-create.plumb";
+    "@type"?: "plumb";
     "axis_order": string;
     "x_spacing": number;
     "y_spacing": number;
@@ -21,10 +21,11 @@ interface VolumeCreatePlumbParameters {
     "y_offset": number;
     "z_offset": number;
 }
+type VolumeCreatePlumbParametersTagged = Required<Pick<VolumeCreatePlumbParameters, '@type'>> & VolumeCreatePlumbParameters;
 
 
 interface VolumeCreateSformParameters {
-    "@type": "workbench.volume-create.sform";
+    "@type"?: "sform";
     "xi_spacing": number;
     "xj_spacing": number;
     "xk_spacing": number;
@@ -38,10 +39,11 @@ interface VolumeCreateSformParameters {
     "zk_spacing": number;
     "z_offset": number;
 }
+type VolumeCreateSformParametersTagged = Required<Pick<VolumeCreateSformParameters, '@type'>> & VolumeCreateSformParameters;
 
 
 interface VolumeCreateParameters {
-    "@type": "workbench.volume-create";
+    "@type"?: "workbench/volume-create";
     "i_dim": number;
     "j_dim": number;
     "k_dim": number;
@@ -49,42 +51,7 @@ interface VolumeCreateParameters {
     "plumb"?: VolumeCreatePlumbParameters | null | undefined;
     "sform"?: VolumeCreateSformParameters | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-create": volume_create_cargs,
-        "workbench.volume-create.plumb": volume_create_plumb_cargs,
-        "workbench.volume-create.sform": volume_create_sform_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-create": volume_create_outputs,
-    };
-    return outputsFuncs[t];
-}
+type VolumeCreateParametersTagged = Required<Pick<VolumeCreateParameters, '@type'>> & VolumeCreateParameters;
 
 
 /**
@@ -108,9 +75,9 @@ function volume_create_plumb_params(
     x_offset: number,
     y_offset: number,
     z_offset: number,
-): VolumeCreatePlumbParameters {
+): VolumeCreatePlumbParametersTagged {
     const params = {
-        "@type": "workbench.volume-create.plumb" as const,
+        "@type": "plumb" as const,
         "axis_order": axis_order,
         "x_spacing": x_spacing,
         "y_spacing": y_spacing,
@@ -179,9 +146,9 @@ function volume_create_sform_params(
     zj_spacing: number,
     zk_spacing: number,
     z_offset: number,
-): VolumeCreateSformParameters {
+): VolumeCreateSformParametersTagged {
     const params = {
-        "@type": "workbench.volume-create.sform" as const,
+        "@type": "sform" as const,
         "xi_spacing": xi_spacing,
         "xj_spacing": xj_spacing,
         "xk_spacing": xk_spacing,
@@ -230,7 +197,7 @@ function volume_create_sform_cargs(
 
 
 /**
- * Output object returned when calling `volume_create(...)`.
+ * Output object returned when calling `VolumeCreateParameters(...)`.
  *
  * @interface
  */
@@ -265,9 +232,9 @@ function volume_create_params(
     volume_out: string,
     plumb: VolumeCreatePlumbParameters | null = null,
     sform: VolumeCreateSformParameters | null = null,
-): VolumeCreateParameters {
+): VolumeCreateParametersTagged {
     const params = {
-        "@type": "workbench.volume-create" as const,
+        "@type": "workbench/volume-create" as const,
         "i_dim": i_dim,
         "j_dim": j_dim,
         "k_dim": k_dim,
@@ -303,10 +270,10 @@ function volume_create_cargs(
     cargs.push(String((params["k_dim"] ?? null)));
     cargs.push((params["volume_out"] ?? null));
     if ((params["plumb"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["plumb"] ?? null)["@type"])((params["plumb"] ?? null), execution));
+        cargs.push(...volume_create_plumb_cargs((params["plumb"] ?? null), execution));
     }
     if ((params["sform"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["sform"] ?? null)["@type"])((params["sform"] ?? null), execution));
+        cargs.push(...volume_create_sform_cargs((params["sform"] ?? null), execution));
     }
     return cargs;
 }
@@ -400,9 +367,6 @@ function volume_create(
 export {
       VOLUME_CREATE_METADATA,
       VolumeCreateOutputs,
-      VolumeCreateParameters,
-      VolumeCreatePlumbParameters,
-      VolumeCreateSformParameters,
       volume_create,
       volume_create_execute,
       volume_create_params,

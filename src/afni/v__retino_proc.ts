@@ -12,7 +12,7 @@ const V__RETINO_PROC_METADATA: Metadata = {
 
 
 interface VRetinoProcParameters {
-    "@type": "afni.@RetinoProc";
+    "@type"?: "afni/@RetinoProc";
     "ccw"?: Array<InputPathType> | null | undefined;
     "clw"?: Array<InputPathType> | null | undefined;
     "exp"?: Array<InputPathType> | null | undefined;
@@ -54,43 +54,11 @@ interface VRetinoProcParameters {
     "a2e_opts"?: string | null | undefined;
     "aea_opts"?: string | null | undefined;
 }
+type VRetinoProcParametersTagged = Required<Pick<VRetinoProcParameters, '@type'>> & VRetinoProcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@RetinoProc": v__retino_proc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__retino_proc(...)`.
+ * Output object returned when calling `VRetinoProcParameters(...)`.
  *
  * @interface
  */
@@ -189,9 +157,9 @@ function v__retino_proc_params(
     echo_edu: boolean = false,
     a2e_opts: string | null = null,
     aea_opts: string | null = null,
-): VRetinoProcParameters {
+): VRetinoProcParametersTagged {
     const params = {
-        "@type": "afni.@RetinoProc" as const,
+        "@type": "afni/@RetinoProc" as const,
         "phase": phase,
         "delay": delay,
         "tr": tr,
@@ -375,10 +343,10 @@ function v__retino_proc_cargs(
             execution.inputFile((params["surf_vol_epi"] ?? null))
         );
     }
-    if ((params["phase"] ?? null)) {
+    if ((params["phase"] ?? false)) {
         cargs.push("-phase");
     }
-    if ((params["delay"] ?? null)) {
+    if ((params["delay"] ?? false)) {
         cargs.push("-delay");
     }
     cargs.push(
@@ -459,7 +427,7 @@ function v__retino_proc_cargs(
             String((params["ignore"] ?? null))
         );
     }
-    if ((params["no_tshift"] ?? null)) {
+    if ((params["no_tshift"] ?? false)) {
         cargs.push("-no_tshift");
     }
     if ((params["spec_left"] ?? null) !== null) {
@@ -516,10 +484,10 @@ function v__retino_proc_cargs(
             (params["out_dir"] ?? null)
         );
     }
-    if ((params["echo"] ?? null)) {
+    if ((params["echo"] ?? false)) {
         cargs.push("-echo");
     }
-    if ((params["echo_edu"] ?? null)) {
+    if ((params["echo_edu"] ?? false)) {
         cargs.push("-echo_edu");
     }
     if ((params["a2e_opts"] ?? null) !== null) {
@@ -688,7 +656,6 @@ function v__retino_proc(
 
 export {
       VRetinoProcOutputs,
-      VRetinoProcParameters,
       V__RETINO_PROC_METADATA,
       v__retino_proc,
       v__retino_proc_execute,

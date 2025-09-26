@@ -12,49 +12,17 @@ const RCA_CONFIG_METADATA: Metadata = {
 
 
 interface RcaConfigParameters {
-    "@type": "freesurfer.rca-config";
+    "@type"?: "freesurfer/rca-config";
     "source_config": InputPathType;
     "updated_config": InputPathType;
     "unknown_args_file": InputPathType;
     "args"?: Array<string> | null | undefined;
 }
+type RcaConfigParametersTagged = Required<Pick<RcaConfigParameters, '@type'>> & RcaConfigParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.rca-config": rca_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `rca_config(...)`.
+ * Output object returned when calling `RcaConfigParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function rca_config_params(
     updated_config: InputPathType,
     unknown_args_file: InputPathType,
     args: Array<string> | null = null,
-): RcaConfigParameters {
+): RcaConfigParametersTagged {
     const params = {
-        "@type": "freesurfer.rca-config" as const,
+        "@type": "freesurfer/rca-config" as const,
         "source_config": source_config,
         "updated_config": updated_config,
         "unknown_args_file": unknown_args_file,
@@ -201,7 +169,6 @@ function rca_config(
 export {
       RCA_CONFIG_METADATA,
       RcaConfigOutputs,
-      RcaConfigParameters,
       rca_config,
       rca_config_execute,
       rca_config_params,

@@ -12,7 +12,7 @@ const INSPEC_METADATA: Metadata = {
 
 
 interface InspecParameters {
-    "@type": "afni.inspec";
+    "@type"?: "afni/inspec";
     "specfile": InputPathType;
     "newspecname"?: string | null | undefined;
     "detail"?: number | null | undefined;
@@ -21,43 +21,11 @@ interface InspecParameters {
     "state_rm"?: string | null | undefined;
     "help": boolean;
 }
+type InspecParametersTagged = Required<Pick<InspecParameters, '@type'>> & InspecParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.inspec": inspec_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `inspec(...)`.
+ * Output object returned when calling `InspecParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +58,9 @@ function inspec_params(
     rightspec: InputPathType | null = null,
     state_rm: string | null = null,
     help: boolean = false,
-): InspecParameters {
+): InspecParametersTagged {
     const params = {
-        "@type": "afni.inspec" as const,
+        "@type": "afni/inspec" as const,
         "specfile": specfile,
         "help": help,
     };
@@ -163,7 +131,7 @@ function inspec_cargs(
             (params["state_rm"] ?? null)
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -255,7 +223,6 @@ function inspec(
 export {
       INSPEC_METADATA,
       InspecOutputs,
-      InspecParameters,
       inspec,
       inspec_execute,
       inspec_params,

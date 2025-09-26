@@ -12,7 +12,7 @@ const V_3D_ALLINEATE_METADATA: Metadata = {
 
 
 interface V3dAllineateParameters {
-    "@type": "afni.3dAllineate";
+    "@type"?: "afni/3dAllineate";
     "source": InputPathType;
     "base"?: InputPathType | null | undefined;
     "prefix": string;
@@ -28,44 +28,11 @@ interface V3dAllineateParameters {
     "verbose": boolean;
     "quiet": boolean;
 }
+type V3dAllineateParametersTagged = Required<Pick<V3dAllineateParameters, '@type'>> & V3dAllineateParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dAllineate": v_3d_allineate_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dAllineate": v_3d_allineate_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_allineate(...)`.
+ * Output object returned when calling `V3dAllineateParameters(...)`.
  *
  * @interface
  */
@@ -128,9 +95,9 @@ function v_3d_allineate_params(
     nopad: boolean = false,
     verbose: boolean = false,
     quiet: boolean = false,
-): V3dAllineateParameters {
+): V3dAllineateParametersTagged {
     const params = {
-        "@type": "afni.3dAllineate" as const,
+        "@type": "afni/3dAllineate" as const,
         "source": source,
         "prefix": prefix,
         "nopad": nopad,
@@ -241,13 +208,13 @@ function v_3d_allineate_cargs(
             String((params["nmatch"] ?? null))
         );
     }
-    if ((params["nopad"] ?? null)) {
+    if ((params["nopad"] ?? false)) {
         cargs.push("-nopad");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
     return cargs;
@@ -356,7 +323,6 @@ function v_3d_allineate(
 
 export {
       V3dAllineateOutputs,
-      V3dAllineateParameters,
       V_3D_ALLINEATE_METADATA,
       v_3d_allineate,
       v_3d_allineate_execute,

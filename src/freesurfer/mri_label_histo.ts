@@ -12,50 +12,17 @@ const MRI_LABEL_HISTO_METADATA: Metadata = {
 
 
 interface MriLabelHistoParameters {
-    "@type": "freesurfer.mri_label_histo";
+    "@type"?: "freesurfer/mri_label_histo";
     "t1_volume": InputPathType;
     "labeled_volume": InputPathType;
     "label": number;
     "output": string;
 }
+type MriLabelHistoParametersTagged = Required<Pick<MriLabelHistoParameters, '@type'>> & MriLabelHistoParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_label_histo": mri_label_histo_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_label_histo": mri_label_histo_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_label_histo(...)`.
+ * Output object returned when calling `MriLabelHistoParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mri_label_histo_params(
     labeled_volume: InputPathType,
     label: number,
     output: string,
-): MriLabelHistoParameters {
+): MriLabelHistoParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_label_histo" as const,
+        "@type": "freesurfer/mri_label_histo" as const,
         "t1_volume": t1_volume,
         "labeled_volume": labeled_volume,
         "label": label,
@@ -200,7 +167,6 @@ function mri_label_histo(
 export {
       MRI_LABEL_HISTO_METADATA,
       MriLabelHistoOutputs,
-      MriLabelHistoParameters,
       mri_label_histo,
       mri_label_histo_execute,
       mri_label_histo_params,

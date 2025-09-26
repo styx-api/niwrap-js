@@ -12,14 +12,15 @@ const VOLUME_GRADIENT_METADATA: Metadata = {
 
 
 interface VolumeGradientPresmoothParameters {
-    "@type": "workbench.volume-gradient.presmooth";
+    "@type"?: "presmooth";
     "kernel": number;
     "opt_fwhm": boolean;
 }
+type VolumeGradientPresmoothParametersTagged = Required<Pick<VolumeGradientPresmoothParameters, '@type'>> & VolumeGradientPresmoothParameters;
 
 
 interface VolumeGradientParameters {
-    "@type": "workbench.volume-gradient";
+    "@type"?: "workbench/volume-gradient";
     "volume_in": InputPathType;
     "volume_out": string;
     "presmooth"?: VolumeGradientPresmoothParameters | null | undefined;
@@ -27,41 +28,7 @@ interface VolumeGradientParameters {
     "opt_vectors_vector_volume_out"?: string | null | undefined;
     "opt_subvolume_subvol"?: string | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-gradient": volume_gradient_cargs,
-        "workbench.volume-gradient.presmooth": volume_gradient_presmooth_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-gradient": volume_gradient_outputs,
-    };
-    return outputsFuncs[t];
-}
+type VolumeGradientParametersTagged = Required<Pick<VolumeGradientParameters, '@type'>> & VolumeGradientParameters;
 
 
 /**
@@ -75,9 +42,9 @@ function dynOutputs(
 function volume_gradient_presmooth_params(
     kernel: number,
     opt_fwhm: boolean = false,
-): VolumeGradientPresmoothParameters {
+): VolumeGradientPresmoothParametersTagged {
     const params = {
-        "@type": "workbench.volume-gradient.presmooth" as const,
+        "@type": "presmooth" as const,
         "kernel": kernel,
         "opt_fwhm": opt_fwhm,
     };
@@ -100,7 +67,7 @@ function volume_gradient_presmooth_cargs(
     const cargs: string[] = [];
     cargs.push("-presmooth");
     cargs.push(String((params["kernel"] ?? null)));
-    if ((params["opt_fwhm"] ?? null)) {
+    if ((params["opt_fwhm"] ?? false)) {
         cargs.push("-fwhm");
     }
     return cargs;
@@ -108,7 +75,7 @@ function volume_gradient_presmooth_cargs(
 
 
 /**
- * Output object returned when calling `volume_gradient(...)`.
+ * Output object returned when calling `VolumeGradientParameters(...)`.
  *
  * @interface
  */
@@ -147,9 +114,9 @@ function volume_gradient_params(
     opt_roi_roi_volume: InputPathType | null = null,
     opt_vectors_vector_volume_out: string | null = null,
     opt_subvolume_subvol: string | null = null,
-): VolumeGradientParameters {
+): VolumeGradientParametersTagged {
     const params = {
-        "@type": "workbench.volume-gradient" as const,
+        "@type": "workbench/volume-gradient" as const,
         "volume_in": volume_in,
         "volume_out": volume_out,
     };
@@ -187,7 +154,7 @@ function volume_gradient_cargs(
     cargs.push(execution.inputFile((params["volume_in"] ?? null)));
     cargs.push((params["volume_out"] ?? null));
     if ((params["presmooth"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["presmooth"] ?? null)["@type"])((params["presmooth"] ?? null), execution));
+        cargs.push(...volume_gradient_presmooth_cargs((params["presmooth"] ?? null), execution));
     }
     if ((params["opt_roi_roi_volume"] ?? null) !== null) {
         cargs.push(
@@ -300,8 +267,6 @@ function volume_gradient(
 export {
       VOLUME_GRADIENT_METADATA,
       VolumeGradientOutputs,
-      VolumeGradientParameters,
-      VolumeGradientPresmoothParameters,
       volume_gradient,
       volume_gradient_execute,
       volume_gradient_params,

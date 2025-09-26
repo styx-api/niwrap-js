@@ -12,7 +12,7 @@ const V__SURF_TO_VOL_SPACKLE_METADATA: Metadata = {
 
 
 interface VSurfToVolSpackleParameters {
-    "@type": "afni.@surf_to_vol_spackle";
+    "@type"?: "afni/@surf_to_vol_spackle";
     "maskset": InputPathType;
     "spec": InputPathType;
     "surfA": string;
@@ -28,44 +28,11 @@ interface VSurfToVolSpackleParameters {
     "datum_type"?: string | null | undefined;
     "ignore_unknown_options": boolean;
 }
+type VSurfToVolSpackleParametersTagged = Required<Pick<VSurfToVolSpackleParameters, '@type'>> & VSurfToVolSpackleParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@surf_to_vol_spackle": v__surf_to_vol_spackle_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@surf_to_vol_spackle": v__surf_to_vol_spackle_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__surf_to_vol_spackle(...)`.
+ * Output object returned when calling `VSurfToVolSpackleParameters(...)`.
  *
  * @interface
  */
@@ -116,9 +83,9 @@ function v__surf_to_vol_spackle_params(
     use_mode: boolean = false,
     datum_type: string | null = null,
     ignore_unknown_options: boolean = false,
-): VSurfToVolSpackleParameters {
+): VSurfToVolSpackleParametersTagged {
     const params = {
-        "@type": "afni.@surf_to_vol_spackle" as const,
+        "@type": "afni/@surf_to_vol_spackle" as const,
         "maskset": maskset,
         "spec": spec,
         "surfA": surf_a,
@@ -190,7 +157,7 @@ function v__surf_to_vol_spackle_cargs(
             String((params["num_steps"] ?? null))
         );
     }
-    if ((params["keep_temp_files"] ?? null)) {
+    if ((params["keep_temp_files"] ?? false)) {
         cargs.push("-keep_temp_files");
     }
     if ((params["max_iters"] ?? null) !== null) {
@@ -199,7 +166,7 @@ function v__surf_to_vol_spackle_cargs(
             String((params["max_iters"] ?? null))
         );
     }
-    if ((params["use_mode"] ?? null)) {
+    if ((params["use_mode"] ?? false)) {
         cargs.push("-mode");
     }
     if ((params["datum_type"] ?? null) !== null) {
@@ -208,7 +175,7 @@ function v__surf_to_vol_spackle_cargs(
             (params["datum_type"] ?? null)
         );
     }
-    if ((params["ignore_unknown_options"] ?? null)) {
+    if ((params["ignore_unknown_options"] ?? false)) {
         cargs.push("-ignore_unknown_options");
     }
     return cargs;
@@ -314,7 +281,6 @@ function v__surf_to_vol_spackle(
 
 export {
       VSurfToVolSpackleOutputs,
-      VSurfToVolSpackleParameters,
       V__SURF_TO_VOL_SPACKLE_METADATA,
       v__surf_to_vol_spackle,
       v__surf_to_vol_spackle_execute,

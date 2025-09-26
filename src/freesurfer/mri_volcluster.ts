@@ -12,7 +12,7 @@ const MRI_VOLCLUSTER_METADATA: Metadata = {
 
 
 interface MriVolclusterParameters {
-    "@type": "freesurfer.mri_volcluster";
+    "@type"?: "freesurfer/mri_volcluster";
     "input_file": InputPathType;
     "summary_file"?: string | null | undefined;
     "output_volid"?: string | null | undefined;
@@ -62,44 +62,11 @@ interface MriVolclusterParameters {
     "fill_params"?: string | null | undefined;
     "help_flag": boolean;
 }
+type MriVolclusterParametersTagged = Required<Pick<MriVolclusterParameters, '@type'>> & MriVolclusterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_volcluster": mri_volcluster_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_volcluster": mri_volcluster_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_volcluster(...)`.
+ * Output object returned when calling `MriVolclusterParameters(...)`.
  *
  * @interface
  */
@@ -230,9 +197,9 @@ function mri_volcluster_params(
     diagnostic_level: number | null = null,
     fill_params: string | null = null,
     help_flag: boolean = false,
-): MriVolclusterParameters {
+): MriVolclusterParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_volcluster" as const,
+        "@type": "freesurfer/mri_volcluster" as const,
         "input_file": input_file,
         "no_adjust_flag": no_adjust_flag,
         "mni152reg_flag": mni152reg_flag,
@@ -428,7 +395,7 @@ function mri_volcluster_cargs(
             (params["sign"] ?? null)
         );
     }
-    if ((params["no_adjust_flag"] ?? null)) {
+    if ((params["no_adjust_flag"] ?? false)) {
         cargs.push("--no-adjust");
     }
     if ((params["match_value"] ?? null) !== null) {
@@ -449,7 +416,7 @@ function mri_volcluster_cargs(
             execution.inputFile((params["registration_file"] ?? null))
         );
     }
-    if ((params["mni152reg_flag"] ?? null)) {
+    if ((params["mni152reg_flag"] ?? false)) {
         cargs.push("--mni152reg");
     }
     if ((params["regheader_subject"] ?? null) !== null) {
@@ -458,7 +425,7 @@ function mri_volcluster_cargs(
             (params["regheader_subject"] ?? null)
         );
     }
-    if ((params["fsaverage_flag"] ?? null)) {
+    if ((params["fsaverage_flag"] ?? false)) {
         cargs.push("--fsaverage");
     }
     if ((params["frame_number"] ?? null) !== null) {
@@ -497,7 +464,7 @@ function mri_volcluster_cargs(
             (params["csdpdf_file"] ?? null)
         );
     }
-    if ((params["csdpdf_only_flag"] ?? null)) {
+    if ((params["csdpdf_only_flag"] ?? false)) {
         cargs.push("--csdpdf-only");
     }
     if ((params["fwhm_value"] ?? null) !== null) {
@@ -530,7 +497,7 @@ function mri_volcluster_cargs(
             String((params["min_distance"] ?? null))
         );
     }
-    if ((params["allow_diag_flag"] ?? null)) {
+    if ((params["allow_diag_flag"] ?? false)) {
         cargs.push("--allowdiag");
     }
     if ((params["bonferroni_number"] ?? null) !== null) {
@@ -545,10 +512,10 @@ function mri_volcluster_cargs(
             String((params["bonferroni_max_number"] ?? null))
         );
     }
-    if ((params["sig2p_max_flag"] ?? null)) {
+    if ((params["sig2p_max_flag"] ?? false)) {
         cargs.push("--sig2p-max");
     }
-    if ((params["gte_flag"] ?? null)) {
+    if ((params["gte_flag"] ?? false)) {
         cargs.push("--gte");
     }
     if ((params["mask_volid"] ?? null) !== null) {
@@ -581,7 +548,7 @@ function mri_volcluster_cargs(
             (params["mask_sign"] ?? null)
         );
     }
-    if ((params["mask_invert_flag"] ?? null)) {
+    if ((params["mask_invert_flag"] ?? false)) {
         cargs.push("--maskinvert");
     }
     if ((params["out_mask_volid"] ?? null) !== null) {
@@ -632,7 +599,7 @@ function mri_volcluster_cargs(
             (params["fill_params"] ?? null)
         );
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -810,7 +777,6 @@ function mri_volcluster(
 export {
       MRI_VOLCLUSTER_METADATA,
       MriVolclusterOutputs,
-      MriVolclusterParameters,
       mri_volcluster,
       mri_volcluster_execute,
       mri_volcluster_params,

@@ -12,7 +12,7 @@ const V_3D_LOCAL_HISTOG_METADATA: Metadata = {
 
 
 interface V3dLocalHistogParameters {
-    "@type": "afni.3dLocalHistog";
+    "@type"?: "afni/3dLocalHistog";
     "nbhd_option"?: string | null | undefined;
     "prefix": string;
     "hsave"?: string | null | undefined;
@@ -24,44 +24,11 @@ interface V3dLocalHistogParameters {
     "quiet": boolean;
     "input_datasets": Array<InputPathType>;
 }
+type V3dLocalHistogParametersTagged = Required<Pick<V3dLocalHistogParameters, '@type'>> & V3dLocalHistogParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dLocalHistog": v_3d_local_histog_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dLocalHistog": v_3d_local_histog_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_local_histog(...)`.
+ * Output object returned when calling `V3dLocalHistogParameters(...)`.
  *
  * @interface
  */
@@ -112,9 +79,9 @@ function v_3d_local_histog_params(
     mincount: number | null = null,
     probability: boolean = false,
     quiet: boolean = false,
-): V3dLocalHistogParameters {
+): V3dLocalHistogParametersTagged {
     const params = {
-        "@type": "afni.3dLocalHistog" as const,
+        "@type": "afni/3dLocalHistog" as const,
         "prefix": prefix,
         "exc_nonlab": exc_nonlab,
         "probability": probability,
@@ -182,7 +149,7 @@ function v_3d_local_histog_cargs(
             ...(params["exclude"] ?? null)
         );
     }
-    if ((params["exc_nonlab"] ?? null)) {
+    if ((params["exc_nonlab"] ?? false)) {
         cargs.push("-excNONLAB");
     }
     if ((params["mincount"] ?? null) !== null) {
@@ -191,10 +158,10 @@ function v_3d_local_histog_cargs(
             String((params["mincount"] ?? null))
         );
     }
-    if ((params["probability"] ?? null)) {
+    if ((params["probability"] ?? false)) {
         cargs.push("-prob");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
     cargs.push(...(params["input_datasets"] ?? null).map(f => execution.inputFile(f)));
@@ -295,7 +262,6 @@ function v_3d_local_histog(
 
 export {
       V3dLocalHistogOutputs,
-      V3dLocalHistogParameters,
       V_3D_LOCAL_HISTOG_METADATA,
       v_3d_local_histog,
       v_3d_local_histog_execute,

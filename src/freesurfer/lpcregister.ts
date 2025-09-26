@@ -12,7 +12,7 @@ const LPCREGISTER_METADATA: Metadata = {
 
 
 interface LpcregisterParameters {
-    "@type": "freesurfer.lpcregister";
+    "@type"?: "freesurfer/lpcregister";
     "subject_id": string;
     "mov_volume": string;
     "reg_file": string;
@@ -27,44 +27,11 @@ interface LpcregisterParameters {
     "version": boolean;
     "help": boolean;
 }
+type LpcregisterParametersTagged = Required<Pick<LpcregisterParameters, '@type'>> & LpcregisterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.lpcregister": lpcregister_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.lpcregister": lpcregister_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `lpcregister(...)`.
+ * Output object returned when calling `LpcregisterParameters(...)`.
  *
  * @interface
  */
@@ -117,9 +84,9 @@ function lpcregister_params(
     no_cleanup: boolean = false,
     version: boolean = false,
     help: boolean = false,
-): LpcregisterParameters {
+): LpcregisterParametersTagged {
     const params = {
-        "@type": "freesurfer.lpcregister" as const,
+        "@type": "freesurfer/lpcregister" as const,
         "subject_id": subject_id,
         "mov_volume": mov_volume,
         "reg_file": reg_file,
@@ -172,10 +139,10 @@ function lpcregister_cargs(
         "--reg",
         (params["reg_file"] ?? null)
     );
-    if ((params["dof_9"] ?? null)) {
+    if ((params["dof_9"] ?? false)) {
         cargs.push("--9");
     }
-    if ((params["dof_12"] ?? null)) {
+    if ((params["dof_12"] ?? false)) {
         cargs.push("--12");
     }
     if ((params["frame_number"] ?? null) !== null) {
@@ -184,7 +151,7 @@ function lpcregister_cargs(
             String((params["frame_number"] ?? null))
         );
     }
-    if ((params["mid_frame"] ?? null)) {
+    if ((params["mid_frame"] ?? false)) {
         cargs.push("--mid-frame");
     }
     if ((params["fsvol"] ?? null) !== null) {
@@ -205,13 +172,13 @@ function lpcregister_cargs(
             (params["tmp_dir"] ?? null)
         );
     }
-    if ((params["no_cleanup"] ?? null)) {
+    if ((params["no_cleanup"] ?? false)) {
         cargs.push("--nocleanup");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -317,7 +284,6 @@ function lpcregister(
 export {
       LPCREGISTER_METADATA,
       LpcregisterOutputs,
-      LpcregisterParameters,
       lpcregister,
       lpcregister_execute,
       lpcregister_params,

@@ -12,50 +12,17 @@ const ANTS_ALIGN_ORIGIN_METADATA: Metadata = {
 
 
 interface AntsAlignOriginParameters {
-    "@type": "ants.antsAlignOrigin";
+    "@type"?: "ants/antsAlignOrigin";
     "dimensionality"?: 2 | 3 | null | undefined;
     "input": InputPathType;
     "reference_image": InputPathType;
     "output": string;
 }
+type AntsAlignOriginParametersTagged = Required<Pick<AntsAlignOriginParameters, '@type'>> & AntsAlignOriginParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.antsAlignOrigin": ants_align_origin_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.antsAlignOrigin": ants_align_origin_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ants_align_origin(...)`.
+ * Output object returned when calling `AntsAlignOriginParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function ants_align_origin_params(
     reference_image: InputPathType,
     output: string,
     dimensionality: 2 | 3 | null = null,
-): AntsAlignOriginParameters {
+): AntsAlignOriginParametersTagged {
     const params = {
-        "@type": "ants.antsAlignOrigin" as const,
+        "@type": "ants/antsAlignOrigin" as const,
         "input": input,
         "reference_image": reference_image,
         "output": output,
@@ -216,7 +183,6 @@ function ants_align_origin(
 export {
       ANTS_ALIGN_ORIGIN_METADATA,
       AntsAlignOriginOutputs,
-      AntsAlignOriginParameters,
       ants_align_origin,
       ants_align_origin_execute,
       ants_align_origin_params,

@@ -12,7 +12,7 @@ const V__FIX_FSSPHERE_METADATA: Metadata = {
 
 
 interface VFixFssphereParameters {
-    "@type": "afni.@fix_FSsphere";
+    "@type"?: "afni/@fix_FSsphere";
     "spec_file": InputPathType;
     "sphere_file": InputPathType;
     "num_iterations"?: number | null | undefined;
@@ -20,44 +20,11 @@ interface VFixFssphereParameters {
     "project_first": boolean;
     "keep_temp": boolean;
 }
+type VFixFssphereParametersTagged = Required<Pick<VFixFssphereParameters, '@type'>> & VFixFssphereParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@fix_FSsphere": v__fix_fssphere_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@fix_FSsphere": v__fix_fssphere_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__fix_fssphere(...)`.
+ * Output object returned when calling `VFixFssphereParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function v__fix_fssphere_params(
     extent_lim: number | null = null,
     project_first: boolean = false,
     keep_temp: boolean = false,
-): VFixFssphereParameters {
+): VFixFssphereParametersTagged {
     const params = {
-        "@type": "afni.@fix_FSsphere" as const,
+        "@type": "afni/@fix_FSsphere" as const,
         "spec_file": spec_file,
         "sphere_file": sphere_file,
         "project_first": project_first,
@@ -144,10 +111,10 @@ function v__fix_fssphere_cargs(
             String((params["extent_lim"] ?? null))
         );
     }
-    if ((params["project_first"] ?? null)) {
+    if ((params["project_first"] ?? false)) {
         cargs.push("-project_first");
     }
-    if ((params["keep_temp"] ?? null)) {
+    if ((params["keep_temp"] ?? false)) {
         cargs.push("-keep_temp");
     }
     return cargs;
@@ -237,7 +204,6 @@ function v__fix_fssphere(
 
 export {
       VFixFssphereOutputs,
-      VFixFssphereParameters,
       V__FIX_FSSPHERE_METADATA,
       v__fix_fssphere,
       v__fix_fssphere_execute,

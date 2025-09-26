@@ -12,49 +12,16 @@ const T4IMG_4DFP_METADATA: Metadata = {
 
 
 interface T4img4dfpParameters {
-    "@type": "freesurfer.t4img_4dfp";
+    "@type"?: "freesurfer/t4img_4dfp";
     "t4file": InputPathType;
     "imgfile": InputPathType;
     "outfile"?: string | null | undefined;
 }
+type T4img4dfpParametersTagged = Required<Pick<T4img4dfpParameters, '@type'>> & T4img4dfpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.t4img_4dfp": t4img_4dfp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.t4img_4dfp": t4img_4dfp_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `t4img_4dfp(...)`.
+ * Output object returned when calling `T4img4dfpParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function t4img_4dfp_params(
     t4file: InputPathType,
     imgfile: InputPathType,
     outfile: string | null = null,
-): T4img4dfpParameters {
+): T4img4dfpParametersTagged {
     const params = {
-        "@type": "freesurfer.t4img_4dfp" as const,
+        "@type": "freesurfer/t4img_4dfp" as const,
         "t4file": t4file,
         "imgfile": imgfile,
     };
@@ -197,7 +164,6 @@ function t4img_4dfp(
 export {
       T4IMG_4DFP_METADATA,
       T4img4dfpOutputs,
-      T4img4dfpParameters,
       t4img_4dfp,
       t4img_4dfp_execute,
       t4img_4dfp_params,

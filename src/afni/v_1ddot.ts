@@ -12,7 +12,7 @@ const V_1DDOT_METADATA: Metadata = {
 
 
 interface V1ddotParameters {
-    "@type": "afni.1ddot";
+    "@type"?: "afni/1ddot";
     "one_flag": boolean;
     "dem_flag": boolean;
     "cov_flag": boolean;
@@ -22,44 +22,11 @@ interface V1ddotParameters {
     "okzero_flag": boolean;
     "input_files": Array<InputPathType>;
 }
+type V1ddotParametersTagged = Required<Pick<V1ddotParameters, '@type'>> & V1ddotParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1ddot": v_1ddot_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.1ddot": v_1ddot_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1ddot(...)`.
+ * Output object returned when calling `V1ddotParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +69,9 @@ function v_1ddot_params(
     rank_flag: boolean = false,
     terse_flag: boolean = false,
     okzero_flag: boolean = false,
-): V1ddotParameters {
+): V1ddotParametersTagged {
     const params = {
-        "@type": "afni.1ddot" as const,
+        "@type": "afni/1ddot" as const,
         "one_flag": one_flag,
         "dem_flag": dem_flag,
         "cov_flag": cov_flag,
@@ -132,25 +99,25 @@ function v_1ddot_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("1ddot");
-    if ((params["one_flag"] ?? null)) {
+    if ((params["one_flag"] ?? false)) {
         cargs.push("-one");
     }
-    if ((params["dem_flag"] ?? null)) {
+    if ((params["dem_flag"] ?? false)) {
         cargs.push("-dem");
     }
-    if ((params["cov_flag"] ?? null)) {
+    if ((params["cov_flag"] ?? false)) {
         cargs.push("-cov");
     }
-    if ((params["inn_flag"] ?? null)) {
+    if ((params["inn_flag"] ?? false)) {
         cargs.push("-inn");
     }
-    if ((params["rank_flag"] ?? null)) {
+    if ((params["rank_flag"] ?? false)) {
         cargs.push("-rank");
     }
-    if ((params["terse_flag"] ?? null)) {
+    if ((params["terse_flag"] ?? false)) {
         cargs.push("-terse");
     }
-    if ((params["okzero_flag"] ?? null)) {
+    if ((params["okzero_flag"] ?? false)) {
         cargs.push("-okzero");
     }
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
@@ -246,7 +213,6 @@ function v_1ddot(
 
 export {
       V1ddotOutputs,
-      V1ddotParameters,
       V_1DDOT_METADATA,
       v_1ddot,
       v_1ddot_execute,

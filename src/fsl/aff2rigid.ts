@@ -12,47 +12,15 @@ const AFF2RIGID_METADATA: Metadata = {
 
 
 interface Aff2rigidParameters {
-    "@type": "fsl.aff2rigid";
+    "@type"?: "fsl/aff2rigid";
     "input_transform": InputPathType;
     "output_transform": string;
 }
+type Aff2rigidParametersTagged = Required<Pick<Aff2rigidParameters, '@type'>> & Aff2rigidParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.aff2rigid": aff2rigid_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `aff2rigid(...)`.
+ * Output object returned when calling `Aff2rigidParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface Aff2rigidOutputs {
 function aff2rigid_params(
     input_transform: InputPathType,
     output_transform: string,
-): Aff2rigidParameters {
+): Aff2rigidParametersTagged {
     const params = {
-        "@type": "fsl.aff2rigid" as const,
+        "@type": "fsl/aff2rigid" as const,
         "input_transform": input_transform,
         "output_transform": output_transform,
     };
@@ -180,7 +148,6 @@ function aff2rigid(
 export {
       AFF2RIGID_METADATA,
       Aff2rigidOutputs,
-      Aff2rigidParameters,
       aff2rigid,
       aff2rigid_execute,
       aff2rigid_params,

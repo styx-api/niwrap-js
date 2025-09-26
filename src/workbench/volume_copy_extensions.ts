@@ -12,50 +12,17 @@ const VOLUME_COPY_EXTENSIONS_METADATA: Metadata = {
 
 
 interface VolumeCopyExtensionsParameters {
-    "@type": "workbench.volume-copy-extensions";
+    "@type"?: "workbench/volume-copy-extensions";
     "data_volume": InputPathType;
     "extension_volume": InputPathType;
     "volume_out": string;
     "opt_drop_unknown": boolean;
 }
+type VolumeCopyExtensionsParametersTagged = Required<Pick<VolumeCopyExtensionsParameters, '@type'>> & VolumeCopyExtensionsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-copy-extensions": volume_copy_extensions_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-copy-extensions": volume_copy_extensions_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `volume_copy_extensions(...)`.
+ * Output object returned when calling `VolumeCopyExtensionsParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function volume_copy_extensions_params(
     extension_volume: InputPathType,
     volume_out: string,
     opt_drop_unknown: boolean = false,
-): VolumeCopyExtensionsParameters {
+): VolumeCopyExtensionsParametersTagged {
     const params = {
-        "@type": "workbench.volume-copy-extensions" as const,
+        "@type": "workbench/volume-copy-extensions" as const,
         "data_volume": data_volume,
         "extension_volume": extension_volume,
         "volume_out": volume_out,
@@ -116,7 +83,7 @@ function volume_copy_extensions_cargs(
     cargs.push(execution.inputFile((params["data_volume"] ?? null)));
     cargs.push(execution.inputFile((params["extension_volume"] ?? null)));
     cargs.push((params["volume_out"] ?? null));
-    if ((params["opt_drop_unknown"] ?? null)) {
+    if ((params["opt_drop_unknown"] ?? false)) {
         cargs.push("-drop-unknown");
     }
     return cargs;
@@ -207,7 +174,6 @@ function volume_copy_extensions(
 export {
       VOLUME_COPY_EXTENSIONS_METADATA,
       VolumeCopyExtensionsOutputs,
-      VolumeCopyExtensionsParameters,
       volume_copy_extensions,
       volume_copy_extensions_execute,
       volume_copy_extensions_params,

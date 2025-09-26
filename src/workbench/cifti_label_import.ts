@@ -12,7 +12,7 @@ const CIFTI_LABEL_IMPORT_METADATA: Metadata = {
 
 
 interface CiftiLabelImportParameters {
-    "@type": "workbench.cifti-label-import";
+    "@type"?: "workbench/cifti-label-import";
     "input": InputPathType;
     "label_list_file": string;
     "output": string;
@@ -20,44 +20,11 @@ interface CiftiLabelImportParameters {
     "opt_unlabeled_value_value"?: number | null | undefined;
     "opt_drop_unused_labels": boolean;
 }
+type CiftiLabelImportParametersTagged = Required<Pick<CiftiLabelImportParameters, '@type'>> & CiftiLabelImportParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-label-import": cifti_label_import_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-label-import": cifti_label_import_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `cifti_label_import(...)`.
+ * Output object returned when calling `CiftiLabelImportParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function cifti_label_import_params(
     opt_discard_others: boolean = false,
     opt_unlabeled_value_value: number | null = null,
     opt_drop_unused_labels: boolean = false,
-): CiftiLabelImportParameters {
+): CiftiLabelImportParametersTagged {
     const params = {
-        "@type": "workbench.cifti-label-import" as const,
+        "@type": "workbench/cifti-label-import" as const,
         "input": input,
         "label_list_file": label_list_file,
         "output": output,
@@ -126,7 +93,7 @@ function cifti_label_import_cargs(
     cargs.push(execution.inputFile((params["input"] ?? null)));
     cargs.push((params["label_list_file"] ?? null));
     cargs.push((params["output"] ?? null));
-    if ((params["opt_discard_others"] ?? null)) {
+    if ((params["opt_discard_others"] ?? false)) {
         cargs.push("-discard-others");
     }
     if ((params["opt_unlabeled_value_value"] ?? null) !== null) {
@@ -135,7 +102,7 @@ function cifti_label_import_cargs(
             String((params["opt_unlabeled_value_value"] ?? null))
         );
     }
-    if ((params["opt_drop_unused_labels"] ?? null)) {
+    if ((params["opt_drop_unused_labels"] ?? false)) {
         cargs.push("-drop-unused-labels");
     }
     return cargs;
@@ -246,7 +213,6 @@ function cifti_label_import(
 export {
       CIFTI_LABEL_IMPORT_METADATA,
       CiftiLabelImportOutputs,
-      CiftiLabelImportParameters,
       cifti_label_import,
       cifti_label_import_execute,
       cifti_label_import_params,

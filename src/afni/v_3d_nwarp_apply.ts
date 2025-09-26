@@ -12,7 +12,7 @@ const V_3D_NWARP_APPLY_METADATA: Metadata = {
 
 
 interface V3dNwarpApplyParameters {
-    "@type": "afni.3dNwarpApply";
+    "@type"?: "afni/3dNwarpApply";
     "nwarp": string;
     "iwarp": boolean;
     "source": string;
@@ -28,44 +28,11 @@ interface V3dNwarpApplyParameters {
     "quiet": boolean;
     "verb": boolean;
 }
+type V3dNwarpApplyParametersTagged = Required<Pick<V3dNwarpApplyParameters, '@type'>> & V3dNwarpApplyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dNwarpApply": v_3d_nwarp_apply_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dNwarpApply": v_3d_nwarp_apply_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_nwarp_apply(...)`.
+ * Output object returned when calling `V3dNwarpApplyParameters(...)`.
  *
  * @interface
  */
@@ -116,9 +83,9 @@ function v_3d_nwarp_apply_params(
     wprefix: string | null = null,
     quiet: boolean = false,
     verb: boolean = false,
-): V3dNwarpApplyParameters {
+): V3dNwarpApplyParametersTagged {
     const params = {
-        "@type": "afni.3dNwarpApply" as const,
+        "@type": "afni/3dNwarpApply" as const,
         "nwarp": nwarp,
         "iwarp": iwarp,
         "source": source,
@@ -172,7 +139,7 @@ function v_3d_nwarp_apply_cargs(
         "-nwarp",
         (params["nwarp"] ?? null)
     );
-    if ((params["iwarp"] ?? null)) {
+    if ((params["iwarp"] ?? false)) {
         cargs.push("-iwarp");
     }
     cargs.push(
@@ -221,7 +188,7 @@ function v_3d_nwarp_apply_cargs(
             (params["suffix"] ?? null)
         );
     }
-    if ((params["short"] ?? null)) {
+    if ((params["short"] ?? false)) {
         cargs.push("-short");
     }
     if ((params["wprefix"] ?? null) !== null) {
@@ -230,10 +197,10 @@ function v_3d_nwarp_apply_cargs(
             (params["wprefix"] ?? null)
         );
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["verb"] ?? null)) {
+    if ((params["verb"] ?? false)) {
         cargs.push("-verb");
     }
     return cargs;
@@ -339,7 +306,6 @@ function v_3d_nwarp_apply(
 
 export {
       V3dNwarpApplyOutputs,
-      V3dNwarpApplyParameters,
       V_3D_NWARP_APPLY_METADATA,
       v_3d_nwarp_apply,
       v_3d_nwarp_apply_execute,

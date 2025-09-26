@@ -12,7 +12,7 @@ const ANTS_MOTION_CORR_STATS_METADATA: Metadata = {
 
 
 interface AntsMotionCorrStatsParameters {
-    "@type": "ants.antsMotionCorrStats";
+    "@type"?: "ants/antsMotionCorrStats";
     "mask": InputPathType;
     "moco_params": InputPathType;
     "output": string;
@@ -22,44 +22,11 @@ interface AntsMotionCorrStatsParameters {
     "timeseries_displacement": boolean;
     "help"?: 0 | 1 | null | undefined;
 }
+type AntsMotionCorrStatsParametersTagged = Required<Pick<AntsMotionCorrStatsParameters, '@type'>> & AntsMotionCorrStatsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.antsMotionCorrStats": ants_motion_corr_stats_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.antsMotionCorrStats": ants_motion_corr_stats_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ants_motion_corr_stats(...)`.
+ * Output object returned when calling `AntsMotionCorrStatsParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function ants_motion_corr_stats_params(
     spatial_map: boolean = false,
     timeseries_displacement: boolean = false,
     help: 0 | 1 | null = null,
-): AntsMotionCorrStatsParameters {
+): AntsMotionCorrStatsParametersTagged {
     const params = {
-        "@type": "ants.antsMotionCorrStats" as const,
+        "@type": "ants/antsMotionCorrStats" as const,
         "mask": mask,
         "moco_params": moco_params,
         "output": output,
@@ -158,10 +125,10 @@ function ants_motion_corr_stats_cargs(
             String((params["framewise"] ?? null))
         );
     }
-    if ((params["spatial_map"] ?? null)) {
+    if ((params["spatial_map"] ?? false)) {
         cargs.push("-s");
     }
-    if ((params["timeseries_displacement"] ?? null)) {
+    if ((params["timeseries_displacement"] ?? false)) {
         cargs.push("-d");
     }
     if ((params["help"] ?? null) !== null) {
@@ -262,7 +229,6 @@ function ants_motion_corr_stats(
 export {
       ANTS_MOTION_CORR_STATS_METADATA,
       AntsMotionCorrStatsOutputs,
-      AntsMotionCorrStatsParameters,
       ants_motion_corr_stats,
       ants_motion_corr_stats_execute,
       ants_motion_corr_stats_params,

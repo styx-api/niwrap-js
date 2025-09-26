@@ -12,14 +12,15 @@ const METRIC_SMOOTHING_METADATA: Metadata = {
 
 
 interface MetricSmoothingRoiParameters {
-    "@type": "workbench.metric-smoothing.roi";
+    "@type"?: "roi";
     "roi_metric": InputPathType;
     "opt_match_columns": boolean;
 }
+type MetricSmoothingRoiParametersTagged = Required<Pick<MetricSmoothingRoiParameters, '@type'>> & MetricSmoothingRoiParameters;
 
 
 interface MetricSmoothingParameters {
-    "@type": "workbench.metric-smoothing";
+    "@type"?: "workbench/metric-smoothing";
     "surface": InputPathType;
     "metric_in": InputPathType;
     "smoothing_kernel": number;
@@ -31,41 +32,7 @@ interface MetricSmoothingParameters {
     "opt_corrected_areas_area_metric"?: InputPathType | null | undefined;
     "opt_method_method"?: string | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-smoothing": metric_smoothing_cargs,
-        "workbench.metric-smoothing.roi": metric_smoothing_roi_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.metric-smoothing": metric_smoothing_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MetricSmoothingParametersTagged = Required<Pick<MetricSmoothingParameters, '@type'>> & MetricSmoothingParameters;
 
 
 /**
@@ -79,9 +46,9 @@ function dynOutputs(
 function metric_smoothing_roi_params(
     roi_metric: InputPathType,
     opt_match_columns: boolean = false,
-): MetricSmoothingRoiParameters {
+): MetricSmoothingRoiParametersTagged {
     const params = {
-        "@type": "workbench.metric-smoothing.roi" as const,
+        "@type": "roi" as const,
         "roi_metric": roi_metric,
         "opt_match_columns": opt_match_columns,
     };
@@ -104,7 +71,7 @@ function metric_smoothing_roi_cargs(
     const cargs: string[] = [];
     cargs.push("-roi");
     cargs.push(execution.inputFile((params["roi_metric"] ?? null)));
-    if ((params["opt_match_columns"] ?? null)) {
+    if ((params["opt_match_columns"] ?? false)) {
         cargs.push("-match-columns");
     }
     return cargs;
@@ -112,7 +79,7 @@ function metric_smoothing_roi_cargs(
 
 
 /**
- * Output object returned when calling `metric_smoothing(...)`.
+ * Output object returned when calling `MetricSmoothingParameters(...)`.
  *
  * @interface
  */
@@ -155,9 +122,9 @@ function metric_smoothing_params(
     opt_column_column: string | null = null,
     opt_corrected_areas_area_metric: InputPathType | null = null,
     opt_method_method: string | null = null,
-): MetricSmoothingParameters {
+): MetricSmoothingParametersTagged {
     const params = {
-        "@type": "workbench.metric-smoothing" as const,
+        "@type": "workbench/metric-smoothing" as const,
         "surface": surface,
         "metric_in": metric_in,
         "smoothing_kernel": smoothing_kernel,
@@ -200,13 +167,13 @@ function metric_smoothing_cargs(
     cargs.push(execution.inputFile((params["metric_in"] ?? null)));
     cargs.push(String((params["smoothing_kernel"] ?? null)));
     cargs.push((params["metric_out"] ?? null));
-    if ((params["opt_fwhm"] ?? null)) {
+    if ((params["opt_fwhm"] ?? false)) {
         cargs.push("-fwhm");
     }
     if ((params["roi"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["roi"] ?? null)["@type"])((params["roi"] ?? null), execution));
+        cargs.push(...metric_smoothing_roi_cargs((params["roi"] ?? null), execution));
     }
-    if ((params["opt_fix_zeros"] ?? null)) {
+    if ((params["opt_fix_zeros"] ?? false)) {
         cargs.push("-fix-zeros");
     }
     if ((params["opt_column_column"] ?? null) !== null) {
@@ -359,8 +326,6 @@ function metric_smoothing(
 export {
       METRIC_SMOOTHING_METADATA,
       MetricSmoothingOutputs,
-      MetricSmoothingParameters,
-      MetricSmoothingRoiParameters,
       metric_smoothing,
       metric_smoothing_execute,
       metric_smoothing_params,

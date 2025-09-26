@@ -12,7 +12,7 @@ const V_3D_BRICK_STAT_METADATA: Metadata = {
 
 
 interface V3dBrickStatParameters {
-    "@type": "afni.3dBrickStat";
+    "@type"?: "afni/3dBrickStat";
     "dataset": string;
     "quick": boolean;
     "slow": boolean;
@@ -44,44 +44,11 @@ interface V3dBrickStatParameters {
     "ver": boolean;
     "help": boolean;
 }
+type V3dBrickStatParametersTagged = Required<Pick<V3dBrickStatParameters, '@type'>> & V3dBrickStatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dBrickStat": v_3d_brick_stat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dBrickStat": v_3d_brick_stat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_brick_stat(...)`.
+ * Output object returned when calling `V3dBrickStatParameters(...)`.
  *
  * @interface
  */
@@ -164,9 +131,9 @@ function v_3d_brick_stat_params(
     perc_quiet: boolean = false,
     ver: boolean = false,
     help: boolean = false,
-): V3dBrickStatParameters {
+): V3dBrickStatParametersTagged {
     const params = {
-        "@type": "afni.3dBrickStat" as const,
+        "@type": "afni/3dBrickStat" as const,
         "dataset": dataset,
         "quick": quick,
         "slow": slow,
@@ -227,61 +194,61 @@ function v_3d_brick_stat_cargs(
     const cargs: string[] = [];
     cargs.push("3dBrickStat");
     cargs.push((params["dataset"] ?? null));
-    if ((params["quick"] ?? null)) {
+    if ((params["quick"] ?? false)) {
         cargs.push("-quick");
     }
-    if ((params["slow"] ?? null)) {
+    if ((params["slow"] ?? false)) {
         cargs.push("-slow");
     }
-    if ((params["min"] ?? null)) {
+    if ((params["min"] ?? false)) {
         cargs.push("-min");
     }
-    if ((params["max"] ?? null)) {
+    if ((params["max"] ?? false)) {
         cargs.push("-max");
     }
-    if ((params["mean"] ?? null)) {
+    if ((params["mean"] ?? false)) {
         cargs.push("-mean");
     }
-    if ((params["sum"] ?? null)) {
+    if ((params["sum"] ?? false)) {
         cargs.push("-sum");
     }
-    if ((params["var"] ?? null)) {
+    if ((params["var"] ?? false)) {
         cargs.push("-var");
     }
-    if ((params["stdev"] ?? null)) {
+    if ((params["stdev"] ?? false)) {
         cargs.push("-stdev");
     }
-    if ((params["count"] ?? null)) {
+    if ((params["count"] ?? false)) {
         cargs.push("-count");
     }
-    if ((params["volume"] ?? null)) {
+    if ((params["volume"] ?? false)) {
         cargs.push("-volume");
     }
-    if ((params["positive"] ?? null)) {
+    if ((params["positive"] ?? false)) {
         cargs.push("-positive");
     }
-    if ((params["negative"] ?? null)) {
+    if ((params["negative"] ?? false)) {
         cargs.push("-negative");
     }
-    if ((params["zero"] ?? null)) {
+    if ((params["zero"] ?? false)) {
         cargs.push("-zero");
     }
-    if ((params["non_positive"] ?? null)) {
+    if ((params["non_positive"] ?? false)) {
         cargs.push("-non-positive");
     }
-    if ((params["non_negative"] ?? null)) {
+    if ((params["non_negative"] ?? false)) {
         cargs.push("-non-negative");
     }
-    if ((params["non_zero"] ?? null)) {
+    if ((params["non_zero"] ?? false)) {
         cargs.push("-non-zero");
     }
-    if ((params["absolute"] ?? null)) {
+    if ((params["absolute"] ?? false)) {
         cargs.push("-absolute");
     }
-    if ((params["nan"] ?? null)) {
+    if ((params["nan"] ?? false)) {
         cargs.push("-nan");
     }
-    if ((params["nonan"] ?? null)) {
+    if ((params["nonan"] ?? false)) {
         cargs.push("-nonan");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -302,7 +269,7 @@ function v_3d_brick_stat_cargs(
             String((params["mvalue"] ?? null))
         );
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     if ((params["percentile"] ?? null) !== null) {
@@ -317,16 +284,16 @@ function v_3d_brick_stat_cargs(
             ...(params["perclist"] ?? null).map(String)
         );
     }
-    if ((params["median"] ?? null)) {
+    if ((params["median"] ?? false)) {
         cargs.push("-median");
     }
-    if ((params["perc_quiet"] ?? null)) {
+    if ((params["perc_quiet"] ?? false)) {
         cargs.push("-perc_quiet");
     }
-    if ((params["ver"] ?? null)) {
+    if ((params["ver"] ?? false)) {
         cargs.push("-ver");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -464,7 +431,6 @@ function v_3d_brick_stat(
 
 export {
       V3dBrickStatOutputs,
-      V3dBrickStatParameters,
       V_3D_BRICK_STAT_METADATA,
       v_3d_brick_stat,
       v_3d_brick_stat_execute,

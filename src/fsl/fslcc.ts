@@ -12,7 +12,7 @@ const FSLCC_METADATA: Metadata = {
 
 
 interface FslccParameters {
-    "@type": "fsl.fslcc";
+    "@type"?: "fsl/fslcc";
     "first_input": InputPathType;
     "second_input": InputPathType;
     "mask"?: InputPathType | null | undefined;
@@ -21,43 +21,11 @@ interface FslccParameters {
     "threshold"?: number | null | undefined;
     "decimal_places"?: number | null | undefined;
 }
+type FslccParametersTagged = Required<Pick<FslccParameters, '@type'>> & FslccParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslcc": fslcc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslcc(...)`.
+ * Output object returned when calling `FslccParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +58,9 @@ function fslcc_params(
     nodemean_flag: boolean = false,
     threshold: number | null = null,
     decimal_places: number | null = null,
-): FslccParameters {
+): FslccParametersTagged {
     const params = {
-        "@type": "fsl.fslcc" as const,
+        "@type": "fsl/fslcc" as const,
         "first_input": first_input,
         "second_input": second_input,
         "noabs_flag": noabs_flag,
@@ -133,10 +101,10 @@ function fslcc_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["noabs_flag"] ?? null)) {
+    if ((params["noabs_flag"] ?? false)) {
         cargs.push("--noabs");
     }
-    if ((params["nodemean_flag"] ?? null)) {
+    if ((params["nodemean_flag"] ?? false)) {
         cargs.push("--nodemean");
     }
     if ((params["threshold"] ?? null) !== null) {
@@ -240,7 +208,6 @@ function fslcc(
 export {
       FSLCC_METADATA,
       FslccOutputs,
-      FslccParameters,
       fslcc,
       fslcc_execute,
       fslcc_params,

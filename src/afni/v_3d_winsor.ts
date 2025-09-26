@@ -12,7 +12,7 @@ const V_3D_WINSOR_METADATA: Metadata = {
 
 
 interface V3dWinsorParameters {
-    "@type": "afni.3dWinsor";
+    "@type"?: "afni/3dWinsor";
     "irad"?: number | null | undefined;
     "cbot"?: number | null | undefined;
     "ctop"?: number | null | undefined;
@@ -23,44 +23,11 @@ interface V3dWinsorParameters {
     "mask"?: InputPathType | null | undefined;
     "dataset": InputPathType;
 }
+type V3dWinsorParametersTagged = Required<Pick<V3dWinsorParameters, '@type'>> & V3dWinsorParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dWinsor": v_3d_winsor_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dWinsor": v_3d_winsor_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_winsor(...)`.
+ * Output object returned when calling `V3dWinsorParameters(...)`.
  *
  * @interface
  */
@@ -105,9 +72,9 @@ function v_3d_winsor_params(
     clip: number | null = null,
     prefix: string | null = null,
     mask: InputPathType | null = null,
-): V3dWinsorParameters {
+): V3dWinsorParametersTagged {
     const params = {
-        "@type": "afni.3dWinsor" as const,
+        "@type": "afni/3dWinsor" as const,
         "keepzero": keepzero,
         "dataset": dataset,
     };
@@ -174,7 +141,7 @@ function v_3d_winsor_cargs(
             String((params["nrep"] ?? null))
         );
     }
-    if ((params["keepzero"] ?? null)) {
+    if ((params["keepzero"] ?? false)) {
         cargs.push("-keepzero");
     }
     if ((params["clip"] ?? null) !== null) {
@@ -290,7 +257,6 @@ function v_3d_winsor(
 
 export {
       V3dWinsorOutputs,
-      V3dWinsorParameters,
       V_3D_WINSOR_METADATA,
       v_3d_winsor,
       v_3d_winsor_execute,

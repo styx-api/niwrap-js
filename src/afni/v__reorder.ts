@@ -12,7 +12,7 @@ const V__REORDER_METADATA: Metadata = {
 
 
 interface VReorderParameters {
-    "@type": "afni.@Reorder";
+    "@type"?: "afni/@Reorder";
     "input_dataset": InputPathType;
     "mapfile": InputPathType;
     "prefix": string;
@@ -21,44 +21,11 @@ interface VReorderParameters {
     "test": boolean;
     "help": boolean;
 }
+type VReorderParametersTagged = Required<Pick<VReorderParameters, '@type'>> & VReorderParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@Reorder": v__reorder_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@Reorder": v__reorder_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__reorder(...)`.
+ * Output object returned when calling `VReorderParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function v__reorder_params(
     save_work: boolean = false,
     test: boolean = false,
     help: boolean = false,
-): VReorderParameters {
+): VReorderParametersTagged {
     const params = {
-        "@type": "afni.@Reorder" as const,
+        "@type": "afni/@Reorder" as const,
         "input_dataset": input_dataset,
         "mapfile": mapfile,
         "prefix": prefix,
@@ -135,13 +102,13 @@ function v__reorder_cargs(
             String((params["offset"] ?? null))
         );
     }
-    if ((params["save_work"] ?? null)) {
+    if ((params["save_work"] ?? false)) {
         cargs.push("-save_work");
     }
-    if ((params["test"] ?? null)) {
+    if ((params["test"] ?? false)) {
         cargs.push("-test");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -233,7 +200,6 @@ function v__reorder(
 
 export {
       VReorderOutputs,
-      VReorderParameters,
       V__REORDER_METADATA,
       v__reorder,
       v__reorder_execute,

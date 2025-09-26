@@ -12,7 +12,7 @@ const V__AFNI_ENV_METADATA: Metadata = {
 
 
 interface VAfniEnvParameters {
-    "@type": "afni.@AfniEnv";
+    "@type"?: "afni/@AfniEnv";
     "set_flag"?: Array<string> | null | undefined;
     "unset_flag"?: string | null | undefined;
     "get_flag"?: string | null | undefined;
@@ -24,43 +24,11 @@ interface VAfniEnvParameters {
     "all_opts_flag": boolean;
     "help_find_flag"?: string | null | undefined;
 }
+type VAfniEnvParametersTagged = Required<Pick<VAfniEnvParameters, '@type'>> & VAfniEnvParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@AfniEnv": v__afni_env_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__afni_env(...)`.
+ * Output object returned when calling `VAfniEnvParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +67,9 @@ function v__afni_env_params(
     help_view_flag_alias: boolean = false,
     all_opts_flag: boolean = false,
     help_find_flag: string | null = null,
-): VAfniEnvParameters {
+): VAfniEnvParametersTagged {
     const params = {
-        "@type": "afni.@AfniEnv" as const,
+        "@type": "afni/@AfniEnv" as const,
         "help_flag": help_flag,
         "help_web_flag": help_web_flag,
         "help_web_flag_alias": help_web_flag_alias,
@@ -157,22 +125,22 @@ function v__afni_env_cargs(
             (params["get_flag"] ?? null)
         );
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["help_web_flag"] ?? null)) {
+    if ((params["help_web_flag"] ?? false)) {
         cargs.push("-h_web");
     }
-    if ((params["help_web_flag_alias"] ?? null)) {
+    if ((params["help_web_flag_alias"] ?? false)) {
         cargs.push("-hweb");
     }
-    if ((params["help_view_flag"] ?? null)) {
+    if ((params["help_view_flag"] ?? false)) {
         cargs.push("-h_view");
     }
-    if ((params["help_view_flag_alias"] ?? null)) {
+    if ((params["help_view_flag_alias"] ?? false)) {
         cargs.push("-hview");
     }
-    if ((params["all_opts_flag"] ?? null)) {
+    if ((params["all_opts_flag"] ?? false)) {
         cargs.push("-all_opts");
     }
     if ((params["help_find_flag"] ?? null) !== null) {
@@ -275,7 +243,6 @@ function v__afni_env(
 
 export {
       VAfniEnvOutputs,
-      VAfniEnvParameters,
       V__AFNI_ENV_METADATA,
       v__afni_env,
       v__afni_env_execute,

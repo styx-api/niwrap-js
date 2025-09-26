@@ -12,7 +12,7 @@ const DCMUNPACK_METADATA: Metadata = {
 
 
 interface DcmunpackParameters {
-    "@type": "freesurfer.dcmunpack";
+    "@type"?: "freesurfer/dcmunpack";
     "src": string;
     "targ"?: string | null | undefined;
     "run"?: string | null | undefined;
@@ -52,43 +52,11 @@ interface DcmunpackParameters {
     "log"?: string | null | undefined;
     "debug": boolean;
 }
+type DcmunpackParametersTagged = Required<Pick<DcmunpackParameters, '@type'>> & DcmunpackParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dcmunpack": dcmunpack_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dcmunpack(...)`.
+ * Output object returned when calling `DcmunpackParameters(...)`.
  *
  * @interface
  */
@@ -183,9 +151,9 @@ function dcmunpack_params(
     xml_only: boolean = false,
     log: string | null = null,
     debug: boolean = false,
-): DcmunpackParameters {
+): DcmunpackParametersTagged {
     const params = {
-        "@type": "freesurfer.dcmunpack" as const,
+        "@type": "freesurfer/dcmunpack" as const,
         "src": src,
         "keep_scouts": keep_scouts,
         "one_per_dir": one_per_dir,
@@ -299,7 +267,7 @@ function dcmunpack_cargs(
             (params["auto_runseq"] ?? null)
         );
     }
-    if ((params["keep_scouts"] ?? null)) {
+    if ((params["keep_scouts"] ?? false)) {
         cargs.push("-keep-scouts");
     }
     if ((params["scanonly"] ?? null) !== null) {
@@ -308,7 +276,7 @@ function dcmunpack_cargs(
             (params["scanonly"] ?? null)
         );
     }
-    if ((params["one_per_dir"] ?? null)) {
+    if ((params["one_per_dir"] ?? false)) {
         cargs.push("-one-per-dir");
     }
     if ((params["ext"] ?? null) !== null) {
@@ -329,25 +297,25 @@ function dcmunpack_cargs(
             (params["pat"] ?? null)
         );
     }
-    if ((params["no_infodump"] ?? null)) {
+    if ((params["no_infodump"] ?? false)) {
         cargs.push("-no-infodump");
     }
-    if ((params["generic"] ?? null)) {
+    if ((params["generic"] ?? false)) {
         cargs.push("-generic");
     }
-    if ((params["copy_only"] ?? null)) {
+    if ((params["copy_only"] ?? false)) {
         cargs.push("-copy-only");
     }
-    if ((params["no_convert"] ?? null)) {
+    if ((params["no_convert"] ?? false)) {
         cargs.push("-no-convert");
     }
-    if ((params["force_update"] ?? null)) {
+    if ((params["force_update"] ?? false)) {
         cargs.push("-force-update");
     }
-    if ((params["max"] ?? null)) {
+    if ((params["max"] ?? false)) {
         cargs.push("-max");
     }
-    if ((params["base"] ?? null)) {
+    if ((params["base"] ?? false)) {
         cargs.push("-base");
     }
     if ((params["key_string"] ?? null) !== null) {
@@ -368,10 +336,10 @@ function dcmunpack_cargs(
             (params["index_in"] ?? null)
         );
     }
-    if ((params["it_dicom"] ?? null)) {
+    if ((params["it_dicom"] ?? false)) {
         cargs.push("-itdicom");
     }
-    if ((params["no_exit_on_error"] ?? null)) {
+    if ((params["no_exit_on_error"] ?? false)) {
         cargs.push("-no-exit-on-error");
     }
     if ((params["run_skip"] ?? null) !== null) {
@@ -380,13 +348,13 @@ function dcmunpack_cargs(
             (params["run_skip"] ?? null)
         );
     }
-    if ((params["no_rescale_dicom"] ?? null)) {
+    if ((params["no_rescale_dicom"] ?? false)) {
         cargs.push("-no-rescale-dicom");
     }
-    if ((params["rescale_dicom"] ?? null)) {
+    if ((params["rescale_dicom"] ?? false)) {
         cargs.push("-rescale-dicom");
     }
-    if ((params["no_dwi"] ?? null)) {
+    if ((params["no_dwi"] ?? false)) {
         cargs.push("-no-dwi");
     }
     if ((params["iid"] ?? null) !== null) {
@@ -407,16 +375,16 @@ function dcmunpack_cargs(
             ...(params["ikd"] ?? null).map(String)
         );
     }
-    if ((params["extra_info"] ?? null)) {
+    if ((params["extra_info"] ?? false)) {
         cargs.push("-extra-info");
     }
-    if ((params["first_dicom"] ?? null)) {
+    if ((params["first_dicom"] ?? false)) {
         cargs.push("-first-dicom");
     }
-    if ((params["no_dcm2niix"] ?? null)) {
+    if ((params["no_dcm2niix"] ?? false)) {
         cargs.push("-no-dcm2niix");
     }
-    if ((params["phase"] ?? null)) {
+    if ((params["phase"] ?? false)) {
         cargs.push("-phase");
     }
     if ((params["fips"] ?? null) !== null) {
@@ -431,7 +399,7 @@ function dcmunpack_cargs(
             (params["fips_run"] ?? null)
         );
     }
-    if ((params["xml_only"] ?? null)) {
+    if ((params["xml_only"] ?? false)) {
         cargs.push("-xml-only");
     }
     if ((params["log"] ?? null) !== null) {
@@ -440,7 +408,7 @@ function dcmunpack_cargs(
             (params["log"] ?? null)
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
     return cargs;
@@ -594,7 +562,6 @@ function dcmunpack(
 export {
       DCMUNPACK_METADATA,
       DcmunpackOutputs,
-      DcmunpackParameters,
       dcmunpack,
       dcmunpack_execute,
       dcmunpack_params,

@@ -12,14 +12,15 @@ const TCK2CONNECTOME_METADATA: Metadata = {
 
 
 interface Tck2connectomeConfigParameters {
-    "@type": "mrtrix.tck2connectome.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Tck2connectomeConfigParametersTagged = Required<Pick<Tck2connectomeConfigParameters, '@type'>> & Tck2connectomeConfigParameters;
 
 
 interface Tck2connectomeParameters {
-    "@type": "mrtrix.tck2connectome";
+    "@type"?: "mrtrix/tck2connectome";
     "assignment_end_voxels": boolean;
     "assignment_radial_search"?: number | null | undefined;
     "assignment_reverse_search"?: number | null | undefined;
@@ -48,41 +49,7 @@ interface Tck2connectomeParameters {
     "nodes_in": InputPathType;
     "connectome_out": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.tck2connectome": tck2connectome_cargs,
-        "mrtrix.tck2connectome.config": tck2connectome_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.tck2connectome": tck2connectome_outputs,
-    };
-    return outputsFuncs[t];
-}
+type Tck2connectomeParametersTagged = Required<Pick<Tck2connectomeParameters, '@type'>> & Tck2connectomeParameters;
 
 
 /**
@@ -96,9 +63,9 @@ function dynOutputs(
 function tck2connectome_config_params(
     key: string,
     value: string,
-): Tck2connectomeConfigParameters {
+): Tck2connectomeConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.tck2connectome.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -127,7 +94,7 @@ function tck2connectome_config_cargs(
 
 
 /**
- * Output object returned when calling `tck2connectome(...)`.
+ * Output object returned when calling `Tck2connectomeParameters(...)`.
  *
  * @interface
  */
@@ -208,9 +175,9 @@ function tck2connectome_params(
     config: Array<Tck2connectomeConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Tck2connectomeParameters {
+): Tck2connectomeParametersTagged {
     const params = {
-        "@type": "mrtrix.tck2connectome" as const,
+        "@type": "mrtrix/tck2connectome" as const,
         "assignment_end_voxels": assignment_end_voxels,
         "assignment_all_voxels": assignment_all_voxels,
         "scale_length": scale_length,
@@ -275,7 +242,7 @@ function tck2connectome_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("tck2connectome");
-    if ((params["assignment_end_voxels"] ?? null)) {
+    if ((params["assignment_end_voxels"] ?? false)) {
         cargs.push("-assignment_end_voxels");
     }
     if ((params["assignment_radial_search"] ?? null) !== null) {
@@ -296,16 +263,16 @@ function tck2connectome_cargs(
             String((params["assignment_forward_search"] ?? null))
         );
     }
-    if ((params["assignment_all_voxels"] ?? null)) {
+    if ((params["assignment_all_voxels"] ?? false)) {
         cargs.push("-assignment_all_voxels");
     }
-    if ((params["scale_length"] ?? null)) {
+    if ((params["scale_length"] ?? false)) {
         cargs.push("-scale_length");
     }
-    if ((params["scale_invlength"] ?? null)) {
+    if ((params["scale_invlength"] ?? false)) {
         cargs.push("-scale_invlength");
     }
-    if ((params["scale_invnodevol"] ?? null)) {
+    if ((params["scale_invnodevol"] ?? false)) {
         cargs.push("-scale_invnodevol");
     }
     if ((params["scale_file"] ?? null) !== null) {
@@ -314,10 +281,10 @@ function tck2connectome_cargs(
             execution.inputFile((params["scale_file"] ?? null))
         );
     }
-    if ((params["symmetric"] ?? null)) {
+    if ((params["symmetric"] ?? false)) {
         cargs.push("-symmetric");
     }
-    if ((params["zero_diagonal"] ?? null)) {
+    if ((params["zero_diagonal"] ?? false)) {
         cargs.push("-zero_diagonal");
     }
     if ((params["stat_edge"] ?? null) !== null) {
@@ -332,7 +299,7 @@ function tck2connectome_cargs(
             execution.inputFile((params["tck_weights_in"] ?? null))
         );
     }
-    if ((params["keep_unassigned"] ?? null)) {
+    if ((params["keep_unassigned"] ?? false)) {
         cargs.push("-keep_unassigned");
     }
     if ((params["out_assignments"] ?? null) !== null) {
@@ -341,19 +308,19 @@ function tck2connectome_cargs(
             (params["out_assignments"] ?? null)
         );
     }
-    if ((params["vector"] ?? null)) {
+    if ((params["vector"] ?? false)) {
         cargs.push("-vector");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -363,12 +330,12 @@ function tck2connectome_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => tck2connectome_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["tracks_in"] ?? null)));
@@ -520,9 +487,7 @@ function tck2connectome(
 
 export {
       TCK2CONNECTOME_METADATA,
-      Tck2connectomeConfigParameters,
       Tck2connectomeOutputs,
-      Tck2connectomeParameters,
       tck2connectome,
       tck2connectome_config_params,
       tck2connectome_execute,

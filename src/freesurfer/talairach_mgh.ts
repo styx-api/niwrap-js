@@ -12,48 +12,15 @@ const TALAIRACH_MGH_METADATA: Metadata = {
 
 
 interface TalairachMghParameters {
-    "@type": "freesurfer.talairach_mgh";
+    "@type"?: "freesurfer/talairach_mgh";
     "input_volume": InputPathType;
     "output_volume": string;
 }
+type TalairachMghParametersTagged = Required<Pick<TalairachMghParameters, '@type'>> & TalairachMghParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.talairach_mgh": talairach_mgh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.talairach_mgh": talairach_mgh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `talairach_mgh(...)`.
+ * Output object returned when calling `TalairachMghParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface TalairachMghOutputs {
 function talairach_mgh_params(
     input_volume: InputPathType,
     output_volume: string,
-): TalairachMghParameters {
+): TalairachMghParametersTagged {
     const params = {
-        "@type": "freesurfer.talairach_mgh" as const,
+        "@type": "freesurfer/talairach_mgh" as const,
         "input_volume": input_volume,
         "output_volume": output_volume,
     };
@@ -186,7 +153,6 @@ function talairach_mgh(
 export {
       TALAIRACH_MGH_METADATA,
       TalairachMghOutputs,
-      TalairachMghParameters,
       talairach_mgh,
       talairach_mgh_execute,
       talairach_mgh_params,

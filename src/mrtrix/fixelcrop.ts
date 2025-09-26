@@ -12,14 +12,15 @@ const FIXELCROP_METADATA: Metadata = {
 
 
 interface FixelcropConfigParameters {
-    "@type": "mrtrix.fixelcrop.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type FixelcropConfigParametersTagged = Required<Pick<FixelcropConfigParameters, '@type'>> & FixelcropConfigParameters;
 
 
 interface FixelcropParameters {
-    "@type": "mrtrix.fixelcrop";
+    "@type"?: "mrtrix/fixelcrop";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -32,41 +33,7 @@ interface FixelcropParameters {
     "input_fixel_mask": InputPathType;
     "output_fixel_directory": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.fixelcrop": fixelcrop_cargs,
-        "mrtrix.fixelcrop.config": fixelcrop_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.fixelcrop": fixelcrop_outputs,
-    };
-    return outputsFuncs[t];
-}
+type FixelcropParametersTagged = Required<Pick<FixelcropParameters, '@type'>> & FixelcropParameters;
 
 
 /**
@@ -80,9 +47,9 @@ function dynOutputs(
 function fixelcrop_config_params(
     key: string,
     value: string,
-): FixelcropConfigParameters {
+): FixelcropConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.fixelcrop.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -111,7 +78,7 @@ function fixelcrop_config_cargs(
 
 
 /**
- * Output object returned when calling `fixelcrop(...)`.
+ * Output object returned when calling `FixelcropParameters(...)`.
  *
  * @interface
  */
@@ -156,9 +123,9 @@ function fixelcrop_params(
     config: Array<FixelcropConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): FixelcropParameters {
+): FixelcropParametersTagged {
     const params = {
-        "@type": "mrtrix.fixelcrop" as const,
+        "@type": "mrtrix/fixelcrop" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -193,16 +160,16 @@ function fixelcrop_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("fixelcrop");
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -212,12 +179,12 @@ function fixelcrop_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => fixelcrop_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input_fixel_directory"] ?? null)));
@@ -332,9 +299,7 @@ function fixelcrop(
 
 export {
       FIXELCROP_METADATA,
-      FixelcropConfigParameters,
       FixelcropOutputs,
-      FixelcropParameters,
       fixelcrop,
       fixelcrop_config_params,
       fixelcrop_execute,

@@ -12,7 +12,7 @@ const MRIS_MULTISCALE_STATS_METADATA: Metadata = {
 
 
 interface MrisMultiscaleStatsParameters {
-    "@type": "freesurfer.mris_multiscale_stats";
+    "@type"?: "freesurfer/mris_multiscale_stats";
     "output_subject": string;
     "hemi": string;
     "surf": InputPathType;
@@ -20,43 +20,11 @@ interface MrisMultiscaleStatsParameters {
     "class1_subjects": Array<string>;
     "class2_subjects": Array<string>;
 }
+type MrisMultiscaleStatsParametersTagged = Required<Pick<MrisMultiscaleStatsParameters, '@type'>> & MrisMultiscaleStatsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_multiscale_stats": mris_multiscale_stats_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_multiscale_stats(...)`.
+ * Output object returned when calling `MrisMultiscaleStatsParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function mris_multiscale_stats_params(
     curv: InputPathType,
     class1_subjects: Array<string>,
     class2_subjects: Array<string>,
-): MrisMultiscaleStatsParameters {
+): MrisMultiscaleStatsParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_multiscale_stats" as const,
+        "@type": "freesurfer/mris_multiscale_stats" as const,
         "output_subject": output_subject,
         "hemi": hemi,
         "surf": surf,
@@ -211,7 +179,6 @@ function mris_multiscale_stats(
 export {
       MRIS_MULTISCALE_STATS_METADATA,
       MrisMultiscaleStatsOutputs,
-      MrisMultiscaleStatsParameters,
       mris_multiscale_stats,
       mris_multiscale_stats_execute,
       mris_multiscale_stats_params,

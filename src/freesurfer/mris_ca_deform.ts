@@ -12,51 +12,18 @@ const MRIS_CA_DEFORM_METADATA: Metadata = {
 
 
 interface MrisCaDeformParameters {
-    "@type": "freesurfer.mris_ca_deform";
+    "@type"?: "freesurfer/mris_ca_deform";
     "input_surface": InputPathType;
     "label_vol": InputPathType;
     "transform": InputPathType;
     "intensity_vol": InputPathType;
     "output_surface": string;
 }
+type MrisCaDeformParametersTagged = Required<Pick<MrisCaDeformParameters, '@type'>> & MrisCaDeformParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_ca_deform": mris_ca_deform_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_ca_deform": mris_ca_deform_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_ca_deform(...)`.
+ * Output object returned when calling `MrisCaDeformParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function mris_ca_deform_params(
     transform: InputPathType,
     intensity_vol: InputPathType,
     output_surface: string,
-): MrisCaDeformParameters {
+): MrisCaDeformParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_ca_deform" as const,
+        "@type": "freesurfer/mris_ca_deform" as const,
         "input_surface": input_surface,
         "label_vol": label_vol,
         "transform": transform,
@@ -207,7 +174,6 @@ function mris_ca_deform(
 export {
       MRIS_CA_DEFORM_METADATA,
       MrisCaDeformOutputs,
-      MrisCaDeformParameters,
       mris_ca_deform,
       mris_ca_deform_execute,
       mris_ca_deform_params,

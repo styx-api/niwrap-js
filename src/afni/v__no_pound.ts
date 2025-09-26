@@ -12,46 +12,14 @@ const V__NO_POUND_METADATA: Metadata = {
 
 
 interface VNoPoundParameters {
-    "@type": "afni.@NoPound";
+    "@type"?: "afni/@NoPound";
     "afni_files": Array<string>;
 }
+type VNoPoundParametersTagged = Required<Pick<VNoPoundParameters, '@type'>> & VNoPoundParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@NoPound": v__no_pound_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__no_pound(...)`.
+ * Output object returned when calling `VNoPoundParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface VNoPoundOutputs {
  */
 function v__no_pound_params(
     afni_files: Array<string>,
-): VNoPoundParameters {
+): VNoPoundParametersTagged {
     const params = {
-        "@type": "afni.@NoPound" as const,
+        "@type": "afni/@NoPound" as const,
         "afni_files": afni_files,
     };
     return params;
@@ -172,7 +140,6 @@ function v__no_pound(
 
 export {
       VNoPoundOutputs,
-      VNoPoundParameters,
       V__NO_POUND_METADATA,
       v__no_pound,
       v__no_pound_execute,

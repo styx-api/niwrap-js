@@ -12,48 +12,15 @@ const DMRI_NEIGHBORING_REGIONS_METADATA: Metadata = {
 
 
 interface DmriNeighboringRegionsParameters {
-    "@type": "freesurfer.dmri_neighboringRegions";
+    "@type"?: "freesurfer/dmri_neighboringRegions";
     "input_file": InputPathType;
     "output_file": string;
 }
+type DmriNeighboringRegionsParametersTagged = Required<Pick<DmriNeighboringRegionsParameters, '@type'>> & DmriNeighboringRegionsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dmri_neighboringRegions": dmri_neighboring_regions_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.dmri_neighboringRegions": dmri_neighboring_regions_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dmri_neighboring_regions(...)`.
+ * Output object returned when calling `DmriNeighboringRegionsParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface DmriNeighboringRegionsOutputs {
 function dmri_neighboring_regions_params(
     input_file: InputPathType,
     output_file: string,
-): DmriNeighboringRegionsParameters {
+): DmriNeighboringRegionsParametersTagged {
     const params = {
-        "@type": "freesurfer.dmri_neighboringRegions" as const,
+        "@type": "freesurfer/dmri_neighboringRegions" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -186,7 +153,6 @@ function dmri_neighboring_regions(
 export {
       DMRI_NEIGHBORING_REGIONS_METADATA,
       DmriNeighboringRegionsOutputs,
-      DmriNeighboringRegionsParameters,
       dmri_neighboring_regions,
       dmri_neighboring_regions_execute,
       dmri_neighboring_regions_params,

@@ -12,50 +12,17 @@ const FAT_ROI_ROW_PY_METADATA: Metadata = {
 
 
 interface FatRoiRowPyParameters {
-    "@type": "afni.fat_roi_row.py";
+    "@type"?: "afni/fat_roi_row.py";
     "roi": string;
     "matrix_files"?: string | null | undefined;
     "list_file"?: InputPathType | null | undefined;
     "extern_labs_no": boolean;
 }
+type FatRoiRowPyParametersTagged = Required<Pick<FatRoiRowPyParameters, '@type'>> & FatRoiRowPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.fat_roi_row.py": fat_roi_row_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.fat_roi_row.py": fat_roi_row_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fat_roi_row_py(...)`.
+ * Output object returned when calling `FatRoiRowPyParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function fat_roi_row_py_params(
     matrix_files: string | null = null,
     list_file: InputPathType | null = null,
     extern_labs_no: boolean = false,
-): FatRoiRowPyParameters {
+): FatRoiRowPyParametersTagged {
     const params = {
-        "@type": "afni.fat_roi_row.py" as const,
+        "@type": "afni/fat_roi_row.py" as const,
         "roi": roi,
         "extern_labs_no": extern_labs_no,
     };
@@ -132,7 +99,7 @@ function fat_roi_row_py_cargs(
             execution.inputFile((params["list_file"] ?? null))
         );
     }
-    if ((params["extern_labs_no"] ?? null)) {
+    if ((params["extern_labs_no"] ?? false)) {
         cargs.push("-E");
     }
     return cargs;
@@ -219,7 +186,6 @@ function fat_roi_row_py(
 export {
       FAT_ROI_ROW_PY_METADATA,
       FatRoiRowPyOutputs,
-      FatRoiRowPyParameters,
       fat_roi_row_py,
       fat_roi_row_py_execute,
       fat_roi_row_py_params,

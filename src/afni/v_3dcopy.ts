@@ -12,50 +12,18 @@ const V_3DCOPY_METADATA: Metadata = {
 
 
 interface V3dcopyParameters {
-    "@type": "afni.3dcopy";
+    "@type"?: "afni/3dcopy";
     "verbose": boolean;
     "denote": boolean;
     "old_prefix": string;
     "view"?: string | null | undefined;
     "new_prefix": string;
 }
+type V3dcopyParametersTagged = Required<Pick<V3dcopyParameters, '@type'>> & V3dcopyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dcopy": v_3dcopy_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dcopy(...)`.
+ * Output object returned when calling `V3dcopyParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function v_3dcopy_params(
     verbose: boolean = false,
     denote: boolean = false,
     view: string | null = null,
-): V3dcopyParameters {
+): V3dcopyParametersTagged {
     const params = {
-        "@type": "afni.3dcopy" as const,
+        "@type": "afni/3dcopy" as const,
         "verbose": verbose,
         "denote": denote,
         "old_prefix": old_prefix,
@@ -113,10 +81,10 @@ function v_3dcopy_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("3dcopy");
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["denote"] ?? null)) {
+    if ((params["denote"] ?? false)) {
         cargs.push("-denote");
     }
     if ((params["view"] ?? null) !== null) {
@@ -210,7 +178,6 @@ function v_3dcopy(
 
 export {
       V3dcopyOutputs,
-      V3dcopyParameters,
       V_3DCOPY_METADATA,
       v_3dcopy,
       v_3dcopy_execute,

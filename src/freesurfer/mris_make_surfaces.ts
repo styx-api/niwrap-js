@@ -12,7 +12,7 @@ const MRIS_MAKE_SURFACES_METADATA: Metadata = {
 
 
 interface MrisMakeSurfacesParameters {
-    "@type": "freesurfer.mris_make_surfaces";
+    "@type"?: "freesurfer/mris_make_surfaces";
     "subject_name": string;
     "hemisphere": string;
     "white"?: string | null | undefined;
@@ -67,43 +67,11 @@ interface MrisMakeSurfacesParameters {
     "min_gray_csf_border"?: number | null | undefined;
     "max_csf"?: number | null | undefined;
 }
+type MrisMakeSurfacesParametersTagged = Required<Pick<MrisMakeSurfacesParameters, '@type'>> & MrisMakeSurfacesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_make_surfaces": mris_make_surfaces_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_make_surfaces(...)`.
+ * Output object returned when calling `MrisMakeSurfacesParameters(...)`.
  *
  * @interface
  */
@@ -228,9 +196,9 @@ function mris_make_surfaces_params(
     max_gray_csf_border: number | null = null,
     min_gray_csf_border: number | null = null,
     max_csf: number | null = null,
-): MrisMakeSurfacesParameters {
+): MrisMakeSurfacesParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_make_surfaces" as const,
+        "@type": "freesurfer/mris_make_surfaces" as const,
         "subject_name": subject_name,
         "hemisphere": hemisphere,
         "whiteonly": whiteonly,
@@ -397,10 +365,10 @@ function mris_make_surfaces_cargs(
             (params["pial"] ?? null)
         );
     }
-    if ((params["whiteonly"] ?? null)) {
+    if ((params["whiteonly"] ?? false)) {
         cargs.push("-whiteonly");
     }
-    if ((params["nowhite"] ?? null)) {
+    if ((params["nowhite"] ?? false)) {
         cargs.push("-nowhite");
     }
     if ((params["orig_white"] ?? null) !== null) {
@@ -415,7 +383,7 @@ function mris_make_surfaces_cargs(
             (params["orig_pial"] ?? null)
         );
     }
-    if ((params["q"] ?? null)) {
+    if ((params["q"] ?? false)) {
         cargs.push("-q");
     }
     if ((params["max_gray_scale"] ?? null) !== null) {
@@ -424,7 +392,7 @@ function mris_make_surfaces_cargs(
             String((params["max_gray_scale"] ?? null))
         );
     }
-    if ((params["c"] ?? null)) {
+    if ((params["c"] ?? false)) {
         cargs.push("-c");
     }
     if ((params["cortex"] ?? null) !== null) {
@@ -439,7 +407,7 @@ function mris_make_surfaces_cargs(
             String((params["w"] ?? null))
         );
     }
-    if ((params["first_wm_peak"] ?? null)) {
+    if ((params["first_wm_peak"] ?? false)) {
         cargs.push("-first_wm_peak");
     }
     if ((params["a_avgs"] ?? null) !== null) {
@@ -472,7 +440,7 @@ function mris_make_surfaces_cargs(
             (params["w_vol"] ?? null)
         );
     }
-    if ((params["long"] ?? null)) {
+    if ((params["long"] ?? false)) {
         cargs.push("-long");
     }
     if ((params["dura_thresh"] ?? null) !== null) {
@@ -487,7 +455,7 @@ function mris_make_surfaces_cargs(
             (params["sdir"] ?? null)
         );
     }
-    if ((params["erase_cerebellum"] ?? null)) {
+    if ((params["erase_cerebellum"] ?? false)) {
         cargs.push("-erase_cerebellum");
     }
     if ((params["wm_weight"] ?? null) !== null) {
@@ -538,10 +506,10 @@ function mris_make_surfaces_cargs(
             String((params["min_peak_pct"] ?? null))
         );
     }
-    if ((params["border_vals_hires"] ?? null)) {
+    if ((params["border_vals_hires"] ?? false)) {
         cargs.push("-border-vals-hires");
     }
-    if ((params["no_unitize"] ?? null)) {
+    if ((params["no_unitize"] ?? false)) {
         cargs.push("-no-unitize");
     }
     if ((params["intensity"] ?? null) !== null) {
@@ -574,10 +542,10 @@ function mris_make_surfaces_cargs(
             String((params["repulse"] ?? null))
         );
     }
-    if ((params["save_target"] ?? null)) {
+    if ((params["save_target"] ?? false)) {
         cargs.push("-save-target");
     }
-    if ((params["save_res"] ?? null)) {
+    if ((params["save_res"] ?? false)) {
         cargs.push("-save-res");
     }
     if ((params["v_vertexno"] ?? null) !== null) {
@@ -839,7 +807,6 @@ function mris_make_surfaces(
 export {
       MRIS_MAKE_SURFACES_METADATA,
       MrisMakeSurfacesOutputs,
-      MrisMakeSurfacesParameters,
       mris_make_surfaces,
       mris_make_surfaces_execute,
       mris_make_surfaces_params,

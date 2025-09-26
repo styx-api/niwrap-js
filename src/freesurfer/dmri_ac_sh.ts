@@ -12,46 +12,14 @@ const DMRI_AC_SH_METADATA: Metadata = {
 
 
 interface DmriAcShParameters {
-    "@type": "freesurfer.dmri_ac.sh";
+    "@type"?: "freesurfer/dmri_ac.sh";
     "additional_args"?: string | null | undefined;
 }
+type DmriAcShParametersTagged = Required<Pick<DmriAcShParameters, '@type'>> & DmriAcShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dmri_ac.sh": dmri_ac_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dmri_ac_sh(...)`.
+ * Output object returned when calling `DmriAcShParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface DmriAcShOutputs {
  */
 function dmri_ac_sh_params(
     additional_args: string | null = null,
-): DmriAcShParameters {
+): DmriAcShParametersTagged {
     const params = {
-        "@type": "freesurfer.dmri_ac.sh" as const,
+        "@type": "freesurfer/dmri_ac.sh" as const,
     };
     if (additional_args !== null) {
         params["additional_args"] = additional_args;
@@ -177,7 +145,6 @@ function dmri_ac_sh(
 export {
       DMRI_AC_SH_METADATA,
       DmriAcShOutputs,
-      DmriAcShParameters,
       dmri_ac_sh,
       dmri_ac_sh_execute,
       dmri_ac_sh_params,

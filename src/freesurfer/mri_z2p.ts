@@ -12,7 +12,7 @@ const MRI_Z2P_METADATA: Metadata = {
 
 
 interface MriZ2pParameters {
-    "@type": "freesurfer.mri_z2p";
+    "@type"?: "freesurfer/mri_z2p";
     "z_volume": InputPathType;
     "p_volume": string;
     "sig_volume": string;
@@ -30,44 +30,11 @@ interface MriZ2pParameters {
     "debug": boolean;
     "check_opts": boolean;
 }
+type MriZ2pParametersTagged = Required<Pick<MriZ2pParameters, '@type'>> & MriZ2pParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_z2p": mri_z2p_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_z2p": mri_z2p_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_z2p(...)`.
+ * Output object returned when calling `MriZ2pParameters(...)`.
  *
  * @interface
  */
@@ -126,9 +93,9 @@ function mri_z2p_params(
     img_format: boolean = false,
     debug: boolean = false,
     check_opts: boolean = false,
-): MriZ2pParameters {
+): MriZ2pParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_z2p" as const,
+        "@type": "freesurfer/mri_z2p" as const,
         "z_volume": z_volume,
         "p_volume": p_volume,
         "sig_volume": sig_volume,
@@ -188,13 +155,13 @@ function mri_z2p_cargs(
             execution.inputFile((params["mask_volume"] ?? null))
         );
     }
-    if ((params["two_sided"] ?? null)) {
+    if ((params["two_sided"] ?? false)) {
         cargs.push("--two-sided");
     }
-    if ((params["one_sided"] ?? null)) {
+    if ((params["one_sided"] ?? false)) {
         cargs.push("--one-sided");
     }
-    if ((params["signed"] ?? null)) {
+    if ((params["signed"] ?? false)) {
         cargs.push("--signed");
     }
     if ((params["feat"] ?? null) !== null) {
@@ -209,25 +176,25 @@ function mri_z2p_cargs(
             (params["feat_format"] ?? null)
         );
     }
-    if ((params["nii_format"] ?? null)) {
+    if ((params["nii_format"] ?? false)) {
         cargs.push("--nii");
     }
-    if ((params["niigz_format"] ?? null)) {
+    if ((params["niigz_format"] ?? false)) {
         cargs.push("--nii.gz");
     }
-    if ((params["mgh_format"] ?? null)) {
+    if ((params["mgh_format"] ?? false)) {
         cargs.push("--mgh");
     }
-    if ((params["mgz_format"] ?? null)) {
+    if ((params["mgz_format"] ?? false)) {
         cargs.push("--mgz");
     }
-    if ((params["img_format"] ?? null)) {
+    if ((params["img_format"] ?? false)) {
         cargs.push("--img");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["check_opts"] ?? null)) {
+    if ((params["check_opts"] ?? false)) {
         cargs.push("--checkopts");
     }
     return cargs;
@@ -339,7 +306,6 @@ function mri_z2p(
 export {
       MRI_Z2P_METADATA,
       MriZ2pOutputs,
-      MriZ2pParameters,
       mri_z2p,
       mri_z2p_execute,
       mri_z2p_params,

@@ -12,7 +12,7 @@ const VOLUME_PARCEL_RESAMPLING_METADATA: Metadata = {
 
 
 interface VolumeParcelResamplingParameters {
-    "@type": "workbench.volume-parcel-resampling";
+    "@type"?: "workbench/volume-parcel-resampling";
     "volume_in": InputPathType;
     "cur_parcels": InputPathType;
     "new_parcels": InputPathType;
@@ -22,44 +22,11 @@ interface VolumeParcelResamplingParameters {
     "opt_fwhm": boolean;
     "opt_subvolume_subvol"?: string | null | undefined;
 }
+type VolumeParcelResamplingParametersTagged = Required<Pick<VolumeParcelResamplingParameters, '@type'>> & VolumeParcelResamplingParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-parcel-resampling": volume_parcel_resampling_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-parcel-resampling": volume_parcel_resampling_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `volume_parcel_resampling(...)`.
+ * Output object returned when calling `VolumeParcelResamplingParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function volume_parcel_resampling_params(
     opt_fix_zeros: boolean = false,
     opt_fwhm: boolean = false,
     opt_subvolume_subvol: string | null = null,
-): VolumeParcelResamplingParameters {
+): VolumeParcelResamplingParametersTagged {
     const params = {
-        "@type": "workbench.volume-parcel-resampling" as const,
+        "@type": "workbench/volume-parcel-resampling" as const,
         "volume_in": volume_in,
         "cur_parcels": cur_parcels,
         "new_parcels": new_parcels,
@@ -136,10 +103,10 @@ function volume_parcel_resampling_cargs(
     cargs.push(execution.inputFile((params["new_parcels"] ?? null)));
     cargs.push(String((params["kernel"] ?? null)));
     cargs.push((params["volume_out"] ?? null));
-    if ((params["opt_fix_zeros"] ?? null)) {
+    if ((params["opt_fix_zeros"] ?? false)) {
         cargs.push("-fix-zeros");
     }
-    if ((params["opt_fwhm"] ?? null)) {
+    if ((params["opt_fwhm"] ?? false)) {
         cargs.push("-fwhm");
     }
     if ((params["opt_subvolume_subvol"] ?? null) !== null) {
@@ -248,7 +215,6 @@ function volume_parcel_resampling(
 export {
       VOLUME_PARCEL_RESAMPLING_METADATA,
       VolumeParcelResamplingOutputs,
-      VolumeParcelResamplingParameters,
       volume_parcel_resampling,
       volume_parcel_resampling_execute,
       volume_parcel_resampling_params,

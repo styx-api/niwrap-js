@@ -12,7 +12,7 @@ const V_3D_SURF2_VOL_METADATA: Metadata = {
 
 
 interface V3dSurf2VolParameters {
-    "@type": "afni.3dSurf2Vol";
+    "@type"?: "afni/3dSurf2Vol";
     "spec": InputPathType;
     "surface_volume": InputPathType;
     "surf_a": string;
@@ -39,43 +39,11 @@ interface V3dSurf2VolParameters {
     "noscale": boolean;
     "sxyz_orient_as_gpar": boolean;
 }
+type V3dSurf2VolParametersTagged = Required<Pick<V3dSurf2VolParameters, '@type'>> & V3dSurf2VolParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dSurf2Vol": v_3d_surf2_vol_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_surf2_vol(...)`.
+ * Output object returned when calling `V3dSurf2VolParameters(...)`.
  *
  * @interface
  */
@@ -144,9 +112,9 @@ function v_3d_surf2_vol_params(
     dvoxel: number | null = null,
     noscale: boolean = false,
     sxyz_orient_as_gpar: boolean = false,
-): V3dSurf2VolParameters {
+): V3dSurf2VolParametersTagged {
     const params = {
-        "@type": "afni.3dSurf2Vol" as const,
+        "@type": "afni/3dSurf2Vol" as const,
         "spec": spec,
         "surface_volume": surface_volume,
         "surf_a": surf_a,
@@ -307,7 +275,7 @@ function v_3d_surf2_vol_cargs(
             String((params["f_pn_mm"] ?? null))
         );
     }
-    if ((params["stop_gap"] ?? null)) {
+    if ((params["stop_gap"] ?? false)) {
         cargs.push("-stop_gap");
     }
     if ((params["cmask"] ?? null) !== null) {
@@ -346,10 +314,10 @@ function v_3d_surf2_vol_cargs(
             String((params["dvoxel"] ?? null))
         );
     }
-    if ((params["noscale"] ?? null)) {
+    if ((params["noscale"] ?? false)) {
         cargs.push("-noscale");
     }
-    if ((params["sxyz_orient_as_gpar"] ?? null)) {
+    if ((params["sxyz_orient_as_gpar"] ?? false)) {
         cargs.push("-sxyz_orient_as_gpar");
     }
     return cargs;
@@ -476,7 +444,6 @@ function v_3d_surf2_vol(
 
 export {
       V3dSurf2VolOutputs,
-      V3dSurf2VolParameters,
       V_3D_SURF2_VOL_METADATA,
       v_3d_surf2_vol,
       v_3d_surf2_vol_execute,

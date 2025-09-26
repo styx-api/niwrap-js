@@ -12,7 +12,7 @@ const V_3D_DEPTH_MAP_METADATA: Metadata = {
 
 
 interface V3dDepthMapParameters {
-    "@type": "afni.3dDepthMap";
+    "@type"?: "afni/3dDepthMap";
     "input_dataset": InputPathType;
     "output_prefix": string;
     "mask"?: InputPathType | null | undefined;
@@ -27,44 +27,11 @@ interface V3dDepthMapParameters {
     "binary_only": boolean;
     "verbosity"?: number | null | undefined;
 }
+type V3dDepthMapParametersTagged = Required<Pick<V3dDepthMapParameters, '@type'>> & V3dDepthMapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dDepthMap": v_3d_depth_map_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dDepthMap": v_3d_depth_map_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_depth_map(...)`.
+ * Output object returned when calling `V3dDepthMapParameters(...)`.
  *
  * @interface
  */
@@ -113,9 +80,9 @@ function v_3d_depth_map_params(
     only2_d: string | null = null,
     binary_only: boolean = false,
     verbosity: number | null = null,
-): V3dDepthMapParameters {
+): V3dDepthMapParametersTagged {
     const params = {
-        "@type": "afni.3dDepthMap" as const,
+        "@type": "afni/3dDepthMap" as const,
         "input_dataset": input_dataset,
         "output_prefix": output_prefix,
         "dist_squared": dist_squared,
@@ -170,10 +137,10 @@ function v_3d_depth_map_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["dist_squared"] ?? null)) {
+    if ((params["dist_squared"] ?? false)) {
         cargs.push("-dist_sq");
     }
-    if ((params["ignore_voxdims"] ?? null)) {
+    if ((params["ignore_voxdims"] ?? false)) {
         cargs.push("-ignore_voxdims");
     }
     if ((params["rimify"] ?? null) !== null) {
@@ -182,16 +149,16 @@ function v_3d_depth_map_cargs(
             String((params["rimify"] ?? null))
         );
     }
-    if ((params["zeros_are_zero"] ?? null)) {
+    if ((params["zeros_are_zero"] ?? false)) {
         cargs.push("-zeros_are_zero");
     }
-    if ((params["zeros_are_neg"] ?? null)) {
+    if ((params["zeros_are_neg"] ?? false)) {
         cargs.push("-zeros_are_neg");
     }
-    if ((params["nz_are_neg"] ?? null)) {
+    if ((params["nz_are_neg"] ?? false)) {
         cargs.push("-nz_are_neg");
     }
-    if ((params["bounds_are_not_zero"] ?? null)) {
+    if ((params["bounds_are_not_zero"] ?? false)) {
         cargs.push("-bounds_are_not_zero");
     }
     if ((params["only2D"] ?? null) !== null) {
@@ -200,7 +167,7 @@ function v_3d_depth_map_cargs(
             (params["only2D"] ?? null)
         );
     }
-    if ((params["binary_only"] ?? null)) {
+    if ((params["binary_only"] ?? false)) {
         cargs.push("-binary_only");
     }
     if ((params["verbosity"] ?? null) !== null) {
@@ -310,7 +277,6 @@ function v_3d_depth_map(
 
 export {
       V3dDepthMapOutputs,
-      V3dDepthMapParameters,
       V_3D_DEPTH_MAP_METADATA,
       v_3d_depth_map,
       v_3d_depth_map_execute,

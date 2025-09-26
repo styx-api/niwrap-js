@@ -12,7 +12,7 @@ const MRI_TWOCLASS_METADATA: Metadata = {
 
 
 interface MriTwoclassParameters {
-    "@type": "freesurfer.mri_twoclass";
+    "@type"?: "freesurfer/mri_twoclass";
     "segmentation_volume": InputPathType;
     "output_subject": string;
     "output_volume": string;
@@ -21,44 +21,11 @@ interface MriTwoclassParameters {
     "f_threshold"?: number | null | undefined;
     "bonferroni_correction": boolean;
 }
+type MriTwoclassParametersTagged = Required<Pick<MriTwoclassParameters, '@type'>> & MriTwoclassParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_twoclass": mri_twoclass_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_twoclass": mri_twoclass_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_twoclass(...)`.
+ * Output object returned when calling `MriTwoclassParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function mri_twoclass_params(
     c2_subjects: Array<string>,
     f_threshold: number | null = null,
     bonferroni_correction: boolean = false,
-): MriTwoclassParameters {
+): MriTwoclassParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_twoclass" as const,
+        "@type": "freesurfer/mri_twoclass" as const,
         "segmentation_volume": segmentation_volume,
         "output_subject": output_subject,
         "output_volume": output_volume,
@@ -137,7 +104,7 @@ function mri_twoclass_cargs(
             String((params["f_threshold"] ?? null))
         );
     }
-    if ((params["bonferroni_correction"] ?? null)) {
+    if ((params["bonferroni_correction"] ?? false)) {
         cargs.push("-b");
     }
     return cargs;
@@ -230,7 +197,6 @@ function mri_twoclass(
 export {
       MRI_TWOCLASS_METADATA,
       MriTwoclassOutputs,
-      MriTwoclassParameters,
       mri_twoclass,
       mri_twoclass_execute,
       mri_twoclass_params,

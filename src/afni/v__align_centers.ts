@@ -12,7 +12,7 @@ const V__ALIGN_CENTERS_METADATA: Metadata = {
 
 
 interface VAlignCentersParameters {
-    "@type": "afni.@Align_Centers";
+    "@type"?: "afni/@Align_Centers";
     "base": InputPathType;
     "dset": InputPathType;
     "children"?: Array<InputPathType> | null | undefined;
@@ -28,44 +28,11 @@ interface VAlignCentersParameters {
     "shift_xform"?: InputPathType | null | undefined;
     "shift_xform_inv"?: InputPathType | null | undefined;
 }
+type VAlignCentersParametersTagged = Required<Pick<VAlignCentersParameters, '@type'>> & VAlignCentersParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@Align_Centers": v__align_centers_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@Align_Centers": v__align_centers_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__align_centers(...)`.
+ * Output object returned when calling `VAlignCentersParameters(...)`.
  *
  * @interface
  */
@@ -124,9 +91,9 @@ function v__align_centers_params(
     center_cm_no_amask: boolean = false,
     shift_xform: InputPathType | null = null,
     shift_xform_inv: InputPathType | null = null,
-): VAlignCentersParameters {
+): VAlignCentersParametersTagged {
     const params = {
-        "@type": "afni.@Align_Centers" as const,
+        "@type": "afni/@Align_Centers" as const,
         "base": base,
         "dset": dset,
         "echo": echo,
@@ -176,10 +143,10 @@ function v__align_centers_cargs(
             ...(params["children"] ?? null).map(f => execution.inputFile(f))
         );
     }
-    if ((params["echo"] ?? null)) {
+    if ((params["echo"] ?? false)) {
         cargs.push("-echo");
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("-overwrite");
     }
     if ((params["prefix"] ?? null) !== null) {
@@ -188,22 +155,22 @@ function v__align_centers_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["matrix_only"] ?? null)) {
+    if ((params["matrix_only"] ?? false)) {
         cargs.push("-1Dmat_only");
     }
-    if ((params["matrix_only_no_dset"] ?? null)) {
+    if ((params["matrix_only_no_dset"] ?? false)) {
         cargs.push("-1Dmat_only_nodset");
     }
-    if ((params["no_cp"] ?? null)) {
+    if ((params["no_cp"] ?? false)) {
         cargs.push("-no_cp");
     }
-    if ((params["center_grid"] ?? null)) {
+    if ((params["center_grid"] ?? false)) {
         cargs.push("-grid");
     }
-    if ((params["center_cm"] ?? null)) {
+    if ((params["center_cm"] ?? false)) {
         cargs.push("-cm");
     }
-    if ((params["center_cm_no_amask"] ?? null)) {
+    if ((params["center_cm_no_amask"] ?? false)) {
         cargs.push("-cm_no_amask");
     }
     if ((params["shift_xform"] ?? null) !== null) {
@@ -323,7 +290,6 @@ function v__align_centers(
 
 export {
       VAlignCentersOutputs,
-      VAlignCentersParameters,
       V__ALIGN_CENTERS_METADATA,
       v__align_centers,
       v__align_centers_execute,

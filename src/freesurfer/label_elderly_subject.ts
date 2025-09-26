@@ -12,50 +12,17 @@ const LABEL_ELDERLY_SUBJECT_METADATA: Metadata = {
 
 
 interface LabelElderlySubjectParameters {
-    "@type": "freesurfer.label_elderly_subject";
+    "@type"?: "freesurfer/label_elderly_subject";
     "norm_volume": InputPathType;
     "transform_lta": InputPathType;
     "classifier_array"?: InputPathType | null | undefined;
     "aseg_volume": InputPathType;
 }
+type LabelElderlySubjectParametersTagged = Required<Pick<LabelElderlySubjectParameters, '@type'>> & LabelElderlySubjectParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.label_elderly_subject": label_elderly_subject_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.label_elderly_subject": label_elderly_subject_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `label_elderly_subject(...)`.
+ * Output object returned when calling `LabelElderlySubjectParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function label_elderly_subject_params(
     transform_lta: InputPathType,
     aseg_volume: InputPathType,
     classifier_array: InputPathType | null = null,
-): LabelElderlySubjectParameters {
+): LabelElderlySubjectParametersTagged {
     const params = {
-        "@type": "freesurfer.label_elderly_subject" as const,
+        "@type": "freesurfer/label_elderly_subject" as const,
         "norm_volume": norm_volume,
         "transform_lta": transform_lta,
         "aseg_volume": aseg_volume,
@@ -204,7 +171,6 @@ function label_elderly_subject(
 export {
       LABEL_ELDERLY_SUBJECT_METADATA,
       LabelElderlySubjectOutputs,
-      LabelElderlySubjectParameters,
       label_elderly_subject,
       label_elderly_subject_execute,
       label_elderly_subject_params,

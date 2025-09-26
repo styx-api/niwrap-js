@@ -12,7 +12,7 @@ const POSSUM_INTERPMOT_PY_METADATA: Metadata = {
 
 
 interface PossumInterpmotPyParameters {
-    "@type": "fsl.possum_interpmot.py";
+    "@type"?: "fsl/possum_interpmot.py";
     "motion_type": number;
     "tr": number;
     "tr_slice": number;
@@ -21,44 +21,11 @@ interface PossumInterpmotPyParameters {
     "custom_motion_file": InputPathType;
     "output_file": string;
 }
+type PossumInterpmotPyParametersTagged = Required<Pick<PossumInterpmotPyParameters, '@type'>> & PossumInterpmotPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.possum_interpmot.py": possum_interpmot_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.possum_interpmot.py": possum_interpmot_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `possum_interpmot_py(...)`.
+ * Output object returned when calling `PossumInterpmotPyParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function possum_interpmot_py_params(
     nvols: number,
     custom_motion_file: InputPathType,
     output_file: string,
-): PossumInterpmotPyParameters {
+): PossumInterpmotPyParametersTagged {
     const params = {
-        "@type": "fsl.possum_interpmot.py" as const,
+        "@type": "fsl/possum_interpmot.py" as const,
         "motion_type": motion_type,
         "tr": tr,
         "tr_slice": tr_slice,
@@ -221,7 +188,6 @@ function possum_interpmot_py(
 export {
       POSSUM_INTERPMOT_PY_METADATA,
       PossumInterpmotPyOutputs,
-      PossumInterpmotPyParameters,
       possum_interpmot_py,
       possum_interpmot_py_execute,
       possum_interpmot_py_params,

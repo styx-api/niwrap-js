@@ -12,7 +12,7 @@ const FSLCREATEHD_METADATA: Metadata = {
 
 
 interface FslcreatehdParameters {
-    "@type": "fsl.fslcreatehd";
+    "@type"?: "fsl/fslcreatehd";
     "xsize": number;
     "ysize": number;
     "zsize": number;
@@ -28,44 +28,11 @@ interface FslcreatehdParameters {
     "headername": string;
     "nifti_xml_file"?: InputPathType | null | undefined;
 }
+type FslcreatehdParametersTagged = Required<Pick<FslcreatehdParameters, '@type'>> & FslcreatehdParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslcreatehd": fslcreatehd_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fslcreatehd": fslcreatehd_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslcreatehd(...)`.
+ * Output object returned when calling `FslcreatehdParameters(...)`.
  *
  * @interface
  */
@@ -116,9 +83,9 @@ function fslcreatehd_params(
     datatype: number,
     headername: string,
     nifti_xml_file: InputPathType | null = null,
-): FslcreatehdParameters {
+): FslcreatehdParametersTagged {
     const params = {
-        "@type": "fsl.fslcreatehd" as const,
+        "@type": "fsl/fslcreatehd" as const,
         "xsize": xsize,
         "ysize": ysize,
         "zsize": zsize,
@@ -274,7 +241,6 @@ function fslcreatehd(
 export {
       FSLCREATEHD_METADATA,
       FslcreatehdOutputs,
-      FslcreatehdParameters,
       fslcreatehd,
       fslcreatehd_execute,
       fslcreatehd_params,

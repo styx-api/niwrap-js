@@ -12,50 +12,17 @@ const MRI_XVOLAVG_METADATA: Metadata = {
 
 
 interface MriXvolavgParameters {
-    "@type": "freesurfer.mri_xvolavg";
+    "@type"?: "freesurfer/mri_xvolavg";
     "input_volumes": Array<InputPathType>;
     "vol_type": string;
     "output_volume": string;
     "output_type"?: string | null | undefined;
 }
+type MriXvolavgParametersTagged = Required<Pick<MriXvolavgParameters, '@type'>> & MriXvolavgParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_xvolavg": mri_xvolavg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_xvolavg": mri_xvolavg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_xvolavg(...)`.
+ * Output object returned when calling `MriXvolavgParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mri_xvolavg_params(
     vol_type: string,
     output_volume: string,
     output_type: string | null = null,
-): MriXvolavgParameters {
+): MriXvolavgParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_xvolavg" as const,
+        "@type": "freesurfer/mri_xvolavg" as const,
         "input_volumes": input_volumes,
         "vol_type": vol_type,
         "output_volume": output_volume,
@@ -216,7 +183,6 @@ function mri_xvolavg(
 export {
       MRI_XVOLAVG_METADATA,
       MriXvolavgOutputs,
-      MriXvolavgParameters,
       mri_xvolavg,
       mri_xvolavg_execute,
       mri_xvolavg_params,

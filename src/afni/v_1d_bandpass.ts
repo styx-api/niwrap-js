@@ -12,7 +12,7 @@ const V_1D_BANDPASS_METADATA: Metadata = {
 
 
 interface V1dBandpassParameters {
-    "@type": "afni.1dBandpass";
+    "@type"?: "afni/1dBandpass";
     "fbot": number;
     "ftop": number;
     "infile": InputPathType;
@@ -21,43 +21,11 @@ interface V1dBandpassParameters {
     "nodetrend": boolean;
     "norm": boolean;
 }
+type V1dBandpassParametersTagged = Required<Pick<V1dBandpassParameters, '@type'>> & V1dBandpassParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dBandpass": v_1d_bandpass_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1d_bandpass(...)`.
+ * Output object returned when calling `V1dBandpassParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +58,9 @@ function v_1d_bandpass_params(
     ortfile: InputPathType | null = null,
     nodetrend: boolean = false,
     norm: boolean = false,
-): V1dBandpassParameters {
+): V1dBandpassParametersTagged {
     const params = {
-        "@type": "afni.1dBandpass" as const,
+        "@type": "afni/1dBandpass" as const,
         "fbot": fbot,
         "ftop": ftop,
         "infile": infile,
@@ -138,10 +106,10 @@ function v_1d_bandpass_cargs(
             execution.inputFile((params["ortfile"] ?? null))
         );
     }
-    if ((params["nodetrend"] ?? null)) {
+    if ((params["nodetrend"] ?? false)) {
         cargs.push("-nodetrend");
     }
-    if ((params["norm"] ?? null)) {
+    if ((params["norm"] ?? false)) {
         cargs.push("-norm");
     }
     return cargs;
@@ -232,7 +200,6 @@ function v_1d_bandpass(
 
 export {
       V1dBandpassOutputs,
-      V1dBandpassParameters,
       V_1D_BANDPASS_METADATA,
       v_1d_bandpass,
       v_1d_bandpass_execute,

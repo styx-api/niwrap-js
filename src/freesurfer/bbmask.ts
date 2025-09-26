@@ -12,7 +12,7 @@ const BBMASK_METADATA: Metadata = {
 
 
 interface BbmaskParameters {
-    "@type": "freesurfer.bbmask";
+    "@type"?: "freesurfer/bbmask";
     "mask": Array<InputPathType>;
     "src_volumes"?: Array<InputPathType> | null | undefined;
     "npad"?: number | null | undefined;
@@ -20,44 +20,11 @@ interface BbmaskParameters {
     "regheader"?: InputPathType | null | undefined;
     "sub2src"?: InputPathType | null | undefined;
 }
+type BbmaskParametersTagged = Required<Pick<BbmaskParameters, '@type'>> & BbmaskParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.bbmask": bbmask_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.bbmask": bbmask_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `bbmask(...)`.
+ * Output object returned when calling `BbmaskParameters(...)`.
  *
  * @interface
  */
@@ -108,9 +75,9 @@ function bbmask_params(
     registration: Array<InputPathType> | null = null,
     regheader: InputPathType | null = null,
     sub2src: InputPathType | null = null,
-): BbmaskParameters {
+): BbmaskParametersTagged {
     const params = {
-        "@type": "freesurfer.bbmask" as const,
+        "@type": "freesurfer/bbmask" as const,
         "mask": mask,
     };
     if (src_volumes !== null) {
@@ -272,7 +239,6 @@ function bbmask(
 export {
       BBMASK_METADATA,
       BbmaskOutputs,
-      BbmaskParameters,
       bbmask,
       bbmask_execute,
       bbmask_params,

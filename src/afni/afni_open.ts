@@ -12,7 +12,7 @@ const AFNI_OPEN_METADATA: Metadata = {
 
 
 interface AfniOpenParameters {
-    "@type": "afni.afni_open";
+    "@type"?: "afni/afni_open";
     "files": Array<InputPathType>;
     "method"?: string | null | undefined;
     "editor": boolean;
@@ -29,43 +29,11 @@ interface AfniOpenParameters {
     "h_view": boolean;
     "h_web": boolean;
 }
+type AfniOpenParametersTagged = Required<Pick<AfniOpenParameters, '@type'>> & AfniOpenParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.afni_open": afni_open_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `afni_open(...)`.
+ * Output object returned when calling `AfniOpenParameters(...)`.
  *
  * @interface
  */
@@ -114,9 +82,9 @@ function afni_open_params(
     extreme_help: boolean = false,
     h_view: boolean = false,
     h_web: boolean = false,
-): AfniOpenParameters {
+): AfniOpenParametersTagged {
     const params = {
-        "@type": "afni.afni_open" as const,
+        "@type": "afni/afni_open" as const,
         "files": files,
         "editor": editor,
         "downloader": downloader,
@@ -160,43 +128,43 @@ function afni_open_cargs(
             (params["method"] ?? null)
         );
     }
-    if ((params["editor"] ?? null)) {
+    if ((params["editor"] ?? false)) {
         cargs.push("-e");
     }
-    if ((params["downloader"] ?? null)) {
+    if ((params["downloader"] ?? false)) {
         cargs.push("-d");
     }
-    if ((params["examinexmat"] ?? null)) {
+    if ((params["examinexmat"] ?? false)) {
         cargs.push("-x");
     }
-    if ((params["browser"] ?? null)) {
+    if ((params["browser"] ?? false)) {
         cargs.push("-b");
     }
-    if ((params["readme"] ?? null)) {
+    if ((params["readme"] ?? false)) {
         cargs.push("-r");
     }
-    if ((params["afniweb"] ?? null)) {
+    if ((params["afniweb"] ?? false)) {
         cargs.push("-aw");
     }
-    if ((params["global_help"] ?? null)) {
+    if ((params["global_help"] ?? false)) {
         cargs.push("-global_help");
     }
-    if ((params["gopts_help"] ?? null)) {
+    if ((params["gopts_help"] ?? false)) {
         cargs.push("-gopts_help");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["mini_help"] ?? null)) {
+    if ((params["mini_help"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["extreme_help"] ?? null)) {
+    if ((params["extreme_help"] ?? false)) {
         cargs.push("-HELP");
     }
-    if ((params["h_view"] ?? null)) {
+    if ((params["h_view"] ?? false)) {
         cargs.push("-h_view");
     }
-    if ((params["h_web"] ?? null)) {
+    if ((params["h_web"] ?? false)) {
         cargs.push("-h_web");
     }
     return cargs;
@@ -304,7 +272,6 @@ function afni_open(
 export {
       AFNI_OPEN_METADATA,
       AfniOpenOutputs,
-      AfniOpenParameters,
       afni_open,
       afni_open_execute,
       afni_open_params,

@@ -12,7 +12,7 @@ const NEW_INVWARP_METADATA: Metadata = {
 
 
 interface NewInvwarpParameters {
-    "@type": "fsl.new_invwarp";
+    "@type"?: "fsl/new_invwarp";
     "warpvol": InputPathType;
     "outvol": string;
     "refvol": InputPathType;
@@ -24,44 +24,11 @@ interface NewInvwarpParameters {
     "debugflag": boolean;
     "verboseflag": boolean;
 }
+type NewInvwarpParametersTagged = Required<Pick<NewInvwarpParameters, '@type'>> & NewInvwarpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.new_invwarp": new_invwarp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.new_invwarp": new_invwarp_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `new_invwarp(...)`.
+ * Output object returned when calling `NewInvwarpParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function new_invwarp_params(
     jmax: number | null = null,
     debugflag: boolean = false,
     verboseflag: boolean = false,
-): NewInvwarpParameters {
+): NewInvwarpParametersTagged {
     const params = {
-        "@type": "fsl.new_invwarp" as const,
+        "@type": "fsl/new_invwarp" as const,
         "warpvol": warpvol,
         "outvol": outvol,
         "refvol": refvol,
@@ -152,13 +119,13 @@ function new_invwarp_cargs(
         "-r",
         execution.inputFile((params["refvol"] ?? null))
     );
-    if ((params["relflag"] ?? null)) {
+    if ((params["relflag"] ?? false)) {
         cargs.push("--rel");
     }
-    if ((params["absflag"] ?? null)) {
+    if ((params["absflag"] ?? false)) {
         cargs.push("--abs");
     }
-    if ((params["noconstraintflag"] ?? null)) {
+    if ((params["noconstraintflag"] ?? false)) {
         cargs.push("--noconstraint");
     }
     if ((params["jmin"] ?? null) !== null) {
@@ -173,10 +140,10 @@ function new_invwarp_cargs(
             String((params["jmax"] ?? null))
         );
     }
-    if ((params["debugflag"] ?? null)) {
+    if ((params["debugflag"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["verboseflag"] ?? null)) {
+    if ((params["verboseflag"] ?? false)) {
         cargs.push("-v");
     }
     return cargs;
@@ -275,7 +242,6 @@ function new_invwarp(
 export {
       NEW_INVWARP_METADATA,
       NewInvwarpOutputs,
-      NewInvwarpParameters,
       new_invwarp,
       new_invwarp_execute,
       new_invwarp_params,

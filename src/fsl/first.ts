@@ -12,7 +12,7 @@ const FIRST_METADATA: Metadata = {
 
 
 interface FirstParameters {
-    "@type": "fsl.first";
+    "@type"?: "fsl/first";
     "input_file": InputPathType;
     "output_name": string;
     "input_model": InputPathType;
@@ -29,44 +29,11 @@ interface FirstParameters {
     "shcond": boolean;
     "loadbvars": boolean;
 }
+type FirstParametersTagged = Required<Pick<FirstParameters, '@type'>> & FirstParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.first": first_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.first": first_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `first(...)`.
+ * Output object returned when calling `FirstParameters(...)`.
  *
  * @interface
  */
@@ -119,9 +86,9 @@ function first_params(
     bvars: InputPathType | null = null,
     shcond: boolean = false,
     loadbvars: boolean = false,
-): FirstParameters {
+): FirstParametersTagged {
     const params = {
-        "@type": "fsl.first" as const,
+        "@type": "fsl/first" as const,
         "input_file": input_file,
         "output_name": output_name,
         "input_model": input_model,
@@ -180,10 +147,10 @@ function first_cargs(
         "-l",
         execution.inputFile((params["flirt_matrix"] ?? null))
     );
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-h");
     }
     if ((params["input_model2"] ?? null) !== null) {
@@ -198,13 +165,13 @@ function first_cargs(
             String((params["nmodes"] ?? null))
         );
     }
-    if ((params["intref"] ?? null)) {
+    if ((params["intref"] ?? false)) {
         cargs.push("--intref");
     }
-    if ((params["multi_image_input"] ?? null)) {
+    if ((params["multi_image_input"] ?? false)) {
         cargs.push("--multiImageInput");
     }
-    if ((params["binary_surface_output"] ?? null)) {
+    if ((params["binary_surface_output"] ?? false)) {
         cargs.push("--binarySurfaceOutput");
     }
     if ((params["bmap_name"] ?? null) !== null) {
@@ -219,10 +186,10 @@ function first_cargs(
             execution.inputFile((params["bvars"] ?? null))
         );
     }
-    if ((params["shcond"] ?? null)) {
+    if ((params["shcond"] ?? false)) {
         cargs.push("--shcond");
     }
-    if ((params["loadbvars"] ?? null)) {
+    if ((params["loadbvars"] ?? false)) {
         cargs.push("--loadbvars");
     }
     return cargs;
@@ -331,7 +298,6 @@ function first(
 export {
       FIRST_METADATA,
       FirstOutputs,
-      FirstParameters,
       first,
       first_execute,
       first_params,

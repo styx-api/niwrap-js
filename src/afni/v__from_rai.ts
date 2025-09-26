@@ -12,47 +12,15 @@ const V__FROM_RAI_METADATA: Metadata = {
 
 
 interface VFromRaiParameters {
-    "@type": "afni.@FromRAI";
+    "@type"?: "afni/@FromRAI";
     "rai_coordinates": Array<number>;
     "orientation": string;
 }
+type VFromRaiParametersTagged = Required<Pick<VFromRaiParameters, '@type'>> & VFromRaiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@FromRAI": v__from_rai_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__from_rai(...)`.
+ * Output object returned when calling `VFromRaiParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface VFromRaiOutputs {
 function v__from_rai_params(
     rai_coordinates: Array<number>,
     orientation: string,
-): VFromRaiParameters {
+): VFromRaiParametersTagged {
     const params = {
-        "@type": "afni.@FromRAI" as const,
+        "@type": "afni/@FromRAI" as const,
         "rai_coordinates": rai_coordinates,
         "orientation": orientation,
     };
@@ -185,7 +153,6 @@ function v__from_rai(
 
 export {
       VFromRaiOutputs,
-      VFromRaiParameters,
       V__FROM_RAI_METADATA,
       v__from_rai,
       v__from_rai_execute,

@@ -12,7 +12,7 @@ const FSL_RIGID_REGISTER_METADATA: Metadata = {
 
 
 interface FslRigidRegisterParameters {
-    "@type": "freesurfer.fsl_rigid_register";
+    "@type"?: "freesurfer/fsl_rigid_register";
     "refvol": InputPathType;
     "inputvol": InputPathType;
     "outputvol": string;
@@ -36,44 +36,11 @@ interface FslRigidRegisterParameters {
     "version": boolean;
     "help": boolean;
 }
+type FslRigidRegisterParametersTagged = Required<Pick<FslRigidRegisterParameters, '@type'>> & FslRigidRegisterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fsl_rigid_register": fsl_rigid_register_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.fsl_rigid_register": fsl_rigid_register_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsl_rigid_register(...)`.
+ * Output object returned when calling `FslRigidRegisterParameters(...)`.
  *
  * @interface
  */
@@ -140,9 +107,9 @@ function fsl_rigid_register_params(
     subject: string | null = null,
     version: boolean = false,
     help: boolean = false,
-): FslRigidRegisterParameters {
+): FslRigidRegisterParametersTagged {
     const params = {
-        "@type": "freesurfer.fsl_rigid_register" as const,
+        "@type": "freesurfer/fsl_rigid_register" as const,
         "refvol": refvol,
         "inputvol": inputvol,
         "outputvol": outputvol,
@@ -246,7 +213,7 @@ function fsl_rigid_register_cargs(
             (params["ltamat"] ?? null)
         );
     }
-    if ((params["noinitgeom"] ?? null)) {
+    if ((params["noinitgeom"] ?? false)) {
         cargs.push("-noinitgeom");
     }
     if ((params["applyxfm"] ?? null) !== null) {
@@ -255,7 +222,7 @@ function fsl_rigid_register_cargs(
             execution.inputFile((params["applyxfm"] ?? null))
         );
     }
-    if ((params["applyinitxfm"] ?? null)) {
+    if ((params["applyinitxfm"] ?? false)) {
         cargs.push("-applyinitxfm");
     }
     if ((params["initxfm"] ?? null) !== null) {
@@ -300,10 +267,10 @@ function fsl_rigid_register_cargs(
             (params["tmpdir"] ?? null)
         );
     }
-    if ((params["nocleanup"] ?? null)) {
+    if ((params["nocleanup"] ?? false)) {
         cargs.push("-nocleanup");
     }
-    if ((params["cleanup"] ?? null)) {
+    if ((params["cleanup"] ?? false)) {
         cargs.push("-cleanup");
     }
     if ((params["subject"] ?? null) !== null) {
@@ -312,10 +279,10 @@ function fsl_rigid_register_cargs(
             (params["subject"] ?? null)
         );
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -438,7 +405,6 @@ function fsl_rigid_register(
 export {
       FSL_RIGID_REGISTER_METADATA,
       FslRigidRegisterOutputs,
-      FslRigidRegisterParameters,
       fsl_rigid_register,
       fsl_rigid_register_execute,
       fsl_rigid_register_params,

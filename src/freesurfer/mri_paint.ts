@@ -12,7 +12,7 @@ const MRI_PAINT_METADATA: Metadata = {
 
 
 interface MriPaintParameters {
-    "@type": "freesurfer.mri_paint";
+    "@type"?: "freesurfer/mri_paint";
     "input_volume": InputPathType;
     "input_surface": InputPathType;
     "registration_file": InputPathType;
@@ -20,44 +20,11 @@ interface MriPaintParameters {
     "image_offset"?: number | null | undefined;
     "paint_surf_coords": boolean;
 }
+type MriPaintParametersTagged = Required<Pick<MriPaintParameters, '@type'>> & MriPaintParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_paint": mri_paint_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_paint": mri_paint_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_paint(...)`.
+ * Output object returned when calling `MriPaintParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function mri_paint_params(
     output_float_file: string,
     image_offset: number | null = null,
     paint_surf_coords: boolean = false,
-): MriPaintParameters {
+): MriPaintParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_paint" as const,
+        "@type": "freesurfer/mri_paint" as const,
         "input_volume": input_volume,
         "input_surface": input_surface,
         "registration_file": registration_file,
@@ -132,7 +99,7 @@ function mri_paint_cargs(
             String((params["image_offset"] ?? null))
         );
     }
-    if ((params["paint_surf_coords"] ?? null)) {
+    if ((params["paint_surf_coords"] ?? false)) {
         cargs.push("-S");
     }
     return cargs;
@@ -223,7 +190,6 @@ function mri_paint(
 export {
       MRI_PAINT_METADATA,
       MriPaintOutputs,
-      MriPaintParameters,
       mri_paint,
       mri_paint_execute,
       mri_paint_params,

@@ -12,50 +12,17 @@ const V_3D_EMPTY_METADATA: Metadata = {
 
 
 interface V3dEmptyParameters {
-    "@type": "afni.3dEmpty";
+    "@type"?: "afni/3dEmpty";
     "prefix"?: string | null | undefined;
     "geometry"?: string | null | undefined;
     "nxyz"?: Array<number> | null | undefined;
     "nt"?: number | null | undefined;
 }
+type V3dEmptyParametersTagged = Required<Pick<V3dEmptyParameters, '@type'>> & V3dEmptyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dEmpty": v_3d_empty_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dEmpty": v_3d_empty_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_empty(...)`.
+ * Output object returned when calling `V3dEmptyParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function v_3d_empty_params(
     geometry: string | null = null,
     nxyz: Array<number> | null = null,
     nt: number | null = null,
-): V3dEmptyParameters {
+): V3dEmptyParametersTagged {
     const params = {
-        "@type": "afni.3dEmpty" as const,
+        "@type": "afni/3dEmpty" as const,
     };
     if (prefix !== null) {
         params["prefix"] = prefix;
@@ -227,7 +194,6 @@ function v_3d_empty(
 
 export {
       V3dEmptyOutputs,
-      V3dEmptyParameters,
       V_3D_EMPTY_METADATA,
       v_3d_empty,
       v_3d_empty_execute,

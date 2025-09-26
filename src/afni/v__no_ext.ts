@@ -12,48 +12,15 @@ const V__NO_EXT_METADATA: Metadata = {
 
 
 interface VNoExtParameters {
-    "@type": "afni.@NoExt";
+    "@type"?: "afni/@NoExt";
     "inputfile": string;
     "extensions"?: Array<string> | null | undefined;
 }
+type VNoExtParametersTagged = Required<Pick<VNoExtParameters, '@type'>> & VNoExtParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@NoExt": v__no_ext_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@NoExt": v__no_ext_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__no_ext(...)`.
+ * Output object returned when calling `VNoExtParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface VNoExtOutputs {
 function v__no_ext_params(
     inputfile: string,
     extensions: Array<string> | null = null,
-): VNoExtParameters {
+): VNoExtParametersTagged {
     const params = {
-        "@type": "afni.@NoExt" as const,
+        "@type": "afni/@NoExt" as const,
         "inputfile": inputfile,
     };
     if (extensions !== null) {
@@ -189,7 +156,6 @@ function v__no_ext(
 
 export {
       VNoExtOutputs,
-      VNoExtParameters,
       V__NO_EXT_METADATA,
       v__no_ext,
       v__no_ext_execute,

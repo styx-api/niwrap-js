@@ -12,48 +12,16 @@ const MRI_LOG_LIKELIHOOD_METADATA: Metadata = {
 
 
 interface MriLogLikelihoodParameters {
-    "@type": "freesurfer.mri_log_likelihood";
+    "@type"?: "freesurfer/mri_log_likelihood";
     "input_brain_images": Array<InputPathType>;
     "atlas_file": InputPathType;
     "transform_file": InputPathType;
 }
+type MriLogLikelihoodParametersTagged = Required<Pick<MriLogLikelihoodParameters, '@type'>> & MriLogLikelihoodParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_log_likelihood": mri_log_likelihood_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_log_likelihood(...)`.
+ * Output object returned when calling `MriLogLikelihoodParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function mri_log_likelihood_params(
     input_brain_images: Array<InputPathType>,
     atlas_file: InputPathType,
     transform_file: InputPathType,
-): MriLogLikelihoodParameters {
+): MriLogLikelihoodParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_log_likelihood" as const,
+        "@type": "freesurfer/mri_log_likelihood" as const,
         "input_brain_images": input_brain_images,
         "atlas_file": atlas_file,
         "transform_file": transform_file,
@@ -187,7 +155,6 @@ function mri_log_likelihood(
 export {
       MRI_LOG_LIKELIHOOD_METADATA,
       MriLogLikelihoodOutputs,
-      MriLogLikelihoodParameters,
       mri_log_likelihood,
       mri_log_likelihood_execute,
       mri_log_likelihood_params,

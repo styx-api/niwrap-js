@@ -12,49 +12,16 @@ const SLICESMASK_METADATA: Metadata = {
 
 
 interface SlicesmaskParameters {
-    "@type": "fsl.slicesmask";
+    "@type"?: "fsl/slicesmask";
     "image": InputPathType;
     "mask": InputPathType;
     "output": string;
 }
+type SlicesmaskParametersTagged = Required<Pick<SlicesmaskParameters, '@type'>> & SlicesmaskParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.slicesmask": slicesmask_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.slicesmask": slicesmask_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `slicesmask(...)`.
+ * Output object returned when calling `SlicesmaskParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function slicesmask_params(
     image: InputPathType,
     mask: InputPathType,
     output: string,
-): SlicesmaskParameters {
+): SlicesmaskParametersTagged {
     const params = {
-        "@type": "fsl.slicesmask" as const,
+        "@type": "fsl/slicesmask" as const,
         "image": image,
         "mask": mask,
         "output": output,
@@ -193,7 +160,6 @@ function slicesmask(
 export {
       SLICESMASK_METADATA,
       SlicesmaskOutputs,
-      SlicesmaskParameters,
       slicesmask,
       slicesmask_execute,
       slicesmask_params,

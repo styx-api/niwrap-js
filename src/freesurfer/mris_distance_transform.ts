@@ -12,7 +12,7 @@ const MRIS_DISTANCE_TRANSFORM_METADATA: Metadata = {
 
 
 interface MrisDistanceTransformParameters {
-    "@type": "freesurfer.mris_distance_transform";
+    "@type"?: "freesurfer/mris_distance_transform";
     "surface": InputPathType;
     "label": InputPathType;
     "mode": "signed" | "unsigned" | "outside";
@@ -22,44 +22,11 @@ interface MrisDistanceTransformParameters {
     "divide"?: number | null | undefined;
     "olabel": boolean;
 }
+type MrisDistanceTransformParametersTagged = Required<Pick<MrisDistanceTransformParameters, '@type'>> & MrisDistanceTransformParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_distance_transform": mris_distance_transform_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_distance_transform": mris_distance_transform_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_distance_transform(...)`.
+ * Output object returned when calling `MrisDistanceTransformParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function mris_distance_transform_params(
     posterior: number | null = null,
     divide: number | null = null,
     olabel: boolean = false,
-): MrisDistanceTransformParameters {
+): MrisDistanceTransformParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_distance_transform" as const,
+        "@type": "freesurfer/mris_distance_transform" as const,
         "surface": surface,
         "label": label,
         "mode": mode,
@@ -156,7 +123,7 @@ function mris_distance_transform_cargs(
             String((params["divide"] ?? null))
         );
     }
-    if ((params["olabel"] ?? null)) {
+    if ((params["olabel"] ?? false)) {
         cargs.push("-olabel");
     }
     return cargs;
@@ -251,7 +218,6 @@ function mris_distance_transform(
 export {
       MRIS_DISTANCE_TRANSFORM_METADATA,
       MrisDistanceTransformOutputs,
-      MrisDistanceTransformParameters,
       mris_distance_transform,
       mris_distance_transform_execute,
       mris_distance_transform_params,

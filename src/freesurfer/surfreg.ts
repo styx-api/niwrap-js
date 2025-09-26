@@ -12,7 +12,7 @@ const SURFREG_METADATA: Metadata = {
 
 
 interface SurfregParameters {
-    "@type": "freesurfer.surfreg";
+    "@type"?: "freesurfer/surfreg";
     "subject": string;
     "target": string;
     "cross_hemi": boolean;
@@ -30,44 +30,11 @@ interface SurfregParameters {
     "no_set_vol_geom": boolean;
     "threads"?: number | null | undefined;
 }
+type SurfregParametersTagged = Required<Pick<SurfregParameters, '@type'>> & SurfregParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.surfreg": surfreg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.surfreg": surfreg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surfreg(...)`.
+ * Output object returned when calling `SurfregParameters(...)`.
  *
  * @interface
  */
@@ -122,9 +89,9 @@ function surfreg_params(
     outsurf: string | null = null,
     no_set_vol_geom: boolean = false,
     threads: number | null = null,
-): SurfregParameters {
+): SurfregParametersTagged {
     const params = {
-        "@type": "freesurfer.surfreg" as const,
+        "@type": "freesurfer/surfreg" as const,
         "subject": subject,
         "target": target,
         "cross_hemi": cross_hemi,
@@ -178,19 +145,19 @@ function surfreg_cargs(
         "--t",
         (params["target"] ?? null)
     );
-    if ((params["cross_hemi"] ?? null)) {
+    if ((params["cross_hemi"] ?? false)) {
         cargs.push("--xhemi");
     }
-    if ((params["reg_lh"] ?? null)) {
+    if ((params["reg_lh"] ?? false)) {
         cargs.push("--lh");
     }
-    if ((params["reg_rh"] ?? null)) {
+    if ((params["reg_rh"] ?? false)) {
         cargs.push("--rh");
     }
-    if ((params["reg_both"] ?? null)) {
+    if ((params["reg_both"] ?? false)) {
         cargs.push("--lhrh");
     }
-    if ((params["no_annot"] ?? null)) {
+    if ((params["no_annot"] ?? false)) {
         cargs.push("--no-annot");
     }
     if ((params["annot"] ?? null) !== null) {
@@ -199,10 +166,10 @@ function surfreg_cargs(
             (params["annot"] ?? null)
         );
     }
-    if ((params["aparc"] ?? null)) {
+    if ((params["aparc"] ?? false)) {
         cargs.push("--aparc");
     }
-    if ((params["noneg"] ?? null)) {
+    if ((params["noneg"] ?? false)) {
         cargs.push("--noneg");
     }
     if ((params["init_reg"] ?? null) !== null) {
@@ -217,7 +184,7 @@ function surfreg_cargs(
             (params["lta"] ?? null)
         );
     }
-    if ((params["init_from_tal"] ?? null)) {
+    if ((params["init_from_tal"] ?? false)) {
         cargs.push("--init-from-tal");
     }
     if ((params["outsurf"] ?? null) !== null) {
@@ -226,7 +193,7 @@ function surfreg_cargs(
             (params["outsurf"] ?? null)
         );
     }
-    if ((params["no_set_vol_geom"] ?? null)) {
+    if ((params["no_set_vol_geom"] ?? false)) {
         cargs.push("--no-set-vol-geom");
     }
     if ((params["threads"] ?? null) !== null) {
@@ -343,7 +310,6 @@ function surfreg(
 export {
       SURFREG_METADATA,
       SurfregOutputs,
-      SurfregParameters,
       surfreg,
       surfreg_execute,
       surfreg_params,

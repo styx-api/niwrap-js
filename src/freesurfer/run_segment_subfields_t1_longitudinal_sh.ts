@@ -12,47 +12,15 @@ const RUN_SEGMENT_SUBFIELDS_T1_LONGITUDINAL_SH_METADATA: Metadata = {
 
 
 interface RunSegmentSubfieldsT1LongitudinalShParameters {
-    "@type": "freesurfer.run_SegmentSubfieldsT1Longitudinal.sh";
+    "@type"?: "freesurfer/run_SegmentSubfieldsT1Longitudinal.sh";
     "deployed_mcr_root": string;
     "additional_args"?: string | null | undefined;
 }
+type RunSegmentSubfieldsT1LongitudinalShParametersTagged = Required<Pick<RunSegmentSubfieldsT1LongitudinalShParameters, '@type'>> & RunSegmentSubfieldsT1LongitudinalShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.run_SegmentSubfieldsT1Longitudinal.sh": run_segment_subfields_t1_longitudinal_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `run_segment_subfields_t1_longitudinal_sh(...)`.
+ * Output object returned when calling `RunSegmentSubfieldsT1LongitudinalShParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface RunSegmentSubfieldsT1LongitudinalShOutputs {
 function run_segment_subfields_t1_longitudinal_sh_params(
     deployed_mcr_root: string,
     additional_args: string | null = null,
-): RunSegmentSubfieldsT1LongitudinalShParameters {
+): RunSegmentSubfieldsT1LongitudinalShParametersTagged {
     const params = {
-        "@type": "freesurfer.run_SegmentSubfieldsT1Longitudinal.sh" as const,
+        "@type": "freesurfer/run_SegmentSubfieldsT1Longitudinal.sh" as const,
         "deployed_mcr_root": deployed_mcr_root,
     };
     if (additional_args !== null) {
@@ -184,7 +152,6 @@ function run_segment_subfields_t1_longitudinal_sh(
 export {
       RUN_SEGMENT_SUBFIELDS_T1_LONGITUDINAL_SH_METADATA,
       RunSegmentSubfieldsT1LongitudinalShOutputs,
-      RunSegmentSubfieldsT1LongitudinalShParameters,
       run_segment_subfields_t1_longitudinal_sh,
       run_segment_subfields_t1_longitudinal_sh_execute,
       run_segment_subfields_t1_longitudinal_sh_params,

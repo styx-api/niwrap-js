@@ -12,14 +12,15 @@ const FABBER_METADATA: Metadata = {
 
 
 interface FabberOptfileParameters {
-    "@type": "fsl.fabber.optfile";
+    "@type"?: "optfile";
     "optfile_short"?: InputPathType | null | undefined;
     "optfile_long"?: InputPathType | null | undefined;
 }
+type FabberOptfileParametersTagged = Required<Pick<FabberOptfileParameters, '@type'>> & FabberOptfileParameters;
 
 
 interface FabberParameters {
-    "@type": "fsl.fabber";
+    "@type"?: "fsl/fabber";
     "output": string;
     "method": string;
     "model": string;
@@ -57,41 +58,7 @@ interface FabberParameters {
     "list_outputs": boolean;
     "old_optfile"?: InputPathType | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fabber": fabber_cargs,
-        "fsl.fabber.optfile": fabber_optfile_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fabber": fabber_outputs,
-    };
-    return outputsFuncs[t];
-}
+type FabberParametersTagged = Required<Pick<FabberParameters, '@type'>> & FabberParameters;
 
 
 /**
@@ -105,9 +72,9 @@ function dynOutputs(
 function fabber_optfile_params(
     optfile_short: InputPathType | null = null,
     optfile_long: InputPathType | null = null,
-): FabberOptfileParameters {
+): FabberOptfileParametersTagged {
     const params = {
-        "@type": "fsl.fabber.optfile" as const,
+        "@type": "optfile" as const,
     };
     if (optfile_short !== null) {
         params["optfile_short"] = optfile_short;
@@ -149,7 +116,7 @@ function fabber_optfile_cargs(
 
 
 /**
- * Output object returned when calling `fabber(...)`.
+ * Output object returned when calling `FabberParameters(...)`.
  *
  * @interface
  */
@@ -288,9 +255,9 @@ function fabber_params(
     desc_params: boolean = false,
     list_outputs: boolean = false,
     old_optfile: InputPathType | null = null,
-): FabberParameters {
+): FabberParametersTagged {
     const params = {
-        "@type": "fsl.fabber" as const,
+        "@type": "fsl/fabber" as const,
         "output": output,
         "method": method,
         "model": model,
@@ -432,13 +399,13 @@ function fabber_cargs(
             String((params["evaluate_nt"] ?? null))
         );
     }
-    if ((params["simple_output"] ?? null)) {
+    if ((params["simple_output"] ?? false)) {
         cargs.push("--simple-output");
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("--overwrite");
     }
-    if ((params["link_to_latest"] ?? null)) {
+    if ((params["link_to_latest"] ?? false)) {
         cargs.push("--link-to-latest");
     }
     if ((params["load_models"] ?? null) !== null) {
@@ -447,61 +414,61 @@ function fabber_cargs(
             execution.inputFile((params["load_models"] ?? null))
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     if ((params["optfile"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["optfile"] ?? null)["@type"])((params["optfile"] ?? null), execution));
+        cargs.push(...fabber_optfile_cargs((params["optfile"] ?? null), execution));
     }
-    if ((params["save_model_fit"] ?? null)) {
+    if ((params["save_model_fit"] ?? false)) {
         cargs.push("--save-model-fit");
     }
-    if ((params["save_residuals"] ?? null)) {
+    if ((params["save_residuals"] ?? false)) {
         cargs.push("--save-residuals");
     }
-    if ((params["save_model_extras"] ?? null)) {
+    if ((params["save_model_extras"] ?? false)) {
         cargs.push("--save-model-extras");
     }
-    if ((params["save_mvn"] ?? null)) {
+    if ((params["save_mvn"] ?? false)) {
         cargs.push("--save-mvn");
     }
-    if ((params["save_mean"] ?? null)) {
+    if ((params["save_mean"] ?? false)) {
         cargs.push("--save-mean");
     }
-    if ((params["save_std"] ?? null)) {
+    if ((params["save_std"] ?? false)) {
         cargs.push("--save-std");
     }
-    if ((params["save_var"] ?? null)) {
+    if ((params["save_var"] ?? false)) {
         cargs.push("--save-var");
     }
-    if ((params["save_zstat"] ?? null)) {
+    if ((params["save_zstat"] ?? false)) {
         cargs.push("--save-zstat");
     }
-    if ((params["save_noise_mean"] ?? null)) {
+    if ((params["save_noise_mean"] ?? false)) {
         cargs.push("--save-noise-mean");
     }
-    if ((params["save_noise_std"] ?? null)) {
+    if ((params["save_noise_std"] ?? false)) {
         cargs.push("--save-noise-std");
     }
-    if ((params["save_free_energy"] ?? null)) {
+    if ((params["save_free_energy"] ?? false)) {
         cargs.push("--save-free-energy");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["list_methods"] ?? null)) {
+    if ((params["list_methods"] ?? false)) {
         cargs.push("--listmethods");
     }
-    if ((params["list_models"] ?? null)) {
+    if ((params["list_models"] ?? false)) {
         cargs.push("--listmodels");
     }
-    if ((params["list_params"] ?? null)) {
+    if ((params["list_params"] ?? false)) {
         cargs.push("--listparams");
     }
-    if ((params["desc_params"] ?? null)) {
+    if ((params["desc_params"] ?? false)) {
         cargs.push("--descparams");
     }
-    if ((params["list_outputs"] ?? null)) {
+    if ((params["list_outputs"] ?? false)) {
         cargs.push("--listoutputs");
     }
     if ((params["old_optfile"] ?? null) !== null) {
@@ -668,9 +635,7 @@ function fabber(
 
 export {
       FABBER_METADATA,
-      FabberOptfileParameters,
       FabberOutputs,
-      FabberParameters,
       fabber,
       fabber_execute,
       fabber_optfile_params,

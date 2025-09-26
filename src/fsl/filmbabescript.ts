@@ -12,47 +12,15 @@ const FILMBABESCRIPT_METADATA: Metadata = {
 
 
 interface FilmbabescriptParameters {
-    "@type": "fsl.filmbabescript";
+    "@type"?: "fsl/filmbabescript";
     "feat_dir": string;
     "flobs_dir": string;
 }
+type FilmbabescriptParametersTagged = Required<Pick<FilmbabescriptParameters, '@type'>> & FilmbabescriptParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.filmbabescript": filmbabescript_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `filmbabescript(...)`.
+ * Output object returned when calling `FilmbabescriptParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface FilmbabescriptOutputs {
 function filmbabescript_params(
     feat_dir: string,
     flobs_dir: string,
-): FilmbabescriptParameters {
+): FilmbabescriptParametersTagged {
     const params = {
-        "@type": "fsl.filmbabescript" as const,
+        "@type": "fsl/filmbabescript" as const,
         "feat_dir": feat_dir,
         "flobs_dir": flobs_dir,
     };
@@ -180,7 +148,6 @@ function filmbabescript(
 export {
       FILMBABESCRIPT_METADATA,
       FilmbabescriptOutputs,
-      FilmbabescriptParameters,
       filmbabescript,
       filmbabescript_execute,
       filmbabescript_params,

@@ -12,21 +12,23 @@ const V_3D_ANOVA3_METADATA: Metadata = {
 
 
 interface V3dAnova3OutfileAbcontrParameters {
-    "@type": "afni.3dANOVA3.outfile_abcontr";
+    "@type"?: "outfile_abcontr";
     "outfile_abcontr"?: string | null | undefined;
     "outfile_Abcontr"?: string | null | undefined;
 }
+type V3dAnova3OutfileAbcontrParametersTagged = Required<Pick<V3dAnova3OutfileAbcontrParameters, '@type'>> & V3dAnova3OutfileAbcontrParameters;
 
 
 interface V3dAnova3OutfileAbcontr1Parameters {
-    "@type": "afni.3dANOVA3.outfile_abdiff";
+    "@type"?: "outfile_abcontr_1";
     "outfile_abdiff"?: string | null | undefined;
     "outfile_Abdiff"?: string | null | undefined;
 }
+type V3dAnova3OutfileAbcontr1ParametersTagged = Required<Pick<V3dAnova3OutfileAbcontr1Parameters, '@type'>> & V3dAnova3OutfileAbcontr1Parameters;
 
 
 interface V3dAnova3Parameters {
-    "@type": "afni.3dANOVA3";
+    "@type"?: "afni/3dANOVA3";
     "type": number;
     "alevels": number;
     "blevels": number;
@@ -59,42 +61,7 @@ interface V3dAnova3Parameters {
     "outfile_bucket"?: string | null | undefined;
     "anova_options"?: Array<string> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dANOVA3": v_3d_anova3_cargs,
-        "afni.3dANOVA3.outfile_abcontr": v_3d_anova3_outfile_abcontr_cargs,
-        "afni.3dANOVA3.outfile_abdiff": v_3d_anova3_outfile_abcontr_1_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dANOVA3": v_3d_anova3_outputs,
-    };
-    return outputsFuncs[t];
-}
+type V3dAnova3ParametersTagged = Required<Pick<V3dAnova3Parameters, '@type'>> & V3dAnova3Parameters;
 
 
 /**
@@ -108,9 +75,9 @@ function dynOutputs(
 function v_3d_anova3_outfile_abcontr_params(
     outfile_abcontr: string | null = null,
     outfile_abcontr_: string | null = null,
-): V3dAnova3OutfileAbcontrParameters {
+): V3dAnova3OutfileAbcontrParametersTagged {
     const params = {
-        "@type": "afni.3dANOVA3.outfile_abcontr" as const,
+        "@type": "outfile_abcontr" as const,
     };
     if (outfile_abcontr !== null) {
         params["outfile_abcontr"] = outfile_abcontr;
@@ -162,9 +129,9 @@ function v_3d_anova3_outfile_abcontr_cargs(
 function v_3d_anova3_outfile_abcontr_1_params(
     outfile_abdiff: string | null = null,
     outfile_abdiff_: string | null = null,
-): V3dAnova3OutfileAbcontr1Parameters {
+): V3dAnova3OutfileAbcontr1ParametersTagged {
     const params = {
-        "@type": "afni.3dANOVA3.outfile_abdiff" as const,
+        "@type": "outfile_abcontr_1" as const,
     };
     if (outfile_abdiff !== null) {
         params["outfile_abdiff"] = outfile_abdiff;
@@ -206,7 +173,7 @@ function v_3d_anova3_outfile_abcontr_1_cargs(
 
 
 /**
- * Output object returned when calling `v_3d_anova3(...)`.
+ * Output object returned when calling `V3dAnova3Parameters(...)`.
  *
  * @interface
  */
@@ -323,9 +290,9 @@ function v_3d_anova3_params(
     outfile_abmean: string | null = null,
     outfile_bucket: string | null = null,
     anova_options: Array<string> | null = null,
-): V3dAnova3Parameters {
+): V3dAnova3ParametersTagged {
     const params = {
-        "@type": "afni.3dANOVA3" as const,
+        "@type": "afni/3dANOVA3" as const,
         "type": type_,
         "alevels": alevels,
         "blevels": blevels,
@@ -452,7 +419,7 @@ function v_3d_anova3_cargs(
             String((params["voxel_num"] ?? null))
         );
     }
-    if ((params["diskspace"] ?? null)) {
+    if ((params["diskspace"] ?? false)) {
         cargs.push("-diskspace");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -570,10 +537,10 @@ function v_3d_anova3_cargs(
         );
     }
     if ((params["outfile_abcontr"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["outfile_abcontr"] ?? null)["@type"])((params["outfile_abcontr"] ?? null), execution));
+        cargs.push(...v_3d_anova3_outfile_abcontr_cargs((params["outfile_abcontr"] ?? null), execution));
     }
     if ((params["outfile_abdiff"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["outfile_abdiff"] ?? null)["@type"])((params["outfile_abdiff"] ?? null), execution));
+        cargs.push(...v_3d_anova3_outfile_abcontr_1_cargs((params["outfile_abdiff"] ?? null), execution));
     }
     if ((params["outfile_abmean"] ?? null) !== null) {
         cargs.push(
@@ -737,10 +704,7 @@ function v_3d_anova3(
 
 
 export {
-      V3dAnova3OutfileAbcontr1Parameters,
-      V3dAnova3OutfileAbcontrParameters,
       V3dAnova3Outputs,
-      V3dAnova3Parameters,
       V_3D_ANOVA3_METADATA,
       v_3d_anova3,
       v_3d_anova3_execute,

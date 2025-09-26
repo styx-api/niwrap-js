@@ -12,49 +12,17 @@ const CAT_MATVEC_METADATA: Metadata = {
 
 
 interface CatMatvecParameters {
-    "@type": "afni.cat_matvec";
+    "@type"?: "afni/cat_matvec";
     "matrix_format": boolean;
     "oneline_format": boolean;
     "four_by_four_format": boolean;
     "matvec_spec": Array<string>;
 }
+type CatMatvecParametersTagged = Required<Pick<CatMatvecParameters, '@type'>> & CatMatvecParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.cat_matvec": cat_matvec_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `cat_matvec(...)`.
+ * Output object returned when calling `CatMatvecParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function cat_matvec_params(
     matrix_format: boolean = false,
     oneline_format: boolean = false,
     four_by_four_format: boolean = false,
-): CatMatvecParameters {
+): CatMatvecParametersTagged {
     const params = {
-        "@type": "afni.cat_matvec" as const,
+        "@type": "afni/cat_matvec" as const,
         "matrix_format": matrix_format,
         "oneline_format": oneline_format,
         "four_by_four_format": four_by_four_format,
@@ -107,13 +75,13 @@ function cat_matvec_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("cat_matvec");
-    if ((params["matrix_format"] ?? null)) {
+    if ((params["matrix_format"] ?? false)) {
         cargs.push("-MATRIX");
     }
-    if ((params["oneline_format"] ?? null)) {
+    if ((params["oneline_format"] ?? false)) {
         cargs.push("-ONELINE");
     }
-    if ((params["four_by_four_format"] ?? null)) {
+    if ((params["four_by_four_format"] ?? false)) {
         cargs.push("-4x4");
     }
     cargs.push(...(params["matvec_spec"] ?? null));
@@ -200,7 +168,6 @@ function cat_matvec(
 export {
       CAT_MATVEC_METADATA,
       CatMatvecOutputs,
-      CatMatvecParameters,
       cat_matvec,
       cat_matvec_execute,
       cat_matvec_params,

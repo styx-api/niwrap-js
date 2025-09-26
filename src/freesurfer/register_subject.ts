@@ -12,7 +12,7 @@ const REGISTER_SUBJECT_METADATA: Metadata = {
 
 
 interface RegisterSubjectParameters {
-    "@type": "freesurfer.register_subject";
+    "@type"?: "freesurfer/register_subject";
     "input_volume"?: InputPathType | null | undefined;
     "mask_volume"?: InputPathType | null | undefined;
     "control_points"?: string | null | undefined;
@@ -20,44 +20,11 @@ interface RegisterSubjectParameters {
     "log_file"?: InputPathType | null | undefined;
     "gca_file"?: InputPathType | null | undefined;
 }
+type RegisterSubjectParametersTagged = Required<Pick<RegisterSubjectParameters, '@type'>> & RegisterSubjectParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.register_subject": register_subject_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.register_subject": register_subject_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `register_subject(...)`.
+ * Output object returned when calling `RegisterSubjectParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +63,9 @@ function register_subject_params(
     output_directory: string | null = null,
     log_file: InputPathType | null = null,
     gca_file: InputPathType | null = null,
-): RegisterSubjectParameters {
+): RegisterSubjectParametersTagged {
     const params = {
-        "@type": "freesurfer.register_subject" as const,
+        "@type": "freesurfer/register_subject" as const,
     };
     if (input_volume !== null) {
         params["input_volume"] = input_volume;
@@ -243,7 +210,6 @@ function register_subject(
 export {
       REGISTER_SUBJECT_METADATA,
       RegisterSubjectOutputs,
-      RegisterSubjectParameters,
       register_subject,
       register_subject_execute,
       register_subject_params,

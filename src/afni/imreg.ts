@@ -12,7 +12,7 @@ const IMREG_METADATA: Metadata = {
 
 
 interface ImregParameters {
-    "@type": "afni.imreg";
+    "@type"?: "afni/imreg";
     "base_image": string;
     "image_sequence": Array<InputPathType>;
     "nowrite": boolean;
@@ -34,44 +34,11 @@ interface ImregParameters {
     "fine"?: Array<number> | null | undefined;
     "nofine": boolean;
 }
+type ImregParametersTagged = Required<Pick<ImregParameters, '@type'>> & ImregParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.imreg": imreg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.imreg": imreg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `imreg(...)`.
+ * Output object returned when calling `ImregParameters(...)`.
  *
  * @interface
  */
@@ -146,9 +113,9 @@ function imreg_params(
     cmass: boolean = false,
     fine: Array<number> | null = null,
     nofine: boolean = false,
-): ImregParameters {
+): ImregParametersTagged {
     const params = {
-        "@type": "afni.imreg" as const,
+        "@type": "afni/imreg" as const,
         "base_image": base_image,
         "image_sequence": image_sequence,
         "nowrite": nowrite,
@@ -206,7 +173,7 @@ function imreg_cargs(
     cargs.push("imreg");
     cargs.push((params["base_image"] ?? null));
     cargs.push(...(params["image_sequence"] ?? null).map(f => execution.inputFile(f)));
-    if ((params["nowrite"] ?? null)) {
+    if ((params["nowrite"] ?? false)) {
         cargs.push("-nowrite");
     }
     if ((params["prefix"] ?? null) !== null) {
@@ -233,16 +200,16 @@ function imreg_cargs(
             String((params["step"] ?? null))
         );
     }
-    if ((params["flim"] ?? null)) {
+    if ((params["flim"] ?? false)) {
         cargs.push("-flim");
     }
-    if ((params["keepsize"] ?? null)) {
+    if ((params["keepsize"] ?? false)) {
         cargs.push("-keepsize");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
     if ((params["dprefix"] ?? null) !== null) {
@@ -251,7 +218,7 @@ function imreg_cargs(
             (params["dprefix"] ?? null)
         );
     }
-    if ((params["bilinear"] ?? null)) {
+    if ((params["bilinear"] ?? false)) {
         cargs.push("-bilinear");
     }
     if ((params["modes"] ?? null) !== null) {
@@ -260,7 +227,7 @@ function imreg_cargs(
             (params["modes"] ?? null)
         );
     }
-    if ((params["mlcf"] ?? null)) {
+    if ((params["mlcf"] ?? false)) {
         cargs.push("-mlcF");
     }
     if ((params["wtim"] ?? null) !== null) {
@@ -269,10 +236,10 @@ function imreg_cargs(
             execution.inputFile((params["wtim"] ?? null))
         );
     }
-    if ((params["dfspace"] ?? null)) {
+    if ((params["dfspace"] ?? false)) {
         cargs.push("-dfspace");
     }
-    if ((params["cmass"] ?? null)) {
+    if ((params["cmass"] ?? false)) {
         cargs.push("-cmass");
     }
     if ((params["fine"] ?? null) !== null) {
@@ -281,7 +248,7 @@ function imreg_cargs(
             ...(params["fine"] ?? null).map(String)
         );
     }
-    if ((params["nofine"] ?? null)) {
+    if ((params["nofine"] ?? false)) {
         cargs.push("-nofine");
     }
     return cargs;
@@ -403,7 +370,6 @@ function imreg(
 export {
       IMREG_METADATA,
       ImregOutputs,
-      ImregParameters,
       imreg,
       imreg_execute,
       imreg_params,

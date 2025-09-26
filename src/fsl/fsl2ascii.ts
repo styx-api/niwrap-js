@@ -12,48 +12,15 @@ const FSL2ASCII_METADATA: Metadata = {
 
 
 interface Fsl2asciiParameters {
-    "@type": "fsl.fsl2ascii";
+    "@type"?: "fsl/fsl2ascii";
     "input_file": InputPathType;
     "output_file": string;
 }
+type Fsl2asciiParametersTagged = Required<Pick<Fsl2asciiParameters, '@type'>> & Fsl2asciiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fsl2ascii": fsl2ascii_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fsl2ascii": fsl2ascii_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsl2ascii(...)`.
+ * Output object returned when calling `Fsl2asciiParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface Fsl2asciiOutputs {
 function fsl2ascii_params(
     input_file: InputPathType,
     output_file: string,
-): Fsl2asciiParameters {
+): Fsl2asciiParametersTagged {
     const params = {
-        "@type": "fsl.fsl2ascii" as const,
+        "@type": "fsl/fsl2ascii" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -186,7 +153,6 @@ function fsl2ascii(
 export {
       FSL2ASCII_METADATA,
       Fsl2asciiOutputs,
-      Fsl2asciiParameters,
       fsl2ascii,
       fsl2ascii_execute,
       fsl2ascii_params,

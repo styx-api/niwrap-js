@@ -12,47 +12,14 @@ const SEGMENT_SUBJECT_NOTAL2_METADATA: Metadata = {
 
 
 interface SegmentSubjectNotal2Parameters {
-    "@type": "freesurfer.segment_subject_notal2";
+    "@type"?: "freesurfer/segment_subject_notal2";
     "license_file": InputPathType;
 }
+type SegmentSubjectNotal2ParametersTagged = Required<Pick<SegmentSubjectNotal2Parameters, '@type'>> & SegmentSubjectNotal2Parameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.segment_subject_notal2": segment_subject_notal2_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.segment_subject_notal2": segment_subject_notal2_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `segment_subject_notal2(...)`.
+ * Output object returned when calling `SegmentSubjectNotal2Parameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface SegmentSubjectNotal2Outputs {
  */
 function segment_subject_notal2_params(
     license_file: InputPathType,
-): SegmentSubjectNotal2Parameters {
+): SegmentSubjectNotal2ParametersTagged {
     const params = {
-        "@type": "freesurfer.segment_subject_notal2" as const,
+        "@type": "freesurfer/segment_subject_notal2" as const,
         "license_file": license_file,
     };
     return params;
@@ -182,7 +149,6 @@ function segment_subject_notal2(
 export {
       SEGMENT_SUBJECT_NOTAL2_METADATA,
       SegmentSubjectNotal2Outputs,
-      SegmentSubjectNotal2Parameters,
       segment_subject_notal2,
       segment_subject_notal2_execute,
       segment_subject_notal2_params,

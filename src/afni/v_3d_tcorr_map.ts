@@ -12,7 +12,7 @@ const V_3D_TCORR_MAP_METADATA: Metadata = {
 
 
 interface V3dTcorrMapParameters {
-    "@type": "afni.3dTcorrMap";
+    "@type"?: "afni/3dTcorrMap";
     "input": InputPathType;
     "seed"?: InputPathType | null | undefined;
     "mask"?: InputPathType | null | undefined;
@@ -31,43 +31,11 @@ interface V3dTcorrMapParameters {
     "sexpr"?: string | null | undefined;
     "hist"?: string | null | undefined;
 }
+type V3dTcorrMapParametersTagged = Required<Pick<V3dTcorrMapParameters, '@type'>> & V3dTcorrMapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dTcorrMap": v_3d_tcorr_map_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_tcorr_map(...)`.
+ * Output object returned when calling `V3dTcorrMapParameters(...)`.
  *
  * @interface
  */
@@ -120,9 +88,9 @@ function v_3d_tcorr_map_params(
     cexpr: string | null = null,
     sexpr: string | null = null,
     hist: string | null = null,
-): V3dTcorrMapParameters {
+): V3dTcorrMapParametersTagged {
     const params = {
-        "@type": "afni.3dTcorrMap" as const,
+        "@type": "afni/3dTcorrMap" as const,
         "input": input,
         "automask": automask,
         "corrmask": corrmask,
@@ -200,7 +168,7 @@ function v_3d_tcorr_map_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     if ((params["mean"] ?? null) !== null) {
@@ -251,7 +219,7 @@ function v_3d_tcorr_map_cargs(
             (params["corrmap"] ?? null)
         );
     }
-    if ((params["corrmask"] ?? null)) {
+    if ((params["corrmask"] ?? false)) {
         cargs.push("-CorrMask");
     }
     if ((params["aexpr"] ?? null) !== null) {
@@ -386,7 +354,6 @@ function v_3d_tcorr_map(
 
 export {
       V3dTcorrMapOutputs,
-      V3dTcorrMapParameters,
       V_3D_TCORR_MAP_METADATA,
       v_3d_tcorr_map,
       v_3d_tcorr_map_execute,

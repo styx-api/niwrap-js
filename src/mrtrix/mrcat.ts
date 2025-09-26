@@ -12,14 +12,15 @@ const MRCAT_METADATA: Metadata = {
 
 
 interface MrcatConfigParameters {
-    "@type": "mrtrix.mrcat.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MrcatConfigParametersTagged = Required<Pick<MrcatConfigParameters, '@type'>> & MrcatConfigParameters;
 
 
 interface MrcatParameters {
-    "@type": "mrtrix.mrcat";
+    "@type"?: "mrtrix/mrcat";
     "axis"?: number | null | undefined;
     "datatype"?: string | null | undefined;
     "info": boolean;
@@ -34,41 +35,7 @@ interface MrcatParameters {
     "image2": Array<InputPathType>;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.mrcat": mrcat_cargs,
-        "mrtrix.mrcat.config": mrcat_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.mrcat": mrcat_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MrcatParametersTagged = Required<Pick<MrcatParameters, '@type'>> & MrcatParameters;
 
 
 /**
@@ -82,9 +49,9 @@ function dynOutputs(
 function mrcat_config_params(
     key: string,
     value: string,
-): MrcatConfigParameters {
+): MrcatConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcat.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -113,7 +80,7 @@ function mrcat_config_cargs(
 
 
 /**
- * Output object returned when calling `mrcat(...)`.
+ * Output object returned when calling `MrcatParameters(...)`.
  *
  * @interface
  */
@@ -162,9 +129,9 @@ function mrcat_params(
     config: Array<MrcatConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrcatParameters {
+): MrcatParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcat" as const,
+        "@type": "mrtrix/mrcat" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -217,16 +184,16 @@ function mrcat_cargs(
             (params["datatype"] ?? null)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -236,12 +203,12 @@ function mrcat_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => mrcat_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["image1"] ?? null)));
@@ -360,9 +327,7 @@ function mrcat(
 
 export {
       MRCAT_METADATA,
-      MrcatConfigParameters,
       MrcatOutputs,
-      MrcatParameters,
       mrcat,
       mrcat_config_params,
       mrcat_execute,

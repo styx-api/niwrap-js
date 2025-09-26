@@ -12,7 +12,7 @@ const QUICKSPEC_SL_METADATA: Metadata = {
 
 
 interface QuickspecSlParameters {
-    "@type": "afni.quickspecSL";
+    "@type"?: "afni/quickspecSL";
     "surf_A": InputPathType;
     "surf_B": InputPathType;
     "surf_intermed_pref"?: string | null | undefined;
@@ -22,44 +22,11 @@ interface QuickspecSlParameters {
     "both_lr_flag": boolean;
     "out_spec"?: string | null | undefined;
 }
+type QuickspecSlParametersTagged = Required<Pick<QuickspecSlParameters, '@type'>> & QuickspecSlParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.quickspecSL": quickspec_sl_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.quickspecSL": quickspec_sl_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `quickspec_sl(...)`.
+ * Output object returned when calling `QuickspecSlParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function quickspec_sl_params(
     infl_surf_intermed_pref: string | null = null,
     both_lr_flag: boolean = false,
     out_spec: string | null = null,
-): QuickspecSlParameters {
+): QuickspecSlParametersTagged {
     const params = {
-        "@type": "afni.quickspecSL" as const,
+        "@type": "afni/quickspecSL" as const,
         "surf_A": surf_a,
         "surf_B": surf_b,
         "both_lr_flag": both_lr_flag,
@@ -170,7 +137,7 @@ function quickspec_sl_cargs(
             (params["infl_surf_intermed_pref"] ?? null)
         );
     }
-    if ((params["both_lr_flag"] ?? null)) {
+    if ((params["both_lr_flag"] ?? false)) {
         cargs.push("-both_lr");
     }
     if ((params["out_spec"] ?? null) !== null) {
@@ -271,7 +238,6 @@ function quickspec_sl(
 export {
       QUICKSPEC_SL_METADATA,
       QuickspecSlOutputs,
-      QuickspecSlParameters,
       quickspec_sl,
       quickspec_sl_execute,
       quickspec_sl_params,

@@ -12,7 +12,7 @@ const MRIS_REPOSITION_SURFACE_METADATA: Metadata = {
 
 
 interface MrisRepositionSurfaceParameters {
-    "@type": "freesurfer.mris_reposition_surface";
+    "@type"?: "freesurfer/mris_reposition_surface";
     "surf": InputPathType;
     "volume": InputPathType;
     "points": InputPathType;
@@ -21,44 +21,11 @@ interface MrisRepositionSurfaceParameters {
     "sigma"?: number | null | undefined;
     "iterations"?: number | null | undefined;
 }
+type MrisRepositionSurfaceParametersTagged = Required<Pick<MrisRepositionSurfaceParameters, '@type'>> & MrisRepositionSurfaceParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_reposition_surface": mris_reposition_surface_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_reposition_surface": mris_reposition_surface_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_reposition_surface(...)`.
+ * Output object returned when calling `MrisRepositionSurfaceParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function mris_reposition_surface_params(
     size: number | null = null,
     sigma: number | null = null,
     iterations: number | null = null,
-): MrisRepositionSurfaceParameters {
+): MrisRepositionSurfaceParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_reposition_surface" as const,
+        "@type": "freesurfer/mris_reposition_surface" as const,
         "surf": surf,
         "volume": volume,
         "points": points,
@@ -254,7 +221,6 @@ function mris_reposition_surface(
 export {
       MRIS_REPOSITION_SURFACE_METADATA,
       MrisRepositionSurfaceOutputs,
-      MrisRepositionSurfaceParameters,
       mris_reposition_surface,
       mris_reposition_surface_execute,
       mris_reposition_surface_params,

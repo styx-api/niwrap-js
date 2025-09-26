@@ -12,50 +12,17 @@ const MEANVAL_METADATA: Metadata = {
 
 
 interface MeanvalParameters {
-    "@type": "freesurfer.meanval";
+    "@type"?: "freesurfer/meanval";
     "input_file": InputPathType;
     "mask_file": InputPathType;
     "output_file": string;
     "avgwf_flag": boolean;
 }
+type MeanvalParametersTagged = Required<Pick<MeanvalParameters, '@type'>> & MeanvalParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.meanval": meanval_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.meanval": meanval_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `meanval(...)`.
+ * Output object returned when calling `MeanvalParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function meanval_params(
     mask_file: InputPathType,
     output_file: string,
     avgwf_flag: boolean = false,
-): MeanvalParameters {
+): MeanvalParametersTagged {
     const params = {
-        "@type": "freesurfer.meanval" as const,
+        "@type": "freesurfer/meanval" as const,
         "input_file": input_file,
         "mask_file": mask_file,
         "output_file": output_file,
@@ -124,7 +91,7 @@ function meanval_cargs(
         "--o",
         (params["output_file"] ?? null)
     );
-    if ((params["avgwf_flag"] ?? null)) {
+    if ((params["avgwf_flag"] ?? false)) {
         cargs.push("--avgwf");
     }
     return cargs;
@@ -211,7 +178,6 @@ function meanval(
 export {
       MEANVAL_METADATA,
       MeanvalOutputs,
-      MeanvalParameters,
       meanval,
       meanval_execute,
       meanval_params,

@@ -12,50 +12,18 @@ const THICKDIFFMAP_METADATA: Metadata = {
 
 
 interface ThickdiffmapParameters {
-    "@type": "freesurfer.thickdiffmap";
+    "@type"?: "freesurfer/thickdiffmap";
     "subjscan1": InputPathType;
     "subjscan2": InputPathType;
     "commonsubj": string;
     "hemi": string;
     "steps"?: Array<string> | null | undefined;
 }
+type ThickdiffmapParametersTagged = Required<Pick<ThickdiffmapParameters, '@type'>> & ThickdiffmapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.thickdiffmap": thickdiffmap_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `thickdiffmap(...)`.
+ * Output object returned when calling `ThickdiffmapParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function thickdiffmap_params(
     commonsubj: string,
     hemi: string,
     steps: Array<string> | null = null,
-): ThickdiffmapParameters {
+): ThickdiffmapParametersTagged {
     const params = {
-        "@type": "freesurfer.thickdiffmap" as const,
+        "@type": "freesurfer/thickdiffmap" as const,
         "subjscan1": subjscan1,
         "subjscan2": subjscan2,
         "commonsubj": commonsubj,
@@ -205,7 +173,6 @@ function thickdiffmap(
 export {
       THICKDIFFMAP_METADATA,
       ThickdiffmapOutputs,
-      ThickdiffmapParameters,
       thickdiffmap,
       thickdiffmap_execute,
       thickdiffmap_params,

@@ -12,21 +12,23 @@ const SH2PEAKS_METADATA: Metadata = {
 
 
 interface Sh2peaksDirectionParameters {
-    "@type": "mrtrix.sh2peaks.direction";
+    "@type"?: "direction";
     "phi": number;
     "theta": number;
 }
+type Sh2peaksDirectionParametersTagged = Required<Pick<Sh2peaksDirectionParameters, '@type'>> & Sh2peaksDirectionParameters;
 
 
 interface Sh2peaksConfigParameters {
-    "@type": "mrtrix.sh2peaks.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Sh2peaksConfigParametersTagged = Required<Pick<Sh2peaksConfigParameters, '@type'>> & Sh2peaksConfigParameters;
 
 
 interface Sh2peaksParameters {
-    "@type": "mrtrix.sh2peaks";
+    "@type"?: "mrtrix/sh2peaks";
     "num"?: number | null | undefined;
     "direction"?: Array<Sh2peaksDirectionParameters> | null | undefined;
     "peaks"?: InputPathType | null | undefined;
@@ -45,42 +47,7 @@ interface Sh2peaksParameters {
     "SH": InputPathType;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.sh2peaks": sh2peaks_cargs,
-        "mrtrix.sh2peaks.direction": sh2peaks_direction_cargs,
-        "mrtrix.sh2peaks.config": sh2peaks_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.sh2peaks": sh2peaks_outputs,
-    };
-    return outputsFuncs[t];
-}
+type Sh2peaksParametersTagged = Required<Pick<Sh2peaksParameters, '@type'>> & Sh2peaksParameters;
 
 
 /**
@@ -94,9 +61,9 @@ function dynOutputs(
 function sh2peaks_direction_params(
     phi: number,
     theta: number,
-): Sh2peaksDirectionParameters {
+): Sh2peaksDirectionParametersTagged {
     const params = {
-        "@type": "mrtrix.sh2peaks.direction" as const,
+        "@type": "direction" as const,
         "phi": phi,
         "theta": theta,
     };
@@ -135,9 +102,9 @@ function sh2peaks_direction_cargs(
 function sh2peaks_config_params(
     key: string,
     value: string,
-): Sh2peaksConfigParameters {
+): Sh2peaksConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.sh2peaks.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -166,7 +133,7 @@ function sh2peaks_config_cargs(
 
 
 /**
- * Output object returned when calling `sh2peaks(...)`.
+ * Output object returned when calling `Sh2peaksParameters(...)`.
  *
  * @interface
  */
@@ -223,9 +190,9 @@ function sh2peaks_params(
     config: Array<Sh2peaksConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Sh2peaksParameters {
+): Sh2peaksParametersTagged {
     const params = {
-        "@type": "mrtrix.sh2peaks" as const,
+        "@type": "mrtrix/sh2peaks" as const,
         "fast": fast,
         "info": info,
         "quiet": quiet,
@@ -285,7 +252,7 @@ function sh2peaks_cargs(
         );
     }
     if ((params["direction"] ?? null) !== null) {
-        cargs.push(...(params["direction"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["direction"] ?? null).map(s => sh2peaks_direction_cargs(s, execution)).flat());
     }
     if ((params["peaks"] ?? null) !== null) {
         cargs.push(
@@ -311,19 +278,19 @@ function sh2peaks_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["fast"] ?? null)) {
+    if ((params["fast"] ?? false)) {
         cargs.push("-fast");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -333,12 +300,12 @@ function sh2peaks_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => sh2peaks_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["SH"] ?? null)));
@@ -470,10 +437,7 @@ function sh2peaks(
 
 export {
       SH2PEAKS_METADATA,
-      Sh2peaksConfigParameters,
-      Sh2peaksDirectionParameters,
       Sh2peaksOutputs,
-      Sh2peaksParameters,
       sh2peaks,
       sh2peaks_config_params,
       sh2peaks_direction_params,

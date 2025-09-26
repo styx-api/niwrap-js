@@ -12,51 +12,18 @@ const TEXTURE_COOCCURRENCE_FEATURES_METADATA: Metadata = {
 
 
 interface TextureCooccurrenceFeaturesParameters {
-    "@type": "ants.TextureCooccurrenceFeatures";
+    "@type"?: "ants/TextureCooccurrenceFeatures";
     "image_dimension": number;
     "input_image": InputPathType;
     "number_of_bins_per_axis"?: number | null | undefined;
     "mask_image"?: InputPathType | null | undefined;
     "mask_label"?: number | null | undefined;
 }
+type TextureCooccurrenceFeaturesParametersTagged = Required<Pick<TextureCooccurrenceFeaturesParameters, '@type'>> & TextureCooccurrenceFeaturesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.TextureCooccurrenceFeatures": texture_cooccurrence_features_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.TextureCooccurrenceFeatures": texture_cooccurrence_features_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `texture_cooccurrence_features(...)`.
+ * Output object returned when calling `TextureCooccurrenceFeaturesParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function texture_cooccurrence_features_params(
     number_of_bins_per_axis: number | null = null,
     mask_image: InputPathType | null = null,
     mask_label: number | null = null,
-): TextureCooccurrenceFeaturesParameters {
+): TextureCooccurrenceFeaturesParametersTagged {
     const params = {
-        "@type": "ants.TextureCooccurrenceFeatures" as const,
+        "@type": "ants/TextureCooccurrenceFeatures" as const,
         "image_dimension": image_dimension,
         "input_image": input_image,
     };
@@ -219,7 +186,6 @@ function texture_cooccurrence_features(
 export {
       TEXTURE_COOCCURRENCE_FEATURES_METADATA,
       TextureCooccurrenceFeaturesOutputs,
-      TextureCooccurrenceFeaturesParameters,
       texture_cooccurrence_features,
       texture_cooccurrence_features_execute,
       texture_cooccurrence_features_params,

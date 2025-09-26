@@ -12,7 +12,7 @@ const EASYTHRESH_METADATA: Metadata = {
 
 
 interface EasythreshParameters {
-    "@type": "fsl.easythresh";
+    "@type"?: "fsl/easythresh";
     "raw_zstat_input": InputPathType;
     "brain_mask_input": InputPathType;
     "cluster_z_thresh_input": number;
@@ -21,44 +21,11 @@ interface EasythreshParameters {
     "output_root": string;
     "mm_flag": boolean;
 }
+type EasythreshParametersTagged = Required<Pick<EasythreshParameters, '@type'>> & EasythreshParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.easythresh": easythresh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.easythresh": easythresh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `easythresh(...)`.
+ * Output object returned when calling `EasythreshParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function easythresh_params(
     background_image_input: InputPathType,
     output_root: string,
     mm_flag: boolean = false,
-): EasythreshParameters {
+): EasythreshParametersTagged {
     const params = {
-        "@type": "fsl.easythresh" as const,
+        "@type": "fsl/easythresh" as const,
         "raw_zstat_input": raw_zstat_input,
         "brain_mask_input": brain_mask_input,
         "cluster_z_thresh_input": cluster_z_thresh_input,
@@ -130,7 +97,7 @@ function easythresh_cargs(
     cargs.push(String((params["cluster_prob_thresh_input"] ?? null)));
     cargs.push(execution.inputFile((params["background_image_input"] ?? null)));
     cargs.push((params["output_root"] ?? null));
-    if ((params["mm_flag"] ?? null)) {
+    if ((params["mm_flag"] ?? false)) {
         cargs.push("--mm");
     }
     return cargs;
@@ -223,7 +190,6 @@ function easythresh(
 export {
       EASYTHRESH_METADATA,
       EasythreshOutputs,
-      EasythreshParameters,
       easythresh,
       easythresh_execute,
       easythresh_params,

@@ -12,7 +12,7 @@ const SAMSEGMESH2SURF_METADATA: Metadata = {
 
 
 interface Samsegmesh2surfParameters {
-    "@type": "freesurfer.samsegmesh2surf";
+    "@type"?: "freesurfer/samsegmesh2surf";
     "atlas_mesh": InputPathType;
     "template"?: InputPathType | null | undefined;
     "lta_transform"?: InputPathType | null | undefined;
@@ -20,44 +20,11 @@ interface Samsegmesh2surfParameters {
     "output_priors"?: string | null | undefined;
     "invert_flag": boolean;
 }
+type Samsegmesh2surfParametersTagged = Required<Pick<Samsegmesh2surfParameters, '@type'>> & Samsegmesh2surfParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.samsegmesh2surf": samsegmesh2surf_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.samsegmesh2surf": samsegmesh2surf_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `samsegmesh2surf(...)`.
+ * Output object returned when calling `Samsegmesh2surfParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +63,9 @@ function samsegmesh2surf_params(
     output_surface: string | null = null,
     output_priors: string | null = null,
     invert_flag: boolean = false,
-): Samsegmesh2surfParameters {
+): Samsegmesh2surfParametersTagged {
     const params = {
-        "@type": "freesurfer.samsegmesh2surf" as const,
+        "@type": "freesurfer/samsegmesh2surf" as const,
         "atlas_mesh": atlas_mesh,
         "invert_flag": invert_flag,
     };
@@ -160,7 +127,7 @@ function samsegmesh2surf_cargs(
             (params["output_priors"] ?? null)
         );
     }
-    if ((params["invert_flag"] ?? null)) {
+    if ((params["invert_flag"] ?? false)) {
         cargs.push("--invert");
     }
     return cargs;
@@ -252,7 +219,6 @@ function samsegmesh2surf(
 export {
       SAMSEGMESH2SURF_METADATA,
       Samsegmesh2surfOutputs,
-      Samsegmesh2surfParameters,
       samsegmesh2surf,
       samsegmesh2surf_execute,
       samsegmesh2surf_params,

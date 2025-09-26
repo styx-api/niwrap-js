@@ -12,50 +12,17 @@ const MAKE_PQ_SCRIPT_PY_METADATA: Metadata = {
 
 
 interface MakePqScriptPyParameters {
-    "@type": "afni.make_pq_script.py";
+    "@type"?: "afni/make_pq_script.py";
     "dataset": InputPathType;
     "brick_index": number;
     "mask": InputPathType;
     "out_script": string;
 }
+type MakePqScriptPyParametersTagged = Required<Pick<MakePqScriptPyParameters, '@type'>> & MakePqScriptPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.make_pq_script.py": make_pq_script_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.make_pq_script.py": make_pq_script_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `make_pq_script_py(...)`.
+ * Output object returned when calling `MakePqScriptPyParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function make_pq_script_py_params(
     brick_index: number,
     mask: InputPathType,
     out_script: string,
-): MakePqScriptPyParameters {
+): MakePqScriptPyParametersTagged {
     const params = {
-        "@type": "afni.make_pq_script.py" as const,
+        "@type": "afni/make_pq_script.py" as const,
         "dataset": dataset,
         "brick_index": brick_index,
         "mask": mask,
@@ -200,7 +167,6 @@ function make_pq_script_py(
 export {
       MAKE_PQ_SCRIPT_PY_METADATA,
       MakePqScriptPyOutputs,
-      MakePqScriptPyParameters,
       make_pq_script_py,
       make_pq_script_py_execute,
       make_pq_script_py_params,

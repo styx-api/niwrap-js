@@ -12,7 +12,7 @@ const MRIS_MULTIMODAL_METADATA: Metadata = {
 
 
 interface MrisMultimodalParameters {
-    "@type": "freesurfer.mris_multimodal";
+    "@type"?: "freesurfer/mris_multimodal";
     "input_surface": InputPathType;
     "target_surface": InputPathType;
     "output_surface": string;
@@ -24,44 +24,11 @@ interface MrisMultimodalParameters {
     "csv_output": string;
     "vtk_output": boolean;
 }
+type MrisMultimodalParametersTagged = Required<Pick<MrisMultimodalParameters, '@type'>> & MrisMultimodalParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_multimodal": mris_multimodal_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_multimodal": mris_multimodal_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_multimodal(...)`.
+ * Output object returned when calling `MrisMultimodalParameters(...)`.
  *
  * @interface
  */
@@ -116,9 +83,9 @@ function mris_multimodal_params(
     curvature: boolean = false,
     thickness: boolean = false,
     vtk_output: boolean = false,
-): MrisMultimodalParameters {
+): MrisMultimodalParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_multimodal" as const,
+        "@type": "freesurfer/mris_multimodal" as const,
         "input_surface": input_surface,
         "target_surface": target_surface,
         "output_surface": output_surface,
@@ -160,13 +127,13 @@ function mris_multimodal_cargs(
         "-o",
         (params["output_surface"] ?? null)
     );
-    if ((params["fill_holes"] ?? null)) {
+    if ((params["fill_holes"] ?? false)) {
         cargs.push("-fillHoles");
     }
-    if ((params["curvature"] ?? null)) {
+    if ((params["curvature"] ?? false)) {
         cargs.push("--curvature");
     }
-    if ((params["thickness"] ?? null)) {
+    if ((params["thickness"] ?? false)) {
         cargs.push("--thickness");
     }
     cargs.push(
@@ -181,7 +148,7 @@ function mris_multimodal_cargs(
         "-c",
         (params["csv_output"] ?? null)
     );
-    if ((params["vtk_output"] ?? null)) {
+    if ((params["vtk_output"] ?? false)) {
         cargs.push("-vtk");
     }
     return cargs;
@@ -283,7 +250,6 @@ function mris_multimodal(
 export {
       MRIS_MULTIMODAL_METADATA,
       MrisMultimodalOutputs,
-      MrisMultimodalParameters,
       mris_multimodal,
       mris_multimodal_execute,
       mris_multimodal_params,

@@ -12,7 +12,7 @@ const CONVERT_DSET_METADATA: Metadata = {
 
 
 interface ConvertDsetParameters {
-    "@type": "afni.ConvertDset";
+    "@type"?: "afni/ConvertDset";
     "output_type": Array<"niml_asc" | "niml_bi" | "1D" | "1Dp" | "1Dpt" | "gii" | "gii_asc" | "gii_b64" | "gii_b64gz" | "1D_stderr" | "1D_stdout" | "niml_stderr" | "niml_stdout" | "1Dp_stdout" | "1Dp_stderr" | "1Dpt_stdout" | "1Dpt_stderr">;
     "input_dataset": InputPathType;
     "input_type"?: "niml" | "1D" | "dx" | null | undefined;
@@ -35,44 +35,11 @@ interface ConvertDsetParameters {
     "split"?: number | null | undefined;
     "no_history": boolean;
 }
+type ConvertDsetParametersTagged = Required<Pick<ConvertDsetParameters, '@type'>> & ConvertDsetParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.ConvertDset": convert_dset_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.ConvertDset": convert_dset_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `convert_dset(...)`.
+ * Output object returned when calling `ConvertDsetParameters(...)`.
  *
  * @interface
  */
@@ -137,9 +104,9 @@ function convert_dset_params(
     multigraph: boolean = false,
     split: number | null = null,
     no_history: boolean = false,
-): ConvertDsetParameters {
+): ConvertDsetParametersTagged {
     const params = {
-        "@type": "afni.ConvertDset" as const,
+        "@type": "afni/ConvertDset" as const,
         "output_type": output_type,
         "input_dataset": input_dataset,
         "add_node_index": add_node_index,
@@ -230,7 +197,7 @@ function convert_dset_cargs(
             (params["dset_labels"] ?? null)
         );
     }
-    if ((params["add_node_index"] ?? null)) {
+    if ((params["add_node_index"] ?? false)) {
         cargs.push("-add_node_index");
     }
     if ((params["node_index_file"] ?? null) !== null) {
@@ -245,7 +212,7 @@ function convert_dset_cargs(
             execution.inputFile((params["node_select_file"] ?? null))
         );
     }
-    if ((params["prepend_node_index"] ?? null)) {
+    if ((params["prepend_node_index"] ?? false)) {
         cargs.push("-prepend_node_index_1D");
     }
     if ((params["pad_to_node"] ?? null) !== null) {
@@ -260,7 +227,7 @@ function convert_dset_cargs(
             execution.inputFile((params["labelize"] ?? null))
         );
     }
-    if ((params["graphize"] ?? null)) {
+    if ((params["graphize"] ?? false)) {
         cargs.push("-graphize");
     }
     if ((params["graph_nodelist"] ?? null) !== null) {
@@ -281,7 +248,7 @@ function convert_dset_cargs(
             (params["graph_named_nodelist"] ?? null)
         );
     }
-    if ((params["graph_xyz_lpi"] ?? null)) {
+    if ((params["graph_xyz_lpi"] ?? false)) {
         cargs.push("-graph_XYZ_LPI");
     }
     if ((params["graph_edgelist"] ?? null) !== null) {
@@ -290,10 +257,10 @@ function convert_dset_cargs(
             execution.inputFile((params["graph_edgelist"] ?? null))
         );
     }
-    if ((params["onegraph"] ?? null)) {
+    if ((params["onegraph"] ?? false)) {
         cargs.push("-onegraph");
     }
-    if ((params["multigraph"] ?? null)) {
+    if ((params["multigraph"] ?? false)) {
         cargs.push("-multigraph");
     }
     if ((params["split"] ?? null) !== null) {
@@ -302,7 +269,7 @@ function convert_dset_cargs(
             String((params["split"] ?? null))
         );
     }
-    if ((params["no_history"] ?? null)) {
+    if ((params["no_history"] ?? false)) {
         cargs.push("-no_history");
     }
     return cargs;
@@ -423,7 +390,6 @@ function convert_dset(
 export {
       CONVERT_DSET_METADATA,
       ConvertDsetOutputs,
-      ConvertDsetParameters,
       convert_dset,
       convert_dset_execute,
       convert_dset_params,

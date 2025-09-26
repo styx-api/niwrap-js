@@ -12,7 +12,7 @@ const V_3D_ZREGRID_METADATA: Metadata = {
 
 
 interface V3dZregridParameters {
-    "@type": "afni.3dZregrid";
+    "@type"?: "afni/3dZregrid";
     "z_thickness"?: number | null | undefined;
     "slice_count"?: number | null | undefined;
     "z_size"?: number | null | undefined;
@@ -20,44 +20,11 @@ interface V3dZregridParameters {
     "infile": InputPathType;
     "verbose": boolean;
 }
+type V3dZregridParametersTagged = Required<Pick<V3dZregridParameters, '@type'>> & V3dZregridParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dZregrid": v_3d_zregrid_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dZregrid": v_3d_zregrid_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_zregrid(...)`.
+ * Output object returned when calling `V3dZregridParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +63,9 @@ function v_3d_zregrid_params(
     z_size: number | null = null,
     prefix: string | null = null,
     verbose: boolean = false,
-): V3dZregridParameters {
+): V3dZregridParametersTagged {
     const params = {
-        "@type": "afni.3dZregrid" as const,
+        "@type": "afni/3dZregrid" as const,
         "infile": infile,
         "verbose": verbose,
     };
@@ -157,7 +124,7 @@ function v_3d_zregrid_cargs(
         );
     }
     cargs.push(execution.inputFile((params["infile"] ?? null)));
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
     return cargs;
@@ -248,7 +215,6 @@ function v_3d_zregrid(
 
 export {
       V3dZregridOutputs,
-      V3dZregridParameters,
       V_3D_ZREGRID_METADATA,
       v_3d_zregrid,
       v_3d_zregrid_execute,

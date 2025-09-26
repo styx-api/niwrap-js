@@ -12,7 +12,7 @@ const MRI_HEAD_METADATA: Metadata = {
 
 
 interface MriHeadParameters {
-    "@type": "freesurfer.mri_head";
+    "@type"?: "freesurfer/mri_head";
     "identify": boolean;
     "read": boolean;
     "filename"?: string | null | undefined;
@@ -20,43 +20,11 @@ interface MriHeadParameters {
     "usage": boolean;
     "question_mark_help": boolean;
 }
+type MriHeadParametersTagged = Required<Pick<MriHeadParameters, '@type'>> & MriHeadParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_head": mri_head_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_head(...)`.
+ * Output object returned when calling `MriHeadParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function mri_head_params(
     help: boolean = false,
     usage: boolean = false,
     question_mark_help: boolean = false,
-): MriHeadParameters {
+): MriHeadParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_head" as const,
+        "@type": "freesurfer/mri_head" as const,
         "identify": identify,
         "read": read,
         "help": help,
@@ -117,22 +85,22 @@ function mri_head_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("mri_head");
-    if ((params["identify"] ?? null)) {
+    if ((params["identify"] ?? false)) {
         cargs.push("-identify");
     }
-    if ((params["read"] ?? null)) {
+    if ((params["read"] ?? false)) {
         cargs.push("-read");
     }
     if ((params["filename"] ?? null) !== null) {
         cargs.push((params["filename"] ?? null));
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["usage"] ?? null)) {
+    if ((params["usage"] ?? false)) {
         cargs.push("-u");
     }
-    if ((params["question_mark_help"] ?? null)) {
+    if ((params["question_mark_help"] ?? false)) {
         cargs.push("-?");
     }
     return cargs;
@@ -222,7 +190,6 @@ function mri_head(
 export {
       MRI_HEAD_METADATA,
       MriHeadOutputs,
-      MriHeadParameters,
       mri_head,
       mri_head_execute,
       mri_head_params,

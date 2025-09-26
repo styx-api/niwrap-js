@@ -12,48 +12,15 @@ const CHECK_FEAT_METADATA: Metadata = {
 
 
 interface CheckFeatParameters {
-    "@type": "fsl.checkFEAT";
+    "@type"?: "fsl/checkFEAT";
     "report_file": InputPathType;
     "report_log_file": InputPathType;
 }
+type CheckFeatParametersTagged = Required<Pick<CheckFeatParameters, '@type'>> & CheckFeatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.checkFEAT": check_feat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.checkFEAT": check_feat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `check_feat(...)`.
+ * Output object returned when calling `CheckFeatParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +51,9 @@ interface CheckFeatOutputs {
 function check_feat_params(
     report_file: InputPathType,
     report_log_file: InputPathType,
-): CheckFeatParameters {
+): CheckFeatParametersTagged {
     const params = {
-        "@type": "fsl.checkFEAT" as const,
+        "@type": "fsl/checkFEAT" as const,
         "report_file": report_file,
         "report_log_file": report_log_file,
     };
@@ -191,7 +158,6 @@ function check_feat(
 export {
       CHECK_FEAT_METADATA,
       CheckFeatOutputs,
-      CheckFeatParameters,
       check_feat,
       check_feat_execute,
       check_feat_params,

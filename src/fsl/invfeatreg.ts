@@ -12,46 +12,14 @@ const INVFEATREG_METADATA: Metadata = {
 
 
 interface InvfeatregParameters {
-    "@type": "fsl.invfeatreg";
+    "@type"?: "fsl/invfeatreg";
     "feat_directory": string;
 }
+type InvfeatregParametersTagged = Required<Pick<InvfeatregParameters, '@type'>> & InvfeatregParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.invfeatreg": invfeatreg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `invfeatreg(...)`.
+ * Output object returned when calling `InvfeatregParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface InvfeatregOutputs {
  */
 function invfeatreg_params(
     feat_directory: string,
-): InvfeatregParameters {
+): InvfeatregParametersTagged {
     const params = {
-        "@type": "fsl.invfeatreg" as const,
+        "@type": "fsl/invfeatreg" as const,
         "feat_directory": feat_directory,
     };
     return params;
@@ -173,7 +141,6 @@ function invfeatreg(
 export {
       INVFEATREG_METADATA,
       InvfeatregOutputs,
-      InvfeatregParameters,
       invfeatreg,
       invfeatreg_execute,
       invfeatreg_params,

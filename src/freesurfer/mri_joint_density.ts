@@ -12,49 +12,16 @@ const MRI_JOINT_DENSITY_METADATA: Metadata = {
 
 
 interface MriJointDensityParameters {
-    "@type": "freesurfer.mri_joint_density";
+    "@type"?: "freesurfer/mri_joint_density";
     "vol1": InputPathType;
     "vol2": InputPathType;
     "output_density_file": string;
 }
+type MriJointDensityParametersTagged = Required<Pick<MriJointDensityParameters, '@type'>> & MriJointDensityParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_joint_density": mri_joint_density_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_joint_density": mri_joint_density_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_joint_density(...)`.
+ * Output object returned when calling `MriJointDensityParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mri_joint_density_params(
     vol1: InputPathType,
     vol2: InputPathType,
     output_density_file: string,
-): MriJointDensityParameters {
+): MriJointDensityParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_joint_density" as const,
+        "@type": "freesurfer/mri_joint_density" as const,
         "vol1": vol1,
         "vol2": vol2,
         "output_density_file": output_density_file,
@@ -193,7 +160,6 @@ function mri_joint_density(
 export {
       MRI_JOINT_DENSITY_METADATA,
       MriJointDensityOutputs,
-      MriJointDensityParameters,
       mri_joint_density,
       mri_joint_density_execute,
       mri_joint_density_params,

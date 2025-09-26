@@ -12,50 +12,17 @@ const SURFACE_TO_SURFACE_3D_DISTANCE_METADATA: Metadata = {
 
 
 interface SurfaceToSurface3dDistanceParameters {
-    "@type": "workbench.surface-to-surface-3d-distance";
+    "@type"?: "workbench/surface-to-surface-3d-distance";
     "surface_comp": InputPathType;
     "surface_ref": InputPathType;
     "dists_out": string;
     "opt_vectors_vectors_out"?: string | null | undefined;
 }
+type SurfaceToSurface3dDistanceParametersTagged = Required<Pick<SurfaceToSurface3dDistanceParameters, '@type'>> & SurfaceToSurface3dDistanceParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-to-surface-3d-distance": surface_to_surface_3d_distance_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-to-surface-3d-distance": surface_to_surface_3d_distance_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_to_surface_3d_distance(...)`.
+ * Output object returned when calling `SurfaceToSurface3dDistanceParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +57,9 @@ function surface_to_surface_3d_distance_params(
     surface_ref: InputPathType,
     dists_out: string,
     opt_vectors_vectors_out: string | null = null,
-): SurfaceToSurface3dDistanceParameters {
+): SurfaceToSurface3dDistanceParametersTagged {
     const params = {
-        "@type": "workbench.surface-to-surface-3d-distance" as const,
+        "@type": "workbench/surface-to-surface-3d-distance" as const,
         "surface_comp": surface_comp,
         "surface_ref": surface_ref,
         "dists_out": dists_out,
@@ -217,7 +184,6 @@ function surface_to_surface_3d_distance(
 export {
       SURFACE_TO_SURFACE_3D_DISTANCE_METADATA,
       SurfaceToSurface3dDistanceOutputs,
-      SurfaceToSurface3dDistanceParameters,
       surface_to_surface_3d_distance,
       surface_to_surface_3d_distance_execute,
       surface_to_surface_3d_distance_params,

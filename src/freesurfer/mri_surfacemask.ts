@@ -12,49 +12,16 @@ const MRI_SURFACEMASK_METADATA: Metadata = {
 
 
 interface MriSurfacemaskParameters {
-    "@type": "freesurfer.mri_surfacemask";
+    "@type"?: "freesurfer/mri_surfacemask";
     "input_volume": InputPathType;
     "input_surface": InputPathType;
     "output_volume": string;
 }
+type MriSurfacemaskParametersTagged = Required<Pick<MriSurfacemaskParameters, '@type'>> & MriSurfacemaskParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_surfacemask": mri_surfacemask_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_surfacemask": mri_surfacemask_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_surfacemask(...)`.
+ * Output object returned when calling `MriSurfacemaskParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mri_surfacemask_params(
     input_volume: InputPathType,
     input_surface: InputPathType,
     output_volume: string,
-): MriSurfacemaskParameters {
+): MriSurfacemaskParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_surfacemask" as const,
+        "@type": "freesurfer/mri_surfacemask" as const,
         "input_volume": input_volume,
         "input_surface": input_surface,
         "output_volume": output_volume,
@@ -193,7 +160,6 @@ function mri_surfacemask(
 export {
       MRI_SURFACEMASK_METADATA,
       MriSurfacemaskOutputs,
-      MriSurfacemaskParameters,
       mri_surfacemask,
       mri_surfacemask_execute,
       mri_surfacemask_params,

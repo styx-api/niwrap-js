@@ -12,49 +12,17 @@ const MRIS_ANNOT_DIFF_METADATA: Metadata = {
 
 
 interface MrisAnnotDiffParameters {
-    "@type": "freesurfer.mris_annot_diff";
+    "@type"?: "freesurfer/mris_annot_diff";
     "annot1": InputPathType;
     "annot2": InputPathType;
     "diff_ctab": boolean;
     "verbose": boolean;
 }
+type MrisAnnotDiffParametersTagged = Required<Pick<MrisAnnotDiffParameters, '@type'>> & MrisAnnotDiffParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_annot_diff": mris_annot_diff_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_annot_diff(...)`.
+ * Output object returned when calling `MrisAnnotDiffParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function mris_annot_diff_params(
     annot2: InputPathType,
     diff_ctab: boolean = false,
     verbose: boolean = false,
-): MrisAnnotDiffParameters {
+): MrisAnnotDiffParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_annot_diff" as const,
+        "@type": "freesurfer/mris_annot_diff" as const,
         "annot1": annot1,
         "annot2": annot2,
         "diff_ctab": diff_ctab,
@@ -109,10 +77,10 @@ function mris_annot_diff_cargs(
     cargs.push("mris_annot_diff");
     cargs.push(execution.inputFile((params["annot1"] ?? null)));
     cargs.push(execution.inputFile((params["annot2"] ?? null)));
-    if ((params["diff_ctab"] ?? null)) {
+    if ((params["diff_ctab"] ?? false)) {
         cargs.push("--diff-ctab");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("--verbose");
     }
     return cargs;
@@ -198,7 +166,6 @@ function mris_annot_diff(
 export {
       MRIS_ANNOT_DIFF_METADATA,
       MrisAnnotDiffOutputs,
-      MrisAnnotDiffParameters,
       mris_annot_diff,
       mris_annot_diff_execute,
       mris_annot_diff_params,

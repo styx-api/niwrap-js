@@ -12,7 +12,7 @@ const FLIRT_METADATA: Metadata = {
 
 
 interface FlirtParameters {
-    "@type": "fsl.flirt";
+    "@type"?: "fsl/flirt";
     "in_file": InputPathType;
     "reference": InputPathType;
     "out_file": string;
@@ -59,44 +59,11 @@ interface FlirtParameters {
     "wmcoords"?: InputPathType | null | undefined;
     "wmnorms"?: InputPathType | null | undefined;
 }
+type FlirtParametersTagged = Required<Pick<FlirtParameters, '@type'>> & FlirtParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.flirt": flirt_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.flirt": flirt_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `flirt(...)`.
+ * Output object returned when calling `FlirtParameters(...)`.
  *
  * @interface
  */
@@ -213,9 +180,9 @@ function flirt_params(
     wm_seg: InputPathType | null = null,
     wmcoords: InputPathType | null = null,
     wmnorms: InputPathType | null = null,
-): FlirtParameters {
+): FlirtParametersTagged {
     const params = {
-        "@type": "fsl.flirt" as const,
+        "@type": "fsl/flirt" as const,
         "in_file": in_file,
         "reference": reference,
         "out_file": out_file,
@@ -372,7 +339,7 @@ function flirt_cargs(
             String((params["apply_isoxfm"] ?? null))
         );
     }
-    if ((params["apply_xfm"] ?? null)) {
+    if ((params["apply_xfm"] ?? false)) {
         cargs.push("-applyxfm");
     }
     if ((params["bbrslope"] ?? null) !== null) {
@@ -423,7 +390,7 @@ function flirt_cargs(
             (params["datatype"] ?? null)
         );
     }
-    if ((params["display_init"] ?? null)) {
+    if ((params["display_init"] ?? false)) {
         cargs.push("-displayinit");
     }
     if ((params["dof"] ?? null) !== null) {
@@ -456,7 +423,7 @@ function flirt_cargs(
             String((params["fine_search"] ?? null))
         );
     }
-    if ((params["force_scaling"] ?? null)) {
+    if ((params["force_scaling"] ?? false)) {
         cargs.push("-forcescaling");
     }
     if ((params["in_matrix_file"] ?? null) !== null) {
@@ -483,16 +450,16 @@ function flirt_cargs(
             String((params["min_sampling"] ?? null))
         );
     }
-    if ((params["no_clamp"] ?? null)) {
+    if ((params["no_clamp"] ?? false)) {
         cargs.push("-noclamp");
     }
-    if ((params["no_resample"] ?? null)) {
+    if ((params["no_resample"] ?? false)) {
         cargs.push("-noresample");
     }
-    if ((params["no_resample_blur"] ?? null)) {
+    if ((params["no_resample_blur"] ?? false)) {
         cargs.push("-noresampblur");
     }
-    if ((params["no_search"] ?? null)) {
+    if ((params["no_search"] ?? false)) {
         cargs.push("-nosearch");
     }
     if ((params["padding_size"] ?? null) !== null) {
@@ -513,7 +480,7 @@ function flirt_cargs(
             execution.inputFile((params["ref_weight"] ?? null))
         );
     }
-    if ((params["rigid2D"] ?? null)) {
+    if ((params["rigid2D"] ?? false)) {
         cargs.push("-2D");
     }
     if ((params["schedule"] ?? null) !== null) {
@@ -552,7 +519,7 @@ function flirt_cargs(
             (params["sinc_window"] ?? null)
         );
     }
-    if ((params["uses_qform"] ?? null)) {
+    if ((params["uses_qform"] ?? false)) {
         cargs.push("-usesqform");
     }
     if ((params["verbose"] ?? null) !== null) {
@@ -746,7 +713,6 @@ function flirt(
 export {
       FLIRT_METADATA,
       FlirtOutputs,
-      FlirtParameters,
       flirt,
       flirt_execute,
       flirt_params,

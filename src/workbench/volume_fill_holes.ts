@@ -12,48 +12,15 @@ const VOLUME_FILL_HOLES_METADATA: Metadata = {
 
 
 interface VolumeFillHolesParameters {
-    "@type": "workbench.volume-fill-holes";
+    "@type"?: "workbench/volume-fill-holes";
     "volume_in": InputPathType;
     "volume_out": string;
 }
+type VolumeFillHolesParametersTagged = Required<Pick<VolumeFillHolesParameters, '@type'>> & VolumeFillHolesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-fill-holes": volume_fill_holes_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-fill-holes": volume_fill_holes_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `volume_fill_holes(...)`.
+ * Output object returned when calling `VolumeFillHolesParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface VolumeFillHolesOutputs {
 function volume_fill_holes_params(
     volume_in: InputPathType,
     volume_out: string,
-): VolumeFillHolesParameters {
+): VolumeFillHolesParametersTagged {
     const params = {
-        "@type": "workbench.volume-fill-holes" as const,
+        "@type": "workbench/volume-fill-holes" as const,
         "volume_in": volume_in,
         "volume_out": volume_out,
     };
@@ -191,7 +158,6 @@ function volume_fill_holes(
 export {
       VOLUME_FILL_HOLES_METADATA,
       VolumeFillHolesOutputs,
-      VolumeFillHolesParameters,
       volume_fill_holes,
       volume_fill_holes_execute,
       volume_fill_holes_params,

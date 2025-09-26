@@ -12,7 +12,7 @@ const FEAT2SURF_METADATA: Metadata = {
 
 
 interface Feat2surfParameters {
-    "@type": "freesurfer.feat2surf";
+    "@type"?: "freesurfer/feat2surf";
     "feat_dirs": Array<string>;
     "feat_dirfile"?: InputPathType | null | undefined;
     "proj_frac"?: number | null | undefined;
@@ -24,44 +24,11 @@ interface Feat2surfParameters {
     "nolog_flag": boolean;
     "out_dir"?: string | null | undefined;
 }
+type Feat2surfParametersTagged = Required<Pick<Feat2surfParameters, '@type'>> & Feat2surfParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.feat2surf": feat2surf_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.feat2surf": feat2surf_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `feat2surf(...)`.
+ * Output object returned when calling `Feat2surfParameters(...)`.
  *
  * @interface
  */
@@ -116,9 +83,9 @@ function feat2surf_params(
     debug_flag: boolean = false,
     nolog_flag: boolean = false,
     out_dir: string | null = null,
-): Feat2surfParameters {
+): Feat2surfParametersTagged {
     const params = {
-        "@type": "freesurfer.feat2surf" as const,
+        "@type": "freesurfer/feat2surf" as const,
         "feat_dirs": feat_dirs,
         "cope_only": cope_only,
         "debug_flag": debug_flag,
@@ -194,13 +161,13 @@ function feat2surf_cargs(
             (params["surf"] ?? null)
         );
     }
-    if ((params["cope_only"] ?? null)) {
+    if ((params["cope_only"] ?? false)) {
         cargs.push("--cope-only");
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["nolog_flag"] ?? null)) {
+    if ((params["nolog_flag"] ?? false)) {
         cargs.push("--nolog");
     }
     if ((params["out_dir"] ?? null) !== null) {
@@ -308,7 +275,6 @@ function feat2surf(
 export {
       FEAT2SURF_METADATA,
       Feat2surfOutputs,
-      Feat2surfParameters,
       feat2surf,
       feat2surf_execute,
       feat2surf_params,

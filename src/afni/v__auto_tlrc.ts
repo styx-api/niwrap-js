@@ -12,7 +12,7 @@ const V__AUTO_TLRC_METADATA: Metadata = {
 
 
 interface VAutoTlrcParameters {
-    "@type": "afni.@auto_tlrc";
+    "@type"?: "afni/@auto_tlrc";
     "base_template": InputPathType;
     "input_anat": InputPathType;
     "no_ss": boolean;
@@ -53,44 +53,11 @@ interface VAutoTlrcParameters {
     "use_gz": boolean;
     "verb": boolean;
 }
+type VAutoTlrcParametersTagged = Required<Pick<VAutoTlrcParameters, '@type'>> & VAutoTlrcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@auto_tlrc": v__auto_tlrc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@auto_tlrc": v__auto_tlrc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__auto_tlrc(...)`.
+ * Output object returned when calling `VAutoTlrcParameters(...)`.
  *
  * @interface
  */
@@ -195,9 +162,9 @@ function v__auto_tlrc_params(
     base_list: boolean = false,
     use_gz: boolean = false,
     verb: boolean = false,
-): VAutoTlrcParameters {
+): VAutoTlrcParametersTagged {
     const params = {
-        "@type": "afni.@auto_tlrc" as const,
+        "@type": "afni/@auto_tlrc" as const,
         "base_template": base_template,
         "input_anat": input_anat,
         "no_ss": no_ss,
@@ -294,10 +261,10 @@ function v__auto_tlrc_cargs(
         "-input",
         execution.inputFile((params["input_anat"] ?? null))
     );
-    if ((params["no_ss"] ?? null)) {
+    if ((params["no_ss"] ?? false)) {
         cargs.push("-no_ss");
     }
-    if ((params["warp_orig_vol"] ?? null)) {
+    if ((params["warp_orig_vol"] ?? false)) {
         cargs.push("-warp_orig_vol");
     }
     if ((params["dxyz"] ?? null) !== null) {
@@ -330,10 +297,10 @@ function v__auto_tlrc_cargs(
             String((params["pad_base"] ?? null))
         );
     }
-    if ((params["keep_tmp"] ?? null)) {
+    if ((params["keep_tmp"] ?? false)) {
         cargs.push("-keep_tmp");
     }
-    if ((params["clean"] ?? null)) {
+    if ((params["clean"] ?? false)) {
         cargs.push("-clean");
     }
     if ((params["xform"] ?? null) !== null) {
@@ -342,16 +309,16 @@ function v__auto_tlrc_cargs(
             (params["xform"] ?? null)
         );
     }
-    if ((params["no_avoid_eyes"] ?? null)) {
+    if ((params["no_avoid_eyes"] ?? false)) {
         cargs.push("-no_avoid_eyes");
     }
-    if ((params["ncr"] ?? null)) {
+    if ((params["ncr"] ?? false)) {
         cargs.push("-ncr");
     }
-    if ((params["onepass"] ?? null)) {
+    if ((params["onepass"] ?? false)) {
         cargs.push("-onepass");
     }
-    if ((params["twopass"] ?? null)) {
+    if ((params["twopass"] ?? false)) {
         cargs.push("-twopass");
     }
     if ((params["maxite"] ?? null) !== null) {
@@ -360,13 +327,13 @@ function v__auto_tlrc_cargs(
             String((params["maxite"] ?? null))
         );
     }
-    if ((params["not_OK_maxite"] ?? null)) {
+    if ((params["not_OK_maxite"] ?? false)) {
         cargs.push("-not_OK_maxite");
     }
-    if ((params["inweight"] ?? null)) {
+    if ((params["inweight"] ?? false)) {
         cargs.push("-inweight");
     }
-    if ((params["rigid_equiv"] ?? null)) {
+    if ((params["rigid_equiv"] ?? false)) {
         cargs.push("-rigid_equiv");
     }
     if ((params["init_xform"] ?? null) !== null) {
@@ -375,7 +342,7 @@ function v__auto_tlrc_cargs(
             (params["init_xform"] ?? null)
         );
     }
-    if ((params["no_pre"] ?? null)) {
+    if ((params["no_pre"] ?? false)) {
         cargs.push("-no_pre");
     }
     if ((params["out_space"] ?? null) !== null) {
@@ -384,7 +351,7 @@ function v__auto_tlrc_cargs(
             (params["out_space"] ?? null)
         );
     }
-    if ((params["3dAllineate"] ?? null)) {
+    if ((params["3dAllineate"] ?? false)) {
         cargs.push("-3dAllineate");
     }
     if ((params["3dAlcost"] ?? null) !== null) {
@@ -393,7 +360,7 @@ function v__auto_tlrc_cargs(
             (params["3dAlcost"] ?? null)
         );
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("-overwrite");
     }
     cargs.push(
@@ -410,10 +377,10 @@ function v__auto_tlrc_cargs(
             String((params["pad_input"] ?? null))
         );
     }
-    if ((params["onewarp"] ?? null)) {
+    if ((params["onewarp"] ?? false)) {
         cargs.push("-onewarp");
     }
-    if ((params["twowarp"] ?? null)) {
+    if ((params["twowarp"] ?? false)) {
         cargs.push("-twowarp");
     }
     if ((params["rmode"] ?? null) !== null) {
@@ -434,7 +401,7 @@ function v__auto_tlrc_cargs(
             (params["suffix"] ?? null)
         );
     }
-    if ((params["keep_view"] ?? null)) {
+    if ((params["keep_view"] ?? false)) {
         cargs.push("-keep_view");
     }
     if ((params["base_copy"] ?? null) !== null) {
@@ -443,13 +410,13 @@ function v__auto_tlrc_cargs(
             (params["base_copy"] ?? null)
         );
     }
-    if ((params["base_list"] ?? null)) {
+    if ((params["base_list"] ?? false)) {
         cargs.push("-base_list");
     }
-    if ((params["use_gz"] ?? null)) {
+    if ((params["use_gz"] ?? false)) {
         cargs.push("-use_gz");
     }
-    if ((params["verb"] ?? null)) {
+    if ((params["verb"] ?? false)) {
         cargs.push("-verb");
     }
     return cargs;
@@ -606,7 +573,6 @@ function v__auto_tlrc(
 
 export {
       VAutoTlrcOutputs,
-      VAutoTlrcParameters,
       V__AUTO_TLRC_METADATA,
       v__auto_tlrc,
       v__auto_tlrc_execute,

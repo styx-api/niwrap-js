@@ -12,7 +12,7 @@ const SFA2FIELDSIGN_METADATA: Metadata = {
 
 
 interface Sfa2fieldsignParameters {
-    "@type": "freesurfer.sfa2fieldsign";
+    "@type"?: "freesurfer/sfa2fieldsign";
     "sfadir": string;
     "register_dat": string;
     "threshold"?: number | null | undefined;
@@ -24,44 +24,11 @@ interface Sfa2fieldsignParameters {
     "lh": boolean;
     "rh": boolean;
 }
+type Sfa2fieldsignParametersTagged = Required<Pick<Sfa2fieldsignParameters, '@type'>> & Sfa2fieldsignParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.sfa2fieldsign": sfa2fieldsign_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.sfa2fieldsign": sfa2fieldsign_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `sfa2fieldsign(...)`.
+ * Output object returned when calling `Sfa2fieldsignParameters(...)`.
  *
  * @interface
  */
@@ -136,9 +103,9 @@ function sfa2fieldsign_params(
     osd: string | null = null,
     lh: boolean = false,
     rh: boolean = false,
-): Sfa2fieldsignParameters {
+): Sfa2fieldsignParametersTagged {
     const params = {
-        "@type": "freesurfer.sfa2fieldsign" as const,
+        "@type": "freesurfer/sfa2fieldsign" as const,
         "sfadir": sfadir,
         "register_dat": register_dat,
         "occip": occip,
@@ -204,7 +171,7 @@ function sfa2fieldsign_cargs(
             String((params["proj_frac"] ?? null))
         );
     }
-    if ((params["occip"] ?? null)) {
+    if ((params["occip"] ?? false)) {
         cargs.push("--occip");
     }
     if ((params["patch"] ?? null) !== null) {
@@ -219,10 +186,10 @@ function sfa2fieldsign_cargs(
             (params["osd"] ?? null)
         );
     }
-    if ((params["lh"] ?? null)) {
+    if ((params["lh"] ?? false)) {
         cargs.push("--lh");
     }
-    if ((params["rh"] ?? null)) {
+    if ((params["rh"] ?? false)) {
         cargs.push("--rh");
     }
     return cargs;
@@ -329,7 +296,6 @@ function sfa2fieldsign(
 export {
       SFA2FIELDSIGN_METADATA,
       Sfa2fieldsignOutputs,
-      Sfa2fieldsignParameters,
       sfa2fieldsign,
       sfa2fieldsign_execute,
       sfa2fieldsign_params,

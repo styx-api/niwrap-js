@@ -12,51 +12,18 @@ const CREATE_MORPH_METADATA: Metadata = {
 
 
 interface CreateMorphParameters {
-    "@type": "freesurfer.createMorph";
+    "@type"?: "freesurfer/createMorph";
     "input_transforms": Array<string>;
     "output_transform": string;
     "template"?: InputPathType | null | undefined;
     "subject"?: InputPathType | null | undefined;
     "debug_coordinates"?: Array<number> | null | undefined;
 }
+type CreateMorphParametersTagged = Required<Pick<CreateMorphParameters, '@type'>> & CreateMorphParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.createMorph": create_morph_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.createMorph": create_morph_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `create_morph(...)`.
+ * Output object returned when calling `CreateMorphParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function create_morph_params(
     template: InputPathType | null = null,
     subject: InputPathType | null = null,
     debug_coordinates: Array<number> | null = null,
-): CreateMorphParameters {
+): CreateMorphParametersTagged {
     const params = {
-        "@type": "freesurfer.createMorph" as const,
+        "@type": "freesurfer/createMorph" as const,
         "input_transforms": input_transforms,
         "output_transform": output_transform,
     };
@@ -234,7 +201,6 @@ function create_morph(
 export {
       CREATE_MORPH_METADATA,
       CreateMorphOutputs,
-      CreateMorphParameters,
       create_morph,
       create_morph_execute,
       create_morph_params,

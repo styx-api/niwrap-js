@@ -12,51 +12,18 @@ const EDDY_SQUAD_METADATA: Metadata = {
 
 
 interface EddySquadParameters {
-    "@type": "fsl.eddy_squad";
+    "@type"?: "fsl/eddy_squad";
     "grouping"?: string | null | undefined;
     "group_db"?: InputPathType | null | undefined;
     "update": boolean;
     "output_dir"?: string | null | undefined;
     "subject_list": string;
 }
+type EddySquadParametersTagged = Required<Pick<EddySquadParameters, '@type'>> & EddySquadParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.eddy_squad": eddy_squad_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.eddy_squad": eddy_squad_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `eddy_squad(...)`.
+ * Output object returned when calling `EddySquadParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function eddy_squad_params(
     group_db: InputPathType | null = null,
     update: boolean = false,
     output_dir: string | null = null,
-): EddySquadParameters {
+): EddySquadParametersTagged {
     const params = {
-        "@type": "fsl.eddy_squad" as const,
+        "@type": "fsl/eddy_squad" as const,
         "update": update,
         "subject_list": subject_list,
     };
@@ -134,7 +101,7 @@ function eddy_squad_cargs(
             execution.inputFile((params["group_db"] ?? null))
         );
     }
-    if ((params["update"] ?? null)) {
+    if ((params["update"] ?? false)) {
         cargs.push("-u");
     }
     if ((params["output_dir"] ?? null) !== null) {
@@ -230,7 +197,6 @@ function eddy_squad(
 export {
       EDDY_SQUAD_METADATA,
       EddySquadOutputs,
-      EddySquadParameters,
       eddy_squad,
       eddy_squad_execute,
       eddy_squad_params,

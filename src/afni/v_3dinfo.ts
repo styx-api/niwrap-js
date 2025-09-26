@@ -12,7 +12,7 @@ const V_3DINFO_METADATA: Metadata = {
 
 
 interface V3dinfoParameters {
-    "@type": "afni.3dinfo";
+    "@type"?: "afni/3dinfo";
     "orient": boolean;
     "Lextent": boolean;
     "Rextent": boolean;
@@ -127,43 +127,11 @@ interface V3dinfoParameters {
     "monog_pairs": boolean;
     "dataset": Array<InputPathType>;
 }
+type V3dinfoParametersTagged = Required<Pick<V3dinfoParameters, '@type'>> & V3dinfoParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dinfo": v_3dinfo_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dinfo(...)`.
+ * Output object returned when calling `V3dinfoParameters(...)`.
  *
  * @interface
  */
@@ -412,9 +380,9 @@ function v_3dinfo_params(
     val_diff: boolean = false,
     sval_diff: boolean = false,
     monog_pairs: boolean = false,
-): V3dinfoParameters {
+): V3dinfoParametersTagged {
     const params = {
-        "@type": "afni.3dinfo" as const,
+        "@type": "afni/3dinfo" as const,
         "orient": orient,
         "Lextent": lextent,
         "Rextent": rextent,
@@ -559,55 +527,55 @@ function v_3dinfo_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("3dinfo");
-    if ((params["orient"] ?? null)) {
+    if ((params["orient"] ?? false)) {
         cargs.push("-orient");
     }
-    if ((params["Lextent"] ?? null)) {
+    if ((params["Lextent"] ?? false)) {
         cargs.push("-Lextent");
     }
-    if ((params["Rextent"] ?? null)) {
+    if ((params["Rextent"] ?? false)) {
         cargs.push("-Rextent");
     }
-    if ((params["Aextent"] ?? null)) {
+    if ((params["Aextent"] ?? false)) {
         cargs.push("-Aextent");
     }
-    if ((params["Pextent"] ?? null)) {
+    if ((params["Pextent"] ?? false)) {
         cargs.push("-Pextent");
     }
-    if ((params["Iextent"] ?? null)) {
+    if ((params["Iextent"] ?? false)) {
         cargs.push("-Iextent");
     }
-    if ((params["Sextent"] ?? null)) {
+    if ((params["Sextent"] ?? false)) {
         cargs.push("-Sextent");
     }
-    if ((params["all_names"] ?? null)) {
+    if ((params["all_names"] ?? false)) {
         cargs.push("-all_names");
     }
-    if ((params["verb"] ?? null)) {
+    if ((params["verb"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["very_verbose"] ?? null)) {
+    if ((params["very_verbose"] ?? false)) {
         cargs.push("-VERB");
     }
-    if ((params["short"] ?? null)) {
+    if ((params["short"] ?? false)) {
         cargs.push("-short");
     }
-    if ((params["no_hist"] ?? null)) {
+    if ((params["no_hist"] ?? false)) {
         cargs.push("-no_hist");
     }
-    if ((params["h"] ?? null)) {
+    if ((params["h"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["extreme_help"] ?? null)) {
+    if ((params["extreme_help"] ?? false)) {
         cargs.push("-HELP");
     }
-    if ((params["h_view"] ?? null)) {
+    if ((params["h_view"] ?? false)) {
         cargs.push("-h_view");
     }
-    if ((params["h_web"] ?? null)) {
+    if ((params["h_web"] ?? false)) {
         cargs.push("-h_web");
     }
     if ((params["h_find"] ?? null) !== null) {
@@ -616,16 +584,16 @@ function v_3dinfo_cargs(
             (params["h_find"] ?? null)
         );
     }
-    if ((params["h_raw"] ?? null)) {
+    if ((params["h_raw"] ?? false)) {
         cargs.push("-h_raw");
     }
-    if ((params["h_spx"] ?? null)) {
+    if ((params["h_spx"] ?? false)) {
         cargs.push("-h_spx");
     }
-    if ((params["h_aspx"] ?? null)) {
+    if ((params["h_aspx"] ?? false)) {
         cargs.push("-h_aspx");
     }
-    if ((params["all_opts"] ?? null)) {
+    if ((params["all_opts"] ?? false)) {
         cargs.push("-all_opts");
     }
     if ((params["label2index"] ?? null) !== null) {
@@ -634,214 +602,214 @@ function v_3dinfo_cargs(
             (params["label2index"] ?? null)
         );
     }
-    if ((params["niml_hdr"] ?? null)) {
+    if ((params["niml_hdr"] ?? false)) {
         cargs.push("-niml_hdr");
     }
-    if ((params["subbrick_info"] ?? null)) {
+    if ((params["subbrick_info"] ?? false)) {
         cargs.push("-subbrick_info");
     }
-    if ((params["exists"] ?? null)) {
+    if ((params["exists"] ?? false)) {
         cargs.push("-exists");
     }
-    if ((params["id"] ?? null)) {
+    if ((params["id"] ?? false)) {
         cargs.push("-id");
     }
-    if ((params["is_atlas"] ?? null)) {
+    if ((params["is_atlas"] ?? false)) {
         cargs.push("-is_atlas");
     }
-    if ((params["is_atlas_or_labeltable"] ?? null)) {
+    if ((params["is_atlas_or_labeltable"] ?? false)) {
         cargs.push("-is_atlas_or_labeltable");
     }
-    if ((params["is_nifti"] ?? null)) {
+    if ((params["is_nifti"] ?? false)) {
         cargs.push("-is_nifti");
     }
-    if ((params["dset_extension"] ?? null)) {
+    if ((params["dset_extension"] ?? false)) {
         cargs.push("-dset_extension");
     }
-    if ((params["storage_mode"] ?? null)) {
+    if ((params["storage_mode"] ?? false)) {
         cargs.push("-storage_mode");
     }
-    if ((params["space"] ?? null)) {
+    if ((params["space"] ?? false)) {
         cargs.push("-space");
     }
-    if ((params["gen_space"] ?? null)) {
+    if ((params["gen_space"] ?? false)) {
         cargs.push("-gen_space");
     }
-    if ((params["av_space"] ?? null)) {
+    if ((params["av_space"] ?? false)) {
         cargs.push("-av_space");
     }
-    if ((params["nifti_code"] ?? null)) {
+    if ((params["nifti_code"] ?? false)) {
         cargs.push("-nifti_code");
     }
-    if ((params["is_oblique"] ?? null)) {
+    if ((params["is_oblique"] ?? false)) {
         cargs.push("-is_oblique");
     }
-    if ((params["handedness"] ?? null)) {
+    if ((params["handedness"] ?? false)) {
         cargs.push("-handedness");
     }
-    if ((params["obliquity"] ?? null)) {
+    if ((params["obliquity"] ?? false)) {
         cargs.push("-obliquity");
     }
-    if ((params["prefix"] ?? null)) {
+    if ((params["prefix"] ?? false)) {
         cargs.push("-prefix");
     }
-    if ((params["prefix_noext"] ?? null)) {
+    if ((params["prefix_noext"] ?? false)) {
         cargs.push("-prefix_noext");
     }
-    if ((params["ni"] ?? null)) {
+    if ((params["ni"] ?? false)) {
         cargs.push("-ni");
     }
-    if ((params["nj"] ?? null)) {
+    if ((params["nj"] ?? false)) {
         cargs.push("-nj");
     }
-    if ((params["nk"] ?? null)) {
+    if ((params["nk"] ?? false)) {
         cargs.push("-nk");
     }
-    if ((params["nijk"] ?? null)) {
+    if ((params["nijk"] ?? false)) {
         cargs.push("-nijk");
     }
-    if ((params["nv"] ?? null)) {
+    if ((params["nv"] ?? false)) {
         cargs.push("-nv");
     }
-    if ((params["nt"] ?? null)) {
+    if ((params["nt"] ?? false)) {
         cargs.push("-nt");
     }
-    if ((params["n4"] ?? null)) {
+    if ((params["n4"] ?? false)) {
         cargs.push("-n4");
     }
-    if ((params["nvi"] ?? null)) {
+    if ((params["nvi"] ?? false)) {
         cargs.push("-nvi");
     }
-    if ((params["nti"] ?? null)) {
+    if ((params["nti"] ?? false)) {
         cargs.push("-nti");
     }
-    if ((params["ntimes"] ?? null)) {
+    if ((params["ntimes"] ?? false)) {
         cargs.push("-ntimes");
     }
-    if ((params["max_node"] ?? null)) {
+    if ((params["max_node"] ?? false)) {
         cargs.push("-max_node");
     }
-    if ((params["di"] ?? null)) {
+    if ((params["di"] ?? false)) {
         cargs.push("-di");
     }
-    if ((params["dj"] ?? null)) {
+    if ((params["dj"] ?? false)) {
         cargs.push("-dj");
     }
-    if ((params["dk"] ?? null)) {
+    if ((params["dk"] ?? false)) {
         cargs.push("-dk");
     }
-    if ((params["d3"] ?? null)) {
+    if ((params["d3"] ?? false)) {
         cargs.push("-d3");
     }
-    if ((params["adi"] ?? null)) {
+    if ((params["adi"] ?? false)) {
         cargs.push("-adi");
     }
-    if ((params["adj"] ?? null)) {
+    if ((params["adj"] ?? false)) {
         cargs.push("-adj");
     }
-    if ((params["adk"] ?? null)) {
+    if ((params["adk"] ?? false)) {
         cargs.push("-adk");
     }
-    if ((params["ad3"] ?? null)) {
+    if ((params["ad3"] ?? false)) {
         cargs.push("-ad3");
     }
-    if ((params["voxvol"] ?? null)) {
+    if ((params["voxvol"] ?? false)) {
         cargs.push("-voxvol");
     }
-    if ((params["oi"] ?? null)) {
+    if ((params["oi"] ?? false)) {
         cargs.push("-oi");
     }
-    if ((params["oj"] ?? null)) {
+    if ((params["oj"] ?? false)) {
         cargs.push("-oj");
     }
-    if ((params["ok"] ?? null)) {
+    if ((params["ok"] ?? false)) {
         cargs.push("-ok");
     }
-    if ((params["o3"] ?? null)) {
+    if ((params["o3"] ?? false)) {
         cargs.push("-o3");
     }
-    if ((params["dcx"] ?? null)) {
+    if ((params["dcx"] ?? false)) {
         cargs.push("-dcx");
     }
-    if ((params["dcy"] ?? null)) {
+    if ((params["dcy"] ?? false)) {
         cargs.push("-dcy");
     }
-    if ((params["dcz"] ?? null)) {
+    if ((params["dcz"] ?? false)) {
         cargs.push("-dcz");
     }
-    if ((params["dc3"] ?? null)) {
+    if ((params["dc3"] ?? false)) {
         cargs.push("-dc3");
     }
-    if ((params["tr"] ?? null)) {
+    if ((params["tr"] ?? false)) {
         cargs.push("-tr");
     }
-    if ((params["dmin"] ?? null)) {
+    if ((params["dmin"] ?? false)) {
         cargs.push("-dmin");
     }
-    if ((params["dmax"] ?? null)) {
+    if ((params["dmax"] ?? false)) {
         cargs.push("-dmax");
     }
-    if ((params["dminus"] ?? null)) {
+    if ((params["dminus"] ?? false)) {
         cargs.push("-dminus");
     }
-    if ((params["dmaxus"] ?? null)) {
+    if ((params["dmaxus"] ?? false)) {
         cargs.push("-dmaxus");
     }
-    if ((params["smode"] ?? null)) {
+    if ((params["smode"] ?? false)) {
         cargs.push("-smode");
     }
-    if ((params["header_name"] ?? null)) {
+    if ((params["header_name"] ?? false)) {
         cargs.push("-header_name");
     }
-    if ((params["brick_name"] ?? null)) {
+    if ((params["brick_name"] ?? false)) {
         cargs.push("-brick_name");
     }
-    if ((params["iname"] ?? null)) {
+    if ((params["iname"] ?? false)) {
         cargs.push("-iname");
     }
-    if ((params["extent"] ?? null)) {
+    if ((params["extent"] ?? false)) {
         cargs.push("-extent");
     }
-    if ((params["fac"] ?? null)) {
+    if ((params["fac"] ?? false)) {
         cargs.push("-fac");
     }
-    if ((params["label"] ?? null)) {
+    if ((params["label"] ?? false)) {
         cargs.push("-label");
     }
-    if ((params["datum"] ?? null)) {
+    if ((params["datum"] ?? false)) {
         cargs.push("-datum");
     }
-    if ((params["min"] ?? null)) {
+    if ((params["min"] ?? false)) {
         cargs.push("-min");
     }
-    if ((params["max"] ?? null)) {
+    if ((params["max"] ?? false)) {
         cargs.push("-max");
     }
-    if ((params["minus"] ?? null)) {
+    if ((params["minus"] ?? false)) {
         cargs.push("-minus");
     }
-    if ((params["maxus"] ?? null)) {
+    if ((params["maxus"] ?? false)) {
         cargs.push("-maxus");
     }
-    if ((params["labeltable"] ?? null)) {
+    if ((params["labeltable"] ?? false)) {
         cargs.push("-labeltable");
     }
-    if ((params["labeltable_as_atlas_points"] ?? null)) {
+    if ((params["labeltable_as_atlas_points"] ?? false)) {
         cargs.push("-labeltable_as_atlas_points");
     }
-    if ((params["atlas_points"] ?? null)) {
+    if ((params["atlas_points"] ?? false)) {
         cargs.push("-atlas_points");
     }
-    if ((params["history"] ?? null)) {
+    if ((params["history"] ?? false)) {
         cargs.push("-history");
     }
-    if ((params["slice_timing"] ?? null)) {
+    if ((params["slice_timing"] ?? false)) {
         cargs.push("-slice_timing");
     }
-    if ((params["header_line"] ?? null)) {
+    if ((params["header_line"] ?? false)) {
         cargs.push("-header_line");
     }
-    if ((params["hdr"] ?? null)) {
+    if ((params["hdr"] ?? false)) {
         cargs.push("-hdr");
     }
     if ((params["sb_delim"] ?? null) !== null) {
@@ -862,19 +830,19 @@ function v_3dinfo_cargs(
             (params["atr_delim"] ?? null)
         );
     }
-    if ((params["aform_real"] ?? null)) {
+    if ((params["aform_real"] ?? false)) {
         cargs.push("-aform_real");
     }
-    if ((params["aform_real_oneline"] ?? null)) {
+    if ((params["aform_real_oneline"] ?? false)) {
         cargs.push("-aform_real_oneline");
     }
-    if ((params["aform_real_refit_ori"] ?? null)) {
+    if ((params["aform_real_refit_ori"] ?? false)) {
         cargs.push("-aform_real_refit_ori");
     }
-    if ((params["is_aform_real_orth"] ?? null)) {
+    if ((params["is_aform_real_orth"] ?? false)) {
         cargs.push("-is_aform_real_orth");
     }
-    if ((params["aform_orth"] ?? null)) {
+    if ((params["aform_orth"] ?? false)) {
         cargs.push("-aform_orth");
     }
     if ((params["perm_to_orient"] ?? null) !== null) {
@@ -883,34 +851,34 @@ function v_3dinfo_cargs(
             (params["perm_to_orient"] ?? null)
         );
     }
-    if ((params["same_grid"] ?? null)) {
+    if ((params["same_grid"] ?? false)) {
         cargs.push("-same_grid");
     }
-    if ((params["same_dim"] ?? null)) {
+    if ((params["same_dim"] ?? false)) {
         cargs.push("-same_dim");
     }
-    if ((params["same_delta"] ?? null)) {
+    if ((params["same_delta"] ?? false)) {
         cargs.push("-same_delta");
     }
-    if ((params["same_orient"] ?? null)) {
+    if ((params["same_orient"] ?? false)) {
         cargs.push("-same_orient");
     }
-    if ((params["same_center"] ?? null)) {
+    if ((params["same_center"] ?? false)) {
         cargs.push("-same_center");
     }
-    if ((params["same_obl"] ?? null)) {
+    if ((params["same_obl"] ?? false)) {
         cargs.push("-same_obl");
     }
-    if ((params["same_all_grid"] ?? null)) {
+    if ((params["same_all_grid"] ?? false)) {
         cargs.push("-same_all_grid");
     }
-    if ((params["val_diff"] ?? null)) {
+    if ((params["val_diff"] ?? false)) {
         cargs.push("-val_diff");
     }
-    if ((params["sval_diff"] ?? null)) {
+    if ((params["sval_diff"] ?? false)) {
         cargs.push("-sval_diff");
     }
-    if ((params["monog_pairs"] ?? null)) {
+    if ((params["monog_pairs"] ?? false)) {
         cargs.push("-monog_pairs");
     }
     cargs.push(...(params["dataset"] ?? null).map(f => execution.inputFile(f)));
@@ -1215,7 +1183,6 @@ function v_3dinfo(
 
 export {
       V3dinfoOutputs,
-      V3dinfoParameters,
       V_3DINFO_METADATA,
       v_3dinfo,
       v_3dinfo_execute,

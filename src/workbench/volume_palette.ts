@@ -12,44 +12,49 @@ const VOLUME_PALETTE_METADATA: Metadata = {
 
 
 interface VolumePalettePosPercentParameters {
-    "@type": "workbench.volume-palette.pos_percent";
+    "@type"?: "pos_percent";
     "pos_min__": number;
     "pos_max__": number;
 }
+type VolumePalettePosPercentParametersTagged = Required<Pick<VolumePalettePosPercentParameters, '@type'>> & VolumePalettePosPercentParameters;
 
 
 interface VolumePaletteNegPercentParameters {
-    "@type": "workbench.volume-palette.neg_percent";
+    "@type"?: "neg_percent";
     "neg_min__": number;
     "neg_max__": number;
 }
+type VolumePaletteNegPercentParametersTagged = Required<Pick<VolumePaletteNegPercentParameters, '@type'>> & VolumePaletteNegPercentParameters;
 
 
 interface VolumePalettePosUserParameters {
-    "@type": "workbench.volume-palette.pos_user";
+    "@type"?: "pos_user";
     "pos_min_user": number;
     "pos_max_user": number;
 }
+type VolumePalettePosUserParametersTagged = Required<Pick<VolumePalettePosUserParameters, '@type'>> & VolumePalettePosUserParameters;
 
 
 interface VolumePaletteNegUserParameters {
-    "@type": "workbench.volume-palette.neg_user";
+    "@type"?: "neg_user";
     "neg_min_user": number;
     "neg_max_user": number;
 }
+type VolumePaletteNegUserParametersTagged = Required<Pick<VolumePaletteNegUserParameters, '@type'>> & VolumePaletteNegUserParameters;
 
 
 interface VolumePaletteThresholdingParameters {
-    "@type": "workbench.volume-palette.thresholding";
+    "@type"?: "thresholding";
     "type": string;
     "test": string;
     "min": number;
     "max": number;
 }
+type VolumePaletteThresholdingParametersTagged = Required<Pick<VolumePaletteThresholdingParameters, '@type'>> & VolumePaletteThresholdingParameters;
 
 
 interface VolumePaletteParameters {
-    "@type": "workbench.volume-palette";
+    "@type"?: "workbench/volume-palette";
     "volume": string;
     "mode": string;
     "opt_subvolume_subvolume"?: string | null | undefined;
@@ -65,44 +70,7 @@ interface VolumePaletteParameters {
     "thresholding"?: VolumePaletteThresholdingParameters | null | undefined;
     "opt_inversion_type"?: string | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-palette": volume_palette_cargs,
-        "workbench.volume-palette.pos_percent": volume_palette_pos_percent_cargs,
-        "workbench.volume-palette.neg_percent": volume_palette_neg_percent_cargs,
-        "workbench.volume-palette.pos_user": volume_palette_pos_user_cargs,
-        "workbench.volume-palette.neg_user": volume_palette_neg_user_cargs,
-        "workbench.volume-palette.thresholding": volume_palette_thresholding_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type VolumePaletteParametersTagged = Required<Pick<VolumePaletteParameters, '@type'>> & VolumePaletteParameters;
 
 
 /**
@@ -116,9 +84,9 @@ function dynOutputs(
 function volume_palette_pos_percent_params(
     pos_min__: number,
     pos_max__: number,
-): VolumePalettePosPercentParameters {
+): VolumePalettePosPercentParametersTagged {
     const params = {
-        "@type": "workbench.volume-palette.pos_percent" as const,
+        "@type": "pos_percent" as const,
         "pos_min__": pos_min__,
         "pos_max__": pos_max__,
     };
@@ -157,9 +125,9 @@ function volume_palette_pos_percent_cargs(
 function volume_palette_neg_percent_params(
     neg_min__: number,
     neg_max__: number,
-): VolumePaletteNegPercentParameters {
+): VolumePaletteNegPercentParametersTagged {
     const params = {
-        "@type": "workbench.volume-palette.neg_percent" as const,
+        "@type": "neg_percent" as const,
         "neg_min__": neg_min__,
         "neg_max__": neg_max__,
     };
@@ -198,9 +166,9 @@ function volume_palette_neg_percent_cargs(
 function volume_palette_pos_user_params(
     pos_min_user: number,
     pos_max_user: number,
-): VolumePalettePosUserParameters {
+): VolumePalettePosUserParametersTagged {
     const params = {
-        "@type": "workbench.volume-palette.pos_user" as const,
+        "@type": "pos_user" as const,
         "pos_min_user": pos_min_user,
         "pos_max_user": pos_max_user,
     };
@@ -239,9 +207,9 @@ function volume_palette_pos_user_cargs(
 function volume_palette_neg_user_params(
     neg_min_user: number,
     neg_max_user: number,
-): VolumePaletteNegUserParameters {
+): VolumePaletteNegUserParametersTagged {
     const params = {
-        "@type": "workbench.volume-palette.neg_user" as const,
+        "@type": "neg_user" as const,
         "neg_min_user": neg_min_user,
         "neg_max_user": neg_max_user,
     };
@@ -284,9 +252,9 @@ function volume_palette_thresholding_params(
     test: string,
     min: number,
     max: number,
-): VolumePaletteThresholdingParameters {
+): VolumePaletteThresholdingParametersTagged {
     const params = {
-        "@type": "workbench.volume-palette.thresholding" as const,
+        "@type": "thresholding" as const,
         "type": type_,
         "test": test,
         "min": min,
@@ -319,7 +287,7 @@ function volume_palette_thresholding_cargs(
 
 
 /**
- * Output object returned when calling `volume_palette(...)`.
+ * Output object returned when calling `VolumePaletteParameters(...)`.
  *
  * @interface
  */
@@ -366,9 +334,9 @@ function volume_palette_params(
     opt_palette_name_name: string | null = null,
     thresholding: VolumePaletteThresholdingParameters | null = null,
     opt_inversion_type: string | null = null,
-): VolumePaletteParameters {
+): VolumePaletteParametersTagged {
     const params = {
-        "@type": "workbench.volume-palette" as const,
+        "@type": "workbench/volume-palette" as const,
         "volume": volume,
         "mode": mode,
     };
@@ -436,16 +404,16 @@ function volume_palette_cargs(
         );
     }
     if ((params["pos_percent"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["pos_percent"] ?? null)["@type"])((params["pos_percent"] ?? null), execution));
+        cargs.push(...volume_palette_pos_percent_cargs((params["pos_percent"] ?? null), execution));
     }
     if ((params["neg_percent"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["neg_percent"] ?? null)["@type"])((params["neg_percent"] ?? null), execution));
+        cargs.push(...volume_palette_neg_percent_cargs((params["neg_percent"] ?? null), execution));
     }
     if ((params["pos_user"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["pos_user"] ?? null)["@type"])((params["pos_user"] ?? null), execution));
+        cargs.push(...volume_palette_pos_user_cargs((params["pos_user"] ?? null), execution));
     }
     if ((params["neg_user"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["neg_user"] ?? null)["@type"])((params["neg_user"] ?? null), execution));
+        cargs.push(...volume_palette_neg_user_cargs((params["neg_user"] ?? null), execution));
     }
     if ((params["opt_interpolate_interpolate"] ?? null) !== null) {
         cargs.push(
@@ -478,7 +446,7 @@ function volume_palette_cargs(
         );
     }
     if ((params["thresholding"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["thresholding"] ?? null)["@type"])((params["thresholding"] ?? null), execution));
+        cargs.push(...volume_palette_thresholding_cargs((params["thresholding"] ?? null), execution));
     }
     if ((params["opt_inversion_type"] ?? null) !== null) {
         cargs.push(
@@ -732,13 +700,7 @@ function volume_palette(
 
 export {
       VOLUME_PALETTE_METADATA,
-      VolumePaletteNegPercentParameters,
-      VolumePaletteNegUserParameters,
       VolumePaletteOutputs,
-      VolumePaletteParameters,
-      VolumePalettePosPercentParameters,
-      VolumePalettePosUserParameters,
-      VolumePaletteThresholdingParameters,
       volume_palette,
       volume_palette_execute,
       volume_palette_neg_percent_params,

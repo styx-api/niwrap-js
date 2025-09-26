@@ -12,7 +12,7 @@ const DMRI_PATHSTATS_METADATA: Metadata = {
 
 
 interface DmriPathstatsParameters {
-    "@type": "freesurfer.dmri_pathstats";
+    "@type"?: "freesurfer/dmri_pathstats";
     "intrk": InputPathType;
     "rois"?: Array<InputPathType> | null | undefined;
     "intrc": InputPathType;
@@ -33,44 +33,11 @@ interface DmriPathstatsParameters {
     "help": boolean;
     "version": boolean;
 }
+type DmriPathstatsParametersTagged = Required<Pick<DmriPathstatsParameters, '@type'>> & DmriPathstatsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dmri_pathstats": dmri_pathstats_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.dmri_pathstats": dmri_pathstats_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dmri_pathstats(...)`.
+ * Output object returned when calling `DmriPathstatsParameters(...)`.
  *
  * @interface
  */
@@ -139,9 +106,9 @@ function dmri_pathstats_params(
     checkopts: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): DmriPathstatsParameters {
+): DmriPathstatsParametersTagged {
     const params = {
-        "@type": "freesurfer.dmri_pathstats" as const,
+        "@type": "freesurfer/dmri_pathstats" as const,
         "intrk": intrk,
         "intrc": intrc,
         "debug": debug,
@@ -292,16 +259,16 @@ function dmri_pathstats_cargs(
             String((params["fthr"] ?? null))
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["checkopts"] ?? null)) {
+    if ((params["checkopts"] ?? false)) {
         cargs.push("--checkopts");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -420,7 +387,6 @@ function dmri_pathstats(
 export {
       DMRI_PATHSTATS_METADATA,
       DmriPathstatsOutputs,
-      DmriPathstatsParameters,
       dmri_pathstats,
       dmri_pathstats_execute,
       dmri_pathstats_params,

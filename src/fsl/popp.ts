@@ -12,7 +12,7 @@ const POPP_METADATA: Metadata = {
 
 
 interface PoppParameters {
-    "@type": "fsl.popp";
+    "@type"?: "fsl/popp";
     "input_file": InputPathType;
     "output_basename": string;
     "sampling_rate"?: number | null | undefined;
@@ -47,44 +47,11 @@ interface PoppParameters {
     "debug_flag": boolean;
     "help_flag": boolean;
 }
+type PoppParametersTagged = Required<Pick<PoppParameters, '@type'>> & PoppParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.popp": popp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.popp": popp_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `popp(...)`.
+ * Output object returned when calling `PoppParameters(...)`.
  *
  * @interface
  */
@@ -185,9 +152,9 @@ function popp_params(
     verbose_flag: boolean = false,
     debug_flag: boolean = false,
     help_flag: boolean = false,
-): PoppParameters {
+): PoppParametersTagged {
     const params = {
-        "@type": "fsl.popp" as const,
+        "@type": "fsl/popp" as const,
         "input_file": input_file,
         "output_basename": output_basename,
         "rvt_flag": rvt_flag,
@@ -320,13 +287,13 @@ function popp_cargs(
             String((params["trigger_column"] ?? null))
         );
     }
-    if ((params["rvt_flag"] ?? null)) {
+    if ((params["rvt_flag"] ?? false)) {
         cargs.push("--rvt");
     }
-    if ((params["heart_rate_flag"] ?? null)) {
+    if ((params["heart_rate_flag"] ?? false)) {
         cargs.push("--heartrate");
     }
-    if ((params["pulseox_trigger_flag"] ?? null)) {
+    if ((params["pulseox_trigger_flag"] ?? false)) {
         cargs.push("--pulseox_trigger");
     }
     if ((params["smooth_card"] ?? null) !== null) {
@@ -377,16 +344,16 @@ function popp_cargs(
             String((params["n_thresh_r"] ?? null))
         );
     }
-    if ((params["invert_resp_flag"] ?? null)) {
+    if ((params["invert_resp_flag"] ?? false)) {
         cargs.push("--invertresp");
     }
-    if ((params["invert_cardiac_flag"] ?? null)) {
+    if ((params["invert_cardiac_flag"] ?? false)) {
         cargs.push("--invertcardiac");
     }
-    if ((params["noclean1_flag"] ?? null)) {
+    if ((params["noclean1_flag"] ?? false)) {
         cargs.push("--noclean1");
     }
-    if ((params["noclean2_flag"] ?? null)) {
+    if ((params["noclean2_flag"] ?? false)) {
         cargs.push("--noclean2");
     }
     if ((params["load_card_phase"] ?? null) !== null) {
@@ -437,13 +404,13 @@ function popp_cargs(
             (params["card_del"] ?? null)
         );
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -591,7 +558,6 @@ function popp(
 export {
       POPP_METADATA,
       PoppOutputs,
-      PoppParameters,
       popp,
       popp_execute,
       popp_params,

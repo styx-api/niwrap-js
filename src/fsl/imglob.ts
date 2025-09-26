@@ -12,48 +12,16 @@ const IMGLOB_METADATA: Metadata = {
 
 
 interface ImglobParameters {
-    "@type": "fsl.imglob";
+    "@type"?: "fsl/imglob";
     "multiple_extensions": boolean;
     "input_list": Array<string>;
     "single_extension": boolean;
 }
+type ImglobParametersTagged = Required<Pick<ImglobParameters, '@type'>> & ImglobParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.imglob": imglob_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `imglob(...)`.
+ * Output object returned when calling `ImglobParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function imglob_params(
     input_list: Array<string>,
     multiple_extensions: boolean = false,
     single_extension: boolean = false,
-): ImglobParameters {
+): ImglobParametersTagged {
     const params = {
-        "@type": "fsl.imglob" as const,
+        "@type": "fsl/imglob" as const,
         "multiple_extensions": multiple_extensions,
         "input_list": input_list,
         "single_extension": single_extension,
@@ -103,11 +71,11 @@ function imglob_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("imglob");
-    if ((params["multiple_extensions"] ?? null)) {
+    if ((params["multiple_extensions"] ?? false)) {
         cargs.push("-extensions");
     }
     cargs.push(...(params["input_list"] ?? null));
-    if ((params["single_extension"] ?? null)) {
+    if ((params["single_extension"] ?? false)) {
         cargs.push("-extension");
     }
     return cargs;
@@ -191,7 +159,6 @@ function imglob(
 export {
       IMGLOB_METADATA,
       ImglobOutputs,
-      ImglobParameters,
       imglob,
       imglob_execute,
       imglob_params,

@@ -12,7 +12,7 @@ const WPNG_METADATA: Metadata = {
 
 
 interface WpngParameters {
-    "@type": "fsl.wpng";
+    "@type"?: "fsl/wpng";
     "input_file"?: InputPathType | null | undefined;
     "gamma"?: number | null | undefined;
     "bgcolor"?: string | null | undefined;
@@ -20,44 +20,11 @@ interface WpngParameters {
     "time_flag": boolean;
     "interlace_flag": boolean;
 }
+type WpngParametersTagged = Required<Pick<WpngParameters, '@type'>> & WpngParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.wpng": wpng_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.wpng": wpng_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `wpng(...)`.
+ * Output object returned when calling `WpngParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function wpng_params(
     text_flag: boolean = false,
     time_flag: boolean = false,
     interlace_flag: boolean = false,
-): WpngParameters {
+): WpngParametersTagged {
     const params = {
-        "@type": "fsl.wpng" as const,
+        "@type": "fsl/wpng" as const,
         "text_flag": text_flag,
         "time_flag": time_flag,
         "interlace_flag": interlace_flag,
@@ -141,13 +108,13 @@ function wpng_cargs(
             (params["bgcolor"] ?? null)
         );
     }
-    if ((params["text_flag"] ?? null)) {
+    if ((params["text_flag"] ?? false)) {
         cargs.push("-text");
     }
-    if ((params["time_flag"] ?? null)) {
+    if ((params["time_flag"] ?? false)) {
         cargs.push("-time");
     }
-    if ((params["interlace_flag"] ?? null)) {
+    if ((params["interlace_flag"] ?? false)) {
         cargs.push("-interlace");
     }
     return cargs;
@@ -238,7 +205,6 @@ function wpng(
 export {
       WPNG_METADATA,
       WpngOutputs,
-      WpngParameters,
       wpng,
       wpng_execute,
       wpng_params,

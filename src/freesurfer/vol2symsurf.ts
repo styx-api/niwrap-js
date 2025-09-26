@@ -12,7 +12,7 @@ const VOL2SYMSURF_METADATA: Metadata = {
 
 
 interface Vol2symsurfParameters {
-    "@type": "freesurfer.vol2symsurf";
+    "@type"?: "freesurfer/vol2symsurf";
     "registration_file": InputPathType;
     "input_volume": InputPathType;
     "fwhm": number;
@@ -22,44 +22,11 @@ interface Vol2symsurfParameters {
     "no_diff": boolean;
     "laterality_index": boolean;
 }
+type Vol2symsurfParametersTagged = Required<Pick<Vol2symsurfParameters, '@type'>> & Vol2symsurfParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.vol2symsurf": vol2symsurf_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.vol2symsurf": vol2symsurf_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `vol2symsurf(...)`.
+ * Output object returned when calling `Vol2symsurfParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function vol2symsurf_params(
     projection_fraction: number | null = null,
     no_diff: boolean = false,
     laterality_index: boolean = false,
-): Vol2symsurfParameters {
+): Vol2symsurfParametersTagged {
     const params = {
-        "@type": "freesurfer.vol2symsurf" as const,
+        "@type": "freesurfer/vol2symsurf" as const,
         "registration_file": registration_file,
         "input_volume": input_volume,
         "fwhm": fwhm,
@@ -176,10 +143,10 @@ function vol2symsurf_cargs(
             String((params["projection_fraction"] ?? null))
         );
     }
-    if ((params["no_diff"] ?? null)) {
+    if ((params["no_diff"] ?? false)) {
         cargs.push("--no-diff");
     }
-    if ((params["laterality_index"] ?? null)) {
+    if ((params["laterality_index"] ?? false)) {
         cargs.push("--li");
     }
     return cargs;
@@ -277,7 +244,6 @@ function vol2symsurf(
 export {
       VOL2SYMSURF_METADATA,
       Vol2symsurfOutputs,
-      Vol2symsurfParameters,
       vol2symsurf,
       vol2symsurf_execute,
       vol2symsurf_params,

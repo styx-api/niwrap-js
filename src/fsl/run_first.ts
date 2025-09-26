@@ -12,7 +12,7 @@ const RUN_FIRST_METADATA: Metadata = {
 
 
 interface RunFirstParameters {
-    "@type": "fsl.run_first";
+    "@type"?: "fsl/run_first";
     "input_image": InputPathType;
     "transformation_matrix": InputPathType;
     "n_modes": number;
@@ -23,43 +23,11 @@ interface RunFirstParameters {
     "load_bvars"?: InputPathType | null | undefined;
     "multiple_images_flag": boolean;
 }
+type RunFirstParametersTagged = Required<Pick<RunFirstParameters, '@type'>> & RunFirstParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.run_first": run_first_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `run_first(...)`.
+ * Output object returned when calling `RunFirstParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +64,9 @@ function run_first_params(
     intref_model_name: string | null = null,
     load_bvars: InputPathType | null = null,
     multiple_images_flag: boolean = false,
-): RunFirstParameters {
+): RunFirstParametersTagged {
     const params = {
-        "@type": "fsl.run_first" as const,
+        "@type": "fsl/run_first" as const,
         "input_image": input_image,
         "transformation_matrix": transformation_matrix,
         "n_modes": n_modes,
@@ -151,7 +119,7 @@ function run_first_cargs(
         "-m",
         execution.inputFile((params["model_name"] ?? null))
     );
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
     if ((params["intref_model_name"] ?? null) !== null) {
@@ -166,7 +134,7 @@ function run_first_cargs(
             execution.inputFile((params["load_bvars"] ?? null))
         );
     }
-    if ((params["multiple_images_flag"] ?? null)) {
+    if ((params["multiple_images_flag"] ?? false)) {
         cargs.push("-multipleImages");
     }
     return cargs;
@@ -262,7 +230,6 @@ function run_first(
 export {
       RUN_FIRST_METADATA,
       RunFirstOutputs,
-      RunFirstParameters,
       run_first,
       run_first_execute,
       run_first_params,

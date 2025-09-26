@@ -12,51 +12,18 @@ const ADJUNCT_SUMA_FS_ROI_INFO_METADATA: Metadata = {
 
 
 interface AdjunctSumaFsRoiInfoParameters {
-    "@type": "afni.adjunct_suma_fs_roi_info";
+    "@type"?: "afni/adjunct_suma_fs_roi_info";
     "subject_id": string;
     "suma_directory": string;
     "help": boolean;
     "hview": boolean;
     "version": boolean;
 }
+type AdjunctSumaFsRoiInfoParametersTagged = Required<Pick<AdjunctSumaFsRoiInfoParameters, '@type'>> & AdjunctSumaFsRoiInfoParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.adjunct_suma_fs_roi_info": adjunct_suma_fs_roi_info_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.adjunct_suma_fs_roi_info": adjunct_suma_fs_roi_info_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `adjunct_suma_fs_roi_info(...)`.
+ * Output object returned when calling `AdjunctSumaFsRoiInfoParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function adjunct_suma_fs_roi_info_params(
     help: boolean = false,
     hview: boolean = false,
     version: boolean = false,
-): AdjunctSumaFsRoiInfoParameters {
+): AdjunctSumaFsRoiInfoParametersTagged {
     const params = {
-        "@type": "afni.adjunct_suma_fs_roi_info" as const,
+        "@type": "afni/adjunct_suma_fs_roi_info" as const,
         "subject_id": subject_id,
         "suma_directory": suma_directory,
         "help": help,
@@ -136,13 +103,13 @@ function adjunct_suma_fs_roi_info_cargs(
         "-suma_dir",
         (params["suma_directory"] ?? null)
     );
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["hview"] ?? null)) {
+    if ((params["hview"] ?? false)) {
         cargs.push("-hview");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-ver");
     }
     return cargs;
@@ -234,7 +201,6 @@ function adjunct_suma_fs_roi_info(
 export {
       ADJUNCT_SUMA_FS_ROI_INFO_METADATA,
       AdjunctSumaFsRoiInfoOutputs,
-      AdjunctSumaFsRoiInfoParameters,
       adjunct_suma_fs_roi_info,
       adjunct_suma_fs_roi_info_execute,
       adjunct_suma_fs_roi_info_params,

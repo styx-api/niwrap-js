@@ -12,49 +12,16 @@ const GIFTI_LABEL_ADD_PREFIX_METADATA: Metadata = {
 
 
 interface GiftiLabelAddPrefixParameters {
-    "@type": "workbench.gifti-label-add-prefix";
+    "@type"?: "workbench/gifti-label-add-prefix";
     "label_in": InputPathType;
     "prefix": string;
     "label_out": string;
 }
+type GiftiLabelAddPrefixParametersTagged = Required<Pick<GiftiLabelAddPrefixParameters, '@type'>> & GiftiLabelAddPrefixParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.gifti-label-add-prefix": gifti_label_add_prefix_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.gifti-label-add-prefix": gifti_label_add_prefix_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `gifti_label_add_prefix(...)`.
+ * Output object returned when calling `GiftiLabelAddPrefixParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function gifti_label_add_prefix_params(
     label_in: InputPathType,
     prefix: string,
     label_out: string,
-): GiftiLabelAddPrefixParameters {
+): GiftiLabelAddPrefixParametersTagged {
     const params = {
-        "@type": "workbench.gifti-label-add-prefix" as const,
+        "@type": "workbench/gifti-label-add-prefix" as const,
         "label_in": label_in,
         "prefix": prefix,
         "label_out": label_out,
@@ -198,7 +165,6 @@ function gifti_label_add_prefix(
 export {
       GIFTI_LABEL_ADD_PREFIX_METADATA,
       GiftiLabelAddPrefixOutputs,
-      GiftiLabelAddPrefixParameters,
       gifti_label_add_prefix,
       gifti_label_add_prefix_execute,
       gifti_label_add_prefix_params,

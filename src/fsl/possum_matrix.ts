@@ -12,7 +12,7 @@ const POSSUM_MATRIX_METADATA: Metadata = {
 
 
 interface PossumMatrixParameters {
-    "@type": "fsl.possum_matrix";
+    "@type"?: "fsl/possum_matrix";
     "pulse_sequence": string;
     "motion_matrix": string;
     "output_matrix": string;
@@ -21,44 +21,11 @@ interface PossumMatrixParameters {
     "old_version_flag": boolean;
     "segment_size"?: number | null | undefined;
 }
+type PossumMatrixParametersTagged = Required<Pick<PossumMatrixParameters, '@type'>> & PossumMatrixParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.possum_matrix": possum_matrix_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.possum_matrix": possum_matrix_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `possum_matrix(...)`.
+ * Output object returned when calling `PossumMatrixParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function possum_matrix_params(
     help_flag: boolean = false,
     old_version_flag: boolean = false,
     segment_size: number | null = null,
-): PossumMatrixParameters {
+): PossumMatrixParametersTagged {
     const params = {
-        "@type": "fsl.possum_matrix" as const,
+        "@type": "fsl/possum_matrix" as const,
         "pulse_sequence": pulse_sequence,
         "motion_matrix": motion_matrix,
         "output_matrix": output_matrix,
@@ -138,13 +105,13 @@ function possum_matrix_cargs(
         "-o",
         (params["output_matrix"] ?? null)
     );
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["old_version_flag"] ?? null)) {
+    if ((params["old_version_flag"] ?? false)) {
         cargs.push("--old");
     }
     if ((params["segment_size"] ?? null) !== null) {
@@ -243,7 +210,6 @@ function possum_matrix(
 export {
       POSSUM_MATRIX_METADATA,
       PossumMatrixOutputs,
-      PossumMatrixParameters,
       possum_matrix,
       possum_matrix_execute,
       possum_matrix_params,

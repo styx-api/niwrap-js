@@ -12,7 +12,7 @@ const AUTO_WARP_PY_METADATA: Metadata = {
 
 
 interface AutoWarpPyParameters {
-    "@type": "afni.auto_warp.py";
+    "@type"?: "afni/auto_warp.py";
     "base": InputPathType;
     "input": InputPathType;
     "skull_strip_input": boolean;
@@ -47,43 +47,11 @@ interface AutoWarpPyParameters {
     "skullstrip_opts"?: string | null | undefined;
     "at_opts"?: string | null | undefined;
 }
+type AutoWarpPyParametersTagged = Required<Pick<AutoWarpPyParameters, '@type'>> & AutoWarpPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.auto_warp.py": auto_warp_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `auto_warp_py(...)`.
+ * Output object returned when calling `AutoWarpPyParameters(...)`.
  *
  * @interface
  */
@@ -168,9 +136,9 @@ function auto_warp_py_params(
     affine_followers_xmat: string | null = null,
     skullstrip_opts: string | null = null,
     at_opts: string | null = null,
-): AutoWarpPyParameters {
+): AutoWarpPyParametersTagged {
     const params = {
-        "@type": "afni.auto_warp.py" as const,
+        "@type": "afni/auto_warp.py" as const,
         "base": base,
         "input": input,
         "skull_strip_input": skull_strip_input,
@@ -259,7 +227,7 @@ function auto_warp_py_cargs(
         "-input",
         execution.inputFile((params["input"] ?? null))
     );
-    if ((params["skull_strip_input"] ?? null)) {
+    if ((params["skull_strip_input"] ?? false)) {
         cargs.push("-skull_strip_input");
     }
     if ((params["qblur"] ?? null) !== null) {
@@ -280,40 +248,40 @@ function auto_warp_py_cargs(
             (params["qw_opts"] ?? null)
         );
     }
-    if ((params["keep_rm_files"] ?? null)) {
+    if ((params["keep_rm_files"] ?? false)) {
         cargs.push("-keep_rm_files");
     }
-    if ((params["prep_only"] ?? null)) {
+    if ((params["prep_only"] ?? false)) {
         cargs.push("-prep_only");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["hview"] ?? null)) {
+    if ((params["hview"] ?? false)) {
         cargs.push("-hview");
     }
-    if ((params["limited_help"] ?? null)) {
+    if ((params["limited_help"] ?? false)) {
         cargs.push("-limited_help");
     }
-    if ((params["option_help"] ?? null)) {
+    if ((params["option_help"] ?? false)) {
         cargs.push("-option_help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
-    if ((params["ver"] ?? null)) {
+    if ((params["ver"] ?? false)) {
         cargs.push("-ver");
     }
-    if ((params["verb"] ?? null)) {
+    if ((params["verb"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["save_script"] ?? null)) {
+    if ((params["save_script"] ?? false)) {
         cargs.push("-save_script");
     }
-    if ((params["skip_affine"] ?? null)) {
+    if ((params["skip_affine"] ?? false)) {
         cargs.push("-skip_affine");
     }
-    if ((params["skull_strip_base"] ?? null)) {
+    if ((params["skull_strip_base"] ?? false)) {
         cargs.push("-skull_strip_base");
     }
     if ((params["ex_mode"] ?? null) !== null) {
@@ -322,7 +290,7 @@ function auto_warp_py_cargs(
             (params["ex_mode"] ?? null)
         );
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("-overwrite");
     }
     if ((params["suffix"] ?? null) !== null) {
@@ -355,13 +323,13 @@ function auto_warp_py_cargs(
             (params["affine_input_xmat"] ?? null)
         );
     }
-    if ((params["smooth_anat"] ?? null)) {
+    if ((params["smooth_anat"] ?? false)) {
         cargs.push("-smooth_anat");
     }
-    if ((params["smooth_base"] ?? null)) {
+    if ((params["smooth_base"] ?? false)) {
         cargs.push("-smooth_base");
     }
-    if ((params["unifize_input"] ?? null)) {
+    if ((params["unifize_input"] ?? false)) {
         cargs.push("-unifize_input");
     }
     if ((params["output_dir"] ?? null) !== null) {
@@ -535,7 +503,6 @@ function auto_warp_py(
 export {
       AUTO_WARP_PY_METADATA,
       AutoWarpPyOutputs,
-      AutoWarpPyParameters,
       auto_warp_py,
       auto_warp_py_execute,
       auto_warp_py_params,

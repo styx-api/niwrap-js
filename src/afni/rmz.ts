@@ -12,49 +12,17 @@ const RMZ_METADATA: Metadata = {
 
 
 interface RmzParameters {
-    "@type": "afni.rmz";
+    "@type"?: "afni/rmz";
     "quiet": boolean;
     "hash_flag"?: number | null | undefined;
     "keep_flag": boolean;
     "filenames": Array<InputPathType>;
 }
+type RmzParametersTagged = Required<Pick<RmzParameters, '@type'>> & RmzParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.rmz": rmz_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `rmz(...)`.
+ * Output object returned when calling `RmzParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function rmz_params(
     quiet: boolean = false,
     hash_flag: number | null = null,
     keep_flag: boolean = false,
-): RmzParameters {
+): RmzParametersTagged {
     const params = {
-        "@type": "afni.rmz" as const,
+        "@type": "afni/rmz" as const,
         "quiet": quiet,
         "keep_flag": keep_flag,
         "filenames": filenames,
@@ -109,7 +77,7 @@ function rmz_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("rmz");
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-q");
     }
     if ((params["hash_flag"] ?? null) !== null) {
@@ -118,7 +86,7 @@ function rmz_cargs(
             String((params["hash_flag"] ?? null))
         );
     }
-    if ((params["keep_flag"] ?? null)) {
+    if ((params["keep_flag"] ?? false)) {
         cargs.push("-k");
     }
     cargs.push(...(params["filenames"] ?? null).map(f => execution.inputFile(f)));
@@ -205,7 +173,6 @@ function rmz(
 export {
       RMZ_METADATA,
       RmzOutputs,
-      RmzParameters,
       rmz,
       rmz_execute,
       rmz_params,

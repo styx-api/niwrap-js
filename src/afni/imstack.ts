@@ -12,49 +12,16 @@ const IMSTACK_METADATA: Metadata = {
 
 
 interface ImstackParameters {
-    "@type": "afni.imstack";
+    "@type"?: "afni/imstack";
     "image_files": Array<InputPathType>;
     "data_type"?: "short" | "float" | null | undefined;
     "output_prefix"?: string | null | undefined;
 }
+type ImstackParametersTagged = Required<Pick<ImstackParameters, '@type'>> & ImstackParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.imstack": imstack_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.imstack": imstack_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `imstack(...)`.
+ * Output object returned when calling `ImstackParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +54,9 @@ function imstack_params(
     image_files: Array<InputPathType>,
     data_type: "short" | "float" | null = null,
     output_prefix: string | null = null,
-): ImstackParameters {
+): ImstackParametersTagged {
     const params = {
-        "@type": "afni.imstack" as const,
+        "@type": "afni/imstack" as const,
         "image_files": image_files,
     };
     if (data_type !== null) {
@@ -212,7 +179,6 @@ function imstack(
 export {
       IMSTACK_METADATA,
       ImstackOutputs,
-      ImstackParameters,
       imstack,
       imstack_execute,
       imstack_params,

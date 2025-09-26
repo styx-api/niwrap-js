@@ -12,48 +12,16 @@ const V_3DNVALS_METADATA: Metadata = {
 
 
 interface V3dnvalsParameters {
-    "@type": "afni.3dnvals";
+    "@type"?: "afni/3dnvals";
     "datasets": Array<InputPathType>;
     "all_flag": boolean;
     "verbose_flag": boolean;
 }
+type V3dnvalsParametersTagged = Required<Pick<V3dnvalsParameters, '@type'>> & V3dnvalsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dnvals": v_3dnvals_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dnvals(...)`.
+ * Output object returned when calling `V3dnvalsParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function v_3dnvals_params(
     datasets: Array<InputPathType>,
     all_flag: boolean = false,
     verbose_flag: boolean = false,
-): V3dnvalsParameters {
+): V3dnvalsParametersTagged {
     const params = {
-        "@type": "afni.3dnvals" as const,
+        "@type": "afni/3dnvals" as const,
         "datasets": datasets,
         "all_flag": all_flag,
         "verbose_flag": verbose_flag,
@@ -104,10 +72,10 @@ function v_3dnvals_cargs(
     const cargs: string[] = [];
     cargs.push("3dnvals");
     cargs.push(...(params["datasets"] ?? null).map(f => execution.inputFile(f)));
-    if ((params["all_flag"] ?? null)) {
+    if ((params["all_flag"] ?? false)) {
         cargs.push("-all");
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-verbose");
     }
     return cargs;
@@ -190,7 +158,6 @@ function v_3dnvals(
 
 export {
       V3dnvalsOutputs,
-      V3dnvalsParameters,
       V_3DNVALS_METADATA,
       v_3dnvals,
       v_3dnvals_execute,

@@ -12,7 +12,7 @@ const MAKE_AVERAGE_SURFACE_METADATA: Metadata = {
 
 
 interface MakeAverageSurfaceParameters {
-    "@type": "freesurfer.make_average_surface";
+    "@type"?: "freesurfer/make_average_surface";
     "subjects": Array<string>;
     "fsgd_file"?: InputPathType | null | undefined;
     "average_subject_name"?: string | null | undefined;
@@ -36,43 +36,11 @@ interface MakeAverageSurfaceParameters {
     "version": boolean;
     "echo": boolean;
 }
+type MakeAverageSurfaceParametersTagged = Required<Pick<MakeAverageSurfaceParameters, '@type'>> & MakeAverageSurfaceParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.make_average_surface": make_average_surface_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `make_average_surface(...)`.
+ * Output object returned when calling `MakeAverageSurfaceParameters(...)`.
  *
  * @interface
  */
@@ -135,9 +103,9 @@ function make_average_surface_params(
     no_symlink: boolean = false,
     version: boolean = false,
     echo: boolean = false,
-): MakeAverageSurfaceParameters {
+): MakeAverageSurfaceParametersTagged {
     const params = {
-        "@type": "freesurfer.make_average_surface" as const,
+        "@type": "freesurfer/make_average_surface" as const,
         "subjects": subjects,
         "left_hemi": left_hemi,
         "right_hemi": right_hemi,
@@ -240,28 +208,28 @@ function make_average_surface_cargs(
             (params["surf_reg"] ?? null)
         );
     }
-    if ((params["left_hemi"] ?? null)) {
+    if ((params["left_hemi"] ?? false)) {
         cargs.push("--lh");
     }
-    if ((params["right_hemi"] ?? null)) {
+    if ((params["right_hemi"] ?? false)) {
         cargs.push("--rh");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("--force");
     }
-    if ((params["annot_template"] ?? null)) {
+    if ((params["annot_template"] ?? false)) {
         cargs.push("--annot-template");
     }
-    if ((params["template_only"] ?? null)) {
+    if ((params["template_only"] ?? false)) {
         cargs.push("--template-only");
     }
-    if ((params["no_template_only"] ?? null)) {
+    if ((params["no_template_only"] ?? false)) {
         cargs.push("--no-template-only");
     }
-    if ((params["no_annot"] ?? null)) {
+    if ((params["no_annot"] ?? false)) {
         cargs.push("--no-annot");
     }
-    if ((params["no_cortex_label"] ?? null)) {
+    if ((params["no_cortex_label"] ?? false)) {
         cargs.push("--no-cortex-label");
     }
     if ((params["annot_list"] ?? null) !== null) {
@@ -276,16 +244,16 @@ function make_average_surface_cargs(
             ...(params["meas_list"] ?? null)
         );
     }
-    if ((params["no_surf2surf"] ?? null)) {
+    if ((params["no_surf2surf"] ?? false)) {
         cargs.push("--no-surf2surf");
     }
-    if ((params["no_symlink"] ?? null)) {
+    if ((params["no_symlink"] ?? false)) {
         cargs.push("--no-symlink");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["echo"] ?? null)) {
+    if ((params["echo"] ?? false)) {
         cargs.push("--echo");
     }
     return cargs;
@@ -407,7 +375,6 @@ function make_average_surface(
 export {
       MAKE_AVERAGE_SURFACE_METADATA,
       MakeAverageSurfaceOutputs,
-      MakeAverageSurfaceParameters,
       make_average_surface,
       make_average_surface_execute,
       make_average_surface_params,

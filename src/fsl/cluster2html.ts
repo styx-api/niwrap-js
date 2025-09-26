@@ -12,48 +12,16 @@ const CLUSTER2HTML_METADATA: Metadata = {
 
 
 interface Cluster2htmlParameters {
-    "@type": "fsl.cluster2html";
+    "@type"?: "fsl/cluster2html";
     "featdir": string;
     "inroot": string;
     "std_flag": boolean;
 }
+type Cluster2htmlParametersTagged = Required<Pick<Cluster2htmlParameters, '@type'>> & Cluster2htmlParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.cluster2html": cluster2html_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `cluster2html(...)`.
+ * Output object returned when calling `Cluster2htmlParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function cluster2html_params(
     featdir: string,
     inroot: string,
     std_flag: boolean = false,
-): Cluster2htmlParameters {
+): Cluster2htmlParametersTagged {
     const params = {
-        "@type": "fsl.cluster2html" as const,
+        "@type": "fsl/cluster2html" as const,
         "featdir": featdir,
         "inroot": inroot,
         "std_flag": std_flag,
@@ -105,7 +73,7 @@ function cluster2html_cargs(
     cargs.push("cluster2html");
     cargs.push((params["featdir"] ?? null));
     cargs.push((params["inroot"] ?? null));
-    if ((params["std_flag"] ?? null)) {
+    if ((params["std_flag"] ?? false)) {
         cargs.push("-std");
     }
     return cargs;
@@ -189,7 +157,6 @@ function cluster2html(
 export {
       CLUSTER2HTML_METADATA,
       Cluster2htmlOutputs,
-      Cluster2htmlParameters,
       cluster2html,
       cluster2html_execute,
       cluster2html_params,

@@ -12,48 +12,15 @@ const QUICK_ALPHA_VALS_PY_METADATA: Metadata = {
 
 
 interface QuickAlphaValsPyParameters {
-    "@type": "afni.quick.alpha.vals.py";
+    "@type"?: "afni/quick.alpha.vals.py";
     "niter"?: number | null | undefined;
     "max_file": InputPathType;
 }
+type QuickAlphaValsPyParametersTagged = Required<Pick<QuickAlphaValsPyParameters, '@type'>> & QuickAlphaValsPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.quick.alpha.vals.py": quick_alpha_vals_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.quick.alpha.vals.py": quick_alpha_vals_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `quick_alpha_vals_py(...)`.
+ * Output object returned when calling `QuickAlphaValsPyParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface QuickAlphaValsPyOutputs {
 function quick_alpha_vals_py_params(
     max_file: InputPathType,
     niter: number | null = null,
-): QuickAlphaValsPyParameters {
+): QuickAlphaValsPyParametersTagged {
     const params = {
-        "@type": "afni.quick.alpha.vals.py" as const,
+        "@type": "afni/quick.alpha.vals.py" as const,
         "max_file": max_file,
     };
     if (niter !== null) {
@@ -193,7 +160,6 @@ function quick_alpha_vals_py(
 export {
       QUICK_ALPHA_VALS_PY_METADATA,
       QuickAlphaValsPyOutputs,
-      QuickAlphaValsPyParameters,
       quick_alpha_vals_py,
       quick_alpha_vals_py_execute,
       quick_alpha_vals_py_params,

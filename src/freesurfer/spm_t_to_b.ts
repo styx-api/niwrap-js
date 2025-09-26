@@ -12,47 +12,15 @@ const SPM_T_TO_B_METADATA: Metadata = {
 
 
 interface SpmTToBParameters {
-    "@type": "freesurfer.spm_t_to_b";
+    "@type"?: "freesurfer/spm_t_to_b";
     "spm_stem_format": string;
     "bshort_stem": string;
 }
+type SpmTToBParametersTagged = Required<Pick<SpmTToBParameters, '@type'>> & SpmTToBParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.spm_t_to_b": spm_t_to_b_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `spm_t_to_b(...)`.
+ * Output object returned when calling `SpmTToBParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface SpmTToBOutputs {
 function spm_t_to_b_params(
     spm_stem_format: string,
     bshort_stem: string,
-): SpmTToBParameters {
+): SpmTToBParametersTagged {
     const params = {
-        "@type": "freesurfer.spm_t_to_b" as const,
+        "@type": "freesurfer/spm_t_to_b" as const,
         "spm_stem_format": spm_stem_format,
         "bshort_stem": bshort_stem,
     };
@@ -180,7 +148,6 @@ function spm_t_to_b(
 export {
       SPM_T_TO_B_METADATA,
       SpmTToBOutputs,
-      SpmTToBParameters,
       spm_t_to_b,
       spm_t_to_b_execute,
       spm_t_to_b_params,

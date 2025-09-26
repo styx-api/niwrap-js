@@ -12,47 +12,15 @@ const RUN_SEGMENT_THALAMIC_NUCLEI_SH_METADATA: Metadata = {
 
 
 interface RunSegmentThalamicNucleiShParameters {
-    "@type": "freesurfer.run_SegmentThalamicNuclei.sh";
+    "@type"?: "freesurfer/run_SegmentThalamicNuclei.sh";
     "mcr_root": string;
     "args"?: Array<string> | null | undefined;
 }
+type RunSegmentThalamicNucleiShParametersTagged = Required<Pick<RunSegmentThalamicNucleiShParameters, '@type'>> & RunSegmentThalamicNucleiShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.run_SegmentThalamicNuclei.sh": run_segment_thalamic_nuclei_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `run_segment_thalamic_nuclei_sh(...)`.
+ * Output object returned when calling `RunSegmentThalamicNucleiShParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface RunSegmentThalamicNucleiShOutputs {
 function run_segment_thalamic_nuclei_sh_params(
     mcr_root: string,
     args: Array<string> | null = null,
-): RunSegmentThalamicNucleiShParameters {
+): RunSegmentThalamicNucleiShParametersTagged {
     const params = {
-        "@type": "freesurfer.run_SegmentThalamicNuclei.sh" as const,
+        "@type": "freesurfer/run_SegmentThalamicNuclei.sh" as const,
         "mcr_root": mcr_root,
     };
     if (args !== null) {
@@ -184,7 +152,6 @@ function run_segment_thalamic_nuclei_sh(
 export {
       RUN_SEGMENT_THALAMIC_NUCLEI_SH_METADATA,
       RunSegmentThalamicNucleiShOutputs,
-      RunSegmentThalamicNucleiShParameters,
       run_segment_thalamic_nuclei_sh,
       run_segment_thalamic_nuclei_sh_execute,
       run_segment_thalamic_nuclei_sh_params,

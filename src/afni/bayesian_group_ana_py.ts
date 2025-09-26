@@ -12,7 +12,7 @@ const BAYESIAN_GROUP_ANA_PY_METADATA: Metadata = {
 
 
 interface BayesianGroupAnaPyParameters {
-    "@type": "afni.BayesianGroupAna.py";
+    "@type"?: "afni/BayesianGroupAna.py";
     "dataTable": InputPathType;
     "y_variable": string;
     "prefix"?: string | null | undefined;
@@ -28,44 +28,11 @@ interface BayesianGroupAnaPyParameters {
     "overwrite": boolean;
     "help": boolean;
 }
+type BayesianGroupAnaPyParametersTagged = Required<Pick<BayesianGroupAnaPyParameters, '@type'>> & BayesianGroupAnaPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.BayesianGroupAna.py": bayesian_group_ana_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.BayesianGroupAna.py": bayesian_group_ana_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `bayesian_group_ana_py(...)`.
+ * Output object returned when calling `BayesianGroupAnaPyParameters(...)`.
  *
  * @interface
  */
@@ -128,9 +95,9 @@ function bayesian_group_ana_py_params(
     seed: number | null = null,
     overwrite: boolean = false,
     help: boolean = false,
-): BayesianGroupAnaPyParameters {
+): BayesianGroupAnaPyParametersTagged {
     const params = {
-        "@type": "afni.BayesianGroupAna.py" as const,
+        "@type": "afni/BayesianGroupAna.py" as const,
         "dataTable": data_table,
         "y_variable": y_variable,
         "no_center": no_center,
@@ -192,7 +159,7 @@ function bayesian_group_ana_py_cargs(
             ...(params["x_variables"] ?? null)
         );
     }
-    if ((params["no_center"] ?? null)) {
+    if ((params["no_center"] ?? false)) {
         cargs.push("-no_center");
     }
     if ((params["iterations"] ?? null) !== null) {
@@ -213,7 +180,7 @@ function bayesian_group_ana_py_cargs(
             (params["control_list"] ?? null)
         );
     }
-    if ((params["plot"] ?? null)) {
+    if ((params["plot"] ?? false)) {
         cargs.push("-plot");
     }
     if ((params["more_plots"] ?? null) !== null) {
@@ -222,7 +189,7 @@ function bayesian_group_ana_py_cargs(
             ...(params["more_plots"] ?? null)
         );
     }
-    if ((params["RData"] ?? null)) {
+    if ((params["RData"] ?? false)) {
         cargs.push("-RData");
     }
     if ((params["seed"] ?? null) !== null) {
@@ -231,10 +198,10 @@ function bayesian_group_ana_py_cargs(
             String((params["seed"] ?? null))
         );
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("-overwrite");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -344,7 +311,6 @@ function bayesian_group_ana_py(
 export {
       BAYESIAN_GROUP_ANA_PY_METADATA,
       BayesianGroupAnaPyOutputs,
-      BayesianGroupAnaPyParameters,
       bayesian_group_ana_py,
       bayesian_group_ana_py_execute,
       bayesian_group_ana_py_params,

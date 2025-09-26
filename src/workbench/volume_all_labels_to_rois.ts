@@ -12,49 +12,16 @@ const VOLUME_ALL_LABELS_TO_ROIS_METADATA: Metadata = {
 
 
 interface VolumeAllLabelsToRoisParameters {
-    "@type": "workbench.volume-all-labels-to-rois";
+    "@type"?: "workbench/volume-all-labels-to-rois";
     "label_in": InputPathType;
     "map": string;
     "volume_out": string;
 }
+type VolumeAllLabelsToRoisParametersTagged = Required<Pick<VolumeAllLabelsToRoisParameters, '@type'>> & VolumeAllLabelsToRoisParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-all-labels-to-rois": volume_all_labels_to_rois_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-all-labels-to-rois": volume_all_labels_to_rois_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `volume_all_labels_to_rois(...)`.
+ * Output object returned when calling `VolumeAllLabelsToRoisParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function volume_all_labels_to_rois_params(
     label_in: InputPathType,
     map: string,
     volume_out: string,
-): VolumeAllLabelsToRoisParameters {
+): VolumeAllLabelsToRoisParametersTagged {
     const params = {
-        "@type": "workbench.volume-all-labels-to-rois" as const,
+        "@type": "workbench/volume-all-labels-to-rois" as const,
         "label_in": label_in,
         "map": map,
         "volume_out": volume_out,
@@ -198,7 +165,6 @@ function volume_all_labels_to_rois(
 export {
       VOLUME_ALL_LABELS_TO_ROIS_METADATA,
       VolumeAllLabelsToRoisOutputs,
-      VolumeAllLabelsToRoisParameters,
       volume_all_labels_to_rois,
       volume_all_labels_to_rois_execute,
       volume_all_labels_to_rois_params,

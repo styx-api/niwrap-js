@@ -12,7 +12,7 @@ const V_3D_VOL2_SURF_METADATA: Metadata = {
 
 
 interface V3dVol2SurfParameters {
-    "@type": "afni.3dVol2Surf";
+    "@type"?: "afni/3dVol2Surf";
     "spec_file": InputPathType;
     "sv": InputPathType;
     "grid_parent": InputPathType;
@@ -56,44 +56,11 @@ interface V3dVol2SurfParameters {
     "keep_norm_dir": boolean;
     "reverse_norm_dir": boolean;
 }
+type V3dVol2SurfParametersTagged = Required<Pick<V3dVol2SurfParameters, '@type'>> & V3dVol2SurfParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dVol2Surf": v_3d_vol2_surf_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dVol2Surf": v_3d_vol2_surf_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_vol2_surf(...)`.
+ * Output object returned when calling `V3dVol2SurfParameters(...)`.
  *
  * @interface
  */
@@ -208,9 +175,9 @@ function v_3d_vol2_surf_params(
     version: boolean = false,
     keep_norm_dir: boolean = false,
     reverse_norm_dir: boolean = false,
-): V3dVol2SurfParameters {
+): V3dVol2SurfParametersTagged {
     const params = {
-        "@type": "afni.3dVol2Surf" as const,
+        "@type": "afni/3dVol2Surf" as const,
         "spec_file": spec_file,
         "sv": sv,
         "grid_parent": grid_parent,
@@ -347,7 +314,7 @@ function v_3d_vol2_surf_cargs(
             (params["out_niml"] ?? null)
         );
     }
-    if ((params["use_norms"] ?? null)) {
+    if ((params["use_norms"] ?? false)) {
         cargs.push("-use_norms");
     }
     if ((params["norm_len"] ?? null) !== null) {
@@ -416,25 +383,25 @@ function v_3d_vol2_surf_cargs(
             String((params["f_pn_fr"] ?? null))
         );
     }
-    if ((params["skip_col_nodes"] ?? null)) {
+    if ((params["skip_col_nodes"] ?? false)) {
         cargs.push("-skip_col_nodes");
     }
-    if ((params["skip_col_1dindex"] ?? null)) {
+    if ((params["skip_col_1dindex"] ?? false)) {
         cargs.push("-skip_col_1dindex");
     }
-    if ((params["skip_col_i"] ?? null)) {
+    if ((params["skip_col_i"] ?? false)) {
         cargs.push("-skip_col_i");
     }
-    if ((params["skip_col_j"] ?? null)) {
+    if ((params["skip_col_j"] ?? false)) {
         cargs.push("-skip_col_j");
     }
-    if ((params["skip_col_k"] ?? null)) {
+    if ((params["skip_col_k"] ?? false)) {
         cargs.push("-skip_col_k");
     }
-    if ((params["skip_col_vals"] ?? null)) {
+    if ((params["skip_col_vals"] ?? false)) {
         cargs.push("-skip_col_vals");
     }
-    if ((params["no_headers"] ?? null)) {
+    if ((params["no_headers"] ?? false)) {
         cargs.push("-no_headers");
     }
     if ((params["save_seg_coords"] ?? null) !== null) {
@@ -473,31 +440,31 @@ function v_3d_vol2_surf_cargs(
             String((params["oom_value"] ?? null))
         );
     }
-    if ((params["outcols_afni_nsd"] ?? null)) {
+    if ((params["outcols_afni_nsd"] ?? false)) {
         cargs.push("-outcols_afni_NSD");
     }
-    if ((params["outcols_1_result"] ?? null)) {
+    if ((params["outcols_1_result"] ?? false)) {
         cargs.push("-outcols_1_result");
     }
-    if ((params["outcols_results"] ?? null)) {
+    if ((params["outcols_results"] ?? false)) {
         cargs.push("-outcols_results");
     }
-    if ((params["outcols_nsd_format"] ?? null)) {
+    if ((params["outcols_nsd_format"] ?? false)) {
         cargs.push("-outcols_NSD_format");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["hist"] ?? null)) {
+    if ((params["hist"] ?? false)) {
         cargs.push("-hist");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
-    if ((params["keep_norm_dir"] ?? null)) {
+    if ((params["keep_norm_dir"] ?? false)) {
         cargs.push("-keep_norm_dir");
     }
-    if ((params["reverse_norm_dir"] ?? null)) {
+    if ((params["reverse_norm_dir"] ?? false)) {
         cargs.push("-reverse_norm_dir");
     }
     return cargs;
@@ -661,7 +628,6 @@ function v_3d_vol2_surf(
 
 export {
       V3dVol2SurfOutputs,
-      V3dVol2SurfParameters,
       V_3D_VOL2_SURF_METADATA,
       v_3d_vol2_surf,
       v_3d_vol2_surf_execute,

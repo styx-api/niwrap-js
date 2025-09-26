@@ -12,7 +12,7 @@ const MRIS_COMPUTE_VOLUME_FRACTIONS_METADATA: Metadata = {
 
 
 interface MrisComputeVolumeFractionsParameters {
-    "@type": "freesurfer.mris_compute_volume_fractions";
+    "@type"?: "freesurfer/mris_compute_volume_fractions";
     "volume_file": InputPathType;
     "surface_file": InputPathType;
     "accuracy": number;
@@ -20,44 +20,11 @@ interface MrisComputeVolumeFractionsParameters {
     "debug": boolean;
     "checkopts": boolean;
 }
+type MrisComputeVolumeFractionsParametersTagged = Required<Pick<MrisComputeVolumeFractionsParameters, '@type'>> & MrisComputeVolumeFractionsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_compute_volume_fractions": mris_compute_volume_fractions_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_compute_volume_fractions": mris_compute_volume_fractions_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_compute_volume_fractions(...)`.
+ * Output object returned when calling `MrisComputeVolumeFractionsParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function mris_compute_volume_fractions_params(
     output_file: string,
     debug: boolean = false,
     checkopts: boolean = false,
-): MrisComputeVolumeFractionsParameters {
+): MrisComputeVolumeFractionsParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_compute_volume_fractions" as const,
+        "@type": "freesurfer/mris_compute_volume_fractions" as const,
         "volume_file": volume_file,
         "surface_file": surface_file,
         "accuracy": accuracy,
@@ -136,10 +103,10 @@ function mris_compute_volume_fractions_cargs(
         "--out",
         (params["output_file"] ?? null)
     );
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["checkopts"] ?? null)) {
+    if ((params["checkopts"] ?? false)) {
         cargs.push("--checkopts");
     }
     return cargs;
@@ -230,7 +197,6 @@ function mris_compute_volume_fractions(
 export {
       MRIS_COMPUTE_VOLUME_FRACTIONS_METADATA,
       MrisComputeVolumeFractionsOutputs,
-      MrisComputeVolumeFractionsParameters,
       mris_compute_volume_fractions,
       mris_compute_volume_fractions_execute,
       mris_compute_volume_fractions_params,

@@ -12,7 +12,7 @@ const MRIS_AVERAGE_CURVATURE_METADATA: Metadata = {
 
 
 interface MrisAverageCurvatureParameters {
-    "@type": "freesurfer.mris_average_curvature";
+    "@type"?: "freesurfer/mris_average_curvature";
     "input_curvature_file": InputPathType;
     "hemi": string;
     "surface": string;
@@ -21,43 +21,11 @@ interface MrisAverageCurvatureParameters {
     "summary_stats_flag": boolean;
     "output_surface_flag": boolean;
 }
+type MrisAverageCurvatureParametersTagged = Required<Pick<MrisAverageCurvatureParameters, '@type'>> & MrisAverageCurvatureParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_average_curvature": mris_average_curvature_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_average_curvature(...)`.
+ * Output object returned when calling `MrisAverageCurvatureParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +58,9 @@ function mris_average_curvature_params(
     output_curvature_file: string,
     summary_stats_flag: boolean = false,
     output_surface_flag: boolean = false,
-): MrisAverageCurvatureParameters {
+): MrisAverageCurvatureParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_average_curvature" as const,
+        "@type": "freesurfer/mris_average_curvature" as const,
         "input_curvature_file": input_curvature_file,
         "hemi": hemi,
         "surface": surface,
@@ -124,10 +92,10 @@ function mris_average_curvature_cargs(
     cargs.push((params["surface"] ?? null));
     cargs.push(...(params["subjects"] ?? null));
     cargs.push((params["output_curvature_file"] ?? null));
-    if ((params["summary_stats_flag"] ?? null)) {
+    if ((params["summary_stats_flag"] ?? false)) {
         cargs.push("-s");
     }
-    if ((params["output_surface_flag"] ?? null)) {
+    if ((params["output_surface_flag"] ?? false)) {
         cargs.push("-o");
     }
     return cargs;
@@ -219,7 +187,6 @@ function mris_average_curvature(
 export {
       MRIS_AVERAGE_CURVATURE_METADATA,
       MrisAverageCurvatureOutputs,
-      MrisAverageCurvatureParameters,
       mris_average_curvature,
       mris_average_curvature_execute,
       mris_average_curvature_params,

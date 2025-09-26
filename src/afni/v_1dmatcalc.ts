@@ -12,47 +12,14 @@ const V_1DMATCALC_METADATA: Metadata = {
 
 
 interface V1dmatcalcParameters {
-    "@type": "afni.1dmatcalc";
+    "@type"?: "afni/1dmatcalc";
     "expression"?: string | null | undefined;
 }
+type V1dmatcalcParametersTagged = Required<Pick<V1dmatcalcParameters, '@type'>> & V1dmatcalcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dmatcalc": v_1dmatcalc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.1dmatcalc": v_1dmatcalc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1dmatcalc(...)`.
+ * Output object returned when calling `V1dmatcalcParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface V1dmatcalcOutputs {
  */
 function v_1dmatcalc_params(
     expression: string | null = null,
-): V1dmatcalcParameters {
+): V1dmatcalcParametersTagged {
     const params = {
-        "@type": "afni.1dmatcalc" as const,
+        "@type": "afni/1dmatcalc" as const,
     };
     if (expression !== null) {
         params["expression"] = expression;
@@ -182,7 +149,6 @@ function v_1dmatcalc(
 
 export {
       V1dmatcalcOutputs,
-      V1dmatcalcParameters,
       V_1DMATCALC_METADATA,
       v_1dmatcalc,
       v_1dmatcalc_execute,

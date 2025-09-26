@@ -12,47 +12,14 @@ const HELP_FORMAT_METADATA: Metadata = {
 
 
 interface HelpFormatParameters {
-    "@type": "afni.help_format";
+    "@type"?: "afni/help_format";
     "stdin": string;
 }
+type HelpFormatParametersTagged = Required<Pick<HelpFormatParameters, '@type'>> & HelpFormatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.help_format": help_format_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.help_format": help_format_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `help_format(...)`.
+ * Output object returned when calling `HelpFormatParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface HelpFormatOutputs {
  */
 function help_format_params(
     stdin: string,
-): HelpFormatParameters {
+): HelpFormatParametersTagged {
     const params = {
-        "@type": "afni.help_format" as const,
+        "@type": "afni/help_format" as const,
         "stdin": stdin,
     };
     return params;
@@ -179,7 +146,6 @@ function help_format(
 export {
       HELP_FORMAT_METADATA,
       HelpFormatOutputs,
-      HelpFormatParameters,
       help_format,
       help_format_execute,
       help_format_params,

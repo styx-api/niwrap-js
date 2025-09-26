@@ -12,46 +12,14 @@ const SEGMENT_BS_SH_METADATA: Metadata = {
 
 
 interface SegmentBsShParameters {
-    "@type": "freesurfer.segmentBS.sh";
+    "@type"?: "freesurfer/segmentBS.sh";
     "matlab_runtime"?: string | null | undefined;
 }
+type SegmentBsShParametersTagged = Required<Pick<SegmentBsShParameters, '@type'>> & SegmentBsShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.segmentBS.sh": segment_bs_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `segment_bs_sh(...)`.
+ * Output object returned when calling `SegmentBsShParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface SegmentBsShOutputs {
  */
 function segment_bs_sh_params(
     matlab_runtime: string | null = null,
-): SegmentBsShParameters {
+): SegmentBsShParametersTagged {
     const params = {
-        "@type": "freesurfer.segmentBS.sh" as const,
+        "@type": "freesurfer/segmentBS.sh" as const,
     };
     if (matlab_runtime !== null) {
         params["matlab_runtime"] = matlab_runtime;
@@ -177,7 +145,6 @@ function segment_bs_sh(
 export {
       SEGMENT_BS_SH_METADATA,
       SegmentBsShOutputs,
-      SegmentBsShParameters,
       segment_bs_sh,
       segment_bs_sh_execute,
       segment_bs_sh_params,

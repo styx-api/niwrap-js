@@ -12,46 +12,14 @@ const SEGMENT_SUBJECT_NOTAL_METADATA: Metadata = {
 
 
 interface SegmentSubjectNotalParameters {
-    "@type": "freesurfer.segment_subject_notal";
+    "@type"?: "freesurfer/segment_subject_notal";
     "subject_path": string;
 }
+type SegmentSubjectNotalParametersTagged = Required<Pick<SegmentSubjectNotalParameters, '@type'>> & SegmentSubjectNotalParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.segment_subject_notal": segment_subject_notal_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `segment_subject_notal(...)`.
+ * Output object returned when calling `SegmentSubjectNotalParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface SegmentSubjectNotalOutputs {
  */
 function segment_subject_notal_params(
     subject_path: string,
-): SegmentSubjectNotalParameters {
+): SegmentSubjectNotalParametersTagged {
     const params = {
-        "@type": "freesurfer.segment_subject_notal" as const,
+        "@type": "freesurfer/segment_subject_notal" as const,
         "subject_path": subject_path,
     };
     return params;
@@ -173,7 +141,6 @@ function segment_subject_notal(
 export {
       SEGMENT_SUBJECT_NOTAL_METADATA,
       SegmentSubjectNotalOutputs,
-      SegmentSubjectNotalParameters,
       segment_subject_notal,
       segment_subject_notal_execute,
       segment_subject_notal_params,

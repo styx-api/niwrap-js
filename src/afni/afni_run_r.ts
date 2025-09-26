@@ -12,47 +12,15 @@ const AFNI_RUN_R_METADATA: Metadata = {
 
 
 interface AfniRunRParameters {
-    "@type": "afni.afni_run_R";
+    "@type"?: "afni/afni_run_R";
     "r_script": InputPathType;
     "r_args": Array<string>;
 }
+type AfniRunRParametersTagged = Required<Pick<AfniRunRParameters, '@type'>> & AfniRunRParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.afni_run_R": afni_run_r_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `afni_run_r(...)`.
+ * Output object returned when calling `AfniRunRParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface AfniRunROutputs {
 function afni_run_r_params(
     r_script: InputPathType,
     r_args: Array<string>,
-): AfniRunRParameters {
+): AfniRunRParametersTagged {
     const params = {
-        "@type": "afni.afni_run_R" as const,
+        "@type": "afni/afni_run_R" as const,
         "r_script": r_script,
         "r_args": r_args,
     };
@@ -180,7 +148,6 @@ function afni_run_r(
 export {
       AFNI_RUN_R_METADATA,
       AfniRunROutputs,
-      AfniRunRParameters,
       afni_run_r,
       afni_run_r_execute,
       afni_run_r_params,

@@ -12,7 +12,7 @@ const MRISP_PAINT_METADATA: Metadata = {
 
 
 interface MrispPaintParameters {
-    "@type": "freesurfer.mrisp_paint";
+    "@type"?: "freesurfer/mrisp_paint";
     "template_file": InputPathType;
     "input_surface": InputPathType;
     "output_name": string;
@@ -30,44 +30,11 @@ interface MrispPaintParameters {
     "version_flag": boolean;
     "diag_write_flag": boolean;
 }
+type MrispPaintParametersTagged = Required<Pick<MrispPaintParameters, '@type'>> & MrispPaintParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mrisp_paint": mrisp_paint_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mrisp_paint": mrisp_paint_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mrisp_paint(...)`.
+ * Output object returned when calling `MrispPaintParameters(...)`.
  *
  * @interface
  */
@@ -122,9 +89,9 @@ function mrisp_paint_params(
     diag_vertex: number | null = null,
     version_flag: boolean = false,
     diag_write_flag: boolean = false,
-): MrispPaintParameters {
+): MrispPaintParametersTagged {
     const params = {
-        "@type": "freesurfer.mrisp_paint" as const,
+        "@type": "freesurfer/mrisp_paint" as const,
         "template_file": template_file,
         "input_surface": input_surface,
         "output_name": output_name,
@@ -193,7 +160,7 @@ function mrisp_paint_cargs(
             String((params["average_flag"] ?? null))
         );
     }
-    if ((params["normalize_flag"] ?? null)) {
+    if ((params["normalize_flag"] ?? false)) {
         cargs.push("-N");
     }
     if ((params["frame_number"] ?? null) !== null) {
@@ -202,7 +169,7 @@ function mrisp_paint_cargs(
             String((params["frame_number"] ?? null))
         );
     }
-    if ((params["square_root_flag"] ?? null)) {
+    if ((params["square_root_flag"] ?? false)) {
         cargs.push("-S");
     }
     if ((params["variance_params"] ?? null) !== null) {
@@ -211,13 +178,13 @@ function mrisp_paint_cargs(
             (params["variance_params"] ?? null)
         );
     }
-    if ((params["usage_flag"] ?? null)) {
+    if ((params["usage_flag"] ?? false)) {
         cargs.push("-?");
     }
-    if ((params["birn_info_flag"] ?? null)) {
+    if ((params["birn_info_flag"] ?? false)) {
         cargs.push("--all-info");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
     if ((params["diag_vertex"] ?? null) !== null) {
@@ -226,10 +193,10 @@ function mrisp_paint_cargs(
             String((params["diag_vertex"] ?? null))
         );
     }
-    if ((params["version_flag"] ?? null)) {
+    if ((params["version_flag"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["diag_write_flag"] ?? null)) {
+    if ((params["diag_write_flag"] ?? false)) {
         cargs.push("-W");
     }
     return cargs;
@@ -340,7 +307,6 @@ function mrisp_paint(
 export {
       MRISP_PAINT_METADATA,
       MrispPaintOutputs,
-      MrispPaintParameters,
       mrisp_paint,
       mrisp_paint_execute,
       mrisp_paint_params,

@@ -12,50 +12,18 @@ const APPLY_MORPH_METADATA: Metadata = {
 
 
 interface ApplyMorphParameters {
-    "@type": "freesurfer.applyMorph";
+    "@type"?: "freesurfer/applyMorph";
     "inputs": Array<InputPathType>;
     "template": InputPathType;
     "transform": InputPathType;
     "zlib_buffer"?: number | null | undefined;
     "dbg_coords"?: Array<number> | null | undefined;
 }
+type ApplyMorphParametersTagged = Required<Pick<ApplyMorphParameters, '@type'>> & ApplyMorphParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.applyMorph": apply_morph_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `apply_morph(...)`.
+ * Output object returned when calling `ApplyMorphParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function apply_morph_params(
     transform: InputPathType,
     zlib_buffer: number | null = null,
     dbg_coords: Array<number> | null = null,
-): ApplyMorphParameters {
+): ApplyMorphParametersTagged {
     const params = {
-        "@type": "freesurfer.applyMorph" as const,
+        "@type": "freesurfer/applyMorph" as const,
         "inputs": inputs,
         "template": template,
         "transform": transform,
@@ -221,7 +189,6 @@ function apply_morph(
 export {
       APPLY_MORPH_METADATA,
       ApplyMorphOutputs,
-      ApplyMorphParameters,
       apply_morph,
       apply_morph_execute,
       apply_morph_params,

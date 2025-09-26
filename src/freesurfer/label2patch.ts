@@ -12,7 +12,7 @@ const LABEL2PATCH_METADATA: Metadata = {
 
 
 interface Label2patchParameters {
-    "@type": "freesurfer.label2patch";
+    "@type"?: "freesurfer/label2patch";
     "subject_name": string;
     "hemisphere": string;
     "label_file": InputPathType;
@@ -24,43 +24,11 @@ interface Label2patchParameters {
     "surface_name"?: string | null | undefined;
     "write_surface": boolean;
 }
+type Label2patchParametersTagged = Required<Pick<Label2patchParameters, '@type'>> & Label2patchParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.label2patch": label2patch_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `label2patch(...)`.
+ * Output object returned when calling `Label2patchParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +67,9 @@ function label2patch_params(
     subjects_dir: string | null = null,
     surface_name: string | null = null,
     write_surface: boolean = false,
-): Label2patchParameters {
+): Label2patchParametersTagged {
     const params = {
-        "@type": "freesurfer.label2patch" as const,
+        "@type": "freesurfer/label2patch" as const,
         "subject_name": subject_name,
         "hemisphere": hemisphere,
         "label_file": label_file,
@@ -175,7 +143,7 @@ function label2patch_cargs(
             (params["surface_name"] ?? null)
         );
     }
-    if ((params["write_surface"] ?? null)) {
+    if ((params["write_surface"] ?? false)) {
         cargs.push("-writesurf");
     }
     return cargs;
@@ -273,7 +241,6 @@ function label2patch(
 export {
       LABEL2PATCH_METADATA,
       Label2patchOutputs,
-      Label2patchParameters,
       label2patch,
       label2patch_execute,
       label2patch_params,

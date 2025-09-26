@@ -12,14 +12,15 @@ const FOD2FIXEL_METADATA: Metadata = {
 
 
 interface Fod2fixelConfigParameters {
-    "@type": "mrtrix.fod2fixel.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Fod2fixelConfigParametersTagged = Required<Pick<Fod2fixelConfigParameters, '@type'>> & Fod2fixelConfigParameters;
 
 
 interface Fod2fixelParameters {
-    "@type": "mrtrix.fod2fixel";
+    "@type"?: "mrtrix/fod2fixel";
     "afd"?: string | null | undefined;
     "peak_amp"?: string | null | undefined;
     "disp"?: string | null | undefined;
@@ -42,41 +43,7 @@ interface Fod2fixelParameters {
     "fod": InputPathType;
     "fixel_directory": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.fod2fixel": fod2fixel_cargs,
-        "mrtrix.fod2fixel.config": fod2fixel_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.fod2fixel": fod2fixel_outputs,
-    };
-    return outputsFuncs[t];
-}
+type Fod2fixelParametersTagged = Required<Pick<Fod2fixelParameters, '@type'>> & Fod2fixelParameters;
 
 
 /**
@@ -90,9 +57,9 @@ function dynOutputs(
 function fod2fixel_config_params(
     key: string,
     value: string,
-): Fod2fixelConfigParameters {
+): Fod2fixelConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.fod2fixel.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -121,7 +88,7 @@ function fod2fixel_config_cargs(
 
 
 /**
- * Output object returned when calling `fod2fixel(...)`.
+ * Output object returned when calling `Fod2fixelParameters(...)`.
  *
  * @interface
  */
@@ -198,9 +165,9 @@ function fod2fixel_params(
     config: Array<Fod2fixelConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Fod2fixelParameters {
+): Fod2fixelParametersTagged {
     const params = {
-        "@type": "mrtrix.fod2fixel" as const,
+        "@type": "mrtrix/fod2fixel" as const,
         "fmls_no_thresholds": fmls_no_thresholds,
         "nii": nii,
         "dirpeak": dirpeak,
@@ -291,7 +258,7 @@ function fod2fixel_cargs(
             String((params["fmls_peak_value"] ?? null))
         );
     }
-    if ((params["fmls_no_thresholds"] ?? null)) {
+    if ((params["fmls_no_thresholds"] ?? false)) {
         cargs.push("-fmls_no_thresholds");
     }
     if ((params["fmls_lobe_merge_ratio"] ?? null) !== null) {
@@ -312,22 +279,22 @@ function fod2fixel_cargs(
             String((params["maxnum"] ?? null))
         );
     }
-    if ((params["nii"] ?? null)) {
+    if ((params["nii"] ?? false)) {
         cargs.push("-nii");
     }
-    if ((params["dirpeak"] ?? null)) {
+    if ((params["dirpeak"] ?? false)) {
         cargs.push("-dirpeak");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -337,12 +304,12 @@ function fod2fixel_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => fod2fixel_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["fod"] ?? null)));
@@ -487,9 +454,7 @@ function fod2fixel(
 
 export {
       FOD2FIXEL_METADATA,
-      Fod2fixelConfigParameters,
       Fod2fixelOutputs,
-      Fod2fixelParameters,
       fod2fixel,
       fod2fixel_config_params,
       fod2fixel_execute,

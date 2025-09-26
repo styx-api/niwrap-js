@@ -12,54 +12,21 @@ const SURFACE_AVERAGE_METADATA: Metadata = {
 
 
 interface SurfaceAverageSurfParameters {
-    "@type": "workbench.surface-average.surf";
+    "@type"?: "surf";
     "surface": InputPathType;
     "opt_weight_weight"?: number | null | undefined;
 }
+type SurfaceAverageSurfParametersTagged = Required<Pick<SurfaceAverageSurfParameters, '@type'>> & SurfaceAverageSurfParameters;
 
 
 interface SurfaceAverageParameters {
-    "@type": "workbench.surface-average";
+    "@type"?: "workbench/surface-average";
     "surface_out": string;
     "opt_stddev_stddev_metric_out"?: string | null | undefined;
     "opt_uncertainty_uncert_metric_out"?: string | null | undefined;
     "surf"?: Array<SurfaceAverageSurfParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-average": surface_average_cargs,
-        "workbench.surface-average.surf": surface_average_surf_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-average": surface_average_outputs,
-    };
-    return outputsFuncs[t];
-}
+type SurfaceAverageParametersTagged = Required<Pick<SurfaceAverageParameters, '@type'>> & SurfaceAverageParameters;
 
 
 /**
@@ -73,9 +40,9 @@ function dynOutputs(
 function surface_average_surf_params(
     surface: InputPathType,
     opt_weight_weight: number | null = null,
-): SurfaceAverageSurfParameters {
+): SurfaceAverageSurfParametersTagged {
     const params = {
-        "@type": "workbench.surface-average.surf" as const,
+        "@type": "surf" as const,
         "surface": surface,
     };
     if (opt_weight_weight !== null) {
@@ -111,7 +78,7 @@ function surface_average_surf_cargs(
 
 
 /**
- * Output object returned when calling `surface_average(...)`.
+ * Output object returned when calling `SurfaceAverageParameters(...)`.
  *
  * @interface
  */
@@ -150,9 +117,9 @@ function surface_average_params(
     opt_stddev_stddev_metric_out: string | null = null,
     opt_uncertainty_uncert_metric_out: string | null = null,
     surf: Array<SurfaceAverageSurfParameters> | null = null,
-): SurfaceAverageParameters {
+): SurfaceAverageParametersTagged {
     const params = {
-        "@type": "workbench.surface-average" as const,
+        "@type": "workbench/surface-average" as const,
         "surface_out": surface_out,
     };
     if (opt_stddev_stddev_metric_out !== null) {
@@ -197,7 +164,7 @@ function surface_average_cargs(
         );
     }
     if ((params["surf"] ?? null) !== null) {
-        cargs.push(...(params["surf"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["surf"] ?? null).map(s => surface_average_surf_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -297,8 +264,6 @@ function surface_average(
 export {
       SURFACE_AVERAGE_METADATA,
       SurfaceAverageOutputs,
-      SurfaceAverageParameters,
-      SurfaceAverageSurfParameters,
       surface_average,
       surface_average_execute,
       surface_average_params,

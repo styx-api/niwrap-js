@@ -12,7 +12,7 @@ const ANTSJACOBIAN_METADATA: Metadata = {
 
 
 interface AntsjacobianParameters {
-    "@type": "ants.ANTSJacobian";
+    "@type"?: "ants/ANTSJacobian";
     "imagedim": number;
     "gwarp": InputPathType;
     "outfile": string;
@@ -21,44 +21,11 @@ interface AntsjacobianParameters {
     "normbytotalbool": number;
     "projectionvector"?: string | null | undefined;
 }
+type AntsjacobianParametersTagged = Required<Pick<AntsjacobianParameters, '@type'>> & AntsjacobianParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.ANTSJacobian": antsjacobian_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.ANTSJacobian": antsjacobian_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `antsjacobian(...)`.
+ * Output object returned when calling `AntsjacobianParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function antsjacobian_params(
     maskfn: InputPathType,
     normbytotalbool: number,
     projectionvector: string | null = null,
-): AntsjacobianParameters {
+): AntsjacobianParametersTagged {
     const params = {
-        "@type": "ants.ANTSJacobian" as const,
+        "@type": "ants/ANTSJacobian" as const,
         "imagedim": imagedim,
         "gwarp": gwarp,
         "outfile": outfile,
@@ -225,7 +192,6 @@ function antsjacobian(
 export {
       ANTSJACOBIAN_METADATA,
       AntsjacobianOutputs,
-      AntsjacobianParameters,
       antsjacobian,
       antsjacobian_execute,
       antsjacobian_params,

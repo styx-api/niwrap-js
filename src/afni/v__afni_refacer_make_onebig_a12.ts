@@ -12,47 +12,14 @@ const V__AFNI_REFACER_MAKE_ONEBIG_A12_METADATA: Metadata = {
 
 
 interface VAfniRefacerMakeOnebigA12Parameters {
-    "@type": "afni.@afni_refacer_make_onebigA12";
+    "@type"?: "afni/@afni_refacer_make_onebigA12";
     "t1w_dataset": InputPathType;
 }
+type VAfniRefacerMakeOnebigA12ParametersTagged = Required<Pick<VAfniRefacerMakeOnebigA12Parameters, '@type'>> & VAfniRefacerMakeOnebigA12Parameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@afni_refacer_make_onebigA12": v__afni_refacer_make_onebig_a12_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@afni_refacer_make_onebigA12": v__afni_refacer_make_onebig_a12_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__afni_refacer_make_onebig_a12(...)`.
+ * Output object returned when calling `VAfniRefacerMakeOnebigA12Parameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface VAfniRefacerMakeOnebigA12Outputs {
  */
 function v__afni_refacer_make_onebig_a12_params(
     t1w_dataset: InputPathType,
-): VAfniRefacerMakeOnebigA12Parameters {
+): VAfniRefacerMakeOnebigA12ParametersTagged {
     const params = {
-        "@type": "afni.@afni_refacer_make_onebigA12" as const,
+        "@type": "afni/@afni_refacer_make_onebigA12" as const,
         "t1w_dataset": t1w_dataset,
     };
     return params;
@@ -178,7 +145,6 @@ function v__afni_refacer_make_onebig_a12(
 
 export {
       VAfniRefacerMakeOnebigA12Outputs,
-      VAfniRefacerMakeOnebigA12Parameters,
       V__AFNI_REFACER_MAKE_ONEBIG_A12_METADATA,
       v__afni_refacer_make_onebig_a12,
       v__afni_refacer_make_onebig_a12_execute,

@@ -12,7 +12,7 @@ const SURF_MEASURES_METADATA: Metadata = {
 
 
 interface SurfMeasuresParameters {
-    "@type": "afni.SurfMeasures";
+    "@type"?: "afni/SurfMeasures";
     "spec_file": InputPathType;
     "surf_A": string;
     "surf_B"?: string | null | undefined;
@@ -32,44 +32,11 @@ interface SurfMeasuresParameters {
     "info_volg": boolean;
     "ver": boolean;
 }
+type SurfMeasuresParametersTagged = Required<Pick<SurfMeasuresParameters, '@type'>> & SurfMeasuresParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.SurfMeasures": surf_measures_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.SurfMeasures": surf_measures_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surf_measures(...)`.
+ * Output object returned when calling `SurfMeasuresParameters(...)`.
  *
  * @interface
  */
@@ -132,9 +99,9 @@ function surf_measures_params(
     info_vol: boolean = false,
     info_volg: boolean = false,
     ver: boolean = false,
-): SurfMeasuresParameters {
+): SurfMeasuresParametersTagged {
     const params = {
-        "@type": "afni.SurfMeasures" as const,
+        "@type": "afni/SurfMeasures" as const,
         "spec_file": spec_file,
         "surf_A": surf_a,
         "out_dset": out_dset,
@@ -248,25 +215,25 @@ function surf_measures_cargs(
             execution.inputFile((params["nodes_1D"] ?? null))
         );
     }
-    if ((params["info_all"] ?? null)) {
+    if ((params["info_all"] ?? false)) {
         cargs.push("-info_all");
     }
-    if ((params["info_area"] ?? null)) {
+    if ((params["info_area"] ?? false)) {
         cargs.push("-info_area");
     }
-    if ((params["info_norms"] ?? null)) {
+    if ((params["info_norms"] ?? false)) {
         cargs.push("-info_norms");
     }
-    if ((params["info_thick"] ?? null)) {
+    if ((params["info_thick"] ?? false)) {
         cargs.push("-info_thick");
     }
-    if ((params["info_vol"] ?? null)) {
+    if ((params["info_vol"] ?? false)) {
         cargs.push("-info_vol");
     }
-    if ((params["info_volg"] ?? null)) {
+    if ((params["info_volg"] ?? false)) {
         cargs.push("-info_volg");
     }
-    if ((params["ver"] ?? null)) {
+    if ((params["ver"] ?? false)) {
         cargs.push("-ver");
     }
     return cargs;
@@ -382,7 +349,6 @@ function surf_measures(
 export {
       SURF_MEASURES_METADATA,
       SurfMeasuresOutputs,
-      SurfMeasuresParameters,
       surf_measures,
       surf_measures_execute,
       surf_measures_params,

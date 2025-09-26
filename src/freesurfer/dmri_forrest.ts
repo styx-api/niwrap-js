@@ -12,7 +12,7 @@ const DMRI_FORREST_METADATA: Metadata = {
 
 
 interface DmriForrestParameters {
-    "@type": "freesurfer.dmri_forrest";
+    "@type"?: "freesurfer/dmri_forrest";
     "test_dir": string;
     "train_file": InputPathType;
     "mask_file": InputPathType;
@@ -23,43 +23,11 @@ interface DmriForrestParameters {
     "checkopts": boolean;
     "help": boolean;
 }
+type DmriForrestParametersTagged = Required<Pick<DmriForrestParameters, '@type'>> & DmriForrestParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dmri_forrest": dmri_forrest_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dmri_forrest(...)`.
+ * Output object returned when calling `DmriForrestParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +64,9 @@ function dmri_forrest_params(
     debug: boolean = false,
     checkopts: boolean = false,
     help: boolean = false,
-): DmriForrestParameters {
+): DmriForrestParametersTagged {
     const params = {
-        "@type": "freesurfer.dmri_forrest" as const,
+        "@type": "freesurfer/dmri_forrest" as const,
         "test_dir": test_dir,
         "train_file": train_file,
         "mask_file": mask_file,
@@ -159,13 +127,13 @@ function dmri_forrest_cargs(
             execution.inputFile((params["diff_file"] ?? null))
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["checkopts"] ?? null)) {
+    if ((params["checkopts"] ?? false)) {
         cargs.push("--checkopts");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -261,7 +229,6 @@ function dmri_forrest(
 export {
       DMRI_FORREST_METADATA,
       DmriForrestOutputs,
-      DmriForrestParameters,
       dmri_forrest,
       dmri_forrest_execute,
       dmri_forrest_params,

@@ -12,7 +12,7 @@ const V_3DMASK_SVD_METADATA: Metadata = {
 
 
 interface V3dmaskSvdParameters {
-    "@type": "afni.3dmaskSVD";
+    "@type"?: "afni/3dmaskSVD";
     "input_dataset": InputPathType;
     "vnorm": boolean;
     "sval"?: number | null | undefined;
@@ -23,44 +23,11 @@ interface V3dmaskSvdParameters {
     "ort"?: Array<InputPathType> | null | undefined;
     "alt_input"?: InputPathType | null | undefined;
 }
+type V3dmaskSvdParametersTagged = Required<Pick<V3dmaskSvdParameters, '@type'>> & V3dmaskSvdParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dmaskSVD": v_3dmask_svd_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dmaskSVD": v_3dmask_svd_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dmask_svd(...)`.
+ * Output object returned when calling `V3dmaskSvdParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function v_3dmask_svd_params(
     bandpass: Array<string> | null = null,
     ort: Array<InputPathType> | null = null,
     alt_input: InputPathType | null = null,
-): V3dmaskSvdParameters {
+): V3dmaskSvdParametersTagged {
     const params = {
-        "@type": "afni.3dmaskSVD" as const,
+        "@type": "afni/3dmaskSVD" as const,
         "input_dataset": input_dataset,
         "vnorm": vnorm,
         "automask": automask,
@@ -145,7 +112,7 @@ function v_3dmask_svd_cargs(
     const cargs: string[] = [];
     cargs.push("3dmaskSVD");
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
-    if ((params["vnorm"] ?? null)) {
+    if ((params["vnorm"] ?? false)) {
         cargs.push("-vnorm");
     }
     if ((params["sval"] ?? null) !== null) {
@@ -160,7 +127,7 @@ function v_3dmask_svd_cargs(
             execution.inputFile((params["mask_file"] ?? null))
         );
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     if ((params["polort"] ?? null) !== null) {
@@ -280,7 +247,6 @@ function v_3dmask_svd(
 
 export {
       V3dmaskSvdOutputs,
-      V3dmaskSvdParameters,
       V_3DMASK_SVD_METADATA,
       v_3dmask_svd,
       v_3dmask_svd_execute,

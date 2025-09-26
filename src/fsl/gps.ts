@@ -12,7 +12,7 @@ const GPS_METADATA: Metadata = {
 
 
 interface GpsParameters {
-    "@type": "fsl.gps";
+    "@type"?: "fsl/gps";
     "ndir": number;
     "optws": boolean;
     "output"?: string | null | undefined;
@@ -22,44 +22,11 @@ interface GpsParameters {
     "verbose": boolean;
     "help": boolean;
 }
+type GpsParametersTagged = Required<Pick<GpsParameters, '@type'>> & GpsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.gps": gps_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.gps": gps_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `gps(...)`.
+ * Output object returned when calling `GpsParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function gps_params(
     report: boolean = false,
     verbose: boolean = false,
     help: boolean = false,
-): GpsParameters {
+): GpsParametersTagged {
     const params = {
-        "@type": "fsl.gps" as const,
+        "@type": "fsl/gps" as const,
         "ndir": ndir,
         "optws": optws,
         "report": report,
@@ -138,7 +105,7 @@ function gps_cargs(
         "--ndir",
         String((params["ndir"] ?? null))
     );
-    if ((params["optws"] ?? null)) {
+    if ((params["optws"] ?? false)) {
         cargs.push("--optws");
     }
     if ((params["output"] ?? null) !== null) {
@@ -159,13 +126,13 @@ function gps_cargs(
             execution.inputFile((params["init"] ?? null))
         );
     }
-    if ((params["report"] ?? null)) {
+    if ((params["report"] ?? false)) {
         cargs.push("--report");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v,--verbose");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-h,--help");
     }
     return cargs;
@@ -260,7 +227,6 @@ function gps(
 export {
       GPS_METADATA,
       GpsOutputs,
-      GpsParameters,
       gps,
       gps_execute,
       gps_params,

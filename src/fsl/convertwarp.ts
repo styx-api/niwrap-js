@@ -12,7 +12,7 @@ const CONVERTWARP_METADATA: Metadata = {
 
 
 interface ConvertwarpParameters {
-    "@type": "fsl.convertwarp";
+    "@type"?: "fsl/convertwarp";
     "abswarp": boolean;
     "cons_jacobian": boolean;
     "jacobian_max"?: number | null | undefined;
@@ -30,44 +30,11 @@ interface ConvertwarpParameters {
     "warp1"?: InputPathType | null | undefined;
     "warp2"?: InputPathType | null | undefined;
 }
+type ConvertwarpParametersTagged = Required<Pick<ConvertwarpParameters, '@type'>> & ConvertwarpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.convertwarp": convertwarp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.convertwarp": convertwarp_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `convertwarp(...)`.
+ * Output object returned when calling `ConvertwarpParameters(...)`.
  *
  * @interface
  */
@@ -126,9 +93,9 @@ function convertwarp_params(
     shift_in_file: InputPathType | null = null,
     warp1: InputPathType | null = null,
     warp2: InputPathType | null = null,
-): ConvertwarpParameters {
+): ConvertwarpParametersTagged {
     const params = {
-        "@type": "fsl.convertwarp" as const,
+        "@type": "fsl/convertwarp" as const,
         "abswarp": abswarp,
         "cons_jacobian": cons_jacobian,
         "out_abswarp": out_abswarp,
@@ -184,10 +151,10 @@ function convertwarp_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("convertwarp");
-    if ((params["abswarp"] ?? null)) {
+    if ((params["abswarp"] ?? false)) {
         cargs.push("--abs");
     }
-    if ((params["cons_jacobian"] ?? null)) {
+    if ((params["cons_jacobian"] ?? false)) {
         cargs.push("--constrainj");
     }
     if ((params["jacobian_max"] ?? null) !== null) {
@@ -199,10 +166,10 @@ function convertwarp_cargs(
     if ((params["midmat"] ?? null) !== null) {
         cargs.push(["--midmat=", execution.inputFile((params["midmat"] ?? null))].join(''));
     }
-    if ((params["out_abswarp"] ?? null)) {
+    if ((params["out_abswarp"] ?? false)) {
         cargs.push("--absout");
     }
-    if ((params["out_relwarp"] ?? null)) {
+    if ((params["out_relwarp"] ?? false)) {
         cargs.push("--relout");
     }
     if ((params["output_type"] ?? null) !== null) {
@@ -215,7 +182,7 @@ function convertwarp_cargs(
         cargs.push(["--premat=", execution.inputFile((params["premat"] ?? null))].join(''));
     }
     cargs.push(["--ref=", execution.inputFile((params["reference"] ?? null))].join(''));
-    if ((params["relwarp"] ?? null)) {
+    if ((params["relwarp"] ?? false)) {
         cargs.push("--rel");
     }
     if ((params["shift_direction"] ?? null) !== null) {
@@ -339,7 +306,6 @@ function convertwarp(
 export {
       CONVERTWARP_METADATA,
       ConvertwarpOutputs,
-      ConvertwarpParameters,
       convertwarp,
       convertwarp_execute,
       convertwarp_params,

@@ -12,51 +12,18 @@ const FS_TIME_METADATA: Metadata = {
 
 
 interface FsTimeParameters {
-    "@type": "freesurfer.fs_time";
+    "@type"?: "freesurfer/fs_time";
     "output_file"?: string | null | undefined;
     "key"?: string | null | undefined;
     "load_avg": boolean;
     "command": string;
     "args"?: Array<string> | null | undefined;
 }
+type FsTimeParametersTagged = Required<Pick<FsTimeParameters, '@type'>> & FsTimeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fs_time": fs_time_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.fs_time": fs_time_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fs_time(...)`.
+ * Output object returned when calling `FsTimeParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function fs_time_params(
     key: string | null = null,
     load_avg: boolean = false,
     args: Array<string> | null = null,
-): FsTimeParameters {
+): FsTimeParametersTagged {
     const params = {
-        "@type": "freesurfer.fs_time" as const,
+        "@type": "freesurfer/fs_time" as const,
         "load_avg": load_avg,
         "command": command,
     };
@@ -134,7 +101,7 @@ function fs_time_cargs(
             (params["key"] ?? null)
         );
     }
-    if ((params["load_avg"] ?? null)) {
+    if ((params["load_avg"] ?? false)) {
         cargs.push("-l");
     }
     cargs.push((params["command"] ?? null));
@@ -227,7 +194,6 @@ function fs_time(
 export {
       FS_TIME_METADATA,
       FsTimeOutputs,
-      FsTimeParameters,
       fs_time,
       fs_time_execute,
       fs_time_params,

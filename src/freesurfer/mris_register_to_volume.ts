@@ -12,7 +12,7 @@ const MRIS_REGISTER_TO_VOLUME_METADATA: Metadata = {
 
 
 interface MrisRegisterToVolumeParameters {
-    "@type": "freesurfer.mris_register_to_volume";
+    "@type"?: "freesurfer/mris_register_to_volume";
     "surface": string;
     "pial": string;
     "pial_only"?: string | null | undefined;
@@ -42,43 +42,11 @@ interface MrisRegisterToVolumeParameters {
     "label"?: string | null | undefined;
     "out_reg"?: string | null | undefined;
 }
+type MrisRegisterToVolumeParametersTagged = Required<Pick<MrisRegisterToVolumeParameters, '@type'>> & MrisRegisterToVolumeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_register_to_volume": mris_register_to_volume_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_register_to_volume(...)`.
+ * Output object returned when calling `MrisRegisterToVolumeParameters(...)`.
  *
  * @interface
  */
@@ -153,9 +121,9 @@ function mris_register_to_volume_params(
     patch: string | null = null,
     label: string | null = null,
     out_reg: string | null = null,
-): MrisRegisterToVolumeParameters {
+): MrisRegisterToVolumeParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_register_to_volume" as const,
+        "@type": "freesurfer/mris_register_to_volume" as const,
         "surface": surface,
         "pial": pial,
         "reg": reg,
@@ -263,10 +231,10 @@ function mris_register_to_volume_cargs(
         "--reg",
         (params["reg"] ?? null)
     );
-    if ((params["noglobal"] ?? null)) {
+    if ((params["noglobal"] ?? false)) {
         cargs.push("--noglobal");
     }
-    if ((params["median"] ?? null)) {
+    if ((params["median"] ?? false)) {
         cargs.push("--median");
     }
     cargs.push(
@@ -345,7 +313,7 @@ function mris_register_to_volume_cargs(
             ...(params["sigma"] ?? null).map(String)
         );
     }
-    if ((params["cnr"] ?? null)) {
+    if ((params["cnr"] ?? false)) {
         cargs.push("--CNR");
     }
     if ((params["max_rot"] ?? null) !== null) {
@@ -527,7 +495,6 @@ function mris_register_to_volume(
 export {
       MRIS_REGISTER_TO_VOLUME_METADATA,
       MrisRegisterToVolumeOutputs,
-      MrisRegisterToVolumeParameters,
       mris_register_to_volume,
       mris_register_to_volume_execute,
       mris_register_to_volume_params,

@@ -12,7 +12,7 @@ const V_3D_ZCAT_METADATA: Metadata = {
 
 
 interface V3dZcatParameters {
-    "@type": "afni.3dZcat";
+    "@type"?: "afni/3dZcat";
     "prefix"?: string | null | undefined;
     "datum"?: "byte" | "short" | "float" | null | undefined;
     "fscale": boolean;
@@ -21,44 +21,11 @@ interface V3dZcatParameters {
     "frugal": boolean;
     "input_files": Array<InputPathType>;
 }
+type V3dZcatParametersTagged = Required<Pick<V3dZcatParameters, '@type'>> & V3dZcatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dZcat": v_3d_zcat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dZcat": v_3d_zcat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_zcat(...)`.
+ * Output object returned when calling `V3dZcatParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +66,9 @@ function v_3d_zcat_params(
     nscale: boolean = false,
     verb: boolean = false,
     frugal: boolean = false,
-): V3dZcatParameters {
+): V3dZcatParametersTagged {
     const params = {
-        "@type": "afni.3dZcat" as const,
+        "@type": "afni/3dZcat" as const,
         "fscale": fscale,
         "nscale": nscale,
         "verb": verb,
@@ -144,16 +111,16 @@ function v_3d_zcat_cargs(
             (params["datum"] ?? null)
         );
     }
-    if ((params["fscale"] ?? null)) {
+    if ((params["fscale"] ?? false)) {
         cargs.push("-fscale");
     }
-    if ((params["nscale"] ?? null)) {
+    if ((params["nscale"] ?? false)) {
         cargs.push("-nscale");
     }
-    if ((params["verb"] ?? null)) {
+    if ((params["verb"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["frugal"] ?? null)) {
+    if ((params["frugal"] ?? false)) {
         cargs.push("-frugal");
     }
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
@@ -247,7 +214,6 @@ function v_3d_zcat(
 
 export {
       V3dZcatOutputs,
-      V3dZcatParameters,
       V_3D_ZCAT_METADATA,
       v_3d_zcat,
       v_3d_zcat_execute,

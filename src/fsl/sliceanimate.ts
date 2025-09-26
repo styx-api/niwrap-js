@@ -12,48 +12,15 @@ const SLICEANIMATE_METADATA: Metadata = {
 
 
 interface SliceanimateParameters {
-    "@type": "fsl.sliceanimate";
+    "@type"?: "fsl/sliceanimate";
     "output_file": string;
     "input_files": Array<InputPathType>;
 }
+type SliceanimateParametersTagged = Required<Pick<SliceanimateParameters, '@type'>> & SliceanimateParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.sliceanimate": sliceanimate_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.sliceanimate": sliceanimate_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `sliceanimate(...)`.
+ * Output object returned when calling `SliceanimateParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface SliceanimateOutputs {
 function sliceanimate_params(
     output_file: string,
     input_files: Array<InputPathType>,
-): SliceanimateParameters {
+): SliceanimateParametersTagged {
     const params = {
-        "@type": "fsl.sliceanimate" as const,
+        "@type": "fsl/sliceanimate" as const,
         "output_file": output_file,
         "input_files": input_files,
     };
@@ -186,7 +153,6 @@ function sliceanimate(
 export {
       SLICEANIMATE_METADATA,
       SliceanimateOutputs,
-      SliceanimateParameters,
       sliceanimate,
       sliceanimate_execute,
       sliceanimate_params,

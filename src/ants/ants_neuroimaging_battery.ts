@@ -12,7 +12,7 @@ const ANTS_NEUROIMAGING_BATTERY_METADATA: Metadata = {
 
 
 interface AntsNeuroimagingBatteryParameters {
-    "@type": "ants.antsNeuroimagingBattery";
+    "@type"?: "ants/antsNeuroimagingBattery";
     "input_directory": string;
     "output_directory": string;
     "output_name": string;
@@ -33,44 +33,11 @@ interface AntsNeuroimagingBatteryParameters {
     "help": boolean;
     "info_only": boolean;
 }
+type AntsNeuroimagingBatteryParametersTagged = Required<Pick<AntsNeuroimagingBatteryParameters, '@type'>> & AntsNeuroimagingBatteryParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.antsNeuroimagingBattery": ants_neuroimaging_battery_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.antsNeuroimagingBattery": ants_neuroimaging_battery_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ants_neuroimaging_battery(...)`.
+ * Output object returned when calling `AntsNeuroimagingBatteryParameters(...)`.
  *
  * @interface
  */
@@ -131,9 +98,9 @@ function ants_neuroimaging_battery_params(
     temp_directory: string | null = null,
     help: boolean = false,
     info_only: boolean = false,
-): AntsNeuroimagingBatteryParameters {
+): AntsNeuroimagingBatteryParametersTagged {
     const params = {
-        "@type": "ants.antsNeuroimagingBattery" as const,
+        "@type": "ants/antsNeuroimagingBattery" as const,
         "input_directory": input_directory,
         "output_directory": output_directory,
         "output_name": output_name,
@@ -288,10 +255,10 @@ function ants_neuroimaging_battery_cargs(
             (params["temp_directory"] ?? null)
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["info_only"] ?? null)) {
+    if ((params["info_only"] ?? false)) {
         cargs.push("--info-only");
     }
     return cargs;
@@ -408,7 +375,6 @@ function ants_neuroimaging_battery(
 export {
       ANTS_NEUROIMAGING_BATTERY_METADATA,
       AntsNeuroimagingBatteryOutputs,
-      AntsNeuroimagingBatteryParameters,
       ants_neuroimaging_battery,
       ants_neuroimaging_battery_execute,
       ants_neuroimaging_battery_params,

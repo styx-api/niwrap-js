@@ -12,46 +12,14 @@ const NMOVIE_QT_METADATA: Metadata = {
 
 
 interface NmovieQtParameters {
-    "@type": "freesurfer.nmovie_qt";
+    "@type"?: "freesurfer/nmovie_qt";
     "images": Array<InputPathType>;
 }
+type NmovieQtParametersTagged = Required<Pick<NmovieQtParameters, '@type'>> & NmovieQtParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.nmovie_qt": nmovie_qt_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `nmovie_qt(...)`.
+ * Output object returned when calling `NmovieQtParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface NmovieQtOutputs {
  */
 function nmovie_qt_params(
     images: Array<InputPathType>,
-): NmovieQtParameters {
+): NmovieQtParametersTagged {
     const params = {
-        "@type": "freesurfer.nmovie_qt" as const,
+        "@type": "freesurfer/nmovie_qt" as const,
         "images": images,
     };
     return params;
@@ -173,7 +141,6 @@ function nmovie_qt(
 export {
       NMOVIE_QT_METADATA,
       NmovieQtOutputs,
-      NmovieQtParameters,
       nmovie_qt,
       nmovie_qt_execute,
       nmovie_qt_params,

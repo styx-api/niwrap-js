@@ -12,51 +12,18 @@ const IMMASK_METADATA: Metadata = {
 
 
 interface ImmaskParameters {
-    "@type": "afni.immask";
+    "@type"?: "afni/immask";
     "threshold"?: number | null | undefined;
     "mask_image"?: InputPathType | null | undefined;
     "positive_only": boolean;
     "input_image": InputPathType;
     "output_image": string;
 }
+type ImmaskParametersTagged = Required<Pick<ImmaskParameters, '@type'>> & ImmaskParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.immask": immask_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.immask": immask_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `immask(...)`.
+ * Output object returned when calling `ImmaskParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function immask_params(
     threshold: number | null = null,
     mask_image: InputPathType | null = null,
     positive_only: boolean = false,
-): ImmaskParameters {
+): ImmaskParametersTagged {
     const params = {
-        "@type": "afni.immask" as const,
+        "@type": "afni/immask" as const,
         "positive_only": positive_only,
         "input_image": input_image,
         "output_image": output_image,
@@ -132,7 +99,7 @@ function immask_cargs(
             execution.inputFile((params["mask_image"] ?? null))
         );
     }
-    if ((params["positive_only"] ?? null)) {
+    if ((params["positive_only"] ?? false)) {
         cargs.push("-pos");
     }
     cargs.push(execution.inputFile((params["input_image"] ?? null)));
@@ -223,7 +190,6 @@ function immask(
 export {
       IMMASK_METADATA,
       ImmaskOutputs,
-      ImmaskParameters,
       immask,
       immask_execute,
       immask_params,

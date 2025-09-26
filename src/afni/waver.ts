@@ -12,7 +12,7 @@ const WAVER_METADATA: Metadata = {
 
 
 interface WaverParameters {
-    "@type": "afni.waver";
+    "@type"?: "afni/waver";
     "wav": boolean;
     "gam": boolean;
     "expr"?: string | null | undefined;
@@ -36,44 +36,11 @@ interface WaverParameters {
     "numout"?: number | null | undefined;
     "ver_flag": boolean;
 }
+type WaverParametersTagged = Required<Pick<WaverParameters, '@type'>> & WaverParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.waver": waver_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.waver": waver_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `waver(...)`.
+ * Output object returned when calling `WaverParameters(...)`.
  *
  * @interface
  */
@@ -140,9 +107,9 @@ function waver_params(
     when_data: string | null = null,
     numout: number | null = null,
     ver_flag: boolean = false,
-): WaverParameters {
+): WaverParametersTagged {
     const params = {
-        "@type": "afni.waver" as const,
+        "@type": "afni/waver" as const,
         "wav": wav,
         "gam": gam,
         "xyout": xyout,
@@ -220,10 +187,10 @@ function waver_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("waver");
-    if ((params["wav"] ?? null)) {
+    if ((params["wav"] ?? false)) {
         cargs.push("-WAV");
     }
-    if ((params["gam"] ?? null)) {
+    if ((params["gam"] ?? false)) {
         cargs.push("-GAM");
     }
     if ((params["expr"] ?? null) !== null) {
@@ -304,7 +271,7 @@ function waver_cargs(
             String((params["tr"] ?? null))
         );
     }
-    if ((params["xyout"] ?? null)) {
+    if ((params["xyout"] ?? false)) {
         cargs.push("-xyout");
     }
     if ((params["input_file"] ?? null) !== null) {
@@ -337,7 +304,7 @@ function waver_cargs(
             String((params["numout"] ?? null))
         );
     }
-    if ((params["ver_flag"] ?? null)) {
+    if ((params["ver_flag"] ?? false)) {
         cargs.push("-ver");
     }
     return cargs;
@@ -460,7 +427,6 @@ function waver(
 export {
       WAVER_METADATA,
       WaverOutputs,
-      WaverParameters,
       waver,
       waver_execute,
       waver_params,

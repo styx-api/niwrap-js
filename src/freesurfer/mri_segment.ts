@@ -12,7 +12,7 @@ const MRI_SEGMENT_METADATA: Metadata = {
 
 
 interface MriSegmentParameters {
-    "@type": "freesurfer.mri_segment";
+    "@type"?: "freesurfer/mri_segment";
     "in_vol": InputPathType;
     "out_vol": string;
     "no1d_remove"?: number | null | undefined;
@@ -48,44 +48,11 @@ interface MriSegmentParameters {
     "diag_write": boolean;
     "diag_verbose": boolean;
 }
+type MriSegmentParametersTagged = Required<Pick<MriSegmentParameters, '@type'>> & MriSegmentParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_segment": mri_segment_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_segment": mri_segment_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_segment(...)`.
+ * Output object returned when calling `MriSegmentParameters(...)`.
  *
  * @interface
  */
@@ -180,9 +147,9 @@ function mri_segment_params(
     diagno: number | null = null,
     diag_write: boolean = false,
     diag_verbose: boolean = false,
-): MriSegmentParameters {
+): MriSegmentParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_segment" as const,
+        "@type": "freesurfer/mri_segment" as const,
         "in_vol": in_vol,
         "out_vol": out_vol,
         "auto": auto,
@@ -312,16 +279,16 @@ function mri_segment_cargs(
             ...(params["debug_voxel"] ?? null).map(String)
         );
     }
-    if ((params["auto"] ?? null)) {
+    if ((params["auto"] ?? false)) {
         cargs.push("-auto");
     }
-    if ((params["noauto"] ?? null)) {
+    if ((params["noauto"] ?? false)) {
         cargs.push("-noauto");
     }
-    if ((params["log"] ?? null)) {
+    if ((params["log"] ?? false)) {
         cargs.push("-log");
     }
-    if ((params["keep"] ?? null)) {
+    if ((params["keep"] ?? false)) {
         cargs.push("-keep");
     }
     if ((params["gray_hi"] ?? null) !== null) {
@@ -354,13 +321,13 @@ function mri_segment_cargs(
             String((params["nseg"] ?? null))
         );
     }
-    if ((params["thicken"] ?? null)) {
+    if ((params["thicken"] ?? false)) {
         cargs.push("-thicken");
     }
-    if ((params["fillbg"] ?? null)) {
+    if ((params["fillbg"] ?? false)) {
         cargs.push("-fillbg");
     }
-    if ((params["fillv"] ?? null)) {
+    if ((params["fillv"] ?? false)) {
         cargs.push("-fillv");
     }
     if ((params["blur_sigma"] ?? null) !== null) {
@@ -381,7 +348,7 @@ function mri_segment_cargs(
             String((params["thin_strand_limit"] ?? null))
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
     if ((params["threshold"] ?? null) !== null) {
@@ -438,10 +405,10 @@ function mri_segment_cargs(
             String((params["diagno"] ?? null))
         );
     }
-    if ((params["diag_write"] ?? null)) {
+    if ((params["diag_write"] ?? false)) {
         cargs.push("-diag-write");
     }
-    if ((params["diag_verbose"] ?? null)) {
+    if ((params["diag_verbose"] ?? false)) {
         cargs.push("-diag-verbose");
     }
     return cargs;
@@ -589,7 +556,6 @@ function mri_segment(
 export {
       MRI_SEGMENT_METADATA,
       MriSegmentOutputs,
-      MriSegmentParameters,
       mri_segment,
       mri_segment_execute,
       mri_segment_params,

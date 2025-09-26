@@ -12,7 +12,7 @@ const FLIP_4DFP_METADATA: Metadata = {
 
 
 interface Flip4dfpParameters {
-    "@type": "freesurfer.flip_4dfp";
+    "@type"?: "freesurfer/flip_4dfp";
     "input_image": InputPathType;
     "output_image"?: string | null | undefined;
     "flip_x": boolean;
@@ -20,44 +20,11 @@ interface Flip4dfpParameters {
     "flip_z": boolean;
     "endianness"?: "b" | "l" | null | undefined;
 }
+type Flip4dfpParametersTagged = Required<Pick<Flip4dfpParameters, '@type'>> & Flip4dfpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.flip_4dfp": flip_4dfp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.flip_4dfp": flip_4dfp_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `flip_4dfp(...)`.
+ * Output object returned when calling `Flip4dfpParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function flip_4dfp_params(
     flip_y: boolean = false,
     flip_z: boolean = false,
     endianness: "b" | "l" | null = null,
-): Flip4dfpParameters {
+): Flip4dfpParametersTagged {
     const params = {
-        "@type": "freesurfer.flip_4dfp" as const,
+        "@type": "freesurfer/flip_4dfp" as const,
         "input_image": input_image,
         "flip_x": flip_x,
         "flip_y": flip_y,
@@ -128,13 +95,13 @@ function flip_4dfp_cargs(
     if ((params["output_image"] ?? null) !== null) {
         cargs.push((params["output_image"] ?? null));
     }
-    if ((params["flip_x"] ?? null)) {
+    if ((params["flip_x"] ?? false)) {
         cargs.push("-x");
     }
-    if ((params["flip_y"] ?? null)) {
+    if ((params["flip_y"] ?? false)) {
         cargs.push("-y");
     }
-    if ((params["flip_z"] ?? null)) {
+    if ((params["flip_z"] ?? false)) {
         cargs.push("-z");
     }
     if ((params["endianness"] ?? null) !== null) {
@@ -231,7 +198,6 @@ function flip_4dfp(
 export {
       FLIP_4DFP_METADATA,
       Flip4dfpOutputs,
-      Flip4dfpParameters,
       flip_4dfp,
       flip_4dfp_execute,
       flip_4dfp_params,

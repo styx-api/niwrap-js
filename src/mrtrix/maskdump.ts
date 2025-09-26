@@ -12,14 +12,15 @@ const MASKDUMP_METADATA: Metadata = {
 
 
 interface MaskdumpConfigParameters {
-    "@type": "mrtrix.maskdump.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MaskdumpConfigParametersTagged = Required<Pick<MaskdumpConfigParameters, '@type'>> & MaskdumpConfigParameters;
 
 
 interface MaskdumpParameters {
-    "@type": "mrtrix.maskdump";
+    "@type"?: "mrtrix/maskdump";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -31,41 +32,7 @@ interface MaskdumpParameters {
     "input": InputPathType;
     "output"?: string | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.maskdump": maskdump_cargs,
-        "mrtrix.maskdump.config": maskdump_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.maskdump": maskdump_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MaskdumpParametersTagged = Required<Pick<MaskdumpParameters, '@type'>> & MaskdumpParameters;
 
 
 /**
@@ -79,9 +46,9 @@ function dynOutputs(
 function maskdump_config_params(
     key: string,
     value: string,
-): MaskdumpConfigParameters {
+): MaskdumpConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.maskdump.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -110,7 +77,7 @@ function maskdump_config_cargs(
 
 
 /**
- * Output object returned when calling `maskdump(...)`.
+ * Output object returned when calling `MaskdumpParameters(...)`.
  *
  * @interface
  */
@@ -153,9 +120,9 @@ function maskdump_params(
     help: boolean = false,
     version: boolean = false,
     output: string | null = null,
-): MaskdumpParameters {
+): MaskdumpParametersTagged {
     const params = {
-        "@type": "mrtrix.maskdump" as const,
+        "@type": "mrtrix/maskdump" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -191,16 +158,16 @@ function maskdump_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("maskdump");
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -210,12 +177,12 @@ function maskdump_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => maskdump_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -329,9 +296,7 @@ function maskdump(
 
 export {
       MASKDUMP_METADATA,
-      MaskdumpConfigParameters,
       MaskdumpOutputs,
-      MaskdumpParameters,
       maskdump,
       maskdump_config_params,
       maskdump_execute,

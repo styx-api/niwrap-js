@@ -12,7 +12,7 @@ const MRI_SYNTHSTRIP_METADATA: Metadata = {
 
 
 interface MriSynthstripParameters {
-    "@type": "freesurfer.mri_synthstrip";
+    "@type"?: "freesurfer/mri_synthstrip";
     "image": InputPathType;
     "output_image"?: string | null | undefined;
     "mask"?: InputPathType | null | undefined;
@@ -21,44 +21,11 @@ interface MriSynthstripParameters {
     "exclude_csf": boolean;
     "model_weights"?: InputPathType | null | undefined;
 }
+type MriSynthstripParametersTagged = Required<Pick<MriSynthstripParameters, '@type'>> & MriSynthstripParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_synthstrip": mri_synthstrip_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_synthstrip": mri_synthstrip_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_synthstrip(...)`.
+ * Output object returned when calling `MriSynthstripParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +66,9 @@ function mri_synthstrip_params(
     border: number | null = null,
     exclude_csf: boolean = false,
     model_weights: InputPathType | null = null,
-): MriSynthstripParameters {
+): MriSynthstripParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_synthstrip" as const,
+        "@type": "freesurfer/mri_synthstrip" as const,
         "image": image,
         "gpu": gpu,
         "exclude_csf": exclude_csf,
@@ -152,7 +119,7 @@ function mri_synthstrip_cargs(
             ["[", execution.inputFile((params["mask"] ?? null)), "]"].join('')
         );
     }
-    if ((params["gpu"] ?? null)) {
+    if ((params["gpu"] ?? false)) {
         cargs.push(["[", "-g", "]"].join(''));
     }
     if ((params["border"] ?? null) !== null) {
@@ -161,7 +128,7 @@ function mri_synthstrip_cargs(
             ["[", String((params["border"] ?? null)), "]"].join('')
         );
     }
-    if ((params["exclude_csf"] ?? null)) {
+    if ((params["exclude_csf"] ?? false)) {
         cargs.push(["[", "--no-csf", "]"].join(''));
     }
     if ((params["model_weights"] ?? null) !== null) {
@@ -261,7 +228,6 @@ function mri_synthstrip(
 export {
       MRI_SYNTHSTRIP_METADATA,
       MriSynthstripOutputs,
-      MriSynthstripParameters,
       mri_synthstrip,
       mri_synthstrip_execute,
       mri_synthstrip_params,

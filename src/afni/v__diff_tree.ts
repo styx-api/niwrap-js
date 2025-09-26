@@ -12,7 +12,7 @@ const V__DIFF_TREE_METADATA: Metadata = {
 
 
 interface VDiffTreeParameters {
-    "@type": "afni.@diff.tree";
+    "@type"?: "afni/@diff.tree";
     "new_dir": string;
     "old_dir": string;
     "diff_opts"?: string | null | undefined;
@@ -32,43 +32,11 @@ interface VDiffTreeParameters {
     "xxdiff": boolean;
     "X_option": boolean;
 }
+type VDiffTreeParametersTagged = Required<Pick<VDiffTreeParameters, '@type'>> & VDiffTreeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@diff.tree": v__diff_tree_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__diff_tree(...)`.
+ * Output object returned when calling `VDiffTreeParameters(...)`.
  *
  * @interface
  */
@@ -123,9 +91,9 @@ function v__diff_tree_params(
     diff_prog: string | null = null,
     xxdiff: boolean = false,
     x_option: boolean = false,
-): VDiffTreeParameters {
+): VDiffTreeParametersTagged {
     const params = {
-        "@type": "afni.@diff.tree" as const,
+        "@type": "afni/@diff.tree" as const,
         "new_dir": new_dir,
         "old_dir": old_dir,
         "ignore_missing": ignore_missing,
@@ -209,25 +177,25 @@ function v__diff_tree_cargs(
             (params["il"] ?? null)
         );
     }
-    if ((params["ignore_missing"] ?? null)) {
+    if ((params["ignore_missing"] ?? false)) {
         cargs.push("-ignore_missing");
     }
-    if ((params["no_diffs"] ?? null)) {
+    if ((params["no_diffs"] ?? false)) {
         cargs.push("-no_diffs");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["save"] ?? null)) {
+    if ((params["save"] ?? false)) {
         cargs.push("-save");
     }
-    if ((params["show"] ?? null)) {
+    if ((params["show"] ?? false)) {
         cargs.push("-show");
     }
-    if ((params["show_list_comp"] ?? null)) {
+    if ((params["show_list_comp"] ?? false)) {
         cargs.push("-show_list_comp");
     }
-    if ((params["skip_data"] ?? null)) {
+    if ((params["skip_data"] ?? false)) {
         cargs.push("-skip_data");
     }
     if ((params["verb"] ?? null) !== null) {
@@ -242,10 +210,10 @@ function v__diff_tree_cargs(
             (params["diff_prog"] ?? null)
         );
     }
-    if ((params["xxdiff"] ?? null)) {
+    if ((params["xxdiff"] ?? false)) {
         cargs.push("-xxdiff");
     }
-    if ((params["X_option"] ?? null)) {
+    if ((params["X_option"] ?? false)) {
         cargs.push("-X");
     }
     return cargs;
@@ -358,7 +326,6 @@ function v__diff_tree(
 
 export {
       VDiffTreeOutputs,
-      VDiffTreeParameters,
       V__DIFF_TREE_METADATA,
       v__diff_tree,
       v__diff_tree_execute,

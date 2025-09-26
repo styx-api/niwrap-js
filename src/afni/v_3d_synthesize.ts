@@ -12,7 +12,7 @@ const V_3D_SYNTHESIZE_METADATA: Metadata = {
 
 
 interface V3dSynthesizeParameters {
-    "@type": "afni.3dSynthesize";
+    "@type"?: "afni/3dSynthesize";
     "c_bucket": InputPathType;
     "matrix": InputPathType;
     "select": string;
@@ -21,43 +21,11 @@ interface V3dSynthesizeParameters {
     "tr"?: number | null | undefined;
     "cenfill"?: "zero" | "nbhr" | "none" | null | undefined;
 }
+type V3dSynthesizeParametersTagged = Required<Pick<V3dSynthesizeParameters, '@type'>> & V3dSynthesizeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dSynthesize": v_3d_synthesize_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_synthesize(...)`.
+ * Output object returned when calling `V3dSynthesizeParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +58,9 @@ function v_3d_synthesize_params(
     dry_flag: boolean = false,
     tr: number | null = null,
     cenfill: "zero" | "nbhr" | "none" | null = null,
-): V3dSynthesizeParameters {
+): V3dSynthesizeParametersTagged {
     const params = {
-        "@type": "afni.3dSynthesize" as const,
+        "@type": "afni/3dSynthesize" as const,
         "c_bucket": c_bucket,
         "matrix": matrix,
         "select": select,
@@ -139,7 +107,7 @@ function v_3d_synthesize_cargs(
         "-prefix",
         (params["prefix"] ?? null)
     );
-    if ((params["dry_flag"] ?? null)) {
+    if ((params["dry_flag"] ?? false)) {
         cargs.push("-dry");
     }
     if ((params["tr"] ?? null) !== null) {
@@ -242,7 +210,6 @@ function v_3d_synthesize(
 
 export {
       V3dSynthesizeOutputs,
-      V3dSynthesizeParameters,
       V_3D_SYNTHESIZE_METADATA,
       v_3d_synthesize,
       v_3d_synthesize_execute,

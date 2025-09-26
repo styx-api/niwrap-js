@@ -12,7 +12,7 @@ const V_3D_BRAIN_VOYAGERTO_AFNI_METADATA: Metadata = {
 
 
 interface V3dBrainVoyagertoAfniParameters {
-    "@type": "afni.3dBRAIN_VOYAGERtoAFNI";
+    "@type"?: "afni/3dBRAIN_VOYAGERtoAFNI";
     "input_file": InputPathType;
     "force_byte_swap": boolean;
     "brainvoyager_qx": boolean;
@@ -28,44 +28,11 @@ interface V3dBrainVoyagertoAfniParameters {
     "turn_off_memory_tracing": boolean;
     "turn_on_memory_tracing": boolean;
 }
+type V3dBrainVoyagertoAfniParametersTagged = Required<Pick<V3dBrainVoyagertoAfniParameters, '@type'>> & V3dBrainVoyagertoAfniParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dBRAIN_VOYAGERtoAFNI": v_3d_brain_voyagerto_afni_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dBRAIN_VOYAGERtoAFNI": v_3d_brain_voyagerto_afni_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_brain_voyagerto_afni(...)`.
+ * Output object returned when calling `V3dBrainVoyagertoAfniParameters(...)`.
  *
  * @interface
  */
@@ -120,9 +87,9 @@ function v_3d_brain_voyagerto_afni_params(
     trace_extreme_debugging: boolean = false,
     turn_off_memory_tracing: boolean = false,
     turn_on_memory_tracing: boolean = false,
-): V3dBrainVoyagertoAfniParameters {
+): V3dBrainVoyagertoAfniParametersTagged {
     const params = {
-        "@type": "afni.3dBRAIN_VOYAGERtoAFNI" as const,
+        "@type": "afni/3dBRAIN_VOYAGERtoAFNI" as const,
         "input_file": input_file,
         "force_byte_swap": force_byte_swap,
         "brainvoyager_qx": brainvoyager_qx,
@@ -164,19 +131,19 @@ function v_3d_brain_voyagerto_afni_cargs(
         "--input",
         execution.inputFile((params["input_file"] ?? null))
     );
-    if ((params["force_byte_swap"] ?? null)) {
+    if ((params["force_byte_swap"] ?? false)) {
         cargs.push("-bs");
     }
-    if ((params["brainvoyager_qx"] ?? null)) {
+    if ((params["brainvoyager_qx"] ?? false)) {
         cargs.push("-qx");
     }
-    if ((params["tlrc_space"] ?? null)) {
+    if ((params["tlrc_space"] ?? false)) {
         cargs.push("-tlrc");
     }
-    if ((params["acpc_space"] ?? null)) {
+    if ((params["acpc_space"] ?? false)) {
         cargs.push("-acpc");
     }
-    if ((params["orig_space"] ?? null)) {
+    if ((params["orig_space"] ?? false)) {
         cargs.push("-orig");
     }
     if ((params["prefix"] ?? null) !== null) {
@@ -185,10 +152,10 @@ function v_3d_brain_voyagerto_afni_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["novolreg"] ?? null)) {
+    if ((params["novolreg"] ?? false)) {
         cargs.push("-novolreg");
     }
-    if ((params["noxform"] ?? null)) {
+    if ((params["noxform"] ?? false)) {
         cargs.push("-noxform");
     }
     if ((params["set_environment"] ?? null) !== null) {
@@ -197,16 +164,16 @@ function v_3d_brain_voyagerto_afni_cargs(
             (params["set_environment"] ?? null)
         );
     }
-    if ((params["trace_debugging"] ?? null)) {
+    if ((params["trace_debugging"] ?? false)) {
         cargs.push("-trace");
     }
-    if ((params["trace_extreme_debugging"] ?? null)) {
+    if ((params["trace_extreme_debugging"] ?? false)) {
         cargs.push("-TRACE");
     }
-    if ((params["turn_off_memory_tracing"] ?? null)) {
+    if ((params["turn_off_memory_tracing"] ?? false)) {
         cargs.push("-nomall");
     }
-    if ((params["turn_on_memory_tracing"] ?? null)) {
+    if ((params["turn_on_memory_tracing"] ?? false)) {
         cargs.push("-yesmall");
     }
     return cargs;
@@ -313,7 +280,6 @@ function v_3d_brain_voyagerto_afni(
 
 export {
       V3dBrainVoyagertoAfniOutputs,
-      V3dBrainVoyagertoAfniParameters,
       V_3D_BRAIN_VOYAGERTO_AFNI_METADATA,
       v_3d_brain_voyagerto_afni,
       v_3d_brain_voyagerto_afni_execute,

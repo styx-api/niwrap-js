@@ -12,7 +12,7 @@ const LESION_FILLING_METADATA: Metadata = {
 
 
 interface LesionFillingParameters {
-    "@type": "fsl.lesion_filling";
+    "@type"?: "fsl/lesion_filling";
     "infile": InputPathType;
     "outfile": string;
     "lesionmask": InputPathType;
@@ -21,44 +21,11 @@ interface LesionFillingParameters {
     "components_flag": boolean;
     "help_flag": boolean;
 }
+type LesionFillingParametersTagged = Required<Pick<LesionFillingParameters, '@type'>> & LesionFillingParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.lesion_filling": lesion_filling_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.lesion_filling": lesion_filling_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `lesion_filling(...)`.
+ * Output object returned when calling `LesionFillingParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function lesion_filling_params(
     verbose_flag: boolean = false,
     components_flag: boolean = false,
     help_flag: boolean = false,
-): LesionFillingParameters {
+): LesionFillingParametersTagged {
     const params = {
-        "@type": "fsl.lesion_filling" as const,
+        "@type": "fsl/lesion_filling" as const,
         "infile": infile,
         "outfile": outfile,
         "lesionmask": lesionmask,
@@ -144,13 +111,13 @@ function lesion_filling_cargs(
             execution.inputFile((params["wmmask"] ?? null))
         );
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["components_flag"] ?? null)) {
+    if ((params["components_flag"] ?? false)) {
         cargs.push("-c");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -243,7 +210,6 @@ function lesion_filling(
 export {
       LESION_FILLING_METADATA,
       LesionFillingOutputs,
-      LesionFillingParameters,
       lesion_filling,
       lesion_filling_execute,
       lesion_filling_params,

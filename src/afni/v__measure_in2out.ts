@@ -12,7 +12,7 @@ const V__MEASURE_IN2OUT_METADATA: Metadata = {
 
 
 interface VMeasureIn2outParameters {
-    "@type": "afni.@measure_in2out";
+    "@type"?: "afni/@measure_in2out";
     "maskset": InputPathType;
     "surfset": InputPathType;
     "outdir": string;
@@ -26,44 +26,11 @@ interface VMeasureIn2outParameters {
     "surfsmooth_method"?: string | null | undefined;
     "fs_cort_dir"?: string | null | undefined;
 }
+type VMeasureIn2outParametersTagged = Required<Pick<VMeasureIn2outParameters, '@type'>> & VMeasureIn2outParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@measure_in2out": v__measure_in2out_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@measure_in2out": v__measure_in2out_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__measure_in2out(...)`.
+ * Output object returned when calling `VMeasureIn2outParameters(...)`.
  *
  * @interface
  */
@@ -138,9 +105,9 @@ function v__measure_in2out_params(
     keep_temp_files: boolean = false,
     surfsmooth_method: string | null = null,
     fs_cort_dir: string | null = null,
-): VMeasureIn2outParameters {
+): VMeasureIn2outParametersTagged {
     const params = {
-        "@type": "afni.@measure_in2out" as const,
+        "@type": "afni/@measure_in2out" as const,
         "maskset": maskset,
         "surfset": surfset,
         "outdir": outdir,
@@ -236,7 +203,7 @@ function v__measure_in2out_cargs(
             ...(params["maskinoutvals"] ?? null).map(String)
         );
     }
-    if ((params["keep_temp_files"] ?? null)) {
+    if ((params["keep_temp_files"] ?? false)) {
         cargs.push("-keep_temp_files");
     }
     if ((params["surfsmooth_method"] ?? null) !== null) {
@@ -357,7 +324,6 @@ function v__measure_in2out(
 
 export {
       VMeasureIn2outOutputs,
-      VMeasureIn2outParameters,
       V__MEASURE_IN2OUT_METADATA,
       v__measure_in2out,
       v__measure_in2out_execute,

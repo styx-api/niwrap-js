@@ -12,50 +12,17 @@ const MCCUTUP_METADATA: Metadata = {
 
 
 interface MccutupParameters {
-    "@type": "fsl.mccutup";
+    "@type"?: "fsl/mccutup";
     "input": InputPathType;
     "output_file"?: string | null | undefined;
     "param1"?: string | null | undefined;
     "param2"?: string | null | undefined;
 }
+type MccutupParametersTagged = Required<Pick<MccutupParameters, '@type'>> & MccutupParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.mccutup": mccutup_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.mccutup": mccutup_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mccutup(...)`.
+ * Output object returned when calling `MccutupParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mccutup_params(
     output_file: string | null = null,
     param1: string | null = null,
     param2: string | null = null,
-): MccutupParameters {
+): MccutupParametersTagged {
     const params = {
-        "@type": "fsl.mccutup" as const,
+        "@type": "fsl/mccutup" as const,
         "input": input,
     };
     if (output_file !== null) {
@@ -221,7 +188,6 @@ function mccutup(
 export {
       MCCUTUP_METADATA,
       MccutupOutputs,
-      MccutupParameters,
       mccutup,
       mccutup_execute,
       mccutup_params,

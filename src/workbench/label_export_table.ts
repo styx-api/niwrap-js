@@ -12,47 +12,15 @@ const LABEL_EXPORT_TABLE_METADATA: Metadata = {
 
 
 interface LabelExportTableParameters {
-    "@type": "workbench.label-export-table";
+    "@type"?: "workbench/label-export-table";
     "label_in": InputPathType;
     "table_out": string;
 }
+type LabelExportTableParametersTagged = Required<Pick<LabelExportTableParameters, '@type'>> & LabelExportTableParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.label-export-table": label_export_table_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `label_export_table(...)`.
+ * Output object returned when calling `LabelExportTableParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface LabelExportTableOutputs {
 function label_export_table_params(
     label_in: InputPathType,
     table_out: string,
-): LabelExportTableParameters {
+): LabelExportTableParametersTagged {
     const params = {
-        "@type": "workbench.label-export-table" as const,
+        "@type": "workbench/label-export-table" as const,
         "label_in": label_in,
         "table_out": table_out,
     };
@@ -185,7 +153,6 @@ function label_export_table(
 export {
       LABEL_EXPORT_TABLE_METADATA,
       LabelExportTableOutputs,
-      LabelExportTableParameters,
       label_export_table,
       label_export_table_execute,
       label_export_table_params,

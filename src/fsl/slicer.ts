@@ -12,7 +12,7 @@ const SLICER_METADATA: Metadata = {
 
 
 interface SlicerParameters {
-    "@type": "fsl.slicer";
+    "@type"?: "fsl/slicer";
     "in_file": InputPathType;
     "overlay_file"?: InputPathType | null | undefined;
     "label_slices": boolean;
@@ -37,44 +37,11 @@ interface SlicerParameters {
     "output_sample_axial_slices_width"?: string | null | undefined;
     "output_sample_axial_slices_fname"?: string | null | undefined;
 }
+type SlicerParametersTagged = Required<Pick<SlicerParameters, '@type'>> & SlicerParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.slicer": slicer_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.slicer": slicer_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `slicer(...)`.
+ * Output object returned when calling `SlicerParameters(...)`.
  *
  * @interface
  */
@@ -159,9 +126,9 @@ function slicer_params(
     output_sample_axial_slices: boolean = false,
     output_sample_axial_slices_width: string | null = null,
     output_sample_axial_slices_fname: string | null = null,
-): SlicerParameters {
+): SlicerParametersTagged {
     const params = {
-        "@type": "fsl.slicer" as const,
+        "@type": "fsl/slicer" as const,
         "in_file": in_file,
         "label_slices": label_slices,
         "dither_edges": dither_edges,
@@ -232,7 +199,7 @@ function slicer_cargs(
     if ((params["overlay_file"] ?? null) !== null) {
         cargs.push(execution.inputFile((params["overlay_file"] ?? null)));
     }
-    if ((params["label_slices"] ?? null)) {
+    if ((params["label_slices"] ?? false)) {
         cargs.push("-L");
     }
     if ((params["colour_map"] ?? null) !== null) {
@@ -259,16 +226,16 @@ function slicer_cargs(
             String((params["threshold_edges"] ?? null))
         );
     }
-    if ((params["dither_edges"] ?? null)) {
+    if ((params["dither_edges"] ?? false)) {
         cargs.push("-t");
     }
-    if ((params["nearest_neighbour"] ?? null)) {
+    if ((params["nearest_neighbour"] ?? false)) {
         cargs.push("-n");
     }
-    if ((params["show_orientation"] ?? null)) {
+    if ((params["show_orientation"] ?? false)) {
         cargs.push("-u");
     }
-    if ((params["red_dot_marker"] ?? null)) {
+    if ((params["red_dot_marker"] ?? false)) {
         cargs.push("-c");
     }
     if ((params["output_single_image"] ?? null) !== null) {
@@ -277,31 +244,31 @@ function slicer_cargs(
             (params["output_single_image"] ?? null)
         );
     }
-    if ((params["output_sagittal_slice"] ?? null)) {
+    if ((params["output_sagittal_slice"] ?? false)) {
         cargs.push("-x");
     }
     if ((params["output_sagittal_slice_fname"] ?? null) !== null) {
         cargs.push((params["output_sagittal_slice_fname"] ?? null));
     }
-    if ((params["output_axial_slice"] ?? null)) {
+    if ((params["output_axial_slice"] ?? false)) {
         cargs.push("-y");
     }
     if ((params["output_axial_slice_fname"] ?? null) !== null) {
         cargs.push((params["output_axial_slice_fname"] ?? null));
     }
-    if ((params["output_coronal_slice"] ?? null)) {
+    if ((params["output_coronal_slice"] ?? false)) {
         cargs.push("-z");
     }
     if ((params["output_coronal_slice_fname"] ?? null) !== null) {
         cargs.push((params["output_coronal_slice_fname"] ?? null));
     }
-    if ((params["output_all_axial_slices"] ?? null)) {
+    if ((params["output_all_axial_slices"] ?? false)) {
         cargs.push("-A");
     }
     if ((params["output_all_axial_slices_fname"] ?? null) !== null) {
         cargs.push((params["output_all_axial_slices_fname"] ?? null));
     }
-    if ((params["output_sample_axial_slices"] ?? null)) {
+    if ((params["output_sample_axial_slices"] ?? false)) {
         cargs.push("-S");
     }
     if ((params["output_sample_axial_slices_width"] ?? null) !== null) {
@@ -436,7 +403,6 @@ function slicer(
 export {
       SLICER_METADATA,
       SlicerOutputs,
-      SlicerParameters,
       slicer,
       slicer_execute,
       slicer_params,

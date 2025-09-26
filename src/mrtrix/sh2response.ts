@@ -12,14 +12,15 @@ const SH2RESPONSE_METADATA: Metadata = {
 
 
 interface Sh2responseConfigParameters {
-    "@type": "mrtrix.sh2response.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Sh2responseConfigParametersTagged = Required<Pick<Sh2responseConfigParameters, '@type'>> & Sh2responseConfigParameters;
 
 
 interface Sh2responseParameters {
-    "@type": "mrtrix.sh2response";
+    "@type"?: "mrtrix/sh2response";
     "lmax"?: number | null | undefined;
     "dump"?: string | null | undefined;
     "info": boolean;
@@ -35,41 +36,7 @@ interface Sh2responseParameters {
     "directions": InputPathType;
     "response": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.sh2response": sh2response_cargs,
-        "mrtrix.sh2response.config": sh2response_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.sh2response": sh2response_outputs,
-    };
-    return outputsFuncs[t];
-}
+type Sh2responseParametersTagged = Required<Pick<Sh2responseParameters, '@type'>> & Sh2responseParameters;
 
 
 /**
@@ -83,9 +50,9 @@ function dynOutputs(
 function sh2response_config_params(
     key: string,
     value: string,
-): Sh2responseConfigParameters {
+): Sh2responseConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.sh2response.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -114,7 +81,7 @@ function sh2response_config_cargs(
 
 
 /**
- * Output object returned when calling `sh2response(...)`.
+ * Output object returned when calling `Sh2responseParameters(...)`.
  *
  * @interface
  */
@@ -169,9 +136,9 @@ function sh2response_params(
     config: Array<Sh2responseConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Sh2responseParameters {
+): Sh2responseParametersTagged {
     const params = {
-        "@type": "mrtrix.sh2response" as const,
+        "@type": "mrtrix/sh2response" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -225,16 +192,16 @@ function sh2response_cargs(
             (params["dump"] ?? null)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -244,12 +211,12 @@ function sh2response_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => sh2response_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["SH"] ?? null)));
@@ -374,9 +341,7 @@ function sh2response(
 
 export {
       SH2RESPONSE_METADATA,
-      Sh2responseConfigParameters,
       Sh2responseOutputs,
-      Sh2responseParameters,
       sh2response,
       sh2response_config_params,
       sh2response_execute,

@@ -12,49 +12,16 @@ const LABEL_PROBABILITY_METADATA: Metadata = {
 
 
 interface LabelProbabilityParameters {
-    "@type": "workbench.label-probability";
+    "@type"?: "workbench/label-probability";
     "label_maps": InputPathType;
     "probability_metric_out": string;
     "opt_exclude_unlabeled": boolean;
 }
+type LabelProbabilityParametersTagged = Required<Pick<LabelProbabilityParameters, '@type'>> & LabelProbabilityParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.label-probability": label_probability_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.label-probability": label_probability_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `label_probability(...)`.
+ * Output object returned when calling `LabelProbabilityParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function label_probability_params(
     label_maps: InputPathType,
     probability_metric_out: string,
     opt_exclude_unlabeled: boolean = false,
-): LabelProbabilityParameters {
+): LabelProbabilityParametersTagged {
     const params = {
-        "@type": "workbench.label-probability" as const,
+        "@type": "workbench/label-probability" as const,
         "label_maps": label_maps,
         "probability_metric_out": probability_metric_out,
         "opt_exclude_unlabeled": opt_exclude_unlabeled,
@@ -111,7 +78,7 @@ function label_probability_cargs(
     cargs.push("-label-probability");
     cargs.push(execution.inputFile((params["label_maps"] ?? null)));
     cargs.push((params["probability_metric_out"] ?? null));
-    if ((params["opt_exclude_unlabeled"] ?? null)) {
+    if ((params["opt_exclude_unlabeled"] ?? false)) {
         cargs.push("-exclude-unlabeled");
     }
     return cargs;
@@ -200,7 +167,6 @@ function label_probability(
 export {
       LABEL_PROBABILITY_METADATA,
       LabelProbabilityOutputs,
-      LabelProbabilityParameters,
       label_probability,
       label_probability_execute,
       label_probability_params,

@@ -12,48 +12,15 @@ const VENTFIX_METADATA: Metadata = {
 
 
 interface VentfixParameters {
-    "@type": "freesurfer.ventfix";
+    "@type"?: "freesurfer/ventfix";
     "subject_dir": string;
     "option1"?: string | null | undefined;
 }
+type VentfixParametersTagged = Required<Pick<VentfixParameters, '@type'>> & VentfixParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.ventfix": ventfix_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.ventfix": ventfix_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ventfix(...)`.
+ * Output object returned when calling `VentfixParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface VentfixOutputs {
 function ventfix_params(
     subject_dir: string,
     option1: string | null = null,
-): VentfixParameters {
+): VentfixParametersTagged {
     const params = {
-        "@type": "freesurfer.ventfix" as const,
+        "@type": "freesurfer/ventfix" as const,
         "subject_dir": subject_dir,
     };
     if (option1 !== null) {
@@ -193,7 +160,6 @@ function ventfix(
 export {
       VENTFIX_METADATA,
       VentfixOutputs,
-      VentfixParameters,
       ventfix,
       ventfix_execute,
       ventfix_params,

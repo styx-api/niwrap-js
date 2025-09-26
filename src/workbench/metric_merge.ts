@@ -12,68 +12,35 @@ const METRIC_MERGE_METADATA: Metadata = {
 
 
 interface MetricMergeUpToParameters {
-    "@type": "workbench.metric-merge.metric.column.up_to";
+    "@type"?: "up_to";
     "last_column": string;
     "opt_reverse": boolean;
 }
+type MetricMergeUpToParametersTagged = Required<Pick<MetricMergeUpToParameters, '@type'>> & MetricMergeUpToParameters;
 
 
 interface MetricMergeColumnParameters {
-    "@type": "workbench.metric-merge.metric.column";
+    "@type"?: "column";
     "column": string;
     "up_to"?: MetricMergeUpToParameters | null | undefined;
 }
+type MetricMergeColumnParametersTagged = Required<Pick<MetricMergeColumnParameters, '@type'>> & MetricMergeColumnParameters;
 
 
 interface MetricMergeMetricParameters {
-    "@type": "workbench.metric-merge.metric";
+    "@type"?: "metric";
     "metric_in": InputPathType;
     "column"?: Array<MetricMergeColumnParameters> | null | undefined;
 }
+type MetricMergeMetricParametersTagged = Required<Pick<MetricMergeMetricParameters, '@type'>> & MetricMergeMetricParameters;
 
 
 interface MetricMergeParameters {
-    "@type": "workbench.metric-merge";
+    "@type"?: "workbench/metric-merge";
     "metric_out": string;
     "metric"?: Array<MetricMergeMetricParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-merge": metric_merge_cargs,
-        "workbench.metric-merge.metric": metric_merge_metric_cargs,
-        "workbench.metric-merge.metric.column": metric_merge_column_cargs,
-        "workbench.metric-merge.metric.column.up_to": metric_merge_up_to_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.metric-merge": metric_merge_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MetricMergeParametersTagged = Required<Pick<MetricMergeParameters, '@type'>> & MetricMergeParameters;
 
 
 /**
@@ -87,9 +54,9 @@ function dynOutputs(
 function metric_merge_up_to_params(
     last_column: string,
     opt_reverse: boolean = false,
-): MetricMergeUpToParameters {
+): MetricMergeUpToParametersTagged {
     const params = {
-        "@type": "workbench.metric-merge.metric.column.up_to" as const,
+        "@type": "up_to" as const,
         "last_column": last_column,
         "opt_reverse": opt_reverse,
     };
@@ -112,7 +79,7 @@ function metric_merge_up_to_cargs(
     const cargs: string[] = [];
     cargs.push("-up-to");
     cargs.push((params["last_column"] ?? null));
-    if ((params["opt_reverse"] ?? null)) {
+    if ((params["opt_reverse"] ?? false)) {
         cargs.push("-reverse");
     }
     return cargs;
@@ -130,9 +97,9 @@ function metric_merge_up_to_cargs(
 function metric_merge_column_params(
     column: string,
     up_to: MetricMergeUpToParameters | null = null,
-): MetricMergeColumnParameters {
+): MetricMergeColumnParametersTagged {
     const params = {
-        "@type": "workbench.metric-merge.metric.column" as const,
+        "@type": "column" as const,
         "column": column,
     };
     if (up_to !== null) {
@@ -158,7 +125,7 @@ function metric_merge_column_cargs(
     cargs.push("-column");
     cargs.push((params["column"] ?? null));
     if ((params["up_to"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["up_to"] ?? null)["@type"])((params["up_to"] ?? null), execution));
+        cargs.push(...metric_merge_up_to_cargs((params["up_to"] ?? null), execution));
     }
     return cargs;
 }
@@ -175,9 +142,9 @@ function metric_merge_column_cargs(
 function metric_merge_metric_params(
     metric_in: InputPathType,
     column: Array<MetricMergeColumnParameters> | null = null,
-): MetricMergeMetricParameters {
+): MetricMergeMetricParametersTagged {
     const params = {
-        "@type": "workbench.metric-merge.metric" as const,
+        "@type": "metric" as const,
         "metric_in": metric_in,
     };
     if (column !== null) {
@@ -203,14 +170,14 @@ function metric_merge_metric_cargs(
     cargs.push("-metric");
     cargs.push(execution.inputFile((params["metric_in"] ?? null)));
     if ((params["column"] ?? null) !== null) {
-        cargs.push(...(params["column"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["column"] ?? null).map(s => metric_merge_column_cargs(s, execution)).flat());
     }
     return cargs;
 }
 
 
 /**
- * Output object returned when calling `metric_merge(...)`.
+ * Output object returned when calling `MetricMergeParameters(...)`.
  *
  * @interface
  */
@@ -237,9 +204,9 @@ interface MetricMergeOutputs {
 function metric_merge_params(
     metric_out: string,
     metric: Array<MetricMergeMetricParameters> | null = null,
-): MetricMergeParameters {
+): MetricMergeParametersTagged {
     const params = {
-        "@type": "workbench.metric-merge" as const,
+        "@type": "workbench/metric-merge" as const,
         "metric_out": metric_out,
     };
     if (metric !== null) {
@@ -266,7 +233,7 @@ function metric_merge_cargs(
     cargs.push("-metric-merge");
     cargs.push((params["metric_out"] ?? null));
     if ((params["metric"] ?? null) !== null) {
-        cargs.push(...(params["metric"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["metric"] ?? null).map(s => metric_merge_metric_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -359,11 +326,7 @@ function metric_merge(
 
 export {
       METRIC_MERGE_METADATA,
-      MetricMergeColumnParameters,
-      MetricMergeMetricParameters,
       MetricMergeOutputs,
-      MetricMergeParameters,
-      MetricMergeUpToParameters,
       metric_merge,
       metric_merge_column_params,
       metric_merge_execute,

@@ -12,7 +12,7 @@ const V_3D_MSE_METADATA: Metadata = {
 
 
 interface V3dMseParameters {
-    "@type": "afni.3dMSE";
+    "@type"?: "afni/3dMSE";
     "polynomial_order"?: number | null | undefined;
     "autoclip": boolean;
     "automask": boolean;
@@ -23,44 +23,11 @@ interface V3dMseParameters {
     "rthresh"?: number | null | undefined;
     "dset": InputPathType;
 }
+type V3dMseParametersTagged = Required<Pick<V3dMseParameters, '@type'>> & V3dMseParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dMSE": v_3d_mse_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dMSE": v_3d_mse_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_mse(...)`.
+ * Output object returned when calling `V3dMseParameters(...)`.
  *
  * @interface
  */
@@ -105,9 +72,9 @@ function v_3d_mse_params(
     scales: number | null = null,
     entwin: number | null = null,
     rthresh: number | null = null,
-): V3dMseParameters {
+): V3dMseParametersTagged {
     const params = {
-        "@type": "afni.3dMSE" as const,
+        "@type": "afni/3dMSE" as const,
         "autoclip": autoclip,
         "automask": automask,
         "dset": dset,
@@ -154,10 +121,10 @@ function v_3d_mse_cargs(
             String((params["polynomial_order"] ?? null))
         );
     }
-    if ((params["autoclip"] ?? null)) {
+    if ((params["autoclip"] ?? false)) {
         cargs.push("-autoclip");
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -285,7 +252,6 @@ function v_3d_mse(
 
 export {
       V3dMseOutputs,
-      V3dMseParameters,
       V_3D_MSE_METADATA,
       v_3d_mse,
       v_3d_mse_execute,

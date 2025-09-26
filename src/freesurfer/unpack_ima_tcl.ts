@@ -12,46 +12,14 @@ const UNPACK_IMA_TCL_METADATA: Metadata = {
 
 
 interface UnpackImaTclParameters {
-    "@type": "freesurfer.unpack_ima.tcl";
+    "@type"?: "freesurfer/unpack_ima.tcl";
     "target_dir": string;
 }
+type UnpackImaTclParametersTagged = Required<Pick<UnpackImaTclParameters, '@type'>> & UnpackImaTclParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.unpack_ima.tcl": unpack_ima_tcl_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `unpack_ima_tcl(...)`.
+ * Output object returned when calling `UnpackImaTclParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface UnpackImaTclOutputs {
  */
 function unpack_ima_tcl_params(
     target_dir: string = "~",
-): UnpackImaTclParameters {
+): UnpackImaTclParametersTagged {
     const params = {
-        "@type": "freesurfer.unpack_ima.tcl" as const,
+        "@type": "freesurfer/unpack_ima.tcl" as const,
         "target_dir": target_dir,
     };
     return params;
@@ -95,7 +63,7 @@ function unpack_ima_tcl_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("unpack_ima.tcl");
-    cargs.push((params["target_dir"] ?? null));
+    cargs.push((params["target_dir"] ?? "~"));
     return cargs;
 }
 
@@ -173,7 +141,6 @@ function unpack_ima_tcl(
 export {
       UNPACK_IMA_TCL_METADATA,
       UnpackImaTclOutputs,
-      UnpackImaTclParameters,
       unpack_ima_tcl,
       unpack_ima_tcl_execute,
       unpack_ima_tcl_params,

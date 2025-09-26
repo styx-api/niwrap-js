@@ -12,7 +12,7 @@ const FSLMATHS_METADATA: Metadata = {
 
 
 interface FslmathsOperationParameters {
-    "@type": "fsl.fslmaths.operations";
+    "@type"?: "operation";
     "add"?: number | null | undefined;
     "sub"?: number | null | undefined;
     "mul"?: number | null | undefined;
@@ -112,51 +112,18 @@ interface FslmathsOperationParameters {
     "bptf"?: Array<number> | null | undefined;
     "roc"?: Array<number> | null | undefined;
 }
+type FslmathsOperationParametersTagged = Required<Pick<FslmathsOperationParameters, '@type'>> & FslmathsOperationParameters;
 
 
 interface FslmathsParameters {
-    "@type": "fsl.fslmaths";
+    "@type"?: "fsl/fslmaths";
     "datatype_internal"?: "char" | "short" | "int" | "float" | "double" | "input" | null | undefined;
     "input_files": Array<InputPathType>;
     "operations": Array<FslmathsOperationParameters>;
     "output": string;
     "output_datatype"?: "char" | "short" | "int" | "float" | "double" | "input" | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslmaths": fslmaths_cargs,
-        "fsl.fslmaths.operations": fslmaths_operation_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fslmaths": fslmaths_outputs,
-    };
-    return outputsFuncs[t];
-}
+type FslmathsParametersTagged = Required<Pick<FslmathsParameters, '@type'>> & FslmathsParameters;
 
 
 /**
@@ -362,9 +329,9 @@ function fslmaths_operation_params(
     roi: Array<number> | null = null,
     bptf: Array<number> | null = null,
     roc: Array<number> | null = null,
-): FslmathsOperationParameters {
+): FslmathsOperationParametersTagged {
     const params = {
-        "@type": "fsl.fslmaths.operations" as const,
+        "@type": "operation" as const,
         "save": save,
         "exp": exp,
         "log": log,
@@ -647,58 +614,58 @@ function fslmaths_operation_cargs(
             execution.inputFile((params["restart"] ?? null))
         );
     }
-    if ((params["save"] ?? null)) {
+    if ((params["save"] ?? false)) {
         cargs.push("-save");
     }
-    if ((params["exp"] ?? null)) {
+    if ((params["exp"] ?? false)) {
         cargs.push("-exp");
     }
-    if ((params["log"] ?? null)) {
+    if ((params["log"] ?? false)) {
         cargs.push("-log");
     }
-    if ((params["sin"] ?? null)) {
+    if ((params["sin"] ?? false)) {
         cargs.push("-sin");
     }
-    if ((params["cos"] ?? null)) {
+    if ((params["cos"] ?? false)) {
         cargs.push("-cos");
     }
-    if ((params["tan"] ?? null)) {
+    if ((params["tan"] ?? false)) {
         cargs.push("-tan");
     }
-    if ((params["asin"] ?? null)) {
+    if ((params["asin"] ?? false)) {
         cargs.push("-asin");
     }
-    if ((params["acos"] ?? null)) {
+    if ((params["acos"] ?? false)) {
         cargs.push("-acos");
     }
-    if ((params["atan"] ?? null)) {
+    if ((params["atan"] ?? false)) {
         cargs.push("-atan");
     }
-    if ((params["sqr"] ?? null)) {
+    if ((params["sqr"] ?? false)) {
         cargs.push("-sqr");
     }
-    if ((params["sqrt"] ?? null)) {
+    if ((params["sqrt"] ?? false)) {
         cargs.push("-sqrt");
     }
-    if ((params["recip"] ?? null)) {
+    if ((params["recip"] ?? false)) {
         cargs.push("-recip");
     }
-    if ((params["abs"] ?? null)) {
+    if ((params["abs"] ?? false)) {
         cargs.push("-abs");
     }
-    if ((params["bin"] ?? null)) {
+    if ((params["bin"] ?? false)) {
         cargs.push("-bin");
     }
-    if ((params["binv"] ?? null)) {
+    if ((params["binv"] ?? false)) {
         cargs.push("-binv");
     }
-    if ((params["fillh"] ?? null)) {
+    if ((params["fillh"] ?? false)) {
         cargs.push("-fillh");
     }
-    if ((params["fillh26"] ?? null)) {
+    if ((params["fillh26"] ?? false)) {
         cargs.push("-fillh26");
     }
-    if ((params["index"] ?? null)) {
+    if ((params["index"] ?? false)) {
         cargs.push("-index");
     }
     if ((params["grid"] ?? null) !== null) {
@@ -707,7 +674,7 @@ function fslmaths_operation_cargs(
             ...(params["grid"] ?? null).map(String)
         );
     }
-    if ((params["edge"] ?? null)) {
+    if ((params["edge"] ?? false)) {
         cargs.push("-edge");
     }
     if ((params["tfce"] ?? null) !== null) {
@@ -722,16 +689,16 @@ function fslmaths_operation_cargs(
             ...(params["tfceS"] ?? null).map(String)
         );
     }
-    if ((params["nan"] ?? null)) {
+    if ((params["nan"] ?? false)) {
         cargs.push("-nan");
     }
-    if ((params["nanm"] ?? null)) {
+    if ((params["nanm"] ?? false)) {
         cargs.push("-nanm");
     }
-    if ((params["rand"] ?? null)) {
+    if ((params["rand"] ?? false)) {
         cargs.push("-rand");
     }
-    if ((params["randn"] ?? null)) {
+    if ((params["randn"] ?? false)) {
         cargs.push("-randn");
     }
     if ((params["inm"] ?? null) !== null) {
@@ -746,16 +713,16 @@ function fslmaths_operation_cargs(
             String((params["ing"] ?? null))
         );
     }
-    if ((params["range"] ?? null)) {
+    if ((params["range"] ?? false)) {
         cargs.push("-range");
     }
-    if ((params["tensor_decomp"] ?? null)) {
+    if ((params["tensor_decomp"] ?? false)) {
         cargs.push("-tensor_decomp");
     }
-    if ((params["kernel_3D"] ?? null)) {
+    if ((params["kernel_3D"] ?? false)) {
         cargs.push("-kernel 3D");
     }
-    if ((params["kernel_2D"] ?? null)) {
+    if ((params["kernel_2D"] ?? false)) {
         cargs.push("-kernel 2D");
     }
     if ((params["kernel_box"] ?? null) !== null) {
@@ -794,31 +761,31 @@ function fslmaths_operation_cargs(
             execution.inputFile((params["kernel_file"] ?? null))
         );
     }
-    if ((params["dilM"] ?? null)) {
+    if ((params["dilM"] ?? false)) {
         cargs.push("-dilM");
     }
-    if ((params["dilD"] ?? null)) {
+    if ((params["dilD"] ?? false)) {
         cargs.push("-dilD");
     }
-    if ((params["dilF"] ?? null)) {
+    if ((params["dilF"] ?? false)) {
         cargs.push("-dilF");
     }
-    if ((params["dilall"] ?? null)) {
+    if ((params["dilall"] ?? false)) {
         cargs.push("-dilall");
     }
-    if ((params["ero"] ?? null)) {
+    if ((params["ero"] ?? false)) {
         cargs.push("-ero");
     }
-    if ((params["eroF"] ?? null)) {
+    if ((params["eroF"] ?? false)) {
         cargs.push("-eroF");
     }
-    if ((params["fmedian"] ?? null)) {
+    if ((params["fmedian"] ?? false)) {
         cargs.push("-fmedian");
     }
-    if ((params["fmean"] ?? null)) {
+    if ((params["fmean"] ?? false)) {
         cargs.push("-fmean");
     }
-    if ((params["fmeanu"] ?? null)) {
+    if ((params["fmeanu"] ?? false)) {
         cargs.push("-fmeanu");
     }
     if ((params["s"] ?? null) !== null) {
@@ -827,82 +794,82 @@ function fslmaths_operation_cargs(
             String((params["s"] ?? null))
         );
     }
-    if ((params["subsamp2"] ?? null)) {
+    if ((params["subsamp2"] ?? false)) {
         cargs.push("-subsamp2");
     }
-    if ((params["subsamp2offc"] ?? null)) {
+    if ((params["subsamp2offc"] ?? false)) {
         cargs.push("-subsamp2offc");
     }
-    if ((params["Tmean"] ?? null)) {
+    if ((params["Tmean"] ?? false)) {
         cargs.push("-Tmean");
     }
-    if ((params["Xmean"] ?? null)) {
+    if ((params["Xmean"] ?? false)) {
         cargs.push("-Xmean");
     }
-    if ((params["Ymean"] ?? null)) {
+    if ((params["Ymean"] ?? false)) {
         cargs.push("-Ymean");
     }
-    if ((params["Zmean"] ?? null)) {
+    if ((params["Zmean"] ?? false)) {
         cargs.push("-Zmean");
     }
-    if ((params["Tstd"] ?? null)) {
+    if ((params["Tstd"] ?? false)) {
         cargs.push("-Tstd");
     }
-    if ((params["Xstd"] ?? null)) {
+    if ((params["Xstd"] ?? false)) {
         cargs.push("-Xstd");
     }
-    if ((params["Ystd"] ?? null)) {
+    if ((params["Ystd"] ?? false)) {
         cargs.push("-Ystd");
     }
-    if ((params["Zstd"] ?? null)) {
+    if ((params["Zstd"] ?? false)) {
         cargs.push("-Zstd");
     }
-    if ((params["Tmax"] ?? null)) {
+    if ((params["Tmax"] ?? false)) {
         cargs.push("-Tmax");
     }
-    if ((params["Xmax"] ?? null)) {
+    if ((params["Xmax"] ?? false)) {
         cargs.push("-Xmax");
     }
-    if ((params["Ymax"] ?? null)) {
+    if ((params["Ymax"] ?? false)) {
         cargs.push("-Ymax");
     }
-    if ((params["Zmax"] ?? null)) {
+    if ((params["Zmax"] ?? false)) {
         cargs.push("-Zmax");
     }
-    if ((params["Tmaxn"] ?? null)) {
+    if ((params["Tmaxn"] ?? false)) {
         cargs.push("-Tmaxn");
     }
-    if ((params["Xmaxn"] ?? null)) {
+    if ((params["Xmaxn"] ?? false)) {
         cargs.push("-Xmaxn");
     }
-    if ((params["Ymaxn"] ?? null)) {
+    if ((params["Ymaxn"] ?? false)) {
         cargs.push("-Ymaxn");
     }
-    if ((params["Zmaxn"] ?? null)) {
+    if ((params["Zmaxn"] ?? false)) {
         cargs.push("-Zmaxn");
     }
-    if ((params["Tmin"] ?? null)) {
+    if ((params["Tmin"] ?? false)) {
         cargs.push("-Tmin");
     }
-    if ((params["Xmin"] ?? null)) {
+    if ((params["Xmin"] ?? false)) {
         cargs.push("-Xmin");
     }
-    if ((params["Ymin"] ?? null)) {
+    if ((params["Ymin"] ?? false)) {
         cargs.push("-Ymin");
     }
-    if ((params["Zmin"] ?? null)) {
+    if ((params["Zmin"] ?? false)) {
         cargs.push("-Zmin");
     }
-    if ((params["Tmedian"] ?? null)) {
+    if ((params["Tmedian"] ?? false)) {
         cargs.push("-Tmedian");
     }
-    if ((params["Xmedian"] ?? null)) {
+    if ((params["Xmedian"] ?? false)) {
         cargs.push("-Xmedian");
     }
-    if ((params["Ymedian"] ?? null)) {
+    if ((params["Ymedian"] ?? false)) {
         cargs.push("-Ymedian");
     }
-    if ((params["Zmedian"] ?? null)) {
+    if ((params["Zmedian"] ?? false)) {
         cargs.push("-Zmedian");
     }
     if ((params["Tperc"] ?? null) !== null) {
@@ -929,7 +896,7 @@ function fslmaths_operation_cargs(
             String((params["Zperc"] ?? null))
         );
     }
-    if ((params["Tar1"] ?? null)) {
+    if ((params["Tar1"] ?? false)) {
         cargs.push("-Tar1");
     }
     if ((params["roi"] ?? null) !== null) {
@@ -955,7 +922,7 @@ function fslmaths_operation_cargs(
 
 
 /**
- * Output object returned when calling `fslmaths(...)`.
+ * Output object returned when calling `FslmathsParameters(...)`.
  *
  * @interface
  */
@@ -988,9 +955,9 @@ function fslmaths_params(
     output: string,
     datatype_internal: "char" | "short" | "int" | "float" | "double" | "input" | null = null,
     output_datatype: "char" | "short" | "int" | "float" | "double" | "input" | null = null,
-): FslmathsParameters {
+): FslmathsParametersTagged {
     const params = {
-        "@type": "fsl.fslmaths" as const,
+        "@type": "fsl/fslmaths" as const,
         "input_files": input_files,
         "operations": operations,
         "output": output,
@@ -1026,7 +993,7 @@ function fslmaths_cargs(
         );
     }
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
-    cargs.push(...(params["operations"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+    cargs.push(...(params["operations"] ?? null).map(s => fslmaths_operation_cargs(s, execution)).flat());
     cargs.push((params["output"] ?? null));
     if ((params["output_datatype"] ?? null) !== null) {
         cargs.push(
@@ -1119,9 +1086,7 @@ function fslmaths(
 
 export {
       FSLMATHS_METADATA,
-      FslmathsOperationParameters,
       FslmathsOutputs,
-      FslmathsParameters,
       fslmaths,
       fslmaths_execute,
       fslmaths_operation_params,

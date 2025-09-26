@@ -12,7 +12,7 @@ const DISTANCEMAP_METADATA: Metadata = {
 
 
 interface DistancemapParameters {
-    "@type": "fsl.distancemap";
+    "@type"?: "fsl/distancemap";
     "input_image": InputPathType;
     "output_image": string;
     "mask_image"?: InputPathType | null | undefined;
@@ -24,44 +24,11 @@ interface DistancemapParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
+type DistancemapParametersTagged = Required<Pick<DistancemapParameters, '@type'>> & DistancemapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.distancemap": distancemap_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.distancemap": distancemap_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `distancemap(...)`.
+ * Output object returned when calling `DistancemapParameters(...)`.
  *
  * @interface
  */
@@ -112,9 +79,9 @@ function distancemap_params(
     interpolate_values: InputPathType | null = null,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): DistancemapParameters {
+): DistancemapParametersTagged {
     const params = {
-        "@type": "fsl.distancemap" as const,
+        "@type": "fsl/distancemap" as const,
         "input_image": input_image,
         "output_image": output_image,
         "invert_flag": invert_flag,
@@ -186,7 +153,7 @@ function distancemap_cargs(
             execution.inputFile((params["segmented_image"] ?? null))
         );
     }
-    if ((params["invert_flag"] ?? null)) {
+    if ((params["invert_flag"] ?? false)) {
         cargs.push("--invert");
     }
     if ((params["interpolate_values"] ?? null) !== null) {
@@ -195,10 +162,10 @@ function distancemap_cargs(
             execution.inputFile((params["interpolate_values"] ?? null))
         );
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -299,7 +266,6 @@ function distancemap(
 export {
       DISTANCEMAP_METADATA,
       DistancemapOutputs,
-      DistancemapParameters,
       distancemap,
       distancemap_execute,
       distancemap_params,

@@ -12,7 +12,7 @@ const V_3D_AMP_TO_RSFC_METADATA: Metadata = {
 
 
 interface V3dAmpToRsfcParameters {
-    "@type": "afni.3dAmpToRSFC";
+    "@type"?: "afni/3dAmpToRSFC";
     "in_amp"?: InputPathType | null | undefined;
     "in_pow"?: InputPathType | null | undefined;
     "prefix": string;
@@ -20,44 +20,11 @@ interface V3dAmpToRsfcParameters {
     "mask"?: InputPathType | null | undefined;
     "nifti": boolean;
 }
+type V3dAmpToRsfcParametersTagged = Required<Pick<V3dAmpToRsfcParameters, '@type'>> & V3dAmpToRsfcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dAmpToRSFC": v_3d_amp_to_rsfc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dAmpToRSFC": v_3d_amp_to_rsfc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_amp_to_rsfc(...)`.
+ * Output object returned when calling `V3dAmpToRsfcParameters(...)`.
  *
  * @interface
  */
@@ -112,9 +79,9 @@ function v_3d_amp_to_rsfc_params(
     in_pow: InputPathType | null = null,
     mask: InputPathType | null = null,
     nifti: boolean = false,
-): V3dAmpToRsfcParameters {
+): V3dAmpToRsfcParametersTagged {
     const params = {
-        "@type": "afni.3dAmpToRSFC" as const,
+        "@type": "afni/3dAmpToRSFC" as const,
         "prefix": prefix,
         "band": band,
         "nifti": nifti,
@@ -172,7 +139,7 @@ function v_3d_amp_to_rsfc_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["nifti"] ?? null)) {
+    if ((params["nifti"] ?? false)) {
         cargs.push("-nifti");
     }
     return cargs;
@@ -267,7 +234,6 @@ function v_3d_amp_to_rsfc(
 
 export {
       V3dAmpToRsfcOutputs,
-      V3dAmpToRsfcParameters,
       V_3D_AMP_TO_RSFC_METADATA,
       v_3d_amp_to_rsfc,
       v_3d_amp_to_rsfc_execute,

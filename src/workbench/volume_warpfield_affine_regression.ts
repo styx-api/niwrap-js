@@ -12,54 +12,22 @@ const VOLUME_WARPFIELD_AFFINE_REGRESSION_METADATA: Metadata = {
 
 
 interface VolumeWarpfieldAffineRegressionFlirtOutParameters {
-    "@type": "workbench.volume-warpfield-affine-regression.flirt_out";
+    "@type"?: "flirt_out";
     "source_volume": string;
     "target_volume": string;
 }
+type VolumeWarpfieldAffineRegressionFlirtOutParametersTagged = Required<Pick<VolumeWarpfieldAffineRegressionFlirtOutParameters, '@type'>> & VolumeWarpfieldAffineRegressionFlirtOutParameters;
 
 
 interface VolumeWarpfieldAffineRegressionParameters {
-    "@type": "workbench.volume-warpfield-affine-regression";
+    "@type"?: "workbench/volume-warpfield-affine-regression";
     "warpfield": string;
     "affine_out": string;
     "opt_roi_roi_vol"?: InputPathType | null | undefined;
     "opt_fnirt_source_volume"?: string | null | undefined;
     "flirt_out"?: VolumeWarpfieldAffineRegressionFlirtOutParameters | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-warpfield-affine-regression": volume_warpfield_affine_regression_cargs,
-        "workbench.volume-warpfield-affine-regression.flirt_out": volume_warpfield_affine_regression_flirt_out_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type VolumeWarpfieldAffineRegressionParametersTagged = Required<Pick<VolumeWarpfieldAffineRegressionParameters, '@type'>> & VolumeWarpfieldAffineRegressionParameters;
 
 
 /**
@@ -73,9 +41,9 @@ function dynOutputs(
 function volume_warpfield_affine_regression_flirt_out_params(
     source_volume: string,
     target_volume: string,
-): VolumeWarpfieldAffineRegressionFlirtOutParameters {
+): VolumeWarpfieldAffineRegressionFlirtOutParametersTagged {
     const params = {
-        "@type": "workbench.volume-warpfield-affine-regression.flirt_out" as const,
+        "@type": "flirt_out" as const,
         "source_volume": source_volume,
         "target_volume": target_volume,
     };
@@ -104,7 +72,7 @@ function volume_warpfield_affine_regression_flirt_out_cargs(
 
 
 /**
- * Output object returned when calling `volume_warpfield_affine_regression(...)`.
+ * Output object returned when calling `VolumeWarpfieldAffineRegressionParameters(...)`.
  *
  * @interface
  */
@@ -133,9 +101,9 @@ function volume_warpfield_affine_regression_params(
     opt_roi_roi_vol: InputPathType | null = null,
     opt_fnirt_source_volume: string | null = null,
     flirt_out: VolumeWarpfieldAffineRegressionFlirtOutParameters | null = null,
-): VolumeWarpfieldAffineRegressionParameters {
+): VolumeWarpfieldAffineRegressionParametersTagged {
     const params = {
-        "@type": "workbench.volume-warpfield-affine-regression" as const,
+        "@type": "workbench/volume-warpfield-affine-regression" as const,
         "warpfield": warpfield,
         "affine_out": affine_out,
     };
@@ -182,7 +150,7 @@ function volume_warpfield_affine_regression_cargs(
         );
     }
     if ((params["flirt_out"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["flirt_out"] ?? null)["@type"])((params["flirt_out"] ?? null), execution));
+        cargs.push(...volume_warpfield_affine_regression_flirt_out_cargs((params["flirt_out"] ?? null), execution));
     }
     return cargs;
 }
@@ -276,9 +244,7 @@ function volume_warpfield_affine_regression(
 
 export {
       VOLUME_WARPFIELD_AFFINE_REGRESSION_METADATA,
-      VolumeWarpfieldAffineRegressionFlirtOutParameters,
       VolumeWarpfieldAffineRegressionOutputs,
-      VolumeWarpfieldAffineRegressionParameters,
       volume_warpfield_affine_regression,
       volume_warpfield_affine_regression_execute,
       volume_warpfield_affine_regression_flirt_out_params,

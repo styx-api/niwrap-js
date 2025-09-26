@@ -12,7 +12,7 @@ const V_3DDELAY_METADATA: Metadata = {
 
 
 interface V3ddelayParameters {
-    "@type": "afni.3ddelay";
+    "@type"?: "afni/3ddelay";
     "input_file": InputPathType;
     "reference_file": InputPathType;
     "sampling_freq": number;
@@ -38,44 +38,11 @@ interface V3ddelayParameters {
     "asc"?: string | null | undefined;
     "ascts"?: string | null | undefined;
 }
+type V3ddelayParametersTagged = Required<Pick<V3ddelayParameters, '@type'>> & V3ddelayParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3ddelay": v_3ddelay_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3ddelay": v_3ddelay_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3ddelay(...)`.
+ * Output object returned when calling `V3ddelayParameters(...)`.
  *
  * @interface
  */
@@ -158,9 +125,9 @@ function v_3ddelay_params(
     co: number | null = null,
     asc: string | null = null,
     ascts: string | null = null,
-): V3ddelayParameters {
+): V3ddelayParametersTagged {
     const params = {
-        "@type": "afni.3ddelay" as const,
+        "@type": "afni/3ddelay" as const,
         "input_file": input_file,
         "reference_file": reference_file,
         "sampling_freq": sampling_freq,
@@ -244,25 +211,25 @@ function v_3ddelay_cargs(
             String((params["polort"] ?? null))
         );
     }
-    if ((params["nodtrnd"] ?? null)) {
+    if ((params["nodtrnd"] ?? false)) {
         cargs.push("-nodtrnd");
     }
-    if ((params["units_seconds"] ?? null)) {
+    if ((params["units_seconds"] ?? false)) {
         cargs.push("-uS");
     }
-    if ((params["units_degrees"] ?? null)) {
+    if ((params["units_degrees"] ?? false)) {
         cargs.push("-uD");
     }
-    if ((params["units_radians"] ?? null)) {
+    if ((params["units_radians"] ?? false)) {
         cargs.push("-uR");
     }
-    if ((params["phzwrp"] ?? null)) {
+    if ((params["phzwrp"] ?? false)) {
         cargs.push("-phzwrp");
     }
-    if ((params["nophzwrp"] ?? null)) {
+    if ((params["nophzwrp"] ?? false)) {
         cargs.push("-nophzwrp");
     }
-    if ((params["phzreverse"] ?? null)) {
+    if ((params["phzreverse"] ?? false)) {
         cargs.push("-phzreverse");
     }
     if ((params["phzscale"] ?? null) !== null) {
@@ -271,16 +238,16 @@ function v_3ddelay_cargs(
             String((params["phzscale"] ?? null))
         );
     }
-    if ((params["bias"] ?? null)) {
+    if ((params["bias"] ?? false)) {
         cargs.push("-bias");
     }
-    if ((params["nobias"] ?? null)) {
+    if ((params["nobias"] ?? false)) {
         cargs.push("-nobias");
     }
-    if ((params["dsamp"] ?? null)) {
+    if ((params["dsamp"] ?? false)) {
         cargs.push("-dsamp");
     }
-    if ((params["nodsamp"] ?? null)) {
+    if ((params["nodsamp"] ?? false)) {
         cargs.push("-nodsamp");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -445,7 +412,6 @@ function v_3ddelay(
 
 export {
       V3ddelayOutputs,
-      V3ddelayParameters,
       V_3DDELAY_METADATA,
       v_3ddelay,
       v_3ddelay_execute,

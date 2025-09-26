@@ -12,49 +12,16 @@ const FSLCHFILETYPE_METADATA: Metadata = {
 
 
 interface FslchfiletypeParameters {
-    "@type": "fsl.fslchfiletype";
+    "@type"?: "fsl/fslchfiletype";
     "filetype": string;
     "filename": InputPathType;
     "filename2"?: string | null | undefined;
 }
+type FslchfiletypeParametersTagged = Required<Pick<FslchfiletypeParameters, '@type'>> & FslchfiletypeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslchfiletype": fslchfiletype_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fslchfiletype": fslchfiletype_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslchfiletype(...)`.
+ * Output object returned when calling `FslchfiletypeParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function fslchfiletype_params(
     filetype: string,
     filename: InputPathType,
     filename2: string | null = null,
-): FslchfiletypeParameters {
+): FslchfiletypeParametersTagged {
     const params = {
-        "@type": "fsl.fslchfiletype" as const,
+        "@type": "fsl/fslchfiletype" as const,
         "filetype": filetype,
         "filename": filename,
     };
@@ -197,7 +164,6 @@ function fslchfiletype(
 export {
       FSLCHFILETYPE_METADATA,
       FslchfiletypeOutputs,
-      FslchfiletypeParameters,
       fslchfiletype,
       fslchfiletype_execute,
       fslchfiletype_params,

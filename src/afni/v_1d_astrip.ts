@@ -12,47 +12,14 @@ const V_1D_ASTRIP_METADATA: Metadata = {
 
 
 interface V1dAstripParameters {
-    "@type": "afni.1dAstrip";
+    "@type"?: "afni/1dAstrip";
     "infile": InputPathType;
 }
+type V1dAstripParametersTagged = Required<Pick<V1dAstripParameters, '@type'>> & V1dAstripParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dAstrip": v_1d_astrip_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.1dAstrip": v_1d_astrip_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1d_astrip(...)`.
+ * Output object returned when calling `V1dAstripParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface V1dAstripOutputs {
  */
 function v_1d_astrip_params(
     infile: InputPathType,
-): V1dAstripParameters {
+): V1dAstripParametersTagged {
     const params = {
-        "@type": "afni.1dAstrip" as const,
+        "@type": "afni/1dAstrip" as const,
         "infile": infile,
     };
     return params;
@@ -178,7 +145,6 @@ function v_1d_astrip(
 
 export {
       V1dAstripOutputs,
-      V1dAstripParameters,
       V_1D_ASTRIP_METADATA,
       v_1d_astrip,
       v_1d_astrip_execute,

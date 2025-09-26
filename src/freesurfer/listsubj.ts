@@ -12,7 +12,7 @@ const LISTSUBJ_METADATA: Metadata = {
 
 
 interface ListsubjParameters {
-    "@type": "freesurfer.listsubj";
+    "@type"?: "freesurfer/listsubj";
     "subject_dir": string;
     "cross": boolean;
     "base": boolean;
@@ -24,43 +24,11 @@ interface ListsubjParameters {
     "count": boolean;
     "help": boolean;
 }
+type ListsubjParametersTagged = Required<Pick<ListsubjParameters, '@type'>> & ListsubjParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.listsubj": listsubj_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `listsubj(...)`.
+ * Output object returned when calling `ListsubjParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +67,9 @@ function listsubj_params(
     full_path: boolean = false,
     count: boolean = false,
     help: boolean = false,
-): ListsubjParameters {
+): ListsubjParametersTagged {
     const params = {
-        "@type": "freesurfer.listsubj" as const,
+        "@type": "freesurfer/listsubj" as const,
         "subject_dir": subject_dir,
         "cross": cross,
         "base": base,
@@ -132,31 +100,31 @@ function listsubj_cargs(
     const cargs: string[] = [];
     cargs.push("listsubj");
     cargs.push((params["subject_dir"] ?? null));
-    if ((params["cross"] ?? null)) {
+    if ((params["cross"] ?? false)) {
         cargs.push("-c");
     }
-    if ((params["base"] ?? null)) {
+    if ((params["base"] ?? false)) {
         cargs.push("-b");
     }
-    if ((params["long"] ?? null)) {
+    if ((params["long"] ?? false)) {
         cargs.push("-l");
     }
-    if ((params["done"] ?? null)) {
+    if ((params["done"] ?? false)) {
         cargs.push("-d");
     }
-    if ((params["error"] ?? null)) {
+    if ((params["error"] ?? false)) {
         cargs.push("-e");
     }
-    if ((params["running"] ?? null)) {
+    if ((params["running"] ?? false)) {
         cargs.push("-r");
     }
-    if ((params["full_path"] ?? null)) {
+    if ((params["full_path"] ?? false)) {
         cargs.push("-f");
     }
-    if ((params["count"] ?? null)) {
+    if ((params["count"] ?? false)) {
         cargs.push("-n");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -254,7 +222,6 @@ function listsubj(
 export {
       LISTSUBJ_METADATA,
       ListsubjOutputs,
-      ListsubjParameters,
       listsubj,
       listsubj_execute,
       listsubj_params,

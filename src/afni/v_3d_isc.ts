@@ -12,7 +12,7 @@ const V_3D_ISC_METADATA: Metadata = {
 
 
 interface V3dIscParameters {
-    "@type": "afni.3dISC";
+    "@type"?: "afni/3dISC";
     "outfile_prefix": string;
     "num_jobs"?: number | null | undefined;
     "mask_file"?: InputPathType | null | undefined;
@@ -23,44 +23,11 @@ interface V3dIscParameters {
     "io_functions"?: "AFNI" | "R" | null | undefined;
     "data_table": string;
 }
+type V3dIscParametersTagged = Required<Pick<V3dIscParameters, '@type'>> & V3dIscParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dISC": v_3d_isc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dISC": v_3d_isc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_isc(...)`.
+ * Output object returned when calling `V3dIscParameters(...)`.
  *
  * @interface
  */
@@ -105,9 +72,9 @@ function v_3d_isc_params(
     quantitative_vars: string | null = null,
     fisher_transform: boolean = false,
     io_functions: "AFNI" | "R" | null = null,
-): V3dIscParameters {
+): V3dIscParametersTagged {
     const params = {
-        "@type": "afni.3dISC" as const,
+        "@type": "afni/3dISC" as const,
         "outfile_prefix": outfile_prefix,
         "model_structure": model_structure,
         "fisher_transform": fisher_transform,
@@ -178,7 +145,7 @@ function v_3d_isc_cargs(
             (params["quantitative_vars"] ?? null)
         );
     }
-    if ((params["fisher_transform"] ?? null)) {
+    if ((params["fisher_transform"] ?? false)) {
         cargs.push("-r2z");
     }
     if ((params["io_functions"] ?? null) !== null) {
@@ -285,7 +252,6 @@ function v_3d_isc(
 
 export {
       V3dIscOutputs,
-      V3dIscParameters,
       V_3D_ISC_METADATA,
       v_3d_isc,
       v_3d_isc_execute,

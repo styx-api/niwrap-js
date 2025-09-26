@@ -12,7 +12,7 @@ const WARP_TIME_SERIES_IMAGE_MULTI_TRANSFORM_METADATA: Metadata = {
 
 
 interface WarpTimeSeriesImageMultiTransformParameters {
-    "@type": "ants.WarpTimeSeriesImageMultiTransform";
+    "@type"?: "ants/WarpTimeSeriesImageMultiTransform";
     "image_dimension": 3 | 4;
     "moving_image": InputPathType;
     "output_image": string;
@@ -20,44 +20,11 @@ interface WarpTimeSeriesImageMultiTransformParameters {
     "transforms": Array<string>;
     "interpolation"?: "NearestNeighbor" | "BSpline" | null | undefined;
 }
+type WarpTimeSeriesImageMultiTransformParametersTagged = Required<Pick<WarpTimeSeriesImageMultiTransformParameters, '@type'>> & WarpTimeSeriesImageMultiTransformParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.WarpTimeSeriesImageMultiTransform": warp_time_series_image_multi_transform_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.WarpTimeSeriesImageMultiTransform": warp_time_series_image_multi_transform_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `warp_time_series_image_multi_transform(...)`.
+ * Output object returned when calling `WarpTimeSeriesImageMultiTransformParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function warp_time_series_image_multi_transform_params(
     reference_image: InputPathType,
     transforms: Array<string>,
     interpolation: "NearestNeighbor" | "BSpline" | null = null,
-): WarpTimeSeriesImageMultiTransformParameters {
+): WarpTimeSeriesImageMultiTransformParametersTagged {
     const params = {
-        "@type": "ants.WarpTimeSeriesImageMultiTransform" as const,
+        "@type": "ants/WarpTimeSeriesImageMultiTransform" as const,
         "image_dimension": image_dimension,
         "moving_image": moving_image,
         "output_image": output_image,
@@ -221,7 +188,6 @@ function warp_time_series_image_multi_transform(
 export {
       WARP_TIME_SERIES_IMAGE_MULTI_TRANSFORM_METADATA,
       WarpTimeSeriesImageMultiTransformOutputs,
-      WarpTimeSeriesImageMultiTransformParameters,
       warp_time_series_image_multi_transform,
       warp_time_series_image_multi_transform_execute,
       warp_time_series_image_multi_transform_params,

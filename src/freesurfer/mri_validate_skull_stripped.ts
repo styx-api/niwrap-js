@@ -12,48 +12,16 @@ const MRI_VALIDATE_SKULL_STRIPPED_METADATA: Metadata = {
 
 
 interface MriValidateSkullStrippedParameters {
-    "@type": "freesurfer.mri_validate_skull_stripped";
+    "@type"?: "freesurfer/mri_validate_skull_stripped";
     "mri_reference": InputPathType;
     "mri_test": InputPathType;
     "weight": number;
 }
+type MriValidateSkullStrippedParametersTagged = Required<Pick<MriValidateSkullStrippedParameters, '@type'>> & MriValidateSkullStrippedParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_validate_skull_stripped": mri_validate_skull_stripped_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_validate_skull_stripped(...)`.
+ * Output object returned when calling `MriValidateSkullStrippedParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function mri_validate_skull_stripped_params(
     mri_reference: InputPathType,
     mri_test: InputPathType,
     weight: number,
-): MriValidateSkullStrippedParameters {
+): MriValidateSkullStrippedParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_validate_skull_stripped" as const,
+        "@type": "freesurfer/mri_validate_skull_stripped" as const,
         "mri_reference": mri_reference,
         "mri_test": mri_test,
         "weight": weight,
@@ -187,7 +155,6 @@ function mri_validate_skull_stripped(
 export {
       MRI_VALIDATE_SKULL_STRIPPED_METADATA,
       MriValidateSkullStrippedOutputs,
-      MriValidateSkullStrippedParameters,
       mri_validate_skull_stripped,
       mri_validate_skull_stripped_execute,
       mri_validate_skull_stripped_params,

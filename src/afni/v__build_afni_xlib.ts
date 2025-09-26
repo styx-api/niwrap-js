@@ -12,7 +12,7 @@ const V__BUILD_AFNI_XLIB_METADATA: Metadata = {
 
 
 interface VBuildAfniXlibParameters {
-    "@type": "afni.@build_afni_Xlib";
+    "@type"?: "afni/@build_afni_Xlib";
     "afniX": boolean;
     "localinstall": boolean;
     "debug_symbols": boolean;
@@ -20,43 +20,11 @@ interface VBuildAfniXlibParameters {
     "lib64": boolean;
     "packages": Array<string>;
 }
+type VBuildAfniXlibParametersTagged = Required<Pick<VBuildAfniXlibParameters, '@type'>> & VBuildAfniXlibParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@build_afni_Xlib": v__build_afni_xlib_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__build_afni_xlib(...)`.
+ * Output object returned when calling `VBuildAfniXlibParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function v__build_afni_xlib_params(
     debug_symbols: boolean = false,
     lib32: boolean = false,
     lib64: boolean = false,
-): VBuildAfniXlibParameters {
+): VBuildAfniXlibParametersTagged {
     const params = {
-        "@type": "afni.@build_afni_Xlib" as const,
+        "@type": "afni/@build_afni_Xlib" as const,
         "afniX": afni_x,
         "localinstall": localinstall,
         "debug_symbols": debug_symbols,
@@ -115,19 +83,19 @@ function v__build_afni_xlib_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("@build_afni_Xlib");
-    if ((params["afniX"] ?? null)) {
+    if ((params["afniX"] ?? false)) {
         cargs.push("-afniX");
     }
-    if ((params["localinstall"] ?? null)) {
+    if ((params["localinstall"] ?? false)) {
         cargs.push("-localinstall");
     }
-    if ((params["debug_symbols"] ?? null)) {
+    if ((params["debug_symbols"] ?? false)) {
         cargs.push("-g");
     }
-    if ((params["lib32"] ?? null)) {
+    if ((params["lib32"] ?? false)) {
         cargs.push("-lib32");
     }
-    if ((params["lib64"] ?? null)) {
+    if ((params["lib64"] ?? false)) {
         cargs.push("-lib64");
     }
     cargs.push(...(params["packages"] ?? null));
@@ -217,7 +185,6 @@ function v__build_afni_xlib(
 
 export {
       VBuildAfniXlibOutputs,
-      VBuildAfniXlibParameters,
       V__BUILD_AFNI_XLIB_METADATA,
       v__build_afni_xlib,
       v__build_afni_xlib_execute,

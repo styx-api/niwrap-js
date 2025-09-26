@@ -12,7 +12,7 @@ const MRIS_CURVATURE_METADATA: Metadata = {
 
 
 interface MrisCurvatureParameters {
-    "@type": "freesurfer.mris_curvature";
+    "@type"?: "freesurfer/mris_curvature";
     "save_curvature_files": boolean;
     "max_principal_curvature": boolean;
     "mgh_output_format": boolean;
@@ -28,43 +28,11 @@ interface MrisCurvatureParameters {
     "k1k2_curvature"?: string | null | undefined;
     "input_surface": InputPathType;
 }
+type MrisCurvatureParametersTagged = Required<Pick<MrisCurvatureParameters, '@type'>> & MrisCurvatureParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_curvature": mris_curvature_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_curvature(...)`.
+ * Output object returned when calling `MrisCurvatureParameters(...)`.
  *
  * @interface
  */
@@ -111,9 +79,9 @@ function mris_curvature_params(
     k1_curvature: string | null = null,
     k2_curvature: string | null = null,
     k1k2_curvature: string | null = null,
-): MrisCurvatureParameters {
+): MrisCurvatureParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_curvature" as const,
+        "@type": "freesurfer/mris_curvature" as const,
         "save_curvature_files": save_curvature_files,
         "max_principal_curvature": max_principal_curvature,
         "mgh_output_format": mgh_output_format,
@@ -165,16 +133,16 @@ function mris_curvature_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("mris_curvature");
-    if ((params["save_curvature_files"] ?? null)) {
+    if ((params["save_curvature_files"] ?? false)) {
         cargs.push("-w");
     }
-    if ((params["max_principal_curvature"] ?? null)) {
+    if ((params["max_principal_curvature"] ?? false)) {
         cargs.push("-max");
     }
-    if ((params["mgh_output_format"] ?? null)) {
+    if ((params["mgh_output_format"] ?? false)) {
         cargs.push("-mgh");
     }
-    if ((params["min_principal_curvature"] ?? null)) {
+    if ((params["min_principal_curvature"] ?? false)) {
         cargs.push("-min");
     }
     if ((params["iterative_averages"] ?? null) !== null) {
@@ -335,7 +303,6 @@ function mris_curvature(
 export {
       MRIS_CURVATURE_METADATA,
       MrisCurvatureOutputs,
-      MrisCurvatureParameters,
       mris_curvature,
       mris_curvature_execute,
       mris_curvature_params,

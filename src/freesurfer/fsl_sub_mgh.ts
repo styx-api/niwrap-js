@@ -12,7 +12,7 @@ const FSL_SUB_MGH_METADATA: Metadata = {
 
 
 interface FslSubMghParameters {
-    "@type": "freesurfer.fsl_sub_mgh";
+    "@type"?: "freesurfer/fsl_sub_mgh";
     "estimated_time"?: number | null | undefined;
     "queue_name"?: string | null | undefined;
     "architecture"?: string | null | undefined;
@@ -27,43 +27,11 @@ interface FslSubMghParameters {
     "verbose": boolean;
     "shell_path"?: string | null | undefined;
 }
+type FslSubMghParametersTagged = Required<Pick<FslSubMghParameters, '@type'>> & FslSubMghParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fsl_sub_mgh": fsl_sub_mgh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsl_sub_mgh(...)`.
+ * Output object returned when calling `FslSubMghParameters(...)`.
  *
  * @interface
  */
@@ -108,9 +76,9 @@ function fsl_sub_mgh_params(
     flags_in_scripts: boolean = false,
     verbose: boolean = false,
     shell_path: string | null = null,
-): FslSubMghParameters {
+): FslSubMghParametersTagged {
     const params = {
-        "@type": "freesurfer.fsl_sub_mgh" as const,
+        "@type": "freesurfer/fsl_sub_mgh" as const,
         "flags_in_scripts": flags_in_scripts,
         "verbose": verbose,
     };
@@ -225,10 +193,10 @@ function fsl_sub_mgh_cargs(
             (params["mail_options"] ?? null)
         );
     }
-    if ((params["flags_in_scripts"] ?? null)) {
+    if ((params["flags_in_scripts"] ?? false)) {
         cargs.push("-F");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
     if ((params["shell_path"] ?? null) !== null) {
@@ -338,7 +306,6 @@ function fsl_sub_mgh(
 export {
       FSL_SUB_MGH_METADATA,
       FslSubMghOutputs,
-      FslSubMghParameters,
       fsl_sub_mgh,
       fsl_sub_mgh_execute,
       fsl_sub_mgh_params,

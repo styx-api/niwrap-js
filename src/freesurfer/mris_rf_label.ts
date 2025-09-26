@@ -12,50 +12,18 @@ const MRIS_RF_LABEL_METADATA: Metadata = {
 
 
 interface MrisRfLabelParameters {
-    "@type": "freesurfer.mris_rf_label";
+    "@type"?: "freesurfer/mris_rf_label";
     "subject": string;
     "rf_classifier": string;
     "output_name": string;
     "hemi"?: string | null | undefined;
     "surf"?: string | null | undefined;
 }
+type MrisRfLabelParametersTagged = Required<Pick<MrisRfLabelParameters, '@type'>> & MrisRfLabelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_rf_label": mris_rf_label_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_rf_label(...)`.
+ * Output object returned when calling `MrisRfLabelParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function mris_rf_label_params(
     output_name: string,
     hemi: string | null = null,
     surf: string | null = null,
-): MrisRfLabelParameters {
+): MrisRfLabelParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_rf_label" as const,
+        "@type": "freesurfer/mris_rf_label" as const,
         "subject": subject,
         "rf_classifier": rf_classifier,
         "output_name": output_name,
@@ -215,7 +183,6 @@ function mris_rf_label(
 export {
       MRIS_RF_LABEL_METADATA,
       MrisRfLabelOutputs,
-      MrisRfLabelParameters,
       mris_rf_label,
       mris_rf_label_execute,
       mris_rf_label_params,

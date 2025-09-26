@@ -12,50 +12,17 @@ const METRIC_FILL_HOLES_METADATA: Metadata = {
 
 
 interface MetricFillHolesParameters {
-    "@type": "workbench.metric-fill-holes";
+    "@type"?: "workbench/metric-fill-holes";
     "surface": InputPathType;
     "metric_in": InputPathType;
     "metric_out": string;
     "opt_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
+type MetricFillHolesParametersTagged = Required<Pick<MetricFillHolesParameters, '@type'>> & MetricFillHolesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-fill-holes": metric_fill_holes_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.metric-fill-holes": metric_fill_holes_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `metric_fill_holes(...)`.
+ * Output object returned when calling `MetricFillHolesParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function metric_fill_holes_params(
     metric_in: InputPathType,
     metric_out: string,
     opt_corrected_areas_area_metric: InputPathType | null = null,
-): MetricFillHolesParameters {
+): MetricFillHolesParametersTagged {
     const params = {
-        "@type": "workbench.metric-fill-holes" as const,
+        "@type": "workbench/metric-fill-holes" as const,
         "surface": surface,
         "metric_in": metric_in,
         "metric_out": metric_out,
@@ -212,7 +179,6 @@ function metric_fill_holes(
 export {
       METRIC_FILL_HOLES_METADATA,
       MetricFillHolesOutputs,
-      MetricFillHolesParameters,
       metric_fill_holes,
       metric_fill_holes_execute,
       metric_fill_holes_params,

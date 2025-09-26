@@ -12,7 +12,7 @@ const MRI_COREG_METADATA: Metadata = {
 
 
 interface MriCoregParameters {
-    "@type": "freesurfer.mri_coreg";
+    "@type"?: "freesurfer/mri_coreg";
     "movvol": InputPathType;
     "refvol": InputPathType;
     "reg": string;
@@ -67,44 +67,11 @@ interface MriCoregParameters {
     "checkopts": boolean;
     "version": boolean;
 }
+type MriCoregParametersTagged = Required<Pick<MriCoregParameters, '@type'>> & MriCoregParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_coreg": mri_coreg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_coreg": mri_coreg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_coreg(...)`.
+ * Output object returned when calling `MriCoregParameters(...)`.
  *
  * @interface
  */
@@ -257,9 +224,9 @@ function mri_coreg_params(
     debug: boolean = false,
     checkopts: boolean = false,
     version: boolean = false,
-): MriCoregParameters {
+): MriCoregParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_coreg" as const,
+        "@type": "freesurfer/mri_coreg" as const,
         "movvol": movvol,
         "refvol": refvol,
         "reg": reg,
@@ -422,16 +389,16 @@ function mri_coreg_cargs(
             String((params["dof"] ?? null))
         );
     }
-    if ((params["zscale"] ?? null)) {
+    if ((params["zscale"] ?? false)) {
         cargs.push("--zscale");
     }
-    if ((params["xztrans_yrot"] ?? null)) {
+    if ((params["xztrans_yrot"] ?? false)) {
         cargs.push("--xztrans+yrot");
     }
-    if ((params["xytrans_zrot"] ?? null)) {
+    if ((params["xytrans_zrot"] ?? false)) {
         cargs.push("--xytrans+zrot");
     }
-    if ((params["xytrans_zrot_xyscale_xyshear"] ?? null)) {
+    if ((params["xytrans_zrot_xyscale_xyshear"] ?? false)) {
         cargs.push("--xytrans+zrot+xyscale+xyshear");
     }
     if ((params["ref_maskvol"] ?? null) !== null) {
@@ -440,7 +407,7 @@ function mri_coreg_cargs(
             execution.inputFile((params["ref_maskvol"] ?? null))
         );
     }
-    if ((params["no_ref_mask"] ?? null)) {
+    if ((params["no_ref_mask"] ?? false)) {
         cargs.push("--no-ref-mask");
     }
     if ((params["mov_maskvol"] ?? null) !== null) {
@@ -467,10 +434,10 @@ function mri_coreg_cargs(
             (params["regdat"] ?? null)
         );
     }
-    if ((params["no_coord_dither"] ?? null)) {
+    if ((params["no_coord_dither"] ?? false)) {
         cargs.push("--no-coord-dither");
     }
-    if ((params["no_intensity_dither"] ?? null)) {
+    if ((params["no_intensity_dither"] ?? false)) {
         cargs.push("--no-intensity-dither");
     }
     if ((params["spatial_scales"] ?? null) !== null) {
@@ -521,13 +488,13 @@ function mri_coreg_cargs(
             (params["out_cost_file"] ?? null)
         );
     }
-    if ((params["no_cras0"] ?? null)) {
+    if ((params["no_cras0"] ?? false)) {
         cargs.push("--no-cras0");
     }
-    if ((params["centroid"] ?? null)) {
+    if ((params["centroid"] ?? false)) {
         cargs.push("--centroid");
     }
-    if ((params["ras2ras"] ?? null)) {
+    if ((params["ras2ras"] ?? false)) {
         cargs.push("--ras2ras");
     }
     if ((params["nitersmax"] ?? null) !== null) {
@@ -560,10 +527,10 @@ function mri_coreg_cargs(
             String((params["sat"] ?? null))
         );
     }
-    if ((params["conf_ref"] ?? null)) {
+    if ((params["conf_ref"] ?? false)) {
         cargs.push("--conf-ref");
     }
-    if ((params["no_bf"] ?? null)) {
+    if ((params["no_bf"] ?? false)) {
         cargs.push("--no-bf");
     }
     if ((params["bf_lim"] ?? null) !== null) {
@@ -578,7 +545,7 @@ function mri_coreg_cargs(
             String((params["bf_nsamp"] ?? null))
         );
     }
-    if ((params["no_smooth"] ?? null)) {
+    if ((params["no_smooth"] ?? false)) {
         cargs.push("--no-smooth");
     }
     if ((params["ref_fwhm"] ?? null) !== null) {
@@ -587,7 +554,7 @@ function mri_coreg_cargs(
             String((params["ref_fwhm"] ?? null))
         );
     }
-    if ((params["mov_oob"] ?? null)) {
+    if ((params["mov_oob"] ?? false)) {
         cargs.push("--mov-oob");
     }
     if ((params["init_reg_save"] ?? null) !== null) {
@@ -650,13 +617,13 @@ function mri_coreg_cargs(
             execution.inputFile((params["mov_idither"] ?? null))
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["checkopts"] ?? null)) {
+    if ((params["checkopts"] ?? false)) {
         cargs.push("--checkopts");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -847,7 +814,6 @@ function mri_coreg(
 export {
       MRI_COREG_METADATA,
       MriCoregOutputs,
-      MriCoregParameters,
       mri_coreg,
       mri_coreg_execute,
       mri_coreg_params,

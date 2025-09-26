@@ -12,7 +12,7 @@ const FIRST_MULT_BCORR_METADATA: Metadata = {
 
 
 interface FirstMultBcorrParameters {
-    "@type": "fsl.first_mult_bcorr";
+    "@type"?: "fsl/first_mult_bcorr";
     "input_image": InputPathType;
     "corrected_4d_labels": InputPathType;
     "uncorrected_4d_labels": InputPathType;
@@ -20,44 +20,11 @@ interface FirstMultBcorrParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
+type FirstMultBcorrParametersTagged = Required<Pick<FirstMultBcorrParameters, '@type'>> & FirstMultBcorrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.first_mult_bcorr": first_mult_bcorr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.first_mult_bcorr": first_mult_bcorr_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `first_mult_bcorr(...)`.
+ * Output object returned when calling `FirstMultBcorrParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function first_mult_bcorr_params(
     output_image: string,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): FirstMultBcorrParameters {
+): FirstMultBcorrParametersTagged {
     const params = {
-        "@type": "fsl.first_mult_bcorr" as const,
+        "@type": "fsl/first_mult_bcorr" as const,
         "input_image": input_image,
         "corrected_4d_labels": corrected_4d_labels,
         "uncorrected_4d_labels": uncorrected_4d_labels,
@@ -136,10 +103,10 @@ function first_mult_bcorr_cargs(
         "-o",
         (params["output_image"] ?? null)
     );
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -230,7 +197,6 @@ function first_mult_bcorr(
 export {
       FIRST_MULT_BCORR_METADATA,
       FirstMultBcorrOutputs,
-      FirstMultBcorrParameters,
       first_mult_bcorr,
       first_mult_bcorr_execute,
       first_mult_bcorr_params,

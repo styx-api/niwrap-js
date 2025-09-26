@@ -12,7 +12,7 @@ const V_3DANISOSMOOTH_METADATA: Metadata = {
 
 
 interface V3danisosmoothParameters {
-    "@type": "afni.3danisosmooth";
+    "@type"?: "afni/3danisosmooth";
     "input_dataset": InputPathType;
     "prefix"?: string | null | undefined;
     "iterations"?: number | null | undefined;
@@ -36,44 +36,11 @@ interface V3danisosmoothParameters {
     "matchorig_flag": boolean;
     "help_flag": boolean;
 }
+type V3danisosmoothParametersTagged = Required<Pick<V3danisosmoothParameters, '@type'>> & V3danisosmoothParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3danisosmooth": v_3danisosmooth_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3danisosmooth": v_3danisosmooth_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3danisosmooth(...)`.
+ * Output object returned when calling `V3danisosmoothParameters(...)`.
  *
  * @interface
  */
@@ -172,9 +139,9 @@ function v_3danisosmooth_params(
     datum_type: string | null = null,
     matchorig_flag: boolean = false,
     help_flag: boolean = false,
-): V3danisosmoothParameters {
+): V3danisosmoothParametersTagged {
     const params = {
-        "@type": "afni.3danisosmooth" as const,
+        "@type": "afni/3danisosmooth" as const,
         "input_dataset": input_dataset,
         "2d_flag": v_2d_flag,
         "3d_flag": v_3d_flag,
@@ -247,10 +214,10 @@ function v_3danisosmooth_cargs(
             String((params["iterations"] ?? null))
         );
     }
-    if ((params["2d_flag"] ?? null)) {
+    if ((params["2d_flag"] ?? false)) {
         cargs.push("-2D");
     }
-    if ((params["3d_flag"] ?? null)) {
+    if ((params["3d_flag"] ?? false)) {
         cargs.push("-3D");
     }
     if ((params["mask_dataset"] ?? null) !== null) {
@@ -259,13 +226,13 @@ function v_3danisosmooth_cargs(
             execution.inputFile((params["mask_dataset"] ?? null))
         );
     }
-    if ((params["automask_flag"] ?? null)) {
+    if ((params["automask_flag"] ?? false)) {
         cargs.push("-automask");
     }
-    if ((params["viewer_flag"] ?? null)) {
+    if ((params["viewer_flag"] ?? false)) {
         cargs.push("-viewer");
     }
-    if ((params["nosmooth_flag"] ?? null)) {
+    if ((params["nosmooth_flag"] ?? false)) {
         cargs.push("-nosmooth");
     }
     if ((params["sigma1"] ?? null) !== null) {
@@ -286,19 +253,19 @@ function v_3danisosmooth_cargs(
             String((params["deltat"] ?? null))
         );
     }
-    if ((params["savetempdata_flag"] ?? null)) {
+    if ((params["savetempdata_flag"] ?? false)) {
         cargs.push("-savetempdata");
     }
-    if ((params["save_temp_with_diff_measures_flag"] ?? null)) {
+    if ((params["save_temp_with_diff_measures_flag"] ?? false)) {
         cargs.push("-save_temp_with_diff_measures");
     }
-    if ((params["phiding_flag"] ?? null)) {
+    if ((params["phiding_flag"] ?? false)) {
         cargs.push("-phiding");
     }
-    if ((params["phiexp_flag"] ?? null)) {
+    if ((params["phiexp_flag"] ?? false)) {
         cargs.push("-phiexp");
     }
-    if ((params["noneg_flag"] ?? null)) {
+    if ((params["noneg_flag"] ?? false)) {
         cargs.push("-noneg");
     }
     if ((params["setneg_value"] ?? null) !== null) {
@@ -319,10 +286,10 @@ function v_3danisosmooth_cargs(
             (params["datum_type"] ?? null)
         );
     }
-    if ((params["matchorig_flag"] ?? null)) {
+    if ((params["matchorig_flag"] ?? false)) {
         cargs.push("-matchorig");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -452,7 +419,6 @@ function v_3danisosmooth(
 
 export {
       V3danisosmoothOutputs,
-      V3danisosmoothParameters,
       V_3DANISOSMOOTH_METADATA,
       v_3danisosmooth,
       v_3danisosmooth_execute,

@@ -12,7 +12,7 @@ const ABIDS_JSON_INFO_PY_METADATA: Metadata = {
 
 
 interface AbidsJsonInfoPyParameters {
-    "@type": "afni.abids_json_info.py";
+    "@type"?: "afni/abids_json_info.py";
     "json_files": Array<InputPathType>;
     "tr_flag": boolean;
     "te_flag": boolean;
@@ -22,43 +22,11 @@ interface AbidsJsonInfoPyParameters {
     "list_fields_flag": boolean;
     "help_flag": boolean;
 }
+type AbidsJsonInfoPyParametersTagged = Required<Pick<AbidsJsonInfoPyParameters, '@type'>> & AbidsJsonInfoPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.abids_json_info.py": abids_json_info_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `abids_json_info_py(...)`.
+ * Output object returned when calling `AbidsJsonInfoPyParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +61,9 @@ function abids_json_info_py_params(
     field_list: Array<string> | null = null,
     list_fields_flag: boolean = false,
     help_flag: boolean = false,
-): AbidsJsonInfoPyParameters {
+): AbidsJsonInfoPyParametersTagged {
     const params = {
-        "@type": "afni.abids_json_info.py" as const,
+        "@type": "afni/abids_json_info.py" as const,
         "json_files": json_files,
         "tr_flag": tr_flag,
         "te_flag": te_flag,
@@ -126,16 +94,16 @@ function abids_json_info_py_cargs(
     const cargs: string[] = [];
     cargs.push("abids_json_info.py");
     cargs.push(...(params["json_files"] ?? null).map(f => execution.inputFile(f)));
-    if ((params["tr_flag"] ?? null)) {
+    if ((params["tr_flag"] ?? false)) {
         cargs.push("-TR");
     }
-    if ((params["te_flag"] ?? null)) {
+    if ((params["te_flag"] ?? false)) {
         cargs.push("-TE");
     }
-    if ((params["te_sec_flag"] ?? null)) {
+    if ((params["te_sec_flag"] ?? false)) {
         cargs.push("-TE_sec");
     }
-    if ((params["match_nii_flag"] ?? null)) {
+    if ((params["match_nii_flag"] ?? false)) {
         cargs.push("-match_nii");
     }
     if ((params["field_list"] ?? null) !== null) {
@@ -144,10 +112,10 @@ function abids_json_info_py_cargs(
             ...(params["field_list"] ?? null)
         );
     }
-    if ((params["list_fields_flag"] ?? null)) {
+    if ((params["list_fields_flag"] ?? false)) {
         cargs.push("-list_fields");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -241,7 +209,6 @@ function abids_json_info_py(
 export {
       ABIDS_JSON_INFO_PY_METADATA,
       AbidsJsonInfoPyOutputs,
-      AbidsJsonInfoPyParameters,
       abids_json_info_py,
       abids_json_info_py_execute,
       abids_json_info_py_params,

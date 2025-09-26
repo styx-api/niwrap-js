@@ -12,49 +12,16 @@ const V__SCRIPT_CHECK_METADATA: Metadata = {
 
 
 interface VScriptCheckParameters {
-    "@type": "afni.@ScriptCheck";
+    "@type"?: "afni/@ScriptCheck";
     "clean": boolean;
     "suffix"?: string | null | undefined;
     "scripts": Array<InputPathType>;
 }
+type VScriptCheckParametersTagged = Required<Pick<VScriptCheckParameters, '@type'>> & VScriptCheckParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@ScriptCheck": v__script_check_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@ScriptCheck": v__script_check_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__script_check(...)`.
+ * Output object returned when calling `VScriptCheckParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +54,9 @@ function v__script_check_params(
     scripts: Array<InputPathType>,
     clean: boolean = false,
     suffix: string | null = null,
-): VScriptCheckParameters {
+): VScriptCheckParametersTagged {
     const params = {
-        "@type": "afni.@ScriptCheck" as const,
+        "@type": "afni/@ScriptCheck" as const,
         "clean": clean,
         "scripts": scripts,
     };
@@ -114,7 +81,7 @@ function v__script_check_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("@ScriptCheck");
-    if ((params["clean"] ?? null)) {
+    if ((params["clean"] ?? false)) {
         cargs.push("-clean");
     }
     if ((params["suffix"] ?? null) !== null) {
@@ -206,7 +173,6 @@ function v__script_check(
 
 export {
       VScriptCheckOutputs,
-      VScriptCheckParameters,
       V__SCRIPT_CHECK_METADATA,
       v__script_check,
       v__script_check_execute,

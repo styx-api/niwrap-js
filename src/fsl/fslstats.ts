@@ -12,7 +12,7 @@ const FSLSTATS_METADATA: Metadata = {
 
 
 interface FslstatsParameters {
-    "@type": "fsl.fslstats";
+    "@type"?: "fsl/fslstats";
     "input_file": InputPathType;
     "index_mask"?: InputPathType | null | undefined;
     "lower_threshold"?: number | null | undefined;
@@ -42,44 +42,11 @@ interface FslstatsParameters {
     "mean_entropy_flag": boolean;
     "nonzero_mean_entropy_flag": boolean;
 }
+type FslstatsParametersTagged = Required<Pick<FslstatsParameters, '@type'>> & FslstatsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslstats": fslstats_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fslstats": fslstats_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslstats(...)`.
+ * Output object returned when calling `FslstatsParameters(...)`.
  *
  * @interface
  */
@@ -158,9 +125,9 @@ function fslstats_params(
     timeseries_flag: boolean = false,
     mean_entropy_flag: boolean = false,
     nonzero_mean_entropy_flag: boolean = false,
-): FslstatsParameters {
+): FslstatsParametersTagged {
     const params = {
-        "@type": "fsl.fslstats" as const,
+        "@type": "fsl/fslstats" as const,
         "input_file": input_file,
         "robust_intensity_flag": robust_intensity_flag,
         "minmax_intensity_flag": minmax_intensity_flag,
@@ -245,43 +212,43 @@ function fslstats_cargs(
             String((params["upper_threshold"] ?? null))
         );
     }
-    if ((params["robust_intensity_flag"] ?? null)) {
+    if ((params["robust_intensity_flag"] ?? false)) {
         cargs.push("-r");
     }
-    if ((params["minmax_intensity_flag"] ?? null)) {
+    if ((params["minmax_intensity_flag"] ?? false)) {
         cargs.push("-R");
     }
-    if ((params["voxels_volume_flag"] ?? null)) {
+    if ((params["voxels_volume_flag"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["nonzero_voxels_volume_flag"] ?? null)) {
+    if ((params["nonzero_voxels_volume_flag"] ?? false)) {
         cargs.push("-V");
     }
-    if ((params["mean_flag"] ?? null)) {
+    if ((params["mean_flag"] ?? false)) {
         cargs.push("-m");
     }
-    if ((params["nonzero_mean_flag"] ?? null)) {
+    if ((params["nonzero_mean_flag"] ?? false)) {
         cargs.push("-M");
     }
-    if ((params["std_dev_flag"] ?? null)) {
+    if ((params["std_dev_flag"] ?? false)) {
         cargs.push("-s");
     }
-    if ((params["nonzero_std_dev_flag"] ?? null)) {
+    if ((params["nonzero_std_dev_flag"] ?? false)) {
         cargs.push("-S");
     }
-    if ((params["smallest_roi_flag"] ?? null)) {
+    if ((params["smallest_roi_flag"] ?? false)) {
         cargs.push("-w");
     }
-    if ((params["max_coords_flag"] ?? null)) {
+    if ((params["max_coords_flag"] ?? false)) {
         cargs.push("-x");
     }
-    if ((params["min_coords_flag"] ?? null)) {
+    if ((params["min_coords_flag"] ?? false)) {
         cargs.push("-X");
     }
-    if ((params["cog_mm_flag"] ?? null)) {
+    if ((params["cog_mm_flag"] ?? false)) {
         cargs.push("-c");
     }
-    if ((params["cog_voxel_flag"] ?? null)) {
+    if ((params["cog_voxel_flag"] ?? false)) {
         cargs.push("-C");
     }
     if ((params["percentile"] ?? null) !== null) {
@@ -296,10 +263,10 @@ function fslstats_cargs(
             String((params["nonzero_percentile"] ?? null))
         );
     }
-    if ((params["absolute_values_flag"] ?? null)) {
+    if ((params["absolute_values_flag"] ?? false)) {
         cargs.push("-a");
     }
-    if ((params["nan_as_zero_flag"] ?? null)) {
+    if ((params["nan_as_zero_flag"] ?? false)) {
         cargs.push("-n");
     }
     if ((params["mask_image"] ?? null) !== null) {
@@ -326,13 +293,13 @@ function fslstats_cargs(
             (params["hist_bins_min_max"] ?? null)
         );
     }
-    if ((params["timeseries_flag"] ?? null)) {
+    if ((params["timeseries_flag"] ?? false)) {
         cargs.push("-t");
     }
-    if ((params["mean_entropy_flag"] ?? null)) {
+    if ((params["mean_entropy_flag"] ?? false)) {
         cargs.push("-e");
     }
-    if ((params["nonzero_mean_entropy_flag"] ?? null)) {
+    if ((params["nonzero_mean_entropy_flag"] ?? false)) {
         cargs.push("-E");
     }
     return cargs;
@@ -467,7 +434,6 @@ function fslstats(
 export {
       FSLSTATS_METADATA,
       FslstatsOutputs,
-      FslstatsParameters,
       fslstats,
       fslstats_execute,
       fslstats_params,

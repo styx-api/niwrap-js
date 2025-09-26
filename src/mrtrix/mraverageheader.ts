@@ -12,14 +12,15 @@ const MRAVERAGEHEADER_METADATA: Metadata = {
 
 
 interface MraverageheaderConfigParameters {
-    "@type": "mrtrix.mraverageheader.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MraverageheaderConfigParametersTagged = Required<Pick<MraverageheaderConfigParameters, '@type'>> & MraverageheaderConfigParameters;
 
 
 interface MraverageheaderParameters {
-    "@type": "mrtrix.mraverageheader";
+    "@type"?: "mrtrix/mraverageheader";
     "padding"?: number | null | undefined;
     "resolution"?: string | null | undefined;
     "fill": boolean;
@@ -35,41 +36,7 @@ interface MraverageheaderParameters {
     "input": Array<InputPathType>;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.mraverageheader": mraverageheader_cargs,
-        "mrtrix.mraverageheader.config": mraverageheader_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.mraverageheader": mraverageheader_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MraverageheaderParametersTagged = Required<Pick<MraverageheaderParameters, '@type'>> & MraverageheaderParameters;
 
 
 /**
@@ -83,9 +50,9 @@ function dynOutputs(
 function mraverageheader_config_params(
     key: string,
     value: string,
-): MraverageheaderConfigParameters {
+): MraverageheaderConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.mraverageheader.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -114,7 +81,7 @@ function mraverageheader_config_cargs(
 
 
 /**
- * Output object returned when calling `mraverageheader(...)`.
+ * Output object returned when calling `MraverageheaderParameters(...)`.
  *
  * @interface
  */
@@ -165,9 +132,9 @@ function mraverageheader_params(
     config: Array<MraverageheaderConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MraverageheaderParameters {
+): MraverageheaderParametersTagged {
     const params = {
-        "@type": "mrtrix.mraverageheader" as const,
+        "@type": "mrtrix/mraverageheader" as const,
         "fill": fill,
         "info": info,
         "quiet": quiet,
@@ -223,7 +190,7 @@ function mraverageheader_cargs(
             (params["resolution"] ?? null)
         );
     }
-    if ((params["fill"] ?? null)) {
+    if ((params["fill"] ?? false)) {
         cargs.push("-fill");
     }
     if ((params["datatype"] ?? null) !== null) {
@@ -232,16 +199,16 @@ function mraverageheader_cargs(
             (params["datatype"] ?? null)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -251,12 +218,12 @@ function mraverageheader_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => mraverageheader_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(...(params["input"] ?? null).map(f => execution.inputFile(f)));
@@ -376,9 +343,7 @@ function mraverageheader(
 
 export {
       MRAVERAGEHEADER_METADATA,
-      MraverageheaderConfigParameters,
       MraverageheaderOutputs,
-      MraverageheaderParameters,
       mraverageheader,
       mraverageheader_config_params,
       mraverageheader_execute,

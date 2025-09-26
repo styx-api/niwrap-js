@@ -12,50 +12,17 @@ const ANTSINTEGRATE_VECTOR_FIELD_METADATA: Metadata = {
 
 
 interface AntsintegrateVectorFieldParameters {
-    "@type": "ants.ANTSIntegrateVectorField";
+    "@type"?: "ants/ANTSIntegrateVectorField";
     "vector_field_input": InputPathType;
     "roi_mask_input": InputPathType;
     "fibers_output": string;
     "length_image_output": string;
 }
+type AntsintegrateVectorFieldParametersTagged = Required<Pick<AntsintegrateVectorFieldParameters, '@type'>> & AntsintegrateVectorFieldParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.ANTSIntegrateVectorField": antsintegrate_vector_field_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.ANTSIntegrateVectorField": antsintegrate_vector_field_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `antsintegrate_vector_field(...)`.
+ * Output object returned when calling `AntsintegrateVectorFieldParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +57,9 @@ function antsintegrate_vector_field_params(
     roi_mask_input: InputPathType,
     fibers_output: string,
     length_image_output: string,
-): AntsintegrateVectorFieldParameters {
+): AntsintegrateVectorFieldParametersTagged {
     const params = {
-        "@type": "ants.ANTSIntegrateVectorField" as const,
+        "@type": "ants/ANTSIntegrateVectorField" as const,
         "vector_field_input": vector_field_input,
         "roi_mask_input": roi_mask_input,
         "fibers_output": fibers_output,
@@ -205,7 +172,6 @@ function antsintegrate_vector_field(
 export {
       ANTSINTEGRATE_VECTOR_FIELD_METADATA,
       AntsintegrateVectorFieldOutputs,
-      AntsintegrateVectorFieldParameters,
       antsintegrate_vector_field,
       antsintegrate_vector_field_execute,
       antsintegrate_vector_field_params,

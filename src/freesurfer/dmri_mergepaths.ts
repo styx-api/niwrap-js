@@ -12,7 +12,7 @@ const DMRI_MERGEPATHS_METADATA: Metadata = {
 
 
 interface DmriMergepathsParameters {
-    "@type": "freesurfer.dmri_mergepaths";
+    "@type"?: "freesurfer/dmri_mergepaths";
     "input_volumes": Array<InputPathType>;
     "input_directory"?: string | null | undefined;
     "output_volume": string;
@@ -21,43 +21,11 @@ interface DmriMergepathsParameters {
     "debug": boolean;
     "check_opts": boolean;
 }
+type DmriMergepathsParametersTagged = Required<Pick<DmriMergepathsParameters, '@type'>> & DmriMergepathsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dmri_mergepaths": dmri_mergepaths_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dmri_mergepaths(...)`.
+ * Output object returned when calling `DmriMergepathsParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +58,9 @@ function dmri_mergepaths_params(
     input_directory: string | null = null,
     debug: boolean = false,
     check_opts: boolean = false,
-): DmriMergepathsParameters {
+): DmriMergepathsParametersTagged {
     const params = {
-        "@type": "freesurfer.dmri_mergepaths" as const,
+        "@type": "freesurfer/dmri_mergepaths" as const,
         "input_volumes": input_volumes,
         "output_volume": output_volume,
         "color_table": color_table,
@@ -140,10 +108,10 @@ function dmri_mergepaths_cargs(
         "--thresh",
         String((params["threshold"] ?? null))
     );
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["check_opts"] ?? null)) {
+    if ((params["check_opts"] ?? false)) {
         cargs.push("--checkopts");
     }
     return cargs;
@@ -235,7 +203,6 @@ function dmri_mergepaths(
 export {
       DMRI_MERGEPATHS_METADATA,
       DmriMergepathsOutputs,
-      DmriMergepathsParameters,
       dmri_mergepaths,
       dmri_mergepaths_execute,
       dmri_mergepaths_params,

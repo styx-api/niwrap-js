@@ -12,7 +12,7 @@ const EPI_B0_CORRECT_PY_METADATA: Metadata = {
 
 
 interface EpiB0CorrectPyParameters {
-    "@type": "afni.epi_b0_correct.py";
+    "@type"?: "afni/epi_b0_correct.py";
     "prefix": string;
     "input_freq": InputPathType;
     "input_epi": InputPathType;
@@ -38,44 +38,11 @@ interface EpiB0CorrectPyParameters {
     "ver": boolean;
     "date": boolean;
 }
+type EpiB0CorrectPyParametersTagged = Required<Pick<EpiB0CorrectPyParameters, '@type'>> & EpiB0CorrectPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.epi_b0_correct.py": epi_b0_correct_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.epi_b0_correct.py": epi_b0_correct_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `epi_b0_correct_py(...)`.
+ * Output object returned when calling `EpiB0CorrectPyParameters(...)`.
  *
  * @interface
  */
@@ -162,9 +129,9 @@ function epi_b0_correct_py_params(
     help: boolean = false,
     ver: boolean = false,
     date: boolean = false,
-): EpiB0CorrectPyParameters {
+): EpiB0CorrectPyParametersTagged {
     const params = {
-        "@type": "afni.epi_b0_correct.py" as const,
+        "@type": "afni/epi_b0_correct.py" as const,
         "prefix": prefix,
         "input_freq": input_freq,
         "input_epi": input_epi,
@@ -333,22 +300,22 @@ function epi_b0_correct_py_cargs(
             ...(params["mask_dilate"] ?? null).map(String)
         );
     }
-    if ((params["no_clean"] ?? null)) {
+    if ((params["no_clean"] ?? false)) {
         cargs.push("-no_clean");
     }
-    if ((params["qc_box_focus_ulay"] ?? null)) {
+    if ((params["qc_box_focus_ulay"] ?? false)) {
         cargs.push("-qc_box_focus_ulay");
     }
-    if ((params["no_qc_image"] ?? null)) {
+    if ((params["no_qc_image"] ?? false)) {
         cargs.push("-no_qc_image");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["ver"] ?? null)) {
+    if ((params["ver"] ?? false)) {
         cargs.push("-ver");
     }
-    if ((params["date"] ?? null)) {
+    if ((params["date"] ?? false)) {
         cargs.push("-date");
     }
     return cargs;
@@ -479,7 +446,6 @@ function epi_b0_correct_py(
 export {
       EPI_B0_CORRECT_PY_METADATA,
       EpiB0CorrectPyOutputs,
-      EpiB0CorrectPyParameters,
       epi_b0_correct_py,
       epi_b0_correct_py_execute,
       epi_b0_correct_py_params,

@@ -12,47 +12,15 @@ const V_2SWAP_METADATA: Metadata = {
 
 
 interface V2swapParameters {
-    "@type": "afni.2swap";
+    "@type"?: "afni/2swap";
     "quiet": boolean;
     "input_files": Array<InputPathType>;
 }
+type V2swapParametersTagged = Required<Pick<V2swapParameters, '@type'>> & V2swapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.2swap": v_2swap_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_2swap(...)`.
+ * Output object returned when calling `V2swapParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface V2swapOutputs {
 function v_2swap_params(
     input_files: Array<InputPathType>,
     quiet: boolean = false,
-): V2swapParameters {
+): V2swapParametersTagged {
     const params = {
-        "@type": "afni.2swap" as const,
+        "@type": "afni/2swap" as const,
         "quiet": quiet,
         "input_files": input_files,
     };
@@ -99,7 +67,7 @@ function v_2swap_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("2swap");
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-q");
     }
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
@@ -181,7 +149,6 @@ function v_2swap(
 
 export {
       V2swapOutputs,
-      V2swapParameters,
       V_2SWAP_METADATA,
       v_2swap,
       v_2swap_execute,

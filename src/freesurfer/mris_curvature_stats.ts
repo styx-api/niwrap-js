@@ -12,7 +12,7 @@ const MRIS_CURVATURE_STATS_METADATA: Metadata = {
 
 
 interface MrisCurvatureStatsParameters {
-    "@type": "freesurfer.mris_curvature_stats";
+    "@type"?: "freesurfer/mris_curvature_stats";
     "subject_name": string;
     "hemisphere": string;
     "curvature_files"?: Array<InputPathType> | null | undefined;
@@ -51,43 +51,11 @@ interface MrisCurvatureStatsParameters {
     "set_zero_vertex"?: number | null | undefined;
     "max_ulps"?: number | null | undefined;
 }
+type MrisCurvatureStatsParametersTagged = Required<Pick<MrisCurvatureStatsParameters, '@type'>> & MrisCurvatureStatsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_curvature_stats": mris_curvature_stats_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_curvature_stats(...)`.
+ * Output object returned when calling `MrisCurvatureStatsParameters(...)`.
  *
  * @interface
  */
@@ -180,9 +148,9 @@ function mris_curvature_stats_params(
     version: boolean = false,
     set_zero_vertex: number | null = null,
     max_ulps: number | null = null,
-): MrisCurvatureStatsParameters {
+): MrisCurvatureStatsParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_curvature_stats" as const,
+        "@type": "freesurfer/mris_curvature_stats" as const,
         "subject_name": subject_name,
         "hemisphere": hemisphere,
         "principal_curvatures": principal_curvatures,
@@ -292,28 +260,28 @@ function mris_curvature_stats_cargs(
             String((params["number_of_averages"] ?? null))
         );
     }
-    if ((params["principal_curvatures"] ?? null)) {
+    if ((params["principal_curvatures"] ?? false)) {
         cargs.push("-G");
     }
-    if ((params["discrete_method"] ?? null)) {
+    if ((params["discrete_method"] ?? false)) {
         cargs.push("--discrete");
     }
-    if ((params["continuous_method"] ?? null)) {
+    if ((params["continuous_method"] ?? false)) {
         cargs.push("--continuous");
     }
-    if ((params["signed_principals"] ?? null)) {
+    if ((params["signed_principals"] ?? false)) {
         cargs.push("--signedPrincipals");
     }
-    if ((params["vertex_area_weigh"] ?? null)) {
+    if ((params["vertex_area_weigh"] ?? false)) {
         cargs.push("--vertexAreaWeigh");
     }
-    if ((params["vertex_area_normalize"] ?? null)) {
+    if ((params["vertex_area_normalize"] ?? false)) {
         cargs.push("--vertexAreaNormalize");
     }
-    if ((params["vertex_area_weigh_frac"] ?? null)) {
+    if ((params["vertex_area_weigh_frac"] ?? false)) {
         cargs.push("--vertexAreaWeighFrac");
     }
-    if ((params["vertex_area_normalize_frac"] ?? null)) {
+    if ((params["vertex_area_normalize_frac"] ?? false)) {
         cargs.push("--vertexAreaNormalizeFrac");
     }
     if ((params["post_scale"] ?? null) !== null) {
@@ -322,10 +290,10 @@ function mris_curvature_stats_cargs(
             String((params["post_scale"] ?? null))
         );
     }
-    if ((params["write_curvature_files"] ?? null)) {
+    if ((params["write_curvature_files"] ?? false)) {
         cargs.push("--writeCurvatureFiles");
     }
-    if ((params["shape_index"] ?? null)) {
+    if ((params["shape_index"] ?? false)) {
         cargs.push("--shapeIndex");
     }
     if ((params["output_file_stem"] ?? null) !== null) {
@@ -370,7 +338,7 @@ function mris_curvature_stats_cargs(
             execution.inputFile((params["label_file"] ?? null))
         );
     }
-    if ((params["regional_percentages"] ?? null)) {
+    if ((params["regional_percentages"] ?? false)) {
         cargs.push("--regionalPercentages");
     }
     if ((params["high_pass_filter"] ?? null) !== null) {
@@ -403,10 +371,10 @@ function mris_curvature_stats_cargs(
             execution.inputFile((params["filter_label"] ?? null))
         );
     }
-    if ((params["min_max_info"] ?? null)) {
+    if ((params["min_max_info"] ?? false)) {
         cargs.push("-m");
     }
-    if ((params["normalize_curvature"] ?? null)) {
+    if ((params["normalize_curvature"] ?? false)) {
         cargs.push("-n");
     }
     if ((params["summary_condition"] ?? null) !== null) {
@@ -433,7 +401,7 @@ function mris_curvature_stats_cargs(
             String((params["scale_factor"] ?? null))
         );
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     if ((params["set_zero_vertex"] ?? null) !== null) {
@@ -597,7 +565,6 @@ function mris_curvature_stats(
 export {
       MRIS_CURVATURE_STATS_METADATA,
       MrisCurvatureStatsOutputs,
-      MrisCurvatureStatsParameters,
       mris_curvature_stats,
       mris_curvature_stats_execute,
       mris_curvature_stats_params,

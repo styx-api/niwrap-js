@@ -12,7 +12,7 @@ const MAKE_AVERAGE_VOLUME_METADATA: Metadata = {
 
 
 interface MakeAverageVolumeParameters {
-    "@type": "freesurfer.make_average_volume";
+    "@type"?: "freesurfer/make_average_volume";
     "subjects": Array<string>;
     "fsgd"?: InputPathType | null | undefined;
     "out"?: string | null | undefined;
@@ -29,43 +29,11 @@ interface MakeAverageVolumeParameters {
     "debug_flag": boolean;
     "nocleanup_flag": boolean;
 }
+type MakeAverageVolumeParametersTagged = Required<Pick<MakeAverageVolumeParameters, '@type'>> & MakeAverageVolumeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.make_average_volume": make_average_volume_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `make_average_volume(...)`.
+ * Output object returned when calling `MakeAverageVolumeParameters(...)`.
  *
  * @interface
  */
@@ -114,9 +82,9 @@ function make_average_volume_params(
     echo_flag: boolean = false,
     debug_flag: boolean = false,
     nocleanup_flag: boolean = false,
-): MakeAverageVolumeParameters {
+): MakeAverageVolumeParametersTagged {
     const params = {
-        "@type": "freesurfer.make_average_volume" as const,
+        "@type": "freesurfer/make_average_volume" as const,
         "subjects": subjects,
         "sd_flag": sd_flag,
         "force_flag": force_flag,
@@ -197,16 +165,16 @@ function make_average_volume_cargs(
             (params["sdir"] ?? null)
         );
     }
-    if ((params["sd_flag"] ?? null)) {
+    if ((params["sd_flag"] ?? false)) {
         cargs.push("--sd");
     }
-    if ((params["force_flag"] ?? null)) {
+    if ((params["force_flag"] ?? false)) {
         cargs.push("--force");
     }
-    if ((params["keep_all_orig_flag"] ?? null)) {
+    if ((params["keep_all_orig_flag"] ?? false)) {
         cargs.push("--keep-all-orig");
     }
-    if ((params["no_aseg_flag"] ?? null)) {
+    if ((params["no_aseg_flag"] ?? false)) {
         cargs.push("--no-aseg");
     }
     if ((params["ctab"] ?? null) !== null) {
@@ -215,16 +183,16 @@ function make_average_volume_cargs(
             (params["ctab"] ?? null)
         );
     }
-    if ((params["ctab_default_flag"] ?? null)) {
+    if ((params["ctab_default_flag"] ?? false)) {
         cargs.push("--ctab-default");
     }
-    if ((params["echo_flag"] ?? null)) {
+    if ((params["echo_flag"] ?? false)) {
         cargs.push("--echo");
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["nocleanup_flag"] ?? null)) {
+    if ((params["nocleanup_flag"] ?? false)) {
         cargs.push("--nocleanup");
     }
     return cargs;
@@ -332,7 +300,6 @@ function make_average_volume(
 export {
       MAKE_AVERAGE_VOLUME_METADATA,
       MakeAverageVolumeOutputs,
-      MakeAverageVolumeParameters,
       make_average_volume,
       make_average_volume_execute,
       make_average_volume_params,

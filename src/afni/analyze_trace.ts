@@ -12,7 +12,7 @@ const ANALYZE_TRACE_METADATA: Metadata = {
 
 
 interface AnalyzeTraceParameters {
-    "@type": "afni.AnalyzeTrace";
+    "@type"?: "afni/AnalyzeTrace";
     "tracefile": InputPathType;
     "max_func_lines"?: number | null | undefined;
     "suma_c"?: InputPathType | null | undefined;
@@ -25,43 +25,11 @@ interface AnalyzeTraceParameters {
     "nomall": boolean;
     "yesmall": boolean;
 }
+type AnalyzeTraceParametersTagged = Required<Pick<AnalyzeTraceParameters, '@type'>> & AnalyzeTraceParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.AnalyzeTrace": analyze_trace_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `analyze_trace(...)`.
+ * Output object returned when calling `AnalyzeTraceParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +70,9 @@ function analyze_trace_params(
     extreme_trace: boolean = false,
     nomall: boolean = false,
     yesmall: boolean = false,
-): AnalyzeTraceParameters {
+): AnalyzeTraceParametersTagged {
     const params = {
-        "@type": "afni.AnalyzeTrace" as const,
+        "@type": "afni/AnalyzeTrace" as const,
         "tracefile": tracefile,
         "novolreg": novolreg,
         "noxform": noxform,
@@ -162,10 +130,10 @@ function analyze_trace_cargs(
             String((params["max_err"] ?? null))
         );
     }
-    if ((params["novolreg"] ?? null)) {
+    if ((params["novolreg"] ?? false)) {
         cargs.push("-novolreg");
     }
-    if ((params["noxform"] ?? null)) {
+    if ((params["noxform"] ?? false)) {
         cargs.push("-noxform");
     }
     if ((params["setenv"] ?? null) !== null) {
@@ -174,16 +142,16 @@ function analyze_trace_cargs(
             (params["setenv"] ?? null)
         );
     }
-    if ((params["trace"] ?? null)) {
+    if ((params["trace"] ?? false)) {
         cargs.push("-trace");
     }
-    if ((params["extreme_trace"] ?? null)) {
+    if ((params["extreme_trace"] ?? false)) {
         cargs.push("-TRACE");
     }
-    if ((params["nomall"] ?? null)) {
+    if ((params["nomall"] ?? false)) {
         cargs.push("-nomall");
     }
-    if ((params["yesmall"] ?? null)) {
+    if ((params["yesmall"] ?? false)) {
         cargs.push("-yesmall");
     }
     return cargs;
@@ -283,7 +251,6 @@ function analyze_trace(
 export {
       ANALYZE_TRACE_METADATA,
       AnalyzeTraceOutputs,
-      AnalyzeTraceParameters,
       analyze_trace,
       analyze_trace_execute,
       analyze_trace_params,

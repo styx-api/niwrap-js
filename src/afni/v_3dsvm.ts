@@ -12,7 +12,7 @@ const V_3DSVM_METADATA: Metadata = {
 
 
 interface V3dsvmParameters {
-    "@type": "afni.3dsvm";
+    "@type"?: "afni/3dsvm";
     "train_vol"?: InputPathType | null | undefined;
     "train_labels"?: InputPathType | null | undefined;
     "mask"?: InputPathType | null | undefined;
@@ -41,44 +41,11 @@ interface V3dsvmParameters {
     "help": boolean;
     "version": boolean;
 }
+type V3dsvmParametersTagged = Required<Pick<V3dsvmParameters, '@type'>> & V3dsvmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dsvm": v_3dsvm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dsvm": v_3dsvm_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dsvm(...)`.
+ * Output object returned when calling `V3dsvmParameters(...)`.
  *
  * @interface
  */
@@ -167,9 +134,9 @@ function v_3dsvm_params(
     multiclass: "DAG" | "vote" | null = null,
     help: boolean = false,
     version: boolean = false,
-): V3dsvmParameters {
+): V3dsvmParametersTagged {
     const params = {
-        "@type": "afni.3dsvm" as const,
+        "@type": "afni/3dsvm" as const,
         "no_model_mask": no_model_mask,
         "model": model,
         "wout": wout,
@@ -270,7 +237,7 @@ function v_3dsvm_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["no_model_mask"] ?? null)) {
+    if ((params["no_model_mask"] ?? false)) {
         cargs.push("-nomodelmask");
     }
     cargs.push(
@@ -343,7 +310,7 @@ function v_3dsvm_cargs(
             String((params["max_iterations"] ?? null))
         );
     }
-    if ((params["wout"] ?? null)) {
+    if ((params["wout"] ?? false)) {
         cargs.push("-wout");
     }
     if ((params["test_vol"] ?? null) !== null) {
@@ -358,16 +325,16 @@ function v_3dsvm_cargs(
             (params["predictions"] ?? null)
         );
     }
-    if ((params["classout"] ?? null)) {
+    if ((params["classout"] ?? false)) {
         cargs.push("-classout");
     }
-    if ((params["nopred_censored"] ?? null)) {
+    if ((params["nopred_censored"] ?? false)) {
         cargs.push("-nopredcensored");
     }
-    if ((params["nodetrend"] ?? null)) {
+    if ((params["nodetrend"] ?? false)) {
         cargs.push("-nodetrend");
     }
-    if ((params["nopred_scale"] ?? null)) {
+    if ((params["nopred_scale"] ?? false)) {
         cargs.push("-nopredscale");
     }
     if ((params["test_labels"] ?? null) !== null) {
@@ -382,10 +349,10 @@ function v_3dsvm_cargs(
             (params["multiclass"] ?? null)
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     return cargs;
@@ -520,7 +487,6 @@ function v_3dsvm(
 
 export {
       V3dsvmOutputs,
-      V3dsvmParameters,
       V_3DSVM_METADATA,
       v_3dsvm,
       v_3dsvm_execute,

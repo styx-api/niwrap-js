@@ -12,7 +12,7 @@ const EXTRACT_SEG_WAVEFORM_METADATA: Metadata = {
 
 
 interface ExtractSegWaveformParameters {
-    "@type": "freesurfer.extract_seg_waveform";
+    "@type"?: "freesurfer/extract_seg_waveform";
     "seg_file": InputPathType;
     "seg_indices": Array<number>;
     "input_volume": InputPathType;
@@ -22,43 +22,11 @@ interface ExtractSegWaveformParameters {
     "demean_flag": boolean;
     "output_file": string;
 }
+type ExtractSegWaveformParametersTagged = Required<Pick<ExtractSegWaveformParameters, '@type'>> & ExtractSegWaveformParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.extract_seg_waveform": extract_seg_waveform_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `extract_seg_waveform(...)`.
+ * Output object returned when calling `ExtractSegWaveformParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +61,9 @@ function extract_seg_waveform_params(
     vsm_file: InputPathType | null = null,
     regheader_flag: boolean = false,
     demean_flag: boolean = false,
-): ExtractSegWaveformParameters {
+): ExtractSegWaveformParametersTagged {
     const params = {
-        "@type": "freesurfer.extract_seg_waveform" as const,
+        "@type": "freesurfer/extract_seg_waveform" as const,
         "seg_file": seg_file,
         "seg_indices": seg_indices,
         "input_volume": input_volume,
@@ -147,10 +115,10 @@ function extract_seg_waveform_cargs(
             execution.inputFile((params["vsm_file"] ?? null))
         );
     }
-    if ((params["regheader_flag"] ?? null)) {
+    if ((params["regheader_flag"] ?? false)) {
         cargs.push("--regheader");
     }
-    if ((params["demean_flag"] ?? null)) {
+    if ((params["demean_flag"] ?? false)) {
         cargs.push("--demean");
     }
     cargs.push(
@@ -248,7 +216,6 @@ function extract_seg_waveform(
 export {
       EXTRACT_SEG_WAVEFORM_METADATA,
       ExtractSegWaveformOutputs,
-      ExtractSegWaveformParameters,
       extract_seg_waveform,
       extract_seg_waveform_execute,
       extract_seg_waveform_params,

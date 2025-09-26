@@ -12,49 +12,16 @@ const QUANTIFY_THALAMIC_NUCLEI_SH_METADATA: Metadata = {
 
 
 interface QuantifyThalamicNucleiShParameters {
-    "@type": "freesurfer.quantifyThalamicNuclei.sh";
+    "@type"?: "freesurfer/quantifyThalamicNuclei.sh";
     "output_file": string;
     "analysis_id": string;
     "subjects_directory"?: string | null | undefined;
 }
+type QuantifyThalamicNucleiShParametersTagged = Required<Pick<QuantifyThalamicNucleiShParameters, '@type'>> & QuantifyThalamicNucleiShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.quantifyThalamicNuclei.sh": quantify_thalamic_nuclei_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.quantifyThalamicNuclei.sh": quantify_thalamic_nuclei_sh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `quantify_thalamic_nuclei_sh(...)`.
+ * Output object returned when calling `QuantifyThalamicNucleiShParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function quantify_thalamic_nuclei_sh_params(
     output_file: string,
     analysis_id: string,
     subjects_directory: string | null = null,
-): QuantifyThalamicNucleiShParameters {
+): QuantifyThalamicNucleiShParametersTagged {
     const params = {
-        "@type": "freesurfer.quantifyThalamicNuclei.sh" as const,
+        "@type": "freesurfer/quantifyThalamicNuclei.sh" as const,
         "output_file": output_file,
         "analysis_id": analysis_id,
     };
@@ -197,7 +164,6 @@ function quantify_thalamic_nuclei_sh(
 export {
       QUANTIFY_THALAMIC_NUCLEI_SH_METADATA,
       QuantifyThalamicNucleiShOutputs,
-      QuantifyThalamicNucleiShParameters,
       quantify_thalamic_nuclei_sh,
       quantify_thalamic_nuclei_sh_execute,
       quantify_thalamic_nuclei_sh_params,

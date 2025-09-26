@@ -12,7 +12,7 @@ const V_3D_DTTO_NOISY_DWI_METADATA: Metadata = {
 
 
 interface V3dDttoNoisyDwiParameters {
-    "@type": "afni.3dDTtoNoisyDWI";
+    "@type"?: "afni/3dDTtoNoisyDWI";
     "dt_file": InputPathType;
     "grad_file": InputPathType;
     "noise_dwi": number;
@@ -22,44 +22,11 @@ interface V3dDttoNoisyDwiParameters {
     "bval"?: number | null | undefined;
     "s0"?: number | null | undefined;
 }
+type V3dDttoNoisyDwiParametersTagged = Required<Pick<V3dDttoNoisyDwiParameters, '@type'>> & V3dDttoNoisyDwiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dDTtoNoisyDWI": v_3d_dtto_noisy_dwi_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dDTtoNoisyDWI": v_3d_dtto_noisy_dwi_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_dtto_noisy_dwi(...)`.
+ * Output object returned when calling `V3dDttoNoisyDwiParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function v_3d_dtto_noisy_dwi_params(
     mask: InputPathType | null = null,
     bval: number | null = null,
     s0: number | null = null,
-): V3dDttoNoisyDwiParameters {
+): V3dDttoNoisyDwiParametersTagged {
     const params = {
-        "@type": "afni.3dDTtoNoisyDWI" as const,
+        "@type": "afni/3dDTtoNoisyDWI" as const,
         "dt_file": dt_file,
         "grad_file": grad_file,
         "noise_dwi": noise_dwi,
@@ -261,7 +228,6 @@ function v_3d_dtto_noisy_dwi(
 
 export {
       V3dDttoNoisyDwiOutputs,
-      V3dDttoNoisyDwiParameters,
       V_3D_DTTO_NOISY_DWI_METADATA,
       v_3d_dtto_noisy_dwi,
       v_3d_dtto_noisy_dwi_execute,

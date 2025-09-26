@@ -12,14 +12,15 @@ const MRMATH_METADATA: Metadata = {
 
 
 interface MrmathConfigParameters {
-    "@type": "mrtrix.mrmath.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MrmathConfigParametersTagged = Required<Pick<MrmathConfigParameters, '@type'>> & MrmathConfigParameters;
 
 
 interface MrmathParameters {
-    "@type": "mrtrix.mrmath";
+    "@type"?: "mrtrix/mrmath";
     "axis"?: number | null | undefined;
     "keep_unary_axes": boolean;
     "datatype"?: string | null | undefined;
@@ -35,41 +36,7 @@ interface MrmathParameters {
     "operation": string;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.mrmath": mrmath_cargs,
-        "mrtrix.mrmath.config": mrmath_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.mrmath": mrmath_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MrmathParametersTagged = Required<Pick<MrmathParameters, '@type'>> & MrmathParameters;
 
 
 /**
@@ -83,9 +50,9 @@ function dynOutputs(
 function mrmath_config_params(
     key: string,
     value: string,
-): MrmathConfigParameters {
+): MrmathConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.mrmath.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -114,7 +81,7 @@ function mrmath_config_cargs(
 
 
 /**
- * Output object returned when calling `mrmath(...)`.
+ * Output object returned when calling `MrmathParameters(...)`.
  *
  * @interface
  */
@@ -165,9 +132,9 @@ function mrmath_params(
     config: Array<MrmathConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrmathParameters {
+): MrmathParametersTagged {
     const params = {
-        "@type": "mrtrix.mrmath" as const,
+        "@type": "mrtrix/mrmath" as const,
         "keep_unary_axes": keep_unary_axes,
         "info": info,
         "quiet": quiet,
@@ -215,7 +182,7 @@ function mrmath_cargs(
             String((params["axis"] ?? null))
         );
     }
-    if ((params["keep_unary_axes"] ?? null)) {
+    if ((params["keep_unary_axes"] ?? false)) {
         cargs.push("-keep_unary_axes");
     }
     if ((params["datatype"] ?? null) !== null) {
@@ -224,16 +191,16 @@ function mrmath_cargs(
             (params["datatype"] ?? null)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -243,12 +210,12 @@ function mrmath_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => mrmath_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(...(params["input"] ?? null).map(f => execution.inputFile(f)));
@@ -377,9 +344,7 @@ function mrmath(
 
 export {
       MRMATH_METADATA,
-      MrmathConfigParameters,
       MrmathOutputs,
-      MrmathParameters,
       mrmath,
       mrmath_config_params,
       mrmath_execute,

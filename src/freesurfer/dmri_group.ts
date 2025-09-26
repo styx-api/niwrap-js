@@ -12,7 +12,7 @@ const DMRI_GROUP_METADATA: Metadata = {
 
 
 interface DmriGroupParameters {
-    "@type": "freesurfer.dmri_group";
+    "@type"?: "freesurfer/dmri_group";
     "input_list": InputPathType;
     "reference_volume": InputPathType;
     "output_base": string;
@@ -21,43 +21,11 @@ interface DmriGroupParameters {
     "debug_mode": boolean;
     "check_options": boolean;
 }
+type DmriGroupParametersTagged = Required<Pick<DmriGroupParameters, '@type'>> & DmriGroupParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dmri_group": dmri_group_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dmri_group(...)`.
+ * Output object returned when calling `DmriGroupParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +58,9 @@ function dmri_group_params(
     sections_num: number | null = null,
     debug_mode: boolean = false,
     check_options: boolean = false,
-): DmriGroupParameters {
+): DmriGroupParametersTagged {
     const params = {
-        "@type": "freesurfer.dmri_group" as const,
+        "@type": "freesurfer/dmri_group" as const,
         "input_list": input_list,
         "reference_volume": reference_volume,
         "output_base": output_base,
@@ -133,7 +101,7 @@ function dmri_group_cargs(
         "--out",
         (params["output_base"] ?? null)
     );
-    if ((params["no_interpolation"] ?? null)) {
+    if ((params["no_interpolation"] ?? false)) {
         cargs.push("--nointerp");
     }
     if ((params["sections_num"] ?? null) !== null) {
@@ -142,10 +110,10 @@ function dmri_group_cargs(
             String((params["sections_num"] ?? null))
         );
     }
-    if ((params["debug_mode"] ?? null)) {
+    if ((params["debug_mode"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["check_options"] ?? null)) {
+    if ((params["check_options"] ?? false)) {
         cargs.push("--checkopts");
     }
     return cargs;
@@ -237,7 +205,6 @@ function dmri_group(
 export {
       DMRI_GROUP_METADATA,
       DmriGroupOutputs,
-      DmriGroupParameters,
       dmri_group,
       dmri_group_execute,
       dmri_group_params,

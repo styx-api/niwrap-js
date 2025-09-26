@@ -12,51 +12,18 @@ const ANTSUSE_DEFORMATION_FIELD_TO_GET_AFFINE_TRANSFORM_METADATA: Metadata = {
 
 
 interface AntsuseDeformationFieldToGetAffineTransformParameters {
-    "@type": "ants.ANTSUseDeformationFieldToGetAffineTransform";
+    "@type"?: "ants/ANTSUseDeformationFieldToGetAffineTransform";
     "deformation_field": InputPathType;
     "load_ratio": number;
     "transform_type": "rigid" | "affine";
     "output_affine": string;
     "mask"?: InputPathType | null | undefined;
 }
+type AntsuseDeformationFieldToGetAffineTransformParametersTagged = Required<Pick<AntsuseDeformationFieldToGetAffineTransformParameters, '@type'>> & AntsuseDeformationFieldToGetAffineTransformParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.ANTSUseDeformationFieldToGetAffineTransform": antsuse_deformation_field_to_get_affine_transform_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.ANTSUseDeformationFieldToGetAffineTransform": antsuse_deformation_field_to_get_affine_transform_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `antsuse_deformation_field_to_get_affine_transform(...)`.
+ * Output object returned when calling `AntsuseDeformationFieldToGetAffineTransformParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function antsuse_deformation_field_to_get_affine_transform_params(
     transform_type: "rigid" | "affine",
     output_affine: string,
     mask: InputPathType | null = null,
-): AntsuseDeformationFieldToGetAffineTransformParameters {
+): AntsuseDeformationFieldToGetAffineTransformParametersTagged {
     const params = {
-        "@type": "ants.ANTSUseDeformationFieldToGetAffineTransform" as const,
+        "@type": "ants/ANTSUseDeformationFieldToGetAffineTransform" as const,
         "deformation_field": deformation_field,
         "load_ratio": load_ratio,
         "transform_type": transform_type,
@@ -211,7 +178,6 @@ function antsuse_deformation_field_to_get_affine_transform(
 export {
       ANTSUSE_DEFORMATION_FIELD_TO_GET_AFFINE_TRANSFORM_METADATA,
       AntsuseDeformationFieldToGetAffineTransformOutputs,
-      AntsuseDeformationFieldToGetAffineTransformParameters,
       antsuse_deformation_field_to_get_affine_transform,
       antsuse_deformation_field_to_get_affine_transform_execute,
       antsuse_deformation_field_to_get_affine_transform_params,

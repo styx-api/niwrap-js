@@ -12,7 +12,7 @@ const AP_RUN_SIMPLE_REST_TCSH_METADATA: Metadata = {
 
 
 interface ApRunSimpleRestTcshParameters {
-    "@type": "afni.ap_run_simple_rest.tcsh";
+    "@type"?: "afni/ap_run_simple_rest.tcsh";
     "anat"?: InputPathType | null | undefined;
     "epi": Array<InputPathType>;
     "nt_rm"?: number | null | undefined;
@@ -24,44 +24,11 @@ interface ApRunSimpleRestTcshParameters {
     "verb"?: number | null | undefined;
     "echo": boolean;
 }
+type ApRunSimpleRestTcshParametersTagged = Required<Pick<ApRunSimpleRestTcshParameters, '@type'>> & ApRunSimpleRestTcshParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.ap_run_simple_rest.tcsh": ap_run_simple_rest_tcsh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.ap_run_simple_rest.tcsh": ap_run_simple_rest_tcsh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ap_run_simple_rest_tcsh(...)`.
+ * Output object returned when calling `ApRunSimpleRestTcshParameters(...)`.
  *
  * @interface
  */
@@ -112,9 +79,9 @@ function ap_run_simple_rest_tcsh_params(
     compressor: string | null = null,
     verb: number | null = null,
     echo: boolean = false,
-): ApRunSimpleRestTcshParameters {
+): ApRunSimpleRestTcshParametersTagged {
     const params = {
-        "@type": "afni.ap_run_simple_rest.tcsh" as const,
+        "@type": "afni/ap_run_simple_rest.tcsh" as const,
         "epi": epi,
         "run_ap": run_ap,
         "run_proc": run_proc,
@@ -172,10 +139,10 @@ function ap_run_simple_rest_tcsh_cargs(
             String((params["nt_rm"] ?? null))
         );
     }
-    if ((params["run_ap"] ?? null)) {
+    if ((params["run_ap"] ?? false)) {
         cargs.push("-run_ap");
     }
-    if ((params["run_proc"] ?? null)) {
+    if ((params["run_proc"] ?? false)) {
         cargs.push("-run_proc");
     }
     if ((params["subjid"] ?? null) !== null) {
@@ -202,7 +169,7 @@ function ap_run_simple_rest_tcsh_cargs(
             String((params["verb"] ?? null))
         );
     }
-    if ((params["echo"] ?? null)) {
+    if ((params["echo"] ?? false)) {
         cargs.push("-echo");
     }
     return cargs;
@@ -303,7 +270,6 @@ function ap_run_simple_rest_tcsh(
 export {
       AP_RUN_SIMPLE_REST_TCSH_METADATA,
       ApRunSimpleRestTcshOutputs,
-      ApRunSimpleRestTcshParameters,
       ap_run_simple_rest_tcsh,
       ap_run_simple_rest_tcsh_execute,
       ap_run_simple_rest_tcsh_params,

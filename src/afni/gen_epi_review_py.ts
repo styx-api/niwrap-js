@@ -12,7 +12,7 @@ const GEN_EPI_REVIEW_PY_METADATA: Metadata = {
 
 
 interface GenEpiReviewPyParameters {
-    "@type": "afni.gen_epi_review.py";
+    "@type"?: "afni/gen_epi_review.py";
     "datasets": Array<string>;
     "script_name"?: string | null | undefined;
     "windows"?: Array<string> | null | undefined;
@@ -24,43 +24,11 @@ interface GenEpiReviewPyParameters {
     "graph_xoffset"?: number | null | undefined;
     "graph_yoffset"?: number | null | undefined;
 }
+type GenEpiReviewPyParametersTagged = Required<Pick<GenEpiReviewPyParameters, '@type'>> & GenEpiReviewPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.gen_epi_review.py": gen_epi_review_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `gen_epi_review_py(...)`.
+ * Output object returned when calling `GenEpiReviewPyParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +67,9 @@ function gen_epi_review_py_params(
     graph_size: Array<number> | null = null,
     graph_xoffset: number | null = null,
     graph_yoffset: number | null = null,
-): GenEpiReviewPyParameters {
+): GenEpiReviewPyParametersTagged {
     const params = {
-        "@type": "afni.gen_epi_review.py" as const,
+        "@type": "afni/gen_epi_review.py" as const,
         "datasets": datasets,
     };
     if (script_name !== null) {
@@ -302,7 +270,6 @@ function gen_epi_review_py(
 export {
       GEN_EPI_REVIEW_PY_METADATA,
       GenEpiReviewPyOutputs,
-      GenEpiReviewPyParameters,
       gen_epi_review_py,
       gen_epi_review_py_execute,
       gen_epi_review_py_params,

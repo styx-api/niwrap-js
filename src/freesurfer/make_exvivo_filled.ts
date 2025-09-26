@@ -12,49 +12,17 @@ const MAKE_EXVIVO_FILLED_METADATA: Metadata = {
 
 
 interface MakeExvivoFilledParameters {
-    "@type": "freesurfer.make_exvivo_filled";
+    "@type"?: "freesurfer/make_exvivo_filled";
     "subject_name": string;
     "input_samseg": InputPathType;
     "input_intensity_vol": InputPathType;
     "hemi_both": string;
 }
+type MakeExvivoFilledParametersTagged = Required<Pick<MakeExvivoFilledParameters, '@type'>> & MakeExvivoFilledParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.make_exvivo_filled": make_exvivo_filled_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `make_exvivo_filled(...)`.
+ * Output object returned when calling `MakeExvivoFilledParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function make_exvivo_filled_params(
     input_samseg: InputPathType,
     input_intensity_vol: InputPathType,
     hemi_both: string,
-): MakeExvivoFilledParameters {
+): MakeExvivoFilledParametersTagged {
     const params = {
-        "@type": "freesurfer.make_exvivo_filled" as const,
+        "@type": "freesurfer/make_exvivo_filled" as const,
         "subject_name": subject_name,
         "input_samseg": input_samseg,
         "input_intensity_vol": input_intensity_vol,
@@ -194,7 +162,6 @@ function make_exvivo_filled(
 export {
       MAKE_EXVIVO_FILLED_METADATA,
       MakeExvivoFilledOutputs,
-      MakeExvivoFilledParameters,
       make_exvivo_filled,
       make_exvivo_filled_execute,
       make_exvivo_filled_params,

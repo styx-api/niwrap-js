@@ -12,7 +12,7 @@ const V_3D_EIGS_TO_DT_METADATA: Metadata = {
 
 
 interface V3dEigsToDtParameters {
-    "@type": "afni.3dEigsToDT";
+    "@type"?: "afni/3dEigsToDT";
     "eig_vals": string;
     "eig_vecs": string;
     "prefix": string;
@@ -22,44 +22,11 @@ interface V3dEigsToDtParameters {
     "flip_z": boolean;
     "scale_eigs"?: number | null | undefined;
 }
+type V3dEigsToDtParametersTagged = Required<Pick<V3dEigsToDtParameters, '@type'>> & V3dEigsToDtParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dEigsToDT": v_3d_eigs_to_dt_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dEigsToDT": v_3d_eigs_to_dt_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_eigs_to_dt(...)`.
+ * Output object returned when calling `V3dEigsToDtParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +69,9 @@ function v_3d_eigs_to_dt_params(
     flip_y: boolean = false,
     flip_z: boolean = false,
     scale_eigs: number | null = null,
-): V3dEigsToDtParameters {
+): V3dEigsToDtParametersTagged {
     const params = {
-        "@type": "afni.3dEigsToDT" as const,
+        "@type": "afni/3dEigsToDT" as const,
         "eig_vals": eig_vals,
         "eig_vecs": eig_vecs,
         "prefix": prefix,
@@ -154,13 +121,13 @@ function v_3d_eigs_to_dt_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["flip_x"] ?? null)) {
+    if ((params["flip_x"] ?? false)) {
         cargs.push("-flip_x");
     }
-    if ((params["flip_y"] ?? null)) {
+    if ((params["flip_y"] ?? false)) {
         cargs.push("-flip_y");
     }
-    if ((params["flip_z"] ?? null)) {
+    if ((params["flip_z"] ?? false)) {
         cargs.push("-flip_z");
     }
     if ((params["scale_eigs"] ?? null) !== null) {
@@ -261,7 +228,6 @@ function v_3d_eigs_to_dt(
 
 export {
       V3dEigsToDtOutputs,
-      V3dEigsToDtParameters,
       V_3D_EIGS_TO_DT_METADATA,
       v_3d_eigs_to_dt,
       v_3d_eigs_to_dt_execute,

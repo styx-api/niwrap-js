@@ -12,7 +12,7 @@ const FSLSELECTVOLS_METADATA: Metadata = {
 
 
 interface FslselectvolsParameters {
-    "@type": "fsl.fslselectvols";
+    "@type"?: "fsl/fslselectvols";
     "input_file": InputPathType;
     "output_file": string;
     "vols_list": string;
@@ -20,44 +20,11 @@ interface FslselectvolsParameters {
     "output_variance_flag": boolean;
     "help_flag": boolean;
 }
+type FslselectvolsParametersTagged = Required<Pick<FslselectvolsParameters, '@type'>> & FslselectvolsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslselectvols": fslselectvols_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fslselectvols": fslselectvols_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslselectvols(...)`.
+ * Output object returned when calling `FslselectvolsParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function fslselectvols_params(
     output_mean_flag: boolean = false,
     output_variance_flag: boolean = false,
     help_flag: boolean = false,
-): FslselectvolsParameters {
+): FslselectvolsParametersTagged {
     const params = {
-        "@type": "fsl.fslselectvols" as const,
+        "@type": "fsl/fslselectvols" as const,
         "input_file": input_file,
         "output_file": output_file,
         "vols_list": vols_list,
@@ -132,13 +99,13 @@ function fslselectvols_cargs(
         "--vols",
         (params["vols_list"] ?? null)
     );
-    if ((params["output_mean_flag"] ?? null)) {
+    if ((params["output_mean_flag"] ?? false)) {
         cargs.push("-m");
     }
-    if ((params["output_variance_flag"] ?? null)) {
+    if ((params["output_variance_flag"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -229,7 +196,6 @@ function fslselectvols(
 export {
       FSLSELECTVOLS_METADATA,
       FslselectvolsOutputs,
-      FslselectvolsParameters,
       fslselectvols,
       fslselectvols_execute,
       fslselectvols_params,

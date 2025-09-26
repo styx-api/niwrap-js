@@ -12,46 +12,14 @@ const FIDUCIALS_CALIBRATION_METADATA: Metadata = {
 
 
 interface FiducialsCalibrationParameters {
-    "@type": "freesurfer.fiducials_calibration";
+    "@type"?: "freesurfer/fiducials_calibration";
     "qt_plugin_installation"?: string | null | undefined;
 }
+type FiducialsCalibrationParametersTagged = Required<Pick<FiducialsCalibrationParameters, '@type'>> & FiducialsCalibrationParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fiducials_calibration": fiducials_calibration_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fiducials_calibration(...)`.
+ * Output object returned when calling `FiducialsCalibrationParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface FiducialsCalibrationOutputs {
  */
 function fiducials_calibration_params(
     qt_plugin_installation: string | null = null,
-): FiducialsCalibrationParameters {
+): FiducialsCalibrationParametersTagged {
     const params = {
-        "@type": "freesurfer.fiducials_calibration" as const,
+        "@type": "freesurfer/fiducials_calibration" as const,
     };
     if (qt_plugin_installation !== null) {
         params["qt_plugin_installation"] = qt_plugin_installation;
@@ -177,7 +145,6 @@ function fiducials_calibration(
 export {
       FIDUCIALS_CALIBRATION_METADATA,
       FiducialsCalibrationOutputs,
-      FiducialsCalibrationParameters,
       fiducials_calibration,
       fiducials_calibration_execute,
       fiducials_calibration_params,

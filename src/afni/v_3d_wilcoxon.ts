@@ -12,51 +12,18 @@ const V_3D_WILCOXON_METADATA: Metadata = {
 
 
 interface V3dWilcoxonParameters {
-    "@type": "afni.3dWilcoxon";
+    "@type"?: "afni/3dWilcoxon";
     "workmem"?: number | null | undefined;
     "voxel"?: number | null | undefined;
     "dset1_x": Array<InputPathType>;
     "dset2_y": Array<InputPathType>;
     "output_prefix": string;
 }
+type V3dWilcoxonParametersTagged = Required<Pick<V3dWilcoxonParameters, '@type'>> & V3dWilcoxonParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dWilcoxon": v_3d_wilcoxon_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dWilcoxon": v_3d_wilcoxon_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_wilcoxon(...)`.
+ * Output object returned when calling `V3dWilcoxonParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function v_3d_wilcoxon_params(
     output_prefix: string,
     workmem: number | null = null,
     voxel: number | null = null,
-): V3dWilcoxonParameters {
+): V3dWilcoxonParametersTagged {
     const params = {
-        "@type": "afni.3dWilcoxon" as const,
+        "@type": "afni/3dWilcoxon" as const,
         "dset1_x": dset1_x,
         "dset2_y": dset2_y,
         "output_prefix": output_prefix,
@@ -229,7 +196,6 @@ function v_3d_wilcoxon(
 
 export {
       V3dWilcoxonOutputs,
-      V3dWilcoxonParameters,
       V_3D_WILCOXON_METADATA,
       v_3d_wilcoxon,
       v_3d_wilcoxon_execute,

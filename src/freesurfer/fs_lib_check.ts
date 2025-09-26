@@ -12,49 +12,17 @@ const FS_LIB_CHECK_METADATA: Metadata = {
 
 
 interface FsLibCheckParameters {
-    "@type": "freesurfer.fs_lib_check";
+    "@type"?: "freesurfer/fs_lib_check";
     "use_ldconfig": boolean;
     "use_rpm": boolean;
     "show_help": boolean;
     "show_version": boolean;
 }
+type FsLibCheckParametersTagged = Required<Pick<FsLibCheckParameters, '@type'>> & FsLibCheckParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fs_lib_check": fs_lib_check_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fs_lib_check(...)`.
+ * Output object returned when calling `FsLibCheckParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function fs_lib_check_params(
     use_rpm: boolean = false,
     show_help: boolean = false,
     show_version: boolean = false,
-): FsLibCheckParameters {
+): FsLibCheckParametersTagged {
     const params = {
-        "@type": "freesurfer.fs_lib_check" as const,
+        "@type": "freesurfer/fs_lib_check" as const,
         "use_ldconfig": use_ldconfig,
         "use_rpm": use_rpm,
         "show_help": show_help,
@@ -107,16 +75,16 @@ function fs_lib_check_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("fs_lib_check");
-    if ((params["use_ldconfig"] ?? null)) {
+    if ((params["use_ldconfig"] ?? false)) {
         cargs.push("-l");
     }
-    if ((params["use_rpm"] ?? null)) {
+    if ((params["use_rpm"] ?? false)) {
         cargs.push("-r");
     }
-    if ((params["show_help"] ?? null)) {
+    if ((params["show_help"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["show_version"] ?? null)) {
+    if ((params["show_version"] ?? false)) {
         cargs.push("-v");
     }
     return cargs;
@@ -202,7 +170,6 @@ function fs_lib_check(
 export {
       FS_LIB_CHECK_METADATA,
       FsLibCheckOutputs,
-      FsLibCheckParameters,
       fs_lib_check,
       fs_lib_check_execute,
       fs_lib_check_params,

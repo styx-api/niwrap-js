@@ -12,50 +12,17 @@ const MRI_COPY_PARAMS_METADATA: Metadata = {
 
 
 interface MriCopyParamsParameters {
-    "@type": "freesurfer.mri_copy_params";
+    "@type"?: "freesurfer/mri_copy_params";
     "in_vol": InputPathType;
     "template_vol": InputPathType;
     "out_vol": string;
     "size_flag": boolean;
 }
+type MriCopyParamsParametersTagged = Required<Pick<MriCopyParamsParameters, '@type'>> & MriCopyParamsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_copy_params": mri_copy_params_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_copy_params": mri_copy_params_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_copy_params(...)`.
+ * Output object returned when calling `MriCopyParamsParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mri_copy_params_params(
     template_vol: InputPathType,
     out_vol: string,
     size_flag: boolean = false,
-): MriCopyParamsParameters {
+): MriCopyParamsParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_copy_params" as const,
+        "@type": "freesurfer/mri_copy_params" as const,
         "in_vol": in_vol,
         "template_vol": template_vol,
         "out_vol": out_vol,
@@ -115,7 +82,7 @@ function mri_copy_params_cargs(
     cargs.push(execution.inputFile((params["in_vol"] ?? null)));
     cargs.push(execution.inputFile((params["template_vol"] ?? null)));
     cargs.push((params["out_vol"] ?? null));
-    if ((params["size_flag"] ?? null)) {
+    if ((params["size_flag"] ?? false)) {
         cargs.push("--size");
     }
     return cargs;
@@ -202,7 +169,6 @@ function mri_copy_params(
 export {
       MRI_COPY_PARAMS_METADATA,
       MriCopyParamsOutputs,
-      MriCopyParamsParameters,
       mri_copy_params,
       mri_copy_params_execute,
       mri_copy_params_params,

@@ -12,7 +12,7 @@ const MRI_FILL_METADATA: Metadata = {
 
 
 interface MriFillParameters {
-    "@type": "freesurfer.mri_fill";
+    "@type"?: "freesurfer/mri_fill";
     "input_mr_dir": string;
     "output_mr_dir": string;
     "threshold"?: number | null | undefined;
@@ -31,44 +31,11 @@ interface MriFillParameters {
     "pointset_args"?: Array<string> | null | undefined;
     "ctab_file"?: InputPathType | null | undefined;
 }
+type MriFillParametersTagged = Required<Pick<MriFillParameters, '@type'>> & MriFillParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_fill": mri_fill_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_fill": mri_fill_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_fill(...)`.
+ * Output object returned when calling `MriFillParameters(...)`.
  *
  * @interface
  */
@@ -125,9 +92,9 @@ function mri_fill_params(
     no_auto_man: boolean = false,
     pointset_args: Array<string> | null = null,
     ctab_file: InputPathType | null = null,
-): MriFillParameters {
+): MriFillParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_fill" as const,
+        "@type": "freesurfer/mri_fill" as const,
         "input_mr_dir": input_mr_dir,
         "output_mr_dir": output_mr_dir,
         "fill_ven": fill_ven,
@@ -216,7 +183,7 @@ function mri_fill_cargs(
             execution.inputFile((params["atlas_file"] ?? null))
         );
     }
-    if ((params["fill_ven"] ?? null)) {
+    if ((params["fill_ven"] ?? false)) {
         cargs.push("-fillven");
     }
     if ((params["seed_cc_tal"] ?? null) !== null) {
@@ -261,7 +228,7 @@ function mri_fill_cargs(
             ...(params["auto_man_files"] ?? null)
         );
     }
-    if ((params["no_auto_man"] ?? null)) {
+    if ((params["no_auto_man"] ?? false)) {
         cargs.push("-no-auto-man");
     }
     if ((params["pointset_args"] ?? null) !== null) {
@@ -386,7 +353,6 @@ function mri_fill(
 export {
       MRI_FILL_METADATA,
       MriFillOutputs,
-      MriFillParameters,
       mri_fill,
       mri_fill_execute,
       mri_fill_params,

@@ -12,7 +12,7 @@ const V_1D_TSORT_METADATA: Metadata = {
 
 
 interface V1dTsortParameters {
-    "@type": "afni.1dTsort";
+    "@type"?: "afni/1dTsort";
     "inc_order": boolean;
     "dec_order": boolean;
     "transpose": boolean;
@@ -20,43 +20,11 @@ interface V1dTsortParameters {
     "imode": boolean;
     "infile": InputPathType;
 }
+type V1dTsortParametersTagged = Required<Pick<V1dTsortParameters, '@type'>> & V1dTsortParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dTsort": v_1d_tsort_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1d_tsort(...)`.
+ * Output object returned when calling `V1dTsortParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function v_1d_tsort_params(
     transpose: boolean = false,
     column: number | null = null,
     imode: boolean = false,
-): V1dTsortParameters {
+): V1dTsortParametersTagged {
     const params = {
-        "@type": "afni.1dTsort" as const,
+        "@type": "afni/1dTsort" as const,
         "inc_order": inc_order,
         "dec_order": dec_order,
         "transpose": transpose,
@@ -117,13 +85,13 @@ function v_1d_tsort_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("1dTsort");
-    if ((params["inc_order"] ?? null)) {
+    if ((params["inc_order"] ?? false)) {
         cargs.push("-inc");
     }
-    if ((params["dec_order"] ?? null)) {
+    if ((params["dec_order"] ?? false)) {
         cargs.push("-dec");
     }
-    if ((params["transpose"] ?? null)) {
+    if ((params["transpose"] ?? false)) {
         cargs.push("-flip");
     }
     if ((params["column"] ?? null) !== null) {
@@ -132,7 +100,7 @@ function v_1d_tsort_cargs(
             String((params["column"] ?? null))
         );
     }
-    if ((params["imode"] ?? null)) {
+    if ((params["imode"] ?? false)) {
         cargs.push("-imode");
     }
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -222,7 +190,6 @@ function v_1d_tsort(
 
 export {
       V1dTsortOutputs,
-      V1dTsortParameters,
       V_1D_TSORT_METADATA,
       v_1d_tsort,
       v_1d_tsort_execute,

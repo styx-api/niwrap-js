@@ -12,48 +12,15 @@ const V__TO_MNI_QWARPAR_METADATA: Metadata = {
 
 
 interface VToMniQwarparParameters {
-    "@type": "afni.@toMNI_Qwarpar";
+    "@type"?: "afni/@toMNI_Qwarpar";
     "numcpu": number;
     "numjob": number;
 }
+type VToMniQwarparParametersTagged = Required<Pick<VToMniQwarparParameters, '@type'>> & VToMniQwarparParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@toMNI_Qwarpar": v__to_mni_qwarpar_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@toMNI_Qwarpar": v__to_mni_qwarpar_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__to_mni_qwarpar(...)`.
+ * Output object returned when calling `VToMniQwarparParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface VToMniQwarparOutputs {
 function v__to_mni_qwarpar_params(
     numcpu: number,
     numjob: number,
-): VToMniQwarparParameters {
+): VToMniQwarparParametersTagged {
     const params = {
-        "@type": "afni.@toMNI_Qwarpar" as const,
+        "@type": "afni/@toMNI_Qwarpar" as const,
         "numcpu": numcpu,
         "numjob": numjob,
     };
@@ -185,7 +152,6 @@ function v__to_mni_qwarpar(
 
 export {
       VToMniQwarparOutputs,
-      VToMniQwarparParameters,
       V__TO_MNI_QWARPAR_METADATA,
       v__to_mni_qwarpar,
       v__to_mni_qwarpar_execute,

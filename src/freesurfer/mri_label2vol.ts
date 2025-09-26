@@ -12,7 +12,7 @@ const MRI_LABEL2VOL_METADATA: Metadata = {
 
 
 interface MriLabel2volParameters {
-    "@type": "freesurfer.mri_label2vol";
+    "@type"?: "freesurfer/mri_label2vol";
     "labels"?: Array<string> | null | undefined;
     "annotation"?: InputPathType | null | undefined;
     "segmentation"?: InputPathType | null | undefined;
@@ -32,44 +32,11 @@ interface MriLabel2volParameters {
     "defects"?: string | null | undefined;
     "native_vox2ras_flag": boolean;
 }
+type MriLabel2volParametersTagged = Required<Pick<MriLabel2volParameters, '@type'>> & MriLabel2volParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_label2vol": mri_label2vol_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_label2vol": mri_label2vol_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_label2vol(...)`.
+ * Output object returned when calling `MriLabel2volParameters(...)`.
  *
  * @interface
  */
@@ -136,9 +103,9 @@ function mri_label2vol_params(
     offset: number | null = null,
     defects: string | null = null,
     native_vox2ras_flag: boolean = false,
-): MriLabel2volParameters {
+): MriLabel2volParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_label2vol" as const,
+        "@type": "freesurfer/mri_label2vol" as const,
         "template": template,
         "identity_flag": identity_flag,
         "output_volume": output_volume,
@@ -232,7 +199,7 @@ function mri_label2vol_cargs(
             execution.inputFile((params["registration"] ?? null))
         );
     }
-    if ((params["identity_flag"] ?? null)) {
+    if ((params["identity_flag"] ?? false)) {
         cargs.push("--identity");
     }
     if ((params["fill_threshold"] ?? null) !== null) {
@@ -299,7 +266,7 @@ function mri_label2vol_cargs(
             (params["defects"] ?? null)
         );
     }
-    if ((params["native_vox2ras_flag"] ?? null)) {
+    if ((params["native_vox2ras_flag"] ?? false)) {
         cargs.push("--native-vox2ras");
     }
     return cargs;
@@ -416,7 +383,6 @@ function mri_label2vol(
 export {
       MRI_LABEL2VOL_METADATA,
       MriLabel2volOutputs,
-      MriLabel2volParameters,
       mri_label2vol,
       mri_label2vol_execute,
       mri_label2vol_params,

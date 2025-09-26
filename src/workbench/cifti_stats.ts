@@ -12,14 +12,15 @@ const CIFTI_STATS_METADATA: Metadata = {
 
 
 interface CiftiStatsRoiParameters {
-    "@type": "workbench.cifti-stats.roi";
+    "@type"?: "roi";
     "roi_cifti": InputPathType;
     "opt_match_maps": boolean;
 }
+type CiftiStatsRoiParametersTagged = Required<Pick<CiftiStatsRoiParameters, '@type'>> & CiftiStatsRoiParameters;
 
 
 interface CiftiStatsParameters {
-    "@type": "workbench.cifti-stats";
+    "@type"?: "workbench/cifti-stats";
     "cifti_in": InputPathType;
     "opt_reduce_operation"?: string | null | undefined;
     "opt_percentile_percent"?: number | null | undefined;
@@ -27,40 +28,7 @@ interface CiftiStatsParameters {
     "roi"?: CiftiStatsRoiParameters | null | undefined;
     "opt_show_map_name": boolean;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-stats": cifti_stats_cargs,
-        "workbench.cifti-stats.roi": cifti_stats_roi_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type CiftiStatsParametersTagged = Required<Pick<CiftiStatsParameters, '@type'>> & CiftiStatsParameters;
 
 
 /**
@@ -74,9 +42,9 @@ function dynOutputs(
 function cifti_stats_roi_params(
     roi_cifti: InputPathType,
     opt_match_maps: boolean = false,
-): CiftiStatsRoiParameters {
+): CiftiStatsRoiParametersTagged {
     const params = {
-        "@type": "workbench.cifti-stats.roi" as const,
+        "@type": "roi" as const,
         "roi_cifti": roi_cifti,
         "opt_match_maps": opt_match_maps,
     };
@@ -99,7 +67,7 @@ function cifti_stats_roi_cargs(
     const cargs: string[] = [];
     cargs.push("-roi");
     cargs.push(execution.inputFile((params["roi_cifti"] ?? null)));
-    if ((params["opt_match_maps"] ?? null)) {
+    if ((params["opt_match_maps"] ?? false)) {
         cargs.push("-match-maps");
     }
     return cargs;
@@ -107,7 +75,7 @@ function cifti_stats_roi_cargs(
 
 
 /**
- * Output object returned when calling `cifti_stats(...)`.
+ * Output object returned when calling `CiftiStatsParameters(...)`.
  *
  * @interface
  */
@@ -138,9 +106,9 @@ function cifti_stats_params(
     opt_column_column: number | null = null,
     roi: CiftiStatsRoiParameters | null = null,
     opt_show_map_name: boolean = false,
-): CiftiStatsParameters {
+): CiftiStatsParametersTagged {
     const params = {
-        "@type": "workbench.cifti-stats" as const,
+        "@type": "workbench/cifti-stats" as const,
         "cifti_in": cifti_in,
         "opt_show_map_name": opt_show_map_name,
     };
@@ -195,9 +163,9 @@ function cifti_stats_cargs(
         );
     }
     if ((params["roi"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["roi"] ?? null)["@type"])((params["roi"] ?? null), execution));
+        cargs.push(...cifti_stats_roi_cargs((params["roi"] ?? null), execution));
     }
-    if ((params["opt_show_map_name"] ?? null)) {
+    if ((params["opt_show_map_name"] ?? false)) {
         cargs.push("-show-map-name");
     }
     return cargs;
@@ -331,8 +299,6 @@ function cifti_stats(
 export {
       CIFTI_STATS_METADATA,
       CiftiStatsOutputs,
-      CiftiStatsParameters,
-      CiftiStatsRoiParameters,
       cifti_stats,
       cifti_stats_execute,
       cifti_stats_params,

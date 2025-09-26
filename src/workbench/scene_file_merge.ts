@@ -12,67 +12,35 @@ const SCENE_FILE_MERGE_METADATA: Metadata = {
 
 
 interface SceneFileMergeUpToParameters {
-    "@type": "workbench.scene-file-merge.scene_file.scene.up_to";
+    "@type"?: "up_to";
     "last_column": string;
     "opt_reverse": boolean;
 }
+type SceneFileMergeUpToParametersTagged = Required<Pick<SceneFileMergeUpToParameters, '@type'>> & SceneFileMergeUpToParameters;
 
 
 interface SceneFileMergeSceneParameters {
-    "@type": "workbench.scene-file-merge.scene_file.scene";
+    "@type"?: "scene";
     "scene": string;
     "up_to"?: SceneFileMergeUpToParameters | null | undefined;
 }
+type SceneFileMergeSceneParametersTagged = Required<Pick<SceneFileMergeSceneParameters, '@type'>> & SceneFileMergeSceneParameters;
 
 
 interface SceneFileMergeSceneFileParameters {
-    "@type": "workbench.scene-file-merge.scene_file";
+    "@type"?: "scene_file";
     "scene_file": string;
     "scene"?: Array<SceneFileMergeSceneParameters> | null | undefined;
 }
+type SceneFileMergeSceneFileParametersTagged = Required<Pick<SceneFileMergeSceneFileParameters, '@type'>> & SceneFileMergeSceneFileParameters;
 
 
 interface SceneFileMergeParameters {
-    "@type": "workbench.scene-file-merge";
+    "@type"?: "workbench/scene-file-merge";
     "scene_file_out": string;
     "scene_file"?: Array<SceneFileMergeSceneFileParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.scene-file-merge": scene_file_merge_cargs,
-        "workbench.scene-file-merge.scene_file": scene_file_merge_scene_file_cargs,
-        "workbench.scene-file-merge.scene_file.scene": scene_file_merge_scene_cargs,
-        "workbench.scene-file-merge.scene_file.scene.up_to": scene_file_merge_up_to_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type SceneFileMergeParametersTagged = Required<Pick<SceneFileMergeParameters, '@type'>> & SceneFileMergeParameters;
 
 
 /**
@@ -86,9 +54,9 @@ function dynOutputs(
 function scene_file_merge_up_to_params(
     last_column: string,
     opt_reverse: boolean = false,
-): SceneFileMergeUpToParameters {
+): SceneFileMergeUpToParametersTagged {
     const params = {
-        "@type": "workbench.scene-file-merge.scene_file.scene.up_to" as const,
+        "@type": "up_to" as const,
         "last_column": last_column,
         "opt_reverse": opt_reverse,
     };
@@ -111,7 +79,7 @@ function scene_file_merge_up_to_cargs(
     const cargs: string[] = [];
     cargs.push("-up-to");
     cargs.push((params["last_column"] ?? null));
-    if ((params["opt_reverse"] ?? null)) {
+    if ((params["opt_reverse"] ?? false)) {
         cargs.push("-reverse");
     }
     return cargs;
@@ -129,9 +97,9 @@ function scene_file_merge_up_to_cargs(
 function scene_file_merge_scene_params(
     scene: string,
     up_to: SceneFileMergeUpToParameters | null = null,
-): SceneFileMergeSceneParameters {
+): SceneFileMergeSceneParametersTagged {
     const params = {
-        "@type": "workbench.scene-file-merge.scene_file.scene" as const,
+        "@type": "scene" as const,
         "scene": scene,
     };
     if (up_to !== null) {
@@ -157,7 +125,7 @@ function scene_file_merge_scene_cargs(
     cargs.push("-scene");
     cargs.push((params["scene"] ?? null));
     if ((params["up_to"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["up_to"] ?? null)["@type"])((params["up_to"] ?? null), execution));
+        cargs.push(...scene_file_merge_up_to_cargs((params["up_to"] ?? null), execution));
     }
     return cargs;
 }
@@ -174,9 +142,9 @@ function scene_file_merge_scene_cargs(
 function scene_file_merge_scene_file_params(
     scene_file: string,
     scene: Array<SceneFileMergeSceneParameters> | null = null,
-): SceneFileMergeSceneFileParameters {
+): SceneFileMergeSceneFileParametersTagged {
     const params = {
-        "@type": "workbench.scene-file-merge.scene_file" as const,
+        "@type": "scene_file" as const,
         "scene_file": scene_file,
     };
     if (scene !== null) {
@@ -202,14 +170,14 @@ function scene_file_merge_scene_file_cargs(
     cargs.push("-scene-file");
     cargs.push((params["scene_file"] ?? null));
     if ((params["scene"] ?? null) !== null) {
-        cargs.push(...(params["scene"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["scene"] ?? null).map(s => scene_file_merge_scene_cargs(s, execution)).flat());
     }
     return cargs;
 }
 
 
 /**
- * Output object returned when calling `scene_file_merge(...)`.
+ * Output object returned when calling `SceneFileMergeParameters(...)`.
  *
  * @interface
  */
@@ -232,9 +200,9 @@ interface SceneFileMergeOutputs {
 function scene_file_merge_params(
     scene_file_out: string,
     scene_file: Array<SceneFileMergeSceneFileParameters> | null = null,
-): SceneFileMergeParameters {
+): SceneFileMergeParametersTagged {
     const params = {
-        "@type": "workbench.scene-file-merge" as const,
+        "@type": "workbench/scene-file-merge" as const,
         "scene_file_out": scene_file_out,
     };
     if (scene_file !== null) {
@@ -261,7 +229,7 @@ function scene_file_merge_cargs(
     cargs.push("-scene-file-merge");
     cargs.push((params["scene_file_out"] ?? null));
     if ((params["scene_file"] ?? null) !== null) {
-        cargs.push(...(params["scene_file"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["scene_file"] ?? null).map(s => scene_file_merge_scene_file_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -354,10 +322,6 @@ function scene_file_merge(
 export {
       SCENE_FILE_MERGE_METADATA,
       SceneFileMergeOutputs,
-      SceneFileMergeParameters,
-      SceneFileMergeSceneFileParameters,
-      SceneFileMergeSceneParameters,
-      SceneFileMergeUpToParameters,
       scene_file_merge,
       scene_file_merge_execute,
       scene_file_merge_params,

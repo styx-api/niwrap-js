@@ -12,51 +12,18 @@ const V_3D_TRFIX_METADATA: Metadata = {
 
 
 interface V3dTrfixParameters {
-    "@type": "afni.3dTRfix";
+    "@type"?: "afni/3dTRfix";
     "input_file": InputPathType;
     "tr_list"?: InputPathType | null | undefined;
     "time_list"?: InputPathType | null | undefined;
     "prefix": string;
     "output_tr"?: number | null | undefined;
 }
+type V3dTrfixParametersTagged = Required<Pick<V3dTrfixParameters, '@type'>> & V3dTrfixParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dTRfix": v_3d_trfix_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dTRfix": v_3d_trfix_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_trfix(...)`.
+ * Output object returned when calling `V3dTrfixParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +60,9 @@ function v_3d_trfix_params(
     tr_list: InputPathType | null = null,
     time_list: InputPathType | null = null,
     output_tr: number | null = null,
-): V3dTrfixParameters {
+): V3dTrfixParametersTagged {
     const params = {
-        "@type": "afni.3dTRfix" as const,
+        "@type": "afni/3dTRfix" as const,
         "input_file": input_file,
         "prefix": prefix,
     };
@@ -238,7 +205,6 @@ function v_3d_trfix(
 
 export {
       V3dTrfixOutputs,
-      V3dTrfixParameters,
       V_3D_TRFIX_METADATA,
       v_3d_trfix,
       v_3d_trfix_execute,

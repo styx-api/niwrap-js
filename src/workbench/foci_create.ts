@@ -12,53 +12,20 @@ const FOCI_CREATE_METADATA: Metadata = {
 
 
 interface FociCreateClassParameters {
-    "@type": "workbench.foci-create.class";
+    "@type"?: "class";
     "class_name": string;
     "foci_list_file": string;
     "surface": InputPathType;
 }
+type FociCreateClassParametersTagged = Required<Pick<FociCreateClassParameters, '@type'>> & FociCreateClassParameters;
 
 
 interface FociCreateParameters {
-    "@type": "workbench.foci-create";
+    "@type"?: "workbench/foci-create";
     "output": string;
     "class"?: Array<FociCreateClassParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.foci-create": foci_create_cargs,
-        "workbench.foci-create.class": foci_create_class_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.foci-create": foci_create_outputs,
-    };
-    return outputsFuncs[t];
-}
+type FociCreateParametersTagged = Required<Pick<FociCreateParameters, '@type'>> & FociCreateParameters;
 
 
 /**
@@ -74,9 +41,9 @@ function foci_create_class_params(
     class_name: string,
     foci_list_file: string,
     surface: InputPathType,
-): FociCreateClassParameters {
+): FociCreateClassParametersTagged {
     const params = {
-        "@type": "workbench.foci-create.class" as const,
+        "@type": "class" as const,
         "class_name": class_name,
         "foci_list_file": foci_list_file,
         "surface": surface,
@@ -107,7 +74,7 @@ function foci_create_class_cargs(
 
 
 /**
- * Output object returned when calling `foci_create(...)`.
+ * Output object returned when calling `FociCreateParameters(...)`.
  *
  * @interface
  */
@@ -134,9 +101,9 @@ interface FociCreateOutputs {
 function foci_create_params(
     output: string,
     class_: Array<FociCreateClassParameters> | null = null,
-): FociCreateParameters {
+): FociCreateParametersTagged {
     const params = {
-        "@type": "workbench.foci-create" as const,
+        "@type": "workbench/foci-create" as const,
         "output": output,
     };
     if (class_ !== null) {
@@ -163,7 +130,7 @@ function foci_create_cargs(
     cargs.push("-foci-create");
     cargs.push((params["output"] ?? null));
     if ((params["class"] ?? null) !== null) {
-        cargs.push(...(params["class"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["class"] ?? null).map(s => foci_create_class_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -268,9 +235,7 @@ function foci_create(
 
 export {
       FOCI_CREATE_METADATA,
-      FociCreateClassParameters,
       FociCreateOutputs,
-      FociCreateParameters,
       foci_create,
       foci_create_class_params,
       foci_create_execute,

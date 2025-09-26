@@ -12,47 +12,14 @@ const V__CHECK_FOR_AFNI_DSET_METADATA: Metadata = {
 
 
 interface VCheckForAfniDsetParameters {
-    "@type": "afni.@CheckForAfniDset";
+    "@type"?: "afni/@CheckForAfniDset";
     "dataset_name": string;
 }
+type VCheckForAfniDsetParametersTagged = Required<Pick<VCheckForAfniDsetParameters, '@type'>> & VCheckForAfniDsetParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@CheckForAfniDset": v__check_for_afni_dset_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@CheckForAfniDset": v__check_for_afni_dset_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__check_for_afni_dset(...)`.
+ * Output object returned when calling `VCheckForAfniDsetParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface VCheckForAfniDsetOutputs {
  */
 function v__check_for_afni_dset_params(
     dataset_name: string,
-): VCheckForAfniDsetParameters {
+): VCheckForAfniDsetParametersTagged {
     const params = {
-        "@type": "afni.@CheckForAfniDset" as const,
+        "@type": "afni/@CheckForAfniDset" as const,
         "dataset_name": dataset_name,
     };
     return params;
@@ -178,7 +145,6 @@ function v__check_for_afni_dset(
 
 export {
       VCheckForAfniDsetOutputs,
-      VCheckForAfniDsetParameters,
       V__CHECK_FOR_AFNI_DSET_METADATA,
       v__check_for_afni_dset,
       v__check_for_afni_dset_execute,

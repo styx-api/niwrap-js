@@ -12,7 +12,7 @@ const MRI_MS_FITPARMS_METADATA: Metadata = {
 
 
 interface MriMsFitparmsParameters {
-    "@type": "freesurfer.mri_ms_fitparms";
+    "@type"?: "freesurfer/mri_ms_fitparms";
     "volumes": Array<InputPathType>;
     "output_dir": string;
     "afi_flag": boolean;
@@ -50,44 +50,11 @@ interface MriMsFitparmsParameters {
     "extract_subimage"?: Array<number> | null | undefined;
     "window_flag": boolean;
 }
+type MriMsFitparmsParametersTagged = Required<Pick<MriMsFitparmsParameters, '@type'>> & MriMsFitparmsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_ms_fitparms": mri_ms_fitparms_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_ms_fitparms": mri_ms_fitparms_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_ms_fitparms(...)`.
+ * Output object returned when calling `MriMsFitparmsParameters(...)`.
  *
  * @interface
  */
@@ -202,9 +169,9 @@ function mri_ms_fitparms_params(
     write_intermediate: number | null = null,
     extract_subimage: Array<number> | null = null,
     window_flag: boolean = false,
-): MriMsFitparmsParameters {
+): MriMsFitparmsParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_ms_fitparms" as const,
+        "@type": "freesurfer/mri_ms_fitparms" as const,
         "volumes": volumes,
         "output_dir": output_dir,
         "afi_flag": afi_flag,
@@ -294,10 +261,10 @@ function mri_ms_fitparms_cargs(
     cargs.push("mri_ms_fitparms");
     cargs.push(...(params["volumes"] ?? null).map(f => execution.inputFile(f)));
     cargs.push((params["output_dir"] ?? null));
-    if ((params["afi_flag"] ?? null)) {
+    if ((params["afi_flag"] ?? false)) {
         cargs.push("-afi");
     }
-    if ((params["ait_flag"] ?? null)) {
+    if ((params["ait_flag"] ?? false)) {
         cargs.push("-ait");
     }
     if ((params["at"] ?? null) !== null) {
@@ -306,19 +273,19 @@ function mri_ms_fitparms_cargs(
             (params["at"] ?? null)
         );
     }
-    if ((params["conform_flag"] ?? null)) {
+    if ((params["conform_flag"] ?? false)) {
         cargs.push("-conform");
     }
-    if ((params["correct_flag"] ?? null)) {
+    if ((params["correct_flag"] ?? false)) {
         cargs.push("-correct");
     }
-    if ((params["cubic_flag"] ?? null)) {
+    if ((params["cubic_flag"] ?? false)) {
         cargs.push("-cubic");
     }
-    if ((params["debug_slice_flag"] ?? null)) {
+    if ((params["debug_slice_flag"] ?? false)) {
         cargs.push("-debug_slice");
     }
-    if ((params["debug_voxel_flag"] ?? null)) {
+    if ((params["debug_voxel_flag"] ?? false)) {
         cargs.push("-debug_voxel");
     }
     if ((params["dt"] ?? null) !== null) {
@@ -351,7 +318,7 @@ function mri_ms_fitparms_cargs(
             String((params["fsmooth"] ?? null))
         );
     }
-    if ((params["invert_flag"] ?? null)) {
+    if ((params["invert_flag"] ?? false)) {
         cargs.push("-i");
     }
     if ((params["momentum"] ?? null) !== null) {
@@ -372,13 +339,13 @@ function mri_ms_fitparms_cargs(
             String((params["n_iter"] ?? null))
         );
     }
-    if ((params["nearest_flag"] ?? null)) {
+    if ((params["nearest_flag"] ?? false)) {
         cargs.push("-nearest");
     }
-    if ((params["nocompress_flag"] ?? null)) {
+    if ((params["nocompress_flag"] ?? false)) {
         cargs.push("-nocompress");
     }
-    if ((params["nosynth_flag"] ?? null)) {
+    if ((params["nosynth_flag"] ?? false)) {
         cargs.push("-nosynth");
     }
     if ((params["residuals"] ?? null) !== null) {
@@ -399,10 +366,10 @@ function mri_ms_fitparms_cargs(
             String((params["scale_factor"] ?? null))
         );
     }
-    if ((params["sinc_flag"] ?? null)) {
+    if ((params["sinc_flag"] ?? false)) {
         cargs.push("-sinc");
     }
-    if ((params["transform_flag"] ?? null)) {
+    if ((params["transform_flag"] ?? false)) {
         cargs.push("-t");
     }
     if ((params["echo_time"] ?? null) !== null) {
@@ -417,16 +384,16 @@ function mri_ms_fitparms_cargs(
             String((params["repetition_time"] ?? null))
         );
     }
-    if ((params["trilinear_flag"] ?? null)) {
+    if ((params["trilinear_flag"] ?? false)) {
         cargs.push("-trilinear");
     }
-    if ((params["tukey_flag"] ?? null)) {
+    if ((params["tukey_flag"] ?? false)) {
         cargs.push("-tukey");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-u");
     }
-    if ((params["use_brain_mask_flag"] ?? null)) {
+    if ((params["use_brain_mask_flag"] ?? false)) {
         cargs.push("-use_brain_mask");
     }
     if ((params["write_intermediate"] ?? null) !== null) {
@@ -441,7 +408,7 @@ function mri_ms_fitparms_cargs(
             ...(params["extract_subimage"] ?? null).map(String)
         );
     }
-    if ((params["window_flag"] ?? null)) {
+    if ((params["window_flag"] ?? false)) {
         cargs.push("-window");
     }
     return cargs;
@@ -597,7 +564,6 @@ function mri_ms_fitparms(
 export {
       MRI_MS_FITPARMS_METADATA,
       MriMsFitparmsOutputs,
-      MriMsFitparmsParameters,
       mri_ms_fitparms,
       mri_ms_fitparms_execute,
       mri_ms_fitparms_params,

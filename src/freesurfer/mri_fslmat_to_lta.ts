@@ -12,50 +12,17 @@ const MRI_FSLMAT_TO_LTA_METADATA: Metadata = {
 
 
 interface MriFslmatToLtaParameters {
-    "@type": "freesurfer.mri_fslmat_to_lta";
+    "@type"?: "freesurfer/mri_fslmat_to_lta";
     "src_vol": InputPathType;
     "target_vol": InputPathType;
     "fslmat_file": InputPathType;
     "lta_file": string;
 }
+type MriFslmatToLtaParametersTagged = Required<Pick<MriFslmatToLtaParameters, '@type'>> & MriFslmatToLtaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_fslmat_to_lta": mri_fslmat_to_lta_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_fslmat_to_lta": mri_fslmat_to_lta_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_fslmat_to_lta(...)`.
+ * Output object returned when calling `MriFslmatToLtaParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mri_fslmat_to_lta_params(
     target_vol: InputPathType,
     fslmat_file: InputPathType,
     lta_file: string,
-): MriFslmatToLtaParameters {
+): MriFslmatToLtaParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_fslmat_to_lta" as const,
+        "@type": "freesurfer/mri_fslmat_to_lta" as const,
         "src_vol": src_vol,
         "target_vol": target_vol,
         "fslmat_file": fslmat_file,
@@ -200,7 +167,6 @@ function mri_fslmat_to_lta(
 export {
       MRI_FSLMAT_TO_LTA_METADATA,
       MriFslmatToLtaOutputs,
-      MriFslmatToLtaParameters,
       mri_fslmat_to_lta,
       mri_fslmat_to_lta_execute,
       mri_fslmat_to_lta_params,

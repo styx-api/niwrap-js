@@ -12,49 +12,17 @@ const NICAT_METADATA: Metadata = {
 
 
 interface NicatParameters {
-    "@type": "afni.nicat";
+    "@type"?: "afni/nicat";
     "stream_spec": string;
     "reopen"?: string | null | undefined;
     "copy_stream": boolean;
     "read_only": boolean;
 }
+type NicatParametersTagged = Required<Pick<NicatParameters, '@type'>> & NicatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.nicat": nicat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `nicat(...)`.
+ * Output object returned when calling `NicatParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function nicat_params(
     reopen: string | null = null,
     copy_stream: boolean = false,
     read_only: boolean = false,
-): NicatParameters {
+): NicatParametersTagged {
     const params = {
-        "@type": "afni.nicat" as const,
+        "@type": "afni/nicat" as const,
         "stream_spec": stream_spec,
         "copy_stream": copy_stream,
         "read_only": read_only,
@@ -116,10 +84,10 @@ function nicat_cargs(
             (params["reopen"] ?? null)
         );
     }
-    if ((params["copy_stream"] ?? null)) {
+    if ((params["copy_stream"] ?? false)) {
         cargs.push("-r");
     }
-    if ((params["read_only"] ?? null)) {
+    if ((params["read_only"] ?? false)) {
         cargs.push("-R");
     }
     return cargs;
@@ -205,7 +173,6 @@ function nicat(
 export {
       NICAT_METADATA,
       NicatOutputs,
-      NicatParameters,
       nicat,
       nicat_execute,
       nicat_params,

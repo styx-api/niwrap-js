@@ -12,7 +12,7 @@ const MCFLIRT_METADATA: Metadata = {
 
 
 interface McflirtParameters {
-    "@type": "fsl.mcflirt";
+    "@type"?: "fsl/mcflirt";
     "in_file": InputPathType;
     "bins"?: number | null | undefined;
     "cost"?: "mutualinfo" | "woods" | "corratio" | "normcorr" | "normmi" | "leastsquares" | null | undefined;
@@ -35,44 +35,11 @@ interface McflirtParameters {
     "use_contour": boolean;
     "use_gradient": boolean;
 }
+type McflirtParametersTagged = Required<Pick<McflirtParameters, '@type'>> & McflirtParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.mcflirt": mcflirt_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.mcflirt": mcflirt_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mcflirt(...)`.
+ * Output object returned when calling `McflirtParameters(...)`.
  *
  * @interface
  */
@@ -161,9 +128,9 @@ function mcflirt_params(
     stats_imgs: boolean = false,
     use_contour: boolean = false,
     use_gradient: boolean = false,
-): McflirtParameters {
+): McflirtParametersTagged {
     const params = {
-        "@type": "fsl.mcflirt" as const,
+        "@type": "fsl/mcflirt" as const,
         "in_file": in_file,
         "mean_vol": mean_vol,
         "save_mats": save_mats,
@@ -259,7 +226,7 @@ function mcflirt_cargs(
     if ((params["interpolation"] ?? null) !== null) {
         cargs.push(["-", (params["interpolation"] ?? null)].join(''));
     }
-    if ((params["mean_vol"] ?? null)) {
+    if ((params["mean_vol"] ?? false)) {
         cargs.push("-meanvol");
     }
     if ((params["out_file"] ?? null) !== null) {
@@ -286,16 +253,16 @@ function mcflirt_cargs(
             String((params["rotation"] ?? null))
         );
     }
-    if ((params["save_mats"] ?? null)) {
+    if ((params["save_mats"] ?? false)) {
         cargs.push("-mats");
     }
-    if ((params["save_plots"] ?? null)) {
+    if ((params["save_plots"] ?? false)) {
         cargs.push("-plots");
     }
-    if ((params["save_rmsabs"] ?? null)) {
+    if ((params["save_rmsabs"] ?? false)) {
         cargs.push("-rmsabs");
     }
-    if ((params["save_rmsrel"] ?? null)) {
+    if ((params["save_rmsrel"] ?? false)) {
         cargs.push("-rmsrel");
     }
     if ((params["scaling"] ?? null) !== null) {
@@ -316,13 +283,13 @@ function mcflirt_cargs(
             String((params["stages"] ?? null))
         );
     }
-    if ((params["stats_imgs"] ?? null)) {
+    if ((params["stats_imgs"] ?? false)) {
         cargs.push("-stats");
     }
-    if ((params["use_contour"] ?? null)) {
+    if ((params["use_contour"] ?? false)) {
         cargs.push("-edge");
     }
-    if ((params["use_gradient"] ?? null)) {
+    if ((params["use_gradient"] ?? false)) {
         cargs.push("-gdt");
     }
     return cargs;
@@ -449,7 +416,6 @@ function mcflirt(
 export {
       MCFLIRT_METADATA,
       McflirtOutputs,
-      McflirtParameters,
       mcflirt,
       mcflirt_execute,
       mcflirt_params,

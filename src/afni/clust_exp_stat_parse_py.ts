@@ -12,7 +12,7 @@ const CLUST_EXP_STAT_PARSE_PY_METADATA: Metadata = {
 
 
 interface ClustExpStatParsePyParameters {
-    "@type": "afni.ClustExp_StatParse.py";
+    "@type"?: "afni/ClustExp_StatParse.py";
     "statdset": InputPathType;
     "meanbrik": number;
     "threshbrik": number;
@@ -27,44 +27,11 @@ interface ClustExpStatParsePyParameters {
     "noshiny": boolean;
     "overwrite": boolean;
 }
+type ClustExpStatParsePyParametersTagged = Required<Pick<ClustExpStatParsePyParameters, '@type'>> & ClustExpStatParsePyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.ClustExp_StatParse.py": clust_exp_stat_parse_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.ClustExp_StatParse.py": clust_exp_stat_parse_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `clust_exp_stat_parse_py(...)`.
+ * Output object returned when calling `ClustExpStatParsePyParameters(...)`.
  *
  * @interface
  */
@@ -141,9 +108,9 @@ function clust_exp_stat_parse_py_params(
     session: string | null = null,
     noshiny: boolean = false,
     overwrite: boolean = false,
-): ClustExpStatParsePyParameters {
+): ClustExpStatParsePyParametersTagged {
     const params = {
-        "@type": "afni.ClustExp_StatParse.py" as const,
+        "@type": "afni/ClustExp_StatParse.py" as const,
         "statdset": statdset,
         "meanbrik": meanbrik,
         "threshbrik": threshbrik,
@@ -240,10 +207,10 @@ function clust_exp_stat_parse_py_cargs(
             (params["session"] ?? null)
         );
     }
-    if ((params["noshiny"] ?? null)) {
+    if ((params["noshiny"] ?? false)) {
         cargs.push("-NoShiny");
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("-overwrite");
     }
     return cargs;
@@ -355,7 +322,6 @@ function clust_exp_stat_parse_py(
 export {
       CLUST_EXP_STAT_PARSE_PY_METADATA,
       ClustExpStatParsePyOutputs,
-      ClustExpStatParsePyParameters,
       clust_exp_stat_parse_py,
       clust_exp_stat_parse_py_execute,
       clust_exp_stat_parse_py_params,

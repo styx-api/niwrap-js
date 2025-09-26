@@ -12,14 +12,15 @@ const VOLUME_STATS_METADATA: Metadata = {
 
 
 interface VolumeStatsRoiParameters {
-    "@type": "workbench.volume-stats.roi";
+    "@type"?: "roi";
     "roi_volume": InputPathType;
     "opt_match_maps": boolean;
 }
+type VolumeStatsRoiParametersTagged = Required<Pick<VolumeStatsRoiParameters, '@type'>> & VolumeStatsRoiParameters;
 
 
 interface VolumeStatsParameters {
-    "@type": "workbench.volume-stats";
+    "@type"?: "workbench/volume-stats";
     "volume_in": InputPathType;
     "opt_reduce_operation"?: string | null | undefined;
     "opt_percentile_percent"?: number | null | undefined;
@@ -27,40 +28,7 @@ interface VolumeStatsParameters {
     "roi"?: VolumeStatsRoiParameters | null | undefined;
     "opt_show_map_name": boolean;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-stats": volume_stats_cargs,
-        "workbench.volume-stats.roi": volume_stats_roi_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type VolumeStatsParametersTagged = Required<Pick<VolumeStatsParameters, '@type'>> & VolumeStatsParameters;
 
 
 /**
@@ -74,9 +42,9 @@ function dynOutputs(
 function volume_stats_roi_params(
     roi_volume: InputPathType,
     opt_match_maps: boolean = false,
-): VolumeStatsRoiParameters {
+): VolumeStatsRoiParametersTagged {
     const params = {
-        "@type": "workbench.volume-stats.roi" as const,
+        "@type": "roi" as const,
         "roi_volume": roi_volume,
         "opt_match_maps": opt_match_maps,
     };
@@ -99,7 +67,7 @@ function volume_stats_roi_cargs(
     const cargs: string[] = [];
     cargs.push("-roi");
     cargs.push(execution.inputFile((params["roi_volume"] ?? null)));
-    if ((params["opt_match_maps"] ?? null)) {
+    if ((params["opt_match_maps"] ?? false)) {
         cargs.push("-match-maps");
     }
     return cargs;
@@ -107,7 +75,7 @@ function volume_stats_roi_cargs(
 
 
 /**
- * Output object returned when calling `volume_stats(...)`.
+ * Output object returned when calling `VolumeStatsParameters(...)`.
  *
  * @interface
  */
@@ -138,9 +106,9 @@ function volume_stats_params(
     opt_subvolume_subvolume: string | null = null,
     roi: VolumeStatsRoiParameters | null = null,
     opt_show_map_name: boolean = false,
-): VolumeStatsParameters {
+): VolumeStatsParametersTagged {
     const params = {
-        "@type": "workbench.volume-stats" as const,
+        "@type": "workbench/volume-stats" as const,
         "volume_in": volume_in,
         "opt_show_map_name": opt_show_map_name,
     };
@@ -195,9 +163,9 @@ function volume_stats_cargs(
         );
     }
     if ((params["roi"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["roi"] ?? null)["@type"])((params["roi"] ?? null), execution));
+        cargs.push(...volume_stats_roi_cargs((params["roi"] ?? null), execution));
     }
-    if ((params["opt_show_map_name"] ?? null)) {
+    if ((params["opt_show_map_name"] ?? false)) {
         cargs.push("-show-map-name");
     }
     return cargs;
@@ -331,8 +299,6 @@ function volume_stats(
 export {
       VOLUME_STATS_METADATA,
       VolumeStatsOutputs,
-      VolumeStatsParameters,
-      VolumeStatsRoiParameters,
       volume_stats,
       volume_stats_execute,
       volume_stats_params,

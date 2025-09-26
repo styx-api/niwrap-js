@@ -12,7 +12,7 @@ const V_1D_SEM_METADATA: Metadata = {
 
 
 interface V1dSemParameters {
-    "@type": "afni.1dSEM";
+    "@type"?: "afni/1dSEM";
     "theta": InputPathType;
     "correlation_matrix": InputPathType;
     "residual_variance": InputPathType;
@@ -30,44 +30,11 @@ interface V1dSemParameters {
     "grow_all": boolean;
     "leafpicker": boolean;
 }
+type V1dSemParametersTagged = Required<Pick<V1dSemParameters, '@type'>> & V1dSemParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dSEM": v_1d_sem_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.1dSEM": v_1d_sem_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1d_sem(...)`.
+ * Output object returned when calling `V1dSemParameters(...)`.
  *
  * @interface
  */
@@ -122,9 +89,9 @@ function v_1d_sem_params(
     forest_growth: boolean = false,
     grow_all: boolean = false,
     leafpicker: boolean = false,
-): V1dSemParameters {
+): V1dSemParametersTagged {
     const params = {
-        "@type": "afni.1dSEM" as const,
+        "@type": "afni/1dSEM" as const,
         "theta": theta,
         "correlation_matrix": correlation_matrix,
         "residual_variance": residual_variance,
@@ -206,7 +173,7 @@ function v_1d_sem_cargs(
             ...(params["limits"] ?? null).map(String)
         );
     }
-    if ((params["calculate_cost"] ?? null)) {
+    if ((params["calculate_cost"] ?? false)) {
         cargs.push("-calccost");
     }
     if ((params["verbose"] ?? null) !== null) {
@@ -215,10 +182,10 @@ function v_1d_sem_cargs(
             String((params["verbose"] ?? null))
         );
     }
-    if ((params["tree_growth"] ?? null)) {
+    if ((params["tree_growth"] ?? false)) {
         cargs.push("-tree_growth");
     }
-    if ((params["model_search"] ?? null)) {
+    if ((params["model_search"] ?? false)) {
         cargs.push("-model_search");
     }
     if ((params["max_paths"] ?? null) !== null) {
@@ -233,13 +200,13 @@ function v_1d_sem_cargs(
             String((params["stop_cost"] ?? null))
         );
     }
-    if ((params["forest_growth"] ?? null)) {
+    if ((params["forest_growth"] ?? false)) {
         cargs.push("-forest_growth");
     }
-    if ((params["grow_all"] ?? null)) {
+    if ((params["grow_all"] ?? false)) {
         cargs.push("-grow_all");
     }
-    if ((params["leafpicker"] ?? null)) {
+    if ((params["leafpicker"] ?? false)) {
         cargs.push("-leafpicker");
     }
     return cargs;
@@ -349,7 +316,6 @@ function v_1d_sem(
 
 export {
       V1dSemOutputs,
-      V1dSemParameters,
       V_1D_SEM_METADATA,
       v_1d_sem,
       v_1d_sem_execute,

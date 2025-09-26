@@ -12,49 +12,16 @@ const FSLREORIENT2STD_METADATA: Metadata = {
 
 
 interface Fslreorient2stdParameters {
-    "@type": "fsl.fslreorient2std";
+    "@type"?: "fsl/fslreorient2std";
     "input_image": InputPathType;
     "output_image"?: string | null | undefined;
     "matrix_file"?: string | null | undefined;
 }
+type Fslreorient2stdParametersTagged = Required<Pick<Fslreorient2stdParameters, '@type'>> & Fslreorient2stdParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslreorient2std": fslreorient2std_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fslreorient2std": fslreorient2std_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslreorient2std(...)`.
+ * Output object returned when calling `Fslreorient2stdParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +54,9 @@ function fslreorient2std_params(
     input_image: InputPathType,
     output_image: string | null = null,
     matrix_file: string | null = null,
-): Fslreorient2stdParameters {
+): Fslreorient2stdParametersTagged {
     const params = {
-        "@type": "fsl.fslreorient2std" as const,
+        "@type": "fsl/fslreorient2std" as const,
         "input_image": input_image,
     };
     if (output_image !== null) {
@@ -209,7 +176,6 @@ function fslreorient2std(
 export {
       FSLREORIENT2STD_METADATA,
       Fslreorient2stdOutputs,
-      Fslreorient2stdParameters,
       fslreorient2std,
       fslreorient2std_execute,
       fslreorient2std_params,

@@ -12,50 +12,17 @@ const LABEL_GEOMETRY_MEASURES_METADATA: Metadata = {
 
 
 interface LabelGeometryMeasuresParameters {
-    "@type": "ants.LabelGeometryMeasures";
+    "@type"?: "ants/LabelGeometryMeasures";
     "image_dimension": number;
     "label_image": InputPathType;
     "intensity_image"?: string | null | undefined;
     "csv_file"?: InputPathType | null | undefined;
 }
+type LabelGeometryMeasuresParametersTagged = Required<Pick<LabelGeometryMeasuresParameters, '@type'>> & LabelGeometryMeasuresParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.LabelGeometryMeasures": label_geometry_measures_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.LabelGeometryMeasures": label_geometry_measures_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `label_geometry_measures(...)`.
+ * Output object returned when calling `LabelGeometryMeasuresParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function label_geometry_measures_params(
     label_image: InputPathType,
     intensity_image: string | null = null,
     csv_file: InputPathType | null = null,
-): LabelGeometryMeasuresParameters {
+): LabelGeometryMeasuresParametersTagged {
     const params = {
-        "@type": "ants.LabelGeometryMeasures" as const,
+        "@type": "ants/LabelGeometryMeasures" as const,
         "image_dimension": image_dimension,
         "label_image": label_image,
     };
@@ -208,7 +175,6 @@ function label_geometry_measures(
 export {
       LABEL_GEOMETRY_MEASURES_METADATA,
       LabelGeometryMeasuresOutputs,
-      LabelGeometryMeasuresParameters,
       label_geometry_measures,
       label_geometry_measures_execute,
       label_geometry_measures_params,

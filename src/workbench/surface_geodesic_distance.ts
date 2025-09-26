@@ -12,7 +12,7 @@ const SURFACE_GEODESIC_DISTANCE_METADATA: Metadata = {
 
 
 interface SurfaceGeodesicDistanceParameters {
-    "@type": "workbench.surface-geodesic-distance";
+    "@type"?: "workbench/surface-geodesic-distance";
     "surface": InputPathType;
     "vertex": number;
     "metric_out": string;
@@ -20,44 +20,11 @@ interface SurfaceGeodesicDistanceParameters {
     "opt_limit_limit_mm"?: number | null | undefined;
     "opt_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
+type SurfaceGeodesicDistanceParametersTagged = Required<Pick<SurfaceGeodesicDistanceParameters, '@type'>> & SurfaceGeodesicDistanceParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-geodesic-distance": surface_geodesic_distance_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-geodesic-distance": surface_geodesic_distance_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_geodesic_distance(...)`.
+ * Output object returned when calling `SurfaceGeodesicDistanceParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function surface_geodesic_distance_params(
     opt_naive: boolean = false,
     opt_limit_limit_mm: number | null = null,
     opt_corrected_areas_area_metric: InputPathType | null = null,
-): SurfaceGeodesicDistanceParameters {
+): SurfaceGeodesicDistanceParametersTagged {
     const params = {
-        "@type": "workbench.surface-geodesic-distance" as const,
+        "@type": "workbench/surface-geodesic-distance" as const,
         "surface": surface,
         "vertex": vertex,
         "metric_out": metric_out,
@@ -128,7 +95,7 @@ function surface_geodesic_distance_cargs(
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(String((params["vertex"] ?? null)));
     cargs.push((params["metric_out"] ?? null));
-    if ((params["opt_naive"] ?? null)) {
+    if ((params["opt_naive"] ?? false)) {
         cargs.push("-naive");
     }
     if ((params["opt_limit_limit_mm"] ?? null) !== null) {
@@ -243,7 +210,6 @@ function surface_geodesic_distance(
 export {
       SURFACE_GEODESIC_DISTANCE_METADATA,
       SurfaceGeodesicDistanceOutputs,
-      SurfaceGeodesicDistanceParameters,
       surface_geodesic_distance,
       surface_geodesic_distance_execute,
       surface_geodesic_distance_params,

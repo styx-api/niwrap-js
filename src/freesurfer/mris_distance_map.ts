@@ -12,48 +12,15 @@ const MRIS_DISTANCE_MAP_METADATA: Metadata = {
 
 
 interface MrisDistanceMapParameters {
-    "@type": "freesurfer.mris_distance_map";
+    "@type"?: "freesurfer/mris_distance_map";
     "input_surface_file": InputPathType;
     "output_scalar_field": string;
 }
+type MrisDistanceMapParametersTagged = Required<Pick<MrisDistanceMapParameters, '@type'>> & MrisDistanceMapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_distance_map": mris_distance_map_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_distance_map": mris_distance_map_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_distance_map(...)`.
+ * Output object returned when calling `MrisDistanceMapParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface MrisDistanceMapOutputs {
 function mris_distance_map_params(
     input_surface_file: InputPathType,
     output_scalar_field: string,
-): MrisDistanceMapParameters {
+): MrisDistanceMapParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_distance_map" as const,
+        "@type": "freesurfer/mris_distance_map" as const,
         "input_surface_file": input_surface_file,
         "output_scalar_field": output_scalar_field,
     };
@@ -186,7 +153,6 @@ function mris_distance_map(
 export {
       MRIS_DISTANCE_MAP_METADATA,
       MrisDistanceMapOutputs,
-      MrisDistanceMapParameters,
       mris_distance_map,
       mris_distance_map_execute,
       mris_distance_map_params,

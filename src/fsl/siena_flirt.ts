@@ -12,48 +12,15 @@ const SIENA_FLIRT_METADATA: Metadata = {
 
 
 interface SienaFlirtParameters {
-    "@type": "fsl.siena_flirt";
+    "@type"?: "fsl/siena_flirt";
     "input1_fileroot": string;
     "input2_fileroot": string;
 }
+type SienaFlirtParametersTagged = Required<Pick<SienaFlirtParameters, '@type'>> & SienaFlirtParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.siena_flirt": siena_flirt_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.siena_flirt": siena_flirt_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `siena_flirt(...)`.
+ * Output object returned when calling `SienaFlirtParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +51,9 @@ interface SienaFlirtOutputs {
 function siena_flirt_params(
     input1_fileroot: string,
     input2_fileroot: string,
-): SienaFlirtParameters {
+): SienaFlirtParametersTagged {
     const params = {
-        "@type": "fsl.siena_flirt" as const,
+        "@type": "fsl/siena_flirt" as const,
         "input1_fileroot": input1_fileroot,
         "input2_fileroot": input2_fileroot,
     };
@@ -191,7 +158,6 @@ function siena_flirt(
 export {
       SIENA_FLIRT_METADATA,
       SienaFlirtOutputs,
-      SienaFlirtParameters,
       siena_flirt,
       siena_flirt_execute,
       siena_flirt_params,

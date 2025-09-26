@@ -12,7 +12,7 @@ const MAKEROT_METADATA: Metadata = {
 
 
 interface MakerotParameters {
-    "@type": "fsl.makerot";
+    "@type"?: "fsl/makerot";
     "axis"?: string | null | undefined;
     "cov"?: InputPathType | null | undefined;
     "center"?: string | null | undefined;
@@ -21,44 +21,11 @@ interface MakerotParameters {
     "help_flag": boolean;
     "theta": number;
 }
+type MakerotParametersTagged = Required<Pick<MakerotParameters, '@type'>> & MakerotParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.makerot": makerot_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.makerot": makerot_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `makerot(...)`.
+ * Output object returned when calling `MakerotParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function makerot_params(
     output_file: string | null = null,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): MakerotParameters {
+): MakerotParametersTagged {
     const params = {
-        "@type": "fsl.makerot" as const,
+        "@type": "fsl/makerot" as const,
         "verbose_flag": verbose_flag,
         "help_flag": help_flag,
         "theta": theta,
@@ -156,10 +123,10 @@ function makerot_cargs(
             (params["output_file"] ?? null)
         );
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("--verbose");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
     cargs.push(
@@ -256,7 +223,6 @@ function makerot(
 export {
       MAKEROT_METADATA,
       MakerotOutputs,
-      MakerotParameters,
       makerot,
       makerot_execute,
       makerot_params,

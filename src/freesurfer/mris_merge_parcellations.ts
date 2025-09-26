@@ -12,49 +12,17 @@ const MRIS_MERGE_PARCELLATIONS_METADATA: Metadata = {
 
 
 interface MrisMergeParcellationsParameters {
-    "@type": "freesurfer.mris_merge_parcellations";
+    "@type"?: "freesurfer/mris_merge_parcellations";
     "surface": InputPathType;
     "label1": InputPathType;
     "label2": InputPathType;
     "annot_name"?: string | null | undefined;
 }
+type MrisMergeParcellationsParametersTagged = Required<Pick<MrisMergeParcellationsParameters, '@type'>> & MrisMergeParcellationsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_merge_parcellations": mris_merge_parcellations_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_merge_parcellations(...)`.
+ * Output object returned when calling `MrisMergeParcellationsParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function mris_merge_parcellations_params(
     label1: InputPathType,
     label2: InputPathType,
     annot_name: string | null = null,
-): MrisMergeParcellationsParameters {
+): MrisMergeParcellationsParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_merge_parcellations" as const,
+        "@type": "freesurfer/mris_merge_parcellations" as const,
         "surface": surface,
         "label1": label1,
         "label2": label2,
@@ -201,7 +169,6 @@ function mris_merge_parcellations(
 export {
       MRIS_MERGE_PARCELLATIONS_METADATA,
       MrisMergeParcellationsOutputs,
-      MrisMergeParcellationsParameters,
       mris_merge_parcellations,
       mris_merge_parcellations_execute,
       mris_merge_parcellations_params,

@@ -12,7 +12,7 @@ const CIFTI_ROI_AVERAGE_METADATA: Metadata = {
 
 
 interface CiftiRoiAverageParameters {
-    "@type": "workbench.cifti-roi-average";
+    "@type"?: "workbench/cifti-roi-average";
     "cifti_in": InputPathType;
     "text_out": string;
     "opt_cifti_roi_roi_cifti"?: InputPathType | null | undefined;
@@ -21,43 +21,11 @@ interface CiftiRoiAverageParameters {
     "opt_cerebellum_roi_roi_metric"?: InputPathType | null | undefined;
     "opt_vol_roi_roi_vol"?: InputPathType | null | undefined;
 }
+type CiftiRoiAverageParametersTagged = Required<Pick<CiftiRoiAverageParameters, '@type'>> & CiftiRoiAverageParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-roi-average": cifti_roi_average_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `cifti_roi_average(...)`.
+ * Output object returned when calling `CiftiRoiAverageParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +58,9 @@ function cifti_roi_average_params(
     opt_right_roi_roi_metric: InputPathType | null = null,
     opt_cerebellum_roi_roi_metric: InputPathType | null = null,
     opt_vol_roi_roi_vol: InputPathType | null = null,
-): CiftiRoiAverageParameters {
+): CiftiRoiAverageParametersTagged {
     const params = {
-        "@type": "workbench.cifti-roi-average" as const,
+        "@type": "workbench/cifti-roi-average" as const,
         "cifti_in": cifti_in,
         "text_out": text_out,
     };
@@ -255,7 +223,6 @@ function cifti_roi_average(
 export {
       CIFTI_ROI_AVERAGE_METADATA,
       CiftiRoiAverageOutputs,
-      CiftiRoiAverageParameters,
       cifti_roi_average,
       cifti_roi_average_execute,
       cifti_roi_average_params,

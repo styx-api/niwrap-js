@@ -12,7 +12,7 @@ const MRI_RF_LONG_TRAIN_METADATA: Metadata = {
 
 
 interface MriRfLongTrainParameters {
-    "@type": "freesurfer.mri_rf_long_train";
+    "@type"?: "freesurfer/mri_rf_long_train";
     "seg_dir": string;
     "xform": string;
     "mask"?: string | null | undefined;
@@ -23,44 +23,11 @@ interface MriRfLongTrainParameters {
     "subjects": Array<string>;
     "output_rfa": string;
 }
+type MriRfLongTrainParametersTagged = Required<Pick<MriRfLongTrainParameters, '@type'>> & MriRfLongTrainParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_rf_long_train": mri_rf_long_train_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_rf_long_train": mri_rf_long_train_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_rf_long_train(...)`.
+ * Output object returned when calling `MriRfLongTrainParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function mri_rf_long_train_params(
     prior_spacing: number | null = null,
     input_data: Array<string> | null = null,
     check: boolean = false,
-): MriRfLongTrainParameters {
+): MriRfLongTrainParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_rf_long_train" as const,
+        "@type": "freesurfer/mri_rf_long_train" as const,
         "seg_dir": seg_dir,
         "xform": xform,
         "check": check,
@@ -172,7 +139,7 @@ function mri_rf_long_train_cargs(
             ...(params["input_data"] ?? null)
         );
     }
-    if ((params["check"] ?? null)) {
+    if ((params["check"] ?? false)) {
         cargs.push("-check");
     }
     cargs.push(...(params["subjects"] ?? null));
@@ -271,7 +238,6 @@ function mri_rf_long_train(
 export {
       MRI_RF_LONG_TRAIN_METADATA,
       MriRfLongTrainOutputs,
-      MriRfLongTrainParameters,
       mri_rf_long_train,
       mri_rf_long_train_execute,
       mri_rf_long_train_params,

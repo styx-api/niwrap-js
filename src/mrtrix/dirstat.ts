@@ -12,21 +12,23 @@ const DIRSTAT_METADATA: Metadata = {
 
 
 interface DirstatFslgradParameters {
-    "@type": "mrtrix.dirstat.fslgrad";
+    "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
+type DirstatFslgradParametersTagged = Required<Pick<DirstatFslgradParameters, '@type'>> & DirstatFslgradParameters;
 
 
 interface DirstatConfigParameters {
-    "@type": "mrtrix.dirstat.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type DirstatConfigParametersTagged = Required<Pick<DirstatConfigParameters, '@type'>> & DirstatConfigParameters;
 
 
 interface DirstatParameters {
-    "@type": "mrtrix.dirstat";
+    "@type"?: "mrtrix/dirstat";
     "output"?: string | null | undefined;
     "shells"?: Array<number> | null | undefined;
     "grad"?: InputPathType | null | undefined;
@@ -41,41 +43,7 @@ interface DirstatParameters {
     "version": boolean;
     "dirs": InputPathType;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.dirstat": dirstat_cargs,
-        "mrtrix.dirstat.fslgrad": dirstat_fslgrad_cargs,
-        "mrtrix.dirstat.config": dirstat_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type DirstatParametersTagged = Required<Pick<DirstatParameters, '@type'>> & DirstatParameters;
 
 
 /**
@@ -89,9 +57,9 @@ function dynOutputs(
 function dirstat_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
-): DirstatFslgradParameters {
+): DirstatFslgradParametersTagged {
     const params = {
-        "@type": "mrtrix.dirstat.fslgrad" as const,
+        "@type": "fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -130,9 +98,9 @@ function dirstat_fslgrad_cargs(
 function dirstat_config_params(
     key: string,
     value: string,
-): DirstatConfigParameters {
+): DirstatConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.dirstat.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -161,7 +129,7 @@ function dirstat_config_cargs(
 
 
 /**
- * Output object returned when calling `dirstat(...)`.
+ * Output object returned when calling `DirstatParameters(...)`.
  *
  * @interface
  */
@@ -207,9 +175,9 @@ function dirstat_params(
     config: Array<DirstatConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): DirstatParameters {
+): DirstatParametersTagged {
     const params = {
-        "@type": "mrtrix.dirstat" as const,
+        "@type": "mrtrix/dirstat" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -273,18 +241,18 @@ function dirstat_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
+        cargs.push(...dirstat_fslgrad_cargs((params["fslgrad"] ?? null), execution));
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -294,12 +262,12 @@ function dirstat_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dirstat_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["dirs"] ?? null)));
@@ -456,10 +424,7 @@ function dirstat(
 
 export {
       DIRSTAT_METADATA,
-      DirstatConfigParameters,
-      DirstatFslgradParameters,
       DirstatOutputs,
-      DirstatParameters,
       dirstat,
       dirstat_config_params,
       dirstat_execute,

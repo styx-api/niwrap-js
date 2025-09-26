@@ -12,48 +12,15 @@ const REG_AVERAGE_METADATA: Metadata = {
 
 
 interface RegAverageParameters {
-    "@type": "niftyreg.reg_average";
+    "@type"?: "niftyreg/reg_average";
     "output_file": string;
     "input_files": Array<InputPathType>;
 }
+type RegAverageParametersTagged = Required<Pick<RegAverageParameters, '@type'>> & RegAverageParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "niftyreg.reg_average": reg_average_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "niftyreg.reg_average": reg_average_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `reg_average(...)`.
+ * Output object returned when calling `RegAverageParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface RegAverageOutputs {
 function reg_average_params(
     output_file: string,
     input_files: Array<InputPathType>,
-): RegAverageParameters {
+): RegAverageParametersTagged {
     const params = {
-        "@type": "niftyreg.reg_average" as const,
+        "@type": "niftyreg/reg_average" as const,
         "output_file": output_file,
         "input_files": input_files,
     };
@@ -186,7 +153,6 @@ function reg_average(
 export {
       REG_AVERAGE_METADATA,
       RegAverageOutputs,
-      RegAverageParameters,
       reg_average,
       reg_average_execute,
       reg_average_params,

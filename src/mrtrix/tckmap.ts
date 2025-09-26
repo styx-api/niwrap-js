@@ -12,31 +12,34 @@ const TCKMAP_METADATA: Metadata = {
 
 
 interface TckmapVariousStringParameters {
-    "@type": "mrtrix.tckmap.VariousString";
+    "@type"?: "VariousString";
     "obj": string;
 }
+type TckmapVariousStringParametersTagged = Required<Pick<TckmapVariousStringParameters, '@type'>> & TckmapVariousStringParameters;
 
 
 interface TckmapVariousFileParameters {
-    "@type": "mrtrix.tckmap.VariousFile";
+    "@type"?: "VariousFile";
     "obj": InputPathType;
 }
+type TckmapVariousFileParametersTagged = Required<Pick<TckmapVariousFileParameters, '@type'>> & TckmapVariousFileParameters;
 
 
 interface TckmapConfigParameters {
-    "@type": "mrtrix.tckmap.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type TckmapConfigParametersTagged = Required<Pick<TckmapConfigParameters, '@type'>> & TckmapConfigParameters;
 
 
 interface TckmapParameters {
-    "@type": "mrtrix.tckmap";
+    "@type"?: "mrtrix/tckmap";
     "template"?: InputPathType | null | undefined;
     "vox"?: Array<number> | null | undefined;
     "datatype"?: string | null | undefined;
     "dec": boolean;
-    "dixel"?: TckmapVariousStringParameters | TckmapVariousFileParameters | null | undefined;
+    "dixel"?: TckmapVariousStringParametersTagged | TckmapVariousFileParametersTagged | null | undefined;
     "tod"?: number | null | undefined;
     "contrast"?: string | null | undefined;
     "image"?: InputPathType | null | undefined;
@@ -61,6 +64,7 @@ interface TckmapParameters {
     "tracks": InputPathType;
     "output": string;
 }
+type TckmapParametersTagged = Required<Pick<TckmapParameters, '@type'>> & TckmapParameters;
 
 
 /**
@@ -70,14 +74,12 @@ interface TckmapParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function tckmap_dixel_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "mrtrix.tckmap": tckmap_cargs,
-        "mrtrix.tckmap.VariousString": tckmap_various_string_cargs,
-        "mrtrix.tckmap.VariousFile": tckmap_various_file_cargs,
-        "mrtrix.tckmap.config": tckmap_config_cargs,
+        "VariousString": tckmap_various_string_cargs,
+        "VariousFile": tckmap_various_file_cargs,
     };
     return cargsFuncs[t];
 }
@@ -90,11 +92,10 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function tckmap_dixel_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "mrtrix.tckmap": tckmap_outputs,
     };
     return outputsFuncs[t];
 }
@@ -109,9 +110,9 @@ function dynOutputs(
  */
 function tckmap_various_string_params(
     obj: string,
-): TckmapVariousStringParameters {
+): TckmapVariousStringParametersTagged {
     const params = {
-        "@type": "mrtrix.tckmap.VariousString" as const,
+        "@type": "VariousString" as const,
         "obj": obj,
     };
     return params;
@@ -145,9 +146,9 @@ function tckmap_various_string_cargs(
  */
 function tckmap_various_file_params(
     obj: InputPathType,
-): TckmapVariousFileParameters {
+): TckmapVariousFileParametersTagged {
     const params = {
-        "@type": "mrtrix.tckmap.VariousFile" as const,
+        "@type": "VariousFile" as const,
         "obj": obj,
     };
     return params;
@@ -183,9 +184,9 @@ function tckmap_various_file_cargs(
 function tckmap_config_params(
     key: string,
     value: string,
-): TckmapConfigParameters {
+): TckmapConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.tckmap.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -214,7 +215,7 @@ function tckmap_config_cargs(
 
 
 /**
- * Output object returned when calling `tckmap(...)`.
+ * Output object returned when calling `TckmapParameters(...)`.
  *
  * @interface
  */
@@ -276,7 +277,7 @@ function tckmap_params(
     vox: Array<number> | null = null,
     datatype: string | null = null,
     dec: boolean = false,
-    dixel: TckmapVariousStringParameters | TckmapVariousFileParameters | null = null,
+    dixel: TckmapVariousStringParametersTagged | TckmapVariousFileParametersTagged | null = null,
     tod: number | null = null,
     contrast: string | null = null,
     image: InputPathType | null = null,
@@ -298,9 +299,9 @@ function tckmap_params(
     config: Array<TckmapConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TckmapParameters {
+): TckmapParametersTagged {
     const params = {
-        "@type": "mrtrix.tckmap" as const,
+        "@type": "mrtrix/tckmap" as const,
         "dec": dec,
         "map_zero": map_zero,
         "backtrack": backtrack,
@@ -396,13 +397,13 @@ function tckmap_cargs(
             (params["datatype"] ?? null)
         );
     }
-    if ((params["dec"] ?? null)) {
+    if ((params["dec"] ?? false)) {
         cargs.push("-dec");
     }
     if ((params["dixel"] ?? null) !== null) {
         cargs.push(
             "-dixel",
-            ...dynCargs((params["dixel"] ?? null)["@type"])((params["dixel"] ?? null), execution)
+            ...tckmap_dixel_cargs_dyn_fn((params["dixel"] ?? null)["@type"])((params["dixel"] ?? null), execution)
         );
     }
     if ((params["tod"] ?? null) !== null) {
@@ -447,10 +448,10 @@ function tckmap_cargs(
             String((params["fwhm_tck"] ?? null))
         );
     }
-    if ((params["map_zero"] ?? null)) {
+    if ((params["map_zero"] ?? false)) {
         cargs.push("-map_zero");
     }
-    if ((params["backtrack"] ?? null)) {
+    if ((params["backtrack"] ?? false)) {
         cargs.push("-backtrack");
     }
     if ((params["upsample"] ?? null) !== null) {
@@ -459,10 +460,10 @@ function tckmap_cargs(
             String((params["upsample"] ?? null))
         );
     }
-    if ((params["precise"] ?? null)) {
+    if ((params["precise"] ?? false)) {
         cargs.push("-precise");
     }
-    if ((params["ends_only"] ?? null)) {
+    if ((params["ends_only"] ?? false)) {
         cargs.push("-ends_only");
     }
     if ((params["tck_weights_in"] ?? null) !== null) {
@@ -471,16 +472,16 @@ function tckmap_cargs(
             execution.inputFile((params["tck_weights_in"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -490,12 +491,12 @@ function tckmap_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => tckmap_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["tracks"] ?? null)));
@@ -655,7 +656,7 @@ function tckmap(
     vox: Array<number> | null = null,
     datatype: string | null = null,
     dec: boolean = false,
-    dixel: TckmapVariousStringParameters | TckmapVariousFileParameters | null = null,
+    dixel: TckmapVariousStringParametersTagged | TckmapVariousFileParametersTagged | null = null,
     tod: number | null = null,
     contrast: string | null = null,
     image: InputPathType | null = null,
@@ -686,11 +687,7 @@ function tckmap(
 
 export {
       TCKMAP_METADATA,
-      TckmapConfigParameters,
       TckmapOutputs,
-      TckmapParameters,
-      TckmapVariousFileParameters,
-      TckmapVariousStringParameters,
       tckmap,
       tckmap_config_params,
       tckmap_execute,

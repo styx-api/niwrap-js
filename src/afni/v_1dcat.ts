@@ -12,7 +12,7 @@ const V_1DCAT_METADATA: Metadata = {
 
 
 interface V1dcatParameters {
-    "@type": "afni.1dcat";
+    "@type"?: "afni/1dcat";
     "input_files": Array<InputPathType>;
     "tsv_output": boolean;
     "csv_output": boolean;
@@ -23,44 +23,11 @@ interface V1dcatParameters {
     "column_row_selection"?: string | null | undefined;
     "ok_empty": boolean;
 }
+type V1dcatParametersTagged = Required<Pick<V1dcatParameters, '@type'>> & V1dcatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dcat": v_1dcat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.1dcat": v_1dcat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1dcat(...)`.
+ * Output object returned when calling `V1dcatParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function v_1dcat_params(
     stack_output: boolean = false,
     column_row_selection: string | null = null,
     ok_empty: boolean = false,
-): V1dcatParameters {
+): V1dcatParametersTagged {
     const params = {
-        "@type": "afni.1dcat" as const,
+        "@type": "afni/1dcat" as const,
         "input_files": input_files,
         "tsv_output": tsv_output,
         "csv_output": csv_output,
@@ -137,16 +104,16 @@ function v_1dcat_cargs(
     const cargs: string[] = [];
     cargs.push("1dcat");
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
-    if ((params["tsv_output"] ?? null)) {
+    if ((params["tsv_output"] ?? false)) {
         cargs.push("-tsvout");
     }
-    if ((params["csv_output"] ?? null)) {
+    if ((params["csv_output"] ?? false)) {
         cargs.push("-csvout");
     }
-    if ((params["nonconst_output"] ?? null)) {
+    if ((params["nonconst_output"] ?? false)) {
         cargs.push("-nonconst");
     }
-    if ((params["nonfixed_output"] ?? null)) {
+    if ((params["nonfixed_output"] ?? false)) {
         cargs.push("-nonfixed");
     }
     if ((params["number_format"] ?? null) !== null) {
@@ -155,7 +122,7 @@ function v_1dcat_cargs(
             (params["number_format"] ?? null)
         );
     }
-    if ((params["stack_output"] ?? null)) {
+    if ((params["stack_output"] ?? false)) {
         cargs.push("-stack");
     }
     if ((params["column_row_selection"] ?? null) !== null) {
@@ -164,7 +131,7 @@ function v_1dcat_cargs(
             (params["column_row_selection"] ?? null)
         );
     }
-    if ((params["ok_empty"] ?? null)) {
+    if ((params["ok_empty"] ?? false)) {
         cargs.push("-OKempty");
     }
     return cargs;
@@ -260,7 +227,6 @@ function v_1dcat(
 
 export {
       V1dcatOutputs,
-      V1dcatParameters,
       V_1DCAT_METADATA,
       v_1dcat,
       v_1dcat_execute,

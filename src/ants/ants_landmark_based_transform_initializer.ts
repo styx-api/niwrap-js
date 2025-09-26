@@ -12,7 +12,7 @@ const ANTS_LANDMARK_BASED_TRANSFORM_INITIALIZER_METADATA: Metadata = {
 
 
 interface AntsLandmarkBasedTransformInitializerParameters {
-    "@type": "ants.antsLandmarkBasedTransformInitializer";
+    "@type"?: "ants/antsLandmarkBasedTransformInitializer";
     "dimension": number;
     "fixed_image": InputPathType;
     "moving_image": InputPathType;
@@ -24,44 +24,11 @@ interface AntsLandmarkBasedTransformInitializerParameters {
     "enforce_stationary_boundaries"?: 0 | 1 | null | undefined;
     "landmark_weights"?: InputPathType | null | undefined;
 }
+type AntsLandmarkBasedTransformInitializerParametersTagged = Required<Pick<AntsLandmarkBasedTransformInitializerParameters, '@type'>> & AntsLandmarkBasedTransformInitializerParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.antsLandmarkBasedTransformInitializer": ants_landmark_based_transform_initializer_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.antsLandmarkBasedTransformInitializer": ants_landmark_based_transform_initializer_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ants_landmark_based_transform_initializer(...)`.
+ * Output object returned when calling `AntsLandmarkBasedTransformInitializerParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function ants_landmark_based_transform_initializer_params(
     order: number | null = null,
     enforce_stationary_boundaries: 0 | 1 | null = null,
     landmark_weights: InputPathType | null = null,
-): AntsLandmarkBasedTransformInitializerParameters {
+): AntsLandmarkBasedTransformInitializerParametersTagged {
     const params = {
-        "@type": "ants.antsLandmarkBasedTransformInitializer" as const,
+        "@type": "ants/antsLandmarkBasedTransformInitializer" as const,
         "dimension": dimension,
         "fixed_image": fixed_image,
         "moving_image": moving_image,
@@ -262,7 +229,6 @@ function ants_landmark_based_transform_initializer(
 export {
       ANTS_LANDMARK_BASED_TRANSFORM_INITIALIZER_METADATA,
       AntsLandmarkBasedTransformInitializerOutputs,
-      AntsLandmarkBasedTransformInitializerParameters,
       ants_landmark_based_transform_initializer,
       ants_landmark_based_transform_initializer_execute,
       ants_landmark_based_transform_initializer_params,

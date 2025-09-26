@@ -12,47 +12,15 @@ const BASIL_VAR_METADATA: Metadata = {
 
 
 interface BasilVarParameters {
-    "@type": "fsl.basil_var";
+    "@type"?: "fsl/basil_var";
     "results_dir": string;
     "mask_image": InputPathType;
 }
+type BasilVarParametersTagged = Required<Pick<BasilVarParameters, '@type'>> & BasilVarParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.basil_var": basil_var_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `basil_var(...)`.
+ * Output object returned when calling `BasilVarParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface BasilVarOutputs {
 function basil_var_params(
     results_dir: string,
     mask_image: InputPathType,
-): BasilVarParameters {
+): BasilVarParametersTagged {
     const params = {
-        "@type": "fsl.basil_var" as const,
+        "@type": "fsl/basil_var" as const,
         "results_dir": results_dir,
         "mask_image": mask_image,
     };
@@ -186,7 +154,6 @@ function basil_var(
 export {
       BASIL_VAR_METADATA,
       BasilVarOutputs,
-      BasilVarParameters,
       basil_var,
       basil_var_execute,
       basil_var_params,

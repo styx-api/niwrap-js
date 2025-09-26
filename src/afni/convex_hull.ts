@@ -12,7 +12,7 @@ const CONVEX_HULL_METADATA: Metadata = {
 
 
 interface ConvexHullParameters {
-    "@type": "afni.ConvexHull";
+    "@type"?: "afni/ConvexHull";
     "vol"?: InputPathType | null | undefined;
     "isoval"?: number | null | undefined;
     "isorange"?: Array<number> | null | undefined;
@@ -30,44 +30,11 @@ interface ConvexHullParameters {
     "novolreg": boolean;
     "setenv"?: string | null | undefined;
 }
+type ConvexHullParametersTagged = Required<Pick<ConvexHullParameters, '@type'>> & ConvexHullParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.ConvexHull": convex_hull_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.ConvexHull": convex_hull_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `convex_hull(...)`.
+ * Output object returned when calling `ConvexHullParameters(...)`.
  *
  * @interface
  */
@@ -122,9 +89,9 @@ function convex_hull_params(
     debug: string | null = null,
     novolreg: boolean = false,
     setenv: string | null = null,
-): ConvexHullParameters {
+): ConvexHullParametersTagged {
     const params = {
-        "@type": "afni.ConvexHull" as const,
+        "@type": "afni/ConvexHull" as const,
         "proj_xy": proj_xy,
         "orig_coord": orig_coord,
         "novolreg": novolreg,
@@ -240,10 +207,10 @@ function convex_hull_cargs(
             (params["q_opt"] ?? null)
         );
     }
-    if ((params["proj_xy"] ?? null)) {
+    if ((params["proj_xy"] ?? false)) {
         cargs.push("-proj_xy");
     }
-    if ((params["orig_coord"] ?? null)) {
+    if ((params["orig_coord"] ?? false)) {
         cargs.push("-orig_coord");
     }
     if ((params["these_coords"] ?? null) !== null) {
@@ -264,7 +231,7 @@ function convex_hull_cargs(
             (params["debug"] ?? null)
         );
     }
-    if ((params["novolreg"] ?? null)) {
+    if ((params["novolreg"] ?? false)) {
         cargs.push("-novolreg");
     }
     if ((params["setenv"] ?? null) !== null) {
@@ -381,7 +348,6 @@ function convex_hull(
 export {
       CONVEX_HULL_METADATA,
       ConvexHullOutputs,
-      ConvexHullParameters,
       convex_hull,
       convex_hull_execute,
       convex_hull_params,

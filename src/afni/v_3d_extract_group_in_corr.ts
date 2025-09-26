@@ -12,48 +12,15 @@ const V_3D_EXTRACT_GROUP_IN_CORR_METADATA: Metadata = {
 
 
 interface V3dExtractGroupInCorrParameters {
-    "@type": "afni.3dExtractGroupInCorr";
+    "@type"?: "afni/3dExtractGroupInCorr";
     "group_in_corr_file": InputPathType;
     "prefix"?: string | null | undefined;
 }
+type V3dExtractGroupInCorrParametersTagged = Required<Pick<V3dExtractGroupInCorrParameters, '@type'>> & V3dExtractGroupInCorrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dExtractGroupInCorr": v_3d_extract_group_in_corr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dExtractGroupInCorr": v_3d_extract_group_in_corr_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_extract_group_in_corr(...)`.
+ * Output object returned when calling `V3dExtractGroupInCorrParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface V3dExtractGroupInCorrOutputs {
 function v_3d_extract_group_in_corr_params(
     group_in_corr_file: InputPathType,
     prefix: string | null = null,
-): V3dExtractGroupInCorrParameters {
+): V3dExtractGroupInCorrParametersTagged {
     const params = {
-        "@type": "afni.3dExtractGroupInCorr" as const,
+        "@type": "afni/3dExtractGroupInCorr" as const,
         "group_in_corr_file": group_in_corr_file,
     };
     if (prefix !== null) {
@@ -192,7 +159,6 @@ function v_3d_extract_group_in_corr(
 
 export {
       V3dExtractGroupInCorrOutputs,
-      V3dExtractGroupInCorrParameters,
       V_3D_EXTRACT_GROUP_IN_CORR_METADATA,
       v_3d_extract_group_in_corr,
       v_3d_extract_group_in_corr_execute,

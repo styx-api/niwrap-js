@@ -12,7 +12,7 @@ const RTVIEW_METADATA: Metadata = {
 
 
 interface RtviewParameters {
-    "@type": "freesurfer.rtview";
+    "@type"?: "freesurfer/rtview";
     "subject"?: string | null | undefined;
     "hemi"?: string | null | undefined;
     "left_hemi": boolean;
@@ -28,43 +28,11 @@ interface RtviewParameters {
     "tcl_file"?: InputPathType | null | undefined;
     "no_cleanup": boolean;
 }
+type RtviewParametersTagged = Required<Pick<RtviewParameters, '@type'>> & RtviewParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.rtview": rtview_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `rtview(...)`.
+ * Output object returned when calling `RtviewParameters(...)`.
  *
  * @interface
  */
@@ -111,9 +79,9 @@ function rtview_params(
     patch: string | null = null,
     tcl_file: InputPathType | null = null,
     no_cleanup: boolean = false,
-): RtviewParameters {
+): RtviewParametersTagged {
     const params = {
-        "@type": "freesurfer.rtview" as const,
+        "@type": "freesurfer/rtview" as const,
         "left_hemi": left_hemi,
         "right_hemi": right_hemi,
         "eccen": eccen,
@@ -175,16 +143,16 @@ function rtview_cargs(
             (params["hemi"] ?? null)
         );
     }
-    if ((params["left_hemi"] ?? null)) {
+    if ((params["left_hemi"] ?? false)) {
         cargs.push("--lh");
     }
-    if ((params["right_hemi"] ?? null)) {
+    if ((params["right_hemi"] ?? false)) {
         cargs.push("--rh");
     }
-    if ((params["eccen"] ?? null)) {
+    if ((params["eccen"] ?? false)) {
         cargs.push("--eccen");
     }
-    if ((params["polar"] ?? null)) {
+    if ((params["polar"] ?? false)) {
         cargs.push("--polar");
     }
     if ((params["real_file"] ?? null) !== null) {
@@ -211,7 +179,7 @@ function rtview_cargs(
             execution.inputFile((params["reg_file"] ?? null))
         );
     }
-    if ((params["flat_display"] ?? null)) {
+    if ((params["flat_display"] ?? false)) {
         cargs.push("--flat");
     }
     if ((params["patch"] ?? null) !== null) {
@@ -226,7 +194,7 @@ function rtview_cargs(
             execution.inputFile((params["tcl_file"] ?? null))
         );
     }
-    if ((params["no_cleanup"] ?? null)) {
+    if ((params["no_cleanup"] ?? false)) {
         cargs.push("--no-cleanup");
     }
     return cargs;
@@ -332,7 +300,6 @@ function rtview(
 export {
       RTVIEW_METADATA,
       RtviewOutputs,
-      RtviewParameters,
       rtview,
       rtview_execute,
       rtview_params,

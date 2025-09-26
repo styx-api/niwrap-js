@@ -12,7 +12,7 @@ const V_3DROTATE_METADATA: Metadata = {
 
 
 interface V3drotateParameters {
-    "@type": "afni.3drotate";
+    "@type"?: "afni/3drotate";
     "dataset": InputPathType;
     "prefix"?: string | null | undefined;
     "verbose": boolean;
@@ -39,44 +39,11 @@ interface V3drotateParameters {
     "noclip": boolean;
     "zpad"?: number | null | undefined;
 }
+type V3drotateParametersTagged = Required<Pick<V3drotateParameters, '@type'>> & V3drotateParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3drotate": v_3drotate_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3drotate": v_3drotate_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3drotate(...)`.
+ * Output object returned when calling `V3drotateParameters(...)`.
  *
  * @interface
  */
@@ -153,9 +120,9 @@ function v_3drotate_params(
     clipit: boolean = false,
     noclip: boolean = false,
     zpad: number | null = null,
-): V3drotateParameters {
+): V3drotateParametersTagged {
     const params = {
-        "@type": "afni.3drotate" as const,
+        "@type": "afni/3drotate" as const,
         "dataset": dataset,
         "verbose": verbose,
         "points": points,
@@ -233,7 +200,7 @@ function v_3drotate_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verbose");
     }
     if ((params["ashift"] ?? null) !== null) {
@@ -296,7 +263,7 @@ function v_3drotate_cargs(
             execution.inputFile((params["1Dfile"] ?? null))
         );
     }
-    if ((params["points"] ?? null)) {
+    if ((params["points"] ?? false)) {
         cargs.push("-points");
     }
     if ((params["origin"] ?? null) !== null) {
@@ -305,31 +272,31 @@ function v_3drotate_cargs(
             ...(params["origin"] ?? null).map(String)
         );
     }
-    if ((params["Fourier"] ?? null)) {
+    if ((params["Fourier"] ?? false)) {
         cargs.push("-Fourier");
     }
-    if ((params["NN"] ?? null)) {
+    if ((params["NN"] ?? false)) {
         cargs.push("-NN");
     }
-    if ((params["linear"] ?? null)) {
+    if ((params["linear"] ?? false)) {
         cargs.push("-linear");
     }
-    if ((params["cubic"] ?? null)) {
+    if ((params["cubic"] ?? false)) {
         cargs.push("-cubic");
     }
-    if ((params["quintic"] ?? null)) {
+    if ((params["quintic"] ?? false)) {
         cargs.push("-quintic");
     }
-    if ((params["heptic"] ?? null)) {
+    if ((params["heptic"] ?? false)) {
         cargs.push("-heptic");
     }
-    if ((params["Fourier_nopad"] ?? null)) {
+    if ((params["Fourier_nopad"] ?? false)) {
         cargs.push("-Fourier_nopad");
     }
-    if ((params["clipit"] ?? null)) {
+    if ((params["clipit"] ?? false)) {
         cargs.push("-clipit");
     }
-    if ((params["noclip"] ?? null)) {
+    if ((params["noclip"] ?? false)) {
         cargs.push("-noclip");
     }
     if ((params["zpad"] ?? null) !== null) {
@@ -464,7 +431,6 @@ function v_3drotate(
 
 export {
       V3drotateOutputs,
-      V3drotateParameters,
       V_3DROTATE_METADATA,
       v_3drotate,
       v_3drotate_execute,

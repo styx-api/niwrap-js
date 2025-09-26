@@ -12,7 +12,7 @@ const AIV_METADATA: Metadata = {
 
 
 interface AivParameters {
-    "@type": "afni.aiv";
+    "@type"?: "afni/aiv";
     "verbose": boolean;
     "quiet": boolean;
     "title"?: string | null | undefined;
@@ -20,43 +20,11 @@ interface AivParameters {
     "pad"?: string | null | undefined;
     "input_images": Array<InputPathType>;
 }
+type AivParametersTagged = Required<Pick<AivParameters, '@type'>> & AivParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.aiv": aiv_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `aiv(...)`.
+ * Output object returned when calling `AivParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function aiv_params(
     title: string | null = null,
     port: number | null = null,
     pad: string | null = null,
-): AivParameters {
+): AivParametersTagged {
     const params = {
-        "@type": "afni.aiv" as const,
+        "@type": "afni/aiv" as const,
         "verbose": verbose,
         "quiet": quiet,
         "input_images": input_images,
@@ -121,10 +89,10 @@ function aiv_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("aiv");
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-q");
     }
     if ((params["title"] ?? null) !== null) {
@@ -233,7 +201,6 @@ function aiv(
 export {
       AIV_METADATA,
       AivOutputs,
-      AivParameters,
       aiv,
       aiv_execute,
       aiv_params,

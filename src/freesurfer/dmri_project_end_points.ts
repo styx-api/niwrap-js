@@ -12,7 +12,7 @@ const DMRI_PROJECT_END_POINTS_METADATA: Metadata = {
 
 
 interface DmriProjectEndPointsParameters {
-    "@type": "freesurfer.dmri_projectEndPoints";
+    "@type"?: "freesurfer/dmri_projectEndPoints";
     "streamline_file": InputPathType;
     "left_surface_file": InputPathType;
     "right_surface_file": InputPathType;
@@ -20,44 +20,11 @@ interface DmriProjectEndPointsParameters {
     "right_overlay_file": string;
     "reference_image": InputPathType;
 }
+type DmriProjectEndPointsParametersTagged = Required<Pick<DmriProjectEndPointsParameters, '@type'>> & DmriProjectEndPointsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dmri_projectEndPoints": dmri_project_end_points_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.dmri_projectEndPoints": dmri_project_end_points_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dmri_project_end_points(...)`.
+ * Output object returned when calling `DmriProjectEndPointsParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +63,9 @@ function dmri_project_end_points_params(
     left_overlay_file: string,
     right_overlay_file: string,
     reference_image: InputPathType,
-): DmriProjectEndPointsParameters {
+): DmriProjectEndPointsParametersTagged {
     const params = {
-        "@type": "freesurfer.dmri_projectEndPoints" as const,
+        "@type": "freesurfer/dmri_projectEndPoints" as const,
         "streamline_file": streamline_file,
         "left_surface_file": left_surface_file,
         "right_surface_file": right_surface_file,
@@ -237,7 +204,6 @@ function dmri_project_end_points(
 export {
       DMRI_PROJECT_END_POINTS_METADATA,
       DmriProjectEndPointsOutputs,
-      DmriProjectEndPointsParameters,
       dmri_project_end_points,
       dmri_project_end_points_execute,
       dmri_project_end_points_params,

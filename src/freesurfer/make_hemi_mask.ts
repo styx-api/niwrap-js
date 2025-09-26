@@ -12,49 +12,16 @@ const MAKE_HEMI_MASK_METADATA: Metadata = {
 
 
 interface MakeHemiMaskParameters {
-    "@type": "freesurfer.make_hemi_mask";
+    "@type"?: "freesurfer/make_hemi_mask";
     "hemi": string;
     "input_file": InputPathType;
     "output_file": string;
 }
+type MakeHemiMaskParametersTagged = Required<Pick<MakeHemiMaskParameters, '@type'>> & MakeHemiMaskParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.make_hemi_mask": make_hemi_mask_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.make_hemi_mask": make_hemi_mask_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `make_hemi_mask(...)`.
+ * Output object returned when calling `MakeHemiMaskParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function make_hemi_mask_params(
     hemi: string,
     input_file: InputPathType,
     output_file: string,
-): MakeHemiMaskParameters {
+): MakeHemiMaskParametersTagged {
     const params = {
-        "@type": "freesurfer.make_hemi_mask" as const,
+        "@type": "freesurfer/make_hemi_mask" as const,
         "hemi": hemi,
         "input_file": input_file,
         "output_file": output_file,
@@ -193,7 +160,6 @@ function make_hemi_mask(
 export {
       MAKE_HEMI_MASK_METADATA,
       MakeHemiMaskOutputs,
-      MakeHemiMaskParameters,
       make_hemi_mask,
       make_hemi_mask_execute,
       make_hemi_mask_params,

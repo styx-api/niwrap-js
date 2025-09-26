@@ -12,7 +12,7 @@ const FABBER_T1_METADATA: Metadata = {
 
 
 interface FabberT1Parameters {
-    "@type": "fsl.fabber_t1";
+    "@type"?: "fsl/fabber_t1";
     "output": string;
     "method": string;
     "model": string;
@@ -44,44 +44,11 @@ interface FabberT1Parameters {
     "optfile"?: InputPathType | null | undefined;
     "debug": boolean;
 }
+type FabberT1ParametersTagged = Required<Pick<FabberT1Parameters, '@type'>> & FabberT1Parameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fabber_t1": fabber_t1_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fabber_t1": fabber_t1_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fabber_t1(...)`.
+ * Output object returned when calling `FabberT1Parameters(...)`.
  *
  * @interface
  */
@@ -208,9 +175,9 @@ function fabber_t1_params(
     save_free_energy: boolean = false,
     optfile: InputPathType | null = null,
     debug: boolean = false,
-): FabberT1Parameters {
+): FabberT1ParametersTagged {
     const params = {
-        "@type": "fsl.fabber_t1" as const,
+        "@type": "fsl/fabber_t1" as const,
         "output": output,
         "method": method,
         "model": model,
@@ -326,13 +293,13 @@ function fabber_t1_cargs(
             execution.inputFile((params["supp_data"] ?? null))
         );
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("--overwrite");
     }
-    if ((params["link_to_latest"] ?? null)) {
+    if ((params["link_to_latest"] ?? false)) {
         cargs.push("--link-to-latest");
     }
-    if ((params["simple_output"] ?? null)) {
+    if ((params["simple_output"] ?? false)) {
         cargs.push("--simple-output");
     }
     if ((params["load_models"] ?? null) !== null) {
@@ -359,40 +326,40 @@ function fabber_t1_cargs(
             String((params["evaluate_nt"] ?? null))
         );
     }
-    if ((params["dump_param_names"] ?? null)) {
+    if ((params["dump_param_names"] ?? false)) {
         cargs.push("--dump-param-names");
     }
-    if ((params["save_model_fit"] ?? null)) {
+    if ((params["save_model_fit"] ?? false)) {
         cargs.push("--save-model-fit");
     }
-    if ((params["save_residuals"] ?? null)) {
+    if ((params["save_residuals"] ?? false)) {
         cargs.push("--save-residuals");
     }
-    if ((params["save_model_extras"] ?? null)) {
+    if ((params["save_model_extras"] ?? false)) {
         cargs.push("--save-model-extras");
     }
-    if ((params["save_mvn"] ?? null)) {
+    if ((params["save_mvn"] ?? false)) {
         cargs.push("--save-mvn");
     }
-    if ((params["save_mean"] ?? null)) {
+    if ((params["save_mean"] ?? false)) {
         cargs.push("--save-mean");
     }
-    if ((params["save_std"] ?? null)) {
+    if ((params["save_std"] ?? false)) {
         cargs.push("--save-std");
     }
-    if ((params["save_var"] ?? null)) {
+    if ((params["save_var"] ?? false)) {
         cargs.push("--save-var");
     }
-    if ((params["save_zstat"] ?? null)) {
+    if ((params["save_zstat"] ?? false)) {
         cargs.push("--save-zstat");
     }
-    if ((params["save_noise_mean"] ?? null)) {
+    if ((params["save_noise_mean"] ?? false)) {
         cargs.push("--save-noise-mean");
     }
-    if ((params["save_noise_std"] ?? null)) {
+    if ((params["save_noise_std"] ?? false)) {
         cargs.push("--save-noise-std");
     }
-    if ((params["save_free_energy"] ?? null)) {
+    if ((params["save_free_energy"] ?? false)) {
         cargs.push("--save-free-energy");
     }
     if ((params["optfile"] ?? null) !== null) {
@@ -401,7 +368,7 @@ function fabber_t1_cargs(
             execution.inputFile((params["optfile"] ?? null))
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -551,7 +518,6 @@ function fabber_t1(
 export {
       FABBER_T1_METADATA,
       FabberT1Outputs,
-      FabberT1Parameters,
       fabber_t1,
       fabber_t1_execute,
       fabber_t1_params,

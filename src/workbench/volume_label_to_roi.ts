@@ -12,51 +12,18 @@ const VOLUME_LABEL_TO_ROI_METADATA: Metadata = {
 
 
 interface VolumeLabelToRoiParameters {
-    "@type": "workbench.volume-label-to-roi";
+    "@type"?: "workbench/volume-label-to-roi";
     "label_in": InputPathType;
     "volume_out": string;
     "opt_name_label_name"?: string | null | undefined;
     "opt_key_label_key"?: number | null | undefined;
     "opt_map_map"?: string | null | undefined;
 }
+type VolumeLabelToRoiParametersTagged = Required<Pick<VolumeLabelToRoiParameters, '@type'>> & VolumeLabelToRoiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-label-to-roi": volume_label_to_roi_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-label-to-roi": volume_label_to_roi_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `volume_label_to_roi(...)`.
+ * Output object returned when calling `VolumeLabelToRoiParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function volume_label_to_roi_params(
     opt_name_label_name: string | null = null,
     opt_key_label_key: number | null = null,
     opt_map_map: string | null = null,
-): VolumeLabelToRoiParameters {
+): VolumeLabelToRoiParametersTagged {
     const params = {
-        "@type": "workbench.volume-label-to-roi" as const,
+        "@type": "workbench/volume-label-to-roi" as const,
         "label_in": label_in,
         "volume_out": volume_out,
     };
@@ -233,7 +200,6 @@ function volume_label_to_roi(
 export {
       VOLUME_LABEL_TO_ROI_METADATA,
       VolumeLabelToRoiOutputs,
-      VolumeLabelToRoiParameters,
       volume_label_to_roi,
       volume_label_to_roi_execute,
       volume_label_to_roi_params,

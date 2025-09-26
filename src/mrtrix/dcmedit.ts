@@ -12,22 +12,24 @@ const DCMEDIT_METADATA: Metadata = {
 
 
 interface DcmeditTagParameters {
-    "@type": "mrtrix.dcmedit.tag";
+    "@type"?: "tag";
     "group": string;
     "element": string;
     "newvalue": string;
 }
+type DcmeditTagParametersTagged = Required<Pick<DcmeditTagParameters, '@type'>> & DcmeditTagParameters;
 
 
 interface DcmeditConfigParameters {
-    "@type": "mrtrix.dcmedit.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type DcmeditConfigParametersTagged = Required<Pick<DcmeditConfigParameters, '@type'>> & DcmeditConfigParameters;
 
 
 interface DcmeditParameters {
-    "@type": "mrtrix.dcmedit";
+    "@type"?: "mrtrix/dcmedit";
     "anonymise": boolean;
     "id"?: string | null | undefined;
     "tag"?: Array<DcmeditTagParameters> | null | undefined;
@@ -41,41 +43,7 @@ interface DcmeditParameters {
     "version": boolean;
     "file": InputPathType;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.dcmedit": dcmedit_cargs,
-        "mrtrix.dcmedit.tag": dcmedit_tag_cargs,
-        "mrtrix.dcmedit.config": dcmedit_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type DcmeditParametersTagged = Required<Pick<DcmeditParameters, '@type'>> & DcmeditParameters;
 
 
 /**
@@ -91,9 +59,9 @@ function dcmedit_tag_params(
     group: string,
     element: string,
     newvalue: string,
-): DcmeditTagParameters {
+): DcmeditTagParametersTagged {
     const params = {
-        "@type": "mrtrix.dcmedit.tag" as const,
+        "@type": "tag" as const,
         "group": group,
         "element": element,
         "newvalue": newvalue,
@@ -134,9 +102,9 @@ function dcmedit_tag_cargs(
 function dcmedit_config_params(
     key: string,
     value: string,
-): DcmeditConfigParameters {
+): DcmeditConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.dcmedit.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -165,7 +133,7 @@ function dcmedit_config_cargs(
 
 
 /**
- * Output object returned when calling `dcmedit(...)`.
+ * Output object returned when calling `DcmeditParameters(...)`.
  *
  * @interface
  */
@@ -211,9 +179,9 @@ function dcmedit_params(
     config: Array<DcmeditConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): DcmeditParameters {
+): DcmeditParametersTagged {
     const params = {
-        "@type": "mrtrix.dcmedit" as const,
+        "@type": "mrtrix/dcmedit" as const,
         "anonymise": anonymise,
         "info": info,
         "quiet": quiet,
@@ -253,7 +221,7 @@ function dcmedit_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("dcmedit");
-    if ((params["anonymise"] ?? null)) {
+    if ((params["anonymise"] ?? false)) {
         cargs.push("-anonymise");
     }
     if ((params["id"] ?? null) !== null) {
@@ -263,18 +231,18 @@ function dcmedit_cargs(
         );
     }
     if ((params["tag"] ?? null) !== null) {
-        cargs.push(...(params["tag"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["tag"] ?? null).map(s => dcmedit_tag_cargs(s, execution)).flat());
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -284,12 +252,12 @@ function dcmedit_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dcmedit_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["file"] ?? null)));
@@ -410,10 +378,7 @@ function dcmedit(
 
 export {
       DCMEDIT_METADATA,
-      DcmeditConfigParameters,
       DcmeditOutputs,
-      DcmeditParameters,
-      DcmeditTagParameters,
       dcmedit,
       dcmedit_config_params,
       dcmedit_execute,

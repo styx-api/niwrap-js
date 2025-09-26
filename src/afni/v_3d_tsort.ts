@@ -12,7 +12,7 @@ const V_3D_TSORT_METADATA: Metadata = {
 
 
 interface V3dTsortParameters {
-    "@type": "afni.3dTsort";
+    "@type"?: "afni/3dTsort";
     "input_file": InputPathType;
     "prefix"?: string | null | undefined;
     "inc": boolean;
@@ -25,44 +25,11 @@ interface V3dTsortParameters {
     "randft": boolean;
     "datum"?: string | null | undefined;
 }
+type V3dTsortParametersTagged = Required<Pick<V3dTsortParameters, '@type'>> & V3dTsortParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dTsort": v_3d_tsort_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dTsort": v_3d_tsort_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_tsort(...)`.
+ * Output object returned when calling `V3dTsortParameters(...)`.
  *
  * @interface
  */
@@ -107,9 +74,9 @@ function v_3d_tsort_params(
     ranfft: boolean = false,
     randft: boolean = false,
     datum: string | null = null,
-): V3dTsortParameters {
+): V3dTsortParametersTagged {
     const params = {
-        "@type": "afni.3dTsort" as const,
+        "@type": "afni/3dTsort" as const,
         "input_file": input_file,
         "inc": inc,
         "dec": dec,
@@ -151,28 +118,28 @@ function v_3d_tsort_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["inc"] ?? null)) {
+    if ((params["inc"] ?? false)) {
         cargs.push("-inc");
     }
-    if ((params["dec"] ?? null)) {
+    if ((params["dec"] ?? false)) {
         cargs.push("-dec");
     }
-    if ((params["rank"] ?? null)) {
+    if ((params["rank"] ?? false)) {
         cargs.push("-rank");
     }
-    if ((params["ind"] ?? null)) {
+    if ((params["ind"] ?? false)) {
         cargs.push("-ind");
     }
-    if ((params["val"] ?? null)) {
+    if ((params["val"] ?? false)) {
         cargs.push("-val");
     }
-    if ((params["random"] ?? null)) {
+    if ((params["random"] ?? false)) {
         cargs.push("-random");
     }
-    if ((params["ranfft"] ?? null)) {
+    if ((params["ranfft"] ?? false)) {
         cargs.push("-ranFFT");
     }
-    if ((params["randft"] ?? null)) {
+    if ((params["randft"] ?? false)) {
         cargs.push("-ranDFT");
     }
     if ((params["datum"] ?? null) !== null) {
@@ -278,7 +245,6 @@ function v_3d_tsort(
 
 export {
       V3dTsortOutputs,
-      V3dTsortParameters,
       V_3D_TSORT_METADATA,
       v_3d_tsort,
       v_3d_tsort_execute,

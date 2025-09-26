@@ -12,7 +12,7 @@ const V__RENAME_PANGA_METADATA: Metadata = {
 
 
 interface VRenamePangaParameters {
-    "@type": "afni.@RenamePanga";
+    "@type"?: "afni/@RenamePanga";
     "dir_number": string;
     "first_image_number": string;
     "num_slices": number;
@@ -24,44 +24,11 @@ interface VRenamePangaParameters {
     "slice_pattern"?: string | null | undefined;
     "output_directory"?: string | null | undefined;
 }
+type VRenamePangaParametersTagged = Required<Pick<VRenamePangaParameters, '@type'>> & VRenamePangaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@RenamePanga": v__rename_panga_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@RenamePanga": v__rename_panga_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__rename_panga(...)`.
+ * Output object returned when calling `VRenamePangaParameters(...)`.
  *
  * @interface
  */
@@ -112,9 +79,9 @@ function v__rename_panga_params(
     outliers_check: boolean = false,
     slice_pattern: string | null = null,
     output_directory: string | null = null,
-): VRenamePangaParameters {
+): VRenamePangaParametersTagged {
     const params = {
-        "@type": "afni.@RenamePanga" as const,
+        "@type": "afni/@RenamePanga" as const,
         "dir_number": dir_number,
         "first_image_number": first_image_number,
         "num_slices": num_slices,
@@ -153,13 +120,13 @@ function v__rename_panga_cargs(
     cargs.push(String((params["num_slices"] ?? null)));
     cargs.push(String((params["num_reps"] ?? null)));
     cargs.push((params["output_root"] ?? null));
-    if ((params["keep_prefix"] ?? null)) {
+    if ((params["keep_prefix"] ?? false)) {
         cargs.push("-kp");
     }
-    if ((params["interactive"] ?? null)) {
+    if ((params["interactive"] ?? false)) {
         cargs.push("-i");
     }
-    if ((params["outliers_check"] ?? null)) {
+    if ((params["outliers_check"] ?? false)) {
         cargs.push("-oc");
     }
     if ((params["slice_pattern"] ?? null) !== null) {
@@ -271,7 +238,6 @@ function v__rename_panga(
 
 export {
       VRenamePangaOutputs,
-      VRenamePangaParameters,
       V__RENAME_PANGA_METADATA,
       v__rename_panga,
       v__rename_panga_execute,

@@ -12,7 +12,7 @@ const CREATE_SIGNED_DISTANCE_VOLUME_METADATA: Metadata = {
 
 
 interface CreateSignedDistanceVolumeParameters {
-    "@type": "workbench.create-signed-distance-volume";
+    "@type"?: "workbench/create-signed-distance-volume";
     "surface": InputPathType;
     "refspace": string;
     "outvol": string;
@@ -23,44 +23,11 @@ interface CreateSignedDistanceVolumeParameters {
     "opt_approx_neighborhood_num"?: number | null | undefined;
     "opt_winding_method"?: string | null | undefined;
 }
+type CreateSignedDistanceVolumeParametersTagged = Required<Pick<CreateSignedDistanceVolumeParameters, '@type'>> & CreateSignedDistanceVolumeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.create-signed-distance-volume": create_signed_distance_volume_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.create-signed-distance-volume": create_signed_distance_volume_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `create_signed_distance_volume(...)`.
+ * Output object returned when calling `CreateSignedDistanceVolumeParameters(...)`.
  *
  * @interface
  */
@@ -105,9 +72,9 @@ function create_signed_distance_volume_params(
     opt_approx_limit_dist: number | null = null,
     opt_approx_neighborhood_num: number | null = null,
     opt_winding_method: string | null = null,
-): CreateSignedDistanceVolumeParameters {
+): CreateSignedDistanceVolumeParametersTagged {
     const params = {
-        "@type": "workbench.create-signed-distance-volume" as const,
+        "@type": "workbench/create-signed-distance-volume" as const,
         "surface": surface,
         "refspace": refspace,
         "outvol": outvol,
@@ -301,7 +268,6 @@ function create_signed_distance_volume(
 export {
       CREATE_SIGNED_DISTANCE_VOLUME_METADATA,
       CreateSignedDistanceVolumeOutputs,
-      CreateSignedDistanceVolumeParameters,
       create_signed_distance_volume,
       create_signed_distance_volume_execute,
       create_signed_distance_volume_params,

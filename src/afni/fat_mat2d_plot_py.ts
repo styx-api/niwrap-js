@@ -12,7 +12,7 @@ const FAT_MAT2D_PLOT_PY_METADATA: Metadata = {
 
 
 interface FatMat2dPlotPyParameters {
-    "@type": "afni.fat_mat2d_plot.py";
+    "@type"?: "afni/fat_mat2d_plot.py";
     "input_file": InputPathType;
     "matrices"?: Array<string> | null | undefined;
     "prefix"?: string | null | undefined;
@@ -39,44 +39,11 @@ interface FatMat2dPlotPyParameters {
     "help": boolean;
     "help_view": boolean;
 }
+type FatMat2dPlotPyParametersTagged = Required<Pick<FatMat2dPlotPyParameters, '@type'>> & FatMat2dPlotPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.fat_mat2d_plot.py": fat_mat2d_plot_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.fat_mat2d_plot.py": fat_mat2d_plot_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fat_mat2d_plot_py(...)`.
+ * Output object returned when calling `FatMat2dPlotPyParameters(...)`.
  *
  * @interface
  */
@@ -149,9 +116,9 @@ function fat_mat2d_plot_py_params(
     date: boolean = false,
     help: boolean = false,
     help_view: boolean = false,
-): FatMat2dPlotPyParameters {
+): FatMat2dPlotPyParametersTagged {
     const params = {
-        "@type": "afni.fat_mat2d_plot.py" as const,
+        "@type": "afni/fat_mat2d_plot.py" as const,
         "input_file": input_file,
         "no_colorbar": no_colorbar,
         "hold_image": hold_image,
@@ -266,7 +233,7 @@ function fat_mat2d_plot_py_cargs(
     if ((params["cbar_width_perc"] ?? null) !== null) {
         cargs.push(String((params["cbar_width_perc"] ?? null)));
     }
-    if ((params["no_colorbar"] ?? null)) {
+    if ((params["no_colorbar"] ?? false)) {
         cargs.push("-cbar_off");
     }
     if ((params["figsize_x"] ?? null) !== null) {
@@ -275,28 +242,28 @@ function fat_mat2d_plot_py_cargs(
     if ((params["figsize_y"] ?? null) !== null) {
         cargs.push(String((params["figsize_y"] ?? null)));
     }
-    if ((params["hold_image"] ?? null)) {
+    if ((params["hold_image"] ?? false)) {
         cargs.push("-hold_image");
     }
-    if ((params["tight_layout"] ?? null)) {
+    if ((params["tight_layout"] ?? false)) {
         cargs.push("-tight_layout");
     }
-    if ((params["xticks_off"] ?? null)) {
+    if ((params["xticks_off"] ?? false)) {
         cargs.push("-xticks_off");
     }
-    if ((params["yticks_off"] ?? null)) {
+    if ((params["yticks_off"] ?? false)) {
         cargs.push("-yticks_off");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-ver");
     }
-    if ((params["date"] ?? null)) {
+    if ((params["date"] ?? false)) {
         cargs.push("-date");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["help_view"] ?? null)) {
+    if ((params["help_view"] ?? false)) {
         cargs.push("-hview");
     }
     return cargs;
@@ -425,7 +392,6 @@ function fat_mat2d_plot_py(
 export {
       FAT_MAT2D_PLOT_PY_METADATA,
       FatMat2dPlotPyOutputs,
-      FatMat2dPlotPyParameters,
       fat_mat2d_plot_py,
       fat_mat2d_plot_py_execute,
       fat_mat2d_plot_py_params,

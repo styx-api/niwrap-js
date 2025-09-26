@@ -12,49 +12,16 @@ const UNPACK_MNC_TCL_METADATA: Metadata = {
 
 
 interface UnpackMncTclParameters {
-    "@type": "freesurfer.unpack_mnc.tcl";
+    "@type"?: "freesurfer/unpack_mnc.tcl";
     "verbose": boolean;
     "output_dir"?: string | null | undefined;
     "input_file"?: InputPathType | null | undefined;
 }
+type UnpackMncTclParametersTagged = Required<Pick<UnpackMncTclParameters, '@type'>> & UnpackMncTclParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.unpack_mnc.tcl": unpack_mnc_tcl_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.unpack_mnc.tcl": unpack_mnc_tcl_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `unpack_mnc_tcl(...)`.
+ * Output object returned when calling `UnpackMncTclParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function unpack_mnc_tcl_params(
     verbose: boolean = false,
     output_dir: string | null = null,
     input_file: InputPathType | null = null,
-): UnpackMncTclParameters {
+): UnpackMncTclParametersTagged {
     const params = {
-        "@type": "freesurfer.unpack_mnc.tcl" as const,
+        "@type": "freesurfer/unpack_mnc.tcl" as const,
         "verbose": verbose,
     };
     if (output_dir !== null) {
@@ -112,7 +79,7 @@ function unpack_mnc_tcl_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("unpack_mnc.tcl");
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
     if ((params["output_dir"] ?? null) !== null) {
@@ -209,7 +176,6 @@ function unpack_mnc_tcl(
 export {
       UNPACK_MNC_TCL_METADATA,
       UnpackMncTclOutputs,
-      UnpackMncTclParameters,
       unpack_mnc_tcl,
       unpack_mnc_tcl_execute,
       unpack_mnc_tcl_params,

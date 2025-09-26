@@ -12,49 +12,16 @@ const MRI_PROBEDICOM_METADATA: Metadata = {
 
 
 interface MriProbedicomParameters {
-    "@type": "freesurfer.mri_probedicom";
+    "@type"?: "freesurfer/mri_probedicom";
     "dicom_file": InputPathType;
     "option1"?: string | null | undefined;
     "option2"?: string | null | undefined;
 }
+type MriProbedicomParametersTagged = Required<Pick<MriProbedicomParameters, '@type'>> & MriProbedicomParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_probedicom": mri_probedicom_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_probedicom": mri_probedicom_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_probedicom(...)`.
+ * Output object returned when calling `MriProbedicomParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mri_probedicom_params(
     dicom_file: InputPathType,
     option1: string | null = null,
     option2: string | null = null,
-): MriProbedicomParameters {
+): MriProbedicomParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_probedicom" as const,
+        "@type": "freesurfer/mri_probedicom" as const,
         "dicom_file": dicom_file,
     };
     if (option1 !== null) {
@@ -207,7 +174,6 @@ function mri_probedicom(
 export {
       MRI_PROBEDICOM_METADATA,
       MriProbedicomOutputs,
-      MriProbedicomParameters,
       mri_probedicom,
       mri_probedicom_execute,
       mri_probedicom_params,

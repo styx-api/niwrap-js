@@ -12,14 +12,15 @@ const FIXEL2TSF_METADATA: Metadata = {
 
 
 interface Fixel2tsfConfigParameters {
-    "@type": "mrtrix.fixel2tsf.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Fixel2tsfConfigParametersTagged = Required<Pick<Fixel2tsfConfigParameters, '@type'>> & Fixel2tsfConfigParameters;
 
 
 interface Fixel2tsfParameters {
-    "@type": "mrtrix.fixel2tsf";
+    "@type"?: "mrtrix/fixel2tsf";
     "angle"?: number | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -33,41 +34,7 @@ interface Fixel2tsfParameters {
     "tracks": InputPathType;
     "tsf": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.fixel2tsf": fixel2tsf_cargs,
-        "mrtrix.fixel2tsf.config": fixel2tsf_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.fixel2tsf": fixel2tsf_outputs,
-    };
-    return outputsFuncs[t];
-}
+type Fixel2tsfParametersTagged = Required<Pick<Fixel2tsfParameters, '@type'>> & Fixel2tsfParameters;
 
 
 /**
@@ -81,9 +48,9 @@ function dynOutputs(
 function fixel2tsf_config_params(
     key: string,
     value: string,
-): Fixel2tsfConfigParameters {
+): Fixel2tsfConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.fixel2tsf.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -112,7 +79,7 @@ function fixel2tsf_config_cargs(
 
 
 /**
- * Output object returned when calling `fixel2tsf(...)`.
+ * Output object returned when calling `Fixel2tsfParameters(...)`.
  *
  * @interface
  */
@@ -159,9 +126,9 @@ function fixel2tsf_params(
     config: Array<Fixel2tsfConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Fixel2tsfParameters {
+): Fixel2tsfParametersTagged {
     const params = {
-        "@type": "mrtrix.fixel2tsf" as const,
+        "@type": "mrtrix/fixel2tsf" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -205,16 +172,16 @@ function fixel2tsf_cargs(
             String((params["angle"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -224,12 +191,12 @@ function fixel2tsf_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => fixel2tsf_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["fixel_in"] ?? null)));
@@ -346,9 +313,7 @@ function fixel2tsf(
 
 export {
       FIXEL2TSF_METADATA,
-      Fixel2tsfConfigParameters,
       Fixel2tsfOutputs,
-      Fixel2tsfParameters,
       fixel2tsf,
       fixel2tsf_config_params,
       fixel2tsf_execute,

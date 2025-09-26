@@ -12,7 +12,7 @@ const V__DEBLANK_FILE_NAMES_METADATA: Metadata = {
 
 
 interface VDeblankFileNamesParameters {
-    "@type": "afni.@DeblankFileNames";
+    "@type"?: "afni/@DeblankFileNames";
     "move": boolean;
     "nobrac": boolean;
     "demo_set": boolean;
@@ -20,43 +20,11 @@ interface VDeblankFileNamesParameters {
     "help": boolean;
     "files"?: Array<InputPathType> | null | undefined;
 }
+type VDeblankFileNamesParametersTagged = Required<Pick<VDeblankFileNamesParameters, '@type'>> & VDeblankFileNamesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@DeblankFileNames": v__deblank_file_names_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__deblank_file_names(...)`.
+ * Output object returned when calling `VDeblankFileNamesParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function v__deblank_file_names_params(
     echo: boolean = false,
     help: boolean = false,
     files: Array<InputPathType> | null = null,
-): VDeblankFileNamesParameters {
+): VDeblankFileNamesParametersTagged {
     const params = {
-        "@type": "afni.@DeblankFileNames" as const,
+        "@type": "afni/@DeblankFileNames" as const,
         "move": move,
         "nobrac": nobrac,
         "demo_set": demo_set,
@@ -117,19 +85,19 @@ function v__deblank_file_names_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("@DeblankFileNames");
-    if ((params["move"] ?? null)) {
+    if ((params["move"] ?? false)) {
         cargs.push("-move");
     }
-    if ((params["nobrac"] ?? null)) {
+    if ((params["nobrac"] ?? false)) {
         cargs.push("-nobrac");
     }
-    if ((params["demo_set"] ?? null)) {
+    if ((params["demo_set"] ?? false)) {
         cargs.push("-demo_set");
     }
-    if ((params["echo"] ?? null)) {
+    if ((params["echo"] ?? false)) {
         cargs.push("-echo");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     if ((params["files"] ?? null) !== null) {
@@ -221,7 +189,6 @@ function v__deblank_file_names(
 
 export {
       VDeblankFileNamesOutputs,
-      VDeblankFileNamesParameters,
       V__DEBLANK_FILE_NAMES_METADATA,
       v__deblank_file_names,
       v__deblank_file_names_execute,

@@ -12,49 +12,16 @@ const V_1D_UPSAMPLE_METADATA: Metadata = {
 
 
 interface V1dUpsampleParameters {
-    "@type": "afni.1dUpsample";
+    "@type"?: "afni/1dUpsample";
     "upsample_factor": number;
     "input_file": InputPathType;
     "linear_interpolation": boolean;
 }
+type V1dUpsampleParametersTagged = Required<Pick<V1dUpsampleParameters, '@type'>> & V1dUpsampleParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dUpsample": v_1d_upsample_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.1dUpsample": v_1d_upsample_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1d_upsample(...)`.
+ * Output object returned when calling `V1dUpsampleParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function v_1d_upsample_params(
     upsample_factor: number,
     input_file: InputPathType,
     linear_interpolation: boolean = false,
-): V1dUpsampleParameters {
+): V1dUpsampleParametersTagged {
     const params = {
-        "@type": "afni.1dUpsample" as const,
+        "@type": "afni/1dUpsample" as const,
         "upsample_factor": upsample_factor,
         "input_file": input_file,
         "linear_interpolation": linear_interpolation,
@@ -110,7 +77,7 @@ function v_1d_upsample_cargs(
     cargs.push("1dUpsample");
     cargs.push(String((params["upsample_factor"] ?? null)));
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
-    if ((params["linear_interpolation"] ?? null)) {
+    if ((params["linear_interpolation"] ?? false)) {
         cargs.push("-one");
     }
     return cargs;
@@ -194,7 +161,6 @@ function v_1d_upsample(
 
 export {
       V1dUpsampleOutputs,
-      V1dUpsampleParameters,
       V_1D_UPSAMPLE_METADATA,
       v_1d_upsample,
       v_1d_upsample_execute,

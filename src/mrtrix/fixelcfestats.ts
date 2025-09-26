@@ -12,32 +12,36 @@ const FIXELCFESTATS_METADATA: Metadata = {
 
 
 interface FixelcfestatsColumnParameters {
-    "@type": "mrtrix.fixelcfestats.column";
+    "@type"?: "column";
     "path": InputPathType;
 }
+type FixelcfestatsColumnParametersTagged = Required<Pick<FixelcfestatsColumnParameters, '@type'>> & FixelcfestatsColumnParameters;
 
 
 interface FixelcfestatsConfigParameters {
-    "@type": "mrtrix.fixelcfestats.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type FixelcfestatsConfigParametersTagged = Required<Pick<FixelcfestatsConfigParameters, '@type'>> & FixelcfestatsConfigParameters;
 
 
 interface FixelcfestatsVariousStringParameters {
-    "@type": "mrtrix.fixelcfestats.VariousString";
+    "@type"?: "VariousString";
     "obj": string;
 }
+type FixelcfestatsVariousStringParametersTagged = Required<Pick<FixelcfestatsVariousStringParameters, '@type'>> & FixelcfestatsVariousStringParameters;
 
 
 interface FixelcfestatsVariousFileParameters {
-    "@type": "mrtrix.fixelcfestats.VariousFile";
+    "@type"?: "VariousFile";
     "obj": InputPathType;
 }
+type FixelcfestatsVariousFileParametersTagged = Required<Pick<FixelcfestatsVariousFileParameters, '@type'>> & FixelcfestatsVariousFileParameters;
 
 
 interface FixelcfestatsParameters {
-    "@type": "mrtrix.fixelcfestats";
+    "@type"?: "mrtrix/fixelcfestats";
     "mask"?: InputPathType | null | undefined;
     "notest": boolean;
     "errors"?: string | null | undefined;
@@ -71,9 +75,10 @@ interface FixelcfestatsParameters {
     "subjects": InputPathType;
     "design": InputPathType;
     "contrast": InputPathType;
-    "connectivity": FixelcfestatsVariousStringParameters | FixelcfestatsVariousFileParameters;
+    "connectivity": FixelcfestatsVariousStringParametersTagged | FixelcfestatsVariousFileParametersTagged;
     "out_fixel_directory": string;
 }
+type FixelcfestatsParametersTagged = Required<Pick<FixelcfestatsParameters, '@type'>> & FixelcfestatsParameters;
 
 
 /**
@@ -83,15 +88,12 @@ interface FixelcfestatsParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function fixelcfestats_connectivity_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "mrtrix.fixelcfestats": fixelcfestats_cargs,
-        "mrtrix.fixelcfestats.column": fixelcfestats_column_cargs,
-        "mrtrix.fixelcfestats.config": fixelcfestats_config_cargs,
-        "mrtrix.fixelcfestats.VariousString": fixelcfestats_various_string_cargs,
-        "mrtrix.fixelcfestats.VariousFile": fixelcfestats_various_file_cargs,
+        "VariousString": fixelcfestats_various_string_cargs,
+        "VariousFile": fixelcfestats_various_file_cargs,
     };
     return cargsFuncs[t];
 }
@@ -104,7 +106,7 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function fixelcfestats_connectivity_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
@@ -122,9 +124,9 @@ function dynOutputs(
  */
 function fixelcfestats_column_params(
     path: InputPathType,
-): FixelcfestatsColumnParameters {
+): FixelcfestatsColumnParametersTagged {
     const params = {
-        "@type": "mrtrix.fixelcfestats.column" as const,
+        "@type": "column" as const,
         "path": path,
     };
     return params;
@@ -161,9 +163,9 @@ function fixelcfestats_column_cargs(
 function fixelcfestats_config_params(
     key: string,
     value: string,
-): FixelcfestatsConfigParameters {
+): FixelcfestatsConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.fixelcfestats.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -200,9 +202,9 @@ function fixelcfestats_config_cargs(
  */
 function fixelcfestats_various_string_params(
     obj: string,
-): FixelcfestatsVariousStringParameters {
+): FixelcfestatsVariousStringParametersTagged {
     const params = {
-        "@type": "mrtrix.fixelcfestats.VariousString" as const,
+        "@type": "VariousString" as const,
         "obj": obj,
     };
     return params;
@@ -236,9 +238,9 @@ function fixelcfestats_various_string_cargs(
  */
 function fixelcfestats_various_file_params(
     obj: InputPathType,
-): FixelcfestatsVariousFileParameters {
+): FixelcfestatsVariousFileParametersTagged {
     const params = {
-        "@type": "mrtrix.fixelcfestats.VariousFile" as const,
+        "@type": "VariousFile" as const,
         "obj": obj,
     };
     return params;
@@ -264,7 +266,7 @@ function fixelcfestats_various_file_cargs(
 
 
 /**
- * Output object returned when calling `fixelcfestats(...)`.
+ * Output object returned when calling `FixelcfestatsParameters(...)`.
  *
  * @interface
  */
@@ -322,7 +324,7 @@ function fixelcfestats_params(
     subjects: InputPathType,
     design: InputPathType,
     contrast: InputPathType,
-    connectivity: FixelcfestatsVariousStringParameters | FixelcfestatsVariousFileParameters,
+    connectivity: FixelcfestatsVariousStringParametersTagged | FixelcfestatsVariousFileParametersTagged,
     out_fixel_directory: string,
     mask: InputPathType | null = null,
     notest: boolean = false,
@@ -353,9 +355,9 @@ function fixelcfestats_params(
     config: Array<FixelcfestatsConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): FixelcfestatsParameters {
+): FixelcfestatsParametersTagged {
     const params = {
-        "@type": "mrtrix.fixelcfestats" as const,
+        "@type": "mrtrix/fixelcfestats" as const,
         "notest": notest,
         "strong": strong,
         "nonstationarity": nonstationarity,
@@ -452,7 +454,7 @@ function fixelcfestats_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["notest"] ?? null)) {
+    if ((params["notest"] ?? false)) {
         cargs.push("-notest");
     }
     if ((params["errors"] ?? null) !== null) {
@@ -473,7 +475,7 @@ function fixelcfestats_cargs(
             execution.inputFile((params["exchange_whole"] ?? null))
         );
     }
-    if ((params["strong"] ?? null)) {
+    if ((params["strong"] ?? false)) {
         cargs.push("-strong");
     }
     if ((params["nshuffles"] ?? null) !== null) {
@@ -488,7 +490,7 @@ function fixelcfestats_cargs(
             execution.inputFile((params["permutations"] ?? null))
         );
     }
-    if ((params["nonstationarity"] ?? null)) {
+    if ((params["nonstationarity"] ?? false)) {
         cargs.push("-nonstationarity");
     }
     if ((params["skew_nonstationarity"] ?? null) !== null) {
@@ -533,7 +535,7 @@ function fixelcfestats_cargs(
             String((params["cfe_c"] ?? null))
         );
     }
-    if ((params["cfe_legacy"] ?? null)) {
+    if ((params["cfe_legacy"] ?? false)) {
         cargs.push("-cfe_legacy");
     }
     if ((params["variance"] ?? null) !== null) {
@@ -548,22 +550,22 @@ function fixelcfestats_cargs(
             execution.inputFile((params["ftests"] ?? null))
         );
     }
-    if ((params["fonly"] ?? null)) {
+    if ((params["fonly"] ?? false)) {
         cargs.push("-fonly");
     }
     if ((params["column"] ?? null) !== null) {
-        cargs.push(...(params["column"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["column"] ?? null).map(s => fixelcfestats_column_cargs(s, execution)).flat());
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -573,19 +575,19 @@ function fixelcfestats_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => fixelcfestats_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["in_fixel_directory"] ?? null)));
     cargs.push(execution.inputFile((params["subjects"] ?? null)));
     cargs.push(execution.inputFile((params["design"] ?? null)));
     cargs.push(execution.inputFile((params["contrast"] ?? null)));
-    cargs.push(...dynCargs((params["connectivity"] ?? null)["@type"])((params["connectivity"] ?? null), execution));
+    cargs.push(...fixelcfestats_connectivity_cargs_dyn_fn((params["connectivity"] ?? null)["@type"])((params["connectivity"] ?? null), execution));
     cargs.push((params["out_fixel_directory"] ?? null));
     return cargs;
 }
@@ -723,7 +725,7 @@ function fixelcfestats(
     subjects: InputPathType,
     design: InputPathType,
     contrast: InputPathType,
-    connectivity: FixelcfestatsVariousStringParameters | FixelcfestatsVariousFileParameters,
+    connectivity: FixelcfestatsVariousStringParametersTagged | FixelcfestatsVariousFileParametersTagged,
     out_fixel_directory: string,
     mask: InputPathType | null = null,
     notest: boolean = false,
@@ -763,12 +765,7 @@ function fixelcfestats(
 
 export {
       FIXELCFESTATS_METADATA,
-      FixelcfestatsColumnParameters,
-      FixelcfestatsConfigParameters,
       FixelcfestatsOutputs,
-      FixelcfestatsParameters,
-      FixelcfestatsVariousFileParameters,
-      FixelcfestatsVariousStringParameters,
       fixelcfestats,
       fixelcfestats_column_params,
       fixelcfestats_config_params,

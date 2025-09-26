@@ -12,7 +12,7 @@ const GCA_APPLY_METADATA: Metadata = {
 
 
 interface GcaApplyParameters {
-    "@type": "freesurfer.gca-apply";
+    "@type"?: "freesurfer/gca-apply";
     "gcafile": InputPathType;
     "subject": string;
     "nthreads"?: number | null | undefined;
@@ -32,44 +32,11 @@ interface GcaApplyParameters {
     "force_update": boolean;
     "gcareg_iters"?: number | null | undefined;
 }
+type GcaApplyParametersTagged = Required<Pick<GcaApplyParameters, '@type'>> & GcaApplyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.gca-apply": gca_apply_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.gca-apply": gca_apply_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `gca_apply(...)`.
+ * Output object returned when calling `GcaApplyParameters(...)`.
  *
  * @interface
  */
@@ -144,9 +111,9 @@ function gca_apply_params(
     gca_rb_2016: boolean = false,
     force_update: boolean = false,
     gcareg_iters: number | null = null,
-): GcaApplyParameters {
+): GcaApplyParametersTagged {
     const params = {
-        "@type": "freesurfer.gca-apply" as const,
+        "@type": "freesurfer/gca-apply" as const,
         "gcafile": gcafile,
         "subject": subject,
         "no_segstats": no_segstats,
@@ -225,7 +192,7 @@ function gca_apply_cargs(
             (params["base"] ?? null)
         );
     }
-    if ((params["no_segstats"] ?? null)) {
+    if ((params["no_segstats"] ?? false)) {
         cargs.push("--no-segstats");
     }
     if ((params["subjects_dir"] ?? null) !== null) {
@@ -273,7 +240,7 @@ function gca_apply_cargs(
             (params["output_dir"] ?? null)
         );
     }
-    if ((params["no_v6labopts"] ?? null)) {
+    if ((params["no_v6labopts"] ?? false)) {
         cargs.push("--no-v6labopts");
     }
     if ((params["m3z_file"] ?? null) !== null) {
@@ -282,10 +249,10 @@ function gca_apply_cargs(
             execution.inputFile((params["m3z_file"] ?? null))
         );
     }
-    if ((params["gca_rb_2016"] ?? null)) {
+    if ((params["gca_rb_2016"] ?? false)) {
         cargs.push("--gca-rb-2016");
     }
-    if ((params["force_update"] ?? null)) {
+    if ((params["force_update"] ?? false)) {
         cargs.push("--force-update");
     }
     if ((params["gcareg_iters"] ?? null) !== null) {
@@ -410,7 +377,6 @@ function gca_apply(
 export {
       GCA_APPLY_METADATA,
       GcaApplyOutputs,
-      GcaApplyParameters,
       gca_apply,
       gca_apply_execute,
       gca_apply_params,

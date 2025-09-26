@@ -12,7 +12,7 @@ const FABBER_DWI_METADATA: Metadata = {
 
 
 interface FabberDwiParameters {
-    "@type": "fsl.fabber_dwi";
+    "@type"?: "fsl/fabber_dwi";
     "output_dir": string;
     "method": string;
     "model": string;
@@ -50,44 +50,11 @@ interface FabberDwiParameters {
     "optfile"?: InputPathType | null | undefined;
     "debug_flag": boolean;
 }
+type FabberDwiParametersTagged = Required<Pick<FabberDwiParameters, '@type'>> & FabberDwiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fabber_dwi": fabber_dwi_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fabber_dwi": fabber_dwi_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fabber_dwi(...)`.
+ * Output object returned when calling `FabberDwiParameters(...)`.
  *
  * @interface
  */
@@ -182,9 +149,9 @@ function fabber_dwi_params(
     save_free_energy_flag: boolean = false,
     optfile: InputPathType | null = null,
     debug_flag: boolean = false,
-): FabberDwiParameters {
+): FabberDwiParametersTagged {
     const params = {
-        "@type": "fsl.fabber_dwi" as const,
+        "@type": "fsl/fabber_dwi" as const,
         "output_dir": output_dir,
         "method": method,
         "model": model,
@@ -276,22 +243,22 @@ function fabber_dwi_cargs(
         "--data",
         execution.inputFile((params["data_file"] ?? null))
     );
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["listmethods_flag"] ?? null)) {
+    if ((params["listmethods_flag"] ?? false)) {
         cargs.push("--listmethods");
     }
-    if ((params["listmodels_flag"] ?? null)) {
+    if ((params["listmodels_flag"] ?? false)) {
         cargs.push("--listmodels");
     }
-    if ((params["listparams_flag"] ?? null)) {
+    if ((params["listparams_flag"] ?? false)) {
         cargs.push("--listparams");
     }
-    if ((params["descparams_flag"] ?? null)) {
+    if ((params["descparams_flag"] ?? false)) {
         cargs.push("--descparams");
     }
-    if ((params["listoutputs_flag"] ?? null)) {
+    if ((params["listoutputs_flag"] ?? false)) {
         cargs.push("--listoutputs");
     }
     if ((params["evaluate"] ?? null) !== null) {
@@ -312,13 +279,13 @@ function fabber_dwi_cargs(
             String((params["evaluate_nt"] ?? null))
         );
     }
-    if ((params["simple_output_flag"] ?? null)) {
+    if ((params["simple_output_flag"] ?? false)) {
         cargs.push("--simple-output");
     }
-    if ((params["overwrite_flag"] ?? null)) {
+    if ((params["overwrite_flag"] ?? false)) {
         cargs.push("--overwrite");
     }
-    if ((params["link_to_latest_flag"] ?? null)) {
+    if ((params["link_to_latest_flag"] ?? false)) {
         cargs.push("--link-to-latest");
     }
     if ((params["loadmodels"] ?? null) !== null) {
@@ -357,40 +324,40 @@ function fabber_dwi_cargs(
             execution.inputFile((params["supp_data"] ?? null))
         );
     }
-    if ((params["dump_param_names_flag"] ?? null)) {
+    if ((params["dump_param_names_flag"] ?? false)) {
         cargs.push("--dump-param-names");
     }
-    if ((params["save_model_fit_flag"] ?? null)) {
+    if ((params["save_model_fit_flag"] ?? false)) {
         cargs.push("--save-model-fit");
     }
-    if ((params["save_residuals_flag"] ?? null)) {
+    if ((params["save_residuals_flag"] ?? false)) {
         cargs.push("--save-residuals");
     }
-    if ((params["save_model_extras_flag"] ?? null)) {
+    if ((params["save_model_extras_flag"] ?? false)) {
         cargs.push("--save-model-extras");
     }
-    if ((params["save_mvn_flag"] ?? null)) {
+    if ((params["save_mvn_flag"] ?? false)) {
         cargs.push("--save-mvn");
     }
-    if ((params["save_mean_flag"] ?? null)) {
+    if ((params["save_mean_flag"] ?? false)) {
         cargs.push("--save-mean");
     }
-    if ((params["save_std_flag"] ?? null)) {
+    if ((params["save_std_flag"] ?? false)) {
         cargs.push("--save-std");
     }
-    if ((params["save_var_flag"] ?? null)) {
+    if ((params["save_var_flag"] ?? false)) {
         cargs.push("--save-var");
     }
-    if ((params["save_zstat_flag"] ?? null)) {
+    if ((params["save_zstat_flag"] ?? false)) {
         cargs.push("--save-zstat");
     }
-    if ((params["save_noise_mean_flag"] ?? null)) {
+    if ((params["save_noise_mean_flag"] ?? false)) {
         cargs.push("--save-noise-mean");
     }
-    if ((params["save_noise_std_flag"] ?? null)) {
+    if ((params["save_noise_std_flag"] ?? false)) {
         cargs.push("--save-noise-std");
     }
-    if ((params["save_free_energy_flag"] ?? null)) {
+    if ((params["save_free_energy_flag"] ?? false)) {
         cargs.push("--save-free-energy");
     }
     if ((params["optfile"] ?? null) !== null) {
@@ -399,7 +366,7 @@ function fabber_dwi_cargs(
             execution.inputFile((params["optfile"] ?? null))
         );
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -550,7 +517,6 @@ function fabber_dwi(
 export {
       FABBER_DWI_METADATA,
       FabberDwiOutputs,
-      FabberDwiParameters,
       fabber_dwi,
       fabber_dwi_execute,
       fabber_dwi_params,

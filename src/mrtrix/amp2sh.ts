@@ -12,33 +12,37 @@ const AMP2SH_METADATA: Metadata = {
 
 
 interface Amp2shFslgradParameters {
-    "@type": "mrtrix.amp2sh.fslgrad";
+    "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
+type Amp2shFslgradParametersTagged = Required<Pick<Amp2shFslgradParameters, '@type'>> & Amp2shFslgradParameters;
 
 
 interface Amp2shVariousStringParameters {
-    "@type": "mrtrix.amp2sh.VariousString";
+    "@type"?: "VariousString";
     "obj": string;
 }
+type Amp2shVariousStringParametersTagged = Required<Pick<Amp2shVariousStringParameters, '@type'>> & Amp2shVariousStringParameters;
 
 
 interface Amp2shVariousFileParameters {
-    "@type": "mrtrix.amp2sh.VariousFile";
+    "@type"?: "VariousFile";
     "obj": InputPathType;
 }
+type Amp2shVariousFileParametersTagged = Required<Pick<Amp2shVariousFileParameters, '@type'>> & Amp2shVariousFileParameters;
 
 
 interface Amp2shConfigParameters {
-    "@type": "mrtrix.amp2sh.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Amp2shConfigParametersTagged = Required<Pick<Amp2shConfigParameters, '@type'>> & Amp2shConfigParameters;
 
 
 interface Amp2shParameters {
-    "@type": "mrtrix.amp2sh";
+    "@type"?: "mrtrix/amp2sh";
     "lmax"?: number | null | undefined;
     "normalise": boolean;
     "directions"?: InputPathType | null | undefined;
@@ -46,7 +50,7 @@ interface Amp2shParameters {
     "grad"?: InputPathType | null | undefined;
     "fslgrad"?: Amp2shFslgradParameters | null | undefined;
     "shells"?: Array<number> | null | undefined;
-    "strides"?: Amp2shVariousStringParameters | Amp2shVariousFileParameters | null | undefined;
+    "strides"?: Amp2shVariousStringParametersTagged | Amp2shVariousFileParametersTagged | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -58,6 +62,7 @@ interface Amp2shParameters {
     "amp": InputPathType;
     "SH": string;
 }
+type Amp2shParametersTagged = Required<Pick<Amp2shParameters, '@type'>> & Amp2shParameters;
 
 
 /**
@@ -67,15 +72,12 @@ interface Amp2shParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function amp2sh_strides_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "mrtrix.amp2sh": amp2sh_cargs,
-        "mrtrix.amp2sh.fslgrad": amp2sh_fslgrad_cargs,
-        "mrtrix.amp2sh.VariousString": amp2sh_various_string_cargs,
-        "mrtrix.amp2sh.VariousFile": amp2sh_various_file_cargs,
-        "mrtrix.amp2sh.config": amp2sh_config_cargs,
+        "VariousString": amp2sh_various_string_cargs,
+        "VariousFile": amp2sh_various_file_cargs,
     };
     return cargsFuncs[t];
 }
@@ -88,11 +90,10 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function amp2sh_strides_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "mrtrix.amp2sh": amp2sh_outputs,
     };
     return outputsFuncs[t];
 }
@@ -109,9 +110,9 @@ function dynOutputs(
 function amp2sh_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
-): Amp2shFslgradParameters {
+): Amp2shFslgradParametersTagged {
     const params = {
-        "@type": "mrtrix.amp2sh.fslgrad" as const,
+        "@type": "fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -148,9 +149,9 @@ function amp2sh_fslgrad_cargs(
  */
 function amp2sh_various_string_params(
     obj: string,
-): Amp2shVariousStringParameters {
+): Amp2shVariousStringParametersTagged {
     const params = {
-        "@type": "mrtrix.amp2sh.VariousString" as const,
+        "@type": "VariousString" as const,
         "obj": obj,
     };
     return params;
@@ -184,9 +185,9 @@ function amp2sh_various_string_cargs(
  */
 function amp2sh_various_file_params(
     obj: InputPathType,
-): Amp2shVariousFileParameters {
+): Amp2shVariousFileParametersTagged {
     const params = {
-        "@type": "mrtrix.amp2sh.VariousFile" as const,
+        "@type": "VariousFile" as const,
         "obj": obj,
     };
     return params;
@@ -222,9 +223,9 @@ function amp2sh_various_file_cargs(
 function amp2sh_config_params(
     key: string,
     value: string,
-): Amp2shConfigParameters {
+): Amp2shConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.amp2sh.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -253,7 +254,7 @@ function amp2sh_config_cargs(
 
 
 /**
- * Output object returned when calling `amp2sh(...)`.
+ * Output object returned when calling `Amp2shParameters(...)`.
  *
  * @interface
  */
@@ -304,7 +305,7 @@ function amp2sh_params(
     grad: InputPathType | null = null,
     fslgrad: Amp2shFslgradParameters | null = null,
     shells: Array<number> | null = null,
-    strides: Amp2shVariousStringParameters | Amp2shVariousFileParameters | null = null,
+    strides: Amp2shVariousStringParametersTagged | Amp2shVariousFileParametersTagged | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
@@ -313,9 +314,9 @@ function amp2sh_params(
     config: Array<Amp2shConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Amp2shParameters {
+): Amp2shParametersTagged {
     const params = {
-        "@type": "mrtrix.amp2sh" as const,
+        "@type": "mrtrix/amp2sh" as const,
         "normalise": normalise,
         "info": info,
         "quiet": quiet,
@@ -377,7 +378,7 @@ function amp2sh_cargs(
             String((params["lmax"] ?? null))
         );
     }
-    if ((params["normalise"] ?? null)) {
+    if ((params["normalise"] ?? false)) {
         cargs.push("-normalise");
     }
     if ((params["directions"] ?? null) !== null) {
@@ -399,7 +400,7 @@ function amp2sh_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
+        cargs.push(...amp2sh_fslgrad_cargs((params["fslgrad"] ?? null), execution));
     }
     if ((params["shells"] ?? null) !== null) {
         cargs.push(
@@ -410,19 +411,19 @@ function amp2sh_cargs(
     if ((params["strides"] ?? null) !== null) {
         cargs.push(
             "-strides",
-            ...dynCargs((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
+            ...amp2sh_strides_cargs_dyn_fn((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -432,12 +433,12 @@ function amp2sh_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => amp2sh_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["amp"] ?? null)));
@@ -558,7 +559,7 @@ function amp2sh(
     grad: InputPathType | null = null,
     fslgrad: Amp2shFslgradParameters | null = null,
     shells: Array<number> | null = null,
-    strides: Amp2shVariousStringParameters | Amp2shVariousFileParameters | null = null,
+    strides: Amp2shVariousStringParametersTagged | Amp2shVariousFileParametersTagged | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
@@ -576,12 +577,7 @@ function amp2sh(
 
 export {
       AMP2SH_METADATA,
-      Amp2shConfigParameters,
-      Amp2shFslgradParameters,
       Amp2shOutputs,
-      Amp2shParameters,
-      Amp2shVariousFileParameters,
-      Amp2shVariousStringParameters,
       amp2sh,
       amp2sh_config_params,
       amp2sh_execute,

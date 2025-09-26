@@ -12,50 +12,56 @@ const CIFTI_CREATE_DENSE_FROM_TEMPLATE_METADATA: Metadata = {
 
 
 interface CiftiCreateDenseFromTemplateSeriesParameters {
-    "@type": "workbench.cifti-create-dense-from-template.series";
+    "@type"?: "series";
     "step": number;
     "start": number;
     "opt_unit_unit"?: string | null | undefined;
 }
+type CiftiCreateDenseFromTemplateSeriesParametersTagged = Required<Pick<CiftiCreateDenseFromTemplateSeriesParameters, '@type'>> & CiftiCreateDenseFromTemplateSeriesParameters;
 
 
 interface CiftiCreateDenseFromTemplateVolumeAllParameters {
-    "@type": "workbench.cifti-create-dense-from-template.volume_all";
+    "@type"?: "volume_all";
     "volume_in": InputPathType;
     "opt_from_cropped": boolean;
 }
+type CiftiCreateDenseFromTemplateVolumeAllParametersTagged = Required<Pick<CiftiCreateDenseFromTemplateVolumeAllParameters, '@type'>> & CiftiCreateDenseFromTemplateVolumeAllParameters;
 
 
 interface CiftiCreateDenseFromTemplateCiftiParameters {
-    "@type": "workbench.cifti-create-dense-from-template.cifti";
+    "@type"?: "cifti";
     "cifti_in": InputPathType;
 }
+type CiftiCreateDenseFromTemplateCiftiParametersTagged = Required<Pick<CiftiCreateDenseFromTemplateCiftiParameters, '@type'>> & CiftiCreateDenseFromTemplateCiftiParameters;
 
 
 interface CiftiCreateDenseFromTemplateMetricParameters {
-    "@type": "workbench.cifti-create-dense-from-template.metric";
+    "@type"?: "metric";
     "structure": string;
     "metric_in": InputPathType;
 }
+type CiftiCreateDenseFromTemplateMetricParametersTagged = Required<Pick<CiftiCreateDenseFromTemplateMetricParameters, '@type'>> & CiftiCreateDenseFromTemplateMetricParameters;
 
 
 interface CiftiCreateDenseFromTemplateLabelParameters {
-    "@type": "workbench.cifti-create-dense-from-template.label";
+    "@type"?: "label";
     "structure": string;
     "label_in": InputPathType;
 }
+type CiftiCreateDenseFromTemplateLabelParametersTagged = Required<Pick<CiftiCreateDenseFromTemplateLabelParameters, '@type'>> & CiftiCreateDenseFromTemplateLabelParameters;
 
 
 interface CiftiCreateDenseFromTemplateVolumeParameters {
-    "@type": "workbench.cifti-create-dense-from-template.volume";
+    "@type"?: "volume";
     "structure": string;
     "volume_in": InputPathType;
     "opt_from_cropped": boolean;
 }
+type CiftiCreateDenseFromTemplateVolumeParametersTagged = Required<Pick<CiftiCreateDenseFromTemplateVolumeParameters, '@type'>> & CiftiCreateDenseFromTemplateVolumeParameters;
 
 
 interface CiftiCreateDenseFromTemplateParameters {
-    "@type": "workbench.cifti-create-dense-from-template";
+    "@type"?: "workbench/cifti-create-dense-from-template";
     "template_cifti": InputPathType;
     "cifti_out": string;
     "series"?: CiftiCreateDenseFromTemplateSeriesParameters | null | undefined;
@@ -66,46 +72,7 @@ interface CiftiCreateDenseFromTemplateParameters {
     "label"?: Array<CiftiCreateDenseFromTemplateLabelParameters> | null | undefined;
     "volume"?: Array<CiftiCreateDenseFromTemplateVolumeParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-create-dense-from-template": cifti_create_dense_from_template_cargs,
-        "workbench.cifti-create-dense-from-template.series": cifti_create_dense_from_template_series_cargs,
-        "workbench.cifti-create-dense-from-template.volume_all": cifti_create_dense_from_template_volume_all_cargs,
-        "workbench.cifti-create-dense-from-template.cifti": cifti_create_dense_from_template_cifti_cargs,
-        "workbench.cifti-create-dense-from-template.metric": cifti_create_dense_from_template_metric_cargs,
-        "workbench.cifti-create-dense-from-template.label": cifti_create_dense_from_template_label_cargs,
-        "workbench.cifti-create-dense-from-template.volume": cifti_create_dense_from_template_volume_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-create-dense-from-template": cifti_create_dense_from_template_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiCreateDenseFromTemplateParametersTagged = Required<Pick<CiftiCreateDenseFromTemplateParameters, '@type'>> & CiftiCreateDenseFromTemplateParameters;
 
 
 /**
@@ -121,9 +88,9 @@ function cifti_create_dense_from_template_series_params(
     step: number,
     start: number,
     opt_unit_unit: string | null = null,
-): CiftiCreateDenseFromTemplateSeriesParameters {
+): CiftiCreateDenseFromTemplateSeriesParametersTagged {
     const params = {
-        "@type": "workbench.cifti-create-dense-from-template.series" as const,
+        "@type": "series" as const,
         "step": step,
         "start": start,
     };
@@ -171,9 +138,9 @@ function cifti_create_dense_from_template_series_cargs(
 function cifti_create_dense_from_template_volume_all_params(
     volume_in: InputPathType,
     opt_from_cropped: boolean = false,
-): CiftiCreateDenseFromTemplateVolumeAllParameters {
+): CiftiCreateDenseFromTemplateVolumeAllParametersTagged {
     const params = {
-        "@type": "workbench.cifti-create-dense-from-template.volume_all" as const,
+        "@type": "volume_all" as const,
         "volume_in": volume_in,
         "opt_from_cropped": opt_from_cropped,
     };
@@ -196,7 +163,7 @@ function cifti_create_dense_from_template_volume_all_cargs(
     const cargs: string[] = [];
     cargs.push("-volume-all");
     cargs.push(execution.inputFile((params["volume_in"] ?? null)));
-    if ((params["opt_from_cropped"] ?? null)) {
+    if ((params["opt_from_cropped"] ?? false)) {
         cargs.push("-from-cropped");
     }
     return cargs;
@@ -212,9 +179,9 @@ function cifti_create_dense_from_template_volume_all_cargs(
  */
 function cifti_create_dense_from_template_cifti_params(
     cifti_in: InputPathType,
-): CiftiCreateDenseFromTemplateCiftiParameters {
+): CiftiCreateDenseFromTemplateCiftiParametersTagged {
     const params = {
-        "@type": "workbench.cifti-create-dense-from-template.cifti" as const,
+        "@type": "cifti" as const,
         "cifti_in": cifti_in,
     };
     return params;
@@ -251,9 +218,9 @@ function cifti_create_dense_from_template_cifti_cargs(
 function cifti_create_dense_from_template_metric_params(
     structure: string,
     metric_in: InputPathType,
-): CiftiCreateDenseFromTemplateMetricParameters {
+): CiftiCreateDenseFromTemplateMetricParametersTagged {
     const params = {
-        "@type": "workbench.cifti-create-dense-from-template.metric" as const,
+        "@type": "metric" as const,
         "structure": structure,
         "metric_in": metric_in,
     };
@@ -292,9 +259,9 @@ function cifti_create_dense_from_template_metric_cargs(
 function cifti_create_dense_from_template_label_params(
     structure: string,
     label_in: InputPathType,
-): CiftiCreateDenseFromTemplateLabelParameters {
+): CiftiCreateDenseFromTemplateLabelParametersTagged {
     const params = {
-        "@type": "workbench.cifti-create-dense-from-template.label" as const,
+        "@type": "label" as const,
         "structure": structure,
         "label_in": label_in,
     };
@@ -335,9 +302,9 @@ function cifti_create_dense_from_template_volume_params(
     structure: string,
     volume_in: InputPathType,
     opt_from_cropped: boolean = false,
-): CiftiCreateDenseFromTemplateVolumeParameters {
+): CiftiCreateDenseFromTemplateVolumeParametersTagged {
     const params = {
-        "@type": "workbench.cifti-create-dense-from-template.volume" as const,
+        "@type": "volume" as const,
         "structure": structure,
         "volume_in": volume_in,
         "opt_from_cropped": opt_from_cropped,
@@ -362,7 +329,7 @@ function cifti_create_dense_from_template_volume_cargs(
     cargs.push("-volume");
     cargs.push((params["structure"] ?? null));
     cargs.push(execution.inputFile((params["volume_in"] ?? null)));
-    if ((params["opt_from_cropped"] ?? null)) {
+    if ((params["opt_from_cropped"] ?? false)) {
         cargs.push("-from-cropped");
     }
     return cargs;
@@ -370,7 +337,7 @@ function cifti_create_dense_from_template_volume_cargs(
 
 
 /**
- * Output object returned when calling `cifti_create_dense_from_template(...)`.
+ * Output object returned when calling `CiftiCreateDenseFromTemplateParameters(...)`.
  *
  * @interface
  */
@@ -411,9 +378,9 @@ function cifti_create_dense_from_template_params(
     metric: Array<CiftiCreateDenseFromTemplateMetricParameters> | null = null,
     label: Array<CiftiCreateDenseFromTemplateLabelParameters> | null = null,
     volume: Array<CiftiCreateDenseFromTemplateVolumeParameters> | null = null,
-): CiftiCreateDenseFromTemplateParameters {
+): CiftiCreateDenseFromTemplateParametersTagged {
     const params = {
-        "@type": "workbench.cifti-create-dense-from-template" as const,
+        "@type": "workbench/cifti-create-dense-from-template" as const,
         "template_cifti": template_cifti,
         "cifti_out": cifti_out,
     };
@@ -460,10 +427,10 @@ function cifti_create_dense_from_template_cargs(
     cargs.push(execution.inputFile((params["template_cifti"] ?? null)));
     cargs.push((params["cifti_out"] ?? null));
     if ((params["series"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["series"] ?? null)["@type"])((params["series"] ?? null), execution));
+        cargs.push(...cifti_create_dense_from_template_series_cargs((params["series"] ?? null), execution));
     }
     if ((params["volume_all"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["volume_all"] ?? null)["@type"])((params["volume_all"] ?? null), execution));
+        cargs.push(...cifti_create_dense_from_template_volume_all_cargs((params["volume_all"] ?? null), execution));
     }
     if ((params["opt_label_collision_action"] ?? null) !== null) {
         cargs.push(
@@ -472,16 +439,16 @@ function cifti_create_dense_from_template_cargs(
         );
     }
     if ((params["cifti"] ?? null) !== null) {
-        cargs.push(...(params["cifti"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["cifti"] ?? null).map(s => cifti_create_dense_from_template_cifti_cargs(s, execution)).flat());
     }
     if ((params["metric"] ?? null) !== null) {
-        cargs.push(...(params["metric"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["metric"] ?? null).map(s => cifti_create_dense_from_template_metric_cargs(s, execution)).flat());
     }
     if ((params["label"] ?? null) !== null) {
-        cargs.push(...(params["label"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["label"] ?? null).map(s => cifti_create_dense_from_template_label_cargs(s, execution)).flat());
     }
     if ((params["volume"] ?? null) !== null) {
-        cargs.push(...(params["volume"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["volume"] ?? null).map(s => cifti_create_dense_from_template_volume_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -670,14 +637,7 @@ function cifti_create_dense_from_template(
 
 export {
       CIFTI_CREATE_DENSE_FROM_TEMPLATE_METADATA,
-      CiftiCreateDenseFromTemplateCiftiParameters,
-      CiftiCreateDenseFromTemplateLabelParameters,
-      CiftiCreateDenseFromTemplateMetricParameters,
       CiftiCreateDenseFromTemplateOutputs,
-      CiftiCreateDenseFromTemplateParameters,
-      CiftiCreateDenseFromTemplateSeriesParameters,
-      CiftiCreateDenseFromTemplateVolumeAllParameters,
-      CiftiCreateDenseFromTemplateVolumeParameters,
       cifti_create_dense_from_template,
       cifti_create_dense_from_template_cifti_params,
       cifti_create_dense_from_template_execute,

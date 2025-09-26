@@ -12,49 +12,16 @@ const CIFTI_TRANSPOSE_METADATA: Metadata = {
 
 
 interface CiftiTransposeParameters {
-    "@type": "workbench.cifti-transpose";
+    "@type"?: "workbench/cifti-transpose";
     "cifti_in": InputPathType;
     "cifti_out": string;
     "opt_mem_limit_limit_gb"?: number | null | undefined;
 }
+type CiftiTransposeParametersTagged = Required<Pick<CiftiTransposeParameters, '@type'>> & CiftiTransposeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-transpose": cifti_transpose_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-transpose": cifti_transpose_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `cifti_transpose(...)`.
+ * Output object returned when calling `CiftiTransposeParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function cifti_transpose_params(
     cifti_in: InputPathType,
     cifti_out: string,
     opt_mem_limit_limit_gb: number | null = null,
-): CiftiTransposeParameters {
+): CiftiTransposeParametersTagged {
     const params = {
-        "@type": "workbench.cifti-transpose" as const,
+        "@type": "workbench/cifti-transpose" as const,
         "cifti_in": cifti_in,
         "cifti_out": cifti_out,
     };
@@ -205,7 +172,6 @@ function cifti_transpose(
 export {
       CIFTI_TRANSPOSE_METADATA,
       CiftiTransposeOutputs,
-      CiftiTransposeParameters,
       cifti_transpose,
       cifti_transpose_execute,
       cifti_transpose_params,

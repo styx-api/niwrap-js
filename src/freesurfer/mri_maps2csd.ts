@@ -12,7 +12,7 @@ const MRI_MAPS2CSD_METADATA: Metadata = {
 
 
 interface MriMaps2csdParameters {
-    "@type": "freesurfer.mri_maps2csd";
+    "@type"?: "freesurfer/mri_maps2csd";
     "input_files": Array<string>;
     "csd_file"?: string | null | undefined;
     "pdf_file"?: string | null | undefined;
@@ -25,43 +25,11 @@ interface MriMaps2csdParameters {
     "debug": boolean;
     "checkopts": boolean;
 }
+type MriMaps2csdParametersTagged = Required<Pick<MriMaps2csdParameters, '@type'>> & MriMaps2csdParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_maps2csd": mri_maps2csd_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_maps2csd(...)`.
+ * Output object returned when calling `MriMaps2csdParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +69,9 @@ function mri_maps2csd_params(
     subjects_dir: string | null = null,
     debug: boolean = false,
     checkopts: boolean = false,
-): MriMaps2csdParameters {
+): MriMaps2csdParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_maps2csd" as const,
+        "@type": "freesurfer/mri_maps2csd" as const,
         "input_files": input_files,
         "debug": debug,
         "checkopts": checkopts,
@@ -199,10 +167,10 @@ function mri_maps2csd_cargs(
             (params["subjects_dir"] ?? null)
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["checkopts"] ?? null)) {
+    if ((params["checkopts"] ?? false)) {
         cargs.push("--checkopts");
     }
     return cargs;
@@ -301,7 +269,6 @@ function mri_maps2csd(
 export {
       MRI_MAPS2CSD_METADATA,
       MriMaps2csdOutputs,
-      MriMaps2csdParameters,
       mri_maps2csd,
       mri_maps2csd_execute,
       mri_maps2csd_params,

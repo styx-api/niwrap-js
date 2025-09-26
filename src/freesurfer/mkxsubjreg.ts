@@ -12,7 +12,7 @@ const MKXSUBJREG_METADATA: Metadata = {
 
 
 interface MkxsubjregParameters {
-    "@type": "freesurfer.mkxsubjreg";
+    "@type"?: "freesurfer/mkxsubjreg";
     "srcreg": InputPathType;
     "targreg": InputPathType;
     "targsubj"?: string | null | undefined;
@@ -22,43 +22,11 @@ interface MkxsubjregParameters {
     "help": boolean;
     "version": boolean;
 }
+type MkxsubjregParametersTagged = Required<Pick<MkxsubjregParameters, '@type'>> & MkxsubjregParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mkxsubjreg": mkxsubjreg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mkxsubjreg(...)`.
+ * Output object returned when calling `MkxsubjregParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +61,9 @@ function mkxsubjreg_params(
     fvol: InputPathType | null = null,
     help: boolean = false,
     version: boolean = false,
-): MkxsubjregParameters {
+): MkxsubjregParametersTagged {
     const params = {
-        "@type": "freesurfer.mkxsubjreg" as const,
+        "@type": "freesurfer/mkxsubjreg" as const,
         "srcreg": srcreg,
         "targreg": targreg,
         "help": help,
@@ -163,10 +131,10 @@ function mkxsubjreg_cargs(
             execution.inputFile((params["fvol"] ?? null))
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -260,7 +228,6 @@ function mkxsubjreg(
 export {
       MKXSUBJREG_METADATA,
       MkxsubjregOutputs,
-      MkxsubjregParameters,
       mkxsubjreg,
       mkxsubjreg_execute,
       mkxsubjreg_params,

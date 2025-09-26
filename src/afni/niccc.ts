@@ -12,7 +12,7 @@ const NICCC_METADATA: Metadata = {
 
 
 interface NicccParameters {
-    "@type": "afni.niccc";
+    "@type"?: "afni/niccc";
     "streamspec": string;
     "duplicate": boolean;
     "nodata": boolean;
@@ -26,44 +26,11 @@ interface NicccParameters {
     "find_attr"?: Array<string> | null | undefined;
     "skip_attr"?: Array<string> | null | undefined;
 }
+type NicccParametersTagged = Required<Pick<NicccParameters, '@type'>> & NicccParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.niccc": niccc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.niccc": niccc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `niccc(...)`.
+ * Output object returned when calling `NicccParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function niccc_params(
     quiet: boolean = false,
     find_attr: Array<string> | null = null,
     skip_attr: Array<string> | null = null,
-): NicccParameters {
+): NicccParametersTagged {
     const params = {
-        "@type": "afni.niccc" as const,
+        "@type": "afni/niccc" as const,
         "streamspec": streamspec,
         "duplicate": duplicate,
         "nodata": nodata,
@@ -153,10 +120,10 @@ function niccc_cargs(
     const cargs: string[] = [];
     cargs.push("niccc");
     cargs.push((params["streamspec"] ?? null));
-    if ((params["duplicate"] ?? null)) {
+    if ((params["duplicate"] ?? false)) {
         cargs.push("-dup");
     }
-    if ((params["nodata"] ?? null)) {
+    if ((params["nodata"] ?? false)) {
         cargs.push("-nodata");
     }
     if ((params["attribute"] ?? null) !== null) {
@@ -171,19 +138,19 @@ function niccc_cargs(
             (params["match"] ?? null)
         );
     }
-    if ((params["file"] ?? null)) {
+    if ((params["file"] ?? false)) {
         cargs.push("-f");
     }
-    if ((params["string"] ?? null)) {
+    if ((params["string"] ?? false)) {
         cargs.push("-s");
     }
-    if ((params["stdout"] ?? null)) {
+    if ((params["stdout"] ?? false)) {
         cargs.push("-stdout");
     }
-    if ((params["hash"] ?? null)) {
+    if ((params["hash"] ?? false)) {
         cargs.push("-#");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
     if ((params["find_attr"] ?? null) !== null) {
@@ -298,7 +265,6 @@ function niccc(
 export {
       NICCC_METADATA,
       NicccOutputs,
-      NicccParameters,
       niccc,
       niccc_execute,
       niccc_params,

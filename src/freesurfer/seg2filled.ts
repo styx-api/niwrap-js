@@ -12,7 +12,7 @@ const SEG2FILLED_METADATA: Metadata = {
 
 
 interface Seg2filledParameters {
-    "@type": "freesurfer.seg2filled";
+    "@type"?: "freesurfer/seg2filled";
     "seg_file": InputPathType;
     "norm_file": InputPathType;
     "output_file": string;
@@ -21,44 +21,11 @@ interface Seg2filledParameters {
     "surf_name"?: string | null | undefined;
     "surf_dir"?: string | null | undefined;
 }
+type Seg2filledParametersTagged = Required<Pick<Seg2filledParameters, '@type'>> & Seg2filledParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.seg2filled": seg2filled_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.seg2filled": seg2filled_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `seg2filled(...)`.
+ * Output object returned when calling `Seg2filledParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function seg2filled_params(
     cavity_flag: boolean = false,
     surf_name: string | null = null,
     surf_dir: string | null = null,
-): Seg2filledParameters {
+): Seg2filledParametersTagged {
     const params = {
-        "@type": "freesurfer.seg2filled" as const,
+        "@type": "freesurfer/seg2filled" as const,
         "seg_file": seg_file,
         "norm_file": norm_file,
         "output_file": output_file,
@@ -148,7 +115,7 @@ function seg2filled_cargs(
             String((params["ndil"] ?? null))
         );
     }
-    if ((params["cavity_flag"] ?? null)) {
+    if ((params["cavity_flag"] ?? false)) {
         cargs.push("--cavity");
     }
     if ((params["surf_name"] ?? null) !== null) {
@@ -253,7 +220,6 @@ function seg2filled(
 export {
       SEG2FILLED_METADATA,
       Seg2filledOutputs,
-      Seg2filledParameters,
       seg2filled,
       seg2filled_execute,
       seg2filled_params,

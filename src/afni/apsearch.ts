@@ -12,49 +12,16 @@ const APSEARCH_METADATA: Metadata = {
 
 
 interface ApsearchParameters {
-    "@type": "afni.apsearch";
+    "@type"?: "afni/apsearch";
     "search_term": string;
     "file_output"?: string | null | undefined;
     "verbose": boolean;
 }
+type ApsearchParametersTagged = Required<Pick<ApsearchParameters, '@type'>> & ApsearchParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.apsearch": apsearch_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.apsearch": apsearch_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `apsearch(...)`.
+ * Output object returned when calling `ApsearchParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function apsearch_params(
     search_term: string,
     file_output: string | null = null,
     verbose: boolean = false,
-): ApsearchParameters {
+): ApsearchParametersTagged {
     const params = {
-        "@type": "afni.apsearch" as const,
+        "@type": "afni/apsearch" as const,
         "search_term": search_term,
         "verbose": verbose,
     };
@@ -114,7 +81,7 @@ function apsearch_cargs(
     if ((params["file_output"] ?? null) !== null) {
         cargs.push((params["file_output"] ?? null));
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
     return cargs;
@@ -199,7 +166,6 @@ function apsearch(
 export {
       APSEARCH_METADATA,
       ApsearchOutputs,
-      ApsearchParameters,
       apsearch,
       apsearch_execute,
       apsearch_params,

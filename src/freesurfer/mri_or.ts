@@ -12,47 +12,15 @@ const MRI_OR_METADATA: Metadata = {
 
 
 interface MriOrParameters {
-    "@type": "freesurfer.mri_or";
+    "@type"?: "freesurfer/mri_or";
     "original_labels": boolean;
     "input_files": Array<InputPathType>;
 }
+type MriOrParametersTagged = Required<Pick<MriOrParameters, '@type'>> & MriOrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_or": mri_or_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_or(...)`.
+ * Output object returned when calling `MriOrParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface MriOrOutputs {
 function mri_or_params(
     input_files: Array<InputPathType>,
     original_labels: boolean = false,
-): MriOrParameters {
+): MriOrParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_or" as const,
+        "@type": "freesurfer/mri_or" as const,
         "original_labels": original_labels,
         "input_files": input_files,
     };
@@ -99,7 +67,7 @@ function mri_or_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("mri_or");
-    if ((params["original_labels"] ?? null)) {
+    if ((params["original_labels"] ?? false)) {
         cargs.push("-o");
     }
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
@@ -182,7 +150,6 @@ function mri_or(
 export {
       MRI_OR_METADATA,
       MriOrOutputs,
-      MriOrParameters,
       mri_or,
       mri_or_execute,
       mri_or_params,

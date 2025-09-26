@@ -12,7 +12,7 @@ const WHIRLGIF_METADATA: Metadata = {
 
 
 interface WhirlgifParameters {
-    "@type": "afni.whirlgif";
+    "@type"?: "afni/whirlgif";
     "verbose": boolean;
     "loop"?: string | null | undefined;
     "transparency_index"?: number | null | undefined;
@@ -21,44 +21,11 @@ interface WhirlgifParameters {
     "infile"?: InputPathType | null | undefined;
     "gif_files": Array<InputPathType>;
 }
+type WhirlgifParametersTagged = Required<Pick<WhirlgifParameters, '@type'>> & WhirlgifParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.whirlgif": whirlgif_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.whirlgif": whirlgif_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `whirlgif(...)`.
+ * Output object returned when calling `WhirlgifParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function whirlgif_params(
     inter_frame_delay: number | null = null,
     outfile: string | null = null,
     infile: InputPathType | null = null,
-): WhirlgifParameters {
+): WhirlgifParametersTagged {
     const params = {
-        "@type": "afni.whirlgif" as const,
+        "@type": "afni/whirlgif" as const,
         "verbose": verbose,
         "gif_files": gif_files,
     };
@@ -134,7 +101,7 @@ function whirlgif_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("whirlgif");
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
     if ((params["loop"] ?? null) !== null) {
@@ -258,7 +225,6 @@ function whirlgif(
 export {
       WHIRLGIF_METADATA,
       WhirlgifOutputs,
-      WhirlgifParameters,
       whirlgif,
       whirlgif_execute,
       whirlgif_params,

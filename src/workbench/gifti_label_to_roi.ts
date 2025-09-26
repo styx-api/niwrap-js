@@ -12,51 +12,18 @@ const GIFTI_LABEL_TO_ROI_METADATA: Metadata = {
 
 
 interface GiftiLabelToRoiParameters {
-    "@type": "workbench.gifti-label-to-roi";
+    "@type"?: "workbench/gifti-label-to-roi";
     "label_in": InputPathType;
     "metric_out": string;
     "opt_name_label_name"?: string | null | undefined;
     "opt_key_label_key"?: number | null | undefined;
     "opt_map_map"?: string | null | undefined;
 }
+type GiftiLabelToRoiParametersTagged = Required<Pick<GiftiLabelToRoiParameters, '@type'>> & GiftiLabelToRoiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.gifti-label-to-roi": gifti_label_to_roi_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.gifti-label-to-roi": gifti_label_to_roi_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `gifti_label_to_roi(...)`.
+ * Output object returned when calling `GiftiLabelToRoiParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function gifti_label_to_roi_params(
     opt_name_label_name: string | null = null,
     opt_key_label_key: number | null = null,
     opt_map_map: string | null = null,
-): GiftiLabelToRoiParameters {
+): GiftiLabelToRoiParametersTagged {
     const params = {
-        "@type": "workbench.gifti-label-to-roi" as const,
+        "@type": "workbench/gifti-label-to-roi" as const,
         "label_in": label_in,
         "metric_out": metric_out,
     };
@@ -233,7 +200,6 @@ function gifti_label_to_roi(
 export {
       GIFTI_LABEL_TO_ROI_METADATA,
       GiftiLabelToRoiOutputs,
-      GiftiLabelToRoiParameters,
       gifti_label_to_roi,
       gifti_label_to_roi_execute,
       gifti_label_to_roi_params,

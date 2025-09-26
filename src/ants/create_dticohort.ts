@@ -12,7 +12,7 @@ const CREATE_DTICOHORT_METADATA: Metadata = {
 
 
 interface CreateDticohortParameters {
-    "@type": "ants.CreateDTICohort";
+    "@type"?: "ants/CreateDTICohort";
     "image_dimensionality"?: 2 | 3 | null | undefined;
     "dti_atlas": InputPathType;
     "label_mask_image"?: string | null | undefined;
@@ -22,44 +22,11 @@ interface CreateDticohortParameters {
     "registered_population"?: InputPathType | null | undefined;
     "output": string;
 }
+type CreateDticohortParametersTagged = Required<Pick<CreateDticohortParameters, '@type'>> & CreateDticohortParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.CreateDTICohort": create_dticohort_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.CreateDTICohort": create_dticohort_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `create_dticohort(...)`.
+ * Output object returned when calling `CreateDticohortParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function create_dticohort_params(
     noise_sigma: number | null = null,
     pathology: string | null = null,
     registered_population: InputPathType | null = null,
-): CreateDticohortParameters {
+): CreateDticohortParametersTagged {
     const params = {
-        "@type": "ants.CreateDTICohort" as const,
+        "@type": "ants/CreateDTICohort" as const,
         "dti_atlas": dti_atlas,
         "dwi_parameters": dwi_parameters,
         "output": output,
@@ -272,7 +239,6 @@ function create_dticohort(
 export {
       CREATE_DTICOHORT_METADATA,
       CreateDticohortOutputs,
-      CreateDticohortParameters,
       create_dticohort,
       create_dticohort_execute,
       create_dticohort_params,

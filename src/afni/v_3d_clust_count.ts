@@ -12,50 +12,17 @@ const V_3D_CLUST_COUNT_METADATA: Metadata = {
 
 
 interface V3dClustCountParameters {
-    "@type": "afni.3dClustCount";
+    "@type"?: "afni/3dClustCount";
     "datasets": Array<InputPathType>;
     "prefix"?: string | null | undefined;
     "final": boolean;
     "quiet": boolean;
 }
+type V3dClustCountParametersTagged = Required<Pick<V3dClustCountParameters, '@type'>> & V3dClustCountParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dClustCount": v_3d_clust_count_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dClustCount": v_3d_clust_count_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_clust_count(...)`.
+ * Output object returned when calling `V3dClustCountParameters(...)`.
  *
  * @interface
  */
@@ -94,9 +61,9 @@ function v_3d_clust_count_params(
     prefix: string | null = null,
     final: boolean = false,
     quiet: boolean = false,
-): V3dClustCountParameters {
+): V3dClustCountParametersTagged {
     const params = {
-        "@type": "afni.3dClustCount" as const,
+        "@type": "afni/3dClustCount" as const,
         "datasets": datasets,
         "final": final,
         "quiet": quiet,
@@ -129,10 +96,10 @@ function v_3d_clust_count_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["final"] ?? null)) {
+    if ((params["final"] ?? false)) {
         cargs.push("-final");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
     return cargs;
@@ -220,7 +187,6 @@ function v_3d_clust_count(
 
 export {
       V3dClustCountOutputs,
-      V3dClustCountParameters,
       V_3D_CLUST_COUNT_METADATA,
       v_3d_clust_count,
       v_3d_clust_count_execute,

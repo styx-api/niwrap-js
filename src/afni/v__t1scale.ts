@@ -12,7 +12,7 @@ const V__T1SCALE_METADATA: Metadata = {
 
 
 interface VT1scaleParameters {
-    "@type": "afni.@T1scale";
+    "@type"?: "afni/@T1scale";
     "t1_volume": InputPathType;
     "pd_volume"?: InputPathType | null | undefined;
     "output_directory"?: string | null | undefined;
@@ -28,44 +28,11 @@ interface VT1scaleParameters {
     "all_opts": boolean;
     "h_find_word"?: string | null | undefined;
 }
+type VT1scaleParametersTagged = Required<Pick<VT1scaleParameters, '@type'>> & VT1scaleParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@T1scale": v__t1scale_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@T1scale": v__t1scale_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__t1scale(...)`.
+ * Output object returned when calling `VT1scaleParameters(...)`.
  *
  * @interface
  */
@@ -124,9 +91,9 @@ function v__t1scale_params(
     h_view: boolean = false,
     all_opts: boolean = false,
     h_find_word: string | null = null,
-): VT1scaleParameters {
+): VT1scaleParametersTagged {
     const params = {
-        "@type": "afni.@T1scale" as const,
+        "@type": "afni/@T1scale" as const,
         "t1_volume": t1_volume,
         "align": align,
         "head_mask": head_mask,
@@ -184,7 +151,7 @@ function v__t1scale_cargs(
             (params["output_directory"] ?? null)
         );
     }
-    if ((params["align"] ?? null)) {
+    if ((params["align"] ?? false)) {
         cargs.push("-align");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -193,28 +160,28 @@ function v__t1scale_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["head_mask"] ?? null)) {
+    if ((params["head_mask"] ?? false)) {
         cargs.push("-head_mask");
     }
-    if ((params["unmasked_uni"] ?? null)) {
+    if ((params["unmasked_uni"] ?? false)) {
         cargs.push("-unmasked_uni");
     }
-    if ((params["masked_uni"] ?? null)) {
+    if ((params["masked_uni"] ?? false)) {
         cargs.push("-masked_uni");
     }
-    if ((params["echo"] ?? null)) {
+    if ((params["echo"] ?? false)) {
         cargs.push("-echo");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["h_web"] ?? null)) {
+    if ((params["h_web"] ?? false)) {
         cargs.push("-h_web");
     }
-    if ((params["h_view"] ?? null)) {
+    if ((params["h_view"] ?? false)) {
         cargs.push("-hview");
     }
-    if ((params["all_opts"] ?? null)) {
+    if ((params["all_opts"] ?? false)) {
         cargs.push("-all_opts");
     }
     if ((params["h_find_word"] ?? null) !== null) {
@@ -328,7 +295,6 @@ function v__t1scale(
 
 export {
       VT1scaleOutputs,
-      VT1scaleParameters,
       V__T1SCALE_METADATA,
       v__t1scale,
       v__t1scale_execute,

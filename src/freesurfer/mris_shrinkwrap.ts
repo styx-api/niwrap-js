@@ -12,49 +12,16 @@ const MRIS_SHRINKWRAP_METADATA: Metadata = {
 
 
 interface MrisShrinkwrapParameters {
-    "@type": "freesurfer.mris_shrinkwrap";
+    "@type"?: "freesurfer/mris_shrinkwrap";
     "volume": InputPathType;
     "output_name": string;
     "threshold"?: number | null | undefined;
 }
+type MrisShrinkwrapParametersTagged = Required<Pick<MrisShrinkwrapParameters, '@type'>> & MrisShrinkwrapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_shrinkwrap": mris_shrinkwrap_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_shrinkwrap": mris_shrinkwrap_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_shrinkwrap(...)`.
+ * Output object returned when calling `MrisShrinkwrapParameters(...)`.
  *
  * @interface
  */
@@ -91,9 +58,9 @@ function mris_shrinkwrap_params(
     volume: InputPathType,
     output_name: string,
     threshold: number | null = null,
-): MrisShrinkwrapParameters {
+): MrisShrinkwrapParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_shrinkwrap" as const,
+        "@type": "freesurfer/mris_shrinkwrap" as const,
         "volume": volume,
         "output_name": output_name,
     };
@@ -210,7 +177,6 @@ function mris_shrinkwrap(
 export {
       MRIS_SHRINKWRAP_METADATA,
       MrisShrinkwrapOutputs,
-      MrisShrinkwrapParameters,
       mris_shrinkwrap,
       mris_shrinkwrap_execute,
       mris_shrinkwrap_params,

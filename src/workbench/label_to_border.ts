@@ -12,51 +12,18 @@ const LABEL_TO_BORDER_METADATA: Metadata = {
 
 
 interface LabelToBorderParameters {
-    "@type": "workbench.label-to-border";
+    "@type"?: "workbench/label-to-border";
     "surface": InputPathType;
     "label_in": InputPathType;
     "border_out": string;
     "opt_placement_fraction"?: number | null | undefined;
     "opt_column_column"?: string | null | undefined;
 }
+type LabelToBorderParametersTagged = Required<Pick<LabelToBorderParameters, '@type'>> & LabelToBorderParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.label-to-border": label_to_border_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.label-to-border": label_to_border_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `label_to_border(...)`.
+ * Output object returned when calling `LabelToBorderParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function label_to_border_params(
     border_out: string,
     opt_placement_fraction: number | null = null,
     opt_column_column: string | null = null,
-): LabelToBorderParameters {
+): LabelToBorderParametersTagged {
     const params = {
-        "@type": "workbench.label-to-border" as const,
+        "@type": "workbench/label-to-border" as const,
         "surface": surface,
         "label_in": label_in,
         "border_out": border_out,
@@ -226,7 +193,6 @@ function label_to_border(
 export {
       LABEL_TO_BORDER_METADATA,
       LabelToBorderOutputs,
-      LabelToBorderParameters,
       label_to_border,
       label_to_border_execute,
       label_to_border_params,

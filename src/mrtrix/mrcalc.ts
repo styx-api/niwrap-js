@@ -12,276 +12,329 @@ const MRCALC_METADATA: Metadata = {
 
 
 interface MrcalcAbsParameters {
-    "@type": "mrtrix.mrcalc.abs";
+    "@type"?: "abs";
 }
+type MrcalcAbsParametersTagged = Required<Pick<MrcalcAbsParameters, '@type'>> & MrcalcAbsParameters;
 
 
 interface MrcalcNegParameters {
-    "@type": "mrtrix.mrcalc.neg";
+    "@type"?: "neg";
 }
+type MrcalcNegParametersTagged = Required<Pick<MrcalcNegParameters, '@type'>> & MrcalcNegParameters;
 
 
 interface MrcalcAddParameters {
-    "@type": "mrtrix.mrcalc.add";
+    "@type"?: "add";
 }
+type MrcalcAddParametersTagged = Required<Pick<MrcalcAddParameters, '@type'>> & MrcalcAddParameters;
 
 
 interface MrcalcSubtractParameters {
-    "@type": "mrtrix.mrcalc.subtract";
+    "@type"?: "subtract";
 }
+type MrcalcSubtractParametersTagged = Required<Pick<MrcalcSubtractParameters, '@type'>> & MrcalcSubtractParameters;
 
 
 interface MrcalcMultiplyParameters {
-    "@type": "mrtrix.mrcalc.multiply";
+    "@type"?: "multiply";
 }
+type MrcalcMultiplyParametersTagged = Required<Pick<MrcalcMultiplyParameters, '@type'>> & MrcalcMultiplyParameters;
 
 
 interface MrcalcDivideParameters {
-    "@type": "mrtrix.mrcalc.divide";
+    "@type"?: "divide";
 }
+type MrcalcDivideParametersTagged = Required<Pick<MrcalcDivideParameters, '@type'>> & MrcalcDivideParameters;
 
 
 interface MrcalcMinParameters {
-    "@type": "mrtrix.mrcalc.min";
+    "@type"?: "min";
 }
+type MrcalcMinParametersTagged = Required<Pick<MrcalcMinParameters, '@type'>> & MrcalcMinParameters;
 
 
 interface MrcalcMaxParameters {
-    "@type": "mrtrix.mrcalc.max";
+    "@type"?: "max";
 }
+type MrcalcMaxParametersTagged = Required<Pick<MrcalcMaxParameters, '@type'>> & MrcalcMaxParameters;
 
 
 interface MrcalcLtParameters {
-    "@type": "mrtrix.mrcalc.lt";
+    "@type"?: "lt";
 }
+type MrcalcLtParametersTagged = Required<Pick<MrcalcLtParameters, '@type'>> & MrcalcLtParameters;
 
 
 interface MrcalcGtParameters {
-    "@type": "mrtrix.mrcalc.gt";
+    "@type"?: "gt";
 }
+type MrcalcGtParametersTagged = Required<Pick<MrcalcGtParameters, '@type'>> & MrcalcGtParameters;
 
 
 interface MrcalcLeParameters {
-    "@type": "mrtrix.mrcalc.le";
+    "@type"?: "le";
 }
+type MrcalcLeParametersTagged = Required<Pick<MrcalcLeParameters, '@type'>> & MrcalcLeParameters;
 
 
 interface MrcalcGeParameters {
-    "@type": "mrtrix.mrcalc.ge";
+    "@type"?: "ge";
 }
+type MrcalcGeParametersTagged = Required<Pick<MrcalcGeParameters, '@type'>> & MrcalcGeParameters;
 
 
 interface MrcalcEqParameters {
-    "@type": "mrtrix.mrcalc.eq";
+    "@type"?: "eq";
 }
+type MrcalcEqParametersTagged = Required<Pick<MrcalcEqParameters, '@type'>> & MrcalcEqParameters;
 
 
 interface MrcalcNeqParameters {
-    "@type": "mrtrix.mrcalc.neq";
+    "@type"?: "neq";
 }
+type MrcalcNeqParametersTagged = Required<Pick<MrcalcNeqParameters, '@type'>> & MrcalcNeqParameters;
 
 
 interface MrcalcIfParameters {
-    "@type": "mrtrix.mrcalc.if";
+    "@type"?: "if";
 }
+type MrcalcIfParametersTagged = Required<Pick<MrcalcIfParameters, '@type'>> & MrcalcIfParameters;
 
 
 interface MrcalcReplaceParameters {
-    "@type": "mrtrix.mrcalc.replace";
+    "@type"?: "replace";
 }
+type MrcalcReplaceParametersTagged = Required<Pick<MrcalcReplaceParameters, '@type'>> & MrcalcReplaceParameters;
 
 
 interface MrcalcSqrtParameters {
-    "@type": "mrtrix.mrcalc.sqrt";
+    "@type"?: "sqrt";
 }
+type MrcalcSqrtParametersTagged = Required<Pick<MrcalcSqrtParameters, '@type'>> & MrcalcSqrtParameters;
 
 
 interface MrcalcPowParameters {
-    "@type": "mrtrix.mrcalc.pow";
+    "@type"?: "pow";
 }
+type MrcalcPowParametersTagged = Required<Pick<MrcalcPowParameters, '@type'>> & MrcalcPowParameters;
 
 
 interface MrcalcRoundParameters {
-    "@type": "mrtrix.mrcalc.round";
+    "@type"?: "round";
 }
+type MrcalcRoundParametersTagged = Required<Pick<MrcalcRoundParameters, '@type'>> & MrcalcRoundParameters;
 
 
 interface MrcalcCeilParameters {
-    "@type": "mrtrix.mrcalc.ceil";
+    "@type"?: "ceil";
 }
+type MrcalcCeilParametersTagged = Required<Pick<MrcalcCeilParameters, '@type'>> & MrcalcCeilParameters;
 
 
 interface MrcalcFloorParameters {
-    "@type": "mrtrix.mrcalc.floor";
+    "@type"?: "floor";
 }
+type MrcalcFloorParametersTagged = Required<Pick<MrcalcFloorParameters, '@type'>> & MrcalcFloorParameters;
 
 
 interface MrcalcNotParameters {
-    "@type": "mrtrix.mrcalc.not";
+    "@type"?: "not";
 }
+type MrcalcNotParametersTagged = Required<Pick<MrcalcNotParameters, '@type'>> & MrcalcNotParameters;
 
 
 interface MrcalcAndParameters {
-    "@type": "mrtrix.mrcalc.and";
+    "@type"?: "and";
 }
+type MrcalcAndParametersTagged = Required<Pick<MrcalcAndParameters, '@type'>> & MrcalcAndParameters;
 
 
 interface MrcalcOrParameters {
-    "@type": "mrtrix.mrcalc.or";
+    "@type"?: "or";
 }
+type MrcalcOrParametersTagged = Required<Pick<MrcalcOrParameters, '@type'>> & MrcalcOrParameters;
 
 
 interface MrcalcXorParameters {
-    "@type": "mrtrix.mrcalc.xor";
+    "@type"?: "xor";
 }
+type MrcalcXorParametersTagged = Required<Pick<MrcalcXorParameters, '@type'>> & MrcalcXorParameters;
 
 
 interface MrcalcIsnanParameters {
-    "@type": "mrtrix.mrcalc.isnan";
+    "@type"?: "isnan";
 }
+type MrcalcIsnanParametersTagged = Required<Pick<MrcalcIsnanParameters, '@type'>> & MrcalcIsnanParameters;
 
 
 interface MrcalcIsinfParameters {
-    "@type": "mrtrix.mrcalc.isinf";
+    "@type"?: "isinf";
 }
+type MrcalcIsinfParametersTagged = Required<Pick<MrcalcIsinfParameters, '@type'>> & MrcalcIsinfParameters;
 
 
 interface MrcalcFiniteParameters {
-    "@type": "mrtrix.mrcalc.finite";
+    "@type"?: "finite";
 }
+type MrcalcFiniteParametersTagged = Required<Pick<MrcalcFiniteParameters, '@type'>> & MrcalcFiniteParameters;
 
 
 interface MrcalcComplexParameters {
-    "@type": "mrtrix.mrcalc.complex";
+    "@type"?: "complex";
 }
+type MrcalcComplexParametersTagged = Required<Pick<MrcalcComplexParameters, '@type'>> & MrcalcComplexParameters;
 
 
 interface MrcalcPolarParameters {
-    "@type": "mrtrix.mrcalc.polar";
+    "@type"?: "polar";
 }
+type MrcalcPolarParametersTagged = Required<Pick<MrcalcPolarParameters, '@type'>> & MrcalcPolarParameters;
 
 
 interface MrcalcRealParameters {
-    "@type": "mrtrix.mrcalc.real";
+    "@type"?: "real";
 }
+type MrcalcRealParametersTagged = Required<Pick<MrcalcRealParameters, '@type'>> & MrcalcRealParameters;
 
 
 interface MrcalcImagParameters {
-    "@type": "mrtrix.mrcalc.imag";
+    "@type"?: "imag";
 }
+type MrcalcImagParametersTagged = Required<Pick<MrcalcImagParameters, '@type'>> & MrcalcImagParameters;
 
 
 interface MrcalcPhaseParameters {
-    "@type": "mrtrix.mrcalc.phase";
+    "@type"?: "phase";
 }
+type MrcalcPhaseParametersTagged = Required<Pick<MrcalcPhaseParameters, '@type'>> & MrcalcPhaseParameters;
 
 
 interface MrcalcConjParameters {
-    "@type": "mrtrix.mrcalc.conj";
+    "@type"?: "conj";
 }
+type MrcalcConjParametersTagged = Required<Pick<MrcalcConjParameters, '@type'>> & MrcalcConjParameters;
 
 
 interface MrcalcProjParameters {
-    "@type": "mrtrix.mrcalc.proj";
+    "@type"?: "proj";
 }
+type MrcalcProjParametersTagged = Required<Pick<MrcalcProjParameters, '@type'>> & MrcalcProjParameters;
 
 
 interface MrcalcExpParameters {
-    "@type": "mrtrix.mrcalc.exp";
+    "@type"?: "exp";
 }
+type MrcalcExpParametersTagged = Required<Pick<MrcalcExpParameters, '@type'>> & MrcalcExpParameters;
 
 
 interface MrcalcLogParameters {
-    "@type": "mrtrix.mrcalc.log";
+    "@type"?: "log";
 }
+type MrcalcLogParametersTagged = Required<Pick<MrcalcLogParameters, '@type'>> & MrcalcLogParameters;
 
 
 interface MrcalcLog10Parameters {
-    "@type": "mrtrix.mrcalc.log10";
+    "@type"?: "log10";
 }
+type MrcalcLog10ParametersTagged = Required<Pick<MrcalcLog10Parameters, '@type'>> & MrcalcLog10Parameters;
 
 
 interface MrcalcCosParameters {
-    "@type": "mrtrix.mrcalc.cos";
+    "@type"?: "cos";
 }
+type MrcalcCosParametersTagged = Required<Pick<MrcalcCosParameters, '@type'>> & MrcalcCosParameters;
 
 
 interface MrcalcSinParameters {
-    "@type": "mrtrix.mrcalc.sin";
+    "@type"?: "sin";
 }
+type MrcalcSinParametersTagged = Required<Pick<MrcalcSinParameters, '@type'>> & MrcalcSinParameters;
 
 
 interface MrcalcTanParameters {
-    "@type": "mrtrix.mrcalc.tan";
+    "@type"?: "tan";
 }
+type MrcalcTanParametersTagged = Required<Pick<MrcalcTanParameters, '@type'>> & MrcalcTanParameters;
 
 
 interface MrcalcAcosParameters {
-    "@type": "mrtrix.mrcalc.acos";
+    "@type"?: "acos";
 }
+type MrcalcAcosParametersTagged = Required<Pick<MrcalcAcosParameters, '@type'>> & MrcalcAcosParameters;
 
 
 interface MrcalcAsinParameters {
-    "@type": "mrtrix.mrcalc.asin";
+    "@type"?: "asin";
 }
+type MrcalcAsinParametersTagged = Required<Pick<MrcalcAsinParameters, '@type'>> & MrcalcAsinParameters;
 
 
 interface MrcalcAtanParameters {
-    "@type": "mrtrix.mrcalc.atan";
+    "@type"?: "atan";
 }
+type MrcalcAtanParametersTagged = Required<Pick<MrcalcAtanParameters, '@type'>> & MrcalcAtanParameters;
 
 
 interface MrcalcCoshParameters {
-    "@type": "mrtrix.mrcalc.cosh";
+    "@type"?: "cosh";
 }
+type MrcalcCoshParametersTagged = Required<Pick<MrcalcCoshParameters, '@type'>> & MrcalcCoshParameters;
 
 
 interface MrcalcSinhParameters {
-    "@type": "mrtrix.mrcalc.sinh";
+    "@type"?: "sinh";
 }
+type MrcalcSinhParametersTagged = Required<Pick<MrcalcSinhParameters, '@type'>> & MrcalcSinhParameters;
 
 
 interface MrcalcTanhParameters {
-    "@type": "mrtrix.mrcalc.tanh";
+    "@type"?: "tanh";
 }
+type MrcalcTanhParametersTagged = Required<Pick<MrcalcTanhParameters, '@type'>> & MrcalcTanhParameters;
 
 
 interface MrcalcAcoshParameters {
-    "@type": "mrtrix.mrcalc.acosh";
+    "@type"?: "acosh";
 }
+type MrcalcAcoshParametersTagged = Required<Pick<MrcalcAcoshParameters, '@type'>> & MrcalcAcoshParameters;
 
 
 interface MrcalcAsinhParameters {
-    "@type": "mrtrix.mrcalc.asinh";
+    "@type"?: "asinh";
 }
+type MrcalcAsinhParametersTagged = Required<Pick<MrcalcAsinhParameters, '@type'>> & MrcalcAsinhParameters;
 
 
 interface MrcalcAtanhParameters {
-    "@type": "mrtrix.mrcalc.atanh";
+    "@type"?: "atanh";
 }
+type MrcalcAtanhParametersTagged = Required<Pick<MrcalcAtanhParameters, '@type'>> & MrcalcAtanhParameters;
 
 
 interface MrcalcConfigParameters {
-    "@type": "mrtrix.mrcalc.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MrcalcConfigParametersTagged = Required<Pick<MrcalcConfigParameters, '@type'>> & MrcalcConfigParameters;
 
 
 interface MrcalcVariousStringParameters {
-    "@type": "mrtrix.mrcalc.VariousString";
+    "@type"?: "VariousString";
     "obj": string;
 }
+type MrcalcVariousStringParametersTagged = Required<Pick<MrcalcVariousStringParameters, '@type'>> & MrcalcVariousStringParameters;
 
 
 interface MrcalcVariousFileParameters {
-    "@type": "mrtrix.mrcalc.VariousFile";
+    "@type"?: "VariousFile";
     "obj": InputPathType;
 }
+type MrcalcVariousFileParametersTagged = Required<Pick<MrcalcVariousFileParameters, '@type'>> & MrcalcVariousFileParameters;
 
 
 interface MrcalcParameters {
-    "@type": "mrtrix.mrcalc";
+    "@type"?: "mrtrix/mrcalc";
     "abs"?: Array<MrcalcAbsParameters> | null | undefined;
     "neg"?: Array<MrcalcNegParameters> | null | undefined;
     "add"?: Array<MrcalcAddParameters> | null | undefined;
@@ -341,8 +394,9 @@ interface MrcalcParameters {
     "config"?: Array<MrcalcConfigParameters> | null | undefined;
     "help": boolean;
     "version": boolean;
-    "operand": Array<MrcalcVariousStringParameters | MrcalcVariousFileParameters>;
+    "operand": Array<MrcalcVariousStringParametersTagged | MrcalcVariousFileParametersTagged>;
 }
+type MrcalcParametersTagged = Required<Pick<MrcalcParameters, '@type'>> & MrcalcParameters;
 
 
 /**
@@ -352,64 +406,12 @@ interface MrcalcParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function mrcalc_operand_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "mrtrix.mrcalc": mrcalc_cargs,
-        "mrtrix.mrcalc.abs": mrcalc_abs_cargs,
-        "mrtrix.mrcalc.neg": mrcalc_neg_cargs,
-        "mrtrix.mrcalc.add": mrcalc_add_cargs,
-        "mrtrix.mrcalc.subtract": mrcalc_subtract_cargs,
-        "mrtrix.mrcalc.multiply": mrcalc_multiply_cargs,
-        "mrtrix.mrcalc.divide": mrcalc_divide_cargs,
-        "mrtrix.mrcalc.min": mrcalc_min_cargs,
-        "mrtrix.mrcalc.max": mrcalc_max_cargs,
-        "mrtrix.mrcalc.lt": mrcalc_lt_cargs,
-        "mrtrix.mrcalc.gt": mrcalc_gt_cargs,
-        "mrtrix.mrcalc.le": mrcalc_le_cargs,
-        "mrtrix.mrcalc.ge": mrcalc_ge_cargs,
-        "mrtrix.mrcalc.eq": mrcalc_eq_cargs,
-        "mrtrix.mrcalc.neq": mrcalc_neq_cargs,
-        "mrtrix.mrcalc.if": mrcalc_if_cargs,
-        "mrtrix.mrcalc.replace": mrcalc_replace_cargs,
-        "mrtrix.mrcalc.sqrt": mrcalc_sqrt_cargs,
-        "mrtrix.mrcalc.pow": mrcalc_pow_cargs,
-        "mrtrix.mrcalc.round": mrcalc_round_cargs,
-        "mrtrix.mrcalc.ceil": mrcalc_ceil_cargs,
-        "mrtrix.mrcalc.floor": mrcalc_floor_cargs,
-        "mrtrix.mrcalc.not": mrcalc_not_cargs,
-        "mrtrix.mrcalc.and": mrcalc_and_cargs,
-        "mrtrix.mrcalc.or": mrcalc_or_cargs,
-        "mrtrix.mrcalc.xor": mrcalc_xor_cargs,
-        "mrtrix.mrcalc.isnan": mrcalc_isnan_cargs,
-        "mrtrix.mrcalc.isinf": mrcalc_isinf_cargs,
-        "mrtrix.mrcalc.finite": mrcalc_finite_cargs,
-        "mrtrix.mrcalc.complex": mrcalc_complex_cargs,
-        "mrtrix.mrcalc.polar": mrcalc_polar_cargs,
-        "mrtrix.mrcalc.real": mrcalc_real_cargs,
-        "mrtrix.mrcalc.imag": mrcalc_imag_cargs,
-        "mrtrix.mrcalc.phase": mrcalc_phase_cargs,
-        "mrtrix.mrcalc.conj": mrcalc_conj_cargs,
-        "mrtrix.mrcalc.proj": mrcalc_proj_cargs,
-        "mrtrix.mrcalc.exp": mrcalc_exp_cargs,
-        "mrtrix.mrcalc.log": mrcalc_log_cargs,
-        "mrtrix.mrcalc.log10": mrcalc_log10_cargs,
-        "mrtrix.mrcalc.cos": mrcalc_cos_cargs,
-        "mrtrix.mrcalc.sin": mrcalc_sin_cargs,
-        "mrtrix.mrcalc.tan": mrcalc_tan_cargs,
-        "mrtrix.mrcalc.acos": mrcalc_acos_cargs,
-        "mrtrix.mrcalc.asin": mrcalc_asin_cargs,
-        "mrtrix.mrcalc.atan": mrcalc_atan_cargs,
-        "mrtrix.mrcalc.cosh": mrcalc_cosh_cargs,
-        "mrtrix.mrcalc.sinh": mrcalc_sinh_cargs,
-        "mrtrix.mrcalc.tanh": mrcalc_tanh_cargs,
-        "mrtrix.mrcalc.acosh": mrcalc_acosh_cargs,
-        "mrtrix.mrcalc.asinh": mrcalc_asinh_cargs,
-        "mrtrix.mrcalc.atanh": mrcalc_atanh_cargs,
-        "mrtrix.mrcalc.config": mrcalc_config_cargs,
-        "mrtrix.mrcalc.VariousString": mrcalc_various_string_cargs,
-        "mrtrix.mrcalc.VariousFile": mrcalc_various_file_cargs,
+        "VariousString": mrcalc_various_string_cargs,
+        "VariousFile": mrcalc_various_file_cargs,
     };
     return cargsFuncs[t];
 }
@@ -422,7 +424,7 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function mrcalc_operand_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
@@ -437,9 +439,9 @@ function dynOutputs(
  * @returns Parameter dictionary
  */
 function mrcalc_abs_params(
-): MrcalcAbsParameters {
+): MrcalcAbsParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.abs" as const,
+        "@type": "abs" as const,
     };
     return params;
 }
@@ -469,9 +471,9 @@ function mrcalc_abs_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_neg_params(
-): MrcalcNegParameters {
+): MrcalcNegParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.neg" as const,
+        "@type": "neg" as const,
     };
     return params;
 }
@@ -501,9 +503,9 @@ function mrcalc_neg_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_add_params(
-): MrcalcAddParameters {
+): MrcalcAddParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.add" as const,
+        "@type": "add" as const,
     };
     return params;
 }
@@ -533,9 +535,9 @@ function mrcalc_add_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_subtract_params(
-): MrcalcSubtractParameters {
+): MrcalcSubtractParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.subtract" as const,
+        "@type": "subtract" as const,
     };
     return params;
 }
@@ -565,9 +567,9 @@ function mrcalc_subtract_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_multiply_params(
-): MrcalcMultiplyParameters {
+): MrcalcMultiplyParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.multiply" as const,
+        "@type": "multiply" as const,
     };
     return params;
 }
@@ -597,9 +599,9 @@ function mrcalc_multiply_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_divide_params(
-): MrcalcDivideParameters {
+): MrcalcDivideParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.divide" as const,
+        "@type": "divide" as const,
     };
     return params;
 }
@@ -629,9 +631,9 @@ function mrcalc_divide_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_min_params(
-): MrcalcMinParameters {
+): MrcalcMinParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.min" as const,
+        "@type": "min" as const,
     };
     return params;
 }
@@ -661,9 +663,9 @@ function mrcalc_min_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_max_params(
-): MrcalcMaxParameters {
+): MrcalcMaxParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.max" as const,
+        "@type": "max" as const,
     };
     return params;
 }
@@ -693,9 +695,9 @@ function mrcalc_max_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_lt_params(
-): MrcalcLtParameters {
+): MrcalcLtParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.lt" as const,
+        "@type": "lt" as const,
     };
     return params;
 }
@@ -725,9 +727,9 @@ function mrcalc_lt_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_gt_params(
-): MrcalcGtParameters {
+): MrcalcGtParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.gt" as const,
+        "@type": "gt" as const,
     };
     return params;
 }
@@ -757,9 +759,9 @@ function mrcalc_gt_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_le_params(
-): MrcalcLeParameters {
+): MrcalcLeParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.le" as const,
+        "@type": "le" as const,
     };
     return params;
 }
@@ -789,9 +791,9 @@ function mrcalc_le_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_ge_params(
-): MrcalcGeParameters {
+): MrcalcGeParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.ge" as const,
+        "@type": "ge" as const,
     };
     return params;
 }
@@ -821,9 +823,9 @@ function mrcalc_ge_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_eq_params(
-): MrcalcEqParameters {
+): MrcalcEqParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.eq" as const,
+        "@type": "eq" as const,
     };
     return params;
 }
@@ -853,9 +855,9 @@ function mrcalc_eq_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_neq_params(
-): MrcalcNeqParameters {
+): MrcalcNeqParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.neq" as const,
+        "@type": "neq" as const,
     };
     return params;
 }
@@ -885,9 +887,9 @@ function mrcalc_neq_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_if_params(
-): MrcalcIfParameters {
+): MrcalcIfParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.if" as const,
+        "@type": "if" as const,
     };
     return params;
 }
@@ -917,9 +919,9 @@ function mrcalc_if_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_replace_params(
-): MrcalcReplaceParameters {
+): MrcalcReplaceParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.replace" as const,
+        "@type": "replace" as const,
     };
     return params;
 }
@@ -949,9 +951,9 @@ function mrcalc_replace_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_sqrt_params(
-): MrcalcSqrtParameters {
+): MrcalcSqrtParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.sqrt" as const,
+        "@type": "sqrt" as const,
     };
     return params;
 }
@@ -981,9 +983,9 @@ function mrcalc_sqrt_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_pow_params(
-): MrcalcPowParameters {
+): MrcalcPowParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.pow" as const,
+        "@type": "pow" as const,
     };
     return params;
 }
@@ -1013,9 +1015,9 @@ function mrcalc_pow_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_round_params(
-): MrcalcRoundParameters {
+): MrcalcRoundParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.round" as const,
+        "@type": "round" as const,
     };
     return params;
 }
@@ -1045,9 +1047,9 @@ function mrcalc_round_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_ceil_params(
-): MrcalcCeilParameters {
+): MrcalcCeilParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.ceil" as const,
+        "@type": "ceil" as const,
     };
     return params;
 }
@@ -1077,9 +1079,9 @@ function mrcalc_ceil_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_floor_params(
-): MrcalcFloorParameters {
+): MrcalcFloorParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.floor" as const,
+        "@type": "floor" as const,
     };
     return params;
 }
@@ -1109,9 +1111,9 @@ function mrcalc_floor_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_not_params(
-): MrcalcNotParameters {
+): MrcalcNotParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.not" as const,
+        "@type": "not" as const,
     };
     return params;
 }
@@ -1141,9 +1143,9 @@ function mrcalc_not_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_and_params(
-): MrcalcAndParameters {
+): MrcalcAndParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.and" as const,
+        "@type": "and" as const,
     };
     return params;
 }
@@ -1173,9 +1175,9 @@ function mrcalc_and_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_or_params(
-): MrcalcOrParameters {
+): MrcalcOrParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.or" as const,
+        "@type": "or" as const,
     };
     return params;
 }
@@ -1205,9 +1207,9 @@ function mrcalc_or_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_xor_params(
-): MrcalcXorParameters {
+): MrcalcXorParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.xor" as const,
+        "@type": "xor" as const,
     };
     return params;
 }
@@ -1237,9 +1239,9 @@ function mrcalc_xor_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_isnan_params(
-): MrcalcIsnanParameters {
+): MrcalcIsnanParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.isnan" as const,
+        "@type": "isnan" as const,
     };
     return params;
 }
@@ -1269,9 +1271,9 @@ function mrcalc_isnan_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_isinf_params(
-): MrcalcIsinfParameters {
+): MrcalcIsinfParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.isinf" as const,
+        "@type": "isinf" as const,
     };
     return params;
 }
@@ -1301,9 +1303,9 @@ function mrcalc_isinf_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_finite_params(
-): MrcalcFiniteParameters {
+): MrcalcFiniteParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.finite" as const,
+        "@type": "finite" as const,
     };
     return params;
 }
@@ -1333,9 +1335,9 @@ function mrcalc_finite_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_complex_params(
-): MrcalcComplexParameters {
+): MrcalcComplexParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.complex" as const,
+        "@type": "complex" as const,
     };
     return params;
 }
@@ -1365,9 +1367,9 @@ function mrcalc_complex_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_polar_params(
-): MrcalcPolarParameters {
+): MrcalcPolarParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.polar" as const,
+        "@type": "polar" as const,
     };
     return params;
 }
@@ -1397,9 +1399,9 @@ function mrcalc_polar_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_real_params(
-): MrcalcRealParameters {
+): MrcalcRealParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.real" as const,
+        "@type": "real" as const,
     };
     return params;
 }
@@ -1429,9 +1431,9 @@ function mrcalc_real_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_imag_params(
-): MrcalcImagParameters {
+): MrcalcImagParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.imag" as const,
+        "@type": "imag" as const,
     };
     return params;
 }
@@ -1461,9 +1463,9 @@ function mrcalc_imag_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_phase_params(
-): MrcalcPhaseParameters {
+): MrcalcPhaseParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.phase" as const,
+        "@type": "phase" as const,
     };
     return params;
 }
@@ -1493,9 +1495,9 @@ function mrcalc_phase_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_conj_params(
-): MrcalcConjParameters {
+): MrcalcConjParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.conj" as const,
+        "@type": "conj" as const,
     };
     return params;
 }
@@ -1525,9 +1527,9 @@ function mrcalc_conj_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_proj_params(
-): MrcalcProjParameters {
+): MrcalcProjParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.proj" as const,
+        "@type": "proj" as const,
     };
     return params;
 }
@@ -1557,9 +1559,9 @@ function mrcalc_proj_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_exp_params(
-): MrcalcExpParameters {
+): MrcalcExpParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.exp" as const,
+        "@type": "exp" as const,
     };
     return params;
 }
@@ -1589,9 +1591,9 @@ function mrcalc_exp_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_log_params(
-): MrcalcLogParameters {
+): MrcalcLogParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.log" as const,
+        "@type": "log" as const,
     };
     return params;
 }
@@ -1621,9 +1623,9 @@ function mrcalc_log_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_log10_params(
-): MrcalcLog10Parameters {
+): MrcalcLog10ParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.log10" as const,
+        "@type": "log10" as const,
     };
     return params;
 }
@@ -1653,9 +1655,9 @@ function mrcalc_log10_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_cos_params(
-): MrcalcCosParameters {
+): MrcalcCosParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.cos" as const,
+        "@type": "cos" as const,
     };
     return params;
 }
@@ -1685,9 +1687,9 @@ function mrcalc_cos_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_sin_params(
-): MrcalcSinParameters {
+): MrcalcSinParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.sin" as const,
+        "@type": "sin" as const,
     };
     return params;
 }
@@ -1717,9 +1719,9 @@ function mrcalc_sin_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_tan_params(
-): MrcalcTanParameters {
+): MrcalcTanParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.tan" as const,
+        "@type": "tan" as const,
     };
     return params;
 }
@@ -1749,9 +1751,9 @@ function mrcalc_tan_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_acos_params(
-): MrcalcAcosParameters {
+): MrcalcAcosParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.acos" as const,
+        "@type": "acos" as const,
     };
     return params;
 }
@@ -1781,9 +1783,9 @@ function mrcalc_acos_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_asin_params(
-): MrcalcAsinParameters {
+): MrcalcAsinParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.asin" as const,
+        "@type": "asin" as const,
     };
     return params;
 }
@@ -1813,9 +1815,9 @@ function mrcalc_asin_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_atan_params(
-): MrcalcAtanParameters {
+): MrcalcAtanParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.atan" as const,
+        "@type": "atan" as const,
     };
     return params;
 }
@@ -1845,9 +1847,9 @@ function mrcalc_atan_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_cosh_params(
-): MrcalcCoshParameters {
+): MrcalcCoshParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.cosh" as const,
+        "@type": "cosh" as const,
     };
     return params;
 }
@@ -1877,9 +1879,9 @@ function mrcalc_cosh_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_sinh_params(
-): MrcalcSinhParameters {
+): MrcalcSinhParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.sinh" as const,
+        "@type": "sinh" as const,
     };
     return params;
 }
@@ -1909,9 +1911,9 @@ function mrcalc_sinh_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_tanh_params(
-): MrcalcTanhParameters {
+): MrcalcTanhParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.tanh" as const,
+        "@type": "tanh" as const,
     };
     return params;
 }
@@ -1941,9 +1943,9 @@ function mrcalc_tanh_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_acosh_params(
-): MrcalcAcoshParameters {
+): MrcalcAcoshParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.acosh" as const,
+        "@type": "acosh" as const,
     };
     return params;
 }
@@ -1973,9 +1975,9 @@ function mrcalc_acosh_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_asinh_params(
-): MrcalcAsinhParameters {
+): MrcalcAsinhParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.asinh" as const,
+        "@type": "asinh" as const,
     };
     return params;
 }
@@ -2005,9 +2007,9 @@ function mrcalc_asinh_cargs(
  * @returns Parameter dictionary
  */
 function mrcalc_atanh_params(
-): MrcalcAtanhParameters {
+): MrcalcAtanhParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.atanh" as const,
+        "@type": "atanh" as const,
     };
     return params;
 }
@@ -2042,9 +2044,9 @@ function mrcalc_atanh_cargs(
 function mrcalc_config_params(
     key: string,
     value: string,
-): MrcalcConfigParameters {
+): MrcalcConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -2081,9 +2083,9 @@ function mrcalc_config_cargs(
  */
 function mrcalc_various_string_params(
     obj: string,
-): MrcalcVariousStringParameters {
+): MrcalcVariousStringParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.VariousString" as const,
+        "@type": "VariousString" as const,
         "obj": obj,
     };
     return params;
@@ -2117,9 +2119,9 @@ function mrcalc_various_string_cargs(
  */
 function mrcalc_various_file_params(
     obj: InputPathType,
-): MrcalcVariousFileParameters {
+): MrcalcVariousFileParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc.VariousFile" as const,
+        "@type": "VariousFile" as const,
         "obj": obj,
     };
     return params;
@@ -2145,7 +2147,7 @@ function mrcalc_various_file_cargs(
 
 
 /**
- * Output object returned when calling `mrcalc(...)`.
+ * Output object returned when calling `MrcalcParameters(...)`.
  *
  * @interface
  */
@@ -2224,7 +2226,7 @@ interface MrcalcOutputs {
  * @returns Parameter dictionary
  */
 function mrcalc_params(
-    operand: Array<MrcalcVariousStringParameters | MrcalcVariousFileParameters>,
+    operand: Array<MrcalcVariousStringParametersTagged | MrcalcVariousFileParametersTagged>,
     abs: Array<MrcalcAbsParameters> | null = null,
     neg: Array<MrcalcNegParameters> | null = null,
     add: Array<MrcalcAddParameters> | null = null,
@@ -2284,9 +2286,9 @@ function mrcalc_params(
     config: Array<MrcalcConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrcalcParameters {
+): MrcalcParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcalc" as const,
+        "@type": "mrtrix/mrcalc" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -2473,154 +2475,154 @@ function mrcalc_cargs(
     const cargs: string[] = [];
     cargs.push("mrcalc");
     if ((params["abs"] ?? null) !== null) {
-        cargs.push(...(params["abs"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["abs"] ?? null).map(s => mrcalc_abs_cargs(s, execution)).flat());
     }
     if ((params["neg"] ?? null) !== null) {
-        cargs.push(...(params["neg"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["neg"] ?? null).map(s => mrcalc_neg_cargs(s, execution)).flat());
     }
     if ((params["add"] ?? null) !== null) {
-        cargs.push(...(params["add"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["add"] ?? null).map(s => mrcalc_add_cargs(s, execution)).flat());
     }
     if ((params["subtract"] ?? null) !== null) {
-        cargs.push(...(params["subtract"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["subtract"] ?? null).map(s => mrcalc_subtract_cargs(s, execution)).flat());
     }
     if ((params["multiply"] ?? null) !== null) {
-        cargs.push(...(params["multiply"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["multiply"] ?? null).map(s => mrcalc_multiply_cargs(s, execution)).flat());
     }
     if ((params["divide"] ?? null) !== null) {
-        cargs.push(...(params["divide"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["divide"] ?? null).map(s => mrcalc_divide_cargs(s, execution)).flat());
     }
     if ((params["min"] ?? null) !== null) {
-        cargs.push(...(params["min"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["min"] ?? null).map(s => mrcalc_min_cargs(s, execution)).flat());
     }
     if ((params["max"] ?? null) !== null) {
-        cargs.push(...(params["max"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["max"] ?? null).map(s => mrcalc_max_cargs(s, execution)).flat());
     }
     if ((params["lt"] ?? null) !== null) {
-        cargs.push(...(params["lt"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["lt"] ?? null).map(s => mrcalc_lt_cargs(s, execution)).flat());
     }
     if ((params["gt"] ?? null) !== null) {
-        cargs.push(...(params["gt"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["gt"] ?? null).map(s => mrcalc_gt_cargs(s, execution)).flat());
     }
     if ((params["le"] ?? null) !== null) {
-        cargs.push(...(params["le"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["le"] ?? null).map(s => mrcalc_le_cargs(s, execution)).flat());
     }
     if ((params["ge"] ?? null) !== null) {
-        cargs.push(...(params["ge"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["ge"] ?? null).map(s => mrcalc_ge_cargs(s, execution)).flat());
     }
     if ((params["eq"] ?? null) !== null) {
-        cargs.push(...(params["eq"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["eq"] ?? null).map(s => mrcalc_eq_cargs(s, execution)).flat());
     }
     if ((params["neq"] ?? null) !== null) {
-        cargs.push(...(params["neq"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["neq"] ?? null).map(s => mrcalc_neq_cargs(s, execution)).flat());
     }
     if ((params["if"] ?? null) !== null) {
-        cargs.push(...(params["if"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["if"] ?? null).map(s => mrcalc_if_cargs(s, execution)).flat());
     }
     if ((params["replace"] ?? null) !== null) {
-        cargs.push(...(params["replace"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["replace"] ?? null).map(s => mrcalc_replace_cargs(s, execution)).flat());
     }
     if ((params["sqrt"] ?? null) !== null) {
-        cargs.push(...(params["sqrt"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["sqrt"] ?? null).map(s => mrcalc_sqrt_cargs(s, execution)).flat());
     }
     if ((params["pow"] ?? null) !== null) {
-        cargs.push(...(params["pow"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["pow"] ?? null).map(s => mrcalc_pow_cargs(s, execution)).flat());
     }
     if ((params["round"] ?? null) !== null) {
-        cargs.push(...(params["round"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["round"] ?? null).map(s => mrcalc_round_cargs(s, execution)).flat());
     }
     if ((params["ceil"] ?? null) !== null) {
-        cargs.push(...(params["ceil"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["ceil"] ?? null).map(s => mrcalc_ceil_cargs(s, execution)).flat());
     }
     if ((params["floor"] ?? null) !== null) {
-        cargs.push(...(params["floor"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["floor"] ?? null).map(s => mrcalc_floor_cargs(s, execution)).flat());
     }
     if ((params["not"] ?? null) !== null) {
-        cargs.push(...(params["not"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["not"] ?? null).map(s => mrcalc_not_cargs(s, execution)).flat());
     }
     if ((params["and"] ?? null) !== null) {
-        cargs.push(...(params["and"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["and"] ?? null).map(s => mrcalc_and_cargs(s, execution)).flat());
     }
     if ((params["or"] ?? null) !== null) {
-        cargs.push(...(params["or"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["or"] ?? null).map(s => mrcalc_or_cargs(s, execution)).flat());
     }
     if ((params["xor"] ?? null) !== null) {
-        cargs.push(...(params["xor"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["xor"] ?? null).map(s => mrcalc_xor_cargs(s, execution)).flat());
     }
     if ((params["isnan"] ?? null) !== null) {
-        cargs.push(...(params["isnan"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["isnan"] ?? null).map(s => mrcalc_isnan_cargs(s, execution)).flat());
     }
     if ((params["isinf"] ?? null) !== null) {
-        cargs.push(...(params["isinf"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["isinf"] ?? null).map(s => mrcalc_isinf_cargs(s, execution)).flat());
     }
     if ((params["finite"] ?? null) !== null) {
-        cargs.push(...(params["finite"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["finite"] ?? null).map(s => mrcalc_finite_cargs(s, execution)).flat());
     }
     if ((params["complex"] ?? null) !== null) {
-        cargs.push(...(params["complex"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["complex"] ?? null).map(s => mrcalc_complex_cargs(s, execution)).flat());
     }
     if ((params["polar"] ?? null) !== null) {
-        cargs.push(...(params["polar"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["polar"] ?? null).map(s => mrcalc_polar_cargs(s, execution)).flat());
     }
     if ((params["real"] ?? null) !== null) {
-        cargs.push(...(params["real"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["real"] ?? null).map(s => mrcalc_real_cargs(s, execution)).flat());
     }
     if ((params["imag"] ?? null) !== null) {
-        cargs.push(...(params["imag"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["imag"] ?? null).map(s => mrcalc_imag_cargs(s, execution)).flat());
     }
     if ((params["phase"] ?? null) !== null) {
-        cargs.push(...(params["phase"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["phase"] ?? null).map(s => mrcalc_phase_cargs(s, execution)).flat());
     }
     if ((params["conj"] ?? null) !== null) {
-        cargs.push(...(params["conj"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["conj"] ?? null).map(s => mrcalc_conj_cargs(s, execution)).flat());
     }
     if ((params["proj"] ?? null) !== null) {
-        cargs.push(...(params["proj"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["proj"] ?? null).map(s => mrcalc_proj_cargs(s, execution)).flat());
     }
     if ((params["exp"] ?? null) !== null) {
-        cargs.push(...(params["exp"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["exp"] ?? null).map(s => mrcalc_exp_cargs(s, execution)).flat());
     }
     if ((params["log"] ?? null) !== null) {
-        cargs.push(...(params["log"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["log"] ?? null).map(s => mrcalc_log_cargs(s, execution)).flat());
     }
     if ((params["log10"] ?? null) !== null) {
-        cargs.push(...(params["log10"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["log10"] ?? null).map(s => mrcalc_log10_cargs(s, execution)).flat());
     }
     if ((params["cos"] ?? null) !== null) {
-        cargs.push(...(params["cos"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["cos"] ?? null).map(s => mrcalc_cos_cargs(s, execution)).flat());
     }
     if ((params["sin"] ?? null) !== null) {
-        cargs.push(...(params["sin"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["sin"] ?? null).map(s => mrcalc_sin_cargs(s, execution)).flat());
     }
     if ((params["tan"] ?? null) !== null) {
-        cargs.push(...(params["tan"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["tan"] ?? null).map(s => mrcalc_tan_cargs(s, execution)).flat());
     }
     if ((params["acos"] ?? null) !== null) {
-        cargs.push(...(params["acos"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["acos"] ?? null).map(s => mrcalc_acos_cargs(s, execution)).flat());
     }
     if ((params["asin"] ?? null) !== null) {
-        cargs.push(...(params["asin"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["asin"] ?? null).map(s => mrcalc_asin_cargs(s, execution)).flat());
     }
     if ((params["atan"] ?? null) !== null) {
-        cargs.push(...(params["atan"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["atan"] ?? null).map(s => mrcalc_atan_cargs(s, execution)).flat());
     }
     if ((params["cosh"] ?? null) !== null) {
-        cargs.push(...(params["cosh"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["cosh"] ?? null).map(s => mrcalc_cosh_cargs(s, execution)).flat());
     }
     if ((params["sinh"] ?? null) !== null) {
-        cargs.push(...(params["sinh"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["sinh"] ?? null).map(s => mrcalc_sinh_cargs(s, execution)).flat());
     }
     if ((params["tanh"] ?? null) !== null) {
-        cargs.push(...(params["tanh"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["tanh"] ?? null).map(s => mrcalc_tanh_cargs(s, execution)).flat());
     }
     if ((params["acosh"] ?? null) !== null) {
-        cargs.push(...(params["acosh"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["acosh"] ?? null).map(s => mrcalc_acosh_cargs(s, execution)).flat());
     }
     if ((params["asinh"] ?? null) !== null) {
-        cargs.push(...(params["asinh"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["asinh"] ?? null).map(s => mrcalc_asinh_cargs(s, execution)).flat());
     }
     if ((params["atanh"] ?? null) !== null) {
-        cargs.push(...(params["atanh"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["atanh"] ?? null).map(s => mrcalc_atanh_cargs(s, execution)).flat());
     }
     if ((params["datatype"] ?? null) !== null) {
         cargs.push(
@@ -2628,16 +2630,16 @@ function mrcalc_cargs(
             (params["datatype"] ?? null)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -2647,15 +2649,15 @@ function mrcalc_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => mrcalc_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
-    cargs.push(...(params["operand"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+    cargs.push(...(params["operand"] ?? null).map(s => mrcalc_operand_cargs_dyn_fn(s["@type"])(s, execution)).flat());
     return cargs;
 }
 
@@ -2801,7 +2803,7 @@ function mrcalc_execute(
  * @returns NamedTuple of outputs (described in `MrcalcOutputs`).
  */
 function mrcalc(
-    operand: Array<MrcalcVariousStringParameters | MrcalcVariousFileParameters>,
+    operand: Array<MrcalcVariousStringParametersTagged | MrcalcVariousFileParametersTagged>,
     abs: Array<MrcalcAbsParameters> | null = null,
     neg: Array<MrcalcNegParameters> | null = null,
     add: Array<MrcalcAddParameters> | null = null,
@@ -2870,61 +2872,7 @@ function mrcalc(
 
 export {
       MRCALC_METADATA,
-      MrcalcAbsParameters,
-      MrcalcAcosParameters,
-      MrcalcAcoshParameters,
-      MrcalcAddParameters,
-      MrcalcAndParameters,
-      MrcalcAsinParameters,
-      MrcalcAsinhParameters,
-      MrcalcAtanParameters,
-      MrcalcAtanhParameters,
-      MrcalcCeilParameters,
-      MrcalcComplexParameters,
-      MrcalcConfigParameters,
-      MrcalcConjParameters,
-      MrcalcCosParameters,
-      MrcalcCoshParameters,
-      MrcalcDivideParameters,
-      MrcalcEqParameters,
-      MrcalcExpParameters,
-      MrcalcFiniteParameters,
-      MrcalcFloorParameters,
-      MrcalcGeParameters,
-      MrcalcGtParameters,
-      MrcalcIfParameters,
-      MrcalcImagParameters,
-      MrcalcIsinfParameters,
-      MrcalcIsnanParameters,
-      MrcalcLeParameters,
-      MrcalcLog10Parameters,
-      MrcalcLogParameters,
-      MrcalcLtParameters,
-      MrcalcMaxParameters,
-      MrcalcMinParameters,
-      MrcalcMultiplyParameters,
-      MrcalcNegParameters,
-      MrcalcNeqParameters,
-      MrcalcNotParameters,
-      MrcalcOrParameters,
       MrcalcOutputs,
-      MrcalcParameters,
-      MrcalcPhaseParameters,
-      MrcalcPolarParameters,
-      MrcalcPowParameters,
-      MrcalcProjParameters,
-      MrcalcRealParameters,
-      MrcalcReplaceParameters,
-      MrcalcRoundParameters,
-      MrcalcSinParameters,
-      MrcalcSinhParameters,
-      MrcalcSqrtParameters,
-      MrcalcSubtractParameters,
-      MrcalcTanParameters,
-      MrcalcTanhParameters,
-      MrcalcVariousFileParameters,
-      MrcalcVariousStringParameters,
-      MrcalcXorParameters,
       mrcalc,
       mrcalc_abs_params,
       mrcalc_acos_params,

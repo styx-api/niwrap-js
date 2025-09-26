@@ -12,7 +12,7 @@ const MSM_METADATA: Metadata = {
 
 
 interface MsmParameters {
-    "@type": "fsl.msm";
+    "@type"?: "fsl/msm";
     "inmesh": InputPathType;
     "out": string;
     "refmesh"?: InputPathType | null | undefined;
@@ -30,44 +30,11 @@ interface MsmParameters {
     "verbose": boolean;
     "printoptions": boolean;
 }
+type MsmParametersTagged = Required<Pick<MsmParameters, '@type'>> & MsmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.msm": msm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.msm": msm_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `msm(...)`.
+ * Output object returned when calling `MsmParameters(...)`.
  *
  * @interface
  */
@@ -122,9 +89,9 @@ function msm_params(
     help: boolean = false,
     verbose: boolean = false,
     printoptions: boolean = false,
-): MsmParameters {
+): MsmParametersTagged {
     const params = {
-        "@type": "fsl.msm" as const,
+        "@type": "fsl/msm" as const,
         "inmesh": inmesh,
         "out": out,
         "help": help,
@@ -250,13 +217,13 @@ function msm_cargs(
             String((params["smoothout"] ?? null))
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["printoptions"] ?? null)) {
+    if ((params["printoptions"] ?? false)) {
         cargs.push("-p");
     }
     return cargs;
@@ -367,7 +334,6 @@ function msm(
 export {
       MSM_METADATA,
       MsmOutputs,
-      MsmParameters,
       msm,
       msm_execute,
       msm_params,

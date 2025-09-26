@@ -12,7 +12,7 @@ const IMCAT_METADATA: Metadata = {
 
 
 interface ImcatParameters {
-    "@type": "afni.imcat";
+    "@type"?: "afni/imcat";
     "input_files": Array<InputPathType>;
     "scale_image"?: InputPathType | null | undefined;
     "scale_pixels"?: InputPathType | null | undefined;
@@ -39,44 +39,11 @@ interface ImcatParameters {
     "gap"?: number | null | undefined;
     "gap_col"?: Array<number> | null | undefined;
 }
+type ImcatParametersTagged = Required<Pick<ImcatParameters, '@type'>> & ImcatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.imcat": imcat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.imcat": imcat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `imcat(...)`.
+ * Output object returned when calling `ImcatParameters(...)`.
  *
  * @interface
  */
@@ -149,9 +116,9 @@ function imcat_params(
     matrix_from_scale: boolean = false,
     gap: number | null = null,
     gap_col: Array<number> | null = null,
-): ImcatParameters {
+): ImcatParametersTagged {
     const params = {
-        "@type": "afni.imcat" as const,
+        "@type": "afni/imcat" as const,
         "input_files": input_files,
         "scale_intensity": scale_intensity,
         "rgb_out": rgb_out,
@@ -241,7 +208,7 @@ function imcat_cargs(
             execution.inputFile((params["scale_pixels"] ?? null))
         );
     }
-    if ((params["scale_intensity"] ?? null)) {
+    if ((params["scale_intensity"] ?? false)) {
         cargs.push("-scale_intensity");
     }
     if ((params["gscale"] ?? null) !== null) {
@@ -250,7 +217,7 @@ function imcat_cargs(
             String((params["gscale"] ?? null))
         );
     }
-    if ((params["rgb_out"] ?? null)) {
+    if ((params["rgb_out"] ?? false)) {
         cargs.push("-rgb_out");
     }
     if ((params["res_in"] ?? null) !== null) {
@@ -289,13 +256,13 @@ function imcat_cargs(
             String((params["autocrop_atol"] ?? null))
         );
     }
-    if ((params["autocrop"] ?? null)) {
+    if ((params["autocrop"] ?? false)) {
         cargs.push("-autocrop");
     }
-    if ((params["zero_wrap"] ?? null)) {
+    if ((params["zero_wrap"] ?? false)) {
         cargs.push("-zero_wrap");
     }
-    if ((params["white_wrap"] ?? null)) {
+    if ((params["white_wrap"] ?? false)) {
         cargs.push("-white_wrap");
     }
     if ((params["gray_wrap"] ?? null) !== null) {
@@ -304,10 +271,10 @@ function imcat_cargs(
             String((params["gray_wrap"] ?? null))
         );
     }
-    if ((params["image_wrap"] ?? null)) {
+    if ((params["image_wrap"] ?? false)) {
         cargs.push("-image_wrap");
     }
-    if ((params["rand_wrap"] ?? null)) {
+    if ((params["rand_wrap"] ?? false)) {
         cargs.push("-rand_wrap");
     }
     if ((params["prefix"] ?? null) !== null) {
@@ -334,7 +301,7 @@ function imcat_cargs(
             String((params["ny"] ?? null))
         );
     }
-    if ((params["matrix_from_scale"] ?? null)) {
+    if ((params["matrix_from_scale"] ?? false)) {
         cargs.push("-matrix_from_scale");
     }
     if ((params["gap"] ?? null) !== null) {
@@ -475,7 +442,6 @@ function imcat(
 export {
       IMCAT_METADATA,
       ImcatOutputs,
-      ImcatParameters,
       imcat,
       imcat_execute,
       imcat_params,

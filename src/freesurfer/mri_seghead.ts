@@ -12,7 +12,7 @@ const MRI_SEGHEAD_METADATA: Metadata = {
 
 
 interface MriSegheadParameters {
-    "@type": "freesurfer.mri_seghead";
+    "@type"?: "freesurfer/mri_seghead";
     "input_volume": string;
     "output_volume": string;
     "fill_value"?: number | null | undefined;
@@ -29,43 +29,11 @@ interface MriSegheadParameters {
     "or_mask_file"?: InputPathType | null | undefined;
     "gdiag_option"?: string | null | undefined;
 }
+type MriSegheadParametersTagged = Required<Pick<MriSegheadParameters, '@type'>> & MriSegheadParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_seghead": mri_seghead_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_seghead(...)`.
+ * Output object returned when calling `MriSegheadParameters(...)`.
  *
  * @interface
  */
@@ -114,9 +82,9 @@ function mri_seghead_params(
     seed_point: Array<number> | null = null,
     or_mask_file: InputPathType | null = null,
     gdiag_option: string | null = null,
-): MriSegheadParameters {
+): MriSegheadParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_seghead" as const,
+        "@type": "freesurfer/mri_seghead" as const,
         "input_volume": input_volume,
         "output_volume": output_volume,
         "signal_behind_head": signal_behind_head,
@@ -221,13 +189,13 @@ function mri_seghead_cargs(
             execution.inputFile((params["hvoldat_file"] ?? null))
         );
     }
-    if ((params["signal_behind_head"] ?? null)) {
+    if ((params["signal_behind_head"] ?? false)) {
         cargs.push("--get-signal-behind-head");
     }
-    if ((params["rescale"] ?? null)) {
+    if ((params["rescale"] ?? false)) {
         cargs.push("--rescale");
     }
-    if ((params["fill_holes_islands"] ?? null)) {
+    if ((params["fill_holes_islands"] ?? false)) {
         cargs.push("--fill-holes-islands");
     }
     if ((params["seed_point"] ?? null) !== null) {
@@ -353,7 +321,6 @@ function mri_seghead(
 export {
       MRI_SEGHEAD_METADATA,
       MriSegheadOutputs,
-      MriSegheadParameters,
       mri_seghead,
       mri_seghead_execute,
       mri_seghead_params,

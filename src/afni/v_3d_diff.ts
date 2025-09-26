@@ -12,7 +12,7 @@ const V_3D_DIFF_METADATA: Metadata = {
 
 
 interface V3dDiffParameters {
-    "@type": "afni.3dDiff";
+    "@type"?: "afni/3dDiff";
     "dataset_a": InputPathType;
     "dataset_b": InputPathType;
     "tolerance"?: number | null | undefined;
@@ -22,44 +22,11 @@ interface V3dDiffParameters {
     "brutalist_mode": boolean;
     "long_report_mode": boolean;
 }
+type V3dDiffParametersTagged = Required<Pick<V3dDiffParameters, '@type'>> & V3dDiffParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dDiff": v_3d_diff_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dDiff": v_3d_diff_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_diff(...)`.
+ * Output object returned when calling `V3dDiffParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function v_3d_diff_params(
     tabular_mode: boolean = false,
     brutalist_mode: boolean = false,
     long_report_mode: boolean = false,
-): V3dDiffParameters {
+): V3dDiffParametersTagged {
     const params = {
-        "@type": "afni.3dDiff" as const,
+        "@type": "afni/3dDiff" as const,
         "dataset_a": dataset_a,
         "dataset_b": dataset_b,
         "quiet_mode": quiet_mode,
@@ -152,16 +119,16 @@ function v_3d_diff_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["quiet_mode"] ?? null)) {
+    if ((params["quiet_mode"] ?? false)) {
         cargs.push("-q");
     }
-    if ((params["tabular_mode"] ?? null)) {
+    if ((params["tabular_mode"] ?? false)) {
         cargs.push("-tabular");
     }
-    if ((params["brutalist_mode"] ?? null)) {
+    if ((params["brutalist_mode"] ?? false)) {
         cargs.push("-brutalist");
     }
-    if ((params["long_report_mode"] ?? null)) {
+    if ((params["long_report_mode"] ?? false)) {
         cargs.push("-long_report");
     }
     return cargs;
@@ -255,7 +222,6 @@ function v_3d_diff(
 
 export {
       V3dDiffOutputs,
-      V3dDiffParameters,
       V_3D_DIFF_METADATA,
       v_3d_diff,
       v_3d_diff_execute,

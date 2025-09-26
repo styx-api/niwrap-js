@@ -12,7 +12,7 @@ const MRI_SBBR_METADATA: Metadata = {
 
 
 interface MriSbbrParameters {
-    "@type": "freesurfer.mri_sbbr";
+    "@type"?: "freesurfer/mri_sbbr";
     "template_volume": InputPathType;
     "surface_file": InputPathType;
     "init_reg_file": InputPathType;
@@ -38,43 +38,11 @@ interface MriSbbrParameters {
     "diagnostic": boolean;
     "check_options": boolean;
 }
+type MriSbbrParametersTagged = Required<Pick<MriSbbrParameters, '@type'>> & MriSbbrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_sbbr": mri_sbbr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_sbbr(...)`.
+ * Output object returned when calling `MriSbbrParameters(...)`.
  *
  * @interface
  */
@@ -141,9 +109,9 @@ function mri_sbbr_params(
     debug: boolean = false,
     diagnostic: boolean = false,
     check_options: boolean = false,
-): MriSbbrParameters {
+): MriSbbrParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_sbbr" as const,
+        "@type": "freesurfer/mri_sbbr" as const,
         "template_volume": template_volume,
         "surface_file": surface_file,
         "init_reg_file": init_reg_file,
@@ -231,10 +199,10 @@ function mri_sbbr_cargs(
         "--init-reg",
         execution.inputFile((params["init_reg_file"] ?? null))
     );
-    if ((params["t1"] ?? null)) {
+    if ((params["t1"] ?? false)) {
         cargs.push("--t1");
     }
-    if ((params["t2"] ?? null)) {
+    if ((params["t2"] ?? false)) {
         cargs.push("--t2");
     }
     if ((params["optimization_type"] ?? null) !== null) {
@@ -333,13 +301,13 @@ function mri_sbbr_cargs(
             (params["output_surface"] ?? null)
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["diagnostic"] ?? null)) {
+    if ((params["diagnostic"] ?? false)) {
         cargs.push("--diag");
     }
-    if ((params["check_options"] ?? null)) {
+    if ((params["check_options"] ?? false)) {
         cargs.push("--checkopts");
     }
     return cargs;
@@ -465,7 +433,6 @@ function mri_sbbr(
 export {
       MRI_SBBR_METADATA,
       MriSbbrOutputs,
-      MriSbbrParameters,
       mri_sbbr,
       mri_sbbr_execute,
       mri_sbbr_params,

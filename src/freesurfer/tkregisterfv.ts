@@ -12,7 +12,7 @@ const TKREGISTERFV_METADATA: Metadata = {
 
 
 interface TkregisterfvParameters {
-    "@type": "freesurfer.tkregisterfv";
+    "@type"?: "freesurfer/tkregisterfv";
     "mov"?: InputPathType | null | undefined;
     "targ"?: InputPathType | null | undefined;
     "reg": InputPathType;
@@ -46,43 +46,11 @@ interface TkregisterfvParameters {
     "fstal": boolean;
     "aux"?: InputPathType | null | undefined;
 }
+type TkregisterfvParametersTagged = Required<Pick<TkregisterfvParameters, '@type'>> & TkregisterfvParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.tkregisterfv": tkregisterfv_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tkregisterfv(...)`.
+ * Output object returned when calling `TkregisterfvParameters(...)`.
  *
  * @interface
  */
@@ -165,9 +133,9 @@ function tkregisterfv_params(
     flip_z_flag: boolean = false,
     fstal: boolean = false,
     aux: InputPathType | null = null,
-): TkregisterfvParameters {
+): TkregisterfvParametersTagged {
     const params = {
-        "@type": "freesurfer.tkregisterfv" as const,
+        "@type": "freesurfer/tkregisterfv" as const,
         "reg": reg,
         "aseg_flag": aseg_flag,
         "aparc_aseg_flag": aparc_aseg_flag,
@@ -291,10 +259,10 @@ function tkregisterfv_cargs(
             execution.inputFile((params["seg"] ?? null))
         );
     }
-    if ((params["aseg_flag"] ?? null)) {
+    if ((params["aseg_flag"] ?? false)) {
         cargs.push("--aseg");
     }
-    if ((params["aparc_aseg_flag"] ?? null)) {
+    if ((params["aparc_aseg_flag"] ?? false)) {
         cargs.push("--aparc+aseg");
     }
     if ((params["opacity"] ?? null) !== null) {
@@ -303,22 +271,22 @@ function tkregisterfv_cargs(
             String((params["opacity"] ?? null))
         );
     }
-    if ((params["surfs_flag"] ?? null)) {
+    if ((params["surfs_flag"] ?? false)) {
         cargs.push("--surfs");
     }
-    if ((params["pial_surfs_flag"] ?? null)) {
+    if ((params["pial_surfs_flag"] ?? false)) {
         cargs.push("--pial-surfs");
     }
-    if ((params["all_surfs_flag"] ?? null)) {
+    if ((params["all_surfs_flag"] ?? false)) {
         cargs.push("--all-surfs");
     }
-    if ((params["no_surfs_flag"] ?? null)) {
+    if ((params["no_surfs_flag"] ?? false)) {
         cargs.push("--no-surfs");
     }
-    if ((params["lh_only_flag"] ?? null)) {
+    if ((params["lh_only_flag"] ?? false)) {
         cargs.push("--lh-only");
     }
-    if ((params["rh_only_flag"] ?? null)) {
+    if ((params["rh_only_flag"] ?? false)) {
         cargs.push("--rh-only");
     }
     if ((params["surf"] ?? null) !== null) {
@@ -339,7 +307,7 @@ function tkregisterfv_cargs(
             (params["plane"] ?? null)
         );
     }
-    if ((params["no_config_flag"] ?? null)) {
+    if ((params["no_config_flag"] ?? false)) {
         cargs.push("--no-config");
     }
     if ((params["mov2"] ?? null) !== null) {
@@ -366,10 +334,10 @@ function tkregisterfv_cargs(
             execution.inputFile((params["reg3"] ?? null))
         );
     }
-    if ((params["heat_flag"] ?? null)) {
+    if ((params["heat_flag"] ?? false)) {
         cargs.push("--heat");
     }
-    if ((params["regheader_flag"] ?? null)) {
+    if ((params["regheader_flag"] ?? false)) {
         cargs.push("--regheader");
     }
     if ((params["params"] ?? null) !== null) {
@@ -378,16 +346,16 @@ function tkregisterfv_cargs(
             ...(params["params"] ?? null).map(String)
         );
     }
-    if ((params["flip_x_flag"] ?? null)) {
+    if ((params["flip_x_flag"] ?? false)) {
         cargs.push("--flip-x");
     }
-    if ((params["flip_y_flag"] ?? null)) {
+    if ((params["flip_y_flag"] ?? false)) {
         cargs.push("--flip-y");
     }
-    if ((params["flip_z_flag"] ?? null)) {
+    if ((params["flip_z_flag"] ?? false)) {
         cargs.push("--flip-z");
     }
-    if ((params["fstal"] ?? null)) {
+    if ((params["fstal"] ?? false)) {
         cargs.push("--fstal");
     }
     if ((params["aux"] ?? null) !== null) {
@@ -535,7 +503,6 @@ function tkregisterfv(
 export {
       TKREGISTERFV_METADATA,
       TkregisterfvOutputs,
-      TkregisterfvParameters,
       tkregisterfv,
       tkregisterfv_execute,
       tkregisterfv_params,

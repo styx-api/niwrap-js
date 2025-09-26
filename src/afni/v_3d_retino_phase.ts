@@ -12,7 +12,7 @@ const V_3D_RETINO_PHASE_METADATA: Metadata = {
 
 
 interface V3dRetinoPhaseParameters {
-    "@type": "afni.3dRetinoPhase";
+    "@type"?: "afni/3dRetinoPhase";
     "prefix": string;
     "dataset": InputPathType;
     "exp"?: string | null | undefined;
@@ -30,44 +30,11 @@ interface V3dRetinoPhaseParameters {
     "ref_ts"?: InputPathType | null | undefined;
     "multi_ref_ts"?: InputPathType | null | undefined;
 }
+type V3dRetinoPhaseParametersTagged = Required<Pick<V3dRetinoPhaseParameters, '@type'>> & V3dRetinoPhaseParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dRetinoPhase": v_3d_retino_phase_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dRetinoPhase": v_3d_retino_phase_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_retino_phase(...)`.
+ * Output object returned when calling `V3dRetinoPhaseParameters(...)`.
  *
  * @interface
  */
@@ -134,9 +101,9 @@ function v_3d_retino_phase_params(
     phase_estimate: string | null = null,
     ref_ts: InputPathType | null = null,
     multi_ref_ts: InputPathType | null = null,
-): V3dRetinoPhaseParameters {
+): V3dRetinoPhaseParametersTagged {
     const params = {
-        "@type": "afni.3dRetinoPhase" as const,
+        "@type": "afni/3dRetinoPhase" as const,
         "prefix": prefix,
         "dataset": dataset,
         "spectra": spectra,
@@ -224,7 +191,7 @@ function v_3d_retino_phase_cargs(
             (params["ccw"] ?? null)
         );
     }
-    if ((params["spectra"] ?? null)) {
+    if ((params["spectra"] ?? false)) {
         cargs.push("-spectra");
     }
     if ((params["tstim"] ?? null) !== null) {
@@ -391,7 +358,6 @@ function v_3d_retino_phase(
 
 export {
       V3dRetinoPhaseOutputs,
-      V3dRetinoPhaseParameters,
       V_3D_RETINO_PHASE_METADATA,
       v_3d_retino_phase,
       v_3d_retino_phase_execute,

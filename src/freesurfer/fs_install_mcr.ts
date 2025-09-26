@@ -12,46 +12,14 @@ const FS_INSTALL_MCR_METADATA: Metadata = {
 
 
 interface FsInstallMcrParameters {
-    "@type": "freesurfer.fs_install_mcr";
+    "@type"?: "freesurfer/fs_install_mcr";
     "mcr_version": string;
 }
+type FsInstallMcrParametersTagged = Required<Pick<FsInstallMcrParameters, '@type'>> & FsInstallMcrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fs_install_mcr": fs_install_mcr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fs_install_mcr(...)`.
+ * Output object returned when calling `FsInstallMcrParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface FsInstallMcrOutputs {
  */
 function fs_install_mcr_params(
     mcr_version: string,
-): FsInstallMcrParameters {
+): FsInstallMcrParametersTagged {
     const params = {
-        "@type": "freesurfer.fs_install_mcr" as const,
+        "@type": "freesurfer/fs_install_mcr" as const,
         "mcr_version": mcr_version,
     };
     return params;
@@ -173,7 +141,6 @@ function fs_install_mcr(
 export {
       FS_INSTALL_MCR_METADATA,
       FsInstallMcrOutputs,
-      FsInstallMcrParameters,
       fs_install_mcr,
       fs_install_mcr_execute,
       fs_install_mcr_params,

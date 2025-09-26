@@ -12,7 +12,7 @@ const RECON_ALL_METADATA: Metadata = {
 
 
 interface ReconAllParameters {
-    "@type": "freesurfer.recon-all";
+    "@type"?: "freesurfer/recon-all";
     "subjid": string;
     "all_flag": boolean;
     "autorecon_all_flag": boolean;
@@ -83,44 +83,11 @@ interface ReconAllParameters {
     "version": boolean;
     "help": boolean;
 }
+type ReconAllParametersTagged = Required<Pick<ReconAllParameters, '@type'>> & ReconAllParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.recon-all": recon_all_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.recon-all": recon_all_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `recon_all(...)`.
+ * Output object returned when calling `ReconAllParameters(...)`.
  *
  * @interface
  */
@@ -285,9 +252,9 @@ function recon_all_params(
     dontrun: boolean = false,
     version: boolean = false,
     help: boolean = false,
-): ReconAllParameters {
+): ReconAllParametersTagged {
     const params = {
-        "@type": "freesurfer.recon-all" as const,
+        "@type": "freesurfer/recon-all" as const,
         "subjid": subjid,
         "all_flag": all_flag,
         "autorecon_all_flag": autorecon_all_flag,
@@ -440,31 +407,31 @@ function recon_all_cargs(
         "-subjid",
         (params["subjid"] ?? null)
     );
-    if ((params["all_flag"] ?? null)) {
+    if ((params["all_flag"] ?? false)) {
         cargs.push("-all");
     }
-    if ((params["autorecon_all_flag"] ?? null)) {
+    if ((params["autorecon_all_flag"] ?? false)) {
         cargs.push("-autorecon-all");
     }
-    if ((params["autorecon1_flag"] ?? null)) {
+    if ((params["autorecon1_flag"] ?? false)) {
         cargs.push("-autorecon1");
     }
-    if ((params["autorecon2_flag"] ?? null)) {
+    if ((params["autorecon2_flag"] ?? false)) {
         cargs.push("-autorecon2");
     }
-    if ((params["autorecon2_cp_flag"] ?? null)) {
+    if ((params["autorecon2_cp_flag"] ?? false)) {
         cargs.push("-autorecon2-cp");
     }
-    if ((params["autorecon2_wm_flag"] ?? null)) {
+    if ((params["autorecon2_wm_flag"] ?? false)) {
         cargs.push("-autorecon2-wm");
     }
-    if ((params["autorecon2_inflate1_flag"] ?? null)) {
+    if ((params["autorecon2_inflate1_flag"] ?? false)) {
         cargs.push("-autorecon2-inflate1");
     }
-    if ((params["autorecon2_perhemi_flag"] ?? null)) {
+    if ((params["autorecon2_perhemi_flag"] ?? false)) {
         cargs.push("-autorecon2-perhemi");
     }
-    if ((params["autorecon3_flag"] ?? null)) {
+    if ((params["autorecon3_flag"] ?? false)) {
         cargs.push("-autorecon3");
     }
     if ((params["hemi"] ?? null) !== null) {
@@ -497,7 +464,7 @@ function recon_all_cargs(
             ...(params["rh_crs"] ?? null).map(String)
         );
     }
-    if ((params["nofill"] ?? null)) {
+    if ((params["nofill"] ?? false)) {
         cargs.push("-nofill");
     }
     if ((params["watershed"] ?? null) !== null) {
@@ -512,19 +479,19 @@ function recon_all_cargs(
             execution.inputFile((params["external_brain_mask"] ?? null))
         );
     }
-    if ((params["wsless"] ?? null)) {
+    if ((params["wsless"] ?? false)) {
         cargs.push("-wsless");
     }
-    if ((params["wsmore"] ?? null)) {
+    if ((params["wsmore"] ?? false)) {
         cargs.push("-wsmore");
     }
-    if ((params["wsatlas"] ?? null)) {
+    if ((params["wsatlas"] ?? false)) {
         cargs.push("-wsatlas");
     }
-    if ((params["no_wsatlas"] ?? null)) {
+    if ((params["no_wsatlas"] ?? false)) {
         cargs.push("-no-wsatlas");
     }
-    if ((params["no_wsgcaatlas"] ?? null)) {
+    if ((params["no_wsgcaatlas"] ?? false)) {
         cargs.push("-no-wsgcaatlas");
     }
     if ((params["wsthresh"] ?? null) !== null) {
@@ -575,13 +542,13 @@ function recon_all_cargs(
             String((params["norm2_n"] ?? null))
         );
     }
-    if ((params["cm"] ?? null)) {
+    if ((params["cm"] ?? false)) {
         cargs.push("-cm");
     }
-    if ((params["no_fix_with_ga"] ?? null)) {
+    if ((params["no_fix_with_ga"] ?? false)) {
         cargs.push("-no-fix-with-ga");
     }
-    if ((params["fix_diag_only"] ?? null)) {
+    if ((params["fix_diag_only"] ?? false)) {
         cargs.push("-fix-diag-only");
     }
     if ((params["seg_wlo"] ?? null) !== null) {
@@ -596,16 +563,16 @@ function recon_all_cargs(
             String((params["seg_ghi"] ?? null))
         );
     }
-    if ((params["nothicken"] ?? null)) {
+    if ((params["nothicken"] ?? false)) {
         cargs.push("-nothicken");
     }
-    if ((params["no_ca_align_after"] ?? null)) {
+    if ((params["no_ca_align_after"] ?? false)) {
         cargs.push("-no-ca-align-after");
     }
-    if ((params["no_ca_align"] ?? null)) {
+    if ((params["no_ca_align"] ?? false)) {
         cargs.push("-no-ca-align");
     }
-    if ((params["deface"] ?? null)) {
+    if ((params["deface"] ?? false)) {
         cargs.push("-deface");
     }
     if ((params["expert_file"] ?? null) !== null) {
@@ -614,13 +581,13 @@ function recon_all_cargs(
             execution.inputFile((params["expert_file"] ?? null))
         );
     }
-    if ((params["xopts_use"] ?? null)) {
+    if ((params["xopts_use"] ?? false)) {
         cargs.push("-xopts-use");
     }
-    if ((params["xopts_clean"] ?? null)) {
+    if ((params["xopts_clean"] ?? false)) {
         cargs.push("-xopts-clean");
     }
-    if ((params["xopts_overwrite"] ?? null)) {
+    if ((params["xopts_overwrite"] ?? false)) {
         cargs.push("-xopts-overwrite");
     }
     if ((params["termscript_file"] ?? null) !== null) {
@@ -629,13 +596,13 @@ function recon_all_cargs(
             execution.inputFile((params["termscript_file"] ?? null))
         );
     }
-    if ((params["mprage"] ?? null)) {
+    if ((params["mprage"] ?? false)) {
         cargs.push("-mprage");
     }
-    if ((params["washu_mprage"] ?? null)) {
+    if ((params["washu_mprage"] ?? false)) {
         cargs.push("-washu_mprage");
     }
-    if ((params["schwartzya3t_atlas"] ?? null)) {
+    if ((params["schwartzya3t_atlas"] ?? false)) {
         cargs.push("-schwartzya3t-atlas");
     }
     if ((params["threads"] ?? null) !== null) {
@@ -668,13 +635,13 @@ function recon_all_cargs(
             execution.inputFile((params["status_file"] ?? null))
         );
     }
-    if ((params["noappend"] ?? null)) {
+    if ((params["noappend"] ?? false)) {
         cargs.push("-noappend");
     }
-    if ((params["no_isrunning"] ?? null)) {
+    if ((params["no_isrunning"] ?? false)) {
         cargs.push("-no-isrunning");
     }
-    if ((params["hippocampal_subfields_t1"] ?? null)) {
+    if ((params["hippocampal_subfields_t1"] ?? false)) {
         cargs.push("-hippocampal-subfields-T1");
     }
     if ((params["hippocampal_subfields_t2"] ?? null) !== null) {
@@ -689,7 +656,7 @@ function recon_all_cargs(
             (params["hippocampal_subfields_t1t2"] ?? null)
         );
     }
-    if ((params["brainstem_structures"] ?? null)) {
+    if ((params["brainstem_structures"] ?? false)) {
         cargs.push("-brainstem-structures");
     }
     if ((params["subjects_dir"] ?? null) !== null) {
@@ -716,22 +683,22 @@ function recon_all_cargs(
             (params["group_id"] ?? null)
         );
     }
-    if ((params["only_versions"] ?? null)) {
+    if ((params["only_versions"] ?? false)) {
         cargs.push("-onlyversions");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["allow_coredump"] ?? null)) {
+    if ((params["allow_coredump"] ?? false)) {
         cargs.push("-allowcoredump");
     }
-    if ((params["dontrun"] ?? null)) {
+    if ((params["dontrun"] ?? false)) {
         cargs.push("-dontrun");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -949,7 +916,6 @@ function recon_all(
 export {
       RECON_ALL_METADATA,
       ReconAllOutputs,
-      ReconAllParameters,
       recon_all,
       recon_all_execute,
       recon_all_params,

@@ -12,7 +12,7 @@ const V__ANATICOR_METADATA: Metadata = {
 
 
 interface VAnaticorParameters {
-    "@type": "afni.@ANATICOR";
+    "@type"?: "afni/@ANATICOR";
     "ts": InputPathType;
     "polort": string;
     "motion": InputPathType;
@@ -28,44 +28,11 @@ interface VAnaticorParameters {
     "dirty": boolean;
     "echo": boolean;
 }
+type VAnaticorParametersTagged = Required<Pick<VAnaticorParameters, '@type'>> & VAnaticorParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@ANATICOR": v__anaticor_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@ANATICOR": v__anaticor_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__anaticor(...)`.
+ * Output object returned when calling `VAnaticorParameters(...)`.
  *
  * @interface
  */
@@ -116,9 +83,9 @@ function v__anaticor_params(
     verb: boolean = false,
     dirty: boolean = false,
     echo: boolean = false,
-): VAnaticorParameters {
+): VAnaticorParametersTagged {
     const params = {
-        "@type": "afni.@ANATICOR" as const,
+        "@type": "afni/@ANATICOR" as const,
         "ts": ts,
         "polort": polort,
         "motion": motion,
@@ -190,22 +157,22 @@ function v__anaticor_cargs(
             execution.inputFile((params["nuisance"] ?? null))
         );
     }
-    if ((params["no_ventricles"] ?? null)) {
+    if ((params["no_ventricles"] ?? false)) {
         cargs.push("-no_ventricles");
     }
-    if ((params["Rsq_WMe"] ?? null)) {
+    if ((params["Rsq_WMe"] ?? false)) {
         cargs.push("-Rsq_WMe");
     }
-    if ((params["coverage"] ?? null)) {
+    if ((params["coverage"] ?? false)) {
         cargs.push("-coverage");
     }
-    if ((params["verb"] ?? null)) {
+    if ((params["verb"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["dirty"] ?? null)) {
+    if ((params["dirty"] ?? false)) {
         cargs.push("-dirty");
     }
-    if ((params["echo"] ?? null)) {
+    if ((params["echo"] ?? false)) {
         cargs.push("-echo");
     }
     return cargs;
@@ -311,7 +278,6 @@ function v__anaticor(
 
 export {
       VAnaticorOutputs,
-      VAnaticorParameters,
       V__ANATICOR_METADATA,
       v__anaticor,
       v__anaticor_execute,

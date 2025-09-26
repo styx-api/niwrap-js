@@ -12,7 +12,7 @@ const MRIS_COMPUTE_ACORR_METADATA: Metadata = {
 
 
 interface MrisComputeAcorrParameters {
-    "@type": "freesurfer.mris_compute_acorr";
+    "@type"?: "freesurfer/mris_compute_acorr";
     "output_subject": string;
     "hemi": string;
     "surf": InputPathType;
@@ -20,43 +20,11 @@ interface MrisComputeAcorrParameters {
     "c1_subjects": Array<string>;
     "c2_subjects": Array<string>;
 }
+type MrisComputeAcorrParametersTagged = Required<Pick<MrisComputeAcorrParameters, '@type'>> & MrisComputeAcorrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_compute_acorr": mris_compute_acorr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_compute_acorr(...)`.
+ * Output object returned when calling `MrisComputeAcorrParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function mris_compute_acorr_params(
     curv: InputPathType,
     c1_subjects: Array<string>,
     c2_subjects: Array<string>,
-): MrisComputeAcorrParameters {
+): MrisComputeAcorrParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_compute_acorr" as const,
+        "@type": "freesurfer/mris_compute_acorr" as const,
         "output_subject": output_subject,
         "hemi": hemi,
         "surf": surf,
@@ -211,7 +179,6 @@ function mris_compute_acorr(
 export {
       MRIS_COMPUTE_ACORR_METADATA,
       MrisComputeAcorrOutputs,
-      MrisComputeAcorrParameters,
       mris_compute_acorr,
       mris_compute_acorr_execute,
       mris_compute_acorr_params,

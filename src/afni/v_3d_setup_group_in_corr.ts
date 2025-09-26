@@ -12,7 +12,7 @@ const V_3D_SETUP_GROUP_IN_CORR_METADATA: Metadata = {
 
 
 interface V3dSetupGroupInCorrParameters {
-    "@type": "afni.3dSetupGroupInCorr";
+    "@type"?: "afni/3dSetupGroupInCorr";
     "datasets": Array<InputPathType>;
     "mask_dataset"?: InputPathType | null | undefined;
     "prefix": string;
@@ -23,44 +23,11 @@ interface V3dSetupGroupInCorrParameters {
     "prep_method"?: string | null | undefined;
     "lr_pairs"?: Array<string> | null | undefined;
 }
+type V3dSetupGroupInCorrParametersTagged = Required<Pick<V3dSetupGroupInCorrParameters, '@type'>> & V3dSetupGroupInCorrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dSetupGroupInCorr": v_3d_setup_group_in_corr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dSetupGroupInCorr": v_3d_setup_group_in_corr_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_setup_group_in_corr(...)`.
+ * Output object returned when calling `V3dSetupGroupInCorrParameters(...)`.
  *
  * @interface
  */
@@ -105,9 +72,9 @@ function v_3d_setup_group_in_corr_params(
     delete_flag: boolean = false,
     prep_method: string | null = null,
     lr_pairs: Array<string> | null = null,
-): V3dSetupGroupInCorrParameters {
+): V3dSetupGroupInCorrParametersTagged {
     const params = {
-        "@type": "afni.3dSetupGroupInCorr" as const,
+        "@type": "afni/3dSetupGroupInCorr" as const,
         "datasets": datasets,
         "prefix": prefix,
         "short_flag": short_flag,
@@ -155,10 +122,10 @@ function v_3d_setup_group_in_corr_cargs(
         "-prefix",
         (params["prefix"] ?? null)
     );
-    if ((params["short_flag"] ?? null)) {
+    if ((params["short_flag"] ?? false)) {
         cargs.push("-short");
     }
-    if ((params["byte_flag"] ?? null)) {
+    if ((params["byte_flag"] ?? false)) {
         cargs.push("-byte");
     }
     if ((params["labels_file"] ?? null) !== null) {
@@ -167,7 +134,7 @@ function v_3d_setup_group_in_corr_cargs(
             execution.inputFile((params["labels_file"] ?? null))
         );
     }
-    if ((params["delete_flag"] ?? null)) {
+    if ((params["delete_flag"] ?? false)) {
         cargs.push("-DELETE");
     }
     if ((params["prep_method"] ?? null) !== null) {
@@ -276,7 +243,6 @@ function v_3d_setup_group_in_corr(
 
 export {
       V3dSetupGroupInCorrOutputs,
-      V3dSetupGroupInCorrParameters,
       V_3D_SETUP_GROUP_IN_CORR_METADATA,
       v_3d_setup_group_in_corr,
       v_3d_setup_group_in_corr_execute,

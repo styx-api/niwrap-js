@@ -12,50 +12,17 @@ const LABEL_MASK_METADATA: Metadata = {
 
 
 interface LabelMaskParameters {
-    "@type": "workbench.label-mask";
+    "@type"?: "workbench/label-mask";
     "label": InputPathType;
     "mask": InputPathType;
     "label_out": string;
     "opt_column_column"?: string | null | undefined;
 }
+type LabelMaskParametersTagged = Required<Pick<LabelMaskParameters, '@type'>> & LabelMaskParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.label-mask": label_mask_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.label-mask": label_mask_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `label_mask(...)`.
+ * Output object returned when calling `LabelMaskParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function label_mask_params(
     mask: InputPathType,
     label_out: string,
     opt_column_column: string | null = null,
-): LabelMaskParameters {
+): LabelMaskParametersTagged {
     const params = {
-        "@type": "workbench.label-mask" as const,
+        "@type": "workbench/label-mask" as const,
         "label": label,
         "mask": mask,
         "label_out": label_out,
@@ -212,7 +179,6 @@ function label_mask(
 export {
       LABEL_MASK_METADATA,
       LabelMaskOutputs,
-      LabelMaskParameters,
       label_mask,
       label_mask_execute,
       label_mask_params,

@@ -12,7 +12,7 @@ const MAKE_SEGVOL_TABLE_METADATA: Metadata = {
 
 
 interface MakeSegvolTableParameters {
-    "@type": "freesurfer.make-segvol-table";
+    "@type"?: "freesurfer/make-segvol-table";
     "subjects": Array<string>;
     "subject_file": InputPathType;
     "outfile": string;
@@ -24,44 +24,11 @@ interface MakeSegvolTableParameters {
     "version": boolean;
     "help": boolean;
 }
+type MakeSegvolTableParametersTagged = Required<Pick<MakeSegvolTableParameters, '@type'>> & MakeSegvolTableParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.make-segvol-table": make_segvol_table_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.make-segvol-table": make_segvol_table_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `make_segvol_table(...)`.
+ * Output object returned when calling `MakeSegvolTableParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function make_segvol_table_params(
     umask: string | null = null,
     version: boolean = false,
     help: boolean = false,
-): MakeSegvolTableParameters {
+): MakeSegvolTableParametersTagged {
     const params = {
-        "@type": "freesurfer.make-segvol-table" as const,
+        "@type": "freesurfer/make-segvol-table" as const,
         "subjects": subjects,
         "subject_file": subject_file,
         "outfile": outfile,
@@ -188,10 +155,10 @@ function make_segvol_table_cargs(
             (params["umask"] ?? null)
         );
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -290,7 +257,6 @@ function make_segvol_table(
 export {
       MAKE_SEGVOL_TABLE_METADATA,
       MakeSegvolTableOutputs,
-      MakeSegvolTableParameters,
       make_segvol_table,
       make_segvol_table_execute,
       make_segvol_table_params,

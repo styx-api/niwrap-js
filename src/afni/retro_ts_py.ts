@@ -12,7 +12,7 @@ const RETRO_TS_PY_METADATA: Metadata = {
 
 
 interface RetroTsPyParameters {
-    "@type": "afni.RetroTS.py";
+    "@type"?: "afni/RetroTS.py";
     "resp_file"?: InputPathType | null | undefined;
     "card_file"?: InputPathType | null | undefined;
     "phys_fs"?: number | null | undefined;
@@ -39,44 +39,11 @@ interface RetroTsPyParameters {
     "zero_phase_offset": boolean;
     "legacy_transform"?: number | null | undefined;
 }
+type RetroTsPyParametersTagged = Required<Pick<RetroTsPyParameters, '@type'>> & RetroTsPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.RetroTS.py": retro_ts_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.RetroTS.py": retro_ts_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `retro_ts_py(...)`.
+ * Output object returned when calling `RetroTsPyParameters(...)`.
  *
  * @interface
  */
@@ -149,9 +116,9 @@ function retro_ts_py_params(
     slice_order: string | null = null,
     zero_phase_offset: boolean = false,
     legacy_transform: number | null = null,
-): RetroTsPyParameters {
+): RetroTsPyParametersTagged {
     const params = {
-        "@type": "afni.RetroTS.py" as const,
+        "@type": "afni/RetroTS.py" as const,
         "num_slices": num_slices,
         "volume_tr": volume_tr,
         "rvt_out": rvt_out,
@@ -276,7 +243,7 @@ function retro_ts_py_cargs(
             (params["rvt_shifts"] ?? null)
         );
     }
-    if ((params["rvt_out"] ?? null)) {
+    if ((params["rvt_out"] ?? false)) {
         cargs.push("-rvt_out");
     }
     if ((params["resp_cutoff_freq"] ?? null) !== null) {
@@ -291,10 +258,10 @@ function retro_ts_py_cargs(
             String((params["cardiac_cutoff_freq"] ?? null))
         );
     }
-    if ((params["cardiac_out"] ?? null)) {
+    if ((params["cardiac_out"] ?? false)) {
         cargs.push("-cardiac_out");
     }
-    if ((params["respiration_out"] ?? null)) {
+    if ((params["respiration_out"] ?? false)) {
         cargs.push("-respiration_out");
     }
     if ((params["interp_style"] ?? null) !== null) {
@@ -309,16 +276,16 @@ function retro_ts_py_cargs(
             String((params["fir_order"] ?? null))
         );
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["demo"] ?? null)) {
+    if ((params["demo"] ?? false)) {
         cargs.push("-demo");
     }
-    if ((params["show_graphs"] ?? null)) {
+    if ((params["show_graphs"] ?? false)) {
         cargs.push("-show_graphs");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
     if ((params["slice_offset"] ?? null) !== null) {
@@ -339,7 +306,7 @@ function retro_ts_py_cargs(
             (params["slice_order"] ?? null)
         );
     }
-    if ((params["zero_phase_offset"] ?? null)) {
+    if ((params["zero_phase_offset"] ?? false)) {
         cargs.push("-zero_phase_offset");
     }
     if ((params["legacy_transform"] ?? null) !== null) {
@@ -474,7 +441,6 @@ function retro_ts_py(
 export {
       RETRO_TS_PY_METADATA,
       RetroTsPyOutputs,
-      RetroTsPyParameters,
       retro_ts_py,
       retro_ts_py_execute,
       retro_ts_py_params,

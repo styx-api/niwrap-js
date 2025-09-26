@@ -12,7 +12,7 @@ const MRIS_JACOBIAN_METADATA: Metadata = {
 
 
 interface MrisJacobianParameters {
-    "@type": "freesurfer.mris_jacobian";
+    "@type"?: "freesurfer/mris_jacobian";
     "original_surface": InputPathType;
     "mapped_surface": InputPathType;
     "jacobian_file": string;
@@ -20,44 +20,11 @@ interface MrisJacobianParameters {
     "noscale": boolean;
     "invert": boolean;
 }
+type MrisJacobianParametersTagged = Required<Pick<MrisJacobianParameters, '@type'>> & MrisJacobianParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_jacobian": mris_jacobian_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_jacobian": mris_jacobian_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_jacobian(...)`.
+ * Output object returned when calling `MrisJacobianParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function mris_jacobian_params(
     log: boolean = false,
     noscale: boolean = false,
     invert: boolean = false,
-): MrisJacobianParameters {
+): MrisJacobianParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_jacobian" as const,
+        "@type": "freesurfer/mris_jacobian" as const,
         "original_surface": original_surface,
         "mapped_surface": mapped_surface,
         "jacobian_file": jacobian_file,
@@ -123,13 +90,13 @@ function mris_jacobian_cargs(
     cargs.push(execution.inputFile((params["original_surface"] ?? null)));
     cargs.push(execution.inputFile((params["mapped_surface"] ?? null)));
     cargs.push((params["jacobian_file"] ?? null));
-    if ((params["log"] ?? null)) {
+    if ((params["log"] ?? false)) {
         cargs.push("-log");
     }
-    if ((params["noscale"] ?? null)) {
+    if ((params["noscale"] ?? false)) {
         cargs.push("-noscale");
     }
-    if ((params["invert"] ?? null)) {
+    if ((params["invert"] ?? false)) {
         cargs.push("-invert");
     }
     return cargs;
@@ -220,7 +187,6 @@ function mris_jacobian(
 export {
       MRIS_JACOBIAN_METADATA,
       MrisJacobianOutputs,
-      MrisJacobianParameters,
       mris_jacobian,
       mris_jacobian_execute,
       mris_jacobian_params,

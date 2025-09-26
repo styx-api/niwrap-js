@@ -12,7 +12,7 @@ const PTA_METADATA: Metadata = {
 
 
 interface PtaParameters {
-    "@type": "afni.PTA";
+    "@type"?: "afni/PTA";
     "prefix": string;
     "input_file": InputPathType;
     "model_formula": string;
@@ -22,44 +22,11 @@ interface PtaParameters {
     "response_var"?: string | null | undefined;
     "dbg_args": boolean;
 }
+type PtaParametersTagged = Required<Pick<PtaParameters, '@type'>> & PtaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.PTA": pta_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.PTA": pta_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `pta(...)`.
+ * Output object returned when calling `PtaParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +69,9 @@ function pta_params(
     verbosity_level: number | null = null,
     response_var: string | null = null,
     dbg_args: boolean = false,
-): PtaParameters {
+): PtaParametersTagged {
     const params = {
-        "@type": "afni.PTA" as const,
+        "@type": "afni/PTA" as const,
         "prefix": prefix,
         "input_file": input_file,
         "model_formula": model_formula,
@@ -176,7 +143,7 @@ function pta_cargs(
             (params["response_var"] ?? null)
         );
     }
-    if ((params["dbg_args"] ?? null)) {
+    if ((params["dbg_args"] ?? false)) {
         cargs.push("-dbgArgs");
     }
     return cargs;
@@ -272,7 +239,6 @@ function pta(
 export {
       PTA_METADATA,
       PtaOutputs,
-      PtaParameters,
       pta,
       pta_execute,
       pta_params,

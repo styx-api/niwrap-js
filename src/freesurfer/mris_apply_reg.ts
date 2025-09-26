@@ -12,7 +12,7 @@ const MRIS_APPLY_REG_METADATA: Metadata = {
 
 
 interface MrisApplyRegParameters {
-    "@type": "freesurfer.mris_apply_reg";
+    "@type"?: "freesurfer/mris_apply_reg";
     "src_input": InputPathType;
     "trg_output": string;
     "streg_pair": string;
@@ -37,44 +37,11 @@ interface MrisApplyRegParameters {
     "debug_mode": boolean;
     "check_options": boolean;
 }
+type MrisApplyRegParametersTagged = Required<Pick<MrisApplyRegParameters, '@type'>> & MrisApplyRegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_apply_reg": mris_apply_reg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_apply_reg": mris_apply_reg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_apply_reg(...)`.
+ * Output object returned when calling `MrisApplyRegParameters(...)`.
  *
  * @interface
  */
@@ -143,9 +110,9 @@ function mris_apply_reg_params(
     trg_reg_scale: number | null = null,
     debug_mode: boolean = false,
     check_options: boolean = false,
-): MrisApplyRegParameters {
+): MrisApplyRegParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_apply_reg" as const,
+        "@type": "freesurfer/mris_apply_reg" as const,
         "src_input": src_input,
         "trg_output": trg_output,
         "streg_pair": streg_pair,
@@ -242,22 +209,22 @@ function mris_apply_reg_cargs(
             execution.inputFile((params["src_xyz"] ?? null))
         );
     }
-    if ((params["jacobian"] ?? null)) {
+    if ((params["jacobian"] ?? false)) {
         cargs.push("--jac");
     }
-    if ((params["no_reverse"] ?? null)) {
+    if ((params["no_reverse"] ?? false)) {
         cargs.push("--no-rev");
     }
-    if ((params["rand_noise"] ?? null)) {
+    if ((params["rand_noise"] ?? false)) {
         cargs.push("--randn");
     }
-    if ((params["replace_ones"] ?? null)) {
+    if ((params["replace_ones"] ?? false)) {
         cargs.push("--ones");
     }
-    if ((params["center_output"] ?? null)) {
+    if ((params["center_output"] ?? false)) {
         cargs.push("--center");
     }
-    if ((params["curv_format"] ?? null)) {
+    if ((params["curv_format"] ?? false)) {
         cargs.push("--curv");
     }
     if ((params["lta_transform"] ?? null) !== null) {
@@ -314,10 +281,10 @@ function mris_apply_reg_cargs(
             String((params["trg_reg_scale"] ?? null))
         );
     }
-    if ((params["debug_mode"] ?? null)) {
+    if ((params["debug_mode"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["check_options"] ?? null)) {
+    if ((params["check_options"] ?? false)) {
         cargs.push("--checkopts");
     }
     return cargs;
@@ -442,7 +409,6 @@ function mris_apply_reg(
 export {
       MRIS_APPLY_REG_METADATA,
       MrisApplyRegOutputs,
-      MrisApplyRegParameters,
       mris_apply_reg,
       mris_apply_reg_execute,
       mris_apply_reg_params,

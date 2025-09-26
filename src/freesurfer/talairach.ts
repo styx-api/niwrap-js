@@ -12,50 +12,17 @@ const TALAIRACH_METADATA: Metadata = {
 
 
 interface TalairachParameters {
-    "@type": "freesurfer.talairach";
+    "@type"?: "freesurfer/talairach";
     "input_volume": InputPathType;
     "output_transform": string;
     "log_flag": boolean;
     "debug_flag": boolean;
 }
+type TalairachParametersTagged = Required<Pick<TalairachParameters, '@type'>> & TalairachParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.talairach": talairach_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.talairach": talairach_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `talairach(...)`.
+ * Output object returned when calling `TalairachParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function talairach_params(
     output_transform: string,
     log_flag: boolean = false,
     debug_flag: boolean = false,
-): TalairachParameters {
+): TalairachParametersTagged {
     const params = {
-        "@type": "freesurfer.talairach" as const,
+        "@type": "freesurfer/talairach" as const,
         "input_volume": input_volume,
         "output_transform": output_transform,
         "log_flag": log_flag,
@@ -120,10 +87,10 @@ function talairach_cargs(
         "-xfm",
         (params["output_transform"] ?? null)
     );
-    if ((params["log_flag"] ?? null)) {
+    if ((params["log_flag"] ?? false)) {
         cargs.push("--log");
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -210,7 +177,6 @@ function talairach(
 export {
       TALAIRACH_METADATA,
       TalairachOutputs,
-      TalairachParameters,
       talairach,
       talairach_execute,
       talairach_params,

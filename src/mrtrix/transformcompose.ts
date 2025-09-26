@@ -12,26 +12,29 @@ const TRANSFORMCOMPOSE_METADATA: Metadata = {
 
 
 interface TransformcomposeConfigParameters {
-    "@type": "mrtrix.transformcompose.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type TransformcomposeConfigParametersTagged = Required<Pick<TransformcomposeConfigParameters, '@type'>> & TransformcomposeConfigParameters;
 
 
 interface TransformcomposeVariousStringParameters {
-    "@type": "mrtrix.transformcompose.VariousString";
+    "@type"?: "VariousString";
     "obj": string;
 }
+type TransformcomposeVariousStringParametersTagged = Required<Pick<TransformcomposeVariousStringParameters, '@type'>> & TransformcomposeVariousStringParameters;
 
 
 interface TransformcomposeVariousFileParameters {
-    "@type": "mrtrix.transformcompose.VariousFile";
+    "@type"?: "VariousFile";
     "obj": InputPathType;
 }
+type TransformcomposeVariousFileParametersTagged = Required<Pick<TransformcomposeVariousFileParameters, '@type'>> & TransformcomposeVariousFileParameters;
 
 
 interface TransformcomposeParameters {
-    "@type": "mrtrix.transformcompose";
+    "@type"?: "mrtrix/transformcompose";
     "template"?: InputPathType | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -42,8 +45,9 @@ interface TransformcomposeParameters {
     "help": boolean;
     "version": boolean;
     "input": Array<InputPathType>;
-    "output": TransformcomposeVariousStringParameters | TransformcomposeVariousFileParameters;
+    "output": TransformcomposeVariousStringParametersTagged | TransformcomposeVariousFileParametersTagged;
 }
+type TransformcomposeParametersTagged = Required<Pick<TransformcomposeParameters, '@type'>> & TransformcomposeParameters;
 
 
 /**
@@ -53,14 +57,12 @@ interface TransformcomposeParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function transformcompose_output_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "mrtrix.transformcompose": transformcompose_cargs,
-        "mrtrix.transformcompose.config": transformcompose_config_cargs,
-        "mrtrix.transformcompose.VariousString": transformcompose_various_string_cargs,
-        "mrtrix.transformcompose.VariousFile": transformcompose_various_file_cargs,
+        "VariousString": transformcompose_various_string_cargs,
+        "VariousFile": transformcompose_various_file_cargs,
     };
     return cargsFuncs[t];
 }
@@ -73,7 +75,7 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function transformcompose_output_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
@@ -93,9 +95,9 @@ function dynOutputs(
 function transformcompose_config_params(
     key: string,
     value: string,
-): TransformcomposeConfigParameters {
+): TransformcomposeConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.transformcompose.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -132,9 +134,9 @@ function transformcompose_config_cargs(
  */
 function transformcompose_various_string_params(
     obj: string,
-): TransformcomposeVariousStringParameters {
+): TransformcomposeVariousStringParametersTagged {
     const params = {
-        "@type": "mrtrix.transformcompose.VariousString" as const,
+        "@type": "VariousString" as const,
         "obj": obj,
     };
     return params;
@@ -168,9 +170,9 @@ function transformcompose_various_string_cargs(
  */
 function transformcompose_various_file_params(
     obj: InputPathType,
-): TransformcomposeVariousFileParameters {
+): TransformcomposeVariousFileParametersTagged {
     const params = {
-        "@type": "mrtrix.transformcompose.VariousFile" as const,
+        "@type": "VariousFile" as const,
         "obj": obj,
     };
     return params;
@@ -196,7 +198,7 @@ function transformcompose_various_file_cargs(
 
 
 /**
- * Output object returned when calling `transformcompose(...)`.
+ * Output object returned when calling `TransformcomposeParameters(...)`.
  *
  * @interface
  */
@@ -227,7 +229,7 @@ interface TransformcomposeOutputs {
  */
 function transformcompose_params(
     input: Array<InputPathType>,
-    output: TransformcomposeVariousStringParameters | TransformcomposeVariousFileParameters,
+    output: TransformcomposeVariousStringParametersTagged | TransformcomposeVariousFileParametersTagged,
     template: InputPathType | null = null,
     info: boolean = false,
     quiet: boolean = false,
@@ -237,9 +239,9 @@ function transformcompose_params(
     config: Array<TransformcomposeConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TransformcomposeParameters {
+): TransformcomposeParametersTagged {
     const params = {
-        "@type": "mrtrix.transformcompose" as const,
+        "@type": "mrtrix/transformcompose" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -282,16 +284,16 @@ function transformcompose_cargs(
             execution.inputFile((params["template"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -301,16 +303,16 @@ function transformcompose_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => transformcompose_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(...(params["input"] ?? null).map(f => execution.inputFile(f)));
-    cargs.push(...dynCargs((params["output"] ?? null)["@type"])((params["output"] ?? null), execution));
+    cargs.push(...transformcompose_output_cargs_dyn_fn((params["output"] ?? null)["@type"])((params["output"] ?? null), execution));
     return cargs;
 }
 
@@ -408,7 +410,7 @@ function transformcompose_execute(
  */
 function transformcompose(
     input: Array<InputPathType>,
-    output: TransformcomposeVariousStringParameters | TransformcomposeVariousFileParameters,
+    output: TransformcomposeVariousStringParametersTagged | TransformcomposeVariousFileParametersTagged,
     template: InputPathType | null = null,
     info: boolean = false,
     quiet: boolean = false,
@@ -427,11 +429,7 @@ function transformcompose(
 
 export {
       TRANSFORMCOMPOSE_METADATA,
-      TransformcomposeConfigParameters,
       TransformcomposeOutputs,
-      TransformcomposeParameters,
-      TransformcomposeVariousFileParameters,
-      TransformcomposeVariousStringParameters,
       transformcompose,
       transformcompose_config_params,
       transformcompose_execute,

@@ -12,7 +12,7 @@ const ANTS_N4_BIAS_FIELD_CORRECTION_FS_METADATA: Metadata = {
 
 
 interface AntsN4BiasFieldCorrectionFsParameters {
-    "@type": "freesurfer.AntsN4BiasFieldCorrectionFs";
+    "@type"?: "freesurfer/AntsN4BiasFieldCorrectionFs";
     "input_file": InputPathType;
     "output_file": string;
     "mask_file"?: InputPathType | null | undefined;
@@ -21,44 +21,11 @@ interface AntsN4BiasFieldCorrectionFsParameters {
     "output_dtype"?: string | null | undefined;
     "replace_zeros"?: string | null | undefined;
 }
+type AntsN4BiasFieldCorrectionFsParametersTagged = Required<Pick<AntsN4BiasFieldCorrectionFsParameters, '@type'>> & AntsN4BiasFieldCorrectionFsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.AntsN4BiasFieldCorrectionFs": ants_n4_bias_field_correction_fs_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.AntsN4BiasFieldCorrectionFs": ants_n4_bias_field_correction_fs_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ants_n4_bias_field_correction_fs(...)`.
+ * Output object returned when calling `AntsN4BiasFieldCorrectionFsParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function ants_n4_bias_field_correction_fs_params(
     iterations: Array<number> | null = null,
     output_dtype: string | null = null,
     replace_zeros: string | null = null,
-): AntsN4BiasFieldCorrectionFsParameters {
+): AntsN4BiasFieldCorrectionFsParametersTagged {
     const params = {
-        "@type": "freesurfer.AntsN4BiasFieldCorrectionFs" as const,
+        "@type": "freesurfer/AntsN4BiasFieldCorrectionFs" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -262,7 +229,6 @@ function ants_n4_bias_field_correction_fs(
 export {
       ANTS_N4_BIAS_FIELD_CORRECTION_FS_METADATA,
       AntsN4BiasFieldCorrectionFsOutputs,
-      AntsN4BiasFieldCorrectionFsParameters,
       ants_n4_bias_field_correction_fs,
       ants_n4_bias_field_correction_fs_execute,
       ants_n4_bias_field_correction_fs_params,

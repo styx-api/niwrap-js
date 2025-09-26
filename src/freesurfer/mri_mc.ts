@@ -12,50 +12,17 @@ const MRI_MC_METADATA: Metadata = {
 
 
 interface MriMcParameters {
-    "@type": "freesurfer.mri_mc";
+    "@type"?: "freesurfer/mri_mc";
     "input_volume": InputPathType;
     "label_value": number;
     "output_surface": string;
     "connectivity"?: number | null | undefined;
 }
+type MriMcParametersTagged = Required<Pick<MriMcParameters, '@type'>> & MriMcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_mc": mri_mc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_mc": mri_mc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_mc(...)`.
+ * Output object returned when calling `MriMcParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mri_mc_params(
     label_value: number,
     output_surface: string,
     connectivity: number | null = null,
-): MriMcParameters {
+): MriMcParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_mc" as const,
+        "@type": "freesurfer/mri_mc" as const,
         "input_volume": input_volume,
         "label_value": label_value,
         "output_surface": output_surface,
@@ -203,7 +170,6 @@ function mri_mc(
 export {
       MRI_MC_METADATA,
       MriMcOutputs,
-      MriMcParameters,
       mri_mc,
       mri_mc_execute,
       mri_mc_params,

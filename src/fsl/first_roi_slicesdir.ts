@@ -12,48 +12,15 @@ const FIRST_ROI_SLICESDIR_METADATA: Metadata = {
 
 
 interface FirstRoiSlicesdirParameters {
-    "@type": "fsl.first_roi_slicesdir";
+    "@type"?: "fsl/first_roi_slicesdir";
     "input_t1_images": string;
     "input_label_images": string;
 }
+type FirstRoiSlicesdirParametersTagged = Required<Pick<FirstRoiSlicesdirParameters, '@type'>> & FirstRoiSlicesdirParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.first_roi_slicesdir": first_roi_slicesdir_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.first_roi_slicesdir": first_roi_slicesdir_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `first_roi_slicesdir(...)`.
+ * Output object returned when calling `FirstRoiSlicesdirParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +51,9 @@ interface FirstRoiSlicesdirOutputs {
 function first_roi_slicesdir_params(
     input_t1_images: string,
     input_label_images: string,
-): FirstRoiSlicesdirParameters {
+): FirstRoiSlicesdirParametersTagged {
     const params = {
-        "@type": "fsl.first_roi_slicesdir" as const,
+        "@type": "fsl/first_roi_slicesdir" as const,
         "input_t1_images": input_t1_images,
         "input_label_images": input_label_images,
     };
@@ -191,7 +158,6 @@ function first_roi_slicesdir(
 export {
       FIRST_ROI_SLICESDIR_METADATA,
       FirstRoiSlicesdirOutputs,
-      FirstRoiSlicesdirParameters,
       first_roi_slicesdir,
       first_roi_slicesdir_execute,
       first_roi_slicesdir_params,

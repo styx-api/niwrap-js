@@ -12,70 +12,37 @@ const CIFTI_MERGE_METADATA: Metadata = {
 
 
 interface CiftiMergeUpToParameters {
-    "@type": "workbench.cifti-merge.cifti.index.up_to";
+    "@type"?: "up_to";
     "last_index": string;
     "opt_reverse": boolean;
 }
+type CiftiMergeUpToParametersTagged = Required<Pick<CiftiMergeUpToParameters, '@type'>> & CiftiMergeUpToParameters;
 
 
 interface CiftiMergeIndexParameters {
-    "@type": "workbench.cifti-merge.cifti.index";
+    "@type"?: "index";
     "index": string;
     "up_to"?: CiftiMergeUpToParameters | null | undefined;
 }
+type CiftiMergeIndexParametersTagged = Required<Pick<CiftiMergeIndexParameters, '@type'>> & CiftiMergeIndexParameters;
 
 
 interface CiftiMergeCiftiParameters {
-    "@type": "workbench.cifti-merge.cifti";
+    "@type"?: "cifti";
     "cifti_in": InputPathType;
     "index"?: Array<CiftiMergeIndexParameters> | null | undefined;
 }
+type CiftiMergeCiftiParametersTagged = Required<Pick<CiftiMergeCiftiParameters, '@type'>> & CiftiMergeCiftiParameters;
 
 
 interface CiftiMergeParameters {
-    "@type": "workbench.cifti-merge";
+    "@type"?: "workbench/cifti-merge";
     "cifti_out": string;
     "opt_direction_direction"?: string | null | undefined;
     "opt_mem_limit_limit_gb"?: number | null | undefined;
     "cifti"?: Array<CiftiMergeCiftiParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-merge": cifti_merge_cargs,
-        "workbench.cifti-merge.cifti": cifti_merge_cifti_cargs,
-        "workbench.cifti-merge.cifti.index": cifti_merge_index_cargs,
-        "workbench.cifti-merge.cifti.index.up_to": cifti_merge_up_to_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-merge": cifti_merge_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiMergeParametersTagged = Required<Pick<CiftiMergeParameters, '@type'>> & CiftiMergeParameters;
 
 
 /**
@@ -89,9 +56,9 @@ function dynOutputs(
 function cifti_merge_up_to_params(
     last_index: string,
     opt_reverse: boolean = false,
-): CiftiMergeUpToParameters {
+): CiftiMergeUpToParametersTagged {
     const params = {
-        "@type": "workbench.cifti-merge.cifti.index.up_to" as const,
+        "@type": "up_to" as const,
         "last_index": last_index,
         "opt_reverse": opt_reverse,
     };
@@ -114,7 +81,7 @@ function cifti_merge_up_to_cargs(
     const cargs: string[] = [];
     cargs.push("-up-to");
     cargs.push((params["last_index"] ?? null));
-    if ((params["opt_reverse"] ?? null)) {
+    if ((params["opt_reverse"] ?? false)) {
         cargs.push("-reverse");
     }
     return cargs;
@@ -132,9 +99,9 @@ function cifti_merge_up_to_cargs(
 function cifti_merge_index_params(
     index: string,
     up_to: CiftiMergeUpToParameters | null = null,
-): CiftiMergeIndexParameters {
+): CiftiMergeIndexParametersTagged {
     const params = {
-        "@type": "workbench.cifti-merge.cifti.index" as const,
+        "@type": "index" as const,
         "index": index,
     };
     if (up_to !== null) {
@@ -160,7 +127,7 @@ function cifti_merge_index_cargs(
     cargs.push("-index");
     cargs.push((params["index"] ?? null));
     if ((params["up_to"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["up_to"] ?? null)["@type"])((params["up_to"] ?? null), execution));
+        cargs.push(...cifti_merge_up_to_cargs((params["up_to"] ?? null), execution));
     }
     return cargs;
 }
@@ -177,9 +144,9 @@ function cifti_merge_index_cargs(
 function cifti_merge_cifti_params(
     cifti_in: InputPathType,
     index: Array<CiftiMergeIndexParameters> | null = null,
-): CiftiMergeCiftiParameters {
+): CiftiMergeCiftiParametersTagged {
     const params = {
-        "@type": "workbench.cifti-merge.cifti" as const,
+        "@type": "cifti" as const,
         "cifti_in": cifti_in,
     };
     if (index !== null) {
@@ -205,14 +172,14 @@ function cifti_merge_cifti_cargs(
     cargs.push("-cifti");
     cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
     if ((params["index"] ?? null) !== null) {
-        cargs.push(...(params["index"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["index"] ?? null).map(s => cifti_merge_index_cargs(s, execution)).flat());
     }
     return cargs;
 }
 
 
 /**
- * Output object returned when calling `cifti_merge(...)`.
+ * Output object returned when calling `CiftiMergeParameters(...)`.
  *
  * @interface
  */
@@ -243,9 +210,9 @@ function cifti_merge_params(
     opt_direction_direction: string | null = null,
     opt_mem_limit_limit_gb: number | null = null,
     cifti: Array<CiftiMergeCiftiParameters> | null = null,
-): CiftiMergeParameters {
+): CiftiMergeParametersTagged {
     const params = {
-        "@type": "workbench.cifti-merge" as const,
+        "@type": "workbench/cifti-merge" as const,
         "cifti_out": cifti_out,
     };
     if (opt_direction_direction !== null) {
@@ -290,7 +257,7 @@ function cifti_merge_cargs(
         );
     }
     if ((params["cifti"] ?? null) !== null) {
-        cargs.push(...(params["cifti"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["cifti"] ?? null).map(s => cifti_merge_cifti_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -387,11 +354,7 @@ function cifti_merge(
 
 export {
       CIFTI_MERGE_METADATA,
-      CiftiMergeCiftiParameters,
-      CiftiMergeIndexParameters,
       CiftiMergeOutputs,
-      CiftiMergeParameters,
-      CiftiMergeUpToParameters,
       cifti_merge,
       cifti_merge_cifti_params,
       cifti_merge_execute,

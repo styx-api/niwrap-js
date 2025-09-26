@@ -12,7 +12,7 @@ const MRIS_SURFACE_STATS_METADATA: Metadata = {
 
 
 interface MrisSurfaceStatsParameters {
-    "@type": "freesurfer.mris_surface_stats";
+    "@type"?: "freesurfer/mris_surface_stats";
     "nsmooth"?: number | null | undefined;
     "surf_name": InputPathType;
     "mask_name"?: InputPathType | null | undefined;
@@ -27,44 +27,11 @@ interface MrisSurfaceStatsParameters {
     "debug"?: number | null | undefined;
     "data_files": Array<InputPathType>;
 }
+type MrisSurfaceStatsParametersTagged = Required<Pick<MrisSurfaceStatsParameters, '@type'>> & MrisSurfaceStatsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_surface_stats": mris_surface_stats_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_surface_stats": mris_surface_stats_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_surface_stats(...)`.
+ * Output object returned when calling `MrisSurfaceStatsParameters(...)`.
  *
  * @interface
  */
@@ -129,9 +96,9 @@ function mris_surface_stats_params(
     src_type: string | null = null,
     trg_type: string | null = null,
     debug: number | null = null,
-): MrisSurfaceStatsParameters {
+): MrisSurfaceStatsParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_surface_stats" as const,
+        "@type": "freesurfer/mris_surface_stats" as const,
         "surf_name": surf_name,
         "out_name": out_name,
         "data_files": data_files,
@@ -359,7 +326,6 @@ function mris_surface_stats(
 export {
       MRIS_SURFACE_STATS_METADATA,
       MrisSurfaceStatsOutputs,
-      MrisSurfaceStatsParameters,
       mris_surface_stats,
       mris_surface_stats_execute,
       mris_surface_stats_params,

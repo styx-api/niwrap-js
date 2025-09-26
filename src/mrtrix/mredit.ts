@@ -12,37 +12,41 @@ const MREDIT_METADATA: Metadata = {
 
 
 interface MreditPlaneParameters {
-    "@type": "mrtrix.mredit.plane";
+    "@type"?: "plane";
     "axis": number;
     "coord": Array<number>;
     "value": number;
 }
+type MreditPlaneParametersTagged = Required<Pick<MreditPlaneParameters, '@type'>> & MreditPlaneParameters;
 
 
 interface MreditSphereParameters {
-    "@type": "mrtrix.mredit.sphere";
+    "@type"?: "sphere";
     "position": Array<number>;
     "radius": number;
     "value": number;
 }
+type MreditSphereParametersTagged = Required<Pick<MreditSphereParameters, '@type'>> & MreditSphereParameters;
 
 
 interface MreditVoxelParameters {
-    "@type": "mrtrix.mredit.voxel";
+    "@type"?: "voxel";
     "position": Array<number>;
     "value": number;
 }
+type MreditVoxelParametersTagged = Required<Pick<MreditVoxelParameters, '@type'>> & MreditVoxelParameters;
 
 
 interface MreditConfigParameters {
-    "@type": "mrtrix.mredit.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MreditConfigParametersTagged = Required<Pick<MreditConfigParameters, '@type'>> & MreditConfigParameters;
 
 
 interface MreditParameters {
-    "@type": "mrtrix.mredit";
+    "@type"?: "mrtrix/mredit";
     "plane"?: Array<MreditPlaneParameters> | null | undefined;
     "sphere"?: Array<MreditSphereParameters> | null | undefined;
     "voxel"?: Array<MreditVoxelParameters> | null | undefined;
@@ -58,44 +62,7 @@ interface MreditParameters {
     "input": InputPathType;
     "output"?: string | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.mredit": mredit_cargs,
-        "mrtrix.mredit.plane": mredit_plane_cargs,
-        "mrtrix.mredit.sphere": mredit_sphere_cargs,
-        "mrtrix.mredit.voxel": mredit_voxel_cargs,
-        "mrtrix.mredit.config": mredit_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.mredit": mredit_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MreditParametersTagged = Required<Pick<MreditParameters, '@type'>> & MreditParameters;
 
 
 /**
@@ -111,9 +78,9 @@ function mredit_plane_params(
     axis: number,
     coord: Array<number>,
     value: number,
-): MreditPlaneParameters {
+): MreditPlaneParametersTagged {
     const params = {
-        "@type": "mrtrix.mredit.plane" as const,
+        "@type": "plane" as const,
         "axis": axis,
         "coord": coord,
         "value": value,
@@ -156,9 +123,9 @@ function mredit_sphere_params(
     position: Array<number>,
     radius: number,
     value: number,
-): MreditSphereParameters {
+): MreditSphereParametersTagged {
     const params = {
-        "@type": "mrtrix.mredit.sphere" as const,
+        "@type": "sphere" as const,
         "position": position,
         "radius": radius,
         "value": value,
@@ -199,9 +166,9 @@ function mredit_sphere_cargs(
 function mredit_voxel_params(
     position: Array<number>,
     value: number,
-): MreditVoxelParameters {
+): MreditVoxelParametersTagged {
     const params = {
-        "@type": "mrtrix.mredit.voxel" as const,
+        "@type": "voxel" as const,
         "position": position,
         "value": value,
     };
@@ -240,9 +207,9 @@ function mredit_voxel_cargs(
 function mredit_config_params(
     key: string,
     value: string,
-): MreditConfigParameters {
+): MreditConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.mredit.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -271,7 +238,7 @@ function mredit_config_cargs(
 
 
 /**
- * Output object returned when calling `mredit(...)`.
+ * Output object returned when calling `MreditParameters(...)`.
  *
  * @interface
  */
@@ -322,9 +289,9 @@ function mredit_params(
     help: boolean = false,
     version: boolean = false,
     output: string | null = null,
-): MreditParameters {
+): MreditParametersTagged {
     const params = {
-        "@type": "mrtrix.mredit" as const,
+        "@type": "mrtrix/mredit" as const,
         "scanner": scanner,
         "info": info,
         "quiet": quiet,
@@ -371,27 +338,27 @@ function mredit_cargs(
     const cargs: string[] = [];
     cargs.push("mredit");
     if ((params["plane"] ?? null) !== null) {
-        cargs.push(...(params["plane"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["plane"] ?? null).map(s => mredit_plane_cargs(s, execution)).flat());
     }
     if ((params["sphere"] ?? null) !== null) {
-        cargs.push(...(params["sphere"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["sphere"] ?? null).map(s => mredit_sphere_cargs(s, execution)).flat());
     }
     if ((params["voxel"] ?? null) !== null) {
-        cargs.push(...(params["voxel"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["voxel"] ?? null).map(s => mredit_voxel_cargs(s, execution)).flat());
     }
-    if ((params["scanner"] ?? null)) {
+    if ((params["scanner"] ?? false)) {
         cargs.push("-scanner");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -401,12 +368,12 @@ function mredit_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => mredit_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -528,12 +495,7 @@ function mredit(
 
 export {
       MREDIT_METADATA,
-      MreditConfigParameters,
       MreditOutputs,
-      MreditParameters,
-      MreditPlaneParameters,
-      MreditSphereParameters,
-      MreditVoxelParameters,
       mredit,
       mredit_config_params,
       mredit_execute,

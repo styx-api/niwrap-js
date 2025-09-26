@@ -12,7 +12,7 @@ const V_3D_TAGALIGN_METADATA: Metadata = {
 
 
 interface V3dTagalignParameters {
-    "@type": "afni.3dTagalign";
+    "@type"?: "afni/3dTagalign";
     "input_dataset": InputPathType;
     "master_dataset": InputPathType;
     "tagset_file"?: InputPathType | null | undefined;
@@ -29,44 +29,11 @@ interface V3dTagalignParameters {
     "nearest_neighbor_interpolation": boolean;
     "quintic_interpolation": boolean;
 }
+type V3dTagalignParametersTagged = Required<Pick<V3dTagalignParameters, '@type'>> & V3dTagalignParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dTagalign": v_3d_tagalign_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dTagalign": v_3d_tagalign_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_tagalign(...)`.
+ * Output object returned when calling `V3dTagalignParameters(...)`.
  *
  * @interface
  */
@@ -127,9 +94,9 @@ function v_3d_tagalign_params(
     cubic_interpolation: boolean = false,
     nearest_neighbor_interpolation: boolean = false,
     quintic_interpolation: boolean = false,
-): V3dTagalignParameters {
+): V3dTagalignParametersTagged {
     const params = {
-        "@type": "afni.3dTagalign" as const,
+        "@type": "afni/3dTagalign" as const,
         "input_dataset": input_dataset,
         "master_dataset": master_dataset,
         "no_keep_tags": no_keep_tags,
@@ -181,7 +148,7 @@ function v_3d_tagalign_cargs(
             execution.inputFile((params["tagset_file"] ?? null))
         );
     }
-    if ((params["no_keep_tags"] ?? null)) {
+    if ((params["no_keep_tags"] ?? false)) {
         cargs.push("-nokeeptags");
     }
     if ((params["matvec_file"] ?? null) !== null) {
@@ -190,13 +157,13 @@ function v_3d_tagalign_cargs(
             (params["matvec_file"] ?? null)
         );
     }
-    if ((params["rotate"] ?? null)) {
+    if ((params["rotate"] ?? false)) {
         cargs.push("-rotate");
     }
-    if ((params["affine"] ?? null)) {
+    if ((params["affine"] ?? false)) {
         cargs.push("-affine");
     }
-    if ((params["rotscl"] ?? null)) {
+    if ((params["rotscl"] ?? false)) {
         cargs.push("-rotscl");
     }
     if ((params["prefix"] ?? null) !== null) {
@@ -205,22 +172,22 @@ function v_3d_tagalign_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["dummy"] ?? null)) {
+    if ((params["dummy"] ?? false)) {
         cargs.push("-dummy");
     }
-    if ((params["linear_interpolation"] ?? null)) {
+    if ((params["linear_interpolation"] ?? false)) {
         cargs.push("-linear");
     }
-    if ((params["cubic_interpolation"] ?? null)) {
+    if ((params["cubic_interpolation"] ?? false)) {
         cargs.push("-cubic");
     }
-    if ((params["nearest_neighbor_interpolation"] ?? null)) {
+    if ((params["nearest_neighbor_interpolation"] ?? false)) {
         cargs.push("-NN");
     }
-    if ((params["quintic_interpolation"] ?? null)) {
+    if ((params["quintic_interpolation"] ?? false)) {
         cargs.push("-quintic");
     }
     return cargs;
@@ -330,7 +297,6 @@ function v_3d_tagalign(
 
 export {
       V3dTagalignOutputs,
-      V3dTagalignParameters,
       V_3D_TAGALIGN_METADATA,
       v_3d_tagalign,
       v_3d_tagalign_execute,

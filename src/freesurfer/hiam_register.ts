@@ -12,49 +12,16 @@ const HIAM_REGISTER_METADATA: Metadata = {
 
 
 interface HiamRegisterParameters {
-    "@type": "freesurfer.hiam_register";
+    "@type"?: "freesurfer/hiam_register";
     "input_surface": InputPathType;
     "average_surface": InputPathType;
     "output_surface": string;
 }
+type HiamRegisterParametersTagged = Required<Pick<HiamRegisterParameters, '@type'>> & HiamRegisterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.hiam_register": hiam_register_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.hiam_register": hiam_register_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `hiam_register(...)`.
+ * Output object returned when calling `HiamRegisterParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function hiam_register_params(
     input_surface: InputPathType,
     average_surface: InputPathType,
     output_surface: string,
-): HiamRegisterParameters {
+): HiamRegisterParametersTagged {
     const params = {
-        "@type": "freesurfer.hiam_register" as const,
+        "@type": "freesurfer/hiam_register" as const,
         "input_surface": input_surface,
         "average_surface": average_surface,
         "output_surface": output_surface,
@@ -193,7 +160,6 @@ function hiam_register(
 export {
       HIAM_REGISTER_METADATA,
       HiamRegisterOutputs,
-      HiamRegisterParameters,
       hiam_register,
       hiam_register_execute,
       hiam_register_params,

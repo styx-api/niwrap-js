@@ -12,49 +12,16 @@ const LABELS_INTERSECT_METADATA: Metadata = {
 
 
 interface LabelsIntersectParameters {
-    "@type": "freesurfer.labels_intersect";
+    "@type"?: "freesurfer/labels_intersect";
     "label1": InputPathType;
     "label2": InputPathType;
     "outputname": string;
 }
+type LabelsIntersectParametersTagged = Required<Pick<LabelsIntersectParameters, '@type'>> & LabelsIntersectParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.labels_intersect": labels_intersect_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.labels_intersect": labels_intersect_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `labels_intersect(...)`.
+ * Output object returned when calling `LabelsIntersectParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function labels_intersect_params(
     label1: InputPathType,
     label2: InputPathType,
     outputname: string,
-): LabelsIntersectParameters {
+): LabelsIntersectParametersTagged {
     const params = {
-        "@type": "freesurfer.labels_intersect" as const,
+        "@type": "freesurfer/labels_intersect" as const,
         "label1": label1,
         "label2": label2,
         "outputname": outputname,
@@ -193,7 +160,6 @@ function labels_intersect(
 export {
       LABELS_INTERSECT_METADATA,
       LabelsIntersectOutputs,
-      LabelsIntersectParameters,
       labels_intersect,
       labels_intersect_execute,
       labels_intersect_params,

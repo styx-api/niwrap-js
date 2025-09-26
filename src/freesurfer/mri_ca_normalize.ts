@@ -12,7 +12,7 @@ const MRI_CA_NORMALIZE_METADATA: Metadata = {
 
 
 interface MriCaNormalizeParameters {
-    "@type": "freesurfer.mri_ca_normalize";
+    "@type"?: "freesurfer/mri_ca_normalize";
     "input_brain_volumes": Array<InputPathType>;
     "atlas_file": InputPathType;
     "xform_file": InputPathType;
@@ -41,44 +41,11 @@ interface MriCaNormalizeParameters {
     "renorm_file"?: InputPathType | null | undefined;
     "flash_flag": boolean;
 }
+type MriCaNormalizeParametersTagged = Required<Pick<MriCaNormalizeParameters, '@type'>> & MriCaNormalizeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_ca_normalize": mri_ca_normalize_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_ca_normalize": mri_ca_normalize_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_ca_normalize(...)`.
+ * Output object returned when calling `MriCaNormalizeParameters(...)`.
  *
  * @interface
  */
@@ -155,9 +122,9 @@ function mri_ca_normalize_params(
     novar_flag: boolean = false,
     renorm_file: InputPathType | null = null,
     flash_flag: boolean = false,
-): MriCaNormalizeParameters {
+): MriCaNormalizeParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_ca_normalize" as const,
+        "@type": "freesurfer/mri_ca_normalize" as const,
         "input_brain_volumes": input_brain_volumes,
         "atlas_file": atlas_file,
         "xform_file": xform_file,
@@ -370,7 +337,7 @@ function mri_ca_normalize_cargs(
             String((params["top_percent"] ?? null))
         );
     }
-    if ((params["novar_flag"] ?? null)) {
+    if ((params["novar_flag"] ?? false)) {
         cargs.push("-novar");
     }
     if ((params["renorm_file"] ?? null) !== null) {
@@ -379,7 +346,7 @@ function mri_ca_normalize_cargs(
             execution.inputFile((params["renorm_file"] ?? null))
         );
     }
-    if ((params["flash_flag"] ?? null)) {
+    if ((params["flash_flag"] ?? false)) {
         cargs.push("-flash");
     }
     return cargs;
@@ -512,7 +479,6 @@ function mri_ca_normalize(
 export {
       MRI_CA_NORMALIZE_METADATA,
       MriCaNormalizeOutputs,
-      MriCaNormalizeParameters,
       mri_ca_normalize,
       mri_ca_normalize_execute,
       mri_ca_normalize_params,

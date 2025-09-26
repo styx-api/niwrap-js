@@ -12,7 +12,7 @@ const FSLORIENT_METADATA: Metadata = {
 
 
 interface FslorientParameters {
-    "@type": "fsl.fslorient";
+    "@type"?: "fsl/fslorient";
     "get_orient": boolean;
     "get_sform": boolean;
     "get_qform": boolean;
@@ -30,43 +30,11 @@ interface FslorientParameters {
     "swap_orient": boolean;
     "filename": InputPathType;
 }
+type FslorientParametersTagged = Required<Pick<FslorientParameters, '@type'>> & FslorientParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslorient": fslorient_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslorient(...)`.
+ * Output object returned when calling `FslorientParameters(...)`.
  *
  * @interface
  */
@@ -117,9 +85,9 @@ function fslorient_params(
     force_neurological: boolean = false,
     force_radiological: boolean = false,
     swap_orient: boolean = false,
-): FslorientParameters {
+): FslorientParametersTagged {
     const params = {
-        "@type": "fsl.fslorient" as const,
+        "@type": "fsl/fslorient" as const,
         "get_orient": get_orient,
         "get_sform": get_sform,
         "get_qform": get_qform,
@@ -163,13 +131,13 @@ function fslorient_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("fslorient");
-    if ((params["get_orient"] ?? null)) {
+    if ((params["get_orient"] ?? false)) {
         cargs.push("-getorient");
     }
-    if ((params["get_sform"] ?? null)) {
+    if ((params["get_sform"] ?? false)) {
         cargs.push("-getsform");
     }
-    if ((params["get_qform"] ?? null)) {
+    if ((params["get_qform"] ?? false)) {
         cargs.push("-getqform");
     }
     if ((params["set_sform"] ?? null) !== null) {
@@ -196,25 +164,25 @@ function fslorient_cargs(
             (params["set_qform_code"] ?? null)
         );
     }
-    if ((params["get_qform_code"] ?? null)) {
+    if ((params["get_qform_code"] ?? false)) {
         cargs.push("-getqformcode");
     }
-    if ((params["get_sform_code"] ?? null)) {
+    if ((params["get_sform_code"] ?? false)) {
         cargs.push("-getsformcode");
     }
-    if ((params["copy_qform_to_sform"] ?? null) || (params["copy_sform_to_qform"] ?? null)) {
-        cargs.push([(((params["copy_qform_to_sform"] ?? null)) ? "-copyqform2sform" : ""), (((params["copy_sform_to_qform"] ?? null)) ? "-copysform2qform" : "")].join(''));
+    if ((params["copy_qform_to_sform"] ?? false) || (params["copy_sform_to_qform"] ?? false)) {
+        cargs.push([(((params["copy_qform_to_sform"] ?? false)) ? "-copyqform2sform" : ""), (((params["copy_sform_to_qform"] ?? false)) ? "-copysform2qform" : "")].join(''));
     }
-    if ((params["delete_orient"] ?? null)) {
+    if ((params["delete_orient"] ?? false)) {
         cargs.push("-deleteorient");
     }
-    if ((params["force_neurological"] ?? null)) {
+    if ((params["force_neurological"] ?? false)) {
         cargs.push("-forceneurological");
     }
-    if ((params["force_radiological"] ?? null)) {
+    if ((params["force_radiological"] ?? false)) {
         cargs.push("-forceradiological");
     }
-    if ((params["swap_orient"] ?? null)) {
+    if ((params["swap_orient"] ?? false)) {
         cargs.push("-swaporient");
     }
     cargs.push(execution.inputFile((params["filename"] ?? null)));
@@ -325,7 +293,6 @@ function fslorient(
 export {
       FSLORIENT_METADATA,
       FslorientOutputs,
-      FslorientParameters,
       fslorient,
       fslorient_execute,
       fslorient_params,

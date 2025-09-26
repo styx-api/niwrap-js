@@ -12,47 +12,15 @@ const V__GET_AFNI_PREFIX_METADATA: Metadata = {
 
 
 interface VGetAfniPrefixParameters {
-    "@type": "afni.@GetAfniPrefix";
+    "@type"?: "afni/@GetAfniPrefix";
     "name": InputPathType;
     "suffix"?: string | null | undefined;
 }
+type VGetAfniPrefixParametersTagged = Required<Pick<VGetAfniPrefixParameters, '@type'>> & VGetAfniPrefixParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@GetAfniPrefix": v__get_afni_prefix_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__get_afni_prefix(...)`.
+ * Output object returned when calling `VGetAfniPrefixParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface VGetAfniPrefixOutputs {
 function v__get_afni_prefix_params(
     name: InputPathType,
     suffix: string | null = null,
-): VGetAfniPrefixParameters {
+): VGetAfniPrefixParametersTagged {
     const params = {
-        "@type": "afni.@GetAfniPrefix" as const,
+        "@type": "afni/@GetAfniPrefix" as const,
         "name": name,
     };
     if (suffix !== null) {
@@ -183,7 +151,6 @@ function v__get_afni_prefix(
 
 export {
       VGetAfniPrefixOutputs,
-      VGetAfniPrefixParameters,
       V__GET_AFNI_PREFIX_METADATA,
       v__get_afni_prefix,
       v__get_afni_prefix_execute,

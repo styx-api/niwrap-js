@@ -12,7 +12,7 @@ const FSLVBM_2_TEMPLATE_METADATA: Metadata = {
 
 
 interface Fslvbm2TemplateParameters {
-    "@type": "fsl.fslvbm_2_template";
+    "@type"?: "fsl/fslvbm_2_template";
     "arch"?: string | null | undefined;
     "coprocessor"?: string | null | undefined;
     "coprocessor_multi"?: string | null | undefined;
@@ -38,43 +38,11 @@ interface Fslvbm2TemplateParameters {
     "runtime_limit"?: number | null | undefined;
     "job_file"?: InputPathType | null | undefined;
 }
+type Fslvbm2TemplateParametersTagged = Required<Pick<Fslvbm2TemplateParameters, '@type'>> & Fslvbm2TemplateParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslvbm_2_template": fslvbm_2_template_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslvbm_2_template(...)`.
+ * Output object returned when calling `Fslvbm2TemplateParameters(...)`.
  *
  * @interface
  */
@@ -141,9 +109,9 @@ function fslvbm_2_template_params(
     project: string | null = null,
     runtime_limit: number | null = null,
     job_file: InputPathType | null = null,
-): Fslvbm2TemplateParameters {
+): Fslvbm2TemplateParametersTagged {
     const params = {
-        "@type": "fsl.fslvbm_2_template" as const,
+        "@type": "fsl/fslvbm_2_template" as const,
     };
     if (arch !== null) {
         params["arch"] = arch;
@@ -502,7 +470,6 @@ function fslvbm_2_template(
 export {
       FSLVBM_2_TEMPLATE_METADATA,
       Fslvbm2TemplateOutputs,
-      Fslvbm2TemplateParameters,
       fslvbm_2_template,
       fslvbm_2_template_execute,
       fslvbm_2_template_params,

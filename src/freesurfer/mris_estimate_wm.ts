@@ -12,7 +12,7 @@ const MRIS_ESTIMATE_WM_METADATA: Metadata = {
 
 
 interface MrisEstimateWmParameters {
-    "@type": "freesurfer.mris_estimate_wm";
+    "@type"?: "freesurfer/mris_estimate_wm";
     "subjs": Array<string>;
     "hemi": string;
     "sdir"?: string | null | undefined;
@@ -23,43 +23,11 @@ interface MrisEstimateWmParameters {
     "single_iter": boolean;
     "vol"?: string | null | undefined;
 }
+type MrisEstimateWmParametersTagged = Required<Pick<MrisEstimateWmParameters, '@type'>> & MrisEstimateWmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_estimate_wm": mris_estimate_wm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_estimate_wm(...)`.
+ * Output object returned when calling `MrisEstimateWmParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +64,9 @@ function mris_estimate_wm_params(
     rsi: boolean = false,
     single_iter: boolean = false,
     vol: string | null = null,
-): MrisEstimateWmParameters {
+): MrisEstimateWmParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_estimate_wm" as const,
+        "@type": "freesurfer/mris_estimate_wm" as const,
         "subjs": subjs,
         "hemi": hemi,
         "gpu": gpu,
@@ -161,13 +129,13 @@ function mris_estimate_wm_cargs(
             (params["suffix"] ?? null)
         );
     }
-    if ((params["gpu"] ?? null)) {
+    if ((params["gpu"] ?? false)) {
         cargs.push("-g");
     }
-    if ((params["rsi"] ?? null)) {
+    if ((params["rsi"] ?? false)) {
         cargs.push("--rsi");
     }
-    if ((params["single_iter"] ?? null)) {
+    if ((params["single_iter"] ?? false)) {
         cargs.push("--single-iter");
     }
     if ((params["vol"] ?? null) !== null) {
@@ -269,7 +237,6 @@ function mris_estimate_wm(
 export {
       MRIS_ESTIMATE_WM_METADATA,
       MrisEstimateWmOutputs,
-      MrisEstimateWmParameters,
       mris_estimate_wm,
       mris_estimate_wm_execute,
       mris_estimate_wm_params,

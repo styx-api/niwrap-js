@@ -12,7 +12,7 @@ const MRI_COMPUTE_CHANGE_MAP_METADATA: Metadata = {
 
 
 interface MriComputeChangeMapParameters {
-    "@type": "freesurfer.mri_compute_change_map";
+    "@type"?: "freesurfer/mri_compute_change_map";
     "mean_filter": boolean;
     "gaussian_sigma"?: number | null | undefined;
     "volume1": InputPathType;
@@ -20,44 +20,11 @@ interface MriComputeChangeMapParameters {
     "transform": InputPathType;
     "outvolume": string;
 }
+type MriComputeChangeMapParametersTagged = Required<Pick<MriComputeChangeMapParameters, '@type'>> & MriComputeChangeMapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_compute_change_map": mri_compute_change_map_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_compute_change_map": mri_compute_change_map_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_compute_change_map(...)`.
+ * Output object returned when calling `MriComputeChangeMapParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function mri_compute_change_map_params(
     outvolume: string,
     mean_filter: boolean = false,
     gaussian_sigma: number | null = null,
-): MriComputeChangeMapParameters {
+): MriComputeChangeMapParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_compute_change_map" as const,
+        "@type": "freesurfer/mri_compute_change_map" as const,
         "mean_filter": mean_filter,
         "volume1": volume1,
         "volume2": volume2,
@@ -122,7 +89,7 @@ function mri_compute_change_map_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("mri_compute_change_map");
-    if ((params["mean_filter"] ?? null)) {
+    if ((params["mean_filter"] ?? false)) {
         cargs.push("-m");
     }
     if ((params["gaussian_sigma"] ?? null) !== null) {
@@ -223,7 +190,6 @@ function mri_compute_change_map(
 export {
       MRI_COMPUTE_CHANGE_MAP_METADATA,
       MriComputeChangeMapOutputs,
-      MriComputeChangeMapParameters,
       mri_compute_change_map,
       mri_compute_change_map_execute,
       mri_compute_change_map_params,

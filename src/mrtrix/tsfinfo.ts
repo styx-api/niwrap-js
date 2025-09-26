@@ -12,14 +12,15 @@ const TSFINFO_METADATA: Metadata = {
 
 
 interface TsfinfoConfigParameters {
-    "@type": "mrtrix.tsfinfo.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type TsfinfoConfigParametersTagged = Required<Pick<TsfinfoConfigParameters, '@type'>> & TsfinfoConfigParameters;
 
 
 interface TsfinfoParameters {
-    "@type": "mrtrix.tsfinfo";
+    "@type"?: "mrtrix/tsfinfo";
     "count": boolean;
     "ascii"?: string | null | undefined;
     "info": boolean;
@@ -32,40 +33,7 @@ interface TsfinfoParameters {
     "version": boolean;
     "tracks": Array<InputPathType>;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.tsfinfo": tsfinfo_cargs,
-        "mrtrix.tsfinfo.config": tsfinfo_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type TsfinfoParametersTagged = Required<Pick<TsfinfoParameters, '@type'>> & TsfinfoParameters;
 
 
 /**
@@ -79,9 +47,9 @@ function dynOutputs(
 function tsfinfo_config_params(
     key: string,
     value: string,
-): TsfinfoConfigParameters {
+): TsfinfoConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.tsfinfo.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -110,7 +78,7 @@ function tsfinfo_config_cargs(
 
 
 /**
- * Output object returned when calling `tsfinfo(...)`.
+ * Output object returned when calling `TsfinfoParameters(...)`.
  *
  * @interface
  */
@@ -151,9 +119,9 @@ function tsfinfo_params(
     config: Array<TsfinfoConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TsfinfoParameters {
+): TsfinfoParametersTagged {
     const params = {
-        "@type": "mrtrix.tsfinfo" as const,
+        "@type": "mrtrix/tsfinfo" as const,
         "count": count,
         "info": info,
         "quiet": quiet,
@@ -190,7 +158,7 @@ function tsfinfo_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("tsfinfo");
-    if ((params["count"] ?? null)) {
+    if ((params["count"] ?? false)) {
         cargs.push("-count");
     }
     if ((params["ascii"] ?? null) !== null) {
@@ -199,16 +167,16 @@ function tsfinfo_cargs(
             (params["ascii"] ?? null)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -218,12 +186,12 @@ function tsfinfo_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => tsfinfo_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(...(params["tracks"] ?? null).map(f => execution.inputFile(f)));
@@ -335,9 +303,7 @@ function tsfinfo(
 
 export {
       TSFINFO_METADATA,
-      TsfinfoConfigParameters,
       TsfinfoOutputs,
-      TsfinfoParameters,
       tsfinfo,
       tsfinfo_config_params,
       tsfinfo_execute,

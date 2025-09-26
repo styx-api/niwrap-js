@@ -12,7 +12,7 @@ const V_3D_CM_METADATA: Metadata = {
 
 
 interface V3dCmParameters {
-    "@type": "afni.3dCM";
+    "@type"?: "afni/3dCM";
     "dset": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "automask": boolean;
@@ -23,43 +23,11 @@ interface V3dCmParameters {
     "icent": boolean;
     "dcent": boolean;
 }
+type V3dCmParametersTagged = Required<Pick<V3dCmParameters, '@type'>> & V3dCmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dCM": v_3d_cm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_cm(...)`.
+ * Output object returned when calling `V3dCmParameters(...)`.
  *
  * @interface
  */
@@ -100,9 +68,9 @@ function v_3d_cm_params(
     all_rois: boolean = false,
     icent: boolean = false,
     dcent: boolean = false,
-): V3dCmParameters {
+): V3dCmParametersTagged {
     const params = {
-        "@type": "afni.3dCM" as const,
+        "@type": "afni/3dCM" as const,
         "dset": dset,
         "automask": automask,
         "local_ijk": local_ijk,
@@ -144,7 +112,7 @@ function v_3d_cm_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     if ((params["set_origin"] ?? null) !== null) {
@@ -153,7 +121,7 @@ function v_3d_cm_cargs(
             ...(params["set_origin"] ?? null).map(String)
         );
     }
-    if ((params["local_ijk"] ?? null)) {
+    if ((params["local_ijk"] ?? false)) {
         cargs.push("-local_ijk");
     }
     if ((params["roi_vals"] ?? null) !== null) {
@@ -162,13 +130,13 @@ function v_3d_cm_cargs(
             ...(params["roi_vals"] ?? null).map(String)
         );
     }
-    if ((params["all_rois"] ?? null)) {
+    if ((params["all_rois"] ?? false)) {
         cargs.push("-all_rois");
     }
-    if ((params["icent"] ?? null)) {
+    if ((params["icent"] ?? false)) {
         cargs.push("-Icent");
     }
-    if ((params["dcent"] ?? null)) {
+    if ((params["dcent"] ?? false)) {
         cargs.push("-Dcent");
     }
     return cargs;
@@ -264,7 +232,6 @@ function v_3d_cm(
 
 export {
       V3dCmOutputs,
-      V3dCmParameters,
       V_3D_CM_METADATA,
       v_3d_cm,
       v_3d_cm_execute,

@@ -12,7 +12,7 @@ const V__DJUNCT_EDGY_ALIGN_CHECK_METADATA: Metadata = {
 
 
 interface VDjunctEdgyAlignCheckParameters {
-    "@type": "afni.@djunct_edgy_align_check";
+    "@type"?: "afni/@djunct_edgy_align_check";
     "ULAY": string;
     "OLAY": string;
     "PREFIX": string;
@@ -40,43 +40,11 @@ interface VDjunctEdgyAlignCheckParameters {
     "ulay_range_nz"?: Array<number> | null | undefined;
     "ulay_range_am"?: Array<number> | null | undefined;
 }
+type VDjunctEdgyAlignCheckParametersTagged = Required<Pick<VDjunctEdgyAlignCheckParameters, '@type'>> & VDjunctEdgyAlignCheckParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@djunct_edgy_align_check": v__djunct_edgy_align_check_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__djunct_edgy_align_check(...)`.
+ * Output object returned when calling `VDjunctEdgyAlignCheckParameters(...)`.
  *
  * @interface
  */
@@ -147,9 +115,9 @@ function v__djunct_edgy_align_check_params(
     ulay_range: Array<number> | null = null,
     ulay_range_nz: Array<number> | null = null,
     ulay_range_am: Array<number> | null = null,
-): VDjunctEdgyAlignCheckParameters {
+): VDjunctEdgyAlignCheckParametersTagged {
     const params = {
-        "@type": "afni.@djunct_edgy_align_check" as const,
+        "@type": "afni/@djunct_edgy_align_check" as const,
         "ULAY": ulay,
         "OLAY": olay,
         "PREFIX": prefix,
@@ -259,31 +227,31 @@ function v__djunct_edgy_align_check_cargs(
     if ((params["label_mode"] ?? null) !== null) {
         cargs.push((params["label_mode"] ?? null));
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["ver_flag"] ?? null)) {
+    if ((params["ver_flag"] ?? false)) {
         cargs.push("-ver");
     }
-    if ((params["echo_flag"] ?? null)) {
+    if ((params["echo_flag"] ?? false)) {
         cargs.push("-echo");
     }
-    if ((params["sharpen_ulay_off_flag"] ?? null)) {
+    if ((params["sharpen_ulay_off_flag"] ?? false)) {
         cargs.push("-sharpen_ulay_off");
     }
-    if ((params["mask_olay_edges_flag"] ?? null)) {
+    if ((params["mask_olay_edges_flag"] ?? false)) {
         cargs.push("-mask_olay_edges");
     }
-    if ((params["no_cor_flag"] ?? null)) {
+    if ((params["no_cor_flag"] ?? false)) {
         cargs.push("-no_cor");
     }
-    if ((params["no_sag_flag"] ?? null)) {
+    if ((params["no_sag_flag"] ?? false)) {
         cargs.push("-no_sag");
     }
-    if ((params["no_axi_flag"] ?? null)) {
+    if ((params["no_axi_flag"] ?? false)) {
         cargs.push("-no_axi");
     }
-    if ((params["no_clean_flag"] ?? null)) {
+    if ((params["no_clean_flag"] ?? false)) {
         cargs.push("-no_clean");
     }
     if ((params["ulay_range"] ?? null) !== null) {
@@ -421,7 +389,6 @@ function v__djunct_edgy_align_check(
 
 export {
       VDjunctEdgyAlignCheckOutputs,
-      VDjunctEdgyAlignCheckParameters,
       V__DJUNCT_EDGY_ALIGN_CHECK_METADATA,
       v__djunct_edgy_align_check,
       v__djunct_edgy_align_check_execute,

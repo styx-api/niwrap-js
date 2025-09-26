@@ -12,51 +12,18 @@ const V_3D_ROW_FILLIN_METADATA: Metadata = {
 
 
 interface V3dRowFillinParameters {
-    "@type": "afni.3dRowFillin";
+    "@type"?: "afni/3dRowFillin";
     "maxgap"?: number | null | undefined;
     "dir"?: string | null | undefined;
     "binary": boolean;
     "prefix"?: string | null | undefined;
     "input_dataset": InputPathType;
 }
+type V3dRowFillinParametersTagged = Required<Pick<V3dRowFillinParameters, '@type'>> & V3dRowFillinParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dRowFillin": v_3d_row_fillin_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dRowFillin": v_3d_row_fillin_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_row_fillin(...)`.
+ * Output object returned when calling `V3dRowFillinParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +60,9 @@ function v_3d_row_fillin_params(
     dir: string | null = null,
     binary: boolean = false,
     prefix: string | null = null,
-): V3dRowFillinParameters {
+): V3dRowFillinParametersTagged {
     const params = {
-        "@type": "afni.3dRowFillin" as const,
+        "@type": "afni/3dRowFillin" as const,
         "binary": binary,
         "input_dataset": input_dataset,
     };
@@ -138,7 +105,7 @@ function v_3d_row_fillin_cargs(
             (params["dir"] ?? null)
         );
     }
-    if ((params["binary"] ?? null)) {
+    if ((params["binary"] ?? false)) {
         cargs.push("-binary");
     }
     if ((params["prefix"] ?? null) !== null) {
@@ -234,7 +201,6 @@ function v_3d_row_fillin(
 
 export {
       V3dRowFillinOutputs,
-      V3dRowFillinParameters,
       V_3D_ROW_FILLIN_METADATA,
       v_3d_row_fillin,
       v_3d_row_fillin_execute,

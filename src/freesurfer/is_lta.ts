@@ -12,48 +12,15 @@ const IS_LTA_METADATA: Metadata = {
 
 
 interface IsLtaParameters {
-    "@type": "freesurfer.IsLTA";
+    "@type"?: "freesurfer/IsLTA";
     "candidate_file": InputPathType;
     "outfile": string;
 }
+type IsLtaParametersTagged = Required<Pick<IsLtaParameters, '@type'>> & IsLtaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.IsLTA": is_lta_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.IsLTA": is_lta_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `is_lta(...)`.
+ * Output object returned when calling `IsLtaParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface IsLtaOutputs {
 function is_lta_params(
     candidate_file: InputPathType,
     outfile: string,
-): IsLtaParameters {
+): IsLtaParametersTagged {
     const params = {
-        "@type": "freesurfer.IsLTA" as const,
+        "@type": "freesurfer/IsLTA" as const,
         "candidate_file": candidate_file,
         "outfile": outfile,
     };
@@ -192,7 +159,6 @@ function is_lta(
 export {
       IS_LTA_METADATA,
       IsLtaOutputs,
-      IsLtaParameters,
       is_lta,
       is_lta_execute,
       is_lta_params,

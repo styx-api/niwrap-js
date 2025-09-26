@@ -12,47 +12,15 @@ const FEAT_GM_PREPARE_METADATA: Metadata = {
 
 
 interface FeatGmPrepareParameters {
-    "@type": "fsl.feat_gm_prepare";
+    "@type"?: "fsl/feat_gm_prepare";
     "gm_output": string;
     "feat_dirs_list": Array<InputPathType>;
 }
+type FeatGmPrepareParametersTagged = Required<Pick<FeatGmPrepareParameters, '@type'>> & FeatGmPrepareParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.feat_gm_prepare": feat_gm_prepare_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `feat_gm_prepare(...)`.
+ * Output object returned when calling `FeatGmPrepareParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface FeatGmPrepareOutputs {
 function feat_gm_prepare_params(
     gm_output: string,
     feat_dirs_list: Array<InputPathType>,
-): FeatGmPrepareParameters {
+): FeatGmPrepareParametersTagged {
     const params = {
-        "@type": "fsl.feat_gm_prepare" as const,
+        "@type": "fsl/feat_gm_prepare" as const,
         "gm_output": gm_output,
         "feat_dirs_list": feat_dirs_list,
     };
@@ -180,7 +148,6 @@ function feat_gm_prepare(
 export {
       FEAT_GM_PREPARE_METADATA,
       FeatGmPrepareOutputs,
-      FeatGmPrepareParameters,
       feat_gm_prepare,
       feat_gm_prepare_execute,
       feat_gm_prepare_params,

@@ -12,49 +12,16 @@ const V__SUMA_MAKE_SPEC_SF_METADATA: Metadata = {
 
 
 interface VSumaMakeSpecSfParameters {
-    "@type": "afni.@SUMA_Make_Spec_SF";
+    "@type"?: "afni/@SUMA_Make_Spec_SF";
     "debug_level"?: number | null | undefined;
     "surface_path"?: string | null | undefined;
     "subject_id": string;
 }
+type VSumaMakeSpecSfParametersTagged = Required<Pick<VSumaMakeSpecSfParameters, '@type'>> & VSumaMakeSpecSfParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@SUMA_Make_Spec_SF": v__suma_make_spec_sf_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@SUMA_Make_Spec_SF": v__suma_make_spec_sf_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__suma_make_spec_sf(...)`.
+ * Output object returned when calling `VSumaMakeSpecSfParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function v__suma_make_spec_sf_params(
     subject_id: string,
     debug_level: number | null = null,
     surface_path: string | null = null,
-): VSumaMakeSpecSfParameters {
+): VSumaMakeSpecSfParametersTagged {
     const params = {
-        "@type": "afni.@SUMA_Make_Spec_SF" as const,
+        "@type": "afni/@SUMA_Make_Spec_SF" as const,
         "subject_id": subject_id,
     };
     if (debug_level !== null) {
@@ -209,7 +176,6 @@ function v__suma_make_spec_sf(
 
 export {
       VSumaMakeSpecSfOutputs,
-      VSumaMakeSpecSfParameters,
       V__SUMA_MAKE_SPEC_SF_METADATA,
       v__suma_make_spec_sf,
       v__suma_make_spec_sf_execute,

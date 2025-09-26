@@ -12,7 +12,7 @@ const V_3D_TORTOISETO_HERE_METADATA: Metadata = {
 
 
 interface V3dTortoisetoHereParameters {
-    "@type": "afni.3dTORTOISEtoHere";
+    "@type"?: "afni/3dTORTOISEtoHere";
     "dt_tort": InputPathType;
     "prefix": string;
     "scale_factor"?: number | null | undefined;
@@ -20,44 +20,11 @@ interface V3dTortoisetoHereParameters {
     "flip_y": boolean;
     "flip_z": boolean;
 }
+type V3dTortoisetoHereParametersTagged = Required<Pick<V3dTortoisetoHereParameters, '@type'>> & V3dTortoisetoHereParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dTORTOISEtoHere": v_3d_tortoiseto_here_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dTORTOISEtoHere": v_3d_tortoiseto_here_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_tortoiseto_here(...)`.
+ * Output object returned when calling `V3dTortoisetoHereParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function v_3d_tortoiseto_here_params(
     flip_x: boolean = false,
     flip_y: boolean = false,
     flip_z: boolean = false,
-): V3dTortoisetoHereParameters {
+): V3dTortoisetoHereParametersTagged {
     const params = {
-        "@type": "afni.3dTORTOISEtoHere" as const,
+        "@type": "afni/3dTORTOISEtoHere" as const,
         "dt_tort": dt_tort,
         "prefix": prefix,
         "flip_x": flip_x,
@@ -136,13 +103,13 @@ function v_3d_tortoiseto_here_cargs(
             String((params["scale_factor"] ?? null))
         );
     }
-    if ((params["flip_x"] ?? null)) {
+    if ((params["flip_x"] ?? false)) {
         cargs.push("-flip_x");
     }
-    if ((params["flip_y"] ?? null)) {
+    if ((params["flip_y"] ?? false)) {
         cargs.push("-flip_y");
     }
-    if ((params["flip_z"] ?? null)) {
+    if ((params["flip_z"] ?? false)) {
         cargs.push("-flip_z");
     }
     return cargs;
@@ -232,7 +199,6 @@ function v_3d_tortoiseto_here(
 
 export {
       V3dTortoisetoHereOutputs,
-      V3dTortoisetoHereParameters,
       V_3D_TORTOISETO_HERE_METADATA,
       v_3d_tortoiseto_here,
       v_3d_tortoiseto_here_execute,

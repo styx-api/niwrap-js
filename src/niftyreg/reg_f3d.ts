@@ -12,7 +12,7 @@ const REG_F3D_METADATA: Metadata = {
 
 
 interface RegF3dParameters {
-    "@type": "niftyreg.reg_f3d";
+    "@type"?: "niftyreg/reg_f3d";
     "reference_image": InputPathType;
     "floating_image": InputPathType;
     "affine_transform"?: InputPathType | null | undefined;
@@ -54,44 +54,11 @@ interface RegF3dParameters {
     "padding_value"?: number | null | undefined;
     "verbose_off": boolean;
 }
+type RegF3dParametersTagged = Required<Pick<RegF3dParameters, '@type'>> & RegF3dParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "niftyreg.reg_f3d": reg_f3d_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "niftyreg.reg_f3d": reg_f3d_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `reg_f3d(...)`.
+ * Output object returned when calling `RegF3dParameters(...)`.
  *
  * @interface
  */
@@ -198,9 +165,9 @@ function reg_f3d_params(
     smooth_gradient: number | null = null,
     padding_value: number | null = null,
     verbose_off: boolean = false,
-): RegF3dParameters {
+): RegF3dParametersTagged {
     const params = {
-        "@type": "niftyreg.reg_f3d" as const,
+        "@type": "niftyreg/reg_f3d" as const,
         "reference_image": reference_image,
         "floating_image": floating_image,
         "no_approx_jl": no_approx_jl,
@@ -452,19 +419,19 @@ function reg_f3d_cargs(
             String((params["jacobian_determinant"] ?? null))
         );
     }
-    if ((params["no_approx_jl"] ?? null)) {
+    if ((params["no_approx_jl"] ?? false)) {
         cargs.push("-noAppJL");
     }
-    if ((params["no_conj"] ?? null)) {
+    if ((params["no_conj"] ?? false)) {
         cargs.push("-noConj");
     }
-    if ((params["ssd"] ?? null)) {
+    if ((params["ssd"] ?? false)) {
         cargs.push("-ssd");
     }
-    if ((params["kld"] ?? null)) {
+    if ((params["kld"] ?? false)) {
         cargs.push("-kld");
     }
-    if ((params["amc"] ?? null)) {
+    if ((params["amc"] ?? false)) {
         cargs.push("-amc");
     }
     if ((params["max_iterations"] ?? null) !== null) {
@@ -485,10 +452,10 @@ function reg_f3d_cargs(
             String((params["first_levels"] ?? null))
         );
     }
-    if ((params["no_pyramid"] ?? null)) {
+    if ((params["no_pyramid"] ?? false)) {
         cargs.push("-nopy");
     }
-    if ((params["symmetric"] ?? null)) {
+    if ((params["symmetric"] ?? false)) {
         cargs.push("-sym");
     }
     if ((params["floating_mask"] ?? null) !== null) {
@@ -503,7 +470,7 @@ function reg_f3d_cargs(
             String((params["inverse_consistency"] ?? null))
         );
     }
-    if ((params["velocity_field"] ?? null)) {
+    if ((params["velocity_field"] ?? false)) {
         cargs.push("-vel");
     }
     if ((params["composition_steps"] ?? null) !== null) {
@@ -524,7 +491,7 @@ function reg_f3d_cargs(
             String((params["padding_value"] ?? null))
         );
     }
-    if ((params["verbose_off"] ?? null)) {
+    if ((params["verbose_off"] ?? false)) {
         cargs.push("-voff");
     }
     return cargs;
@@ -684,7 +651,6 @@ function reg_f3d(
 export {
       REG_F3D_METADATA,
       RegF3dOutputs,
-      RegF3dParameters,
       reg_f3d,
       reg_f3d_execute,
       reg_f3d_params,

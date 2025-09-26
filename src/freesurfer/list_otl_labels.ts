@@ -12,46 +12,14 @@ const LIST_OTL_LABELS_METADATA: Metadata = {
 
 
 interface ListOtlLabelsParameters {
-    "@type": "freesurfer.list_otl_labels";
+    "@type"?: "freesurfer/list_otl_labels";
     "input_file": InputPathType;
 }
+type ListOtlLabelsParametersTagged = Required<Pick<ListOtlLabelsParameters, '@type'>> & ListOtlLabelsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.list_otl_labels": list_otl_labels_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `list_otl_labels(...)`.
+ * Output object returned when calling `ListOtlLabelsParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface ListOtlLabelsOutputs {
  */
 function list_otl_labels_params(
     input_file: InputPathType,
-): ListOtlLabelsParameters {
+): ListOtlLabelsParametersTagged {
     const params = {
-        "@type": "freesurfer.list_otl_labels" as const,
+        "@type": "freesurfer/list_otl_labels" as const,
         "input_file": input_file,
     };
     return params;
@@ -176,7 +144,6 @@ function list_otl_labels(
 export {
       LIST_OTL_LABELS_METADATA,
       ListOtlLabelsOutputs,
-      ListOtlLabelsParameters,
       list_otl_labels,
       list_otl_labels_execute,
       list_otl_labels_params,

@@ -12,47 +12,15 @@ const V__GET_AFNI_RES_METADATA: Metadata = {
 
 
 interface VGetAfniResParameters {
-    "@type": "afni.@GetAfniRes";
+    "@type"?: "afni/@GetAfniRes";
     "output_type"?: "-min" | "-max" | "-mean" | null | undefined;
     "input_dataset": InputPathType;
 }
+type VGetAfniResParametersTagged = Required<Pick<VGetAfniResParameters, '@type'>> & VGetAfniResParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@GetAfniRes": v__get_afni_res_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__get_afni_res(...)`.
+ * Output object returned when calling `VGetAfniResParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface VGetAfniResOutputs {
 function v__get_afni_res_params(
     input_dataset: InputPathType,
     output_type: "-min" | "-max" | "-mean" | null = null,
-): VGetAfniResParameters {
+): VGetAfniResParametersTagged {
     const params = {
-        "@type": "afni.@GetAfniRes" as const,
+        "@type": "afni/@GetAfniRes" as const,
         "input_dataset": input_dataset,
     };
     if (output_type !== null) {
@@ -183,7 +151,6 @@ function v__get_afni_res(
 
 export {
       VGetAfniResOutputs,
-      VGetAfniResParameters,
       V__GET_AFNI_RES_METADATA,
       v__get_afni_res,
       v__get_afni_res_execute,

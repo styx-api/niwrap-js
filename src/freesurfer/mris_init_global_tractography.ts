@@ -12,48 +12,16 @@ const MRIS_INIT_GLOBAL_TRACTOGRAPHY_METADATA: Metadata = {
 
 
 interface MrisInitGlobalTractographyParameters {
-    "@type": "freesurfer.mris_init_global_tractography";
+    "@type"?: "freesurfer/mris_init_global_tractography";
     "subject": string;
     "parcellation": string;
     "output_volume": string;
 }
+type MrisInitGlobalTractographyParametersTagged = Required<Pick<MrisInitGlobalTractographyParameters, '@type'>> & MrisInitGlobalTractographyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_init_global_tractography": mris_init_global_tractography_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_init_global_tractography(...)`.
+ * Output object returned when calling `MrisInitGlobalTractographyParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function mris_init_global_tractography_params(
     subject: string,
     parcellation: string,
     output_volume: string,
-): MrisInitGlobalTractographyParameters {
+): MrisInitGlobalTractographyParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_init_global_tractography" as const,
+        "@type": "freesurfer/mris_init_global_tractography" as const,
         "subject": subject,
         "parcellation": parcellation,
         "output_volume": output_volume,
@@ -187,7 +155,6 @@ function mris_init_global_tractography(
 export {
       MRIS_INIT_GLOBAL_TRACTOGRAPHY_METADATA,
       MrisInitGlobalTractographyOutputs,
-      MrisInitGlobalTractographyParameters,
       mris_init_global_tractography,
       mris_init_global_tractography_execute,
       mris_init_global_tractography_params,

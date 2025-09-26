@@ -12,47 +12,15 @@ const V_4SWAP_METADATA: Metadata = {
 
 
 interface V4swapParameters {
-    "@type": "afni.4swap";
+    "@type"?: "afni/4swap";
     "files": Array<InputPathType>;
     "quiet": boolean;
 }
+type V4swapParametersTagged = Required<Pick<V4swapParameters, '@type'>> & V4swapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.4swap": v_4swap_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_4swap(...)`.
+ * Output object returned when calling `V4swapParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface V4swapOutputs {
 function v_4swap_params(
     files: Array<InputPathType>,
     quiet: boolean = false,
-): V4swapParameters {
+): V4swapParametersTagged {
     const params = {
-        "@type": "afni.4swap" as const,
+        "@type": "afni/4swap" as const,
         "files": files,
         "quiet": quiet,
     };
@@ -100,7 +68,7 @@ function v_4swap_cargs(
     const cargs: string[] = [];
     cargs.push("4swap");
     cargs.push(...(params["files"] ?? null).map(f => execution.inputFile(f)));
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-q");
     }
     return cargs;
@@ -181,7 +149,6 @@ function v_4swap(
 
 export {
       V4swapOutputs,
-      V4swapParameters,
       V_4SWAP_METADATA,
       v_4swap,
       v_4swap_execute,

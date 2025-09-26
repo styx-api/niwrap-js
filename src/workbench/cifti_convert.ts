@@ -12,30 +12,33 @@ const CIFTI_CONVERT_METADATA: Metadata = {
 
 
 interface CiftiConvertToGiftiExtParameters {
-    "@type": "workbench.cifti-convert.to_gifti_ext";
+    "@type"?: "to_gifti_ext";
     "cifti_in": InputPathType;
     "gifti_out": string;
 }
+type CiftiConvertToGiftiExtParametersTagged = Required<Pick<CiftiConvertToGiftiExtParameters, '@type'>> & CiftiConvertToGiftiExtParameters;
 
 
 interface CiftiConvertResetTimepointsParameters {
-    "@type": "workbench.cifti-convert.from_gifti_ext.reset_timepoints";
+    "@type"?: "reset_timepoints";
     "timestep": number;
     "timestart": number;
     "opt_unit_unit"?: string | null | undefined;
 }
+type CiftiConvertResetTimepointsParametersTagged = Required<Pick<CiftiConvertResetTimepointsParameters, '@type'>> & CiftiConvertResetTimepointsParameters;
 
 
 interface CiftiConvertReplaceBinaryParameters {
-    "@type": "workbench.cifti-convert.from_gifti_ext.replace_binary";
+    "@type"?: "replace_binary";
     "binary_in": string;
     "opt_flip_endian": boolean;
     "opt_transpose": boolean;
 }
+type CiftiConvertReplaceBinaryParametersTagged = Required<Pick<CiftiConvertReplaceBinaryParameters, '@type'>> & CiftiConvertReplaceBinaryParameters;
 
 
 interface CiftiConvertFromGiftiExtParameters {
-    "@type": "workbench.cifti-convert.from_gifti_ext";
+    "@type"?: "from_gifti_ext";
     "gifti_in": string;
     "cifti_out": string;
     "reset_timepoints"?: CiftiConvertResetTimepointsParameters | null | undefined;
@@ -43,53 +46,59 @@ interface CiftiConvertFromGiftiExtParameters {
     "opt_column_reset_scalars": boolean;
     "replace_binary"?: CiftiConvertReplaceBinaryParameters | null | undefined;
 }
+type CiftiConvertFromGiftiExtParametersTagged = Required<Pick<CiftiConvertFromGiftiExtParameters, '@type'>> & CiftiConvertFromGiftiExtParameters;
 
 
 interface CiftiConvertToNiftiParameters {
-    "@type": "workbench.cifti-convert.to_nifti";
+    "@type"?: "to_nifti";
     "cifti_in": InputPathType;
     "nifti_out": string;
     "opt_smaller_file": boolean;
     "opt_smaller_dims": boolean;
 }
+type CiftiConvertToNiftiParametersTagged = Required<Pick<CiftiConvertToNiftiParameters, '@type'>> & CiftiConvertToNiftiParameters;
 
 
 interface CiftiConvertResetTimepoints1Parameters {
-    "@type": "workbench.cifti-convert.from_nifti.reset_timepoints";
+    "@type"?: "reset_timepoints_1";
     "timestep": number;
     "timestart": number;
     "opt_unit_unit"?: string | null | undefined;
 }
+type CiftiConvertResetTimepoints1ParametersTagged = Required<Pick<CiftiConvertResetTimepoints1Parameters, '@type'>> & CiftiConvertResetTimepoints1Parameters;
 
 
 interface CiftiConvertFromNiftiParameters {
-    "@type": "workbench.cifti-convert.from_nifti";
+    "@type"?: "from_nifti";
     "nifti_in": InputPathType;
     "cifti_template": InputPathType;
     "cifti_out": string;
     "reset_timepoints"?: CiftiConvertResetTimepoints1Parameters | null | undefined;
     "opt_reset_scalars": boolean;
 }
+type CiftiConvertFromNiftiParametersTagged = Required<Pick<CiftiConvertFromNiftiParameters, '@type'>> & CiftiConvertFromNiftiParameters;
 
 
 interface CiftiConvertToTextParameters {
-    "@type": "workbench.cifti-convert.to_text";
+    "@type"?: "to_text";
     "cifti_in": InputPathType;
     "text_out": string;
     "opt_col_delim_delim_string"?: string | null | undefined;
 }
+type CiftiConvertToTextParametersTagged = Required<Pick<CiftiConvertToTextParameters, '@type'>> & CiftiConvertToTextParameters;
 
 
 interface CiftiConvertResetTimepoints2Parameters {
-    "@type": "workbench.cifti-convert.from_text.reset_timepoints";
+    "@type"?: "reset_timepoints_2";
     "timestep": number;
     "timestart": number;
     "opt_unit_unit"?: string | null | undefined;
 }
+type CiftiConvertResetTimepoints2ParametersTagged = Required<Pick<CiftiConvertResetTimepoints2Parameters, '@type'>> & CiftiConvertResetTimepoints2Parameters;
 
 
 interface CiftiConvertFromTextParameters {
-    "@type": "workbench.cifti-convert.from_text";
+    "@type"?: "from_text";
     "text_in": string;
     "cifti_template": InputPathType;
     "cifti_out": string;
@@ -97,10 +106,11 @@ interface CiftiConvertFromTextParameters {
     "reset_timepoints"?: CiftiConvertResetTimepoints2Parameters | null | undefined;
     "opt_reset_scalars": boolean;
 }
+type CiftiConvertFromTextParametersTagged = Required<Pick<CiftiConvertFromTextParameters, '@type'>> & CiftiConvertFromTextParameters;
 
 
 interface CiftiConvertParameters {
-    "@type": "workbench.cifti-convert";
+    "@type"?: "workbench/cifti-convert";
     "to_gifti_ext"?: CiftiConvertToGiftiExtParameters | null | undefined;
     "from_gifti_ext"?: CiftiConvertFromGiftiExtParameters | null | undefined;
     "to_nifti"?: CiftiConvertToNiftiParameters | null | undefined;
@@ -108,54 +118,7 @@ interface CiftiConvertParameters {
     "to_text"?: CiftiConvertToTextParameters | null | undefined;
     "from_text"?: CiftiConvertFromTextParameters | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-convert": cifti_convert_cargs,
-        "workbench.cifti-convert.to_gifti_ext": cifti_convert_to_gifti_ext_cargs,
-        "workbench.cifti-convert.from_gifti_ext": cifti_convert_from_gifti_ext_cargs,
-        "workbench.cifti-convert.from_gifti_ext.reset_timepoints": cifti_convert_reset_timepoints_cargs,
-        "workbench.cifti-convert.from_gifti_ext.replace_binary": cifti_convert_replace_binary_cargs,
-        "workbench.cifti-convert.to_nifti": cifti_convert_to_nifti_cargs,
-        "workbench.cifti-convert.from_nifti": cifti_convert_from_nifti_cargs,
-        "workbench.cifti-convert.from_nifti.reset_timepoints": cifti_convert_reset_timepoints_1_cargs,
-        "workbench.cifti-convert.to_text": cifti_convert_to_text_cargs,
-        "workbench.cifti-convert.from_text": cifti_convert_from_text_cargs,
-        "workbench.cifti-convert.from_text.reset_timepoints": cifti_convert_reset_timepoints_2_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-convert": cifti_convert_outputs,
-        "workbench.cifti-convert.from_gifti_ext": cifti_convert_from_gifti_ext_outputs,
-        "workbench.cifti-convert.to_nifti": cifti_convert_to_nifti_outputs,
-        "workbench.cifti-convert.from_nifti": cifti_convert_from_nifti_outputs,
-        "workbench.cifti-convert.from_text": cifti_convert_from_text_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiConvertParametersTagged = Required<Pick<CiftiConvertParameters, '@type'>> & CiftiConvertParameters;
 
 
 /**
@@ -169,9 +132,9 @@ function dynOutputs(
 function cifti_convert_to_gifti_ext_params(
     cifti_in: InputPathType,
     gifti_out: string,
-): CiftiConvertToGiftiExtParameters {
+): CiftiConvertToGiftiExtParametersTagged {
     const params = {
-        "@type": "workbench.cifti-convert.to_gifti_ext" as const,
+        "@type": "to_gifti_ext" as const,
         "cifti_in": cifti_in,
         "gifti_out": gifti_out,
     };
@@ -212,9 +175,9 @@ function cifti_convert_reset_timepoints_params(
     timestep: number,
     timestart: number,
     opt_unit_unit: string | null = null,
-): CiftiConvertResetTimepointsParameters {
+): CiftiConvertResetTimepointsParametersTagged {
     const params = {
-        "@type": "workbench.cifti-convert.from_gifti_ext.reset_timepoints" as const,
+        "@type": "reset_timepoints" as const,
         "timestep": timestep,
         "timestart": timestart,
     };
@@ -264,9 +227,9 @@ function cifti_convert_replace_binary_params(
     binary_in: string,
     opt_flip_endian: boolean = false,
     opt_transpose: boolean = false,
-): CiftiConvertReplaceBinaryParameters {
+): CiftiConvertReplaceBinaryParametersTagged {
     const params = {
-        "@type": "workbench.cifti-convert.from_gifti_ext.replace_binary" as const,
+        "@type": "replace_binary" as const,
         "binary_in": binary_in,
         "opt_flip_endian": opt_flip_endian,
         "opt_transpose": opt_transpose,
@@ -290,10 +253,10 @@ function cifti_convert_replace_binary_cargs(
     const cargs: string[] = [];
     cargs.push("-replace-binary");
     cargs.push((params["binary_in"] ?? null));
-    if ((params["opt_flip_endian"] ?? null)) {
+    if ((params["opt_flip_endian"] ?? false)) {
         cargs.push("-flip-endian");
     }
-    if ((params["opt_transpose"] ?? null)) {
+    if ((params["opt_transpose"] ?? false)) {
         cargs.push("-transpose");
     }
     return cargs;
@@ -336,9 +299,9 @@ function cifti_convert_from_gifti_ext_params(
     opt_reset_scalars: boolean = false,
     opt_column_reset_scalars: boolean = false,
     replace_binary: CiftiConvertReplaceBinaryParameters | null = null,
-): CiftiConvertFromGiftiExtParameters {
+): CiftiConvertFromGiftiExtParametersTagged {
     const params = {
-        "@type": "workbench.cifti-convert.from_gifti_ext" as const,
+        "@type": "from_gifti_ext" as const,
         "gifti_in": gifti_in,
         "cifti_out": cifti_out,
         "opt_reset_scalars": opt_reset_scalars,
@@ -371,16 +334,16 @@ function cifti_convert_from_gifti_ext_cargs(
     cargs.push((params["gifti_in"] ?? null));
     cargs.push((params["cifti_out"] ?? null));
     if ((params["reset_timepoints"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["reset_timepoints"] ?? null)["@type"])((params["reset_timepoints"] ?? null), execution));
+        cargs.push(...cifti_convert_reset_timepoints_cargs((params["reset_timepoints"] ?? null), execution));
     }
-    if ((params["opt_reset_scalars"] ?? null)) {
+    if ((params["opt_reset_scalars"] ?? false)) {
         cargs.push("-reset-scalars");
     }
-    if ((params["opt_column_reset_scalars"] ?? null)) {
+    if ((params["opt_column_reset_scalars"] ?? false)) {
         cargs.push("-column-reset-scalars");
     }
     if ((params["replace_binary"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["replace_binary"] ?? null)["@type"])((params["replace_binary"] ?? null), execution));
+        cargs.push(...cifti_convert_replace_binary_cargs((params["replace_binary"] ?? null), execution));
     }
     return cargs;
 }
@@ -438,9 +401,9 @@ function cifti_convert_to_nifti_params(
     nifti_out: string,
     opt_smaller_file: boolean = false,
     opt_smaller_dims: boolean = false,
-): CiftiConvertToNiftiParameters {
+): CiftiConvertToNiftiParametersTagged {
     const params = {
-        "@type": "workbench.cifti-convert.to_nifti" as const,
+        "@type": "to_nifti" as const,
         "cifti_in": cifti_in,
         "nifti_out": nifti_out,
         "opt_smaller_file": opt_smaller_file,
@@ -466,10 +429,10 @@ function cifti_convert_to_nifti_cargs(
     cargs.push("-to-nifti");
     cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
     cargs.push((params["nifti_out"] ?? null));
-    if ((params["opt_smaller_file"] ?? null)) {
+    if ((params["opt_smaller_file"] ?? false)) {
         cargs.push("-smaller-file");
     }
-    if ((params["opt_smaller_dims"] ?? null)) {
+    if ((params["opt_smaller_dims"] ?? false)) {
         cargs.push("-smaller-dims");
     }
     return cargs;
@@ -509,9 +472,9 @@ function cifti_convert_reset_timepoints_1_params(
     timestep: number,
     timestart: number,
     opt_unit_unit: string | null = null,
-): CiftiConvertResetTimepoints1Parameters {
+): CiftiConvertResetTimepoints1ParametersTagged {
     const params = {
-        "@type": "workbench.cifti-convert.from_nifti.reset_timepoints" as const,
+        "@type": "reset_timepoints_1" as const,
         "timestep": timestep,
         "timestart": timestart,
     };
@@ -582,9 +545,9 @@ function cifti_convert_from_nifti_params(
     cifti_out: string,
     reset_timepoints: CiftiConvertResetTimepoints1Parameters | null = null,
     opt_reset_scalars: boolean = false,
-): CiftiConvertFromNiftiParameters {
+): CiftiConvertFromNiftiParametersTagged {
     const params = {
-        "@type": "workbench.cifti-convert.from_nifti" as const,
+        "@type": "from_nifti" as const,
         "nifti_in": nifti_in,
         "cifti_template": cifti_template,
         "cifti_out": cifti_out,
@@ -615,9 +578,9 @@ function cifti_convert_from_nifti_cargs(
     cargs.push(execution.inputFile((params["cifti_template"] ?? null)));
     cargs.push((params["cifti_out"] ?? null));
     if ((params["reset_timepoints"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["reset_timepoints"] ?? null)["@type"])((params["reset_timepoints"] ?? null), execution));
+        cargs.push(...cifti_convert_reset_timepoints_1_cargs((params["reset_timepoints"] ?? null), execution));
     }
-    if ((params["opt_reset_scalars"] ?? null)) {
+    if ((params["opt_reset_scalars"] ?? false)) {
         cargs.push("-reset-scalars");
     }
     return cargs;
@@ -657,9 +620,9 @@ function cifti_convert_to_text_params(
     cifti_in: InputPathType,
     text_out: string,
     opt_col_delim_delim_string: string | null = null,
-): CiftiConvertToTextParameters {
+): CiftiConvertToTextParametersTagged {
     const params = {
-        "@type": "workbench.cifti-convert.to_text" as const,
+        "@type": "to_text" as const,
         "cifti_in": cifti_in,
         "text_out": text_out,
     };
@@ -709,9 +672,9 @@ function cifti_convert_reset_timepoints_2_params(
     timestep: number,
     timestart: number,
     opt_unit_unit: string | null = null,
-): CiftiConvertResetTimepoints2Parameters {
+): CiftiConvertResetTimepoints2ParametersTagged {
     const params = {
-        "@type": "workbench.cifti-convert.from_text.reset_timepoints" as const,
+        "@type": "reset_timepoints_2" as const,
         "timestep": timestep,
         "timestart": timestart,
     };
@@ -784,9 +747,9 @@ function cifti_convert_from_text_params(
     opt_col_delim_delim_string: string | null = null,
     reset_timepoints: CiftiConvertResetTimepoints2Parameters | null = null,
     opt_reset_scalars: boolean = false,
-): CiftiConvertFromTextParameters {
+): CiftiConvertFromTextParametersTagged {
     const params = {
-        "@type": "workbench.cifti-convert.from_text" as const,
+        "@type": "from_text" as const,
         "text_in": text_in,
         "cifti_template": cifti_template,
         "cifti_out": cifti_out,
@@ -826,9 +789,9 @@ function cifti_convert_from_text_cargs(
         );
     }
     if ((params["reset_timepoints"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["reset_timepoints"] ?? null)["@type"])((params["reset_timepoints"] ?? null), execution));
+        cargs.push(...cifti_convert_reset_timepoints_2_cargs((params["reset_timepoints"] ?? null), execution));
     }
-    if ((params["opt_reset_scalars"] ?? null)) {
+    if ((params["opt_reset_scalars"] ?? false)) {
         cargs.push("-reset-scalars");
     }
     return cargs;
@@ -856,7 +819,7 @@ function cifti_convert_from_text_outputs(
 
 
 /**
- * Output object returned when calling `cifti_convert(...)`.
+ * Output object returned when calling `CiftiConvertParameters(...)`.
  *
  * @interface
  */
@@ -903,9 +866,9 @@ function cifti_convert_params(
     from_nifti: CiftiConvertFromNiftiParameters | null = null,
     to_text: CiftiConvertToTextParameters | null = null,
     from_text: CiftiConvertFromTextParameters | null = null,
-): CiftiConvertParameters {
+): CiftiConvertParametersTagged {
     const params = {
-        "@type": "workbench.cifti-convert" as const,
+        "@type": "workbench/cifti-convert" as const,
     };
     if (to_gifti_ext !== null) {
         params["to_gifti_ext"] = to_gifti_ext;
@@ -945,22 +908,22 @@ function cifti_convert_cargs(
     cargs.push("wb_command");
     cargs.push("-cifti-convert");
     if ((params["to_gifti_ext"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["to_gifti_ext"] ?? null)["@type"])((params["to_gifti_ext"] ?? null), execution));
+        cargs.push(...cifti_convert_to_gifti_ext_cargs((params["to_gifti_ext"] ?? null), execution));
     }
     if ((params["from_gifti_ext"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["from_gifti_ext"] ?? null)["@type"])((params["from_gifti_ext"] ?? null), execution));
+        cargs.push(...cifti_convert_from_gifti_ext_cargs((params["from_gifti_ext"] ?? null), execution));
     }
     if ((params["to_nifti"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["to_nifti"] ?? null)["@type"])((params["to_nifti"] ?? null), execution));
+        cargs.push(...cifti_convert_to_nifti_cargs((params["to_nifti"] ?? null), execution));
     }
     if ((params["from_nifti"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["from_nifti"] ?? null)["@type"])((params["from_nifti"] ?? null), execution));
+        cargs.push(...cifti_convert_from_nifti_cargs((params["from_nifti"] ?? null), execution));
     }
     if ((params["to_text"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["to_text"] ?? null)["@type"])((params["to_text"] ?? null), execution));
+        cargs.push(...cifti_convert_to_text_cargs((params["to_text"] ?? null), execution));
     }
     if ((params["from_text"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["from_text"] ?? null)["@type"])((params["from_text"] ?? null), execution));
+        cargs.push(...cifti_convert_from_text_cargs((params["from_text"] ?? null), execution));
     }
     return cargs;
 }
@@ -980,10 +943,10 @@ function cifti_convert_outputs(
 ): CiftiConvertOutputs {
     const ret: CiftiConvertOutputs = {
         root: execution.outputFile("."),
-        from_gifti_ext: (params["from_gifti_ext"] ?? null) ? (dynOutputs((params["from_gifti_ext"] ?? null)["@type"])?.((params["from_gifti_ext"] ?? null), execution) ?? null) : null,
-        to_nifti: (params["to_nifti"] ?? null) ? (dynOutputs((params["to_nifti"] ?? null)["@type"])?.((params["to_nifti"] ?? null), execution) ?? null) : null,
-        from_nifti: (params["from_nifti"] ?? null) ? (dynOutputs((params["from_nifti"] ?? null)["@type"])?.((params["from_nifti"] ?? null), execution) ?? null) : null,
-        from_text: (params["from_text"] ?? null) ? (dynOutputs((params["from_text"] ?? null)["@type"])?.((params["from_text"] ?? null), execution) ?? null) : null,
+        from_gifti_ext: (params["from_gifti_ext"] ?? null) ? (cifti_convert_from_gifti_ext_outputs((params["from_gifti_ext"] ?? null), execution) ?? null) : null,
+        to_nifti: (params["to_nifti"] ?? null) ? (cifti_convert_to_nifti_outputs((params["to_nifti"] ?? null), execution) ?? null) : null,
+        from_nifti: (params["from_nifti"] ?? null) ? (cifti_convert_from_nifti_outputs((params["from_nifti"] ?? null), execution) ?? null) : null,
+        from_text: (params["from_text"] ?? null) ? (cifti_convert_from_text_outputs((params["from_text"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }
@@ -1087,21 +1050,10 @@ function cifti_convert(
 export {
       CIFTI_CONVERT_METADATA,
       CiftiConvertFromGiftiExtOutputs,
-      CiftiConvertFromGiftiExtParameters,
       CiftiConvertFromNiftiOutputs,
-      CiftiConvertFromNiftiParameters,
       CiftiConvertFromTextOutputs,
-      CiftiConvertFromTextParameters,
       CiftiConvertOutputs,
-      CiftiConvertParameters,
-      CiftiConvertReplaceBinaryParameters,
-      CiftiConvertResetTimepoints1Parameters,
-      CiftiConvertResetTimepoints2Parameters,
-      CiftiConvertResetTimepointsParameters,
-      CiftiConvertToGiftiExtParameters,
       CiftiConvertToNiftiOutputs,
-      CiftiConvertToNiftiParameters,
-      CiftiConvertToTextParameters,
       cifti_convert,
       cifti_convert_execute,
       cifti_convert_from_gifti_ext_params,

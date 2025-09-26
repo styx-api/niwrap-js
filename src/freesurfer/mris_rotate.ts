@@ -12,7 +12,7 @@ const MRIS_ROTATE_METADATA: Metadata = {
 
 
 interface MrisRotateParameters {
-    "@type": "freesurfer.mris_rotate";
+    "@type"?: "freesurfer/mris_rotate";
     "input_surface": InputPathType;
     "alpha_deg": number;
     "beta_deg": number;
@@ -21,44 +21,11 @@ interface MrisRotateParameters {
     "regfile"?: InputPathType | null | undefined;
     "invalidate_geometry": boolean;
 }
+type MrisRotateParametersTagged = Required<Pick<MrisRotateParameters, '@type'>> & MrisRotateParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_rotate": mris_rotate_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_rotate": mris_rotate_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_rotate(...)`.
+ * Output object returned when calling `MrisRotateParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function mris_rotate_params(
     output_surface: string,
     regfile: InputPathType | null = null,
     invalidate_geometry: boolean = false,
-): MrisRotateParameters {
+): MrisRotateParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_rotate" as const,
+        "@type": "freesurfer/mris_rotate" as const,
         "input_surface": input_surface,
         "alpha_deg": alpha_deg,
         "beta_deg": beta_deg,
@@ -137,7 +104,7 @@ function mris_rotate_cargs(
             execution.inputFile((params["regfile"] ?? null))
         );
     }
-    if ((params["invalidate_geometry"] ?? null)) {
+    if ((params["invalidate_geometry"] ?? false)) {
         cargs.push("-n");
     }
     return cargs;
@@ -230,7 +197,6 @@ function mris_rotate(
 export {
       MRIS_ROTATE_METADATA,
       MrisRotateOutputs,
-      MrisRotateParameters,
       mris_rotate,
       mris_rotate_execute,
       mris_rotate_params,

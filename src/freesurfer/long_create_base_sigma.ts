@@ -12,47 +12,15 @@ const LONG_CREATE_BASE_SIGMA_METADATA: Metadata = {
 
 
 interface LongCreateBaseSigmaParameters {
-    "@type": "freesurfer.long_create_base_sigma";
+    "@type"?: "freesurfer/long_create_base_sigma";
     "base_id": string;
     "sigma": number;
 }
+type LongCreateBaseSigmaParametersTagged = Required<Pick<LongCreateBaseSigmaParameters, '@type'>> & LongCreateBaseSigmaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.long_create_base_sigma": long_create_base_sigma_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `long_create_base_sigma(...)`.
+ * Output object returned when calling `LongCreateBaseSigmaParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface LongCreateBaseSigmaOutputs {
 function long_create_base_sigma_params(
     base_id: string,
     sigma: number,
-): LongCreateBaseSigmaParameters {
+): LongCreateBaseSigmaParametersTagged {
     const params = {
-        "@type": "freesurfer.long_create_base_sigma" as const,
+        "@type": "freesurfer/long_create_base_sigma" as const,
         "base_id": base_id,
         "sigma": sigma,
     };
@@ -180,7 +148,6 @@ function long_create_base_sigma(
 export {
       LONG_CREATE_BASE_SIGMA_METADATA,
       LongCreateBaseSigmaOutputs,
-      LongCreateBaseSigmaParameters,
       long_create_base_sigma,
       long_create_base_sigma_execute,
       long_create_base_sigma_params,

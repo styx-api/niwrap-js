@@ -12,50 +12,17 @@ const MRIS_FILL_METADATA: Metadata = {
 
 
 interface MrisFillParameters {
-    "@type": "freesurfer.mris_fill";
+    "@type"?: "freesurfer/mris_fill";
     "resolution"?: number | null | undefined;
     "conform": boolean;
     "input_surface": InputPathType;
     "output_volume": string;
 }
+type MrisFillParametersTagged = Required<Pick<MrisFillParameters, '@type'>> & MrisFillParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_fill": mris_fill_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_fill": mris_fill_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_fill(...)`.
+ * Output object returned when calling `MrisFillParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mris_fill_params(
     output_volume: string,
     resolution: number | null = null,
     conform: boolean = false,
-): MrisFillParameters {
+): MrisFillParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_fill" as const,
+        "@type": "freesurfer/mris_fill" as const,
         "conform": conform,
         "input_surface": input_surface,
         "output_volume": output_volume,
@@ -120,7 +87,7 @@ function mris_fill_cargs(
             String((params["resolution"] ?? null))
         );
     }
-    if ((params["conform"] ?? null)) {
+    if ((params["conform"] ?? false)) {
         cargs.push("-c");
     }
     cargs.push(execution.inputFile((params["input_surface"] ?? null)));
@@ -209,7 +176,6 @@ function mris_fill(
 export {
       MRIS_FILL_METADATA,
       MrisFillOutputs,
-      MrisFillParameters,
       mris_fill,
       mris_fill_execute,
       mris_fill_params,

@@ -12,7 +12,7 @@ const MRI_RF_LABEL_METADATA: Metadata = {
 
 
 interface MriRfLabelParameters {
-    "@type": "freesurfer.mri_rf_label";
+    "@type"?: "freesurfer/mri_rf_label";
     "input_volumes": Array<InputPathType>;
     "transform_file": InputPathType;
     "gcafile": InputPathType;
@@ -54,44 +54,11 @@ interface MriRfLabelParameters {
     "longitudinal_lta"?: InputPathType | null | undefined;
     "relabel_unlikely_flag"?: Array<number> | null | undefined;
 }
+type MriRfLabelParametersTagged = Required<Pick<MriRfLabelParameters, '@type'>> & MriRfLabelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_rf_label": mri_rf_label_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_rf_label": mri_rf_label_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_rf_label(...)`.
+ * Output object returned when calling `MriRfLabelParameters(...)`.
  *
  * @interface
  */
@@ -194,9 +161,9 @@ function mri_rf_label_params(
     longitudinal_vol: InputPathType | null = null,
     longitudinal_lta: InputPathType | null = null,
     relabel_unlikely_flag: Array<number> | null = null,
-): MriRfLabelParameters {
+): MriRfLabelParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_rf_label" as const,
+        "@type": "freesurfer/mri_rf_label" as const,
         "input_volumes": input_volumes,
         "transform_file": transform_file,
         "gcafile": gcafile,
@@ -316,10 +283,10 @@ function mri_rf_label_cargs(
     cargs.push(execution.inputFile((params["transform_file"] ?? null)));
     cargs.push(execution.inputFile((params["gcafile"] ?? null)));
     cargs.push((params["output_volume"] ?? null));
-    if ((params["cross_sequence_flag"] ?? null)) {
+    if ((params["cross_sequence_flag"] ?? false)) {
         cargs.push("-cross-sequence");
     }
-    if ((params["nogibbs_flag"] ?? null)) {
+    if ((params["nogibbs_flag"] ?? false)) {
         cargs.push("-nogibbs");
     }
     if ((params["wm_path"] ?? null) !== null) {
@@ -328,10 +295,10 @@ function mri_rf_label_cargs(
             execution.inputFile((params["wm_path"] ?? null))
         );
     }
-    if ((params["conform_flag"] ?? null)) {
+    if ((params["conform_flag"] ?? false)) {
         cargs.push("-conform");
     }
-    if ((params["normpd_flag"] ?? null)) {
+    if ((params["normpd_flag"] ?? false)) {
         cargs.push("-normpd");
     }
     if ((params["gca_tl"] ?? null) !== null) {
@@ -394,7 +361,7 @@ function mri_rf_label_cargs(
             String((params["niter"] ?? null))
         );
     }
-    if ((params["novar_flag"] ?? null)) {
+    if ((params["novar_flag"] ?? false)) {
         cargs.push("-novar");
     }
     if ((params["regularize"] ?? null) !== null) {
@@ -403,7 +370,7 @@ function mri_rf_label_cargs(
             String((params["regularize"] ?? null))
         );
     }
-    if ((params["nohippo_flag"] ?? null)) {
+    if ((params["nohippo_flag"] ?? false)) {
         cargs.push("-nohippo");
     }
     if ((params["fwm"] ?? null) !== null) {
@@ -430,7 +397,7 @@ function mri_rf_label_cargs(
             execution.inputFile((params["renorm"] ?? null))
         );
     }
-    if ((params["flash_flag"] ?? null)) {
+    if ((params["flash_flag"] ?? false)) {
         cargs.push("-flash");
     }
     if ((params["flash_params"] ?? null) !== null) {
@@ -451,7 +418,7 @@ function mri_rf_label_cargs(
             execution.inputFile((params["set_input"] ?? null))
         );
     }
-    if ((params["histogram_flag"] ?? null)) {
+    if ((params["histogram_flag"] ?? false)) {
         cargs.push("-h");
     }
     if ((params["cond_density_mean"] ?? null) !== null) {
@@ -661,7 +628,6 @@ function mri_rf_label(
 export {
       MRI_RF_LABEL_METADATA,
       MriRfLabelOutputs,
-      MriRfLabelParameters,
       mri_rf_label,
       mri_rf_label_execute,
       mri_rf_label_params,

@@ -12,7 +12,7 @@ const V__ATLASIZE_METADATA: Metadata = {
 
 
 interface VAtlasizeParameters {
-    "@type": "afni.@Atlasize";
+    "@type"?: "afni/@Atlasize";
     "dset"?: InputPathType | null | undefined;
     "space"?: string | null | undefined;
     "lab_file"?: Array<string> | null | undefined;
@@ -32,44 +32,11 @@ interface VAtlasizeParameters {
     "all_opts": boolean;
     "h_find"?: string | null | undefined;
 }
+type VAtlasizeParametersTagged = Required<Pick<VAtlasizeParameters, '@type'>> & VAtlasizeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@Atlasize": v__atlasize_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@Atlasize": v__atlasize_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__atlasize(...)`.
+ * Output object returned when calling `VAtlasizeParameters(...)`.
  *
  * @interface
  */
@@ -128,9 +95,9 @@ function v__atlasize_params(
     h_view: boolean = false,
     all_opts: boolean = false,
     h_find: string | null = null,
-): VAtlasizeParameters {
+): VAtlasizeParametersTagged {
     const params = {
-        "@type": "afni.@Atlasize" as const,
+        "@type": "afni/@Atlasize" as const,
         "auto_backup": auto_backup,
         "centers": centers,
         "skip_novoxels": skip_novoxels,
@@ -246,10 +213,10 @@ function v__atlasize_cargs(
             (params["atlas_name"] ?? null)
         );
     }
-    if ((params["auto_backup"] ?? null)) {
+    if ((params["auto_backup"] ?? false)) {
         cargs.push("-auto_backup");
     }
-    if ((params["centers"] ?? null)) {
+    if ((params["centers"] ?? false)) {
         cargs.push("-centers");
     }
     if ((params["centertype"] ?? null) !== null) {
@@ -264,16 +231,16 @@ function v__atlasize_cargs(
             execution.inputFile((params["centermask"] ?? null))
         );
     }
-    if ((params["skip_novoxels"] ?? null)) {
+    if ((params["skip_novoxels"] ?? false)) {
         cargs.push("-skip_novoxels");
     }
-    if ((params["h_web"] ?? null)) {
+    if ((params["h_web"] ?? false)) {
         cargs.push("-h_web");
     }
-    if ((params["h_view"] ?? null)) {
+    if ((params["h_view"] ?? false)) {
         cargs.push("-h_view");
     }
-    if ((params["all_opts"] ?? null)) {
+    if ((params["all_opts"] ?? false)) {
         cargs.push("-all_opts");
     }
     if ((params["h_find"] ?? null) !== null) {
@@ -393,7 +360,6 @@ function v__atlasize(
 
 export {
       VAtlasizeOutputs,
-      VAtlasizeParameters,
       V__ATLASIZE_METADATA,
       v__atlasize,
       v__atlasize_execute,

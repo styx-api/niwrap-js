@@ -12,7 +12,7 @@ const QBOOT_METADATA: Metadata = {
 
 
 interface QbootParameters {
-    "@type": "fsl.qboot";
+    "@type"?: "fsl/qboot";
     "data_file": InputPathType;
     "mask_file": InputPathType;
     "bvecs_file": InputPathType;
@@ -35,44 +35,11 @@ interface QbootParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
+type QbootParametersTagged = Required<Pick<QbootParameters, '@type'>> & QbootParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.qboot": qboot_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.qboot": qboot_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `qboot(...)`.
+ * Output object returned when calling `QbootParameters(...)`.
  *
  * @interface
  */
@@ -137,9 +104,9 @@ function qboot_params(
     savemeancoeff_flag: boolean = false,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): QbootParameters {
+): QbootParametersTagged {
     const params = {
-        "@type": "fsl.qboot" as const,
+        "@type": "fsl/qboot" as const,
         "data_file": data_file,
         "mask_file": mask_file,
         "bvecs_file": bvecs_file,
@@ -224,7 +191,7 @@ function qboot_cargs(
             (params["log_dir"] ?? null)
         );
     }
-    if ((params["forcedir_flag"] ?? null)) {
+    if ((params["forcedir_flag"] ?? false)) {
         cargs.push("--forcedir");
     }
     if ((params["q_file"] ?? null) !== null) {
@@ -287,19 +254,19 @@ function qboot_cargs(
             String((params["seed_param"] ?? null))
         );
     }
-    if ((params["gfa_flag"] ?? null)) {
+    if ((params["gfa_flag"] ?? false)) {
         cargs.push("--gfa");
     }
-    if ((params["savecoeff_flag"] ?? null)) {
+    if ((params["savecoeff_flag"] ?? false)) {
         cargs.push("--savecoeff");
     }
-    if ((params["savemeancoeff_flag"] ?? null)) {
+    if ((params["savemeancoeff_flag"] ?? false)) {
         cargs.push("--savemeancoeff");
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-V");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -420,7 +387,6 @@ function qboot(
 export {
       QBOOT_METADATA,
       QbootOutputs,
-      QbootParameters,
       qboot,
       qboot_execute,
       qboot_params,

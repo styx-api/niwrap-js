@@ -12,7 +12,7 @@ const SUMA_CHANGE_SPEC_METADATA: Metadata = {
 
 
 interface SumaChangeSpecParameters {
-    "@type": "afni.suma_change_spec";
+    "@type"?: "afni/suma_change_spec";
     "input": InputPathType;
     "state": string;
     "domainparent"?: string | null | undefined;
@@ -20,44 +20,11 @@ interface SumaChangeSpecParameters {
     "remove": boolean;
     "anatomical": boolean;
 }
+type SumaChangeSpecParametersTagged = Required<Pick<SumaChangeSpecParameters, '@type'>> & SumaChangeSpecParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.suma_change_spec": suma_change_spec_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.suma_change_spec": suma_change_spec_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `suma_change_spec(...)`.
+ * Output object returned when calling `SumaChangeSpecParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +63,9 @@ function suma_change_spec_params(
     output: string | null = null,
     remove: boolean = false,
     anatomical: boolean = false,
-): SumaChangeSpecParameters {
+): SumaChangeSpecParametersTagged {
     const params = {
-        "@type": "afni.suma_change_spec" as const,
+        "@type": "afni/suma_change_spec" as const,
         "input": input,
         "state": state,
         "remove": remove,
@@ -136,10 +103,10 @@ function suma_change_spec_cargs(
     if ((params["output"] ?? null) !== null) {
         cargs.push((params["output"] ?? null));
     }
-    if ((params["remove"] ?? null)) {
+    if ((params["remove"] ?? false)) {
         cargs.push("-remove");
     }
-    if ((params["anatomical"] ?? null)) {
+    if ((params["anatomical"] ?? false)) {
         cargs.push("-anatomical");
     }
     return cargs;
@@ -231,7 +198,6 @@ function suma_change_spec(
 export {
       SUMA_CHANGE_SPEC_METADATA,
       SumaChangeSpecOutputs,
-      SumaChangeSpecParameters,
       suma_change_spec,
       suma_change_spec_execute,
       suma_change_spec_params,

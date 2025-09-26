@@ -12,46 +12,14 @@ const ADJUNCT_CALC_MONT_DIMS_PY_METADATA: Metadata = {
 
 
 interface AdjunctCalcMontDimsPyParameters {
-    "@type": "afni.adjunct_calc_mont_dims.py";
+    "@type"?: "afni/adjunct_calc_mont_dims.py";
     "help": boolean;
 }
+type AdjunctCalcMontDimsPyParametersTagged = Required<Pick<AdjunctCalcMontDimsPyParameters, '@type'>> & AdjunctCalcMontDimsPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.adjunct_calc_mont_dims.py": adjunct_calc_mont_dims_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `adjunct_calc_mont_dims_py(...)`.
+ * Output object returned when calling `AdjunctCalcMontDimsPyParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface AdjunctCalcMontDimsPyOutputs {
  */
 function adjunct_calc_mont_dims_py_params(
     help: boolean = false,
-): AdjunctCalcMontDimsPyParameters {
+): AdjunctCalcMontDimsPyParametersTagged {
     const params = {
-        "@type": "afni.adjunct_calc_mont_dims.py" as const,
+        "@type": "afni/adjunct_calc_mont_dims.py" as const,
         "help": help,
     };
     return params;
@@ -95,7 +63,7 @@ function adjunct_calc_mont_dims_py_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("adjunct_calc_mont_dims.py");
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -175,7 +143,6 @@ function adjunct_calc_mont_dims_py(
 export {
       ADJUNCT_CALC_MONT_DIMS_PY_METADATA,
       AdjunctCalcMontDimsPyOutputs,
-      AdjunctCalcMontDimsPyParameters,
       adjunct_calc_mont_dims_py,
       adjunct_calc_mont_dims_py_execute,
       adjunct_calc_mont_dims_py_params,

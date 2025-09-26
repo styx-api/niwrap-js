@@ -12,51 +12,18 @@ const SEGMENT_HA_T1_SH_METADATA: Metadata = {
 
 
 interface SegmentHaT1ShParameters {
-    "@type": "freesurfer.segmentHA_T1.sh";
+    "@type"?: "freesurfer/segmentHA_T1.sh";
     "input_image": InputPathType;
     "output_directory": string;
     "brain_mask"?: InputPathType | null | undefined;
     "verbose": boolean;
     "debug": boolean;
 }
+type SegmentHaT1ShParametersTagged = Required<Pick<SegmentHaT1ShParameters, '@type'>> & SegmentHaT1ShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.segmentHA_T1.sh": segment_ha_t1_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.segmentHA_T1.sh": segment_ha_t1_sh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `segment_ha_t1_sh(...)`.
+ * Output object returned when calling `SegmentHaT1ShParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +60,9 @@ function segment_ha_t1_sh_params(
     brain_mask: InputPathType | null = null,
     verbose: boolean = false,
     debug: boolean = false,
-): SegmentHaT1ShParameters {
+): SegmentHaT1ShParametersTagged {
     const params = {
-        "@type": "freesurfer.segmentHA_T1.sh" as const,
+        "@type": "freesurfer/segmentHA_T1.sh" as const,
         "input_image": input_image,
         "output_directory": output_directory,
         "verbose": verbose,
@@ -130,10 +97,10 @@ function segment_ha_t1_sh_cargs(
             execution.inputFile((params["brain_mask"] ?? null))
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("--verbose");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -223,7 +190,6 @@ function segment_ha_t1_sh(
 export {
       SEGMENT_HA_T1_SH_METADATA,
       SegmentHaT1ShOutputs,
-      SegmentHaT1ShParameters,
       segment_ha_t1_sh,
       segment_ha_t1_sh_execute,
       segment_ha_t1_sh_params,

@@ -12,7 +12,7 @@ const V_3D_TOUTCOUNT_METADATA: Metadata = {
 
 
 interface V3dToutcountParameters {
-    "@type": "afni.3dToutcount";
+    "@type"?: "afni/3dToutcount";
     "input_dataset": string;
     "output_prefix"?: string | null | undefined;
     "mask_dataset"?: string | null | undefined;
@@ -24,44 +24,11 @@ interface V3dToutcountParameters {
     "polort_order"?: number | null | undefined;
     "legendre": boolean;
 }
+type V3dToutcountParametersTagged = Required<Pick<V3dToutcountParameters, '@type'>> & V3dToutcountParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dToutcount": v_3d_toutcount_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dToutcount": v_3d_toutcount_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_toutcount(...)`.
+ * Output object returned when calling `V3dToutcountParameters(...)`.
  *
  * @interface
  */
@@ -108,9 +75,9 @@ function v_3d_toutcount_params(
     range: boolean = false,
     polort_order: number | null = null,
     legendre: boolean = false,
-): V3dToutcountParameters {
+): V3dToutcountParametersTagged {
     const params = {
-        "@type": "afni.3dToutcount" as const,
+        "@type": "afni/3dToutcount" as const,
         "input_dataset": input_dataset,
         "autoclip": autoclip,
         "automask": automask,
@@ -164,16 +131,16 @@ function v_3d_toutcount_cargs(
             String((params["q_threshold"] ?? null))
         );
     }
-    if ((params["autoclip"] ?? null)) {
+    if ((params["autoclip"] ?? false)) {
         cargs.push("-autoclip");
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
-    if ((params["fraction"] ?? null)) {
+    if ((params["fraction"] ?? false)) {
         cargs.push("-fraction");
     }
-    if ((params["range"] ?? null)) {
+    if ((params["range"] ?? false)) {
         cargs.push("-range");
     }
     if ((params["polort_order"] ?? null) !== null) {
@@ -182,7 +149,7 @@ function v_3d_toutcount_cargs(
             String((params["polort_order"] ?? null))
         );
     }
-    if ((params["legendre"] ?? null)) {
+    if ((params["legendre"] ?? false)) {
         cargs.push("-legendre");
     }
     return cargs;
@@ -281,7 +248,6 @@ function v_3d_toutcount(
 
 export {
       V3dToutcountOutputs,
-      V3dToutcountParameters,
       V_3D_TOUTCOUNT_METADATA,
       v_3d_toutcount,
       v_3d_toutcount_execute,

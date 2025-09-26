@@ -12,47 +12,15 @@ const V__TIME_DIFF_METADATA: Metadata = {
 
 
 interface VTimeDiffParameters {
-    "@type": "afni.@TimeDiff";
+    "@type"?: "afni/@TimeDiff";
     "file1": InputPathType;
     "file2": InputPathType;
 }
+type VTimeDiffParametersTagged = Required<Pick<VTimeDiffParameters, '@type'>> & VTimeDiffParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@TimeDiff": v__time_diff_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__time_diff(...)`.
+ * Output object returned when calling `VTimeDiffParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface VTimeDiffOutputs {
 function v__time_diff_params(
     file1: InputPathType,
     file2: InputPathType,
-): VTimeDiffParameters {
+): VTimeDiffParametersTagged {
     const params = {
-        "@type": "afni.@TimeDiff" as const,
+        "@type": "afni/@TimeDiff" as const,
         "file1": file1,
         "file2": file2,
     };
@@ -179,7 +147,6 @@ function v__time_diff(
 
 export {
       VTimeDiffOutputs,
-      VTimeDiffParameters,
       V__TIME_DIFF_METADATA,
       v__time_diff,
       v__time_diff_execute,

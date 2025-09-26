@@ -12,7 +12,7 @@ const METRIC_DILATE_METADATA: Metadata = {
 
 
 interface MetricDilateParameters {
-    "@type": "workbench.metric-dilate";
+    "@type"?: "workbench/metric-dilate";
     "metric": InputPathType;
     "surface": InputPathType;
     "distance": number;
@@ -26,44 +26,11 @@ interface MetricDilateParameters {
     "opt_corrected_areas_area_metric"?: InputPathType | null | undefined;
     "opt_legacy_cutoff": boolean;
 }
+type MetricDilateParametersTagged = Required<Pick<MetricDilateParameters, '@type'>> & MetricDilateParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-dilate": metric_dilate_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.metric-dilate": metric_dilate_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `metric_dilate(...)`.
+ * Output object returned when calling `MetricDilateParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function metric_dilate_params(
     opt_exponent_exponent: number | null = null,
     opt_corrected_areas_area_metric: InputPathType | null = null,
     opt_legacy_cutoff: boolean = false,
-): MetricDilateParameters {
+): MetricDilateParametersTagged {
     const params = {
-        "@type": "workbench.metric-dilate" as const,
+        "@type": "workbench/metric-dilate" as const,
         "metric": metric,
         "surface": surface,
         "distance": distance,
@@ -177,10 +144,10 @@ function metric_dilate_cargs(
             (params["opt_column_column"] ?? null)
         );
     }
-    if ((params["opt_nearest"] ?? null)) {
+    if ((params["opt_nearest"] ?? false)) {
         cargs.push("-nearest");
     }
-    if ((params["opt_linear"] ?? null)) {
+    if ((params["opt_linear"] ?? false)) {
         cargs.push("-linear");
     }
     if ((params["opt_exponent_exponent"] ?? null) !== null) {
@@ -195,7 +162,7 @@ function metric_dilate_cargs(
             execution.inputFile((params["opt_corrected_areas_area_metric"] ?? null))
         );
     }
-    if ((params["opt_legacy_cutoff"] ?? null)) {
+    if ((params["opt_legacy_cutoff"] ?? false)) {
         cargs.push("-legacy-cutoff");
     }
     return cargs;
@@ -314,7 +281,6 @@ function metric_dilate(
 export {
       METRIC_DILATE_METADATA,
       MetricDilateOutputs,
-      MetricDilateParameters,
       metric_dilate,
       metric_dilate_execute,
       metric_dilate_params,

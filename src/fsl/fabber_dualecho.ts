@@ -12,7 +12,7 @@ const FABBER_DUALECHO_METADATA: Metadata = {
 
 
 interface FabberDualechoParameters {
-    "@type": "fsl.fabber_dualecho";
+    "@type"?: "fsl/fabber_dualecho";
     "output_directory": string;
     "method": string;
     "model": string;
@@ -49,44 +49,11 @@ interface FabberDualechoParameters {
     "save_free_energy_flag": boolean;
     "debug_flag": boolean;
 }
+type FabberDualechoParametersTagged = Required<Pick<FabberDualechoParameters, '@type'>> & FabberDualechoParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fabber_dualecho": fabber_dualecho_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fabber_dualecho": fabber_dualecho_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fabber_dualecho(...)`.
+ * Output object returned when calling `FabberDualechoParameters(...)`.
  *
  * @interface
  */
@@ -179,9 +146,9 @@ function fabber_dualecho_params(
     save_noise_std_flag: boolean = false,
     save_free_energy_flag: boolean = false,
     debug_flag: boolean = false,
-): FabberDualechoParameters {
+): FabberDualechoParametersTagged {
     const params = {
-        "@type": "fsl.fabber_dualecho" as const,
+        "@type": "fsl/fabber_dualecho" as const,
         "output_directory": output_directory,
         "method": method,
         "model": model,
@@ -297,22 +264,22 @@ function fabber_dualecho_cargs(
             execution.inputFile((params["options_file"] ?? null))
         );
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["list_methods_flag"] ?? null)) {
+    if ((params["list_methods_flag"] ?? false)) {
         cargs.push("--listmethods");
     }
-    if ((params["list_models_flag"] ?? null)) {
+    if ((params["list_models_flag"] ?? false)) {
         cargs.push("--listmodels");
     }
-    if ((params["list_params_flag"] ?? null)) {
+    if ((params["list_params_flag"] ?? false)) {
         cargs.push("--listparams");
     }
-    if ((params["desc_params_flag"] ?? null)) {
+    if ((params["desc_params_flag"] ?? false)) {
         cargs.push("--descparams");
     }
-    if ((params["list_outputs_flag"] ?? null)) {
+    if ((params["list_outputs_flag"] ?? false)) {
         cargs.push("--listoutputs");
     }
     if ((params["evaluate"] ?? null) !== null) {
@@ -333,13 +300,13 @@ function fabber_dualecho_cargs(
             String((params["evaluate_nt"] ?? null))
         );
     }
-    if ((params["simple_output_flag"] ?? null)) {
+    if ((params["simple_output_flag"] ?? false)) {
         cargs.push("--simple-output");
     }
-    if ((params["overwrite_flag"] ?? null)) {
+    if ((params["overwrite_flag"] ?? false)) {
         cargs.push("--overwrite");
     }
-    if ((params["link_to_latest_flag"] ?? null)) {
+    if ((params["link_to_latest_flag"] ?? false)) {
         cargs.push("--link-to-latest");
     }
     if ((params["load_models"] ?? null) !== null) {
@@ -348,43 +315,43 @@ function fabber_dualecho_cargs(
             execution.inputFile((params["load_models"] ?? null))
         );
     }
-    if ((params["dump_param_names_flag"] ?? null)) {
+    if ((params["dump_param_names_flag"] ?? false)) {
         cargs.push("--dump-param-names");
     }
-    if ((params["save_model_fit_flag"] ?? null)) {
+    if ((params["save_model_fit_flag"] ?? false)) {
         cargs.push("--save-model-fit");
     }
-    if ((params["save_residuals_flag"] ?? null)) {
+    if ((params["save_residuals_flag"] ?? false)) {
         cargs.push("--save-residuals");
     }
-    if ((params["save_model_extras_flag"] ?? null)) {
+    if ((params["save_model_extras_flag"] ?? false)) {
         cargs.push("--save-model-extras");
     }
-    if ((params["save_mvn_flag"] ?? null)) {
+    if ((params["save_mvn_flag"] ?? false)) {
         cargs.push("--save-mvn");
     }
-    if ((params["save_mean_flag"] ?? null)) {
+    if ((params["save_mean_flag"] ?? false)) {
         cargs.push("--save-mean");
     }
-    if ((params["save_std_flag"] ?? null)) {
+    if ((params["save_std_flag"] ?? false)) {
         cargs.push("--save-std");
     }
-    if ((params["save_var_flag"] ?? null)) {
+    if ((params["save_var_flag"] ?? false)) {
         cargs.push("--save-var");
     }
-    if ((params["save_zstat_flag"] ?? null)) {
+    if ((params["save_zstat_flag"] ?? false)) {
         cargs.push("--save-zstat");
     }
-    if ((params["save_noise_mean_flag"] ?? null)) {
+    if ((params["save_noise_mean_flag"] ?? false)) {
         cargs.push("--save-noise-mean");
     }
-    if ((params["save_noise_std_flag"] ?? null)) {
+    if ((params["save_noise_std_flag"] ?? false)) {
         cargs.push("--save-noise-std");
     }
-    if ((params["save_free_energy_flag"] ?? null)) {
+    if ((params["save_free_energy_flag"] ?? false)) {
         cargs.push("--save-free-energy");
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -533,7 +500,6 @@ function fabber_dualecho(
 export {
       FABBER_DUALECHO_METADATA,
       FabberDualechoOutputs,
-      FabberDualechoParameters,
       fabber_dualecho,
       fabber_dualecho_execute,
       fabber_dualecho_params,

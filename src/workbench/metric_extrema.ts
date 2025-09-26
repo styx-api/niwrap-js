@@ -12,21 +12,23 @@ const METRIC_EXTREMA_METADATA: Metadata = {
 
 
 interface MetricExtremaPresmoothParameters {
-    "@type": "workbench.metric-extrema.presmooth";
+    "@type"?: "presmooth";
     "kernel": number;
     "opt_fwhm": boolean;
 }
+type MetricExtremaPresmoothParametersTagged = Required<Pick<MetricExtremaPresmoothParameters, '@type'>> & MetricExtremaPresmoothParameters;
 
 
 interface MetricExtremaThresholdParameters {
-    "@type": "workbench.metric-extrema.threshold";
+    "@type"?: "threshold";
     "low": number;
     "high": number;
 }
+type MetricExtremaThresholdParametersTagged = Required<Pick<MetricExtremaThresholdParameters, '@type'>> & MetricExtremaThresholdParameters;
 
 
 interface MetricExtremaParameters {
-    "@type": "workbench.metric-extrema";
+    "@type"?: "workbench/metric-extrema";
     "surface": InputPathType;
     "metric_in": InputPathType;
     "distance": number;
@@ -40,42 +42,7 @@ interface MetricExtremaParameters {
     "opt_only_minima": boolean;
     "opt_column_column"?: string | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-extrema": metric_extrema_cargs,
-        "workbench.metric-extrema.presmooth": metric_extrema_presmooth_cargs,
-        "workbench.metric-extrema.threshold": metric_extrema_threshold_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.metric-extrema": metric_extrema_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MetricExtremaParametersTagged = Required<Pick<MetricExtremaParameters, '@type'>> & MetricExtremaParameters;
 
 
 /**
@@ -89,9 +56,9 @@ function dynOutputs(
 function metric_extrema_presmooth_params(
     kernel: number,
     opt_fwhm: boolean = false,
-): MetricExtremaPresmoothParameters {
+): MetricExtremaPresmoothParametersTagged {
     const params = {
-        "@type": "workbench.metric-extrema.presmooth" as const,
+        "@type": "presmooth" as const,
         "kernel": kernel,
         "opt_fwhm": opt_fwhm,
     };
@@ -114,7 +81,7 @@ function metric_extrema_presmooth_cargs(
     const cargs: string[] = [];
     cargs.push("-presmooth");
     cargs.push(String((params["kernel"] ?? null)));
-    if ((params["opt_fwhm"] ?? null)) {
+    if ((params["opt_fwhm"] ?? false)) {
         cargs.push("-fwhm");
     }
     return cargs;
@@ -132,9 +99,9 @@ function metric_extrema_presmooth_cargs(
 function metric_extrema_threshold_params(
     low: number,
     high: number,
-): MetricExtremaThresholdParameters {
+): MetricExtremaThresholdParametersTagged {
     const params = {
-        "@type": "workbench.metric-extrema.threshold" as const,
+        "@type": "threshold" as const,
         "low": low,
         "high": high,
     };
@@ -163,7 +130,7 @@ function metric_extrema_threshold_cargs(
 
 
 /**
- * Output object returned when calling `metric_extrema(...)`.
+ * Output object returned when calling `MetricExtremaParameters(...)`.
  *
  * @interface
  */
@@ -210,9 +177,9 @@ function metric_extrema_params(
     opt_only_maxima: boolean = false,
     opt_only_minima: boolean = false,
     opt_column_column: string | null = null,
-): MetricExtremaParameters {
+): MetricExtremaParametersTagged {
     const params = {
-        "@type": "workbench.metric-extrema" as const,
+        "@type": "workbench/metric-extrema" as const,
         "surface": surface,
         "metric_in": metric_in,
         "distance": distance,
@@ -258,7 +225,7 @@ function metric_extrema_cargs(
     cargs.push(String((params["distance"] ?? null)));
     cargs.push((params["metric_out"] ?? null));
     if ((params["presmooth"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["presmooth"] ?? null)["@type"])((params["presmooth"] ?? null), execution));
+        cargs.push(...metric_extrema_presmooth_cargs((params["presmooth"] ?? null), execution));
     }
     if ((params["opt_roi_roi_metric"] ?? null) !== null) {
         cargs.push(
@@ -267,18 +234,18 @@ function metric_extrema_cargs(
         );
     }
     if ((params["threshold"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["threshold"] ?? null)["@type"])((params["threshold"] ?? null), execution));
+        cargs.push(...metric_extrema_threshold_cargs((params["threshold"] ?? null), execution));
     }
-    if ((params["opt_sum_columns"] ?? null)) {
+    if ((params["opt_sum_columns"] ?? false)) {
         cargs.push("-sum-columns");
     }
-    if ((params["opt_consolidate_mode"] ?? null)) {
+    if ((params["opt_consolidate_mode"] ?? false)) {
         cargs.push("-consolidate-mode");
     }
-    if ((params["opt_only_maxima"] ?? null)) {
+    if ((params["opt_only_maxima"] ?? false)) {
         cargs.push("-only-maxima");
     }
-    if ((params["opt_only_minima"] ?? null)) {
+    if ((params["opt_only_minima"] ?? false)) {
         cargs.push("-only-minima");
     }
     if ((params["opt_column_column"] ?? null) !== null) {
@@ -407,9 +374,6 @@ function metric_extrema(
 export {
       METRIC_EXTREMA_METADATA,
       MetricExtremaOutputs,
-      MetricExtremaParameters,
-      MetricExtremaPresmoothParameters,
-      MetricExtremaThresholdParameters,
       metric_extrema,
       metric_extrema_execute,
       metric_extrema_params,

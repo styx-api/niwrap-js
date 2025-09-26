@@ -12,7 +12,7 @@ const DCMSPLIT_METADATA: Metadata = {
 
 
 interface DcmsplitParameters {
-    "@type": "freesurfer.dcmsplit";
+    "@type"?: "freesurfer/dcmsplit";
     "dcm_dir": string;
     "out_dir": string;
     "copy": boolean;
@@ -24,43 +24,11 @@ interface DcmsplitParameters {
     "dicom_tag"?: string | null | undefined;
     "study_description": boolean;
 }
+type DcmsplitParametersTagged = Required<Pick<DcmsplitParameters, '@type'>> & DcmsplitParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dcmsplit": dcmsplit_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dcmsplit(...)`.
+ * Output object returned when calling `DcmsplitParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +67,9 @@ function dcmsplit_params(
     series_plus: boolean = false,
     dicom_tag: string | null = null,
     study_description: boolean = false,
-): DcmsplitParameters {
+): DcmsplitParametersTagged {
     const params = {
-        "@type": "freesurfer.dcmsplit" as const,
+        "@type": "freesurfer/dcmsplit" as const,
         "dcm_dir": dcm_dir,
         "out_dir": out_dir,
         "copy": copy,
@@ -141,22 +109,22 @@ function dcmsplit_cargs(
         "--o",
         (params["out_dir"] ?? null)
     );
-    if ((params["copy"] ?? null)) {
+    if ((params["copy"] ?? false)) {
         cargs.push("--cp");
     }
-    if ((params["link"] ?? null)) {
+    if ((params["link"] ?? false)) {
         cargs.push("--link");
     }
-    if ((params["split_name"] ?? null)) {
+    if ((params["split_name"] ?? false)) {
         cargs.push("--name");
     }
-    if ((params["split_uid"] ?? null)) {
+    if ((params["split_uid"] ?? false)) {
         cargs.push("--uid");
     }
-    if ((params["series_no"] ?? null)) {
+    if ((params["series_no"] ?? false)) {
         cargs.push("--seriesno");
     }
-    if ((params["series_plus"] ?? null)) {
+    if ((params["series_plus"] ?? false)) {
         cargs.push("--series+");
     }
     if ((params["dicom_tag"] ?? null) !== null) {
@@ -165,7 +133,7 @@ function dcmsplit_cargs(
             (params["dicom_tag"] ?? null)
         );
     }
-    if ((params["study_description"] ?? null)) {
+    if ((params["study_description"] ?? false)) {
         cargs.push("--studyDes");
     }
     return cargs;
@@ -263,7 +231,6 @@ function dcmsplit(
 export {
       DCMSPLIT_METADATA,
       DcmsplitOutputs,
-      DcmsplitParameters,
       dcmsplit,
       dcmsplit_execute,
       dcmsplit_params,

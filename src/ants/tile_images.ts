@@ -12,50 +12,17 @@ const TILE_IMAGES_METADATA: Metadata = {
 
 
 interface TileImagesParameters {
-    "@type": "ants.TileImages";
+    "@type"?: "ants/TileImages";
     "image_dimension": number;
     "output_image": string;
     "layout": string;
     "input_images": Array<InputPathType>;
 }
+type TileImagesParametersTagged = Required<Pick<TileImagesParameters, '@type'>> & TileImagesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.TileImages": tile_images_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.TileImages": tile_images_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tile_images(...)`.
+ * Output object returned when calling `TileImagesParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function tile_images_params(
     output_image: string,
     layout: string,
     input_images: Array<InputPathType>,
-): TileImagesParameters {
+): TileImagesParametersTagged {
     const params = {
-        "@type": "ants.TileImages" as const,
+        "@type": "ants/TileImages" as const,
         "image_dimension": image_dimension,
         "output_image": output_image,
         "layout": layout,
@@ -200,7 +167,6 @@ function tile_images(
 export {
       TILE_IMAGES_METADATA,
       TileImagesOutputs,
-      TileImagesParameters,
       tile_images,
       tile_images_execute,
       tile_images_params,

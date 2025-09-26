@@ -12,7 +12,7 @@ const FSL_GLM_METADATA: Metadata = {
 
 
 interface FslGlmParameters {
-    "@type": "fsl.fsl_glm";
+    "@type"?: "fsl/fsl_glm";
     "input_file": InputPathType;
     "design_matrix": InputPathType;
     "output_file"?: string | null | undefined;
@@ -38,44 +38,11 @@ interface FslGlmParameters {
     "vx_images"?: Array<InputPathType> | null | undefined;
     "help_flag": boolean;
 }
+type FslGlmParametersTagged = Required<Pick<FslGlmParameters, '@type'>> & FslGlmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fsl_glm": fsl_glm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fsl_glm": fsl_glm_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsl_glm(...)`.
+ * Output object returned when calling `FslGlmParameters(...)`.
  *
  * @interface
  */
@@ -190,9 +157,9 @@ function fsl_glm_params(
     vx_text: Array<string> | null = null,
     vx_images: Array<InputPathType> | null = null,
     help_flag: boolean = false,
-): FslGlmParameters {
+): FslGlmParametersTagged {
     const params = {
-        "@type": "fsl.fsl_glm" as const,
+        "@type": "fsl/fsl_glm" as const,
         "input_file": input_file,
         "design_matrix": design_matrix,
         "design_norm_flag": design_norm_flag,
@@ -302,16 +269,16 @@ function fsl_glm_cargs(
             String((params["dof"] ?? null))
         );
     }
-    if ((params["design_norm_flag"] ?? null)) {
+    if ((params["design_norm_flag"] ?? false)) {
         cargs.push("--des_norm");
     }
-    if ((params["data_norm_flag"] ?? null)) {
+    if ((params["data_norm_flag"] ?? false)) {
         cargs.push("--dat_norm");
     }
-    if ((params["vn_flag"] ?? null)) {
+    if ((params["vn_flag"] ?? false)) {
         cargs.push("--vn");
     }
-    if ((params["demean_flag"] ?? null)) {
+    if ((params["demean_flag"] ?? false)) {
         cargs.push("--demean");
     }
     if ((params["output_copes"] ?? null) !== null) {
@@ -392,7 +359,7 @@ function fsl_glm_cargs(
             ...(params["vx_images"] ?? null).map(f => execution.inputFile(f))
         );
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -530,7 +497,6 @@ function fsl_glm(
 export {
       FSL_GLM_METADATA,
       FslGlmOutputs,
-      FslGlmParameters,
       fsl_glm,
       fsl_glm_execute,
       fsl_glm_params,

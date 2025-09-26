@@ -12,28 +12,31 @@ const CIFTI_GRADIENT_METADATA: Metadata = {
 
 
 interface CiftiGradientLeftSurfaceParameters {
-    "@type": "workbench.cifti-gradient.left_surface";
+    "@type"?: "left_surface";
     "surface": InputPathType;
     "opt_left_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
+type CiftiGradientLeftSurfaceParametersTagged = Required<Pick<CiftiGradientLeftSurfaceParameters, '@type'>> & CiftiGradientLeftSurfaceParameters;
 
 
 interface CiftiGradientRightSurfaceParameters {
-    "@type": "workbench.cifti-gradient.right_surface";
+    "@type"?: "right_surface";
     "surface": InputPathType;
     "opt_right_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
+type CiftiGradientRightSurfaceParametersTagged = Required<Pick<CiftiGradientRightSurfaceParameters, '@type'>> & CiftiGradientRightSurfaceParameters;
 
 
 interface CiftiGradientCerebellumSurfaceParameters {
-    "@type": "workbench.cifti-gradient.cerebellum_surface";
+    "@type"?: "cerebellum_surface";
     "surface": InputPathType;
     "opt_cerebellum_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
+type CiftiGradientCerebellumSurfaceParametersTagged = Required<Pick<CiftiGradientCerebellumSurfaceParameters, '@type'>> & CiftiGradientCerebellumSurfaceParameters;
 
 
 interface CiftiGradientParameters {
-    "@type": "workbench.cifti-gradient";
+    "@type"?: "workbench/cifti-gradient";
     "cifti": InputPathType;
     "direction": string;
     "cifti_out": string;
@@ -46,43 +49,7 @@ interface CiftiGradientParameters {
     "opt_average_output": boolean;
     "opt_vectors_vectors_out"?: string | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-gradient": cifti_gradient_cargs,
-        "workbench.cifti-gradient.left_surface": cifti_gradient_left_surface_cargs,
-        "workbench.cifti-gradient.right_surface": cifti_gradient_right_surface_cargs,
-        "workbench.cifti-gradient.cerebellum_surface": cifti_gradient_cerebellum_surface_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-gradient": cifti_gradient_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiGradientParametersTagged = Required<Pick<CiftiGradientParameters, '@type'>> & CiftiGradientParameters;
 
 
 /**
@@ -96,9 +63,9 @@ function dynOutputs(
 function cifti_gradient_left_surface_params(
     surface: InputPathType,
     opt_left_corrected_areas_area_metric: InputPathType | null = null,
-): CiftiGradientLeftSurfaceParameters {
+): CiftiGradientLeftSurfaceParametersTagged {
     const params = {
-        "@type": "workbench.cifti-gradient.left_surface" as const,
+        "@type": "left_surface" as const,
         "surface": surface,
     };
     if (opt_left_corrected_areas_area_metric !== null) {
@@ -144,9 +111,9 @@ function cifti_gradient_left_surface_cargs(
 function cifti_gradient_right_surface_params(
     surface: InputPathType,
     opt_right_corrected_areas_area_metric: InputPathType | null = null,
-): CiftiGradientRightSurfaceParameters {
+): CiftiGradientRightSurfaceParametersTagged {
     const params = {
-        "@type": "workbench.cifti-gradient.right_surface" as const,
+        "@type": "right_surface" as const,
         "surface": surface,
     };
     if (opt_right_corrected_areas_area_metric !== null) {
@@ -192,9 +159,9 @@ function cifti_gradient_right_surface_cargs(
 function cifti_gradient_cerebellum_surface_params(
     surface: InputPathType,
     opt_cerebellum_corrected_areas_area_metric: InputPathType | null = null,
-): CiftiGradientCerebellumSurfaceParameters {
+): CiftiGradientCerebellumSurfaceParametersTagged {
     const params = {
-        "@type": "workbench.cifti-gradient.cerebellum_surface" as const,
+        "@type": "cerebellum_surface" as const,
         "surface": surface,
     };
     if (opt_cerebellum_corrected_areas_area_metric !== null) {
@@ -230,7 +197,7 @@ function cifti_gradient_cerebellum_surface_cargs(
 
 
 /**
- * Output object returned when calling `cifti_gradient(...)`.
+ * Output object returned when calling `CiftiGradientParameters(...)`.
  *
  * @interface
  */
@@ -279,9 +246,9 @@ function cifti_gradient_params(
     opt_presmooth_fwhm: boolean = false,
     opt_average_output: boolean = false,
     opt_vectors_vectors_out: string | null = null,
-): CiftiGradientParameters {
+): CiftiGradientParametersTagged {
     const params = {
-        "@type": "workbench.cifti-gradient" as const,
+        "@type": "workbench/cifti-gradient" as const,
         "cifti": cifti,
         "direction": direction,
         "cifti_out": cifti_out,
@@ -329,13 +296,13 @@ function cifti_gradient_cargs(
     cargs.push((params["direction"] ?? null));
     cargs.push((params["cifti_out"] ?? null));
     if ((params["left_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["left_surface"] ?? null)["@type"])((params["left_surface"] ?? null), execution));
+        cargs.push(...cifti_gradient_left_surface_cargs((params["left_surface"] ?? null), execution));
     }
     if ((params["right_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["right_surface"] ?? null)["@type"])((params["right_surface"] ?? null), execution));
+        cargs.push(...cifti_gradient_right_surface_cargs((params["right_surface"] ?? null), execution));
     }
     if ((params["cerebellum_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["cerebellum_surface"] ?? null)["@type"])((params["cerebellum_surface"] ?? null), execution));
+        cargs.push(...cifti_gradient_cerebellum_surface_cargs((params["cerebellum_surface"] ?? null), execution));
     }
     if ((params["opt_surface_presmooth_surface_kernel"] ?? null) !== null) {
         cargs.push(
@@ -349,10 +316,10 @@ function cifti_gradient_cargs(
             String((params["opt_volume_presmooth_volume_kernel"] ?? null))
         );
     }
-    if ((params["opt_presmooth_fwhm"] ?? null)) {
+    if ((params["opt_presmooth_fwhm"] ?? false)) {
         cargs.push("-presmooth-fwhm");
     }
-    if ((params["opt_average_output"] ?? null)) {
+    if ((params["opt_average_output"] ?? false)) {
         cargs.push("-average-output");
     }
     if ((params["opt_vectors_vectors_out"] ?? null) !== null) {
@@ -463,11 +430,7 @@ function cifti_gradient(
 
 export {
       CIFTI_GRADIENT_METADATA,
-      CiftiGradientCerebellumSurfaceParameters,
-      CiftiGradientLeftSurfaceParameters,
       CiftiGradientOutputs,
-      CiftiGradientParameters,
-      CiftiGradientRightSurfaceParameters,
       cifti_gradient,
       cifti_gradient_cerebellum_surface_params,
       cifti_gradient_execute,

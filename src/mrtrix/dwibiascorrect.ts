@@ -12,21 +12,23 @@ const DWIBIASCORRECT_METADATA: Metadata = {
 
 
 interface DwibiascorrectFslgradParameters {
-    "@type": "mrtrix.dwibiascorrect.fslgrad";
+    "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
+type DwibiascorrectFslgradParametersTagged = Required<Pick<DwibiascorrectFslgradParameters, '@type'>> & DwibiascorrectFslgradParameters;
 
 
 interface DwibiascorrectConfigParameters {
-    "@type": "mrtrix.dwibiascorrect.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type DwibiascorrectConfigParametersTagged = Required<Pick<DwibiascorrectConfigParameters, '@type'>> & DwibiascorrectConfigParameters;
 
 
 interface DwibiascorrectParameters {
-    "@type": "mrtrix.dwibiascorrect";
+    "@type"?: "mrtrix/dwibiascorrect";
     "algorithm": string;
     "input_image": InputPathType;
     "output_image": string;
@@ -49,42 +51,7 @@ interface DwibiascorrectParameters {
     "ants_c"?: string | null | undefined;
     "ants_s"?: string | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.dwibiascorrect": dwibiascorrect_cargs,
-        "mrtrix.dwibiascorrect.fslgrad": dwibiascorrect_fslgrad_cargs,
-        "mrtrix.dwibiascorrect.config": dwibiascorrect_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.dwibiascorrect": dwibiascorrect_outputs,
-    };
-    return outputsFuncs[t];
-}
+type DwibiascorrectParametersTagged = Required<Pick<DwibiascorrectParameters, '@type'>> & DwibiascorrectParameters;
 
 
 /**
@@ -98,9 +65,9 @@ function dynOutputs(
 function dwibiascorrect_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
-): DwibiascorrectFslgradParameters {
+): DwibiascorrectFslgradParametersTagged {
     const params = {
-        "@type": "mrtrix.dwibiascorrect.fslgrad" as const,
+        "@type": "fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -139,9 +106,9 @@ function dwibiascorrect_fslgrad_cargs(
 function dwibiascorrect_config_params(
     key: string,
     value: string,
-): DwibiascorrectConfigParameters {
+): DwibiascorrectConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.dwibiascorrect.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -170,7 +137,7 @@ function dwibiascorrect_config_cargs(
 
 
 /**
- * Output object returned when calling `dwibiascorrect(...)`.
+ * Output object returned when calling `DwibiascorrectParameters(...)`.
  *
  * @interface
  */
@@ -239,9 +206,9 @@ function dwibiascorrect_params(
     ants_b: string | null = null,
     ants_c: string | null = null,
     ants_s: string | null = null,
-): DwibiascorrectParameters {
+): DwibiascorrectParametersTagged {
     const params = {
-        "@type": "mrtrix.dwibiascorrect" as const,
+        "@type": "mrtrix/dwibiascorrect" as const,
         "algorithm": algorithm,
         "input_image": input_image,
         "output_image": output_image,
@@ -314,7 +281,7 @@ function dwibiascorrect_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
+        cargs.push(...dwibiascorrect_fslgrad_cargs((params["fslgrad"] ?? null), execution));
     }
     if ((params["mask_image"] ?? null) !== null) {
         cargs.push(
@@ -328,7 +295,7 @@ function dwibiascorrect_cargs(
             execution.inputFile((params["bias_image"] ?? null))
         );
     }
-    if ((params["nocleanup"] ?? null)) {
+    if ((params["nocleanup"] ?? false)) {
         cargs.push("-nocleanup");
     }
     if ((params["scratch_dir"] ?? null) !== null) {
@@ -343,16 +310,16 @@ function dwibiascorrect_cargs(
             ...(params["continue_scratch_dir"] ?? null).map(f => execution.inputFile(f))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -362,12 +329,12 @@ function dwibiascorrect_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dwibiascorrect_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     if ((params["ants_b"] ?? null) !== null) {
@@ -506,10 +473,7 @@ function dwibiascorrect(
 
 export {
       DWIBIASCORRECT_METADATA,
-      DwibiascorrectConfigParameters,
-      DwibiascorrectFslgradParameters,
       DwibiascorrectOutputs,
-      DwibiascorrectParameters,
       dwibiascorrect,
       dwibiascorrect_config_params,
       dwibiascorrect_execute,

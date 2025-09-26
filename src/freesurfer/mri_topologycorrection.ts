@@ -12,48 +12,15 @@ const MRI_TOPOLOGYCORRECTION_METADATA: Metadata = {
 
 
 interface MriTopologycorrectionParameters {
-    "@type": "freesurfer.mri_topologycorrection";
+    "@type"?: "freesurfer/mri_topologycorrection";
     "input_orig_file": InputPathType;
     "input_segmented_file": InputPathType;
 }
+type MriTopologycorrectionParametersTagged = Required<Pick<MriTopologycorrectionParameters, '@type'>> & MriTopologycorrectionParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_topologycorrection": mri_topologycorrection_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_topologycorrection": mri_topologycorrection_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_topologycorrection(...)`.
+ * Output object returned when calling `MriTopologycorrectionParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface MriTopologycorrectionOutputs {
 function mri_topologycorrection_params(
     input_orig_file: InputPathType,
     input_segmented_file: InputPathType,
-): MriTopologycorrectionParameters {
+): MriTopologycorrectionParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_topologycorrection" as const,
+        "@type": "freesurfer/mri_topologycorrection" as const,
         "input_orig_file": input_orig_file,
         "input_segmented_file": input_segmented_file,
     };
@@ -186,7 +153,6 @@ function mri_topologycorrection(
 export {
       MRI_TOPOLOGYCORRECTION_METADATA,
       MriTopologycorrectionOutputs,
-      MriTopologycorrectionParameters,
       mri_topologycorrection,
       mri_topologycorrection_execute,
       mri_topologycorrection_params,

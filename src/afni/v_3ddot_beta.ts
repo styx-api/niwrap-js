@@ -12,50 +12,17 @@ const V_3DDOT_BETA_METADATA: Metadata = {
 
 
 interface V3ddotBetaParameters {
-    "@type": "afni.3ddot_beta";
+    "@type"?: "afni/3ddot_beta";
     "input_file": InputPathType;
     "prefix": string;
     "doeta2": boolean;
     "mask"?: InputPathType | null | undefined;
 }
+type V3ddotBetaParametersTagged = Required<Pick<V3ddotBetaParameters, '@type'>> & V3ddotBetaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3ddot_beta": v_3ddot_beta_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3ddot_beta": v_3ddot_beta_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3ddot_beta(...)`.
+ * Output object returned when calling `V3ddotBetaParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function v_3ddot_beta_params(
     prefix: string,
     doeta2: boolean = false,
     mask: InputPathType | null = null,
-): V3ddotBetaParameters {
+): V3ddotBetaParametersTagged {
     const params = {
-        "@type": "afni.3ddot_beta" as const,
+        "@type": "afni/3ddot_beta" as const,
         "input_file": input_file,
         "prefix": prefix,
         "doeta2": doeta2,
@@ -122,7 +89,7 @@ function v_3ddot_beta_cargs(
         "-prefix",
         (params["prefix"] ?? null)
     );
-    if ((params["doeta2"] ?? null)) {
+    if ((params["doeta2"] ?? false)) {
         cargs.push("-doeta2");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -214,7 +181,6 @@ function v_3ddot_beta(
 
 export {
       V3ddotBetaOutputs,
-      V3ddotBetaParameters,
       V_3DDOT_BETA_METADATA,
       v_3ddot_beta,
       v_3ddot_beta_execute,

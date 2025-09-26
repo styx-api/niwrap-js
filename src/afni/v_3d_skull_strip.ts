@@ -12,49 +12,16 @@ const V_3D_SKULL_STRIP_METADATA: Metadata = {
 
 
 interface V3dSkullStripParameters {
-    "@type": "afni.3dSkullStrip";
+    "@type"?: "afni/3dSkullStrip";
     "in_file": InputPathType;
     "num_threads"?: number | null | undefined;
     "outputtype"?: "NIFTI" | "AFNI" | "NIFTI_GZ" | null | undefined;
 }
+type V3dSkullStripParametersTagged = Required<Pick<V3dSkullStripParameters, '@type'>> & V3dSkullStripParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dSkullStrip": v_3d_skull_strip_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dSkullStrip": v_3d_skull_strip_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_skull_strip(...)`.
+ * Output object returned when calling `V3dSkullStripParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +54,9 @@ function v_3d_skull_strip_params(
     in_file: InputPathType,
     num_threads: number | null = null,
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
-): V3dSkullStripParameters {
+): V3dSkullStripParametersTagged {
     const params = {
-        "@type": "afni.3dSkullStrip" as const,
+        "@type": "afni/3dSkullStrip" as const,
         "in_file": in_file,
     };
     if (num_threads !== null) {
@@ -208,7 +175,6 @@ function v_3d_skull_strip(
 
 export {
       V3dSkullStripOutputs,
-      V3dSkullStripParameters,
       V_3D_SKULL_STRIP_METADATA,
       v_3d_skull_strip,
       v_3d_skull_strip_execute,

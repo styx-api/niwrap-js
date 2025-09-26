@@ -12,50 +12,17 @@ const LABEL2FLAT_METADATA: Metadata = {
 
 
 interface Label2flatParameters {
-    "@type": "freesurfer.label2flat";
+    "@type"?: "freesurfer/label2flat";
     "subject_name": string;
     "label_file": InputPathType;
     "patch_file": InputPathType;
     "output_file": string;
 }
+type Label2flatParametersTagged = Required<Pick<Label2flatParameters, '@type'>> & Label2flatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.label2flat": label2flat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.label2flat": label2flat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `label2flat(...)`.
+ * Output object returned when calling `Label2flatParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function label2flat_params(
     label_file: InputPathType,
     patch_file: InputPathType,
     output_file: string,
-): Label2flatParameters {
+): Label2flatParametersTagged {
     const params = {
-        "@type": "freesurfer.label2flat" as const,
+        "@type": "freesurfer/label2flat" as const,
         "subject_name": subject_name,
         "label_file": label_file,
         "patch_file": patch_file,
@@ -200,7 +167,6 @@ function label2flat(
 export {
       LABEL2FLAT_METADATA,
       Label2flatOutputs,
-      Label2flatParameters,
       label2flat,
       label2flat_execute,
       label2flat_params,

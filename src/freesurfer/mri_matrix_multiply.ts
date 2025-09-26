@@ -12,7 +12,7 @@ const MRI_MATRIX_MULTIPLY_METADATA: Metadata = {
 
 
 interface MriMatrixMultiplyParameters {
-    "@type": "freesurfer.mri_matrix_multiply";
+    "@type"?: "freesurfer/mri_matrix_multiply";
     "input_matrices": Array<InputPathType>;
     "inverted_input_matrices"?: Array<InputPathType> | null | undefined;
     "output_matrix": string;
@@ -21,44 +21,11 @@ interface MriMatrixMultiplyParameters {
     "binarize": boolean;
     "subject_name"?: string | null | undefined;
 }
+type MriMatrixMultiplyParametersTagged = Required<Pick<MriMatrixMultiplyParameters, '@type'>> & MriMatrixMultiplyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_matrix_multiply": mri_matrix_multiply_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_matrix_multiply": mri_matrix_multiply_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_matrix_multiply(...)`.
+ * Output object returned when calling `MriMatrixMultiplyParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function mri_matrix_multiply_params(
     fsl: boolean = false,
     binarize: boolean = false,
     subject_name: string | null = null,
-): MriMatrixMultiplyParameters {
+): MriMatrixMultiplyParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_matrix_multiply" as const,
+        "@type": "freesurfer/mri_matrix_multiply" as const,
         "input_matrices": input_matrices,
         "output_matrix": output_matrix,
         "verbose": verbose,
@@ -142,13 +109,13 @@ function mri_matrix_multiply_cargs(
         "-om",
         (params["output_matrix"] ?? null)
     );
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["fsl"] ?? null)) {
+    if ((params["fsl"] ?? false)) {
         cargs.push("-fsl");
     }
-    if ((params["binarize"] ?? null)) {
+    if ((params["binarize"] ?? false)) {
         cargs.push("-bin");
     }
     if ((params["subject_name"] ?? null) !== null) {
@@ -247,7 +214,6 @@ function mri_matrix_multiply(
 export {
       MRI_MATRIX_MULTIPLY_METADATA,
       MriMatrixMultiplyOutputs,
-      MriMatrixMultiplyParameters,
       mri_matrix_multiply,
       mri_matrix_multiply_execute,
       mri_matrix_multiply_params,

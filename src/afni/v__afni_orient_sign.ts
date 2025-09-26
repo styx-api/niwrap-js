@@ -12,47 +12,14 @@ const V__AFNI_ORIENT_SIGN_METADATA: Metadata = {
 
 
 interface VAfniOrientSignParameters {
-    "@type": "afni.@AfniOrientSign";
+    "@type"?: "afni/@AfniOrientSign";
     "infile": InputPathType;
 }
+type VAfniOrientSignParametersTagged = Required<Pick<VAfniOrientSignParameters, '@type'>> & VAfniOrientSignParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@AfniOrientSign": v__afni_orient_sign_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@AfniOrientSign": v__afni_orient_sign_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__afni_orient_sign(...)`.
+ * Output object returned when calling `VAfniOrientSignParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface VAfniOrientSignOutputs {
  */
 function v__afni_orient_sign_params(
     infile: InputPathType,
-): VAfniOrientSignParameters {
+): VAfniOrientSignParametersTagged {
     const params = {
-        "@type": "afni.@AfniOrientSign" as const,
+        "@type": "afni/@AfniOrientSign" as const,
         "infile": infile,
     };
     return params;
@@ -181,7 +148,6 @@ function v__afni_orient_sign(
 
 export {
       VAfniOrientSignOutputs,
-      VAfniOrientSignParameters,
       V__AFNI_ORIENT_SIGN_METADATA,
       v__afni_orient_sign,
       v__afni_orient_sign_execute,

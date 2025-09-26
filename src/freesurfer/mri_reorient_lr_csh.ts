@@ -12,7 +12,7 @@ const MRI_REORIENT_LR_CSH_METADATA: Metadata = {
 
 
 interface MriReorientLrCshParameters {
-    "@type": "freesurfer.mri_reorient_LR.csh";
+    "@type"?: "freesurfer/mri_reorient_LR.csh";
     "input_vol": InputPathType;
     "output_vol": string;
     "display_result": boolean;
@@ -21,44 +21,11 @@ interface MriReorientLrCshParameters {
     "version": boolean;
     "help": boolean;
 }
+type MriReorientLrCshParametersTagged = Required<Pick<MriReorientLrCshParameters, '@type'>> & MriReorientLrCshParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_reorient_LR.csh": mri_reorient_lr_csh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_reorient_LR.csh": mri_reorient_lr_csh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_reorient_lr_csh(...)`.
+ * Output object returned when calling `MriReorientLrCshParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function mri_reorient_lr_csh_params(
     output_registration: boolean = false,
     version: boolean = false,
     help: boolean = false,
-): MriReorientLrCshParameters {
+): MriReorientLrCshParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_reorient_LR.csh" as const,
+        "@type": "freesurfer/mri_reorient_LR.csh" as const,
         "input_vol": input_vol,
         "output_vol": output_vol,
         "display_result": display_result,
@@ -132,19 +99,19 @@ function mri_reorient_lr_csh_cargs(
         "--o",
         (params["output_vol"] ?? null)
     );
-    if ((params["display_result"] ?? null)) {
+    if ((params["display_result"] ?? false)) {
         cargs.push("--disp");
     }
-    if ((params["clean_files"] ?? null)) {
+    if ((params["clean_files"] ?? false)) {
         cargs.push("--clean");
     }
-    if ((params["output_registration"] ?? null)) {
+    if ((params["output_registration"] ?? false)) {
         cargs.push("--outreg");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -237,7 +204,6 @@ function mri_reorient_lr_csh(
 export {
       MRI_REORIENT_LR_CSH_METADATA,
       MriReorientLrCshOutputs,
-      MriReorientLrCshParameters,
       mri_reorient_lr_csh,
       mri_reorient_lr_csh_execute,
       mri_reorient_lr_csh_params,

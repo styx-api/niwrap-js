@@ -12,47 +12,14 @@ const V__SUMA_RENUMBER_FS_METADATA: Metadata = {
 
 
 interface VSumaRenumberFsParameters {
-    "@type": "afni.@SUMA_renumber_FS";
+    "@type"?: "afni/@SUMA_renumber_FS";
     "sumadir": string;
 }
+type VSumaRenumberFsParametersTagged = Required<Pick<VSumaRenumberFsParameters, '@type'>> & VSumaRenumberFsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@SUMA_renumber_FS": v__suma_renumber_fs_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@SUMA_renumber_FS": v__suma_renumber_fs_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__suma_renumber_fs(...)`.
+ * Output object returned when calling `VSumaRenumberFsParameters(...)`.
  *
  * @interface
  */
@@ -117,9 +84,9 @@ interface VSumaRenumberFsOutputs {
  */
 function v__suma_renumber_fs_params(
     sumadir: string,
-): VSumaRenumberFsParameters {
+): VSumaRenumberFsParametersTagged {
     const params = {
-        "@type": "afni.@SUMA_renumber_FS" as const,
+        "@type": "afni/@SUMA_renumber_FS" as const,
         "sumadir": sumadir,
     };
     return params;
@@ -228,7 +195,6 @@ function v__suma_renumber_fs(
 
 export {
       VSumaRenumberFsOutputs,
-      VSumaRenumberFsParameters,
       V__SUMA_RENUMBER_FS_METADATA,
       v__suma_renumber_fs,
       v__suma_renumber_fs_execute,

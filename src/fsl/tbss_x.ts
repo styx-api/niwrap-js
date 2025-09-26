@@ -12,47 +12,15 @@ const TBSS_X_METADATA: Metadata = {
 
 
 interface TbssXParameters {
-    "@type": "fsl.tbss_x";
+    "@type"?: "fsl/tbss_x";
     "scalar_dirs": Array<string>;
     "vector_dirs": Array<string>;
 }
+type TbssXParametersTagged = Required<Pick<TbssXParameters, '@type'>> & TbssXParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.tbss_x": tbss_x_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tbss_x(...)`.
+ * Output object returned when calling `TbssXParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface TbssXOutputs {
 function tbss_x_params(
     scalar_dirs: Array<string>,
     vector_dirs: Array<string>,
-): TbssXParameters {
+): TbssXParametersTagged {
     const params = {
-        "@type": "fsl.tbss_x" as const,
+        "@type": "fsl/tbss_x" as const,
         "scalar_dirs": scalar_dirs,
         "vector_dirs": vector_dirs,
     };
@@ -180,7 +148,6 @@ function tbss_x(
 export {
       TBSS_X_METADATA,
       TbssXOutputs,
-      TbssXParameters,
       tbss_x,
       tbss_x_execute,
       tbss_x_params,

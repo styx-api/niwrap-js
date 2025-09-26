@@ -12,7 +12,7 @@ const VOL2SEGAVG_METADATA: Metadata = {
 
 
 interface Vol2segavgParameters {
-    "@type": "freesurfer.vol2segavg";
+    "@type"?: "freesurfer/vol2segavg";
     "output_file": string;
     "input_volume": InputPathType;
     "registration": string;
@@ -29,44 +29,11 @@ interface Vol2segavgParameters {
     "xcsf_flag": boolean;
     "remove_mean_flag": boolean;
 }
+type Vol2segavgParametersTagged = Required<Pick<Vol2segavgParameters, '@type'>> & Vol2segavgParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.vol2segavg": vol2segavg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.vol2segavg": vol2segavg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `vol2segavg(...)`.
+ * Output object returned when calling `Vol2segavgParameters(...)`.
  *
  * @interface
  */
@@ -119,9 +86,9 @@ function vol2segavg_params(
     vcsf_flag: boolean = false,
     xcsf_flag: boolean = false,
     remove_mean_flag: boolean = false,
-): Vol2segavgParameters {
+): Vol2segavgParametersTagged {
     const params = {
-        "@type": "freesurfer.vol2segavg" as const,
+        "@type": "freesurfer/vol2segavg" as const,
         "output_file": output_file,
         "input_volume": input_volume,
         "registration": registration,
@@ -182,7 +149,7 @@ function vol2segavg_cargs(
         "--seg",
         execution.inputFile((params["segmentation_file"] ?? null))
     );
-    if ((params["aparc_aseg_flag"] ?? null)) {
+    if ((params["aparc_aseg_flag"] ?? false)) {
         cargs.push("--aparc+aseg");
     }
     if ((params["subject_id"] ?? null) !== null) {
@@ -203,7 +170,7 @@ function vol2segavg_cargs(
             String((params["multiply_value"] ?? null))
         );
     }
-    if ((params["no_bb_flag"] ?? null)) {
+    if ((params["no_bb_flag"] ?? false)) {
         cargs.push("--no-bb");
     }
     if ((params["erode_value"] ?? null) !== null) {
@@ -218,16 +185,16 @@ function vol2segavg_cargs(
             String((params["dilate_value"] ?? null))
         );
     }
-    if ((params["wm_flag"] ?? null)) {
+    if ((params["wm_flag"] ?? false)) {
         cargs.push("--wm");
     }
-    if ((params["vcsf_flag"] ?? null)) {
+    if ((params["vcsf_flag"] ?? false)) {
         cargs.push("--vcsf");
     }
-    if ((params["xcsf_flag"] ?? null)) {
+    if ((params["xcsf_flag"] ?? false)) {
         cargs.push("--xcsf");
     }
-    if ((params["remove_mean_flag"] ?? null)) {
+    if ((params["remove_mean_flag"] ?? false)) {
         cargs.push("--remove-mean");
     }
     return cargs;
@@ -336,7 +303,6 @@ function vol2segavg(
 export {
       VOL2SEGAVG_METADATA,
       Vol2segavgOutputs,
-      Vol2segavgParameters,
       vol2segavg,
       vol2segavg_execute,
       vol2segavg_params,

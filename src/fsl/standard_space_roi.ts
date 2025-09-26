@@ -12,7 +12,7 @@ const STANDARD_SPACE_ROI_METADATA: Metadata = {
 
 
 interface StandardSpaceRoiParameters {
-    "@type": "fsl.standard_space_roi";
+    "@type"?: "fsl/standard_space_roi";
     "infile": InputPathType;
     "outfile": string;
     "mask_fov_flag": boolean;
@@ -26,44 +26,11 @@ interface StandardSpaceRoiParameters {
     "debug_flag": boolean;
     "bet_premask_flag": boolean;
 }
+type StandardSpaceRoiParametersTagged = Required<Pick<StandardSpaceRoiParameters, '@type'>> & StandardSpaceRoiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.standard_space_roi": standard_space_roi_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.standard_space_roi": standard_space_roi_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `standard_space_roi(...)`.
+ * Output object returned when calling `StandardSpaceRoiParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function standard_space_roi_params(
     alt_input: InputPathType | null = null,
     debug_flag: boolean = false,
     bet_premask_flag: boolean = false,
-): StandardSpaceRoiParameters {
+): StandardSpaceRoiParametersTagged {
     const params = {
-        "@type": "fsl.standard_space_roi" as const,
+        "@type": "fsl/standard_space_roi" as const,
         "infile": infile,
         "outfile": outfile,
         "mask_fov_flag": mask_fov_flag,
@@ -154,7 +121,7 @@ function standard_space_roi_cargs(
     cargs.push("standard_space_roi");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
     cargs.push((params["outfile"] ?? null));
-    if ((params["mask_fov_flag"] ?? null)) {
+    if ((params["mask_fov_flag"] ?? false)) {
         cargs.push("-maskFOV");
     }
     if ((params["mask_mask"] ?? null) !== null) {
@@ -163,10 +130,10 @@ function standard_space_roi_cargs(
             execution.inputFile((params["mask_mask"] ?? null))
         );
     }
-    if ((params["mask_none_flag"] ?? null)) {
+    if ((params["mask_none_flag"] ?? false)) {
         cargs.push("-maskNONE");
     }
-    if ((params["roi_fov_flag"] ?? null)) {
+    if ((params["roi_fov_flag"] ?? false)) {
         cargs.push("-roiFOV");
     }
     if ((params["roi_mask"] ?? null) !== null) {
@@ -175,7 +142,7 @@ function standard_space_roi_cargs(
             execution.inputFile((params["roi_mask"] ?? null))
         );
     }
-    if ((params["roi_none_flag"] ?? null)) {
+    if ((params["roi_none_flag"] ?? false)) {
         cargs.push("-roiNONE");
     }
     if ((params["ss_ref"] ?? null) !== null) {
@@ -190,10 +157,10 @@ function standard_space_roi_cargs(
             execution.inputFile((params["alt_input"] ?? null))
         );
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("-d");
     }
-    if ((params["bet_premask_flag"] ?? null)) {
+    if ((params["bet_premask_flag"] ?? false)) {
         cargs.push("-b");
     }
     return cargs;
@@ -296,7 +263,6 @@ function standard_space_roi(
 export {
       STANDARD_SPACE_ROI_METADATA,
       StandardSpaceRoiOutputs,
-      StandardSpaceRoiParameters,
       standard_space_roi,
       standard_space_roi_execute,
       standard_space_roi_params,

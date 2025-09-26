@@ -12,7 +12,7 @@ const PASTE_IMAGE_INTO_IMAGE_METADATA: Metadata = {
 
 
 interface PasteImageIntoImageParameters {
-    "@type": "ants.PasteImageIntoImage";
+    "@type"?: "ants/PasteImageIntoImage";
     "image_dimension": number;
     "input_canvas_image": InputPathType;
     "input_image": InputPathType;
@@ -22,44 +22,11 @@ interface PasteImageIntoImageParameters {
     "paint_over_non_background_voxels"?: 0 | 1 | 2 | null | undefined;
     "conflict_label"?: number | null | undefined;
 }
+type PasteImageIntoImageParametersTagged = Required<Pick<PasteImageIntoImageParameters, '@type'>> & PasteImageIntoImageParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.PasteImageIntoImage": paste_image_into_image_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.PasteImageIntoImage": paste_image_into_image_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `paste_image_into_image(...)`.
+ * Output object returned when calling `PasteImageIntoImageParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function paste_image_into_image_params(
     background_label: number | null = null,
     paint_over_non_background_voxels: 0 | 1 | 2 | null = null,
     conflict_label: number | null = null,
-): PasteImageIntoImageParameters {
+): PasteImageIntoImageParametersTagged {
     const params = {
-        "@type": "ants.PasteImageIntoImage" as const,
+        "@type": "ants/PasteImageIntoImage" as const,
         "image_dimension": image_dimension,
         "input_canvas_image": input_canvas_image,
         "input_image": input_image,
@@ -240,7 +207,6 @@ function paste_image_into_image(
 export {
       PASTE_IMAGE_INTO_IMAGE_METADATA,
       PasteImageIntoImageOutputs,
-      PasteImageIntoImageParameters,
       paste_image_into_image,
       paste_image_into_image_execute,
       paste_image_into_image_params,

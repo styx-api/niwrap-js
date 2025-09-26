@@ -12,7 +12,7 @@ const XCEREBRALSEG_METADATA: Metadata = {
 
 
 interface XcerebralsegParameters {
-    "@type": "freesurfer.xcerebralseg";
+    "@type"?: "freesurfer/xcerebralseg";
     "subject": string;
     "output_volume"?: string | null | undefined;
     "atlas"?: string | null | undefined;
@@ -24,44 +24,11 @@ interface XcerebralsegParameters {
     "no_vermis": boolean;
     "threads"?: number | null | undefined;
 }
+type XcerebralsegParametersTagged = Required<Pick<XcerebralsegParameters, '@type'>> & XcerebralsegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.xcerebralseg": xcerebralseg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.xcerebralseg": xcerebralseg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `xcerebralseg(...)`.
+ * Output object returned when calling `XcerebralsegParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function xcerebralseg_params(
     no_pons: boolean = false,
     no_vermis: boolean = false,
     threads: number | null = null,
-): XcerebralsegParameters {
+): XcerebralsegParametersTagged {
     const params = {
-        "@type": "freesurfer.xcerebralseg" as const,
+        "@type": "freesurfer/xcerebralseg" as const,
         "subject": subject,
         "no_stats": no_stats,
         "no_pons": no_pons,
@@ -176,7 +143,7 @@ function xcerebralseg_cargs(
             (params["source_volume"] ?? null)
         );
     }
-    if ((params["no_stats"] ?? null)) {
+    if ((params["no_stats"] ?? false)) {
         cargs.push("--no-stats");
     }
     if ((params["seg1_name"] ?? null) !== null) {
@@ -185,10 +152,10 @@ function xcerebralseg_cargs(
             (params["seg1_name"] ?? null)
         );
     }
-    if ((params["no_pons"] ?? null)) {
+    if ((params["no_pons"] ?? false)) {
         cargs.push("--no-pons");
     }
-    if ((params["no_vermis"] ?? null)) {
+    if ((params["no_vermis"] ?? false)) {
         cargs.push("--no-vermis");
     }
     if ((params["threads"] ?? null) !== null) {
@@ -293,7 +260,6 @@ function xcerebralseg(
 export {
       XCEREBRALSEG_METADATA,
       XcerebralsegOutputs,
-      XcerebralsegParameters,
       xcerebralseg,
       xcerebralseg_execute,
       xcerebralseg_params,

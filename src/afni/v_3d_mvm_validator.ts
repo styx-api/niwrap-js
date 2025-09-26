@@ -12,47 +12,15 @@ const V_3D_MVM_VALIDATOR_METADATA: Metadata = {
 
 
 interface V3dMvmValidatorParameters {
-    "@type": "afni.3dMVM_validator";
+    "@type"?: "afni/3dMVM_validator";
     "datatable": InputPathType;
     "shinyfolder"?: string | null | undefined;
 }
+type V3dMvmValidatorParametersTagged = Required<Pick<V3dMvmValidatorParameters, '@type'>> & V3dMvmValidatorParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dMVM_validator": v_3d_mvm_validator_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_mvm_validator(...)`.
+ * Output object returned when calling `V3dMvmValidatorParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface V3dMvmValidatorOutputs {
 function v_3d_mvm_validator_params(
     datatable: InputPathType,
     shinyfolder: string | null = null,
-): V3dMvmValidatorParameters {
+): V3dMvmValidatorParametersTagged {
     const params = {
-        "@type": "afni.3dMVM_validator" as const,
+        "@type": "afni/3dMVM_validator" as const,
         "datatable": datatable,
     };
     if (shinyfolder !== null) {
@@ -186,7 +154,6 @@ function v_3d_mvm_validator(
 
 export {
       V3dMvmValidatorOutputs,
-      V3dMvmValidatorParameters,
       V_3D_MVM_VALIDATOR_METADATA,
       v_3d_mvm_validator,
       v_3d_mvm_validator_execute,

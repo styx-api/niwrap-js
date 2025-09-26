@@ -12,7 +12,7 @@ const IMCUTUP_METADATA: Metadata = {
 
 
 interface ImcutupParameters {
-    "@type": "afni.imcutup";
+    "@type"?: "afni/imcutup";
     "prefix"?: string | null | undefined;
     "xynum": boolean;
     "yxnum": boolean;
@@ -22,43 +22,11 @@ interface ImcutupParameters {
     "ny": number;
     "input_file": InputPathType;
 }
+type ImcutupParametersTagged = Required<Pick<ImcutupParameters, '@type'>> & ImcutupParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.imcutup": imcutup_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `imcutup(...)`.
+ * Output object returned when calling `ImcutupParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +61,9 @@ function imcutup_params(
     yxnum: boolean = false,
     xynum_format: boolean = false,
     yxnum_format: boolean = false,
-): ImcutupParameters {
+): ImcutupParametersTagged {
     const params = {
-        "@type": "afni.imcutup" as const,
+        "@type": "afni/imcutup" as const,
         "xynum": xynum,
         "yxnum": yxnum,
         "xynum_format": xynum_format,
@@ -131,16 +99,16 @@ function imcutup_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["xynum"] ?? null)) {
+    if ((params["xynum"] ?? false)) {
         cargs.push("-xynum");
     }
-    if ((params["yxnum"] ?? null)) {
+    if ((params["yxnum"] ?? false)) {
         cargs.push("-yxnum");
     }
-    if ((params["xynum_format"] ?? null)) {
+    if ((params["xynum_format"] ?? false)) {
         cargs.push("-x.ynum");
     }
-    if ((params["yxnum_format"] ?? null)) {
+    if ((params["yxnum_format"] ?? false)) {
         cargs.push("-y.xnum");
     }
     cargs.push(String((params["nx"] ?? null)));
@@ -237,7 +205,6 @@ function imcutup(
 export {
       IMCUTUP_METADATA,
       ImcutupOutputs,
-      ImcutupParameters,
       imcutup,
       imcutup_execute,
       imcutup_params,

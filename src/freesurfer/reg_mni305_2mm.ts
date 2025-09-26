@@ -12,48 +12,15 @@ const REG_MNI305_2MM_METADATA: Metadata = {
 
 
 interface RegMni3052mmParameters {
-    "@type": "freesurfer.reg-mni305.2mm";
+    "@type"?: "freesurfer/reg-mni305.2mm";
     "subject_id": string;
     "regfile": InputPathType;
 }
+type RegMni3052mmParametersTagged = Required<Pick<RegMni3052mmParameters, '@type'>> & RegMni3052mmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.reg-mni305.2mm": reg_mni305_2mm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.reg-mni305.2mm": reg_mni305_2mm_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `reg_mni305_2mm(...)`.
+ * Output object returned when calling `RegMni3052mmParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface RegMni3052mmOutputs {
 function reg_mni305_2mm_params(
     subject_id: string,
     regfile: InputPathType,
-): RegMni3052mmParameters {
+): RegMni3052mmParametersTagged {
     const params = {
-        "@type": "freesurfer.reg-mni305.2mm" as const,
+        "@type": "freesurfer/reg-mni305.2mm" as const,
         "subject_id": subject_id,
         "regfile": regfile,
     };
@@ -192,7 +159,6 @@ function reg_mni305_2mm(
 export {
       REG_MNI305_2MM_METADATA,
       RegMni3052mmOutputs,
-      RegMni3052mmParameters,
       reg_mni305_2mm,
       reg_mni305_2mm_execute,
       reg_mni305_2mm_params,

@@ -12,7 +12,7 @@ const V_1D_RPLOT_METADATA: Metadata = {
 
 
 interface V1dRplotParameters {
-    "@type": "afni.1dRplot";
+    "@type"?: "afni/1dRplot";
     "input_file": InputPathType;
     "output_prefix"?: string | null | undefined;
     "save_size"?: Array<number> | null | undefined;
@@ -33,44 +33,11 @@ interface V1dRplotParameters {
     "save_plot": boolean;
     "column_name_show": boolean;
 }
+type V1dRplotParametersTagged = Required<Pick<V1dRplotParameters, '@type'>> & V1dRplotParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dRplot": v_1d_rplot_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.1dRplot": v_1d_rplot_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1d_rplot(...)`.
+ * Output object returned when calling `V1dRplotParameters(...)`.
  *
  * @interface
  */
@@ -131,9 +98,9 @@ function v_1d_rplot_params(
     legend_position: "bottomright" | "bottom" | "bottomleft" | "left" | "topleft" | "top" | "topright" | "right" | "center" | null = null,
     save_plot: boolean = false,
     column_name_show: boolean = false,
-): V1dRplotParameters {
+): V1dRplotParametersTagged {
     const params = {
-        "@type": "afni.1dRplot" as const,
+        "@type": "afni/1dRplot" as const,
         "input_file": input_file,
         "legend_show": legend_show,
         "save_plot": save_plot,
@@ -290,7 +257,7 @@ function v_1d_rplot_cargs(
             ...(params["group_labels"] ?? null)
         );
     }
-    if ((params["legend_show"] ?? null)) {
+    if ((params["legend_show"] ?? false)) {
         cargs.push("-leg.show");
     }
     if ((params["legend_position"] ?? null) !== null) {
@@ -299,10 +266,10 @@ function v_1d_rplot_cargs(
             (params["legend_position"] ?? null)
         );
     }
-    if ((params["save_plot"] ?? null)) {
+    if ((params["save_plot"] ?? false)) {
         cargs.push("-save");
     }
-    if ((params["column_name_show"] ?? null)) {
+    if ((params["column_name_show"] ?? false)) {
         cargs.push("-col.name.show");
     }
     return cargs;
@@ -418,7 +385,6 @@ function v_1d_rplot(
 
 export {
       V1dRplotOutputs,
-      V1dRplotParameters,
       V_1D_RPLOT_METADATA,
       v_1d_rplot,
       v_1d_rplot_execute,

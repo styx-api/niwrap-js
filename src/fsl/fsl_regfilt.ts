@@ -12,7 +12,7 @@ const FSL_REGFILT_METADATA: Metadata = {
 
 
 interface FslRegfiltParameters {
-    "@type": "fsl.fsl_regfilt";
+    "@type"?: "fsl/fsl_regfilt";
     "infile": InputPathType;
     "designfile": InputPathType;
     "outfile": string;
@@ -31,44 +31,11 @@ interface FslRegfiltParameters {
     "out_mix"?: string | null | undefined;
     "out_vnscales"?: string | null | undefined;
 }
+type FslRegfiltParametersTagged = Required<Pick<FslRegfiltParameters, '@type'>> & FslRegfiltParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fsl_regfilt": fsl_regfilt_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fsl_regfilt": fsl_regfilt_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsl_regfilt(...)`.
+ * Output object returned when calling `FslRegfiltParameters(...)`.
  *
  * @interface
  */
@@ -137,9 +104,9 @@ function fsl_regfilt_params(
     out_data: string | null = null,
     out_mix: string | null = null,
     out_vnscales: string | null = null,
-): FslRegfiltParameters {
+): FslRegfiltParametersTagged {
     const params = {
-        "@type": "fsl.fsl_regfilt" as const,
+        "@type": "fsl/fsl_regfilt" as const,
         "infile": infile,
         "designfile": designfile,
         "outfile": outfile,
@@ -216,10 +183,10 @@ function fsl_regfilt_cargs(
             (params["filter"] ?? null)
         );
     }
-    if ((params["freq_filter_flag"] ?? null)) {
+    if ((params["freq_filter_flag"] ?? false)) {
         cargs.push("-F");
     }
-    if ((params["freq_ic_flag"] ?? null)) {
+    if ((params["freq_ic_flag"] ?? false)) {
         cargs.push("--freq_ic");
     }
     if ((params["freq_ic_smooth"] ?? null) !== null) {
@@ -240,16 +207,16 @@ function fsl_regfilt_cargs(
             String((params["fthresh2"] ?? null))
         );
     }
-    if ((params["vn_flag"] ?? null)) {
+    if ((params["vn_flag"] ?? false)) {
         cargs.push("--vn");
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["aggressive_flag"] ?? null)) {
+    if ((params["aggressive_flag"] ?? false)) {
         cargs.push("-a");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
     if ((params["out_data"] ?? null) !== null) {
@@ -383,7 +350,6 @@ function fsl_regfilt(
 export {
       FSL_REGFILT_METADATA,
       FslRegfiltOutputs,
-      FslRegfiltParameters,
       fsl_regfilt,
       fsl_regfilt_execute,
       fsl_regfilt_params,

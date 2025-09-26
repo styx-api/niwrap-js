@@ -12,7 +12,7 @@ const SURF_FWHM_METADATA: Metadata = {
 
 
 interface SurfFwhmParameters {
-    "@type": "afni.SurfFWHM";
+    "@type"?: "afni/SurfFWHM";
     "input_file": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "surf_1"?: string | null | undefined;
@@ -28,44 +28,11 @@ interface SurfFwhmParameters {
     "examples": boolean;
     "slice": boolean;
 }
+type SurfFwhmParametersTagged = Required<Pick<SurfFwhmParameters, '@type'>> & SurfFwhmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.SurfFWHM": surf_fwhm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.SurfFWHM": surf_fwhm_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surf_fwhm(...)`.
+ * Output object returned when calling `SurfFwhmParameters(...)`.
  *
  * @interface
  */
@@ -128,9 +95,9 @@ function surf_fwhm_params(
     ok_warn: boolean = false,
     examples: boolean = false,
     slice: boolean = false,
-): SurfFwhmParameters {
+): SurfFwhmParametersTagged {
     const params = {
-        "@type": "afni.SurfFWHM" as const,
+        "@type": "afni/SurfFWHM" as const,
         "input_file": input_file,
         "clean": clean,
         "ok_warn": ok_warn,
@@ -201,7 +168,7 @@ function surf_fwhm_cargs(
             (params["surf_sphere"] ?? null)
         );
     }
-    if ((params["clean"] ?? null)) {
+    if ((params["clean"] ?? false)) {
         cargs.push("-clean");
     }
     if ((params["detrend"] ?? null) !== null) {
@@ -240,13 +207,13 @@ function surf_fwhm_cargs(
             String((params["neighborhood"] ?? null))
         );
     }
-    if ((params["ok_warn"] ?? null)) {
+    if ((params["ok_warn"] ?? false)) {
         cargs.push("-ok_warn");
     }
-    if ((params["examples"] ?? null)) {
+    if ((params["examples"] ?? false)) {
         cargs.push("-examples");
     }
-    if ((params["slice"] ?? null)) {
+    if ((params["slice"] ?? false)) {
         cargs.push("-slice");
     }
     return cargs;
@@ -356,7 +323,6 @@ function surf_fwhm(
 export {
       SURF_FWHM_METADATA,
       SurfFwhmOutputs,
-      SurfFwhmParameters,
       surf_fwhm,
       surf_fwhm_execute,
       surf_fwhm_params,

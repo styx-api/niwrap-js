@@ -12,21 +12,23 @@ const METRIC_GRADIENT_METADATA: Metadata = {
 
 
 interface MetricGradientPresmoothParameters {
-    "@type": "workbench.metric-gradient.presmooth";
+    "@type"?: "presmooth";
     "kernel": number;
     "opt_fwhm": boolean;
 }
+type MetricGradientPresmoothParametersTagged = Required<Pick<MetricGradientPresmoothParameters, '@type'>> & MetricGradientPresmoothParameters;
 
 
 interface MetricGradientRoiParameters {
-    "@type": "workbench.metric-gradient.roi";
+    "@type"?: "roi";
     "roi_metric": InputPathType;
     "opt_match_columns": boolean;
 }
+type MetricGradientRoiParametersTagged = Required<Pick<MetricGradientRoiParameters, '@type'>> & MetricGradientRoiParameters;
 
 
 interface MetricGradientParameters {
-    "@type": "workbench.metric-gradient";
+    "@type"?: "workbench/metric-gradient";
     "surface": InputPathType;
     "metric_in": InputPathType;
     "metric_out": string;
@@ -37,42 +39,7 @@ interface MetricGradientParameters {
     "opt_corrected_areas_area_metric"?: InputPathType | null | undefined;
     "opt_average_normals": boolean;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-gradient": metric_gradient_cargs,
-        "workbench.metric-gradient.presmooth": metric_gradient_presmooth_cargs,
-        "workbench.metric-gradient.roi": metric_gradient_roi_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.metric-gradient": metric_gradient_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MetricGradientParametersTagged = Required<Pick<MetricGradientParameters, '@type'>> & MetricGradientParameters;
 
 
 /**
@@ -86,9 +53,9 @@ function dynOutputs(
 function metric_gradient_presmooth_params(
     kernel: number,
     opt_fwhm: boolean = false,
-): MetricGradientPresmoothParameters {
+): MetricGradientPresmoothParametersTagged {
     const params = {
-        "@type": "workbench.metric-gradient.presmooth" as const,
+        "@type": "presmooth" as const,
         "kernel": kernel,
         "opt_fwhm": opt_fwhm,
     };
@@ -111,7 +78,7 @@ function metric_gradient_presmooth_cargs(
     const cargs: string[] = [];
     cargs.push("-presmooth");
     cargs.push(String((params["kernel"] ?? null)));
-    if ((params["opt_fwhm"] ?? null)) {
+    if ((params["opt_fwhm"] ?? false)) {
         cargs.push("-fwhm");
     }
     return cargs;
@@ -129,9 +96,9 @@ function metric_gradient_presmooth_cargs(
 function metric_gradient_roi_params(
     roi_metric: InputPathType,
     opt_match_columns: boolean = false,
-): MetricGradientRoiParameters {
+): MetricGradientRoiParametersTagged {
     const params = {
-        "@type": "workbench.metric-gradient.roi" as const,
+        "@type": "roi" as const,
         "roi_metric": roi_metric,
         "opt_match_columns": opt_match_columns,
     };
@@ -154,7 +121,7 @@ function metric_gradient_roi_cargs(
     const cargs: string[] = [];
     cargs.push("-roi");
     cargs.push(execution.inputFile((params["roi_metric"] ?? null)));
-    if ((params["opt_match_columns"] ?? null)) {
+    if ((params["opt_match_columns"] ?? false)) {
         cargs.push("-match-columns");
     }
     return cargs;
@@ -162,7 +129,7 @@ function metric_gradient_roi_cargs(
 
 
 /**
- * Output object returned when calling `metric_gradient(...)`.
+ * Output object returned when calling `MetricGradientParameters(...)`.
  *
  * @interface
  */
@@ -207,9 +174,9 @@ function metric_gradient_params(
     opt_column_column: string | null = null,
     opt_corrected_areas_area_metric: InputPathType | null = null,
     opt_average_normals: boolean = false,
-): MetricGradientParameters {
+): MetricGradientParametersTagged {
     const params = {
-        "@type": "workbench.metric-gradient" as const,
+        "@type": "workbench/metric-gradient" as const,
         "surface": surface,
         "metric_in": metric_in,
         "metric_out": metric_out,
@@ -253,10 +220,10 @@ function metric_gradient_cargs(
     cargs.push(execution.inputFile((params["metric_in"] ?? null)));
     cargs.push((params["metric_out"] ?? null));
     if ((params["presmooth"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["presmooth"] ?? null)["@type"])((params["presmooth"] ?? null), execution));
+        cargs.push(...metric_gradient_presmooth_cargs((params["presmooth"] ?? null), execution));
     }
     if ((params["roi"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["roi"] ?? null)["@type"])((params["roi"] ?? null), execution));
+        cargs.push(...metric_gradient_roi_cargs((params["roi"] ?? null), execution));
     }
     if ((params["opt_vectors_vector_metric_out"] ?? null) !== null) {
         cargs.push(
@@ -276,7 +243,7 @@ function metric_gradient_cargs(
             execution.inputFile((params["opt_corrected_areas_area_metric"] ?? null))
         );
     }
-    if ((params["opt_average_normals"] ?? null)) {
+    if ((params["opt_average_normals"] ?? false)) {
         cargs.push("-average-normals");
     }
     return cargs;
@@ -394,9 +361,6 @@ function metric_gradient(
 export {
       METRIC_GRADIENT_METADATA,
       MetricGradientOutputs,
-      MetricGradientParameters,
-      MetricGradientPresmoothParameters,
-      MetricGradientRoiParameters,
       metric_gradient,
       metric_gradient_execute,
       metric_gradient_params,

@@ -12,7 +12,7 @@ const DT_RECON_METADATA: Metadata = {
 
 
 interface DtReconParameters {
-    "@type": "freesurfer.dt_recon";
+    "@type"?: "freesurfer/dt_recon";
     "input_volume": InputPathType;
     "bvals_bvecs"?: string | null | undefined;
     "subject_id": string;
@@ -32,44 +32,11 @@ interface DtReconParameters {
     "debug_flag": boolean;
     "version_flag": boolean;
 }
+type DtReconParametersTagged = Required<Pick<DtReconParameters, '@type'>> & DtReconParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dt_recon": dt_recon_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.dt_recon": dt_recon_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dt_recon(...)`.
+ * Output object returned when calling `DtReconParameters(...)`.
  *
  * @interface
  */
@@ -152,9 +119,9 @@ function dt_recon_params(
     init_fsl_flag: boolean = false,
     debug_flag: boolean = false,
     version_flag: boolean = false,
-): DtReconParameters {
+): DtReconParametersTagged {
     const params = {
-        "@type": "freesurfer.dt_recon" as const,
+        "@type": "freesurfer/dt_recon" as const,
         "input_volume": input_volume,
         "subject_id": subject_id,
         "output_dir": output_dir,
@@ -234,10 +201,10 @@ function dt_recon_cargs(
             String((params["ec_reference"] ?? null))
         );
     }
-    if ((params["no_ec_flag"] ?? null)) {
+    if ((params["no_ec_flag"] ?? false)) {
         cargs.push("--no-ec");
     }
-    if ((params["no_reg_flag"] ?? null)) {
+    if ((params["no_reg_flag"] ?? false)) {
         cargs.push("--no-reg");
     }
     if ((params["register_file"] ?? null) !== null) {
@@ -246,7 +213,7 @@ function dt_recon_cargs(
             execution.inputFile((params["register_file"] ?? null))
         );
     }
-    if ((params["no_tal_flag"] ?? null)) {
+    if ((params["no_tal_flag"] ?? false)) {
         cargs.push("--no-tal");
     }
     if ((params["subjects_dir"] ?? null) !== null) {
@@ -255,10 +222,10 @@ function dt_recon_cargs(
             (params["subjects_dir"] ?? null)
         );
     }
-    if ((params["save_ec_residuals_flag"] ?? null)) {
+    if ((params["save_ec_residuals_flag"] ?? false)) {
         cargs.push("--eres-save");
     }
-    if ((params["pca_analysis_flag"] ?? null)) {
+    if ((params["pca_analysis_flag"] ?? false)) {
         cargs.push("--pca");
     }
     if ((params["mask_prune_threshold"] ?? null) !== null) {
@@ -267,16 +234,16 @@ function dt_recon_cargs(
             String((params["mask_prune_threshold"] ?? null))
         );
     }
-    if ((params["init_spm_flag"] ?? null)) {
+    if ((params["init_spm_flag"] ?? false)) {
         cargs.push("--init-spm");
     }
-    if ((params["init_fsl_flag"] ?? null)) {
+    if ((params["init_fsl_flag"] ?? false)) {
         cargs.push("--init-fsl");
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["version_flag"] ?? null)) {
+    if ((params["version_flag"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -397,7 +364,6 @@ function dt_recon(
 export {
       DT_RECON_METADATA,
       DtReconOutputs,
-      DtReconParameters,
       dt_recon,
       dt_recon_execute,
       dt_recon_params,

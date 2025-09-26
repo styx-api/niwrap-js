@@ -12,14 +12,15 @@ const MESHFILTER_METADATA: Metadata = {
 
 
 interface MeshfilterConfigParameters {
-    "@type": "mrtrix.meshfilter.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MeshfilterConfigParametersTagged = Required<Pick<MeshfilterConfigParameters, '@type'>> & MeshfilterConfigParameters;
 
 
 interface MeshfilterParameters {
-    "@type": "mrtrix.meshfilter";
+    "@type"?: "mrtrix/meshfilter";
     "smooth_spatial"?: number | null | undefined;
     "smooth_influence"?: number | null | undefined;
     "info": boolean;
@@ -34,41 +35,7 @@ interface MeshfilterParameters {
     "filter": string;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.meshfilter": meshfilter_cargs,
-        "mrtrix.meshfilter.config": meshfilter_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.meshfilter": meshfilter_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MeshfilterParametersTagged = Required<Pick<MeshfilterParameters, '@type'>> & MeshfilterParameters;
 
 
 /**
@@ -82,9 +49,9 @@ function dynOutputs(
 function meshfilter_config_params(
     key: string,
     value: string,
-): MeshfilterConfigParameters {
+): MeshfilterConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.meshfilter.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -113,7 +80,7 @@ function meshfilter_config_cargs(
 
 
 /**
- * Output object returned when calling `meshfilter(...)`.
+ * Output object returned when calling `MeshfilterParameters(...)`.
  *
  * @interface
  */
@@ -162,9 +129,9 @@ function meshfilter_params(
     config: Array<MeshfilterConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MeshfilterParameters {
+): MeshfilterParametersTagged {
     const params = {
-        "@type": "mrtrix.meshfilter" as const,
+        "@type": "mrtrix/meshfilter" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -217,16 +184,16 @@ function meshfilter_cargs(
             String((params["smooth_influence"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -236,12 +203,12 @@ function meshfilter_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => meshfilter_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -360,9 +327,7 @@ function meshfilter(
 
 export {
       MESHFILTER_METADATA,
-      MeshfilterConfigParameters,
       MeshfilterOutputs,
-      MeshfilterParameters,
       meshfilter,
       meshfilter_config_params,
       meshfilter_execute,

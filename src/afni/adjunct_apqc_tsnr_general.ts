@@ -12,7 +12,7 @@ const ADJUNCT_APQC_TSNR_GENERAL_METADATA: Metadata = {
 
 
 interface AdjunctApqcTsnrGeneralParameters {
-    "@type": "afni.adjunct_apqc_tsnr_general";
+    "@type"?: "afni/adjunct_apqc_tsnr_general";
     "montgap"?: string | null | undefined;
     "montcolor"?: string | null | undefined;
     "montx"?: string | null | undefined;
@@ -37,43 +37,11 @@ interface AdjunctApqcTsnrGeneralParameters {
     "no_axi": boolean;
     "echo": boolean;
 }
+type AdjunctApqcTsnrGeneralParametersTagged = Required<Pick<AdjunctApqcTsnrGeneralParameters, '@type'>> & AdjunctApqcTsnrGeneralParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.adjunct_apqc_tsnr_general": adjunct_apqc_tsnr_general_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `adjunct_apqc_tsnr_general(...)`.
+ * Output object returned when calling `AdjunctApqcTsnrGeneralParameters(...)`.
  *
  * @interface
  */
@@ -138,9 +106,9 @@ function adjunct_apqc_tsnr_general_params(
     no_sag: boolean = false,
     no_axi: boolean = false,
     echo: boolean = false,
-): AdjunctApqcTsnrGeneralParameters {
+): AdjunctApqcTsnrGeneralParametersTagged {
     const params = {
-        "@type": "afni.adjunct_apqc_tsnr_general" as const,
+        "@type": "afni/adjunct_apqc_tsnr_general" as const,
         "no_cor": no_cor,
         "no_sag": no_sag,
         "no_axi": no_axi,
@@ -335,16 +303,16 @@ function adjunct_apqc_tsnr_general_cargs(
             (params["cbar_cont"] ?? null)
         );
     }
-    if ((params["no_cor"] ?? null)) {
+    if ((params["no_cor"] ?? false)) {
         cargs.push("-no_cor");
     }
-    if ((params["no_sag"] ?? null)) {
+    if ((params["no_sag"] ?? false)) {
         cargs.push("-no_sag");
     }
-    if ((params["no_axi"] ?? null)) {
+    if ((params["no_axi"] ?? false)) {
         cargs.push("-no_axi");
     }
-    if ((params["echo"] ?? null)) {
+    if ((params["echo"] ?? false)) {
         cargs.push("-echo");
     }
     return cargs;
@@ -468,7 +436,6 @@ function adjunct_apqc_tsnr_general(
 export {
       ADJUNCT_APQC_TSNR_GENERAL_METADATA,
       AdjunctApqcTsnrGeneralOutputs,
-      AdjunctApqcTsnrGeneralParameters,
       adjunct_apqc_tsnr_general,
       adjunct_apqc_tsnr_general_execute,
       adjunct_apqc_tsnr_general_params,

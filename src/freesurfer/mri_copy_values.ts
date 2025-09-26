@@ -12,49 +12,16 @@ const MRI_COPY_VALUES_METADATA: Metadata = {
 
 
 interface MriCopyValuesParameters {
-    "@type": "freesurfer.mri_copy_values";
+    "@type"?: "freesurfer/mri_copy_values";
     "source_volume": InputPathType;
     "target_volume": InputPathType;
     "output_volume": string;
 }
+type MriCopyValuesParametersTagged = Required<Pick<MriCopyValuesParameters, '@type'>> & MriCopyValuesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_copy_values": mri_copy_values_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_copy_values": mri_copy_values_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_copy_values(...)`.
+ * Output object returned when calling `MriCopyValuesParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mri_copy_values_params(
     source_volume: InputPathType,
     target_volume: InputPathType,
     output_volume: string,
-): MriCopyValuesParameters {
+): MriCopyValuesParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_copy_values" as const,
+        "@type": "freesurfer/mri_copy_values" as const,
         "source_volume": source_volume,
         "target_volume": target_volume,
         "output_volume": output_volume,
@@ -193,7 +160,6 @@ function mri_copy_values(
 export {
       MRI_COPY_VALUES_METADATA,
       MriCopyValuesOutputs,
-      MriCopyValuesParameters,
       mri_copy_values,
       mri_copy_values_execute,
       mri_copy_values_params,

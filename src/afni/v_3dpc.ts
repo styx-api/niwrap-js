@@ -12,7 +12,7 @@ const V_3DPC_METADATA: Metadata = {
 
 
 interface V3dpcParameters {
-    "@type": "afni.3dpc";
+    "@type"?: "afni/3dpc";
     "datasets": Array<InputPathType>;
     "dmean": boolean;
     "vmean": boolean;
@@ -29,44 +29,11 @@ interface V3dpcParameters {
     "float": boolean;
     "mask"?: InputPathType | null | undefined;
 }
+type V3dpcParametersTagged = Required<Pick<V3dpcParameters, '@type'>> & V3dpcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dpc": v_3dpc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dpc": v_3dpc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dpc(...)`.
+ * Output object returned when calling `V3dpcParameters(...)`.
  *
  * @interface
  */
@@ -135,9 +102,9 @@ function v_3dpc_params(
     eigonly: boolean = false,
     float: boolean = false,
     mask: InputPathType | null = null,
-): V3dpcParameters {
+): V3dpcParametersTagged {
     const params = {
-        "@type": "afni.3dpc" as const,
+        "@type": "afni/3dpc" as const,
         "datasets": datasets,
         "dmean": dmean,
         "vmean": vmean,
@@ -183,19 +150,19 @@ function v_3dpc_cargs(
     const cargs: string[] = [];
     cargs.push("3dpc");
     cargs.push(...(params["datasets"] ?? null).map(f => execution.inputFile(f)));
-    if ((params["dmean"] ?? null)) {
+    if ((params["dmean"] ?? false)) {
         cargs.push("-dmean");
     }
-    if ((params["vmean"] ?? null)) {
+    if ((params["vmean"] ?? false)) {
         cargs.push("-vmean");
     }
-    if ((params["vnorm"] ?? null)) {
+    if ((params["vnorm"] ?? false)) {
         cargs.push("-vnorm");
     }
-    if ((params["normalize"] ?? null)) {
+    if ((params["normalize"] ?? false)) {
         cargs.push("-normalize");
     }
-    if ((params["nscale"] ?? null)) {
+    if ((params["nscale"] ?? false)) {
         cargs.push("-nscale");
     }
     if ((params["pcsave"] ?? null) !== null) {
@@ -222,16 +189,16 @@ function v_3dpc_cargs(
             String((params["dummy_lines"] ?? null))
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verbose");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["eigonly"] ?? null)) {
+    if ((params["eigonly"] ?? false)) {
         cargs.push("-eigonly");
     }
-    if ((params["float"] ?? null)) {
+    if ((params["float"] ?? false)) {
         cargs.push("-float");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -349,7 +316,6 @@ function v_3dpc(
 
 export {
       V3dpcOutputs,
-      V3dpcParameters,
       V_3DPC_METADATA,
       v_3dpc,
       v_3dpc_execute,

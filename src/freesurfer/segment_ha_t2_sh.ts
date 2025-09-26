@@ -12,48 +12,15 @@ const SEGMENT_HA_T2_SH_METADATA: Metadata = {
 
 
 interface SegmentHaT2ShParameters {
-    "@type": "freesurfer.segmentHA_T2.sh";
+    "@type"?: "freesurfer/segmentHA_T2.sh";
     "input_image": InputPathType;
     "output_directory": string;
 }
+type SegmentHaT2ShParametersTagged = Required<Pick<SegmentHaT2ShParameters, '@type'>> & SegmentHaT2ShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.segmentHA_T2.sh": segment_ha_t2_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.segmentHA_T2.sh": segment_ha_t2_sh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `segment_ha_t2_sh(...)`.
+ * Output object returned when calling `SegmentHaT2ShParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +51,9 @@ interface SegmentHaT2ShOutputs {
 function segment_ha_t2_sh_params(
     input_image: InputPathType,
     output_directory: string,
-): SegmentHaT2ShParameters {
+): SegmentHaT2ShParametersTagged {
     const params = {
-        "@type": "freesurfer.segmentHA_T2.sh" as const,
+        "@type": "freesurfer/segmentHA_T2.sh" as const,
         "input_image": input_image,
         "output_directory": output_directory,
     };
@@ -191,7 +158,6 @@ function segment_ha_t2_sh(
 export {
       SEGMENT_HA_T2_SH_METADATA,
       SegmentHaT2ShOutputs,
-      SegmentHaT2ShParameters,
       segment_ha_t2_sh,
       segment_ha_t2_sh_execute,
       segment_ha_t2_sh_params,

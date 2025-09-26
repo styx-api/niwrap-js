@@ -12,7 +12,7 @@ const FEATQUERY_METADATA: Metadata = {
 
 
 interface FeatqueryParameters {
-    "@type": "fsl.featquery";
+    "@type"?: "fsl/featquery";
     "n_featdirs": number;
     "featdirs": Array<string>;
     "n_stats": number;
@@ -28,44 +28,11 @@ interface FeatqueryParameters {
     "mask_file": InputPathType;
     "coords"?: Array<number> | null | undefined;
 }
+type FeatqueryParametersTagged = Required<Pick<FeatqueryParameters, '@type'>> & FeatqueryParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.featquery": featquery_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.featquery": featquery_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `featquery(...)`.
+ * Output object returned when calling `FeatqueryParameters(...)`.
  *
  * @interface
  */
@@ -116,9 +83,9 @@ function featquery_params(
     weight_flag: boolean = false,
     browser_flag: boolean = false,
     coords: Array<number> | null = null,
-): FeatqueryParameters {
+): FeatqueryParametersTagged {
     const params = {
-        "@type": "fsl.featquery" as const,
+        "@type": "fsl/featquery" as const,
         "n_featdirs": n_featdirs,
         "featdirs": featdirs,
         "n_stats": n_stats,
@@ -169,10 +136,10 @@ function featquery_cargs(
             (params["atlas_flag"] ?? null)
         );
     }
-    if ((params["percent_convert_flag"] ?? null)) {
+    if ((params["percent_convert_flag"] ?? false)) {
         cargs.push("-p");
     }
-    if ((params["thresh_flag"] ?? null)) {
+    if ((params["thresh_flag"] ?? false)) {
         cargs.push("-t");
     }
     if ((params["interp_thresh"] ?? null) !== null) {
@@ -181,13 +148,13 @@ function featquery_cargs(
             String((params["interp_thresh"] ?? null))
         );
     }
-    if ((params["timeseries_flag"] ?? null)) {
+    if ((params["timeseries_flag"] ?? false)) {
         cargs.push("-s");
     }
-    if ((params["weight_flag"] ?? null)) {
+    if ((params["weight_flag"] ?? false)) {
         cargs.push("-w");
     }
-    if ((params["browser_flag"] ?? null)) {
+    if ((params["browser_flag"] ?? false)) {
         cargs.push("-b");
     }
     cargs.push(execution.inputFile((params["mask_file"] ?? null)));
@@ -301,7 +268,6 @@ function featquery(
 export {
       FEATQUERY_METADATA,
       FeatqueryOutputs,
-      FeatqueryParameters,
       featquery,
       featquery_execute,
       featquery_params,

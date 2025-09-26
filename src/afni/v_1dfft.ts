@@ -12,7 +12,7 @@ const V_1DFFT_METADATA: Metadata = {
 
 
 interface V1dfftParameters {
-    "@type": "afni.1dfft";
+    "@type"?: "afni/1dfft";
     "infile": InputPathType;
     "outfile": string;
     "ignore"?: number | null | undefined;
@@ -23,44 +23,11 @@ interface V1dfftParameters {
     "hilbert": boolean;
     "nodetrend": boolean;
 }
+type V1dfftParametersTagged = Required<Pick<V1dfftParameters, '@type'>> & V1dfftParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dfft": v_1dfft_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.1dfft": v_1dfft_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1dfft(...)`.
+ * Output object returned when calling `V1dfftParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function v_1dfft_params(
     fromcx: boolean = false,
     hilbert: boolean = false,
     nodetrend: boolean = false,
-): V1dfftParameters {
+): V1dfftParametersTagged {
     const params = {
-        "@type": "afni.1dfft" as const,
+        "@type": "afni/1dfft" as const,
         "infile": infile,
         "outfile": outfile,
         "tocx": tocx,
@@ -158,16 +125,16 @@ function v_1dfft_cargs(
             String((params["nfft"] ?? null))
         );
     }
-    if ((params["tocx"] ?? null)) {
+    if ((params["tocx"] ?? false)) {
         cargs.push("-tocx");
     }
-    if ((params["fromcx"] ?? null)) {
+    if ((params["fromcx"] ?? false)) {
         cargs.push("-fromcx");
     }
-    if ((params["hilbert"] ?? null)) {
+    if ((params["hilbert"] ?? false)) {
         cargs.push("-hilbert");
     }
-    if ((params["nodetrend"] ?? null)) {
+    if ((params["nodetrend"] ?? false)) {
         cargs.push("-nodetrend");
     }
     return cargs;
@@ -263,7 +230,6 @@ function v_1dfft(
 
 export {
       V1dfftOutputs,
-      V1dfftParameters,
       V_1DFFT_METADATA,
       v_1dfft,
       v_1dfft_execute,

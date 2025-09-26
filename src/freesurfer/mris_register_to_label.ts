@@ -12,7 +12,7 @@ const MRIS_REGISTER_TO_LABEL_METADATA: Metadata = {
 
 
 interface MrisRegisterToLabelParameters {
-    "@type": "freesurfer.mris_register_to_label";
+    "@type"?: "freesurfer/mris_register_to_label";
     "surface": InputPathType;
     "regfile": InputPathType;
     "mri_reg": InputPathType;
@@ -26,43 +26,11 @@ interface MrisRegisterToLabelParameters {
     "downsample"?: number | null | undefined;
     "cost_file"?: InputPathType | null | undefined;
 }
+type MrisRegisterToLabelParametersTagged = Required<Pick<MrisRegisterToLabelParameters, '@type'>> & MrisRegisterToLabelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_register_to_label": mris_register_to_label_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_register_to_label(...)`.
+ * Output object returned when calling `MrisRegisterToLabelParameters(...)`.
  *
  * @interface
  */
@@ -105,9 +73,9 @@ function mris_register_to_label_params(
     out_reg: string | null = null,
     downsample: number | null = null,
     cost_file: InputPathType | null = null,
-): MrisRegisterToLabelParameters {
+): MrisRegisterToLabelParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_register_to_label" as const,
+        "@type": "freesurfer/mris_register_to_label" as const,
         "surface": surface,
         "regfile": regfile,
         "mri_reg": mri_reg,
@@ -314,7 +282,6 @@ function mris_register_to_label(
 export {
       MRIS_REGISTER_TO_LABEL_METADATA,
       MrisRegisterToLabelOutputs,
-      MrisRegisterToLabelParameters,
       mris_register_to_label,
       mris_register_to_label_execute,
       mris_register_to_label_params,

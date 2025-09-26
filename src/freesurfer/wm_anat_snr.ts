@@ -12,7 +12,7 @@ const WM_ANAT_SNR_METADATA: Metadata = {
 
 
 interface WmAnatSnrParameters {
-    "@type": "freesurfer.wm-anat-snr";
+    "@type"?: "freesurfer/wm-anat-snr";
     "subject": string;
     "output_file": string;
     "force": boolean;
@@ -21,44 +21,11 @@ interface WmAnatSnrParameters {
     "cleanup": boolean;
     "no_cleanup": boolean;
 }
+type WmAnatSnrParametersTagged = Required<Pick<WmAnatSnrParameters, '@type'>> & WmAnatSnrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.wm-anat-snr": wm_anat_snr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.wm-anat-snr": wm_anat_snr_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `wm_anat_snr(...)`.
+ * Output object returned when calling `WmAnatSnrParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function wm_anat_snr_params(
     tmp_dir: string | null = null,
     cleanup: boolean = false,
     no_cleanup: boolean = false,
-): WmAnatSnrParameters {
+): WmAnatSnrParametersTagged {
     const params = {
-        "@type": "freesurfer.wm-anat-snr" as const,
+        "@type": "freesurfer/wm-anat-snr" as const,
         "subject": subject,
         "output_file": output_file,
         "force": force,
@@ -136,7 +103,7 @@ function wm_anat_snr_cargs(
         "--o",
         (params["output_file"] ?? null)
     );
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("--force");
     }
     if ((params["nerode"] ?? null) !== null) {
@@ -151,10 +118,10 @@ function wm_anat_snr_cargs(
             (params["tmp_dir"] ?? null)
         );
     }
-    if ((params["cleanup"] ?? null)) {
+    if ((params["cleanup"] ?? false)) {
         cargs.push("--cleanup");
     }
-    if ((params["no_cleanup"] ?? null)) {
+    if ((params["no_cleanup"] ?? false)) {
         cargs.push("--no-cleanup");
     }
     return cargs;
@@ -247,7 +214,6 @@ function wm_anat_snr(
 export {
       WM_ANAT_SNR_METADATA,
       WmAnatSnrOutputs,
-      WmAnatSnrParameters,
       wm_anat_snr,
       wm_anat_snr_execute,
       wm_anat_snr_params,

@@ -12,7 +12,7 @@ const STAT_NORMALIZE_METADATA: Metadata = {
 
 
 interface StatNormalizeParameters {
-    "@type": "freesurfer.stat_normalize";
+    "@type"?: "freesurfer/stat_normalize";
     "input_sv_prefix": string;
     "output_sv_prefix": string;
     "resolution"?: number | null | undefined;
@@ -22,43 +22,11 @@ interface StatNormalizeParameters {
     "fix_xfm_flag": boolean;
     "float2int_option"?: string | null | undefined;
 }
+type StatNormalizeParametersTagged = Required<Pick<StatNormalizeParameters, '@type'>> & StatNormalizeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.stat_normalize": stat_normalize_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `stat_normalize(...)`.
+ * Output object returned when calling `StatNormalizeParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +61,9 @@ function stat_normalize_params(
     xfm_file: string | null = null,
     fix_xfm_flag: boolean = false,
     float2int_option: string | null = null,
-): StatNormalizeParameters {
+): StatNormalizeParametersTagged {
     const params = {
-        "@type": "freesurfer.stat_normalize" as const,
+        "@type": "freesurfer/stat_normalize" as const,
         "input_sv_prefix": input_sv_prefix,
         "output_sv_prefix": output_sv_prefix,
         "fix_xfm_flag": fix_xfm_flag,
@@ -159,7 +127,7 @@ function stat_normalize_cargs(
             (params["xfm_file"] ?? null)
         );
     }
-    if ((params["fix_xfm_flag"] ?? null)) {
+    if ((params["fix_xfm_flag"] ?? false)) {
         cargs.push("-i");
     }
     if ((params["float2int_option"] ?? null) !== null) {
@@ -259,7 +227,6 @@ function stat_normalize(
 export {
       STAT_NORMALIZE_METADATA,
       StatNormalizeOutputs,
-      StatNormalizeParameters,
       stat_normalize,
       stat_normalize_execute,
       stat_normalize_params,

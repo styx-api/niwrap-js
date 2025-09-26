@@ -12,46 +12,14 @@ const UNPACKIMADIR2_METADATA: Metadata = {
 
 
 interface Unpackimadir2Parameters {
-    "@type": "freesurfer.unpackimadir2";
+    "@type"?: "freesurfer/unpackimadir2";
     "directory": InputPathType;
 }
+type Unpackimadir2ParametersTagged = Required<Pick<Unpackimadir2Parameters, '@type'>> & Unpackimadir2Parameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.unpackimadir2": unpackimadir2_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `unpackimadir2(...)`.
+ * Output object returned when calling `Unpackimadir2Parameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface Unpackimadir2Outputs {
  */
 function unpackimadir2_params(
     directory: InputPathType,
-): Unpackimadir2Parameters {
+): Unpackimadir2ParametersTagged {
     const params = {
-        "@type": "freesurfer.unpackimadir2" as const,
+        "@type": "freesurfer/unpackimadir2" as const,
         "directory": directory,
     };
     return params;
@@ -173,7 +141,6 @@ function unpackimadir2(
 export {
       UNPACKIMADIR2_METADATA,
       Unpackimadir2Outputs,
-      Unpackimadir2Parameters,
       unpackimadir2,
       unpackimadir2_execute,
       unpackimadir2_params,

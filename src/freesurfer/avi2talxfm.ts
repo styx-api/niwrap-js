@@ -12,50 +12,17 @@ const AVI2TALXFM_METADATA: Metadata = {
 
 
 interface Avi2talxfmParameters {
-    "@type": "freesurfer.avi2talxfm";
+    "@type"?: "freesurfer/avi2talxfm";
     "input_volume": InputPathType;
     "target_volume": InputPathType;
     "vox2vox_transform": InputPathType;
     "output_xfm": string;
 }
+type Avi2talxfmParametersTagged = Required<Pick<Avi2talxfmParameters, '@type'>> & Avi2talxfmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.avi2talxfm": avi2talxfm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.avi2talxfm": avi2talxfm_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `avi2talxfm(...)`.
+ * Output object returned when calling `Avi2talxfmParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function avi2talxfm_params(
     target_volume: InputPathType,
     vox2vox_transform: InputPathType,
     output_xfm: string,
-): Avi2talxfmParameters {
+): Avi2talxfmParametersTagged {
     const params = {
-        "@type": "freesurfer.avi2talxfm" as const,
+        "@type": "freesurfer/avi2talxfm" as const,
         "input_volume": input_volume,
         "target_volume": target_volume,
         "vox2vox_transform": vox2vox_transform,
@@ -200,7 +167,6 @@ function avi2talxfm(
 export {
       AVI2TALXFM_METADATA,
       Avi2talxfmOutputs,
-      Avi2talxfmParameters,
       avi2talxfm,
       avi2talxfm_execute,
       avi2talxfm_params,

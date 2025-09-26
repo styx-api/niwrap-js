@@ -12,49 +12,16 @@ const V_3DSVM_LINPREDICT_METADATA: Metadata = {
 
 
 interface V3dsvmLinpredictParameters {
-    "@type": "afni.3dsvm_linpredict";
+    "@type"?: "afni/3dsvm_linpredict";
     "mask_dataset"?: InputPathType | null | undefined;
     "weight_vector": InputPathType;
     "input_dataset": string;
 }
+type V3dsvmLinpredictParametersTagged = Required<Pick<V3dsvmLinpredictParameters, '@type'>> & V3dsvmLinpredictParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dsvm_linpredict": v_3dsvm_linpredict_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dsvm_linpredict": v_3dsvm_linpredict_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dsvm_linpredict(...)`.
+ * Output object returned when calling `V3dsvmLinpredictParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function v_3dsvm_linpredict_params(
     weight_vector: InputPathType,
     input_dataset: string,
     mask_dataset: InputPathType | null = null,
-): V3dsvmLinpredictParameters {
+): V3dsvmLinpredictParametersTagged {
     const params = {
-        "@type": "afni.3dsvm_linpredict" as const,
+        "@type": "afni/3dsvm_linpredict" as const,
         "weight_vector": weight_vector,
         "input_dataset": input_dataset,
     };
@@ -199,7 +166,6 @@ function v_3dsvm_linpredict(
 
 export {
       V3dsvmLinpredictOutputs,
-      V3dsvmLinpredictParameters,
       V_3DSVM_LINPREDICT_METADATA,
       v_3dsvm_linpredict,
       v_3dsvm_linpredict_execute,

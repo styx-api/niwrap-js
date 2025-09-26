@@ -12,50 +12,17 @@ const MRIS_PARCELLATE_CONNECTIVITY_METADATA: Metadata = {
 
 
 interface MrisParcellateConnectivityParameters {
-    "@type": "freesurfer.mris_parcellate_connectivity";
+    "@type"?: "freesurfer/mris_parcellate_connectivity";
     "smooth_iterations"?: number | null | undefined;
     "input_surface": InputPathType;
     "input_correlations": InputPathType;
     "output_parcellation": string;
 }
+type MrisParcellateConnectivityParametersTagged = Required<Pick<MrisParcellateConnectivityParameters, '@type'>> & MrisParcellateConnectivityParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_parcellate_connectivity": mris_parcellate_connectivity_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_parcellate_connectivity": mris_parcellate_connectivity_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_parcellate_connectivity(...)`.
+ * Output object returned when calling `MrisParcellateConnectivityParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mris_parcellate_connectivity_params(
     input_correlations: InputPathType,
     output_parcellation: string,
     smooth_iterations: number | null = null,
-): MrisParcellateConnectivityParameters {
+): MrisParcellateConnectivityParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_parcellate_connectivity" as const,
+        "@type": "freesurfer/mris_parcellate_connectivity" as const,
         "input_surface": input_surface,
         "input_correlations": input_correlations,
         "output_parcellation": output_parcellation,
@@ -207,7 +174,6 @@ function mris_parcellate_connectivity(
 export {
       MRIS_PARCELLATE_CONNECTIVITY_METADATA,
       MrisParcellateConnectivityOutputs,
-      MrisParcellateConnectivityParameters,
       mris_parcellate_connectivity,
       mris_parcellate_connectivity_execute,
       mris_parcellate_connectivity_params,

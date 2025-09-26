@@ -12,7 +12,7 @@ const ASEG2FEAT_METADATA: Metadata = {
 
 
 interface Aseg2featParameters {
-    "@type": "freesurfer.aseg2feat";
+    "@type"?: "freesurfer/aseg2feat";
     "feat": string;
     "featdirfile"?: InputPathType | null | undefined;
     "seg"?: string | null | undefined;
@@ -23,44 +23,11 @@ interface Aseg2featParameters {
     "help": boolean;
     "version": boolean;
 }
+type Aseg2featParametersTagged = Required<Pick<Aseg2featParameters, '@type'>> & Aseg2featParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.aseg2feat": aseg2feat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.aseg2feat": aseg2feat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `aseg2feat(...)`.
+ * Output object returned when calling `Aseg2featParameters(...)`.
  *
  * @interface
  */
@@ -105,9 +72,9 @@ function aseg2feat_params(
     debug: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): Aseg2featParameters {
+): Aseg2featParametersTagged {
     const params = {
-        "@type": "freesurfer.aseg2feat" as const,
+        "@type": "freesurfer/aseg2feat" as const,
         "feat": feat,
         "aparc_aseg": aparc_aseg,
         "svstats": svstats,
@@ -156,22 +123,22 @@ function aseg2feat_cargs(
             (params["seg"] ?? null)
         );
     }
-    if ((params["aparc_aseg"] ?? null)) {
+    if ((params["aparc_aseg"] ?? false)) {
         cargs.push("--aparc+aseg");
     }
-    if ((params["svstats"] ?? null)) {
+    if ((params["svstats"] ?? false)) {
         cargs.push("--svstats");
     }
-    if ((params["standard"] ?? null)) {
+    if ((params["standard"] ?? false)) {
         cargs.push("--standard");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -269,7 +236,6 @@ function aseg2feat(
 export {
       ASEG2FEAT_METADATA,
       Aseg2featOutputs,
-      Aseg2featParameters,
       aseg2feat,
       aseg2feat_execute,
       aseg2feat_params,

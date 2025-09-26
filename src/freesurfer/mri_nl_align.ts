@@ -12,7 +12,7 @@ const MRI_NL_ALIGN_METADATA: Metadata = {
 
 
 interface MriNlAlignParameters {
-    "@type": "freesurfer.mri_nl_align";
+    "@type"?: "freesurfer/mri_nl_align";
     "source": InputPathType;
     "target": InputPathType;
     "warp": string;
@@ -62,44 +62,11 @@ interface MriNlAlignParameters {
     "exp_k"?: number | null | undefined;
     "diagnostics"?: number | null | undefined;
 }
+type MriNlAlignParametersTagged = Required<Pick<MriNlAlignParameters, '@type'>> & MriNlAlignParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_nl_align": mri_nl_align_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_nl_align": mri_nl_align_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_nl_align(...)`.
+ * Output object returned when calling `MriNlAlignParameters(...)`.
  *
  * @interface
  */
@@ -218,9 +185,9 @@ function mri_nl_align_params(
     smooth_averages: number | null = null,
     exp_k: number | null = null,
     diagnostics: number | null = null,
-): MriNlAlignParameters {
+): MriNlAlignParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_nl_align" as const,
+        "@type": "freesurfer/mri_nl_align" as const,
         "source": source,
         "target": target,
         "warp": warp,
@@ -391,7 +358,7 @@ function mri_nl_align_cargs(
             String((params["renormalize"] ?? null))
         );
     }
-    if ((params["aseg_flag"] ?? null)) {
+    if ((params["aseg_flag"] ?? false)) {
         cargs.push("-aseg");
     }
     if ((params["diag_volume"] ?? null) !== null) {
@@ -400,13 +367,13 @@ function mri_nl_align_cargs(
             (params["diag_volume"] ?? null)
         );
     }
-    if ((params["optimal_flag"] ?? null)) {
+    if ((params["optimal_flag"] ?? false)) {
         cargs.push("-OPTIMAL");
     }
-    if ((params["momentum_flag"] ?? null)) {
+    if ((params["momentum_flag"] ?? false)) {
         cargs.push("-MOMENTUM");
     }
-    if ((params["fixed_flag"] ?? null)) {
+    if ((params["fixed_flag"] ?? false)) {
         cargs.push("-FIXED");
     }
     if ((params["distance"] ?? null) !== null) {
@@ -421,7 +388,7 @@ function mri_nl_align_cargs(
             String((params["dtrans"] ?? null))
         );
     }
-    if ((params["match_peak_flag"] ?? null)) {
+    if ((params["match_peak_flag"] ?? false)) {
         cargs.push("-match_peak");
     }
     if ((params["erode"] ?? null) !== null) {
@@ -448,10 +415,10 @@ function mri_nl_align_cargs(
             String((params["ll"] ?? null))
         );
     }
-    if ((params["noregrid_flag"] ?? null)) {
+    if ((params["noregrid_flag"] ?? false)) {
         cargs.push("-noregrid");
     }
-    if ((params["regrid_flag"] ?? null)) {
+    if ((params["regrid_flag"] ?? false)) {
         cargs.push("-regrid");
     }
     if ((params["view"] ?? null) !== null) {
@@ -788,7 +755,6 @@ function mri_nl_align(
 export {
       MRI_NL_ALIGN_METADATA,
       MriNlAlignOutputs,
-      MriNlAlignParameters,
       mri_nl_align,
       mri_nl_align_execute,
       mri_nl_align_params,

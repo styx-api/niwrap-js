@@ -12,49 +12,16 @@ const V_3D_SHARPEN_METADATA: Metadata = {
 
 
 interface V3dSharpenParameters {
-    "@type": "afni.3dSharpen";
+    "@type"?: "afni/3dSharpen";
     "sharpening_factor"?: number | null | undefined;
     "input_dataset": InputPathType;
     "output_prefix": string;
 }
+type V3dSharpenParametersTagged = Required<Pick<V3dSharpenParameters, '@type'>> & V3dSharpenParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dSharpen": v_3d_sharpen_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dSharpen": v_3d_sharpen_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_sharpen(...)`.
+ * Output object returned when calling `V3dSharpenParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function v_3d_sharpen_params(
     input_dataset: InputPathType,
     output_prefix: string,
     sharpening_factor: number | null = null,
-): V3dSharpenParameters {
+): V3dSharpenParametersTagged {
     const params = {
-        "@type": "afni.3dSharpen" as const,
+        "@type": "afni/3dSharpen" as const,
         "input_dataset": input_dataset,
         "output_prefix": output_prefix,
     };
@@ -202,7 +169,6 @@ function v_3d_sharpen(
 
 export {
       V3dSharpenOutputs,
-      V3dSharpenParameters,
       V_3D_SHARPEN_METADATA,
       v_3d_sharpen,
       v_3d_sharpen_execute,

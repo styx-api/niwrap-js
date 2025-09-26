@@ -12,7 +12,7 @@ const DMRI_VOX2VOX_METADATA: Metadata = {
 
 
 interface DmriVox2voxParameters {
-    "@type": "freesurfer.dmri_vox2vox";
+    "@type"?: "freesurfer/dmri_vox2vox";
     "input_files": Array<InputPathType>;
     "input_directory"?: string | null | undefined;
     "output_files": Array<string>;
@@ -27,43 +27,11 @@ interface DmriVox2voxParameters {
     "help": boolean;
     "version": boolean;
 }
+type DmriVox2voxParametersTagged = Required<Pick<DmriVox2voxParameters, '@type'>> & DmriVox2voxParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dmri_vox2vox": dmri_vox2vox_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dmri_vox2vox(...)`.
+ * Output object returned when calling `DmriVox2voxParameters(...)`.
  *
  * @interface
  */
@@ -108,9 +76,9 @@ function dmri_vox2vox_params(
     check_options: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): DmriVox2voxParameters {
+): DmriVox2voxParametersTagged {
     const params = {
-        "@type": "freesurfer.dmri_vox2vox" as const,
+        "@type": "freesurfer/dmri_vox2vox" as const,
         "input_files": input_files,
         "output_files": output_files,
         "input_reference": input_reference,
@@ -183,19 +151,19 @@ function dmri_vox2vox_cargs(
         "--regnl",
         execution.inputFile((params["nonlinear_registration"] ?? null))
     );
-    if ((params["inverse_nonlinear"] ?? null)) {
+    if ((params["inverse_nonlinear"] ?? false)) {
         cargs.push("--invnl");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["check_options"] ?? null)) {
+    if ((params["check_options"] ?? false)) {
         cargs.push("--checkopts");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -299,7 +267,6 @@ function dmri_vox2vox(
 export {
       DMRI_VOX2VOX_METADATA,
       DmriVox2voxOutputs,
-      DmriVox2voxParameters,
       dmri_vox2vox,
       dmri_vox2vox_execute,
       dmri_vox2vox_params,

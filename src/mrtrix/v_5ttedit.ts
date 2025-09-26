@@ -12,14 +12,15 @@ const V_5TTEDIT_METADATA: Metadata = {
 
 
 interface V5tteditConfigParameters {
-    "@type": "mrtrix.5ttedit.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type V5tteditConfigParametersTagged = Required<Pick<V5tteditConfigParameters, '@type'>> & V5tteditConfigParameters;
 
 
 interface V5tteditParameters {
-    "@type": "mrtrix.5ttedit";
+    "@type"?: "mrtrix/5ttedit";
     "cgm"?: InputPathType | null | undefined;
     "sgm"?: InputPathType | null | undefined;
     "wm"?: InputPathType | null | undefined;
@@ -37,41 +38,7 @@ interface V5tteditParameters {
     "input": InputPathType;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.5ttedit": v_5ttedit_cargs,
-        "mrtrix.5ttedit.config": v_5ttedit_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.5ttedit": v_5ttedit_outputs,
-    };
-    return outputsFuncs[t];
-}
+type V5tteditParametersTagged = Required<Pick<V5tteditParameters, '@type'>> & V5tteditParameters;
 
 
 /**
@@ -85,9 +52,9 @@ function dynOutputs(
 function v_5ttedit_config_params(
     key: string,
     value: string,
-): V5tteditConfigParameters {
+): V5tteditConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.5ttedit.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -116,7 +83,7 @@ function v_5ttedit_config_cargs(
 
 
 /**
- * Output object returned when calling `v_5ttedit(...)`.
+ * Output object returned when calling `V5tteditParameters(...)`.
  *
  * @interface
  */
@@ -171,9 +138,9 @@ function v_5ttedit_params(
     config: Array<V5tteditConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): V5tteditParameters {
+): V5tteditParametersTagged {
     const params = {
-        "@type": "mrtrix.5ttedit" as const,
+        "@type": "mrtrix/5ttedit" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -261,16 +228,16 @@ function v_5ttedit_cargs(
             execution.inputFile((params["none"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -280,12 +247,12 @@ function v_5ttedit_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => v_5ttedit_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -408,9 +375,7 @@ function v_5ttedit(
 
 
 export {
-      V5tteditConfigParameters,
       V5tteditOutputs,
-      V5tteditParameters,
       V_5TTEDIT_METADATA,
       v_5ttedit,
       v_5ttedit_config_params,

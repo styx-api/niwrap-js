@@ -12,7 +12,7 @@ const GDCMCONV_FS_METADATA: Metadata = {
 
 
 interface GdcmconvFsParameters {
-    "@type": "freesurfer.gdcmconv.fs";
+    "@type"?: "freesurfer/gdcmconv.fs";
     "input_file": InputPathType;
     "output_file": string;
     "explicit_flag": boolean;
@@ -54,43 +54,11 @@ interface GdcmconvFsParameters {
     "irreversible_flag": boolean;
     "ignore_errors_flag": boolean;
 }
+type GdcmconvFsParametersTagged = Required<Pick<GdcmconvFsParameters, '@type'>> & GdcmconvFsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.gdcmconv.fs": gdcmconv_fs_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `gdcmconv_fs(...)`.
+ * Output object returned when calling `GdcmconvFsParameters(...)`.
  *
  * @interface
  */
@@ -189,9 +157,9 @@ function gdcmconv_fs_params(
     number_resolution: number | null = null,
     irreversible_flag: boolean = false,
     ignore_errors_flag: boolean = false,
-): GdcmconvFsParameters {
+): GdcmconvFsParametersTagged {
     const params = {
-        "@type": "freesurfer.gdcmconv.fs" as const,
+        "@type": "freesurfer/gdcmconv.fs" as const,
         "input_file": input_file,
         "output_file": output_file,
         "explicit_flag": explicit_flag,
@@ -275,19 +243,19 @@ function gdcmconv_fs_cargs(
     cargs.push("gdcmconv.fs");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
     cargs.push((params["output_file"] ?? null));
-    if ((params["explicit_flag"] ?? null)) {
+    if ((params["explicit_flag"] ?? false)) {
         cargs.push("-X");
     }
-    if ((params["implicit_flag"] ?? null)) {
+    if ((params["implicit_flag"] ?? false)) {
         cargs.push("-M");
     }
-    if ((params["use_dict_flag"] ?? null)) {
+    if ((params["use_dict_flag"] ?? false)) {
         cargs.push("-U");
     }
-    if ((params["with_private_dict_flag"] ?? null)) {
+    if ((params["with_private_dict_flag"] ?? false)) {
         cargs.push("--with-private-dict");
     }
-    if ((params["check_meta_flag"] ?? null)) {
+    if ((params["check_meta_flag"] ?? false)) {
         cargs.push("-C");
     }
     if ((params["root_uid"] ?? null) !== null) {
@@ -296,16 +264,16 @@ function gdcmconv_fs_cargs(
             (params["root_uid"] ?? null)
         );
     }
-    if ((params["remove_gl_flag"] ?? null)) {
+    if ((params["remove_gl_flag"] ?? false)) {
         cargs.push("--remove-gl");
     }
-    if ((params["remove_private_tags_flag"] ?? null)) {
+    if ((params["remove_private_tags_flag"] ?? false)) {
         cargs.push("--remove-private-tags");
     }
-    if ((params["remove_retired_flag"] ?? null)) {
+    if ((params["remove_retired_flag"] ?? false)) {
         cargs.push("--remove-retired");
     }
-    if ((params["apply_lut_flag"] ?? null)) {
+    if ((params["apply_lut_flag"] ?? false)) {
         cargs.push("-l");
     }
     if ((params["photometric_interpretation"] ?? null) !== null) {
@@ -314,28 +282,28 @@ function gdcmconv_fs_cargs(
             (params["photometric_interpretation"] ?? null)
         );
     }
-    if ((params["raw_flag"] ?? null)) {
+    if ((params["raw_flag"] ?? false)) {
         cargs.push("-w");
     }
-    if ((params["deflated_flag"] ?? null)) {
+    if ((params["deflated_flag"] ?? false)) {
         cargs.push("-d");
     }
-    if ((params["jpeg_flag"] ?? null)) {
+    if ((params["jpeg_flag"] ?? false)) {
         cargs.push("-J");
     }
-    if ((params["j2k_flag"] ?? null)) {
+    if ((params["j2k_flag"] ?? false)) {
         cargs.push("-K");
     }
-    if ((params["jpegls_flag"] ?? null)) {
+    if ((params["jpegls_flag"] ?? false)) {
         cargs.push("-L");
     }
-    if ((params["rle_flag"] ?? null)) {
+    if ((params["rle_flag"] ?? false)) {
         cargs.push("-R");
     }
-    if ((params["force_flag"] ?? null)) {
+    if ((params["force_flag"] ?? false)) {
         cargs.push("-F");
     }
-    if ((params["generate_icon_flag"] ?? null)) {
+    if ((params["generate_icon_flag"] ?? false)) {
         cargs.push("--generate-icon");
     }
     if ((params["icon_minmax"] ?? null) !== null) {
@@ -344,10 +312,10 @@ function gdcmconv_fs_cargs(
             ...(params["icon_minmax"] ?? null).map(String)
         );
     }
-    if ((params["icon_auto_minmax_flag"] ?? null)) {
+    if ((params["icon_auto_minmax_flag"] ?? false)) {
         cargs.push("--icon-auto-minmax");
     }
-    if ((params["compress_icon_flag"] ?? null)) {
+    if ((params["compress_icon_flag"] ?? false)) {
         cargs.push("--compress-icon");
     }
     if ((params["planar_configuration"] ?? null) !== null) {
@@ -356,7 +324,7 @@ function gdcmconv_fs_cargs(
             (params["planar_configuration"] ?? null)
         );
     }
-    if ((params["lossy_flag"] ?? null)) {
+    if ((params["lossy_flag"] ?? false)) {
         cargs.push("-Y");
     }
     if ((params["split"] ?? null) !== null) {
@@ -365,19 +333,19 @@ function gdcmconv_fs_cargs(
             String((params["split"] ?? null))
         );
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-V");
     }
-    if ((params["warning_flag"] ?? null)) {
+    if ((params["warning_flag"] ?? false)) {
         cargs.push("-W");
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("-D");
     }
-    if ((params["error_flag"] ?? null)) {
+    if ((params["error_flag"] ?? false)) {
         cargs.push("-E");
     }
-    if ((params["quiet_flag"] ?? null)) {
+    if ((params["quiet_flag"] ?? false)) {
         cargs.push("--quiet");
     }
     if ((params["jpeg_quality"] ?? null) !== null) {
@@ -416,10 +384,10 @@ function gdcmconv_fs_cargs(
             String((params["number_resolution"] ?? null))
         );
     }
-    if ((params["irreversible_flag"] ?? null)) {
+    if ((params["irreversible_flag"] ?? false)) {
         cargs.push("--irreversible");
     }
-    if ((params["ignore_errors_flag"] ?? null)) {
+    if ((params["ignore_errors_flag"] ?? false)) {
         cargs.push("-I");
     }
     return cargs;
@@ -577,7 +545,6 @@ function gdcmconv_fs(
 export {
       GDCMCONV_FS_METADATA,
       GdcmconvFsOutputs,
-      GdcmconvFsParameters,
       gdcmconv_fs,
       gdcmconv_fs_execute,
       gdcmconv_fs_params,

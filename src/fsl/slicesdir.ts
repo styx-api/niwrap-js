@@ -12,50 +12,18 @@ const SLICESDIR_METADATA: Metadata = {
 
 
 interface SlicesdirParameters {
-    "@type": "fsl.slicesdir";
+    "@type"?: "fsl/slicesdir";
     "flag_filelist": boolean;
     "outline_image"?: InputPathType | null | undefined;
     "edge_threshold"?: number | null | undefined;
     "slice_option": boolean;
     "filelist": Array<string>;
 }
+type SlicesdirParametersTagged = Required<Pick<SlicesdirParameters, '@type'>> & SlicesdirParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.slicesdir": slicesdir_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `slicesdir(...)`.
+ * Output object returned when calling `SlicesdirParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function slicesdir_params(
     outline_image: InputPathType | null = null,
     edge_threshold: number | null = null,
     slice_option: boolean = false,
-): SlicesdirParameters {
+): SlicesdirParametersTagged {
     const params = {
-        "@type": "fsl.slicesdir" as const,
+        "@type": "fsl/slicesdir" as const,
         "flag_filelist": flag_filelist,
         "slice_option": slice_option,
         "filelist": filelist,
@@ -115,7 +83,7 @@ function slicesdir_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("slicesdir");
-    if ((params["flag_filelist"] ?? null)) {
+    if ((params["flag_filelist"] ?? false)) {
         cargs.push("-o");
     }
     if ((params["outline_image"] ?? null) !== null) {
@@ -130,7 +98,7 @@ function slicesdir_cargs(
             String((params["edge_threshold"] ?? null))
         );
     }
-    if ((params["slice_option"] ?? null)) {
+    if ((params["slice_option"] ?? false)) {
         cargs.push("-S");
     }
     cargs.push(...(params["filelist"] ?? null));
@@ -219,7 +187,6 @@ function slicesdir(
 export {
       SLICESDIR_METADATA,
       SlicesdirOutputs,
-      SlicesdirParameters,
       slicesdir,
       slicesdir_execute,
       slicesdir_params,

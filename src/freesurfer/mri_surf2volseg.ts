@@ -12,7 +12,7 @@ const MRI_SURF2VOLSEG_METADATA: Metadata = {
 
 
 interface MriSurf2volsegParameters {
-    "@type": "freesurfer.mri_surf2volseg";
+    "@type"?: "freesurfer/mri_surf2volseg";
     "input_segmentation"?: InputPathType | null | undefined;
     "output_segmentation"?: string | null | undefined;
     "source_segmentation"?: InputPathType | null | undefined;
@@ -39,43 +39,11 @@ interface MriSurf2volsegParameters {
     "ctab_file"?: InputPathType | null | undefined;
     "threads_number"?: number | null | undefined;
 }
+type MriSurf2volsegParametersTagged = Required<Pick<MriSurf2volsegParameters, '@type'>> & MriSurf2volsegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_surf2volseg": mri_surf2volseg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_surf2volseg(...)`.
+ * Output object returned when calling `MriSurf2volsegParameters(...)`.
  *
  * @interface
  */
@@ -144,9 +112,9 @@ function mri_surf2volseg_params(
     crs_test: Array<number> | null = null,
     ctab_file: InputPathType | null = null,
     threads_number: number | null = null,
-): MriSurf2volsegParameters {
+): MriSurf2volsegParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_surf2volseg" as const,
+        "@type": "freesurfer/mri_surf2volseg" as const,
         "label_cortex": label_cortex,
         "label_wm": label_wm,
         "rip_unknown": rip_unknown,
@@ -289,10 +257,10 @@ function mri_surf2volseg_cargs(
             execution.inputFile((params["fix_presurf_ribbon"] ?? null))
         );
     }
-    if ((params["label_cortex"] ?? null)) {
+    if ((params["label_cortex"] ?? false)) {
         cargs.push("--label-cortex");
     }
-    if ((params["label_wm"] ?? null)) {
+    if ((params["label_wm"] ?? false)) {
         cargs.push("--label-wm");
     }
     if ((params["label_wm_unknown"] ?? null) !== null) {
@@ -319,10 +287,10 @@ function mri_surf2volseg_cargs(
             String((params["wmparc_dmax"] ?? null))
         );
     }
-    if ((params["rip_unknown"] ?? null)) {
+    if ((params["rip_unknown"] ?? false)) {
         cargs.push("--rip-unknown");
     }
-    if ((params["hypo_as_wm"] ?? null)) {
+    if ((params["hypo_as_wm"] ?? false)) {
         cargs.push("--hypo-as-wm");
     }
     if ((params["hashres"] ?? null) !== null) {
@@ -337,10 +305,10 @@ function mri_surf2volseg_cargs(
             String((params["nhops"] ?? null))
         );
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version_flag"] ?? null)) {
+    if ((params["version_flag"] ?? false)) {
         cargs.push("--version");
     }
     if ((params["crs_test"] ?? null) !== null) {
@@ -486,7 +454,6 @@ function mri_surf2volseg(
 export {
       MRI_SURF2VOLSEG_METADATA,
       MriSurf2volsegOutputs,
-      MriSurf2volsegParameters,
       mri_surf2volseg,
       mri_surf2volseg_execute,
       mri_surf2volseg_params,

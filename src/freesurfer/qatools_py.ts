@@ -12,7 +12,7 @@ const QATOOLS_PY_METADATA: Metadata = {
 
 
 interface QatoolsPyParameters {
-    "@type": "freesurfer.qatools.py";
+    "@type"?: "freesurfer/qatools.py";
     "subjects_dir": string;
     "output_dir": string;
     "subjects"?: Array<string> | null | undefined;
@@ -21,44 +21,11 @@ interface QatoolsPyParameters {
     "outlier": boolean;
     "outlier_table"?: InputPathType | null | undefined;
 }
+type QatoolsPyParametersTagged = Required<Pick<QatoolsPyParameters, '@type'>> & QatoolsPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.qatools.py": qatools_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.qatools.py": qatools_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `qatools_py(...)`.
+ * Output object returned when calling `QatoolsPyParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +66,9 @@ function qatools_py_params(
     fornix: boolean = false,
     outlier: boolean = false,
     outlier_table: InputPathType | null = null,
-): QatoolsPyParameters {
+): QatoolsPyParametersTagged {
     const params = {
-        "@type": "freesurfer.qatools.py" as const,
+        "@type": "freesurfer/qatools.py" as const,
         "subjects_dir": subjects_dir,
         "output_dir": output_dir,
         "screenshots": screenshots,
@@ -146,13 +113,13 @@ function qatools_py_cargs(
             ...(params["subjects"] ?? null)
         );
     }
-    if ((params["screenshots"] ?? null)) {
+    if ((params["screenshots"] ?? false)) {
         cargs.push("--screenshots");
     }
-    if ((params["fornix"] ?? null)) {
+    if ((params["fornix"] ?? false)) {
         cargs.push("--fornix");
     }
-    if ((params["outlier"] ?? null)) {
+    if ((params["outlier"] ?? false)) {
         cargs.push("--outlier");
     }
     if ((params["outlier_table"] ?? null) !== null) {
@@ -252,7 +219,6 @@ function qatools_py(
 export {
       QATOOLS_PY_METADATA,
       QatoolsPyOutputs,
-      QatoolsPyParameters,
       qatools_py,
       qatools_py_execute,
       qatools_py_params,

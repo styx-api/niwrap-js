@@ -12,7 +12,7 @@ const FAT_PROC_DWI_TO_DT_METADATA: Metadata = {
 
 
 interface FatProcDwiToDtParameters {
-    "@type": "afni.fat_proc_dwi_to_dt";
+    "@type"?: "afni/fat_proc_dwi_to_dt";
     "in_dwi": InputPathType;
     "in_gradmat": InputPathType;
     "prefix": string;
@@ -43,43 +43,11 @@ interface FatProcDwiToDtParameters {
     "uncert_extra_cmds"?: string | null | undefined;
     "check_abs_min"?: number | null | undefined;
 }
+type FatProcDwiToDtParametersTagged = Required<Pick<FatProcDwiToDtParameters, '@type'>> & FatProcDwiToDtParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.fat_proc_dwi_to_dt": fat_proc_dwi_to_dt_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fat_proc_dwi_to_dt(...)`.
+ * Output object returned when calling `FatProcDwiToDtParameters(...)`.
  *
  * @interface
  */
@@ -156,9 +124,9 @@ function fat_proc_dwi_to_dt_params(
     uncert_iters: number | null = null,
     uncert_extra_cmds: string | null = null,
     check_abs_min: number | null = null,
-): FatProcDwiToDtParameters {
+): FatProcDwiToDtParametersTagged {
     const params = {
-        "@type": "afni.fat_proc_dwi_to_dt" as const,
+        "@type": "afni/fat_proc_dwi_to_dt" as const,
         "in_dwi": in_dwi,
         "in_gradmat": in_gradmat,
         "prefix": prefix,
@@ -256,7 +224,7 @@ function fat_proc_dwi_to_dt_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["mask_from_struc"] ?? null)) {
+    if ((params["mask_from_struc"] ?? false)) {
         cargs.push("-mask_from_struc");
     }
     if ((params["in_struc_res"] ?? null) !== null) {
@@ -277,25 +245,25 @@ function fat_proc_dwi_to_dt_cargs(
             (params["prefix_dti"] ?? null)
         );
     }
-    if ((params["flip_x"] ?? null)) {
+    if ((params["flip_x"] ?? false)) {
         cargs.push("-flip_x");
     }
-    if ((params["flip_y"] ?? null)) {
+    if ((params["flip_y"] ?? false)) {
         cargs.push("-flip_y");
     }
-    if ((params["flip_z"] ?? null)) {
+    if ((params["flip_z"] ?? false)) {
         cargs.push("-flip_z");
     }
-    if ((params["no_flip"] ?? null)) {
+    if ((params["no_flip"] ?? false)) {
         cargs.push("-no_flip");
     }
-    if ((params["no_scale_out_1000"] ?? null)) {
+    if ((params["no_scale_out_1000"] ?? false)) {
         cargs.push("-no_scale_out_1000");
     }
-    if ((params["no_reweight"] ?? null)) {
+    if ((params["no_reweight"] ?? false)) {
         cargs.push("-no_reweight");
     }
-    if ((params["no_cumulative_wts"] ?? null)) {
+    if ((params["no_cumulative_wts"] ?? false)) {
         cargs.push("-no_cumulative_wts");
     }
     if ((params["qc_fa_thr"] ?? null) !== null) {
@@ -328,10 +296,10 @@ function fat_proc_dwi_to_dt_cargs(
             (params["qc_prefix"] ?? null)
         );
     }
-    if ((params["no_qc_view"] ?? null)) {
+    if ((params["no_qc_view"] ?? false)) {
         cargs.push("-no_qc_view");
     }
-    if ((params["no_cmd_out"] ?? null)) {
+    if ((params["no_cmd_out"] ?? false)) {
         cargs.push("-no_cmd_out");
     }
     if ((params["workdir"] ?? null) !== null) {
@@ -340,10 +308,10 @@ function fat_proc_dwi_to_dt_cargs(
             (params["workdir"] ?? null)
         );
     }
-    if ((params["no_clean"] ?? null)) {
+    if ((params["no_clean"] ?? false)) {
         cargs.push("-no_clean");
     }
-    if ((params["uncert_off"] ?? null)) {
+    if ((params["uncert_off"] ?? false)) {
         cargs.push("-uncert_off");
     }
     if ((params["uncert_iters"] ?? null) !== null) {
@@ -497,7 +465,6 @@ function fat_proc_dwi_to_dt(
 export {
       FAT_PROC_DWI_TO_DT_METADATA,
       FatProcDwiToDtOutputs,
-      FatProcDwiToDtParameters,
       fat_proc_dwi_to_dt,
       fat_proc_dwi_to_dt_execute,
       fat_proc_dwi_to_dt_params,

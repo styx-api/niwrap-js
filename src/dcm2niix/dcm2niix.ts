@@ -12,7 +12,7 @@ const DCM2NIIX_METADATA: Metadata = {
 
 
 interface Dcm2niixParameters {
-    "@type": "dcm2niix.dcm2niix";
+    "@type"?: "dcm2niix/dcm2niix";
     "compression_level"?: number | null | undefined;
     "adjacent"?: "y" | "n" | null | undefined;
     "bids"?: "y" | "n" | "o" | null | undefined;
@@ -43,43 +43,11 @@ interface Dcm2niixParameters {
     "xml": boolean;
     "input_dir": InputPathType;
 }
+type Dcm2niixParametersTagged = Required<Pick<Dcm2niixParameters, '@type'>> & Dcm2niixParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "dcm2niix.dcm2niix": dcm2niix_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dcm2niix_(...)`.
+ * Output object returned when calling `Dcm2niixParameters(...)`.
  *
  * @interface
  */
@@ -156,9 +124,9 @@ function dcm2niix_params(
     ignore_trigger: boolean = false,
     terse: boolean = false,
     xml: boolean = false,
-): Dcm2niixParameters {
+): Dcm2niixParametersTagged {
     const params = {
-        "@type": "dcm2niix.dcm2niix" as const,
+        "@type": "dcm2niix/dcm2niix" as const,
         "update_check": update_check,
         "ignore_trigger": ignore_trigger,
         "terse": terse,
@@ -330,10 +298,10 @@ function dcm2niix_cargs(
             (params["series_number"] ?? null)
         );
     }
-    if ((params["output_dir"] ?? null) !== null) {
+    if ((params["output_dir"] ?? ".") !== null) {
         cargs.push(
             "-o",
-            (params["output_dir"] ?? null)
+            (params["output_dir"] ?? ".")
         );
     }
     if ((params["philips_scaling"] ?? null) !== null) {
@@ -360,7 +328,7 @@ function dcm2niix_cargs(
             (params["single_file"] ?? null)
         );
     }
-    if ((params["update_check"] ?? null)) {
+    if ((params["update_check"] ?? false)) {
         cargs.push("-u");
     }
     if ((params["verbose"] ?? null) !== null) {
@@ -399,13 +367,13 @@ function dcm2niix_cargs(
             (params["progress"] ?? null)
         );
     }
-    if ((params["ignore_trigger"] ?? null)) {
+    if ((params["ignore_trigger"] ?? false)) {
         cargs.push("--ignore_trigger_times");
     }
-    if ((params["terse"] ?? null)) {
+    if ((params["terse"] ?? false)) {
         cargs.push("--terse");
     }
-    if ((params["xml"] ?? null)) {
+    if ((params["xml"] ?? false)) {
         cargs.push("--xml");
     }
     cargs.push(execution.inputFile((params["input_dir"] ?? null)));
@@ -538,7 +506,6 @@ function dcm2niix_(
 export {
       DCM2NIIX_METADATA,
       Dcm2niixOutputs,
-      Dcm2niixParameters,
       dcm2niix_,
       dcm2niix_execute,
       dcm2niix_params,

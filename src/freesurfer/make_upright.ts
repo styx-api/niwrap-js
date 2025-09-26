@@ -12,49 +12,16 @@ const MAKE_UPRIGHT_METADATA: Metadata = {
 
 
 interface MakeUprightParameters {
-    "@type": "freesurfer.make_upright";
+    "@type"?: "freesurfer/make_upright";
     "input_image": InputPathType;
     "output_image": string;
     "transformation_map": InputPathType;
 }
+type MakeUprightParametersTagged = Required<Pick<MakeUprightParameters, '@type'>> & MakeUprightParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.make_upright": make_upright_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.make_upright": make_upright_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `make_upright(...)`.
+ * Output object returned when calling `MakeUprightParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function make_upright_params(
     input_image: InputPathType,
     output_image: string,
     transformation_map: InputPathType,
-): MakeUprightParameters {
+): MakeUprightParametersTagged {
     const params = {
-        "@type": "freesurfer.make_upright" as const,
+        "@type": "freesurfer/make_upright" as const,
         "input_image": input_image,
         "output_image": output_image,
         "transformation_map": transformation_map,
@@ -193,7 +160,6 @@ function make_upright(
 export {
       MAKE_UPRIGHT_METADATA,
       MakeUprightOutputs,
-      MakeUprightParameters,
       make_upright,
       make_upright_execute,
       make_upright_params,

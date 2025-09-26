@@ -12,7 +12,7 @@ const V_3D_DEGREE_CENTRALITY_METADATA: Metadata = {
 
 
 interface V3dDegreeCentralityParameters {
-    "@type": "afni.3dDegreeCentrality";
+    "@type"?: "afni/3dDegreeCentrality";
     "autoclip": boolean;
     "automask": boolean;
     "in_file": InputPathType;
@@ -22,44 +22,11 @@ interface V3dDegreeCentralityParameters {
     "sparsity"?: number | null | undefined;
     "thresh"?: number | null | undefined;
 }
+type V3dDegreeCentralityParametersTagged = Required<Pick<V3dDegreeCentralityParameters, '@type'>> & V3dDegreeCentralityParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dDegreeCentrality": v_3d_degree_centrality_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dDegreeCentrality": v_3d_degree_centrality_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_degree_centrality(...)`.
+ * Output object returned when calling `V3dDegreeCentralityParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +69,9 @@ function v_3d_degree_centrality_params(
     polort: number | null = null,
     sparsity: number | null = null,
     thresh: number | null = null,
-): V3dDegreeCentralityParameters {
+): V3dDegreeCentralityParametersTagged {
     const params = {
-        "@type": "afni.3dDegreeCentrality" as const,
+        "@type": "afni/3dDegreeCentrality" as const,
         "autoclip": autoclip,
         "automask": automask,
         "in_file": in_file,
@@ -142,10 +109,10 @@ function v_3d_degree_centrality_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("3dDegreeCentrality");
-    if ((params["autoclip"] ?? null)) {
+    if ((params["autoclip"] ?? false)) {
         cargs.push("-autoclip");
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     cargs.push(execution.inputFile((params["in_file"] ?? null)));
@@ -271,7 +238,6 @@ function v_3d_degree_centrality(
 
 export {
       V3dDegreeCentralityOutputs,
-      V3dDegreeCentralityParameters,
       V_3D_DEGREE_CENTRALITY_METADATA,
       v_3d_degree_centrality,
       v_3d_degree_centrality_execute,

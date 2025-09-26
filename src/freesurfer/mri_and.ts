@@ -12,46 +12,14 @@ const MRI_AND_METADATA: Metadata = {
 
 
 interface MriAndParameters {
-    "@type": "freesurfer.mri_and";
+    "@type"?: "freesurfer/mri_and";
     "input_files": Array<InputPathType>;
 }
+type MriAndParametersTagged = Required<Pick<MriAndParameters, '@type'>> & MriAndParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_and": mri_and_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_and(...)`.
+ * Output object returned when calling `MriAndParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface MriAndOutputs {
  */
 function mri_and_params(
     input_files: Array<InputPathType>,
-): MriAndParameters {
+): MriAndParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_and" as const,
+        "@type": "freesurfer/mri_and" as const,
         "input_files": input_files,
     };
     return params;
@@ -173,7 +141,6 @@ function mri_and(
 export {
       MRI_AND_METADATA,
       MriAndOutputs,
-      MriAndParameters,
       mri_and,
       mri_and_execute,
       mri_and_params,

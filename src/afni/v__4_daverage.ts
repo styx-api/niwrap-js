@@ -12,47 +12,15 @@ const V__4_DAVERAGE_METADATA: Metadata = {
 
 
 interface V4DaverageParameters {
-    "@type": "afni.@4Daverage";
+    "@type"?: "afni/@4Daverage";
     "output_prefix": string;
     "input_files": Array<InputPathType>;
 }
+type V4DaverageParametersTagged = Required<Pick<V4DaverageParameters, '@type'>> & V4DaverageParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@4Daverage": v__4_daverage_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__4_daverage(...)`.
+ * Output object returned when calling `V4DaverageParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface V4DaverageOutputs {
 function v__4_daverage_params(
     output_prefix: string,
     input_files: Array<InputPathType>,
-): V4DaverageParameters {
+): V4DaverageParametersTagged {
     const params = {
-        "@type": "afni.@4Daverage" as const,
+        "@type": "afni/@4Daverage" as const,
         "output_prefix": output_prefix,
         "input_files": input_files,
     };
@@ -179,7 +147,6 @@ function v__4_daverage(
 
 export {
       V4DaverageOutputs,
-      V4DaverageParameters,
       V__4_DAVERAGE_METADATA,
       v__4_daverage,
       v__4_daverage_execute,

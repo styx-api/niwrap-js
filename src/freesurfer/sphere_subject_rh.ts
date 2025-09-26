@@ -12,46 +12,14 @@ const SPHERE_SUBJECT_RH_METADATA: Metadata = {
 
 
 interface SphereSubjectRhParameters {
-    "@type": "freesurfer.sphere_subject-rh";
+    "@type"?: "freesurfer/sphere_subject-rh";
     "license_file": InputPathType;
 }
+type SphereSubjectRhParametersTagged = Required<Pick<SphereSubjectRhParameters, '@type'>> & SphereSubjectRhParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.sphere_subject-rh": sphere_subject_rh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `sphere_subject_rh(...)`.
+ * Output object returned when calling `SphereSubjectRhParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface SphereSubjectRhOutputs {
  */
 function sphere_subject_rh_params(
     license_file: InputPathType,
-): SphereSubjectRhParameters {
+): SphereSubjectRhParametersTagged {
     const params = {
-        "@type": "freesurfer.sphere_subject-rh" as const,
+        "@type": "freesurfer/sphere_subject-rh" as const,
         "license_file": license_file,
     };
     return params;
@@ -176,7 +144,6 @@ function sphere_subject_rh(
 export {
       SPHERE_SUBJECT_RH_METADATA,
       SphereSubjectRhOutputs,
-      SphereSubjectRhParameters,
       sphere_subject_rh,
       sphere_subject_rh_execute,
       sphere_subject_rh_params,

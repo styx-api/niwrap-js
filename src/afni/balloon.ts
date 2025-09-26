@@ -12,7 +12,7 @@ const BALLOON_METADATA: Metadata = {
 
 
 interface BalloonParameters {
-    "@type": "afni.balloon";
+    "@type"?: "afni/balloon";
     "tr": number;
     "num_scans": number;
     "event_times": InputPathType;
@@ -20,43 +20,11 @@ interface BalloonParameters {
     "t_fall"?: Array<number> | null | undefined;
     "t_sustain"?: Array<number> | null | undefined;
 }
+type BalloonParametersTagged = Required<Pick<BalloonParameters, '@type'>> & BalloonParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.balloon": balloon_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `balloon(...)`.
+ * Output object returned when calling `BalloonParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function balloon_params(
     t_rise: Array<number> | null = null,
     t_fall: Array<number> | null = null,
     t_sustain: Array<number> | null = null,
-): BalloonParameters {
+): BalloonParametersTagged {
     const params = {
-        "@type": "afni.balloon" as const,
+        "@type": "afni/balloon" as const,
         "tr": tr,
         "num_scans": num_scans,
         "event_times": event_times,
@@ -220,7 +188,6 @@ function balloon(
 export {
       BALLOON_METADATA,
       BalloonOutputs,
-      BalloonParameters,
       balloon,
       balloon_execute,
       balloon_params,

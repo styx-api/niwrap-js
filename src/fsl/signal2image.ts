@@ -12,7 +12,7 @@ const SIGNAL2IMAGE_METADATA: Metadata = {
 
 
 interface Signal2imageParameters {
-    "@type": "fsl.signal2image";
+    "@type"?: "fsl/signal2image";
     "pulse_sequence": InputPathType;
     "input_signal"?: InputPathType | null | undefined;
     "output_image"?: string | null | undefined;
@@ -27,44 +27,11 @@ interface Signal2imageParameters {
     "save_flag": boolean;
     "help_flag": boolean;
 }
+type Signal2imageParametersTagged = Required<Pick<Signal2imageParameters, '@type'>> & Signal2imageParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.signal2image": signal2image_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.signal2image": signal2image_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `signal2image(...)`.
+ * Output object returned when calling `Signal2imageParameters(...)`.
  *
  * @interface
  */
@@ -117,9 +84,9 @@ function signal2image_params(
     rolloff: number | null = null,
     save_flag: boolean = false,
     help_flag: boolean = false,
-): Signal2imageParameters {
+): Signal2imageParametersTagged {
     const params = {
-        "@type": "fsl.signal2image" as const,
+        "@type": "fsl/signal2image" as const,
         "pulse_sequence": pulse_sequence,
         "abs_flag": abs_flag,
         "homodyne_flag": homodyne_flag,
@@ -192,16 +159,16 @@ function signal2image_cargs(
             (params["output_kspace"] ?? null)
         );
     }
-    if ((params["abs_flag"] ?? null)) {
+    if ((params["abs_flag"] ?? false)) {
         cargs.push("-a");
     }
-    if ((params["homodyne_flag"] ?? null)) {
+    if ((params["homodyne_flag"] ?? false)) {
         cargs.push("--homo");
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["apodize_flag"] ?? null)) {
+    if ((params["apodize_flag"] ?? false)) {
         cargs.push("-z");
     }
     if ((params["cutoff"] ?? null) !== null) {
@@ -216,10 +183,10 @@ function signal2image_cargs(
             String((params["rolloff"] ?? null))
         );
     }
-    if ((params["save_flag"] ?? null)) {
+    if ((params["save_flag"] ?? false)) {
         cargs.push("-s");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -325,7 +292,6 @@ function signal2image(
 export {
       SIGNAL2IMAGE_METADATA,
       Signal2imageOutputs,
-      Signal2imageParameters,
       signal2image,
       signal2image_execute,
       signal2image_params,

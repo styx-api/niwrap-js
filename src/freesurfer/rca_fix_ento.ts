@@ -12,51 +12,18 @@ const RCA_FIX_ENTO_METADATA: Metadata = {
 
 
 interface RcaFixEntoParameters {
-    "@type": "freesurfer.rca-fix-ento";
+    "@type"?: "freesurfer/rca-fix-ento";
     "subject": string;
     "threads"?: number | null | undefined;
     "submit": boolean;
     "account"?: string | null | undefined;
     "brain_mask": boolean;
 }
+type RcaFixEntoParametersTagged = Required<Pick<RcaFixEntoParameters, '@type'>> & RcaFixEntoParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.rca-fix-ento": rca_fix_ento_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.rca-fix-ento": rca_fix_ento_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `rca_fix_ento(...)`.
+ * Output object returned when calling `RcaFixEntoParameters(...)`.
  *
  * @interface
  */
@@ -97,9 +64,9 @@ function rca_fix_ento_params(
     submit: boolean = false,
     account: string | null = null,
     brain_mask: boolean = false,
-): RcaFixEntoParameters {
+): RcaFixEntoParametersTagged {
     const params = {
-        "@type": "freesurfer.rca-fix-ento" as const,
+        "@type": "freesurfer/rca-fix-ento" as const,
         "subject": subject,
         "submit": submit,
         "brain_mask": brain_mask,
@@ -138,7 +105,7 @@ function rca_fix_ento_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["submit"] ?? null)) {
+    if ((params["submit"] ?? false)) {
         cargs.push("--submit");
     }
     if ((params["account"] ?? null) !== null) {
@@ -147,7 +114,7 @@ function rca_fix_ento_cargs(
             (params["account"] ?? null)
         );
     }
-    if ((params["brain_mask"] ?? null)) {
+    if ((params["brain_mask"] ?? false)) {
         cargs.push("--brain-mask");
     }
     return cargs;
@@ -238,7 +205,6 @@ function rca_fix_ento(
 export {
       RCA_FIX_ENTO_METADATA,
       RcaFixEntoOutputs,
-      RcaFixEntoParameters,
       rca_fix_ento,
       rca_fix_ento_execute,
       rca_fix_ento_params,

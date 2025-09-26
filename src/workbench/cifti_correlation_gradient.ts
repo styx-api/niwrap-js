@@ -12,36 +12,40 @@ const CIFTI_CORRELATION_GRADIENT_METADATA: Metadata = {
 
 
 interface CiftiCorrelationGradientLeftSurfaceParameters {
-    "@type": "workbench.cifti-correlation-gradient.left_surface";
+    "@type"?: "left_surface";
     "surface": InputPathType;
     "opt_left_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
+type CiftiCorrelationGradientLeftSurfaceParametersTagged = Required<Pick<CiftiCorrelationGradientLeftSurfaceParameters, '@type'>> & CiftiCorrelationGradientLeftSurfaceParameters;
 
 
 interface CiftiCorrelationGradientRightSurfaceParameters {
-    "@type": "workbench.cifti-correlation-gradient.right_surface";
+    "@type"?: "right_surface";
     "surface": InputPathType;
     "opt_right_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
+type CiftiCorrelationGradientRightSurfaceParametersTagged = Required<Pick<CiftiCorrelationGradientRightSurfaceParameters, '@type'>> & CiftiCorrelationGradientRightSurfaceParameters;
 
 
 interface CiftiCorrelationGradientCerebellumSurfaceParameters {
-    "@type": "workbench.cifti-correlation-gradient.cerebellum_surface";
+    "@type"?: "cerebellum_surface";
     "surface": InputPathType;
     "opt_cerebellum_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
+type CiftiCorrelationGradientCerebellumSurfaceParametersTagged = Required<Pick<CiftiCorrelationGradientCerebellumSurfaceParameters, '@type'>> & CiftiCorrelationGradientCerebellumSurfaceParameters;
 
 
 interface CiftiCorrelationGradientDoubleCorrelationParameters {
-    "@type": "workbench.cifti-correlation-gradient.double_correlation";
+    "@type"?: "double_correlation";
     "opt_fisher_z_first": boolean;
     "opt_no_demean_first": boolean;
     "opt_covariance_first": boolean;
 }
+type CiftiCorrelationGradientDoubleCorrelationParametersTagged = Required<Pick<CiftiCorrelationGradientDoubleCorrelationParameters, '@type'>> & CiftiCorrelationGradientDoubleCorrelationParameters;
 
 
 interface CiftiCorrelationGradientParameters {
-    "@type": "workbench.cifti-correlation-gradient";
+    "@type"?: "workbench/cifti-correlation-gradient";
     "cifti": InputPathType;
     "cifti_out": string;
     "left_surface"?: CiftiCorrelationGradientLeftSurfaceParameters | null | undefined;
@@ -58,44 +62,7 @@ interface CiftiCorrelationGradientParameters {
     "opt_mem_limit_limit_gb"?: number | null | undefined;
     "double_correlation"?: CiftiCorrelationGradientDoubleCorrelationParameters | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-correlation-gradient": cifti_correlation_gradient_cargs,
-        "workbench.cifti-correlation-gradient.left_surface": cifti_correlation_gradient_left_surface_cargs,
-        "workbench.cifti-correlation-gradient.right_surface": cifti_correlation_gradient_right_surface_cargs,
-        "workbench.cifti-correlation-gradient.cerebellum_surface": cifti_correlation_gradient_cerebellum_surface_cargs,
-        "workbench.cifti-correlation-gradient.double_correlation": cifti_correlation_gradient_double_correlation_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-correlation-gradient": cifti_correlation_gradient_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiCorrelationGradientParametersTagged = Required<Pick<CiftiCorrelationGradientParameters, '@type'>> & CiftiCorrelationGradientParameters;
 
 
 /**
@@ -109,9 +76,9 @@ function dynOutputs(
 function cifti_correlation_gradient_left_surface_params(
     surface: InputPathType,
     opt_left_corrected_areas_area_metric: InputPathType | null = null,
-): CiftiCorrelationGradientLeftSurfaceParameters {
+): CiftiCorrelationGradientLeftSurfaceParametersTagged {
     const params = {
-        "@type": "workbench.cifti-correlation-gradient.left_surface" as const,
+        "@type": "left_surface" as const,
         "surface": surface,
     };
     if (opt_left_corrected_areas_area_metric !== null) {
@@ -157,9 +124,9 @@ function cifti_correlation_gradient_left_surface_cargs(
 function cifti_correlation_gradient_right_surface_params(
     surface: InputPathType,
     opt_right_corrected_areas_area_metric: InputPathType | null = null,
-): CiftiCorrelationGradientRightSurfaceParameters {
+): CiftiCorrelationGradientRightSurfaceParametersTagged {
     const params = {
-        "@type": "workbench.cifti-correlation-gradient.right_surface" as const,
+        "@type": "right_surface" as const,
         "surface": surface,
     };
     if (opt_right_corrected_areas_area_metric !== null) {
@@ -205,9 +172,9 @@ function cifti_correlation_gradient_right_surface_cargs(
 function cifti_correlation_gradient_cerebellum_surface_params(
     surface: InputPathType,
     opt_cerebellum_corrected_areas_area_metric: InputPathType | null = null,
-): CiftiCorrelationGradientCerebellumSurfaceParameters {
+): CiftiCorrelationGradientCerebellumSurfaceParametersTagged {
     const params = {
-        "@type": "workbench.cifti-correlation-gradient.cerebellum_surface" as const,
+        "@type": "cerebellum_surface" as const,
         "surface": surface,
     };
     if (opt_cerebellum_corrected_areas_area_metric !== null) {
@@ -255,9 +222,9 @@ function cifti_correlation_gradient_double_correlation_params(
     opt_fisher_z_first: boolean = false,
     opt_no_demean_first: boolean = false,
     opt_covariance_first: boolean = false,
-): CiftiCorrelationGradientDoubleCorrelationParameters {
+): CiftiCorrelationGradientDoubleCorrelationParametersTagged {
     const params = {
-        "@type": "workbench.cifti-correlation-gradient.double_correlation" as const,
+        "@type": "double_correlation" as const,
         "opt_fisher_z_first": opt_fisher_z_first,
         "opt_no_demean_first": opt_no_demean_first,
         "opt_covariance_first": opt_covariance_first,
@@ -280,13 +247,13 @@ function cifti_correlation_gradient_double_correlation_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("-double-correlation");
-    if ((params["opt_fisher_z_first"] ?? null)) {
+    if ((params["opt_fisher_z_first"] ?? false)) {
         cargs.push("-fisher-z-first");
     }
-    if ((params["opt_no_demean_first"] ?? null)) {
+    if ((params["opt_no_demean_first"] ?? false)) {
         cargs.push("-no-demean-first");
     }
-    if ((params["opt_covariance_first"] ?? null)) {
+    if ((params["opt_covariance_first"] ?? false)) {
         cargs.push("-covariance-first");
     }
     return cargs;
@@ -294,7 +261,7 @@ function cifti_correlation_gradient_double_correlation_cargs(
 
 
 /**
- * Output object returned when calling `cifti_correlation_gradient(...)`.
+ * Output object returned when calling `CiftiCorrelationGradientParameters(...)`.
  *
  * @interface
  */
@@ -347,9 +314,9 @@ function cifti_correlation_gradient_params(
     opt_covariance: boolean = false,
     opt_mem_limit_limit_gb: number | null = null,
     double_correlation: CiftiCorrelationGradientDoubleCorrelationParameters | null = null,
-): CiftiCorrelationGradientParameters {
+): CiftiCorrelationGradientParametersTagged {
     const params = {
-        "@type": "workbench.cifti-correlation-gradient" as const,
+        "@type": "workbench/cifti-correlation-gradient" as const,
         "cifti": cifti,
         "cifti_out": cifti_out,
         "opt_presmooth_fwhm": opt_presmooth_fwhm,
@@ -406,13 +373,13 @@ function cifti_correlation_gradient_cargs(
     cargs.push(execution.inputFile((params["cifti"] ?? null)));
     cargs.push((params["cifti_out"] ?? null));
     if ((params["left_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["left_surface"] ?? null)["@type"])((params["left_surface"] ?? null), execution));
+        cargs.push(...cifti_correlation_gradient_left_surface_cargs((params["left_surface"] ?? null), execution));
     }
     if ((params["right_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["right_surface"] ?? null)["@type"])((params["right_surface"] ?? null), execution));
+        cargs.push(...cifti_correlation_gradient_right_surface_cargs((params["right_surface"] ?? null), execution));
     }
     if ((params["cerebellum_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["cerebellum_surface"] ?? null)["@type"])((params["cerebellum_surface"] ?? null), execution));
+        cargs.push(...cifti_correlation_gradient_cerebellum_surface_cargs((params["cerebellum_surface"] ?? null), execution));
     }
     if ((params["opt_surface_presmooth_surface_kernel"] ?? null) !== null) {
         cargs.push(
@@ -426,13 +393,13 @@ function cifti_correlation_gradient_cargs(
             String((params["opt_volume_presmooth_volume_kernel"] ?? null))
         );
     }
-    if ((params["opt_presmooth_fwhm"] ?? null)) {
+    if ((params["opt_presmooth_fwhm"] ?? false)) {
         cargs.push("-presmooth-fwhm");
     }
-    if ((params["opt_undo_fisher_z"] ?? null)) {
+    if ((params["opt_undo_fisher_z"] ?? false)) {
         cargs.push("-undo-fisher-z");
     }
-    if ((params["opt_fisher_z"] ?? null)) {
+    if ((params["opt_fisher_z"] ?? false)) {
         cargs.push("-fisher-z");
     }
     if ((params["opt_surface_exclude_distance"] ?? null) !== null) {
@@ -447,7 +414,7 @@ function cifti_correlation_gradient_cargs(
             String((params["opt_volume_exclude_distance"] ?? null))
         );
     }
-    if ((params["opt_covariance"] ?? null)) {
+    if ((params["opt_covariance"] ?? false)) {
         cargs.push("-covariance");
     }
     if ((params["opt_mem_limit_limit_gb"] ?? null) !== null) {
@@ -457,7 +424,7 @@ function cifti_correlation_gradient_cargs(
         );
     }
     if ((params["double_correlation"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["double_correlation"] ?? null)["@type"])((params["double_correlation"] ?? null), execution));
+        cargs.push(...cifti_correlation_gradient_double_correlation_cargs((params["double_correlation"] ?? null), execution));
     }
     return cargs;
 }
@@ -568,12 +535,7 @@ function cifti_correlation_gradient(
 
 export {
       CIFTI_CORRELATION_GRADIENT_METADATA,
-      CiftiCorrelationGradientCerebellumSurfaceParameters,
-      CiftiCorrelationGradientDoubleCorrelationParameters,
-      CiftiCorrelationGradientLeftSurfaceParameters,
       CiftiCorrelationGradientOutputs,
-      CiftiCorrelationGradientParameters,
-      CiftiCorrelationGradientRightSurfaceParameters,
       cifti_correlation_gradient,
       cifti_correlation_gradient_cerebellum_surface_params,
       cifti_correlation_gradient_double_correlation_params,

@@ -12,7 +12,7 @@ const V_3DHISTOG_METADATA: Metadata = {
 
 
 interface V3dhistogParameters {
-    "@type": "afni.3dhistog";
+    "@type"?: "afni/3dhistog";
     "dataset": InputPathType;
     "nbin"?: number | null | undefined;
     "dind"?: number | null | undefined;
@@ -32,44 +32,11 @@ interface V3dhistogParameters {
     "unq"?: string | null | undefined;
     "prefix"?: string | null | undefined;
 }
+type V3dhistogParametersTagged = Required<Pick<V3dhistogParameters, '@type'>> & V3dhistogParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dhistog": v_3dhistog_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dhistog": v_3dhistog_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dhistog(...)`.
+ * Output object returned when calling `V3dhistogParameters(...)`.
  *
  * @interface
  */
@@ -128,9 +95,9 @@ function v_3dhistog_params(
     float: boolean = false,
     unq: string | null = null,
     prefix: string | null = null,
-): V3dhistogParameters {
+): V3dhistogParametersTagged {
     const params = {
-        "@type": "afni.3dhistog" as const,
+        "@type": "afni/3dhistog" as const,
         "dataset": dataset,
         "doall": doall,
         "noempty": noempty,
@@ -217,19 +184,19 @@ function v_3dhistog_cargs(
             execution.inputFile((params["roi_mask"] ?? null))
         );
     }
-    if ((params["doall"] ?? null)) {
+    if ((params["doall"] ?? false)) {
         cargs.push("-doall");
     }
-    if ((params["noempty"] ?? null)) {
+    if ((params["noempty"] ?? false)) {
         cargs.push("-noempty");
     }
-    if ((params["notitle"] ?? null)) {
+    if ((params["notitle"] ?? false)) {
         cargs.push("-notitle");
     }
-    if ((params["log10"] ?? null)) {
+    if ((params["log10"] ?? false)) {
         cargs.push("-log10");
     }
-    if ((params["pdf"] ?? null)) {
+    if ((params["pdf"] ?? false)) {
         cargs.push("-pdf");
     }
     if ((params["min"] ?? null) !== null) {
@@ -244,13 +211,13 @@ function v_3dhistog_cargs(
             String((params["max"] ?? null))
         );
     }
-    if ((params["igfac"] ?? null)) {
+    if ((params["igfac"] ?? false)) {
         cargs.push("-igfac");
     }
-    if ((params["int"] ?? null)) {
+    if ((params["int"] ?? false)) {
         cargs.push("-int");
     }
-    if ((params["float"] ?? null)) {
+    if ((params["float"] ?? false)) {
         cargs.push("-float");
     }
     if ((params["unq"] ?? null) !== null) {
@@ -376,7 +343,6 @@ function v_3dhistog(
 
 export {
       V3dhistogOutputs,
-      V3dhistogParameters,
       V_3DHISTOG_METADATA,
       v_3dhistog,
       v_3dhistog_execute,

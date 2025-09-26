@@ -12,7 +12,7 @@ const ANATOMICAL_AVERAGE_METADATA: Metadata = {
 
 
 interface AnatomicalAverageParameters {
-    "@type": "fsl.AnatomicalAverage";
+    "@type"?: "fsl/AnatomicalAverage";
     "output_basename": string;
     "input_images": Array<InputPathType>;
     "standard_image"?: InputPathType | null | undefined;
@@ -23,44 +23,11 @@ interface AnatomicalAverageParameters {
     "noclean_flag": boolean;
     "verbose_flag": boolean;
 }
+type AnatomicalAverageParametersTagged = Required<Pick<AnatomicalAverageParameters, '@type'>> & AnatomicalAverageParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.AnatomicalAverage": anatomical_average_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.AnatomicalAverage": anatomical_average_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `anatomical_average(...)`.
+ * Output object returned when calling `AnatomicalAverageParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function anatomical_average_params(
     brainsize: number | null = null,
     noclean_flag: boolean = false,
     verbose_flag: boolean = false,
-): AnatomicalAverageParameters {
+): AnatomicalAverageParametersTagged {
     const params = {
-        "@type": "fsl.AnatomicalAverage" as const,
+        "@type": "fsl/AnatomicalAverage" as const,
         "output_basename": output_basename,
         "input_images": input_images,
         "no_crop_flag": no_crop_flag,
@@ -157,7 +124,7 @@ function anatomical_average_cargs(
             execution.inputFile((params["standard_brain_mask"] ?? null))
         );
     }
-    if ((params["no_crop_flag"] ?? null)) {
+    if ((params["no_crop_flag"] ?? false)) {
         cargs.push("-n");
     }
     if ((params["work_dir"] ?? null) !== null) {
@@ -172,10 +139,10 @@ function anatomical_average_cargs(
             String((params["brainsize"] ?? null))
         );
     }
-    if ((params["noclean_flag"] ?? null)) {
+    if ((params["noclean_flag"] ?? false)) {
         cargs.push("--noclean");
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
     return cargs;
@@ -272,7 +239,6 @@ function anatomical_average(
 export {
       ANATOMICAL_AVERAGE_METADATA,
       AnatomicalAverageOutputs,
-      AnatomicalAverageParameters,
       anatomical_average,
       anatomical_average_execute,
       anatomical_average_params,

@@ -12,7 +12,7 @@ const TBSS_NON_FA_METADATA: Metadata = {
 
 
 interface TbssNonFaParameters {
-    "@type": "fsl.tbss_non_FA";
+    "@type"?: "fsl/tbss_non_FA";
     "concat_auto": boolean;
     "output_file": string;
     "input_files": Array<InputPathType>;
@@ -23,44 +23,11 @@ interface TbssNonFaParameters {
     "concat_tr"?: number | null | undefined;
     "volume_number"?: number | null | undefined;
 }
+type TbssNonFaParametersTagged = Required<Pick<TbssNonFaParameters, '@type'>> & TbssNonFaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.tbss_non_FA": tbss_non_fa_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.tbss_non_FA": tbss_non_fa_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tbss_non_fa(...)`.
+ * Output object returned when calling `TbssNonFaParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function tbss_non_fa_params(
     concat_t: boolean = false,
     concat_tr: number | null = null,
     volume_number: number | null = null,
-): TbssNonFaParameters {
+): TbssNonFaParametersTagged {
     const params = {
-        "@type": "fsl.tbss_non_FA" as const,
+        "@type": "fsl/tbss_non_FA" as const,
         "concat_auto": concat_auto,
         "output_file": output_file,
         "input_files": input_files,
@@ -136,21 +103,21 @@ function tbss_non_fa_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("tbss_non_FA");
-    if ((params["concat_auto"] ?? null)) {
+    if ((params["concat_auto"] ?? false)) {
         cargs.push("-a");
     }
     cargs.push((params["output_file"] ?? null));
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
-    if ((params["concat_x"] ?? null)) {
+    if ((params["concat_x"] ?? false)) {
         cargs.push("-x");
     }
-    if ((params["concat_y"] ?? null)) {
+    if ((params["concat_y"] ?? false)) {
         cargs.push("-y");
     }
-    if ((params["concat_z"] ?? null)) {
+    if ((params["concat_z"] ?? false)) {
         cargs.push("-z");
     }
-    if ((params["concat_t"] ?? null)) {
+    if ((params["concat_t"] ?? false)) {
         cargs.push("-t");
     }
     if ((params["concat_tr"] ?? null) !== null) {
@@ -259,7 +226,6 @@ function tbss_non_fa(
 export {
       TBSS_NON_FA_METADATA,
       TbssNonFaOutputs,
-      TbssNonFaParameters,
       tbss_non_fa,
       tbss_non_fa_execute,
       tbss_non_fa_params,

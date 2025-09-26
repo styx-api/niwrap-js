@@ -12,7 +12,7 @@ const ALIGN_EPI_ANAT_PY_METADATA: Metadata = {
 
 
 interface AlignEpiAnatPyParameters {
-    "@type": "afni.align_epi_anat.py";
+    "@type"?: "afni/align_epi_anat.py";
     "epi": InputPathType;
     "anat": InputPathType;
     "epi_base": string;
@@ -31,44 +31,11 @@ interface AlignEpiAnatPyParameters {
     "ex_mode"?: "quiet" | "echo" | "dry_run" | "script" | null | undefined;
     "overwrite": boolean;
 }
+type AlignEpiAnatPyParametersTagged = Required<Pick<AlignEpiAnatPyParameters, '@type'>> & AlignEpiAnatPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.align_epi_anat.py": align_epi_anat_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.align_epi_anat.py": align_epi_anat_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `align_epi_anat_py(...)`.
+ * Output object returned when calling `AlignEpiAnatPyParameters(...)`.
  *
  * @interface
  */
@@ -129,9 +96,9 @@ function align_epi_anat_py_params(
     volreg_method: "3dvolreg" | "3dWarpDrive" | "3dAllineate" | null = null,
     ex_mode: "quiet" | "echo" | "dry_run" | "script" | null = null,
     overwrite: boolean = false,
-): AlignEpiAnatPyParameters {
+): AlignEpiAnatPyParametersTagged {
     const params = {
-        "@type": "afni.align_epi_anat.py" as const,
+        "@type": "afni/align_epi_anat.py" as const,
         "epi": epi,
         "anat": anat,
         "epi_base": epi_base,
@@ -190,10 +157,10 @@ function align_epi_anat_py_cargs(
         "-epi_base",
         (params["epi_base"] ?? null)
     );
-    if ((params["anat2epi"] ?? null)) {
+    if ((params["anat2epi"] ?? false)) {
         cargs.push("-anat2epi");
     }
-    if ((params["epi2anat"] ?? null)) {
+    if ((params["epi2anat"] ?? false)) {
         cargs.push("-epi2anat");
     }
     if ((params["suffix"] ?? null) !== null) {
@@ -202,22 +169,22 @@ function align_epi_anat_py_cargs(
             (params["suffix"] ?? null)
         );
     }
-    if ((params["AddEdge"] ?? null)) {
+    if ((params["AddEdge"] ?? false)) {
         cargs.push("-AddEdge");
     }
-    if ((params["big_move"] ?? null)) {
+    if ((params["big_move"] ?? false)) {
         cargs.push("-big_move");
     }
-    if ((params["giant_move"] ?? null)) {
+    if ((params["giant_move"] ?? false)) {
         cargs.push("-giant_move");
     }
-    if ((params["ginormous_move"] ?? null)) {
+    if ((params["ginormous_move"] ?? false)) {
         cargs.push("-ginormous_move");
     }
-    if ((params["keep_rm_files"] ?? null)) {
+    if ((params["keep_rm_files"] ?? false)) {
         cargs.push("-keep_rm_files");
     }
-    if ((params["prep_only"] ?? null)) {
+    if ((params["prep_only"] ?? false)) {
         cargs.push("-prep_only");
     }
     if ((params["ana_has_skull"] ?? null) !== null) {
@@ -244,7 +211,7 @@ function align_epi_anat_py_cargs(
             (params["ex_mode"] ?? null)
         );
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("-overwrite");
     }
     return cargs;
@@ -358,7 +325,6 @@ function align_epi_anat_py(
 export {
       ALIGN_EPI_ANAT_PY_METADATA,
       AlignEpiAnatPyOutputs,
-      AlignEpiAnatPyParameters,
       align_epi_anat_py,
       align_epi_anat_py_execute,
       align_epi_anat_py_params,

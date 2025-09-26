@@ -12,50 +12,17 @@ const CIFTI_REORDER_METADATA: Metadata = {
 
 
 interface CiftiReorderParameters {
-    "@type": "workbench.cifti-reorder";
+    "@type"?: "workbench/cifti-reorder";
     "cifti_in": InputPathType;
     "direction": string;
     "reorder_list": string;
     "cifti_out": string;
 }
+type CiftiReorderParametersTagged = Required<Pick<CiftiReorderParameters, '@type'>> & CiftiReorderParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-reorder": cifti_reorder_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-reorder": cifti_reorder_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `cifti_reorder(...)`.
+ * Output object returned when calling `CiftiReorderParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function cifti_reorder_params(
     direction: string,
     reorder_list: string,
     cifti_out: string,
-): CiftiReorderParameters {
+): CiftiReorderParametersTagged {
     const params = {
-        "@type": "workbench.cifti-reorder" as const,
+        "@type": "workbench/cifti-reorder" as const,
         "cifti_in": cifti_in,
         "direction": direction,
         "reorder_list": reorder_list,
@@ -205,7 +172,6 @@ function cifti_reorder(
 export {
       CIFTI_REORDER_METADATA,
       CiftiReorderOutputs,
-      CiftiReorderParameters,
       cifti_reorder,
       cifti_reorder_execute,
       cifti_reorder_params,

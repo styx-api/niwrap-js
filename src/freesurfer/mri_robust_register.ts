@@ -12,7 +12,7 @@ const MRI_ROBUST_REGISTER_METADATA: Metadata = {
 
 
 interface MriRobustRegisterParameters {
-    "@type": "freesurfer.mri_robust_register";
+    "@type"?: "freesurfer/mri_robust_register";
     "movable_volume": InputPathType;
     "target_volume": InputPathType;
     "output_registration": string;
@@ -63,44 +63,11 @@ interface MriRobustRegisterParameters {
     "debug": boolean;
     "verbose"?: number | null | undefined;
 }
+type MriRobustRegisterParametersTagged = Required<Pick<MriRobustRegisterParameters, '@type'>> & MriRobustRegisterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_robust_register": mri_robust_register_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_robust_register": mri_robust_register_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_robust_register(...)`.
+ * Output object returned when calling `MriRobustRegisterParameters(...)`.
  *
  * @interface
  */
@@ -265,9 +232,9 @@ function mri_robust_register_params(
     half_dst_lta: string | null = null,
     debug: boolean = false,
     verbose: number | null = null,
-): MriRobustRegisterParameters {
+): MriRobustRegisterParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_robust_register" as const,
+        "@type": "freesurfer/mri_robust_register" as const,
         "movable_volume": movable_volume,
         "target_volume": target_volume,
         "output_registration": output_registration,
@@ -408,7 +375,7 @@ function mri_robust_register_cargs(
             String((params["outlier_sensitivity"] ?? null))
         );
     }
-    if ((params["satit"] ?? null)) {
+    if ((params["satit"] ?? false)) {
         cargs.push("--satit");
     }
     if ((params["mapped_movable"] ?? null) !== null) {
@@ -429,13 +396,13 @@ function mri_robust_register_cargs(
             (params["weights"] ?? null)
         );
     }
-    if ((params["oneminus_w"] ?? null)) {
+    if ((params["oneminus_w"] ?? false)) {
         cargs.push("--oneminusw");
     }
-    if ((params["iscale"] ?? null)) {
+    if ((params["iscale"] ?? false)) {
         cargs.push("--iscale");
     }
-    if ((params["iscale_only"] ?? null)) {
+    if ((params["iscale_only"] ?? false)) {
         cargs.push("--iscaleonly");
     }
     if ((params["iscale_out"] ?? null) !== null) {
@@ -450,10 +417,10 @@ function mri_robust_register_cargs(
             (params["iscale_in"] ?? null)
         );
     }
-    if ((params["trans_only"] ?? null)) {
+    if ((params["trans_only"] ?? false)) {
         cargs.push("--transonly");
     }
-    if ((params["affine"] ?? null)) {
+    if ((params["affine"] ?? false)) {
         cargs.push("--affine");
     }
     if ((params["ixform"] ?? null) !== null) {
@@ -462,13 +429,13 @@ function mri_robust_register_cargs(
             (params["ixform"] ?? null)
         );
     }
-    if ((params["init_orient"] ?? null)) {
+    if ((params["init_orient"] ?? false)) {
         cargs.push("--initorient");
     }
-    if ((params["no_init"] ?? null)) {
+    if ((params["no_init"] ?? false)) {
         cargs.push("--noinit");
     }
-    if ((params["vox2vox"] ?? null)) {
+    if ((params["vox2vox"] ?? false)) {
         cargs.push("--vox2vox");
     }
     if ((params["cost"] ?? null) !== null) {
@@ -483,10 +450,10 @@ function mri_robust_register_cargs(
             String((params["ent_radius"] ?? null))
         );
     }
-    if ((params["ent_correction"] ?? null)) {
+    if ((params["ent_correction"] ?? false)) {
         cargs.push("--entcorrection");
     }
-    if ((params["ent_ball"] ?? null)) {
+    if ((params["ent_ball"] ?? false)) {
         cargs.push("--entball");
     }
     if ((params["ent_mov"] ?? null) !== null) {
@@ -501,10 +468,10 @@ function mri_robust_register_cargs(
             String((params["powell_tolerance"] ?? null))
         );
     }
-    if ((params["sobel"] ?? null)) {
+    if ((params["sobel"] ?? false)) {
         cargs.push("--sobel");
     }
-    if ((params["no_sym"] ?? null)) {
+    if ((params["no_sym"] ?? false)) {
         cargs.push("--nosym");
     }
     if ((params["maximum_iterations"] ?? null) !== null) {
@@ -531,7 +498,7 @@ function mri_robust_register_cargs(
             String((params["eps_iteration"] ?? null))
         );
     }
-    if ((params["no_multiscale"] ?? null)) {
+    if ((params["no_multiscale"] ?? false)) {
         cargs.push("--nomulti");
     }
     if ((params["max_size"] ?? null) !== null) {
@@ -558,16 +525,16 @@ function mri_robust_register_cargs(
             String((params["sub_sample"] ?? null))
         );
     }
-    if ((params["float_type"] ?? null)) {
+    if ((params["float_type"] ?? false)) {
         cargs.push("--floattype");
     }
-    if ((params["white_bg_mov"] ?? null)) {
+    if ((params["white_bg_mov"] ?? false)) {
         cargs.push("--whitebgmov");
     }
-    if ((params["white_bg_dst"] ?? null)) {
+    if ((params["white_bg_dst"] ?? false)) {
         cargs.push("--whitebgdst");
     }
-    if ((params["uchar"] ?? null)) {
+    if ((params["uchar"] ?? false)) {
         cargs.push("--uchar");
     }
     if ((params["mask_mov"] ?? null) !== null) {
@@ -612,7 +579,7 @@ function mri_robust_register_cargs(
             (params["half_dst_lta"] ?? null)
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     if ((params["verbose"] ?? null) !== null) {
@@ -806,7 +773,6 @@ function mri_robust_register(
 export {
       MRI_ROBUST_REGISTER_METADATA,
       MriRobustRegisterOutputs,
-      MriRobustRegisterParameters,
       mri_robust_register,
       mri_robust_register_execute,
       mri_robust_register_params,

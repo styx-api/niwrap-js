@@ -12,7 +12,7 @@ const DSETSTAT2P_METADATA: Metadata = {
 
 
 interface Dsetstat2pParameters {
-    "@type": "afni.dsetstat2p";
+    "@type"?: "afni/dsetstat2p";
     "dataset": string;
     "statval": number;
     "bisided": boolean;
@@ -20,44 +20,11 @@ interface Dsetstat2pParameters {
     "one_sided": boolean;
     "quiet": boolean;
 }
+type Dsetstat2pParametersTagged = Required<Pick<Dsetstat2pParameters, '@type'>> & Dsetstat2pParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.dsetstat2p": dsetstat2p_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.dsetstat2p": dsetstat2p_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dsetstat2p(...)`.
+ * Output object returned when calling `Dsetstat2pParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function dsetstat2p_params(
     two_sided: boolean = false,
     one_sided: boolean = false,
     quiet: boolean = false,
-): Dsetstat2pParameters {
+): Dsetstat2pParametersTagged {
     const params = {
-        "@type": "afni.dsetstat2p" as const,
+        "@type": "afni/dsetstat2p" as const,
         "dataset": dataset,
         "statval": statval,
         "bisided": bisided,
@@ -122,16 +89,16 @@ function dsetstat2p_cargs(
     cargs.push("dsetstat2p");
     cargs.push((params["dataset"] ?? null));
     cargs.push(String((params["statval"] ?? null)));
-    if ((params["bisided"] ?? null)) {
+    if ((params["bisided"] ?? false)) {
         cargs.push("-bisided");
     }
-    if ((params["two_sided"] ?? null)) {
+    if ((params["two_sided"] ?? false)) {
         cargs.push("-2sided");
     }
-    if ((params["one_sided"] ?? null)) {
+    if ((params["one_sided"] ?? false)) {
         cargs.push("-1sided");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
     return cargs;
@@ -222,7 +189,6 @@ function dsetstat2p(
 export {
       DSETSTAT2P_METADATA,
       Dsetstat2pOutputs,
-      Dsetstat2pParameters,
       dsetstat2p,
       dsetstat2p_execute,
       dsetstat2p_params,

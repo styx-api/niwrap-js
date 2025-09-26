@@ -12,49 +12,16 @@ const MRI_RIGID_REGISTER_METADATA: Metadata = {
 
 
 interface MriRigidRegisterParameters {
-    "@type": "freesurfer.mri_rigid_register";
+    "@type"?: "freesurfer/mri_rigid_register";
     "source_volume": InputPathType;
     "target_volume": InputPathType;
     "transform_output": string;
 }
+type MriRigidRegisterParametersTagged = Required<Pick<MriRigidRegisterParameters, '@type'>> & MriRigidRegisterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_rigid_register": mri_rigid_register_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_rigid_register": mri_rigid_register_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_rigid_register(...)`.
+ * Output object returned when calling `MriRigidRegisterParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mri_rigid_register_params(
     source_volume: InputPathType,
     target_volume: InputPathType,
     transform_output: string,
-): MriRigidRegisterParameters {
+): MriRigidRegisterParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_rigid_register" as const,
+        "@type": "freesurfer/mri_rigid_register" as const,
         "source_volume": source_volume,
         "target_volume": target_volume,
         "transform_output": transform_output,
@@ -193,7 +160,6 @@ function mri_rigid_register(
 export {
       MRI_RIGID_REGISTER_METADATA,
       MriRigidRegisterOutputs,
-      MriRigidRegisterParameters,
       mri_rigid_register,
       mri_rigid_register_execute,
       mri_rigid_register_params,

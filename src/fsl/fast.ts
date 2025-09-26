@@ -12,7 +12,7 @@ const FAST_METADATA: Metadata = {
 
 
 interface FastParameters {
-    "@type": "fsl.fast";
+    "@type"?: "fsl/fast";
     "number_classes"?: number | null | undefined;
     "bias_iters"?: number | null | undefined;
     "bias_lowpass"?: number | null | undefined;
@@ -36,44 +36,11 @@ interface FastParameters {
     "iters_afterbias"?: number | null | undefined;
     "in_files": Array<InputPathType>;
 }
+type FastParametersTagged = Required<Pick<FastParameters, '@type'>> & FastParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fast": fast_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fast": fast_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fast(...)`.
+ * Output object returned when calling `FastParameters(...)`.
  *
  * @interface
  */
@@ -156,9 +123,9 @@ function fast_params(
     verbose: boolean = false,
     manual_seg: InputPathType | null = null,
     iters_afterbias: number | null = null,
-): FastParameters {
+): FastParametersTagged {
     const params = {
-        "@type": "fsl.fast" as const,
+        "@type": "fsl/fast" as const,
         "segments": segments,
         "output_biasfield": output_biasfield,
         "output_biascorrected": output_biascorrected,
@@ -258,7 +225,7 @@ function fast_cargs(
             String((params["init_seg_smooth"] ?? null))
         );
     }
-    if ((params["segments"] ?? null)) {
+    if ((params["segments"] ?? false)) {
         cargs.push("-g");
     }
     if ((params["init_transform"] ?? null) !== null) {
@@ -273,13 +240,13 @@ function fast_cargs(
             ...(params["other_priors"] ?? null).map(f => execution.inputFile(f))
         );
     }
-    if ((params["output_biasfield"] ?? null)) {
+    if ((params["output_biasfield"] ?? false)) {
         cargs.push("-b");
     }
-    if ((params["output_biascorrected"] ?? null)) {
+    if ((params["output_biascorrected"] ?? false)) {
         cargs.push("-B");
     }
-    if ((params["no_bias"] ?? null)) {
+    if ((params["no_bias"] ?? false)) {
         cargs.push("-N");
     }
     if ((params["channels"] ?? null) !== null) {
@@ -294,10 +261,10 @@ function fast_cargs(
             (params["out_basename"] ?? null)
         );
     }
-    if ((params["use_priors"] ?? null)) {
+    if ((params["use_priors"] ?? false)) {
         cargs.push("-P");
     }
-    if ((params["no_pve"] ?? null)) {
+    if ((params["no_pve"] ?? false)) {
         cargs.push("--nopve");
     }
     if ((params["segment_iters"] ?? null) !== null) {
@@ -318,7 +285,7 @@ function fast_cargs(
             String((params["hyper"] ?? null))
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
     if ((params["manual_seg"] ?? null) !== null) {
@@ -458,7 +425,6 @@ function fast(
 export {
       FAST_METADATA,
       FastOutputs,
-      FastParameters,
       fast,
       fast_execute,
       fast_params,

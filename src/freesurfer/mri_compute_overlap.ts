@@ -12,7 +12,7 @@ const MRI_COMPUTE_OVERLAP_METADATA: Metadata = {
 
 
 interface MriComputeOverlapParameters {
-    "@type": "freesurfer.mri_compute_overlap";
+    "@type"?: "freesurfer/mri_compute_overlap";
     "volumes": Array<InputPathType>;
     "label_numbers"?: Array<string> | null | undefined;
     "all_labels": boolean;
@@ -25,43 +25,11 @@ interface MriComputeOverlapParameters {
     "translate_label"?: Array<number> | null | undefined;
     "help": boolean;
 }
+type MriComputeOverlapParametersTagged = Required<Pick<MriComputeOverlapParameters, '@type'>> & MriComputeOverlapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_compute_overlap": mri_compute_overlap_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_compute_overlap(...)`.
+ * Output object returned when calling `MriComputeOverlapParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +70,9 @@ function mri_compute_overlap_params(
     quiet_mode: boolean = false,
     translate_label: Array<number> | null = null,
     help: boolean = false,
-): MriComputeOverlapParameters {
+): MriComputeOverlapParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_compute_overlap" as const,
+        "@type": "freesurfer/mri_compute_overlap" as const,
         "volumes": volumes,
         "all_labels": all_labels,
         "show_label": show_label,
@@ -147,16 +115,16 @@ function mri_compute_overlap_cargs(
     if ((params["label_numbers"] ?? null) !== null) {
         cargs.push(...(params["label_numbers"] ?? null));
     }
-    if ((params["all_labels"] ?? null)) {
+    if ((params["all_labels"] ?? false)) {
         cargs.push("-a");
     }
-    if ((params["show_label"] ?? null)) {
+    if ((params["show_label"] ?? false)) {
         cargs.push("-s");
     }
-    if ((params["total_overlap"] ?? null)) {
+    if ((params["total_overlap"] ?? false)) {
         cargs.push("-total");
     }
-    if ((params["no_summary"] ?? null)) {
+    if ((params["no_summary"] ?? false)) {
         cargs.push("-nosummary");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -171,7 +139,7 @@ function mri_compute_overlap_cargs(
             (params["output_file"] ?? null)
         );
     }
-    if ((params["quiet_mode"] ?? null)) {
+    if ((params["quiet_mode"] ?? false)) {
         cargs.push("-q");
     }
     if ((params["translate_label"] ?? null) !== null) {
@@ -180,7 +148,7 @@ function mri_compute_overlap_cargs(
             ...(params["translate_label"] ?? null).map(String)
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -280,7 +248,6 @@ function mri_compute_overlap(
 export {
       MRI_COMPUTE_OVERLAP_METADATA,
       MriComputeOverlapOutputs,
-      MriComputeOverlapParameters,
       mri_compute_overlap,
       mri_compute_overlap_execute,
       mri_compute_overlap_params,

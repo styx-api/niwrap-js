@@ -12,48 +12,15 @@ const SURFACE_FLIP_LR_METADATA: Metadata = {
 
 
 interface SurfaceFlipLrParameters {
-    "@type": "workbench.surface-flip-lr";
+    "@type"?: "workbench/surface-flip-lr";
     "surface": InputPathType;
     "surface_out": string;
 }
+type SurfaceFlipLrParametersTagged = Required<Pick<SurfaceFlipLrParameters, '@type'>> & SurfaceFlipLrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-flip-lr": surface_flip_lr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-flip-lr": surface_flip_lr_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_flip_lr(...)`.
+ * Output object returned when calling `SurfaceFlipLrParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface SurfaceFlipLrOutputs {
 function surface_flip_lr_params(
     surface: InputPathType,
     surface_out: string,
-): SurfaceFlipLrParameters {
+): SurfaceFlipLrParametersTagged {
     const params = {
-        "@type": "workbench.surface-flip-lr" as const,
+        "@type": "workbench/surface-flip-lr" as const,
         "surface": surface,
         "surface_out": surface_out,
     };
@@ -191,7 +158,6 @@ function surface_flip_lr(
 export {
       SURFACE_FLIP_LR_METADATA,
       SurfaceFlipLrOutputs,
-      SurfaceFlipLrParameters,
       surface_flip_lr,
       surface_flip_lr_execute,
       surface_flip_lr_params,

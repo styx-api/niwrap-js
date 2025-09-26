@@ -12,7 +12,7 @@ const LTA_DIFF_METADATA: Metadata = {
 
 
 interface LtaDiffParameters {
-    "@type": "freesurfer.lta_diff";
+    "@type"?: "freesurfer/lta_diff";
     "transform1": InputPathType;
     "transform2"?: InputPathType | null | undefined;
     "dist_type"?: number | null | undefined;
@@ -22,43 +22,11 @@ interface LtaDiffParameters {
     "normdiv"?: number | null | undefined;
     "radius"?: number | null | undefined;
 }
+type LtaDiffParametersTagged = Required<Pick<LtaDiffParameters, '@type'>> & LtaDiffParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.lta_diff": lta_diff_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `lta_diff(...)`.
+ * Output object returned when calling `LtaDiffParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +61,9 @@ function lta_diff_params(
     vox: boolean = false,
     normdiv: number | null = null,
     radius: number | null = null,
-): LtaDiffParameters {
+): LtaDiffParametersTagged {
     const params = {
-        "@type": "freesurfer.lta_diff" as const,
+        "@type": "freesurfer/lta_diff" as const,
         "transform1": transform1,
         "invert1": invert1,
         "invert2": invert2,
@@ -141,13 +109,13 @@ function lta_diff_cargs(
             String((params["dist_type"] ?? null))
         );
     }
-    if ((params["invert1"] ?? null)) {
+    if ((params["invert1"] ?? false)) {
         cargs.push("--invert1");
     }
-    if ((params["invert2"] ?? null)) {
+    if ((params["invert2"] ?? false)) {
         cargs.push("--invert2");
     }
-    if ((params["vox"] ?? null)) {
+    if ((params["vox"] ?? false)) {
         cargs.push("--vox");
     }
     if ((params["normdiv"] ?? null) !== null) {
@@ -253,7 +221,6 @@ function lta_diff(
 export {
       LTA_DIFF_METADATA,
       LtaDiffOutputs,
-      LtaDiffParameters,
       lta_diff,
       lta_diff_execute,
       lta_diff_params,

@@ -12,48 +12,15 @@ const MINC2SEQINFO_METADATA: Metadata = {
 
 
 interface Minc2seqinfoParameters {
-    "@type": "freesurfer.minc2seqinfo";
+    "@type"?: "freesurfer/minc2seqinfo";
     "mincfile": InputPathType;
     "seqinfofile": string;
 }
+type Minc2seqinfoParametersTagged = Required<Pick<Minc2seqinfoParameters, '@type'>> & Minc2seqinfoParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.minc2seqinfo": minc2seqinfo_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.minc2seqinfo": minc2seqinfo_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `minc2seqinfo(...)`.
+ * Output object returned when calling `Minc2seqinfoParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface Minc2seqinfoOutputs {
 function minc2seqinfo_params(
     mincfile: InputPathType,
     seqinfofile: string,
-): Minc2seqinfoParameters {
+): Minc2seqinfoParametersTagged {
     const params = {
-        "@type": "freesurfer.minc2seqinfo" as const,
+        "@type": "freesurfer/minc2seqinfo" as const,
         "mincfile": mincfile,
         "seqinfofile": seqinfofile,
     };
@@ -186,7 +153,6 @@ function minc2seqinfo(
 export {
       MINC2SEQINFO_METADATA,
       Minc2seqinfoOutputs,
-      Minc2seqinfoParameters,
       minc2seqinfo,
       minc2seqinfo_execute,
       minc2seqinfo_params,

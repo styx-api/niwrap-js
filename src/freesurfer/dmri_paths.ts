@@ -12,7 +12,7 @@ const DMRI_PATHS_METADATA: Metadata = {
 
 
 interface DmriPathsParameters {
-    "@type": "freesurfer.dmri_paths";
+    "@type"?: "freesurfer/dmri_paths";
     "indir"?: string | null | undefined;
     "outdir"?: string | null | undefined;
     "dwi"?: InputPathType | null | undefined;
@@ -50,43 +50,11 @@ interface DmriPathsParameters {
     "checkopts": boolean;
     "version": boolean;
 }
+type DmriPathsParametersTagged = Required<Pick<DmriPathsParameters, '@type'>> & DmriPathsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dmri_paths": dmri_paths_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dmri_paths(...)`.
+ * Output object returned when calling `DmriPathsParameters(...)`.
  *
  * @interface
  */
@@ -177,9 +145,9 @@ function dmri_paths_params(
     debug: boolean = false,
     checkopts: boolean = false,
     version: boolean = false,
-): DmriPathsParameters {
+): DmriPathsParametersTagged {
     const params = {
-        "@type": "freesurfer.dmri_paths" as const,
+        "@type": "freesurfer/dmri_paths" as const,
         "debug": debug,
         "checkopts": checkopts,
         "version": version,
@@ -499,13 +467,13 @@ function dmri_paths_cargs(
             execution.inputFile((params["sdp"] ?? null))
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["checkopts"] ?? null)) {
+    if ((params["checkopts"] ?? false)) {
         cargs.push("--checkopts");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -655,7 +623,6 @@ function dmri_paths(
 export {
       DMRI_PATHS_METADATA,
       DmriPathsOutputs,
-      DmriPathsParameters,
       dmri_paths,
       dmri_paths_execute,
       dmri_paths_params,

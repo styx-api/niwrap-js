@@ -12,46 +12,14 @@ const TBSS_4_PRESTATS_METADATA: Metadata = {
 
 
 interface Tbss4PrestatsParameters {
-    "@type": "fsl.tbss_4_prestats";
+    "@type"?: "fsl/tbss_4_prestats";
     "threshold": number;
 }
+type Tbss4PrestatsParametersTagged = Required<Pick<Tbss4PrestatsParameters, '@type'>> & Tbss4PrestatsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.tbss_4_prestats": tbss_4_prestats_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tbss_4_prestats(...)`.
+ * Output object returned when calling `Tbss4PrestatsParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface Tbss4PrestatsOutputs {
  */
 function tbss_4_prestats_params(
     threshold: number = 0.2,
-): Tbss4PrestatsParameters {
+): Tbss4PrestatsParametersTagged {
     const params = {
-        "@type": "fsl.tbss_4_prestats" as const,
+        "@type": "fsl/tbss_4_prestats" as const,
         "threshold": threshold,
     };
     return params;
@@ -95,7 +63,7 @@ function tbss_4_prestats_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("tbss_4_prestats");
-    cargs.push(String((params["threshold"] ?? null)));
+    cargs.push(String((params["threshold"] ?? 0.2)));
     return cargs;
 }
 
@@ -173,7 +141,6 @@ function tbss_4_prestats(
 export {
       TBSS_4_PRESTATS_METADATA,
       Tbss4PrestatsOutputs,
-      Tbss4PrestatsParameters,
       tbss_4_prestats,
       tbss_4_prestats_execute,
       tbss_4_prestats_params,

@@ -12,49 +12,16 @@ const TBSS_DEPROJECT_METADATA: Metadata = {
 
 
 interface TbssDeprojectParameters {
-    "@type": "fsl.tbss_deproject";
+    "@type"?: "fsl/tbss_deproject";
     "skeleton_space_input_image": InputPathType;
     "final_space_option": number;
     "index_image_flag": boolean;
 }
+type TbssDeprojectParametersTagged = Required<Pick<TbssDeprojectParameters, '@type'>> & TbssDeprojectParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.tbss_deproject": tbss_deproject_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.tbss_deproject": tbss_deproject_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tbss_deproject(...)`.
+ * Output object returned when calling `TbssDeprojectParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +54,9 @@ function tbss_deproject_params(
     skeleton_space_input_image: InputPathType,
     final_space_option: number,
     index_image_flag: boolean = false,
-): TbssDeprojectParameters {
+): TbssDeprojectParametersTagged {
     const params = {
-        "@type": "fsl.tbss_deproject" as const,
+        "@type": "fsl/tbss_deproject" as const,
         "skeleton_space_input_image": skeleton_space_input_image,
         "final_space_option": final_space_option,
         "index_image_flag": index_image_flag,
@@ -114,7 +81,7 @@ function tbss_deproject_cargs(
     cargs.push("tbss_deproject");
     cargs.push(execution.inputFile((params["skeleton_space_input_image"] ?? null)));
     cargs.push(String((params["final_space_option"] ?? null)));
-    if ((params["index_image_flag"] ?? null)) {
+    if ((params["index_image_flag"] ?? false)) {
         cargs.push("-n");
     }
     return cargs;
@@ -200,7 +167,6 @@ function tbss_deproject(
 export {
       TBSS_DEPROJECT_METADATA,
       TbssDeprojectOutputs,
-      TbssDeprojectParameters,
       tbss_deproject,
       tbss_deproject_execute,
       tbss_deproject_params,

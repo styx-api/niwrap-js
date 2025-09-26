@@ -12,7 +12,7 @@ const ASEGSTATS2TABLE_METADATA: Metadata = {
 
 
 interface Asegstats2tableParameters {
-    "@type": "freesurfer.asegstats2table";
+    "@type"?: "freesurfer/asegstats2table";
     "subjects"?: Array<string> | null | undefined;
     "inputs"?: Array<string> | null | undefined;
     "tablefile": string;
@@ -38,44 +38,11 @@ interface Asegstats2tableParameters {
     "skip_missing_flag": boolean;
     "replace53_flag": boolean;
 }
+type Asegstats2tableParametersTagged = Required<Pick<Asegstats2tableParameters, '@type'>> & Asegstats2tableParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.asegstats2table": asegstats2table_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.asegstats2table": asegstats2table_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `asegstats2table(...)`.
+ * Output object returned when calling `Asegstats2tableParameters(...)`.
  *
  * @interface
  */
@@ -146,9 +113,9 @@ function asegstats2table_params(
     no_vol_extras_flag: boolean = false,
     skip_missing_flag: boolean = false,
     replace53_flag: boolean = false,
-): Asegstats2tableParameters {
+): Asegstats2tableParametersTagged {
     const params = {
-        "@type": "freesurfer.asegstats2table" as const,
+        "@type": "freesurfer/asegstats2table" as const,
         "tablefile": tablefile,
         "write_etiv": write_etiv,
         "debug": debug,
@@ -316,28 +283,28 @@ function asegstats2table_cargs(
             String((params["scale"] ?? null))
         );
     }
-    if ((params["write_etiv"] ?? null)) {
+    if ((params["write_etiv"] ?? false)) {
         cargs.push("--etiv");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["transpose_flag"] ?? null)) {
+    if ((params["transpose_flag"] ?? false)) {
         cargs.push("--transpose");
     }
-    if ((params["common_segs_flag"] ?? null)) {
+    if ((params["common_segs_flag"] ?? false)) {
         cargs.push("--common-segs");
     }
-    if ((params["all_segs_flag"] ?? null)) {
+    if ((params["all_segs_flag"] ?? false)) {
         cargs.push("--all-segs");
     }
-    if ((params["no_vol_extras_flag"] ?? null)) {
+    if ((params["no_vol_extras_flag"] ?? false)) {
         cargs.push("--no-vol-extras");
     }
-    if ((params["skip_missing_flag"] ?? null)) {
+    if ((params["skip_missing_flag"] ?? false)) {
         cargs.push("--skip");
     }
-    if ((params["replace53_flag"] ?? null)) {
+    if ((params["replace53_flag"] ?? false)) {
         cargs.push("--replace53");
     }
     return cargs;
@@ -464,7 +431,6 @@ function asegstats2table(
 export {
       ASEGSTATS2TABLE_METADATA,
       Asegstats2tableOutputs,
-      Asegstats2tableParameters,
       asegstats2table,
       asegstats2table_execute,
       asegstats2table_params,

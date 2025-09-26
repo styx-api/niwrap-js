@@ -12,7 +12,7 @@ const FS_TEMP_FILE_METADATA: Metadata = {
 
 
 interface FsTempFileParameters {
-    "@type": "freesurfer.fs_temp_file";
+    "@type"?: "freesurfer/fs_temp_file";
     "base_dir"?: string | null | undefined;
     "base_dir_alt"?: string | null | undefined;
     "suffix"?: string | null | undefined;
@@ -21,43 +21,11 @@ interface FsTempFileParameters {
     "help": boolean;
     "help_alt": boolean;
 }
+type FsTempFileParametersTagged = Required<Pick<FsTempFileParameters, '@type'>> & FsTempFileParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fs_temp_file": fs_temp_file_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fs_temp_file(...)`.
+ * Output object returned when calling `FsTempFileParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +58,9 @@ function fs_temp_file_params(
     scratch: boolean = false,
     help: boolean = false,
     help_alt: boolean = false,
-): FsTempFileParameters {
+): FsTempFileParametersTagged {
     const params = {
-        "@type": "freesurfer.fs_temp_file" as const,
+        "@type": "freesurfer/fs_temp_file" as const,
         "scratch": scratch,
         "help": help,
         "help_alt": help_alt,
@@ -151,13 +119,13 @@ function fs_temp_file_cargs(
             (params["suffix_alt"] ?? null)
         );
     }
-    if ((params["scratch"] ?? null)) {
+    if ((params["scratch"] ?? false)) {
         cargs.push("--scratch");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["help_alt"] ?? null)) {
+    if ((params["help_alt"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -249,7 +217,6 @@ function fs_temp_file(
 export {
       FS_TEMP_FILE_METADATA,
       FsTempFileOutputs,
-      FsTempFileParameters,
       fs_temp_file,
       fs_temp_file_execute,
       fs_temp_file_params,

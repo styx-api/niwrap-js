@@ -12,47 +12,15 @@ const V_3D_ENTROPY_METADATA: Metadata = {
 
 
 interface V3dEntropyParameters {
-    "@type": "afni.3dEntropy";
+    "@type"?: "afni/3dEntropy";
     "zskip": boolean;
     "input_dataset": InputPathType;
 }
+type V3dEntropyParametersTagged = Required<Pick<V3dEntropyParameters, '@type'>> & V3dEntropyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dEntropy": v_3d_entropy_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_entropy(...)`.
+ * Output object returned when calling `V3dEntropyParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface V3dEntropyOutputs {
 function v_3d_entropy_params(
     input_dataset: InputPathType,
     zskip: boolean = false,
-): V3dEntropyParameters {
+): V3dEntropyParametersTagged {
     const params = {
-        "@type": "afni.3dEntropy" as const,
+        "@type": "afni/3dEntropy" as const,
         "zskip": zskip,
         "input_dataset": input_dataset,
     };
@@ -99,7 +67,7 @@ function v_3d_entropy_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("3dEntropy");
-    if ((params["zskip"] ?? null)) {
+    if ((params["zskip"] ?? false)) {
         cargs.push("-zskip");
     }
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
@@ -181,7 +149,6 @@ function v_3d_entropy(
 
 export {
       V3dEntropyOutputs,
-      V3dEntropyParameters,
       V_3D_ENTROPY_METADATA,
       v_3d_entropy,
       v_3d_entropy_execute,

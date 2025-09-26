@@ -12,50 +12,18 @@ const DCMDIR_INFO_MGH_METADATA: Metadata = {
 
 
 interface DcmdirInfoMghParameters {
-    "@type": "freesurfer.dcmdir-info-mgh";
+    "@type"?: "freesurfer/dcmdir-info-mgh";
     "dicomdir": string;
     "unpackdir"?: string | null | undefined;
     "version": boolean;
     "help": boolean;
     "nopre": boolean;
 }
+type DcmdirInfoMghParametersTagged = Required<Pick<DcmdirInfoMghParameters, '@type'>> & DcmdirInfoMghParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dcmdir-info-mgh": dcmdir_info_mgh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dcmdir_info_mgh(...)`.
+ * Output object returned when calling `DcmdirInfoMghParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function dcmdir_info_mgh_params(
     version: boolean = false,
     help: boolean = false,
     nopre: boolean = false,
-): DcmdirInfoMghParameters {
+): DcmdirInfoMghParametersTagged {
     const params = {
-        "@type": "freesurfer.dcmdir-info-mgh" as const,
+        "@type": "freesurfer/dcmdir-info-mgh" as const,
         "dicomdir": dicomdir,
         "version": version,
         "help": help,
@@ -120,13 +88,13 @@ function dcmdir_info_mgh_cargs(
     if ((params["unpackdir"] ?? null) !== null) {
         cargs.push((params["unpackdir"] ?? null));
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["nopre"] ?? null)) {
+    if ((params["nopre"] ?? false)) {
         cargs.push("--nopre");
     }
     return cargs;
@@ -214,7 +182,6 @@ function dcmdir_info_mgh(
 export {
       DCMDIR_INFO_MGH_METADATA,
       DcmdirInfoMghOutputs,
-      DcmdirInfoMghParameters,
       dcmdir_info_mgh,
       dcmdir_info_mgh_execute,
       dcmdir_info_mgh_params,

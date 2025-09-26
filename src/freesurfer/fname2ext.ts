@@ -12,47 +12,14 @@ const FNAME2EXT_METADATA: Metadata = {
 
 
 interface Fname2extParameters {
-    "@type": "freesurfer.fname2ext";
+    "@type"?: "freesurfer/fname2ext";
     "filename": string;
 }
+type Fname2extParametersTagged = Required<Pick<Fname2extParameters, '@type'>> & Fname2extParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fname2ext": fname2ext_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.fname2ext": fname2ext_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fname2ext(...)`.
+ * Output object returned when calling `Fname2extParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface Fname2extOutputs {
  */
 function fname2ext_params(
     filename: string,
-): Fname2extParameters {
+): Fname2extParametersTagged {
     const params = {
-        "@type": "freesurfer.fname2ext" as const,
+        "@type": "freesurfer/fname2ext" as const,
         "filename": filename,
     };
     return params;
@@ -179,7 +146,6 @@ function fname2ext(
 export {
       FNAME2EXT_METADATA,
       Fname2extOutputs,
-      Fname2extParameters,
       fname2ext,
       fname2ext_execute,
       fname2ext_params,

@@ -12,7 +12,7 @@ const UBER_SKEL_PY_METADATA: Metadata = {
 
 
 interface UberSkelPyParameters {
-    "@type": "afni.uber_skel.py";
+    "@type"?: "afni/uber_skel.py";
     "qt_options"?: string | null | undefined;
     "no_gui_flag": boolean;
     "print_script": boolean;
@@ -25,43 +25,11 @@ interface UberSkelPyParameters {
     "show_valid_opts": boolean;
     "version": boolean;
 }
+type UberSkelPyParametersTagged = Required<Pick<UberSkelPyParameters, '@type'>> & UberSkelPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.uber_skel.py": uber_skel_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `uber_skel_py(...)`.
+ * Output object returned when calling `UberSkelPyParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +70,9 @@ function uber_skel_py_params(
     history: boolean = false,
     show_valid_opts: boolean = false,
     version: boolean = false,
-): UberSkelPyParameters {
+): UberSkelPyParametersTagged {
     const params = {
-        "@type": "afni.uber_skel.py" as const,
+        "@type": "afni/uber_skel.py" as const,
         "no_gui_flag": no_gui_flag,
         "print_script": print_script,
         "help_howto_program": help_howto_program,
@@ -147,10 +115,10 @@ function uber_skel_py_cargs(
             (params["qt_options"] ?? null)
         );
     }
-    if ((params["no_gui_flag"] ?? null)) {
+    if ((params["no_gui_flag"] ?? false)) {
         cargs.push("-no_gui");
     }
-    if ((params["print_script"] ?? null)) {
+    if ((params["print_script"] ?? false)) {
         cargs.push("-print_script");
     }
     if ((params["save_script"] ?? null) !== null) {
@@ -165,22 +133,22 @@ function uber_skel_py_cargs(
             ...(params["user_var"] ?? null)
         );
     }
-    if ((params["help_howto_program"] ?? null)) {
+    if ((params["help_howto_program"] ?? false)) {
         cargs.push("-help_howto_program");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["help_gui"] ?? null)) {
+    if ((params["help_gui"] ?? false)) {
         cargs.push("-help_gui");
     }
-    if ((params["history"] ?? null)) {
+    if ((params["history"] ?? false)) {
         cargs.push("-hist");
     }
-    if ((params["show_valid_opts"] ?? null)) {
+    if ((params["show_valid_opts"] ?? false)) {
         cargs.push("-show_valid_opts");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-ver");
     }
     return cargs;
@@ -280,7 +248,6 @@ function uber_skel_py(
 export {
       UBER_SKEL_PY_METADATA,
       UberSkelPyOutputs,
-      UberSkelPyParameters,
       uber_skel_py,
       uber_skel_py_execute,
       uber_skel_py_params,

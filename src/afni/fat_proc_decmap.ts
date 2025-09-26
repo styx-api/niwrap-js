@@ -12,7 +12,7 @@ const FAT_PROC_DECMAP_METADATA: Metadata = {
 
 
 interface FatProcDecmapParameters {
-    "@type": "afni.fat_proc_decmap";
+    "@type"?: "afni/fat_proc_decmap";
     "in_fa": InputPathType;
     "in_v1": InputPathType;
     "prefix": string;
@@ -25,44 +25,11 @@ interface FatProcDecmapParameters {
     "no_cmd_out": boolean;
     "no_qc_view": boolean;
 }
+type FatProcDecmapParametersTagged = Required<Pick<FatProcDecmapParameters, '@type'>> & FatProcDecmapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.fat_proc_decmap": fat_proc_decmap_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.fat_proc_decmap": fat_proc_decmap_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fat_proc_decmap(...)`.
+ * Output object returned when calling `FatProcDecmapParameters(...)`.
  *
  * @interface
  */
@@ -127,9 +94,9 @@ function fat_proc_decmap_params(
     qc_prefix: string | null = null,
     no_cmd_out: boolean = false,
     no_qc_view: boolean = false,
-): FatProcDecmapParameters {
+): FatProcDecmapParametersTagged {
     const params = {
-        "@type": "afni.fat_proc_decmap" as const,
+        "@type": "afni/fat_proc_decmap" as const,
         "in_fa": in_fa,
         "in_v1": in_v1,
         "prefix": prefix,
@@ -206,7 +173,7 @@ function fat_proc_decmap_cargs(
             (params["workdir"] ?? null)
         );
     }
-    if ((params["no_clean"] ?? null)) {
+    if ((params["no_clean"] ?? false)) {
         cargs.push("-no_clean");
     }
     if ((params["qc_prefix"] ?? null) !== null) {
@@ -215,10 +182,10 @@ function fat_proc_decmap_cargs(
             (params["qc_prefix"] ?? null)
         );
     }
-    if ((params["no_cmd_out"] ?? null)) {
+    if ((params["no_cmd_out"] ?? false)) {
         cargs.push("-no_cmd_out");
     }
-    if ((params["no_qc_view"] ?? null)) {
+    if ((params["no_qc_view"] ?? false)) {
         cargs.push("-no_qc_view");
     }
     return cargs;
@@ -324,7 +291,6 @@ function fat_proc_decmap(
 export {
       FAT_PROC_DECMAP_METADATA,
       FatProcDecmapOutputs,
-      FatProcDecmapParameters,
       fat_proc_decmap,
       fat_proc_decmap_execute,
       fat_proc_decmap_params,

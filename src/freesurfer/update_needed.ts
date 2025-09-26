@@ -12,48 +12,16 @@ const UPDATE_NEEDED_METADATA: Metadata = {
 
 
 interface UpdateNeededParameters {
-    "@type": "freesurfer.UpdateNeeded";
+    "@type"?: "freesurfer/UpdateNeeded";
     "target_file": InputPathType;
     "source_file": InputPathType;
     "additional_source_files"?: Array<InputPathType> | null | undefined;
 }
+type UpdateNeededParametersTagged = Required<Pick<UpdateNeededParameters, '@type'>> & UpdateNeededParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.UpdateNeeded": update_needed_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `update_needed(...)`.
+ * Output object returned when calling `UpdateNeededParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function update_needed_params(
     target_file: InputPathType,
     source_file: InputPathType,
     additional_source_files: Array<InputPathType> | null = null,
-): UpdateNeededParameters {
+): UpdateNeededParametersTagged {
     const params = {
-        "@type": "freesurfer.UpdateNeeded" as const,
+        "@type": "freesurfer/UpdateNeeded" as const,
         "target_file": target_file,
         "source_file": source_file,
     };
@@ -191,7 +159,6 @@ function update_needed(
 export {
       UPDATE_NEEDED_METADATA,
       UpdateNeededOutputs,
-      UpdateNeededParameters,
       update_needed,
       update_needed_execute,
       update_needed_params,

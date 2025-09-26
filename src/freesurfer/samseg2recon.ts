@@ -12,7 +12,7 @@ const SAMSEG2RECON_METADATA: Metadata = {
 
 
 interface Samseg2reconParameters {
-    "@type": "freesurfer.samseg2recon";
+    "@type"?: "freesurfer/samseg2recon";
     "subject": string;
     "samseg_dir"?: string | null | undefined;
     "no_cc": boolean;
@@ -26,44 +26,11 @@ interface Samseg2reconParameters {
     "from_recon_all": boolean;
     "force_update": boolean;
 }
+type Samseg2reconParametersTagged = Required<Pick<Samseg2reconParameters, '@type'>> & Samseg2reconParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.samseg2recon": samseg2recon_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.samseg2recon": samseg2recon_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `samseg2recon(...)`.
+ * Output object returned when calling `Samseg2reconParameters(...)`.
  *
  * @interface
  */
@@ -118,9 +85,9 @@ function samseg2recon_params(
     mask_file: InputPathType | null = null,
     from_recon_all: boolean = false,
     force_update: boolean = false,
-): Samseg2reconParameters {
+): Samseg2reconParametersTagged {
     const params = {
-        "@type": "freesurfer.samseg2recon" as const,
+        "@type": "freesurfer/samseg2recon" as const,
         "subject": subject,
         "no_cc": no_cc,
         "fill": fill,
@@ -168,19 +135,19 @@ function samseg2recon_cargs(
             (params["samseg_dir"] ?? null)
         );
     }
-    if ((params["no_cc"] ?? null)) {
+    if ((params["no_cc"] ?? false)) {
         cargs.push("--no-cc");
     }
-    if ((params["fill"] ?? null)) {
+    if ((params["fill"] ?? false)) {
         cargs.push("--fill");
     }
-    if ((params["normalization2"] ?? null)) {
+    if ((params["normalization2"] ?? false)) {
         cargs.push("--normalization2");
     }
-    if ((params["uchar"] ?? null)) {
+    if ((params["uchar"] ?? false)) {
         cargs.push("--uchar");
     }
-    if ((params["no_keep_exc"] ?? null)) {
+    if ((params["no_keep_exc"] ?? false)) {
         cargs.push("--no-keep-exc");
     }
     if ((params["long_tp"] ?? null) !== null) {
@@ -189,7 +156,7 @@ function samseg2recon_cargs(
             String((params["long_tp"] ?? null))
         );
     }
-    if ((params["base"] ?? null)) {
+    if ((params["base"] ?? false)) {
         cargs.push("--base");
     }
     if ((params["mask_file"] ?? null) !== null) {
@@ -198,10 +165,10 @@ function samseg2recon_cargs(
             execution.inputFile((params["mask_file"] ?? null))
         );
     }
-    if ((params["from_recon_all"] ?? null)) {
+    if ((params["from_recon_all"] ?? false)) {
         cargs.push("--from-recon-all");
     }
-    if ((params["force_update"] ?? null)) {
+    if ((params["force_update"] ?? false)) {
         cargs.push("--force-update");
     }
     return cargs;
@@ -306,7 +273,6 @@ function samseg2recon(
 export {
       SAMSEG2RECON_METADATA,
       Samseg2reconOutputs,
-      Samseg2reconParameters,
       samseg2recon,
       samseg2recon_execute,
       samseg2recon_params,

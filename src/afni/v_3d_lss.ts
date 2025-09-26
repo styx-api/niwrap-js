@@ -12,7 +12,7 @@ const V_3D_LSS_METADATA: Metadata = {
 
 
 interface V3dLssParameters {
-    "@type": "afni.3dLSS";
+    "@type"?: "afni/3dLSS";
     "matrix": InputPathType;
     "input"?: InputPathType | null | undefined;
     "nodata": boolean;
@@ -22,44 +22,11 @@ interface V3dLssParameters {
     "save1D"?: string | null | undefined;
     "verbose": boolean;
 }
+type V3dLssParametersTagged = Required<Pick<V3dLssParameters, '@type'>> & V3dLssParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dLSS": v_3d_lss_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dLSS": v_3d_lss_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_lss(...)`.
+ * Output object returned when calling `V3dLssParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +69,9 @@ function v_3d_lss_params(
     prefix: string | null = null,
     save1_d: string | null = null,
     verbose: boolean = false,
-): V3dLssParameters {
+): V3dLssParametersTagged {
     const params = {
-        "@type": "afni.3dLSS" as const,
+        "@type": "afni/3dLSS" as const,
         "matrix": matrix,
         "nodata": nodata,
         "automask": automask,
@@ -150,7 +117,7 @@ function v_3d_lss_cargs(
             execution.inputFile((params["input"] ?? null))
         );
     }
-    if ((params["nodata"] ?? null)) {
+    if ((params["nodata"] ?? false)) {
         cargs.push("-nodata");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -159,7 +126,7 @@ function v_3d_lss_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     if ((params["prefix"] ?? null) !== null) {
@@ -174,7 +141,7 @@ function v_3d_lss_cargs(
             (params["save1D"] ?? null)
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
     return cargs;
@@ -269,7 +236,6 @@ function v_3d_lss(
 
 export {
       V3dLssOutputs,
-      V3dLssParameters,
       V_3D_LSS_METADATA,
       v_3d_lss,
       v_3d_lss_execute,

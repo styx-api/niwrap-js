@@ -12,7 +12,7 @@ const ISO_SURFACE_METADATA: Metadata = {
 
 
 interface IsoSurfaceParameters {
-    "@type": "afni.IsoSurface";
+    "@type"?: "afni/IsoSurface";
     "input_vol"?: InputPathType | null | undefined;
     "shape_spec"?: Array<string> | null | undefined;
     "isorois": boolean;
@@ -28,44 +28,11 @@ interface IsoSurfaceParameters {
     "novolreg": boolean;
     "noxform": boolean;
 }
+type IsoSurfaceParametersTagged = Required<Pick<IsoSurfaceParameters, '@type'>> & IsoSurfaceParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.IsoSurface": iso_surface_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.IsoSurface": iso_surface_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `iso_surface(...)`.
+ * Output object returned when calling `IsoSurfaceParameters(...)`.
  *
  * @interface
  */
@@ -124,9 +91,9 @@ function iso_surface_params(
     xform: string | null = null,
     novolreg: boolean = false,
     noxform: boolean = false,
-): IsoSurfaceParameters {
+): IsoSurfaceParametersTagged {
     const params = {
-        "@type": "afni.IsoSurface" as const,
+        "@type": "afni/IsoSurface" as const,
         "isorois": isorois,
         "autocrop": autocrop,
         "novolreg": novolreg,
@@ -192,7 +159,7 @@ function iso_surface_cargs(
             ...(params["shape_spec"] ?? null)
         );
     }
-    if ((params["isorois"] ?? null)) {
+    if ((params["isorois"] ?? false)) {
         cargs.push("-isorois");
     }
     if ((params["isoval"] ?? null) !== null) {
@@ -231,7 +198,7 @@ function iso_surface_cargs(
             (params["debug"] ?? null)
         );
     }
-    if ((params["autocrop"] ?? null)) {
+    if ((params["autocrop"] ?? false)) {
         cargs.push("-autocrop");
     }
     if ((params["remesh"] ?? null) !== null) {
@@ -246,10 +213,10 @@ function iso_surface_cargs(
             (params["xform"] ?? null)
         );
     }
-    if ((params["novolreg"] ?? null)) {
+    if ((params["novolreg"] ?? false)) {
         cargs.push("-novolreg");
     }
-    if ((params["noxform"] ?? null)) {
+    if ((params["noxform"] ?? false)) {
         cargs.push("-noxform");
     }
     return cargs;
@@ -358,7 +325,6 @@ function iso_surface(
 export {
       ISO_SURFACE_METADATA,
       IsoSurfaceOutputs,
-      IsoSurfaceParameters,
       iso_surface,
       iso_surface_execute,
       iso_surface_params,

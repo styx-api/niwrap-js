@@ -12,50 +12,17 @@ const VSM_SMOOTH_METADATA: Metadata = {
 
 
 interface VsmSmoothParameters {
-    "@type": "freesurfer.vsm-smooth";
+    "@type"?: "freesurfer/vsm-smooth";
     "input_file": InputPathType;
     "output_file": string;
     "fwhm_value": number;
     "temp_dir": string;
 }
+type VsmSmoothParametersTagged = Required<Pick<VsmSmoothParameters, '@type'>> & VsmSmoothParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.vsm-smooth": vsm_smooth_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.vsm-smooth": vsm_smooth_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `vsm_smooth(...)`.
+ * Output object returned when calling `VsmSmoothParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function vsm_smooth_params(
     output_file: string,
     fwhm_value: number,
     temp_dir: string,
-): VsmSmoothParameters {
+): VsmSmoothParametersTagged {
     const params = {
-        "@type": "freesurfer.vsm-smooth" as const,
+        "@type": "freesurfer/vsm-smooth" as const,
         "input_file": input_file,
         "output_file": output_file,
         "fwhm_value": fwhm_value,
@@ -212,7 +179,6 @@ function vsm_smooth(
 export {
       VSM_SMOOTH_METADATA,
       VsmSmoothOutputs,
-      VsmSmoothParameters,
       vsm_smooth,
       vsm_smooth_execute,
       vsm_smooth_params,

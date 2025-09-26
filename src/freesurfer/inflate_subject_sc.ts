@@ -12,49 +12,16 @@ const INFLATE_SUBJECT_SC_METADATA: Metadata = {
 
 
 interface InflateSubjectScParameters {
-    "@type": "freesurfer.inflate_subject_sc";
+    "@type"?: "freesurfer/inflate_subject_sc";
     "subject_dir": string;
     "verbose": boolean;
     "debug": boolean;
 }
+type InflateSubjectScParametersTagged = Required<Pick<InflateSubjectScParameters, '@type'>> & InflateSubjectScParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.inflate_subject_sc": inflate_subject_sc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.inflate_subject_sc": inflate_subject_sc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `inflate_subject_sc(...)`.
+ * Output object returned when calling `InflateSubjectScParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function inflate_subject_sc_params(
     subject_dir: string,
     verbose: boolean = false,
     debug: boolean = false,
-): InflateSubjectScParameters {
+): InflateSubjectScParametersTagged {
     const params = {
-        "@type": "freesurfer.inflate_subject_sc" as const,
+        "@type": "freesurfer/inflate_subject_sc" as const,
         "subject_dir": subject_dir,
         "verbose": verbose,
         "debug": debug,
@@ -109,10 +76,10 @@ function inflate_subject_sc_cargs(
     const cargs: string[] = [];
     cargs.push("inflate_subject_sc");
     cargs.push((params["subject_dir"] ?? null));
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("--verbose");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -197,7 +164,6 @@ function inflate_subject_sc(
 export {
       INFLATE_SUBJECT_SC_METADATA,
       InflateSubjectScOutputs,
-      InflateSubjectScParameters,
       inflate_subject_sc,
       inflate_subject_sc_execute,
       inflate_subject_sc_params,

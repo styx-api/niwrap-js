@@ -12,49 +12,16 @@ const V_3D_COMPARE_AFFINE_METADATA: Metadata = {
 
 
 interface V3dCompareAffineParameters {
-    "@type": "afni.3dCompareAffine";
+    "@type"?: "afni/3dCompareAffine";
     "mask"?: string | null | undefined;
     "dset"?: InputPathType | null | undefined;
     "affine"?: Array<string> | null | undefined;
 }
+type V3dCompareAffineParametersTagged = Required<Pick<V3dCompareAffineParameters, '@type'>> & V3dCompareAffineParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dCompareAffine": v_3d_compare_affine_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dCompareAffine": v_3d_compare_affine_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_compare_affine(...)`.
+ * Output object returned when calling `V3dCompareAffineParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function v_3d_compare_affine_params(
     mask: string | null = null,
     dset: InputPathType | null = null,
     affine: Array<string> | null = null,
-): V3dCompareAffineParameters {
+): V3dCompareAffineParametersTagged {
     const params = {
-        "@type": "afni.3dCompareAffine" as const,
+        "@type": "afni/3dCompareAffine" as const,
     };
     if (mask !== null) {
         params["mask"] = mask;
@@ -213,7 +180,6 @@ function v_3d_compare_affine(
 
 export {
       V3dCompareAffineOutputs,
-      V3dCompareAffineParameters,
       V_3D_COMPARE_AFFINE_METADATA,
       v_3d_compare_affine,
       v_3d_compare_affine_execute,

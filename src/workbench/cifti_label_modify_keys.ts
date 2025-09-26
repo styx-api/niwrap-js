@@ -12,50 +12,17 @@ const CIFTI_LABEL_MODIFY_KEYS_METADATA: Metadata = {
 
 
 interface CiftiLabelModifyKeysParameters {
-    "@type": "workbench.cifti-label-modify-keys";
+    "@type"?: "workbench/cifti-label-modify-keys";
     "cifti_in": InputPathType;
     "remap_file": string;
     "cifti_out": string;
     "opt_column_column"?: string | null | undefined;
 }
+type CiftiLabelModifyKeysParametersTagged = Required<Pick<CiftiLabelModifyKeysParameters, '@type'>> & CiftiLabelModifyKeysParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-label-modify-keys": cifti_label_modify_keys_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-label-modify-keys": cifti_label_modify_keys_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `cifti_label_modify_keys(...)`.
+ * Output object returned when calling `CiftiLabelModifyKeysParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function cifti_label_modify_keys_params(
     remap_file: string,
     cifti_out: string,
     opt_column_column: string | null = null,
-): CiftiLabelModifyKeysParameters {
+): CiftiLabelModifyKeysParametersTagged {
     const params = {
-        "@type": "workbench.cifti-label-modify-keys" as const,
+        "@type": "workbench/cifti-label-modify-keys" as const,
         "cifti_in": cifti_in,
         "remap_file": remap_file,
         "cifti_out": cifti_out,
@@ -224,7 +191,6 @@ function cifti_label_modify_keys(
 export {
       CIFTI_LABEL_MODIFY_KEYS_METADATA,
       CiftiLabelModifyKeysOutputs,
-      CiftiLabelModifyKeysParameters,
       cifti_label_modify_keys,
       cifti_label_modify_keys_execute,
       cifti_label_modify_keys_params,

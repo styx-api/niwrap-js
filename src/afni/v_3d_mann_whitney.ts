@@ -12,50 +12,18 @@ const V_3D_MANN_WHITNEY_METADATA: Metadata = {
 
 
 interface V3dMannWhitneyParameters {
-    "@type": "afni.3dMannWhitney";
+    "@type"?: "afni/3dMannWhitney";
     "dset1_x": Array<string>;
     "dset2_y": Array<string>;
     "output_prefix": string;
     "workmem"?: number | null | undefined;
     "voxel_num"?: number | null | undefined;
 }
+type V3dMannWhitneyParametersTagged = Required<Pick<V3dMannWhitneyParameters, '@type'>> & V3dMannWhitneyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dMannWhitney": v_3d_mann_whitney_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_mann_whitney(...)`.
+ * Output object returned when calling `V3dMannWhitneyParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function v_3d_mann_whitney_params(
     output_prefix: string,
     workmem: number | null = null,
     voxel_num: number | null = null,
-): V3dMannWhitneyParameters {
+): V3dMannWhitneyParametersTagged {
     const params = {
-        "@type": "afni.3dMannWhitney" as const,
+        "@type": "afni/3dMannWhitney" as const,
         "dset1_x": dset1_x,
         "dset2_y": dset2_y,
         "output_prefix": output_prefix,
@@ -223,7 +191,6 @@ function v_3d_mann_whitney(
 
 export {
       V3dMannWhitneyOutputs,
-      V3dMannWhitneyParameters,
       V_3D_MANN_WHITNEY_METADATA,
       v_3d_mann_whitney,
       v_3d_mann_whitney_execute,

@@ -12,50 +12,17 @@ const MIST_FA_REG_METADATA: Metadata = {
 
 
 interface MistFaRegParameters {
-    "@type": "fsl.mist_FA_reg";
+    "@type"?: "fsl/mist_FA_reg";
     "fa_volume": InputPathType;
     "s0_volume": InputPathType;
     "reference_t1_volume": InputPathType;
     "output_filename": string;
 }
+type MistFaRegParametersTagged = Required<Pick<MistFaRegParameters, '@type'>> & MistFaRegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.mist_FA_reg": mist_fa_reg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.mist_FA_reg": mist_fa_reg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mist_fa_reg(...)`.
+ * Output object returned when calling `MistFaRegParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mist_fa_reg_params(
     s0_volume: InputPathType,
     reference_t1_volume: InputPathType,
     output_filename: string,
-): MistFaRegParameters {
+): MistFaRegParametersTagged {
     const params = {
-        "@type": "fsl.mist_FA_reg" as const,
+        "@type": "fsl/mist_FA_reg" as const,
         "fa_volume": fa_volume,
         "s0_volume": s0_volume,
         "reference_t1_volume": reference_t1_volume,
@@ -200,7 +167,6 @@ function mist_fa_reg(
 export {
       MIST_FA_REG_METADATA,
       MistFaRegOutputs,
-      MistFaRegParameters,
       mist_fa_reg,
       mist_fa_reg_execute,
       mist_fa_reg_params,

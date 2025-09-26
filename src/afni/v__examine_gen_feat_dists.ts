@@ -12,7 +12,7 @@ const V__EXAMINE_GEN_FEAT_DISTS_METADATA: Metadata = {
 
 
 interface VExamineGenFeatDistsParameters {
-    "@type": "afni.@ExamineGenFeatDists";
+    "@type"?: "afni/@ExamineGenFeatDists";
     "features_dir": string;
     "wildcards"?: Array<string> | null | undefined;
     "output_suffix"?: string | null | undefined;
@@ -23,43 +23,11 @@ interface VExamineGenFeatDistsParameters {
     "echo": boolean;
     "help": boolean;
 }
+type VExamineGenFeatDistsParametersTagged = Required<Pick<VExamineGenFeatDistsParameters, '@type'>> & VExamineGenFeatDistsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@ExamineGenFeatDists": v__examine_gen_feat_dists_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__examine_gen_feat_dists(...)`.
+ * Output object returned when calling `VExamineGenFeatDistsParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +64,9 @@ function v__examine_gen_feat_dists_params(
     panels_horizontal: number | null = null,
     echo: boolean = false,
     help: boolean = false,
-): VExamineGenFeatDistsParameters {
+): VExamineGenFeatDistsParametersTagged {
     const params = {
-        "@type": "afni.@ExamineGenFeatDists" as const,
+        "@type": "afni/@ExamineGenFeatDists" as const,
         "features_dir": features_dir,
         "echo": echo,
         "help": help,
@@ -179,10 +147,10 @@ function v__examine_gen_feat_dists_cargs(
             String((params["panels_horizontal"] ?? null))
         );
     }
-    if ((params["echo"] ?? null)) {
+    if ((params["echo"] ?? false)) {
         cargs.push("-echo");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -277,7 +245,6 @@ function v__examine_gen_feat_dists(
 
 export {
       VExamineGenFeatDistsOutputs,
-      VExamineGenFeatDistsParameters,
       V__EXAMINE_GEN_FEAT_DISTS_METADATA,
       v__examine_gen_feat_dists,
       v__examine_gen_feat_dists_execute,

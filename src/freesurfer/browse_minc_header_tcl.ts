@@ -12,46 +12,14 @@ const BROWSE_MINC_HEADER_TCL_METADATA: Metadata = {
 
 
 interface BrowseMincHeaderTclParameters {
-    "@type": "freesurfer.browse-minc-header.tcl";
+    "@type"?: "freesurfer/browse-minc-header.tcl";
     "infile": InputPathType;
 }
+type BrowseMincHeaderTclParametersTagged = Required<Pick<BrowseMincHeaderTclParameters, '@type'>> & BrowseMincHeaderTclParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.browse-minc-header.tcl": browse_minc_header_tcl_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `browse_minc_header_tcl(...)`.
+ * Output object returned when calling `BrowseMincHeaderTclParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface BrowseMincHeaderTclOutputs {
  */
 function browse_minc_header_tcl_params(
     infile: InputPathType,
-): BrowseMincHeaderTclParameters {
+): BrowseMincHeaderTclParametersTagged {
     const params = {
-        "@type": "freesurfer.browse-minc-header.tcl" as const,
+        "@type": "freesurfer/browse-minc-header.tcl" as const,
         "infile": infile,
     };
     return params;
@@ -173,7 +141,6 @@ function browse_minc_header_tcl(
 export {
       BROWSE_MINC_HEADER_TCL_METADATA,
       BrowseMincHeaderTclOutputs,
-      BrowseMincHeaderTclParameters,
       browse_minc_header_tcl,
       browse_minc_header_tcl_execute,
       browse_minc_header_tcl_params,

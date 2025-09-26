@@ -12,48 +12,15 @@ const REMOVE_TALAIRACH_METADATA: Metadata = {
 
 
 interface RemoveTalairachParameters {
-    "@type": "freesurfer.remove_talairach";
+    "@type"?: "freesurfer/remove_talairach";
     "input_file": InputPathType;
     "output_file": string;
 }
+type RemoveTalairachParametersTagged = Required<Pick<RemoveTalairachParameters, '@type'>> & RemoveTalairachParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.remove_talairach": remove_talairach_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.remove_talairach": remove_talairach_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `remove_talairach(...)`.
+ * Output object returned when calling `RemoveTalairachParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface RemoveTalairachOutputs {
 function remove_talairach_params(
     input_file: InputPathType,
     output_file: string,
-): RemoveTalairachParameters {
+): RemoveTalairachParametersTagged {
     const params = {
-        "@type": "freesurfer.remove_talairach" as const,
+        "@type": "freesurfer/remove_talairach" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -186,7 +153,6 @@ function remove_talairach(
 export {
       REMOVE_TALAIRACH_METADATA,
       RemoveTalairachOutputs,
-      RemoveTalairachParameters,
       remove_talairach,
       remove_talairach_execute,
       remove_talairach_params,

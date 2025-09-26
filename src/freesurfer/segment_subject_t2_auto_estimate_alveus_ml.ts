@@ -12,46 +12,14 @@ const SEGMENT_SUBJECT_T2_AUTO_ESTIMATE_ALVEUS_ML_METADATA: Metadata = {
 
 
 interface SegmentSubjectT2AutoEstimateAlveusMlParameters {
-    "@type": "freesurfer.segmentSubjectT2_autoEstimateAlveusML";
+    "@type"?: "freesurfer/segmentSubjectT2_autoEstimateAlveusML";
     "missing_library": string;
 }
+type SegmentSubjectT2AutoEstimateAlveusMlParametersTagged = Required<Pick<SegmentSubjectT2AutoEstimateAlveusMlParameters, '@type'>> & SegmentSubjectT2AutoEstimateAlveusMlParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.segmentSubjectT2_autoEstimateAlveusML": segment_subject_t2_auto_estimate_alveus_ml_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `segment_subject_t2_auto_estimate_alveus_ml(...)`.
+ * Output object returned when calling `SegmentSubjectT2AutoEstimateAlveusMlParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface SegmentSubjectT2AutoEstimateAlveusMlOutputs {
  */
 function segment_subject_t2_auto_estimate_alveus_ml_params(
     missing_library: string = "libmwlaunchermain.so: cannot open shared object file",
-): SegmentSubjectT2AutoEstimateAlveusMlParameters {
+): SegmentSubjectT2AutoEstimateAlveusMlParametersTagged {
     const params = {
-        "@type": "freesurfer.segmentSubjectT2_autoEstimateAlveusML" as const,
+        "@type": "freesurfer/segmentSubjectT2_autoEstimateAlveusML" as const,
         "missing_library": missing_library,
     };
     return params;
@@ -95,7 +63,7 @@ function segment_subject_t2_auto_estimate_alveus_ml_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("segmentSubjectT2_autoEstimateAlveusML");
-    cargs.push((params["missing_library"] ?? null));
+    cargs.push((params["missing_library"] ?? "libmwlaunchermain.so: cannot open shared object file"));
     return cargs;
 }
 
@@ -173,7 +141,6 @@ function segment_subject_t2_auto_estimate_alveus_ml(
 export {
       SEGMENT_SUBJECT_T2_AUTO_ESTIMATE_ALVEUS_ML_METADATA,
       SegmentSubjectT2AutoEstimateAlveusMlOutputs,
-      SegmentSubjectT2AutoEstimateAlveusMlParameters,
       segment_subject_t2_auto_estimate_alveus_ml,
       segment_subject_t2_auto_estimate_alveus_ml_execute,
       segment_subject_t2_auto_estimate_alveus_ml_params,

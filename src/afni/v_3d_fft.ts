@@ -12,7 +12,7 @@ const V_3D_FFT_METADATA: Metadata = {
 
 
 interface V3dFftParameters {
-    "@type": "afni.3dFFT";
+    "@type"?: "afni/3dFFT";
     "dataset": InputPathType;
     "abs": boolean;
     "phase": boolean;
@@ -26,44 +26,11 @@ interface V3dFftParameters {
     "input"?: InputPathType | null | undefined;
     "prefix"?: string | null | undefined;
 }
+type V3dFftParametersTagged = Required<Pick<V3dFftParameters, '@type'>> & V3dFftParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dFFT": v_3d_fft_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dFFT": v_3d_fft_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_fft(...)`.
+ * Output object returned when calling `V3dFftParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function v_3d_fft_params(
     alt_out: boolean = false,
     input: InputPathType | null = null,
     prefix: string | null = null,
-): V3dFftParameters {
+): V3dFftParametersTagged {
     const params = {
-        "@type": "afni.3dFFT" as const,
+        "@type": "afni/3dFFT" as const,
         "dataset": dataset,
         "abs": abs,
         "phase": phase,
@@ -155,16 +122,16 @@ function v_3d_fft_cargs(
     const cargs: string[] = [];
     cargs.push("3dFFT");
     cargs.push(execution.inputFile((params["dataset"] ?? null)));
-    if ((params["abs"] ?? null)) {
+    if ((params["abs"] ?? false)) {
         cargs.push("--abs");
     }
-    if ((params["phase"] ?? null)) {
+    if ((params["phase"] ?? false)) {
         cargs.push("--phase");
     }
-    if ((params["complex"] ?? null)) {
+    if ((params["complex"] ?? false)) {
         cargs.push("--complex");
     }
-    if ((params["inverse"] ?? null)) {
+    if ((params["inverse"] ?? false)) {
         cargs.push("--inverse");
     }
     if ((params["Lx"] ?? null) !== null) {
@@ -185,10 +152,10 @@ function v_3d_fft_cargs(
             String((params["Lz"] ?? null))
         );
     }
-    if ((params["altIN"] ?? null)) {
+    if ((params["altIN"] ?? false)) {
         cargs.push("--altIN");
     }
-    if ((params["altOUT"] ?? null)) {
+    if ((params["altOUT"] ?? false)) {
         cargs.push("--altOUT");
     }
     if ((params["input"] ?? null) !== null) {
@@ -302,7 +269,6 @@ function v_3d_fft(
 
 export {
       V3dFftOutputs,
-      V3dFftParameters,
       V_3D_FFT_METADATA,
       v_3d_fft,
       v_3d_fft_execute,

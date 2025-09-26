@@ -12,50 +12,18 @@ const JKGCATRAIN_METADATA: Metadata = {
 
 
 interface JkgcatrainParameters {
-    "@type": "freesurfer.jkgcatrain";
+    "@type"?: "freesurfer/jkgcatrain";
     "gca_directory": string;
     "iteration_number"?: number | null | undefined;
     "num_threads"?: number | null | undefined;
     "no_submit": boolean;
     "mail_flag": boolean;
 }
+type JkgcatrainParametersTagged = Required<Pick<JkgcatrainParameters, '@type'>> & JkgcatrainParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.jkgcatrain": jkgcatrain_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `jkgcatrain(...)`.
+ * Output object returned when calling `JkgcatrainParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function jkgcatrain_params(
     num_threads: number | null = null,
     no_submit: boolean = false,
     mail_flag: boolean = false,
-): JkgcatrainParameters {
+): JkgcatrainParametersTagged {
     const params = {
-        "@type": "freesurfer.jkgcatrain" as const,
+        "@type": "freesurfer/jkgcatrain" as const,
         "gca_directory": gca_directory,
         "no_submit": no_submit,
         "mail_flag": mail_flag,
@@ -131,10 +99,10 @@ function jkgcatrain_cargs(
             String((params["num_threads"] ?? null))
         );
     }
-    if ((params["no_submit"] ?? null)) {
+    if ((params["no_submit"] ?? false)) {
         cargs.push("--no-submit");
     }
-    if ((params["mail_flag"] ?? null)) {
+    if ((params["mail_flag"] ?? false)) {
         cargs.push("--pb-m");
     }
     return cargs;
@@ -222,7 +190,6 @@ function jkgcatrain(
 export {
       JKGCATRAIN_METADATA,
       JkgcatrainOutputs,
-      JkgcatrainParameters,
       jkgcatrain,
       jkgcatrain_execute,
       jkgcatrain_params,

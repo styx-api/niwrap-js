@@ -12,7 +12,7 @@ const MEICA_PY_METADATA: Metadata = {
 
 
 interface MeicaPyParameters {
-    "@type": "afni.meica.py";
+    "@type"?: "afni/meica.py";
     "infile": InputPathType;
     "echo_times": string;
     "affine": string;
@@ -22,44 +22,11 @@ interface MeicaPyParameters {
     "threshold"?: number | null | undefined;
     "debug": boolean;
 }
+type MeicaPyParametersTagged = Required<Pick<MeicaPyParameters, '@type'>> & MeicaPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.meica.py": meica_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.meica.py": meica_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `meica_py(...)`.
+ * Output object returned when calling `MeicaPyParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +69,9 @@ function meica_py_params(
     talairach: boolean = false,
     threshold: number | null = null,
     debug: boolean = false,
-): MeicaPyParameters {
+): MeicaPyParametersTagged {
     const params = {
-        "@type": "afni.meica.py" as const,
+        "@type": "afni/meica.py" as const,
         "infile": infile,
         "echo_times": echo_times,
         "affine": affine,
@@ -158,7 +125,7 @@ function meica_py_cargs(
             String((params["components"] ?? null))
         );
     }
-    if ((params["talairach"] ?? null)) {
+    if ((params["talairach"] ?? false)) {
         cargs.push("-t");
     }
     if ((params["threshold"] ?? null) !== null) {
@@ -167,7 +134,7 @@ function meica_py_cargs(
             String((params["threshold"] ?? null))
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -263,7 +230,6 @@ function meica_py(
 export {
       MEICA_PY_METADATA,
       MeicaPyOutputs,
-      MeicaPyParameters,
       meica_py,
       meica_py_execute,
       meica_py_params,

@@ -12,7 +12,7 @@ const MRI_GTMSEG_METADATA: Metadata = {
 
 
 interface MriGtmsegParameters {
-    "@type": "freesurfer.mri_gtmseg";
+    "@type"?: "freesurfer/mri_gtmseg";
     "output_volume": string;
     "source_subject": string;
     "internal_usf"?: number | null | undefined;
@@ -33,43 +33,11 @@ interface MriGtmsegParameters {
     "debug": boolean;
     "check_opts": boolean;
 }
+type MriGtmsegParametersTagged = Required<Pick<MriGtmsegParameters, '@type'>> & MriGtmsegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_gtmseg": mri_gtmseg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_gtmseg(...)`.
+ * Output object returned when calling `MriGtmsegParameters(...)`.
  *
  * @interface
  */
@@ -126,9 +94,9 @@ function mri_gtmseg_params(
     threads_max_1: boolean = false,
     debug: boolean = false,
     check_opts: boolean = false,
-): MriGtmsegParameters {
+): MriGtmsegParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_gtmseg" as const,
+        "@type": "freesurfer/mri_gtmseg" as const,
         "output_volume": output_volume,
         "source_subject": source_subject,
         "subseg_wm": subseg_wm,
@@ -213,7 +181,7 @@ function mri_gtmseg_cargs(
             ...(params["context_annotation"] ?? null)
         );
     }
-    if ((params["subseg_wm"] ?? null)) {
+    if ((params["subseg_wm"] ?? false)) {
         cargs.push("--subseg-wm");
     }
     if ((params["wm_annotation"] ?? null) !== null) {
@@ -228,10 +196,10 @@ function mri_gtmseg_cargs(
             String((params["dmax"] ?? null))
         );
     }
-    if ((params["keep_hypo"] ?? null)) {
+    if ((params["keep_hypo"] ?? false)) {
         cargs.push("--keep-hypo");
     }
-    if ((params["keep_cc"] ?? null)) {
+    if ((params["keep_cc"] ?? false)) {
         cargs.push("--keep-cc");
     }
     if ((params["ctab"] ?? null) !== null) {
@@ -264,16 +232,16 @@ function mri_gtmseg_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["threads_max"] ?? null)) {
+    if ((params["threads_max"] ?? false)) {
         cargs.push("--threads-max");
     }
-    if ((params["threads_max_1"] ?? null)) {
+    if ((params["threads_max_1"] ?? false)) {
         cargs.push("--threads-max-1");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["check_opts"] ?? null)) {
+    if ((params["check_opts"] ?? false)) {
         cargs.push("--checkopts");
     }
     return cargs;
@@ -389,7 +357,6 @@ function mri_gtmseg(
 export {
       MRI_GTMSEG_METADATA,
       MriGtmsegOutputs,
-      MriGtmsegParameters,
       mri_gtmseg,
       mri_gtmseg_execute,
       mri_gtmseg_params,

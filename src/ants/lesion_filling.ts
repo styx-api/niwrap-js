@@ -12,50 +12,17 @@ const LESION_FILLING_METADATA: Metadata = {
 
 
 interface LesionFillingParameters {
-    "@type": "ants.LesionFilling";
+    "@type"?: "ants/LesionFilling";
     "image_dimension": number;
     "t1_image": InputPathType;
     "lesion_mask": InputPathType;
     "output_lesion_filled": string;
 }
+type LesionFillingParametersTagged = Required<Pick<LesionFillingParameters, '@type'>> & LesionFillingParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.LesionFilling": lesion_filling_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.LesionFilling": lesion_filling_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `lesion_filling(...)`.
+ * Output object returned when calling `LesionFillingParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function lesion_filling_params(
     t1_image: InputPathType,
     lesion_mask: InputPathType,
     output_lesion_filled: string,
-): LesionFillingParameters {
+): LesionFillingParametersTagged {
     const params = {
-        "@type": "ants.LesionFilling" as const,
+        "@type": "ants/LesionFilling" as const,
         "image_dimension": image_dimension,
         "t1_image": t1_image,
         "lesion_mask": lesion_mask,
@@ -200,7 +167,6 @@ function lesion_filling(
 export {
       LESION_FILLING_METADATA,
       LesionFillingOutputs,
-      LesionFillingParameters,
       lesion_filling,
       lesion_filling_execute,
       lesion_filling_params,

@@ -12,7 +12,7 @@ const AFNI_METADATA: Metadata = {
 
 
 interface AfniParameters {
-    "@type": "afni.afni";
+    "@type"?: "afni/afni";
     "session_directories"?: string | null | undefined;
     "bysub"?: Array<string> | null | undefined;
     "all_dsets": boolean;
@@ -39,44 +39,11 @@ interface AfniParameters {
     "com"?: string | null | undefined;
     "comsep"?: string | null | undefined;
 }
+type AfniParametersTagged = Required<Pick<AfniParameters, '@type'>> & AfniParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.afni": afni_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.afni": afni_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `afni_(...)`.
+ * Output object returned when calling `AfniParameters(...)`.
  *
  * @interface
  */
@@ -149,9 +116,9 @@ function afni_params(
     npb: number | null = null,
     com: string | null = null,
     comsep: string | null = null,
-): AfniParameters {
+): AfniParametersTagged {
     const params = {
-        "@type": "afni.afni" as const,
+        "@type": "afni/afni" as const,
         "all_dsets": all_dsets,
         "purge": purge,
         "posfunc": posfunc,
@@ -223,28 +190,28 @@ function afni_cargs(
             ...(params["bysub"] ?? null)
         );
     }
-    if ((params["all_dsets"] ?? null)) {
+    if ((params["all_dsets"] ?? false)) {
         cargs.push("-all_dsets");
     }
-    if ((params["purge"] ?? null)) {
+    if ((params["purge"] ?? false)) {
         cargs.push("-purge");
     }
-    if ((params["posfunc"] ?? null)) {
+    if ((params["posfunc"] ?? false)) {
         cargs.push("-posfunc");
     }
-    if ((params["recursive"] ?? null)) {
+    if ((params["recursive"] ?? false)) {
         cargs.push("-R");
     }
-    if ((params["no1D"] ?? null)) {
+    if ((params["no1D"] ?? false)) {
         cargs.push("-no1D");
     }
-    if ((params["nocsv"] ?? null)) {
+    if ((params["nocsv"] ?? false)) {
         cargs.push("-nocsv");
     }
-    if ((params["notsv"] ?? null)) {
+    if ((params["notsv"] ?? false)) {
         cargs.push("-notsv");
     }
-    if ((params["unique"] ?? null)) {
+    if ((params["unique"] ?? false)) {
         cargs.push("-unique");
     }
     if ((params["orient"] ?? null) !== null) {
@@ -253,25 +220,25 @@ function afni_cargs(
             (params["orient"] ?? null)
         );
     }
-    if ((params["noplugins"] ?? null)) {
+    if ((params["noplugins"] ?? false)) {
         cargs.push("-noplugins");
     }
-    if ((params["seehidden"] ?? null)) {
+    if ((params["seehidden"] ?? false)) {
         cargs.push("-seehidden");
     }
-    if ((params["allow_all_plugins"] ?? null)) {
+    if ((params["allow_all_plugins"] ?? false)) {
         cargs.push("-DAFNI_ALLOW_ALL_PLUGINS=YES");
     }
-    if ((params["yesplugouts"] ?? null)) {
+    if ((params["yesplugouts"] ?? false)) {
         cargs.push("-yesplugouts");
     }
-    if ((params["debug_plugouts"] ?? null)) {
+    if ((params["debug_plugouts"] ?? false)) {
         cargs.push("-YESplugouts");
     }
-    if ((params["noplugouts"] ?? null)) {
+    if ((params["noplugouts"] ?? false)) {
         cargs.push("-noplugouts");
     }
-    if ((params["skip_afnirc"] ?? null)) {
+    if ((params["skip_afnirc"] ?? false)) {
         cargs.push("-skip_afnirc");
     }
     if ((params["layout"] ?? null) !== null) {
@@ -280,7 +247,7 @@ function afni_cargs(
             execution.inputFile((params["layout"] ?? null))
         );
     }
-    if ((params["niml"] ?? null)) {
+    if ((params["niml"] ?? false)) {
         cargs.push("-niml");
     }
     if ((params["np"] ?? null) !== null) {
@@ -439,7 +406,6 @@ function afni_(
 export {
       AFNI_METADATA,
       AfniOutputs,
-      AfniParameters,
       afni_,
       afni_execute,
       afni_params,

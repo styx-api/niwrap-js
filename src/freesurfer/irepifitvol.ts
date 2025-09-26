@@ -12,48 +12,15 @@ const IREPIFITVOL_METADATA: Metadata = {
 
 
 interface IrepifitvolParameters {
-    "@type": "freesurfer.irepifitvol";
+    "@type"?: "freesurfer/irepifitvol";
     "input_file": InputPathType;
     "output_file": string;
 }
+type IrepifitvolParametersTagged = Required<Pick<IrepifitvolParameters, '@type'>> & IrepifitvolParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.irepifitvol": irepifitvol_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.irepifitvol": irepifitvol_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `irepifitvol(...)`.
+ * Output object returned when calling `IrepifitvolParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface IrepifitvolOutputs {
 function irepifitvol_params(
     input_file: InputPathType,
     output_file: string = "fitted_output",
-): IrepifitvolParameters {
+): IrepifitvolParametersTagged {
     const params = {
-        "@type": "freesurfer.irepifitvol" as const,
+        "@type": "freesurfer/irepifitvol" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -105,7 +72,7 @@ function irepifitvol_cargs(
     const cargs: string[] = [];
     cargs.push("irepifitvol");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
-    cargs.push((params["output_file"] ?? null));
+    cargs.push((params["output_file"] ?? "fitted_output"));
     return cargs;
 }
 
@@ -124,7 +91,7 @@ function irepifitvol_outputs(
 ): IrepifitvolOutputs {
     const ret: IrepifitvolOutputs = {
         root: execution.outputFile("."),
-        fitted_output: execution.outputFile([(params["output_file"] ?? null), ".ext"].join('')),
+        fitted_output: execution.outputFile([(params["output_file"] ?? "fitted_output"), ".ext"].join('')),
     };
     return ret;
 }
@@ -186,7 +153,6 @@ function irepifitvol(
 export {
       IREPIFITVOL_METADATA,
       IrepifitvolOutputs,
-      IrepifitvolParameters,
       irepifitvol,
       irepifitvol_execute,
       irepifitvol_params,

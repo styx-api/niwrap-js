@@ -12,47 +12,14 @@ const MRI_GDFGLM_METADATA: Metadata = {
 
 
 interface MriGdfglmParameters {
-    "@type": "freesurfer.mri_gdfglm";
+    "@type"?: "freesurfer/mri_gdfglm";
     "inputs"?: string | null | undefined;
 }
+type MriGdfglmParametersTagged = Required<Pick<MriGdfglmParameters, '@type'>> & MriGdfglmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_gdfglm": mri_gdfglm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_gdfglm": mri_gdfglm_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_gdfglm(...)`.
+ * Output object returned when calling `MriGdfglmParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface MriGdfglmOutputs {
  */
 function mri_gdfglm_params(
     inputs: string | null = null,
-): MriGdfglmParameters {
+): MriGdfglmParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_gdfglm" as const,
+        "@type": "freesurfer/mri_gdfglm" as const,
     };
     if (inputs !== null) {
         params["inputs"] = inputs;
@@ -183,7 +150,6 @@ function mri_gdfglm(
 export {
       MRI_GDFGLM_METADATA,
       MriGdfglmOutputs,
-      MriGdfglmParameters,
       mri_gdfglm,
       mri_gdfglm_execute,
       mri_gdfglm_params,

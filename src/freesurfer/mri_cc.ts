@@ -12,7 +12,7 @@ const MRI_CC_METADATA: Metadata = {
 
 
 interface MriCcParameters {
-    "@type": "freesurfer.mri_cc";
+    "@type"?: "freesurfer/mri_cc";
     "subject_name": string;
     "output_file"?: string | null | undefined;
     "aseg_file"?: InputPathType | null | undefined;
@@ -26,44 +26,11 @@ interface MriCcParameters {
     "skip_voxels"?: number | null | undefined;
     "max_rotation"?: number | null | undefined;
 }
+type MriCcParametersTagged = Required<Pick<MriCcParameters, '@type'>> & MriCcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_cc": mri_cc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_cc": mri_cc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_cc(...)`.
+ * Output object returned when calling `MriCcParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function mri_cc_params(
     thickness: number | null = null,
     skip_voxels: number | null = null,
     max_rotation: number | null = null,
-): MriCcParameters {
+): MriCcParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_cc" as const,
+        "@type": "freesurfer/mri_cc" as const,
         "subject_name": subject_name,
         "force_flag": force_flag,
         "include_fornix": include_fornix,
@@ -193,10 +160,10 @@ function mri_cc_cargs(
             execution.inputFile((params["rotation_lta"] ?? null))
         );
     }
-    if ((params["force_flag"] ?? null)) {
+    if ((params["force_flag"] ?? false)) {
         cargs.push("-force");
     }
-    if ((params["include_fornix"] ?? null)) {
+    if ((params["include_fornix"] ?? false)) {
         cargs.push("-f");
     }
     if ((params["compartments"] ?? null) !== null) {
@@ -323,7 +290,6 @@ function mri_cc(
 export {
       MRI_CC_METADATA,
       MriCcOutputs,
-      MriCcParameters,
       mri_cc,
       mri_cc_execute,
       mri_cc_params,

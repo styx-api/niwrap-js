@@ -12,55 +12,22 @@ const VOLUME_REDUCE_METADATA: Metadata = {
 
 
 interface VolumeReduceExcludeOutliersParameters {
-    "@type": "workbench.volume-reduce.exclude_outliers";
+    "@type"?: "exclude_outliers";
     "sigma_below": number;
     "sigma_above": number;
 }
+type VolumeReduceExcludeOutliersParametersTagged = Required<Pick<VolumeReduceExcludeOutliersParameters, '@type'>> & VolumeReduceExcludeOutliersParameters;
 
 
 interface VolumeReduceParameters {
-    "@type": "workbench.volume-reduce";
+    "@type"?: "workbench/volume-reduce";
     "volume_in": InputPathType;
     "operation": string;
     "volume_out": string;
     "exclude_outliers"?: VolumeReduceExcludeOutliersParameters | null | undefined;
     "opt_only_numeric": boolean;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-reduce": volume_reduce_cargs,
-        "workbench.volume-reduce.exclude_outliers": volume_reduce_exclude_outliers_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-reduce": volume_reduce_outputs,
-    };
-    return outputsFuncs[t];
-}
+type VolumeReduceParametersTagged = Required<Pick<VolumeReduceParameters, '@type'>> & VolumeReduceParameters;
 
 
 /**
@@ -74,9 +41,9 @@ function dynOutputs(
 function volume_reduce_exclude_outliers_params(
     sigma_below: number,
     sigma_above: number,
-): VolumeReduceExcludeOutliersParameters {
+): VolumeReduceExcludeOutliersParametersTagged {
     const params = {
-        "@type": "workbench.volume-reduce.exclude_outliers" as const,
+        "@type": "exclude_outliers" as const,
         "sigma_below": sigma_below,
         "sigma_above": sigma_above,
     };
@@ -105,7 +72,7 @@ function volume_reduce_exclude_outliers_cargs(
 
 
 /**
- * Output object returned when calling `volume_reduce(...)`.
+ * Output object returned when calling `VolumeReduceParameters(...)`.
  *
  * @interface
  */
@@ -138,9 +105,9 @@ function volume_reduce_params(
     volume_out: string,
     exclude_outliers: VolumeReduceExcludeOutliersParameters | null = null,
     opt_only_numeric: boolean = false,
-): VolumeReduceParameters {
+): VolumeReduceParametersTagged {
     const params = {
-        "@type": "workbench.volume-reduce" as const,
+        "@type": "workbench/volume-reduce" as const,
         "volume_in": volume_in,
         "operation": operation,
         "volume_out": volume_out,
@@ -172,9 +139,9 @@ function volume_reduce_cargs(
     cargs.push((params["operation"] ?? null));
     cargs.push((params["volume_out"] ?? null));
     if ((params["exclude_outliers"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["exclude_outliers"] ?? null)["@type"])((params["exclude_outliers"] ?? null), execution));
+        cargs.push(...volume_reduce_exclude_outliers_cargs((params["exclude_outliers"] ?? null), execution));
     }
-    if ((params["opt_only_numeric"] ?? null)) {
+    if ((params["opt_only_numeric"] ?? false)) {
         cargs.push("-only-numeric");
     }
     return cargs;
@@ -302,9 +269,7 @@ function volume_reduce(
 
 export {
       VOLUME_REDUCE_METADATA,
-      VolumeReduceExcludeOutliersParameters,
       VolumeReduceOutputs,
-      VolumeReduceParameters,
       volume_reduce,
       volume_reduce_exclude_outliers_params,
       volume_reduce_execute,

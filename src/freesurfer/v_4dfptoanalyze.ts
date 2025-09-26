@@ -12,51 +12,18 @@ const V_4DFPTOANALYZE_METADATA: Metadata = {
 
 
 interface V4dfptoanalyzeParameters {
-    "@type": "freesurfer.4dfptoanalyze";
+    "@type"?: "freesurfer/4dfptoanalyze";
     "input_file": InputPathType;
     "scale_factor"?: number | null | undefined;
     "output_8bit": boolean;
     "spm99": boolean;
     "endianness"?: string | null | undefined;
 }
+type V4dfptoanalyzeParametersTagged = Required<Pick<V4dfptoanalyzeParameters, '@type'>> & V4dfptoanalyzeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.4dfptoanalyze": v_4dfptoanalyze_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.4dfptoanalyze": v_4dfptoanalyze_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_4dfptoanalyze(...)`.
+ * Output object returned when calling `V4dfptoanalyzeParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +60,9 @@ function v_4dfptoanalyze_params(
     output_8bit: boolean = false,
     spm99: boolean = false,
     endianness: string | null = null,
-): V4dfptoanalyzeParameters {
+): V4dfptoanalyzeParametersTagged {
     const params = {
-        "@type": "freesurfer.4dfptoanalyze" as const,
+        "@type": "freesurfer/4dfptoanalyze" as const,
         "input_file": input_file,
         "output_8bit": output_8bit,
         "spm99": spm99,
@@ -131,10 +98,10 @@ function v_4dfptoanalyze_cargs(
             String((params["scale_factor"] ?? null))
         );
     }
-    if ((params["output_8bit"] ?? null)) {
+    if ((params["output_8bit"] ?? false)) {
         cargs.push("-8");
     }
-    if ((params["spm99"] ?? null)) {
+    if ((params["spm99"] ?? false)) {
         cargs.push("-SPM99");
     }
     if ((params["endianness"] ?? null) !== null) {
@@ -229,7 +196,6 @@ function v_4dfptoanalyze(
 
 export {
       V4dfptoanalyzeOutputs,
-      V4dfptoanalyzeParameters,
       V_4DFPTOANALYZE_METADATA,
       v_4dfptoanalyze,
       v_4dfptoanalyze_execute,

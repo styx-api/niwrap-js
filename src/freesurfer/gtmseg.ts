@@ -12,7 +12,7 @@ const GTMSEG_METADATA: Metadata = {
 
 
 interface GtmsegParameters {
-    "@type": "freesurfer.gtmseg";
+    "@type"?: "freesurfer/gtmseg";
     "subject": string;
     "outvol"?: string | null | undefined;
     "usf"?: number | null | undefined;
@@ -32,44 +32,11 @@ interface GtmsegParameters {
     "xcerseg": boolean;
     "debug": boolean;
 }
+type GtmsegParametersTagged = Required<Pick<GtmsegParameters, '@type'>> & GtmsegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.gtmseg": gtmseg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.gtmseg": gtmseg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `gtmseg(...)`.
+ * Output object returned when calling `GtmsegParameters(...)`.
  *
  * @interface
  */
@@ -132,9 +99,9 @@ function gtmseg_params(
     no_seg_stats: boolean = false,
     xcerseg: boolean = false,
     debug: boolean = false,
-): GtmsegParameters {
+): GtmsegParametersTagged {
     const params = {
-        "@type": "freesurfer.gtmseg" as const,
+        "@type": "freesurfer/gtmseg" as const,
         "subject": subject,
         "subsegwm": subsegwm,
         "keep_hypo": keep_hypo,
@@ -204,13 +171,13 @@ function gtmseg_cargs(
             String((params["usf"] ?? null))
         );
     }
-    if ((params["subsegwm"] ?? null)) {
+    if ((params["subsegwm"] ?? false)) {
         cargs.push("--subsegwm");
     }
-    if ((params["keep_hypo"] ?? null)) {
+    if ((params["keep_hypo"] ?? false)) {
         cargs.push("--keep-hypo");
     }
-    if ((params["keep_cc"] ?? null)) {
+    if ((params["keep_cc"] ?? false)) {
         cargs.push("--keep-cc");
     }
     if ((params["dmax"] ?? null) !== null) {
@@ -243,13 +210,13 @@ function gtmseg_cargs(
             (params["head"] ?? null)
         );
     }
-    if ((params["subseg_cbwm"] ?? null)) {
+    if ((params["subseg_cbwm"] ?? false)) {
         cargs.push("--subseg-cblum-wm");
     }
-    if ((params["no_pons"] ?? null)) {
+    if ((params["no_pons"] ?? false)) {
         cargs.push("--no-pons");
     }
-    if ((params["no_vermis"] ?? null)) {
+    if ((params["no_vermis"] ?? false)) {
         cargs.push("--no-vermis");
     }
     if ((params["ctab"] ?? null) !== null) {
@@ -258,13 +225,13 @@ function gtmseg_cargs(
             execution.inputFile((params["ctab"] ?? null))
         );
     }
-    if ((params["no_seg_stats"] ?? null)) {
+    if ((params["no_seg_stats"] ?? false)) {
         cargs.push("--no-seg-stats");
     }
-    if ((params["xcerseg"] ?? null)) {
+    if ((params["xcerseg"] ?? false)) {
         cargs.push("--xcerseg");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -380,7 +347,6 @@ function gtmseg(
 export {
       GTMSEG_METADATA,
       GtmsegOutputs,
-      GtmsegParameters,
       gtmseg,
       gtmseg_execute,
       gtmseg_params,

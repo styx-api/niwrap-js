@@ -12,7 +12,7 @@ const V_3D_ECM_METADATA: Metadata = {
 
 
 interface V3dEcmParameters {
-    "@type": "afni.3dECM";
+    "@type"?: "afni/3dECM";
     "in_file": InputPathType;
     "autoclip": boolean;
     "automask": boolean;
@@ -31,44 +31,11 @@ interface V3dEcmParameters {
     "sparsity"?: number | null | undefined;
     "thresh"?: number | null | undefined;
 }
+type V3dEcmParametersTagged = Required<Pick<V3dEcmParameters, '@type'>> & V3dEcmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dECM": v_3d_ecm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dECM": v_3d_ecm_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_ecm(...)`.
+ * Output object returned when calling `V3dEcmParameters(...)`.
  *
  * @interface
  */
@@ -129,9 +96,9 @@ function v_3d_ecm_params(
     shift: number | null = null,
     sparsity: number | null = null,
     thresh: number | null = null,
-): V3dEcmParameters {
+): V3dEcmParametersTagged {
     const params = {
-        "@type": "afni.3dECM" as const,
+        "@type": "afni/3dECM" as const,
         "in_file": in_file,
         "autoclip": autoclip,
         "automask": automask,
@@ -193,10 +160,10 @@ function v_3d_ecm_cargs(
     const cargs: string[] = [];
     cargs.push("3dECM");
     cargs.push(execution.inputFile((params["in_file"] ?? null)));
-    if ((params["autoclip"] ?? null)) {
+    if ((params["autoclip"] ?? false)) {
         cargs.push("-autoclip");
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     if ((params["eps"] ?? null) !== null) {
@@ -205,10 +172,10 @@ function v_3d_ecm_cargs(
             String((params["eps"] ?? null))
         );
     }
-    if ((params["fecm"] ?? null)) {
+    if ((params["fecm"] ?? false)) {
         cargs.push("-fecm");
     }
-    if ((params["full"] ?? null)) {
+    if ((params["full"] ?? false)) {
         cargs.push("-full");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -381,7 +348,6 @@ function v_3d_ecm(
 
 export {
       V3dEcmOutputs,
-      V3dEcmParameters,
       V_3D_ECM_METADATA,
       v_3d_ecm,
       v_3d_ecm_execute,

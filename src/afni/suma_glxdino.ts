@@ -12,46 +12,14 @@ const SUMA_GLXDINO_METADATA: Metadata = {
 
 
 interface SumaGlxdinoParameters {
-    "@type": "afni.SUMA_glxdino";
+    "@type"?: "afni/SUMA_glxdino";
     "verbose": boolean;
 }
+type SumaGlxdinoParametersTagged = Required<Pick<SumaGlxdinoParameters, '@type'>> & SumaGlxdinoParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.SUMA_glxdino": suma_glxdino_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `suma_glxdino(...)`.
+ * Output object returned when calling `SumaGlxdinoParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface SumaGlxdinoOutputs {
  */
 function suma_glxdino_params(
     verbose: boolean = false,
-): SumaGlxdinoParameters {
+): SumaGlxdinoParametersTagged {
     const params = {
-        "@type": "afni.SUMA_glxdino" as const,
+        "@type": "afni/SUMA_glxdino" as const,
         "verbose": verbose,
     };
     return params;
@@ -95,7 +63,7 @@ function suma_glxdino_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("SUMA_glxdino");
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
     return cargs;
@@ -175,7 +143,6 @@ function suma_glxdino(
 export {
       SUMA_GLXDINO_METADATA,
       SumaGlxdinoOutputs,
-      SumaGlxdinoParameters,
       suma_glxdino,
       suma_glxdino_execute,
       suma_glxdino_params,

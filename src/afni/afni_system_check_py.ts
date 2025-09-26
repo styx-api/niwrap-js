@@ -12,7 +12,7 @@ const AFNI_SYSTEM_CHECK_PY_METADATA: Metadata = {
 
 
 interface AfniSystemCheckPyParameters {
-    "@type": "afni.afni_system_check.py";
+    "@type"?: "afni/afni_system_check.py";
     "check_all": boolean;
     "find_prog"?: string | null | undefined;
     "exact"?: string | null | undefined;
@@ -24,43 +24,11 @@ interface AfniSystemCheckPyParameters {
     "casematch"?: string | null | undefined;
     "data_root"?: string | null | undefined;
 }
+type AfniSystemCheckPyParametersTagged = Required<Pick<AfniSystemCheckPyParameters, '@type'>> & AfniSystemCheckPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.afni_system_check.py": afni_system_check_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `afni_system_check_py(...)`.
+ * Output object returned when calling `AfniSystemCheckPyParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +67,9 @@ function afni_system_check_py_params(
     dot_file_pack: string | null = null,
     casematch: string | null = null,
     data_root: string | null = null,
-): AfniSystemCheckPyParameters {
+): AfniSystemCheckPyParametersTagged {
     const params = {
-        "@type": "afni.afni_system_check.py" as const,
+        "@type": "afni/afni_system_check.py" as const,
         "check_all": check_all,
         "disp_num_cpu": disp_num_cpu,
         "disp_ver_matplotlib": disp_ver_matplotlib,
@@ -141,7 +109,7 @@ function afni_system_check_py_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("afni_system_check.py");
-    if ((params["check_all"] ?? null)) {
+    if ((params["check_all"] ?? false)) {
         cargs.push("-check_all");
     }
     if ((params["find_prog"] ?? null) !== null) {
@@ -156,16 +124,16 @@ function afni_system_check_py_cargs(
             (params["exact"] ?? null)
         );
     }
-    if ((params["disp_num_cpu"] ?? null)) {
+    if ((params["disp_num_cpu"] ?? false)) {
         cargs.push("-disp_num_cpu");
     }
-    if ((params["disp_ver_matplotlib"] ?? null)) {
+    if ((params["disp_ver_matplotlib"] ?? false)) {
         cargs.push("-disp_ver_matplotlib");
     }
-    if ((params["dot_file_list"] ?? null)) {
+    if ((params["dot_file_list"] ?? false)) {
         cargs.push("-dot_file_list");
     }
-    if ((params["dot_file_show"] ?? null)) {
+    if ((params["dot_file_show"] ?? false)) {
         cargs.push("-dot_file_show");
     }
     if ((params["dot_file_pack"] ?? null) !== null) {
@@ -281,7 +249,6 @@ function afni_system_check_py(
 export {
       AFNI_SYSTEM_CHECK_PY_METADATA,
       AfniSystemCheckPyOutputs,
-      AfniSystemCheckPyParameters,
       afni_system_check_py,
       afni_system_check_py_execute,
       afni_system_check_py_params,

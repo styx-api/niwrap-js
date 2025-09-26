@@ -12,46 +12,14 @@ const GETFULLPATH_METADATA: Metadata = {
 
 
 interface GetfullpathParameters {
-    "@type": "freesurfer.getfullpath";
+    "@type"?: "freesurfer/getfullpath";
     "filename": string;
 }
+type GetfullpathParametersTagged = Required<Pick<GetfullpathParameters, '@type'>> & GetfullpathParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.getfullpath": getfullpath_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `getfullpath(...)`.
+ * Output object returned when calling `GetfullpathParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface GetfullpathOutputs {
  */
 function getfullpath_params(
     filename: string,
-): GetfullpathParameters {
+): GetfullpathParametersTagged {
     const params = {
-        "@type": "freesurfer.getfullpath" as const,
+        "@type": "freesurfer/getfullpath" as const,
         "filename": filename,
     };
     return params;
@@ -173,7 +141,6 @@ function getfullpath(
 export {
       GETFULLPATH_METADATA,
       GetfullpathOutputs,
-      GetfullpathParameters,
       getfullpath,
       getfullpath_execute,
       getfullpath_params,

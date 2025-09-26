@@ -12,7 +12,7 @@ const TKSURFERFV_METADATA: Metadata = {
 
 
 interface TksurferfvParameters {
-    "@type": "freesurfer.tksurferfv";
+    "@type"?: "freesurfer/tksurferfv";
     "subject": string;
     "hemi": string;
     "surface": string;
@@ -25,43 +25,11 @@ interface TksurferfvParameters {
     "rotate_around_cursor": boolean;
     "heat_scale"?: string | null | undefined;
 }
+type TksurferfvParametersTagged = Required<Pick<TksurferfvParameters, '@type'>> & TksurferfvParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.tksurferfv": tksurferfv_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tksurferfv(...)`.
+ * Output object returned when calling `TksurferfvParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +70,9 @@ function tksurferfv_params(
     neuro_orientation: boolean = false,
     rotate_around_cursor: boolean = false,
     heat_scale: string | null = null,
-): TksurferfvParameters {
+): TksurferfvParametersTagged {
     const params = {
-        "@type": "freesurfer.tksurferfv" as const,
+        "@type": "freesurfer/tksurferfv" as const,
         "subject": subject,
         "hemi": hemi,
         "surface": surface,
@@ -140,25 +108,25 @@ function tksurferfv_cargs(
     cargs.push((params["subject"] ?? null));
     cargs.push((params["hemi"] ?? null));
     cargs.push((params["surface"] ?? null));
-    if ((params["tksurfer"] ?? null)) {
+    if ((params["tksurfer"] ?? false)) {
         cargs.push("-tksurfer");
     }
-    if ((params["all_surfaces"] ?? null)) {
+    if ((params["all_surfaces"] ?? false)) {
         cargs.push("-all");
     }
-    if ((params["vgl"] ?? null)) {
+    if ((params["vgl"] ?? false)) {
         cargs.push("-vgl");
     }
-    if ((params["no_vgl"] ?? null)) {
+    if ((params["no_vgl"] ?? false)) {
         cargs.push("-no-vgl");
     }
-    if ((params["no_outline"] ?? null)) {
+    if ((params["no_outline"] ?? false)) {
         cargs.push("-no-outline");
     }
-    if ((params["neuro_orientation"] ?? null)) {
+    if ((params["neuro_orientation"] ?? false)) {
         cargs.push("-neuro");
     }
-    if ((params["rotate_around_cursor"] ?? null)) {
+    if ((params["rotate_around_cursor"] ?? false)) {
         cargs.push("-rca");
     }
     if ((params["heat_scale"] ?? null) !== null) {
@@ -261,7 +229,6 @@ function tksurferfv(
 export {
       TKSURFERFV_METADATA,
       TksurferfvOutputs,
-      TksurferfvParameters,
       tksurferfv,
       tksurferfv_execute,
       tksurferfv_params,

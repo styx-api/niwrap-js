@@ -12,7 +12,7 @@ const SWAP_SUBJECTWISE_METADATA: Metadata = {
 
 
 interface SwapSubjectwiseParameters {
-    "@type": "fsl.swap_subjectwise";
+    "@type"?: "fsl/swap_subjectwise";
     "dyads": InputPathType;
     "fmean": InputPathType;
     "mask"?: InputPathType | null | undefined;
@@ -21,43 +21,11 @@ interface SwapSubjectwiseParameters {
     "averageonly_flag": boolean;
     "verbose_flag": boolean;
 }
+type SwapSubjectwiseParametersTagged = Required<Pick<SwapSubjectwiseParameters, '@type'>> & SwapSubjectwiseParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.swap_subjectwise": swap_subjectwise_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `swap_subjectwise(...)`.
+ * Output object returned when calling `SwapSubjectwiseParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +58,9 @@ function swap_subjectwise_params(
     xthresh: number | null = null,
     averageonly_flag: boolean = false,
     verbose_flag: boolean = false,
-): SwapSubjectwiseParameters {
+): SwapSubjectwiseParametersTagged {
     const params = {
-        "@type": "fsl.swap_subjectwise" as const,
+        "@type": "fsl/swap_subjectwise" as const,
         "dyads": dyads,
         "fmean": fmean,
         "averageonly_flag": averageonly_flag,
@@ -151,10 +119,10 @@ function swap_subjectwise_cargs(
             String((params["xthresh"] ?? null))
         );
     }
-    if ((params["averageonly_flag"] ?? null)) {
+    if ((params["averageonly_flag"] ?? false)) {
         cargs.push("--averageonly");
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("--verbose");
     }
     return cargs;
@@ -246,7 +214,6 @@ function swap_subjectwise(
 export {
       SWAP_SUBJECTWISE_METADATA,
       SwapSubjectwiseOutputs,
-      SwapSubjectwiseParameters,
       swap_subjectwise,
       swap_subjectwise_execute,
       swap_subjectwise_params,

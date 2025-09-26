@@ -12,50 +12,17 @@ const SLICEDELAY_METADATA: Metadata = {
 
 
 interface SlicedelayParameters {
-    "@type": "freesurfer.slicedelay";
+    "@type"?: "freesurfer/slicedelay";
     "slicedelayfile": string;
     "nslices": number;
     "order": "up" | "down" | "odd" | "even" | "siemens";
     "ngroups": number;
 }
+type SlicedelayParametersTagged = Required<Pick<SlicedelayParameters, '@type'>> & SlicedelayParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.slicedelay": slicedelay_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.slicedelay": slicedelay_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `slicedelay(...)`.
+ * Output object returned when calling `SlicedelayParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function slicedelay_params(
     nslices: number,
     order: "up" | "down" | "odd" | "even" | "siemens",
     ngroups: number,
-): SlicedelayParameters {
+): SlicedelayParametersTagged {
     const params = {
-        "@type": "freesurfer.slicedelay" as const,
+        "@type": "freesurfer/slicedelay" as const,
         "slicedelayfile": slicedelayfile,
         "nslices": nslices,
         "order": order,
@@ -212,7 +179,6 @@ function slicedelay(
 export {
       SLICEDELAY_METADATA,
       SlicedelayOutputs,
-      SlicedelayParameters,
       slicedelay,
       slicedelay_execute,
       slicedelay_params,

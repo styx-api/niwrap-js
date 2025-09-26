@@ -12,14 +12,15 @@ const MRCOLOUR_METADATA: Metadata = {
 
 
 interface MrcolourConfigParameters {
-    "@type": "mrtrix.mrcolour.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MrcolourConfigParametersTagged = Required<Pick<MrcolourConfigParameters, '@type'>> & MrcolourConfigParameters;
 
 
 interface MrcolourParameters {
-    "@type": "mrtrix.mrcolour";
+    "@type"?: "mrtrix/mrcolour";
     "upper"?: number | null | undefined;
     "lower"?: number | null | undefined;
     "colour"?: Array<number> | null | undefined;
@@ -35,41 +36,7 @@ interface MrcolourParameters {
     "map": string;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.mrcolour": mrcolour_cargs,
-        "mrtrix.mrcolour.config": mrcolour_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.mrcolour": mrcolour_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MrcolourParametersTagged = Required<Pick<MrcolourParameters, '@type'>> & MrcolourParameters;
 
 
 /**
@@ -83,9 +50,9 @@ function dynOutputs(
 function mrcolour_config_params(
     key: string,
     value: string,
-): MrcolourConfigParameters {
+): MrcolourConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcolour.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -114,7 +81,7 @@ function mrcolour_config_cargs(
 
 
 /**
- * Output object returned when calling `mrcolour(...)`.
+ * Output object returned when calling `MrcolourParameters(...)`.
  *
  * @interface
  */
@@ -165,9 +132,9 @@ function mrcolour_params(
     config: Array<MrcolourConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrcolourParameters {
+): MrcolourParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcolour" as const,
+        "@type": "mrtrix/mrcolour" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -229,16 +196,16 @@ function mrcolour_cargs(
             (params["colour"] ?? null).map(String).join(",")
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -248,12 +215,12 @@ function mrcolour_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => mrcolour_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -378,9 +345,7 @@ function mrcolour(
 
 export {
       MRCOLOUR_METADATA,
-      MrcolourConfigParameters,
       MrcolourOutputs,
-      MrcolourParameters,
       mrcolour,
       mrcolour_config_params,
       mrcolour_execute,

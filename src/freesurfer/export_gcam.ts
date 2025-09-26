@@ -12,7 +12,7 @@ const EXPORT_GCAM_METADATA: Metadata = {
 
 
 interface ExportGcamParameters {
-    "@type": "freesurfer.exportGcam";
+    "@type"?: "freesurfer/exportGcam";
     "fixed": InputPathType;
     "moving": InputPathType;
     "morph": InputPathType;
@@ -22,44 +22,11 @@ interface ExportGcamParameters {
     "interp_method"?: "linear" | "nearest" | null | undefined;
     "test": boolean;
 }
+type ExportGcamParametersTagged = Required<Pick<ExportGcamParameters, '@type'>> & ExportGcamParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.exportGcam": export_gcam_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.exportGcam": export_gcam_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `export_gcam(...)`.
+ * Output object returned when calling `ExportGcamParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function export_gcam_params(
     bbox_threshold: number | null = null,
     interp_method: "linear" | "nearest" | null = null,
     test: boolean = false,
-): ExportGcamParameters {
+): ExportGcamParametersTagged {
     const params = {
-        "@type": "freesurfer.exportGcam" as const,
+        "@type": "freesurfer/exportGcam" as const,
         "fixed": fixed,
         "moving": moving,
         "morph": morph,
@@ -168,7 +135,7 @@ function export_gcam_cargs(
             (params["interp_method"] ?? null)
         );
     }
-    if ((params["test"] ?? null)) {
+    if ((params["test"] ?? false)) {
         cargs.push("--test");
     }
     return cargs;
@@ -263,7 +230,6 @@ function export_gcam(
 export {
       EXPORT_GCAM_METADATA,
       ExportGcamOutputs,
-      ExportGcamParameters,
       export_gcam,
       export_gcam_execute,
       export_gcam_params,

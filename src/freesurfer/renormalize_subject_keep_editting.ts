@@ -12,47 +12,14 @@ const RENORMALIZE_SUBJECT_KEEP_EDITTING_METADATA: Metadata = {
 
 
 interface RenormalizeSubjectKeepEdittingParameters {
-    "@type": "freesurfer.renormalize_subject_keep_editting";
+    "@type"?: "freesurfer/renormalize_subject_keep_editting";
     "placeholder_input"?: string | null | undefined;
 }
+type RenormalizeSubjectKeepEdittingParametersTagged = Required<Pick<RenormalizeSubjectKeepEdittingParameters, '@type'>> & RenormalizeSubjectKeepEdittingParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.renormalize_subject_keep_editting": renormalize_subject_keep_editting_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.renormalize_subject_keep_editting": renormalize_subject_keep_editting_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `renormalize_subject_keep_editting(...)`.
+ * Output object returned when calling `RenormalizeSubjectKeepEdittingParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface RenormalizeSubjectKeepEdittingOutputs {
  */
 function renormalize_subject_keep_editting_params(
     placeholder_input: string | null = null,
-): RenormalizeSubjectKeepEdittingParameters {
+): RenormalizeSubjectKeepEdittingParametersTagged {
     const params = {
-        "@type": "freesurfer.renormalize_subject_keep_editting" as const,
+        "@type": "freesurfer/renormalize_subject_keep_editting" as const,
     };
     if (placeholder_input !== null) {
         params["placeholder_input"] = placeholder_input;
@@ -183,7 +150,6 @@ function renormalize_subject_keep_editting(
 export {
       RENORMALIZE_SUBJECT_KEEP_EDITTING_METADATA,
       RenormalizeSubjectKeepEdittingOutputs,
-      RenormalizeSubjectKeepEdittingParameters,
       renormalize_subject_keep_editting,
       renormalize_subject_keep_editting_execute,
       renormalize_subject_keep_editting_params,

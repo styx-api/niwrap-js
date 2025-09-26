@@ -12,7 +12,7 @@ const RUN_SAMSEG_LONG_METADATA: Metadata = {
 
 
 interface RunSamsegLongParameters {
-    "@type": "freesurfer.run_samseg_long";
+    "@type"?: "freesurfer/run_samseg_long";
     "timepoint": Array<InputPathType>;
     "output": string;
     "lesion": boolean;
@@ -36,43 +36,11 @@ interface RunSamsegLongParameters {
     "showfigs": boolean;
     "movie": boolean;
 }
+type RunSamsegLongParametersTagged = Required<Pick<RunSamsegLongParameters, '@type'>> & RunSamsegLongParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.run_samseg_long": run_samseg_long_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `run_samseg_long(...)`.
+ * Output object returned when calling `RunSamsegLongParameters(...)`.
  *
  * @interface
  */
@@ -135,9 +103,9 @@ function run_samseg_long_params(
     history: boolean = false,
     showfigs: boolean = false,
     movie: boolean = false,
-): RunSamsegLongParameters {
+): RunSamsegLongParametersTagged {
     const params = {
-        "@type": "freesurfer.run_samseg_long" as const,
+        "@type": "freesurfer/run_samseg_long" as const,
         "timepoint": timepoint,
         "output": output,
         "lesion": lesion,
@@ -211,7 +179,7 @@ function run_samseg_long_cargs(
         "-o",
         (params["output"] ?? null)
     );
-    if ((params["lesion"] ?? null)) {
+    if ((params["lesion"] ?? false)) {
         cargs.push("--lesion");
     }
     if ((params["threshold"] ?? null) !== null) {
@@ -268,10 +236,10 @@ function run_samseg_long_cargs(
             String((params["gmm_hyperprior"] ?? null))
         );
     }
-    if ((params["save_warp"] ?? null)) {
+    if ((params["save_warp"] ?? false)) {
         cargs.push("--save-warp");
     }
-    if ((params["save_mesh"] ?? null)) {
+    if ((params["save_mesh"] ?? false)) {
         cargs.push("--save-mesh");
     }
     if ((params["save_posteriors"] ?? null) !== null) {
@@ -280,7 +248,7 @@ function run_samseg_long_cargs(
             ...(params["save_posteriors"] ?? null)
         );
     }
-    if ((params["pallidum_separate"] ?? null)) {
+    if ((params["pallidum_separate"] ?? false)) {
         cargs.push("--pallidum-separate");
     }
     if ((params["threads"] ?? null) !== null) {
@@ -295,16 +263,16 @@ function run_samseg_long_cargs(
             ...(params["tp_to_base_transform"] ?? null).map(f => execution.inputFile(f))
         );
     }
-    if ((params["force_different_resolutions"] ?? null)) {
+    if ((params["force_different_resolutions"] ?? false)) {
         cargs.push("--force-different-resolutions");
     }
-    if ((params["history"] ?? null)) {
+    if ((params["history"] ?? false)) {
         cargs.push("--history");
     }
-    if ((params["showfigs"] ?? null)) {
+    if ((params["showfigs"] ?? false)) {
         cargs.push("--showfigs");
     }
-    if ((params["movie"] ?? null)) {
+    if ((params["movie"] ?? false)) {
         cargs.push("--movie");
     }
     return cargs;
@@ -426,7 +394,6 @@ function run_samseg_long(
 export {
       RUN_SAMSEG_LONG_METADATA,
       RunSamsegLongOutputs,
-      RunSamsegLongParameters,
       run_samseg_long,
       run_samseg_long_execute,
       run_samseg_long_params,

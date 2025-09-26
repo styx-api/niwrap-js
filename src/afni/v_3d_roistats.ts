@@ -12,7 +12,7 @@ const V_3D_ROISTATS_METADATA: Metadata = {
 
 
 interface V3dRoistatsParameters {
-    "@type": "afni.3dROIstats";
+    "@type"?: "afni/3dROIstats";
     "in_file": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "debug": boolean;
@@ -28,43 +28,11 @@ interface V3dRoistatsParameters {
     "stat"?: Array<InputPathType> | null | undefined;
     "zerofill"?: string | null | undefined;
 }
+type V3dRoistatsParametersTagged = Required<Pick<V3dRoistatsParameters, '@type'>> & V3dRoistatsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dROIstats": v_3d_roistats_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_roistats(...)`.
+ * Output object returned when calling `V3dRoistatsParameters(...)`.
  *
  * @interface
  */
@@ -115,9 +83,9 @@ function v_3d_roistats_params(
     roisel: InputPathType | null = null,
     stat: Array<InputPathType> | null = null,
     zerofill: string | null = null,
-): V3dRoistatsParameters {
+): V3dRoistatsParametersTagged {
     const params = {
-        "@type": "afni.3dROIstats" as const,
+        "@type": "afni/3dROIstats" as const,
         "in_file": in_file,
         "debug": debug,
         "format1D": format1_d,
@@ -170,16 +138,16 @@ function v_3d_roistats_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["format1D"] ?? null)) {
+    if ((params["format1D"] ?? false)) {
         cargs.push("-1Dformat");
     }
-    if ((params["format1DR"] ?? null)) {
+    if ((params["format1DR"] ?? false)) {
         cargs.push("-1DRformat");
     }
-    if ((params["mask_f2short"] ?? null)) {
+    if ((params["mask_f2short"] ?? false)) {
         cargs.push("-mask_f2short");
     }
     if ((params["mask_file"] ?? null) !== null) {
@@ -188,10 +156,10 @@ function v_3d_roistats_cargs(
             execution.inputFile((params["mask_file"] ?? null))
         );
     }
-    if ((params["nobriklab"] ?? null)) {
+    if ((params["nobriklab"] ?? false)) {
         cargs.push("-nobriklab");
     }
-    if ((params["nomeanout"] ?? null)) {
+    if ((params["nomeanout"] ?? false)) {
         cargs.push("-nomeanout");
     }
     if ((params["num_roi"] ?? null) !== null) {
@@ -200,7 +168,7 @@ function v_3d_roistats_cargs(
             String((params["num_roi"] ?? null))
         );
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
     if ((params["roisel"] ?? null) !== null) {
@@ -321,7 +289,6 @@ function v_3d_roistats(
 
 export {
       V3dRoistatsOutputs,
-      V3dRoistatsParameters,
       V_3D_ROISTATS_METADATA,
       v_3d_roistats,
       v_3d_roistats_execute,

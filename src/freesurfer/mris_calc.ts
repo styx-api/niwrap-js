@@ -12,7 +12,7 @@ const MRIS_CALC_METADATA: Metadata = {
 
 
 interface MrisCalcParameters {
-    "@type": "freesurfer.mris_calc";
+    "@type"?: "freesurfer/mris_calc";
     "input_file1": InputPathType;
     "action": string;
     "input_file2_or_float"?: InputPathType | null | undefined;
@@ -20,44 +20,11 @@ interface MrisCalcParameters {
     "label_file"?: InputPathType | null | undefined;
     "verbosity"?: string | null | undefined;
 }
+type MrisCalcParametersTagged = Required<Pick<MrisCalcParameters, '@type'>> & MrisCalcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_calc": mris_calc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_calc": mris_calc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_calc(...)`.
+ * Output object returned when calling `MrisCalcParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function mris_calc_params(
     output_file: string | null = null,
     label_file: InputPathType | null = null,
     verbosity: string | null = null,
-): MrisCalcParameters {
+): MrisCalcParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_calc" as const,
+        "@type": "freesurfer/mris_calc" as const,
         "input_file1": input_file1,
         "action": action,
     };
@@ -239,7 +206,6 @@ function mris_calc(
 export {
       MRIS_CALC_METADATA,
       MrisCalcOutputs,
-      MrisCalcParameters,
       mris_calc,
       mris_calc_execute,
       mris_calc_params,

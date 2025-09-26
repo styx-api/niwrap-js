@@ -12,50 +12,17 @@ const V_3D_RANK_METADATA: Metadata = {
 
 
 interface V3dRankParameters {
-    "@type": "afni.3dRank";
+    "@type"?: "afni/3dRank";
     "input_datasets": Array<InputPathType>;
     "output_prefix"?: string | null | undefined;
     "version_info": boolean;
     "help_info": boolean;
 }
+type V3dRankParametersTagged = Required<Pick<V3dRankParameters, '@type'>> & V3dRankParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dRank": v_3d_rank_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dRank": v_3d_rank_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_rank(...)`.
+ * Output object returned when calling `V3dRankParameters(...)`.
  *
  * @interface
  */
@@ -94,9 +61,9 @@ function v_3d_rank_params(
     output_prefix: string | null = null,
     version_info: boolean = false,
     help_info: boolean = false,
-): V3dRankParameters {
+): V3dRankParametersTagged {
     const params = {
-        "@type": "afni.3dRank" as const,
+        "@type": "afni/3dRank" as const,
         "input_datasets": input_datasets,
         "version_info": version_info,
         "help_info": help_info,
@@ -129,10 +96,10 @@ function v_3d_rank_cargs(
             (params["output_prefix"] ?? null)
         );
     }
-    if ((params["version_info"] ?? null)) {
+    if ((params["version_info"] ?? false)) {
         cargs.push("-ver");
     }
-    if ((params["help_info"] ?? null)) {
+    if ((params["help_info"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -220,7 +187,6 @@ function v_3d_rank(
 
 export {
       V3dRankOutputs,
-      V3dRankParameters,
       V_3D_RANK_METADATA,
       v_3d_rank,
       v_3d_rank_execute,

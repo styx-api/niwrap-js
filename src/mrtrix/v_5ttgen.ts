@@ -12,32 +12,35 @@ const V_5TTGEN_METADATA: Metadata = {
 
 
 interface V5ttgenFreesurferParameters {
-    "@type": "mrtrix.5ttgen.freesurfer";
+    "@type"?: "freesurfer";
     "input": InputPathType;
     "output": string;
     "lut"?: InputPathType | null | undefined;
 }
+type V5ttgenFreesurferParametersTagged = Required<Pick<V5ttgenFreesurferParameters, '@type'>> & V5ttgenFreesurferParameters;
 
 
 interface V5ttgenFslParameters {
-    "@type": "mrtrix.5ttgen.fsl";
+    "@type"?: "fsl";
     "input": InputPathType;
     "output": string;
     "t2"?: InputPathType | null | undefined;
     "mask"?: InputPathType | null | undefined;
     "premasked": boolean;
 }
+type V5ttgenFslParametersTagged = Required<Pick<V5ttgenFslParameters, '@type'>> & V5ttgenFslParameters;
 
 
 interface V5ttgenGifParameters {
-    "@type": "mrtrix.5ttgen.gif";
+    "@type"?: "gif";
     "input": InputPathType;
     "output": string;
 }
+type V5ttgenGifParametersTagged = Required<Pick<V5ttgenGifParameters, '@type'>> & V5ttgenGifParameters;
 
 
 interface V5ttgenHsvsParameters {
-    "@type": "mrtrix.5ttgen.hsvs";
+    "@type"?: "hsvs";
     "input": InputPathType;
     "output": string;
     "template"?: InputPathType | null | undefined;
@@ -45,18 +48,20 @@ interface V5ttgenHsvsParameters {
     "thalami"?: "nuclei" | "first" | "aseg" | null | undefined;
     "white_stem": boolean;
 }
+type V5ttgenHsvsParametersTagged = Required<Pick<V5ttgenHsvsParameters, '@type'>> & V5ttgenHsvsParameters;
 
 
 interface V5ttgenConfigParameters {
-    "@type": "mrtrix.5ttgen.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type V5ttgenConfigParametersTagged = Required<Pick<V5ttgenConfigParameters, '@type'>> & V5ttgenConfigParameters;
 
 
 interface V5ttgenParameters {
-    "@type": "mrtrix.5ttgen";
-    "algorithm": V5ttgenFreesurferParameters | V5ttgenFslParameters | V5ttgenGifParameters | V5ttgenHsvsParameters;
+    "@type"?: "mrtrix/5ttgen";
+    "algorithm": V5ttgenFreesurferParametersTagged | V5ttgenFslParametersTagged | V5ttgenGifParametersTagged | V5ttgenHsvsParametersTagged;
     "nocrop": boolean;
     "sgm_amyg_hipp": boolean;
     "nocleanup": boolean;
@@ -71,6 +76,7 @@ interface V5ttgenParameters {
     "help": boolean;
     "version": boolean;
 }
+type V5ttgenParametersTagged = Required<Pick<V5ttgenParameters, '@type'>> & V5ttgenParameters;
 
 
 /**
@@ -80,16 +86,14 @@ interface V5ttgenParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function v_5ttgen_algorithm_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "mrtrix.5ttgen": v_5ttgen_cargs,
-        "mrtrix.5ttgen.freesurfer": v_5ttgen_freesurfer_cargs,
-        "mrtrix.5ttgen.fsl": v_5ttgen_fsl_cargs,
-        "mrtrix.5ttgen.gif": v_5ttgen_gif_cargs,
-        "mrtrix.5ttgen.hsvs": v_5ttgen_hsvs_cargs,
-        "mrtrix.5ttgen.config": v_5ttgen_config_cargs,
+        "freesurfer": v_5ttgen_freesurfer_cargs,
+        "fsl": v_5ttgen_fsl_cargs,
+        "gif": v_5ttgen_gif_cargs,
+        "hsvs": v_5ttgen_hsvs_cargs,
     };
     return cargsFuncs[t];
 }
@@ -102,15 +106,14 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function v_5ttgen_algorithm_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "mrtrix.5ttgen": v_5ttgen_outputs,
-        "mrtrix.5ttgen.freesurfer": v_5ttgen_freesurfer_outputs,
-        "mrtrix.5ttgen.fsl": v_5ttgen_fsl_outputs,
-        "mrtrix.5ttgen.gif": v_5ttgen_gif_outputs,
-        "mrtrix.5ttgen.hsvs": v_5ttgen_hsvs_outputs,
+        "freesurfer": v_5ttgen_freesurfer_outputs,
+        "fsl": v_5ttgen_fsl_outputs,
+        "gif": v_5ttgen_gif_outputs,
+        "hsvs": v_5ttgen_hsvs_outputs,
     };
     return outputsFuncs[t];
 }
@@ -146,9 +149,9 @@ function v_5ttgen_freesurfer_params(
     input: InputPathType,
     output: string,
     lut: InputPathType | null = null,
-): V5ttgenFreesurferParameters {
+): V5ttgenFreesurferParametersTagged {
     const params = {
-        "@type": "mrtrix.5ttgen.freesurfer" as const,
+        "@type": "freesurfer" as const,
         "input": input,
         "output": output,
     };
@@ -239,9 +242,9 @@ function v_5ttgen_fsl_params(
     t2: InputPathType | null = null,
     mask: InputPathType | null = null,
     premasked: boolean = false,
-): V5ttgenFslParameters {
+): V5ttgenFslParametersTagged {
     const params = {
-        "@type": "mrtrix.5ttgen.fsl" as const,
+        "@type": "fsl" as const,
         "input": input,
         "output": output,
         "premasked": premasked,
@@ -284,7 +287,7 @@ function v_5ttgen_fsl_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["premasked"] ?? null)) {
+    if ((params["premasked"] ?? false)) {
         cargs.push("-premasked");
     }
     return cargs;
@@ -339,9 +342,9 @@ interface V5ttgenGifOutputs {
 function v_5ttgen_gif_params(
     input: InputPathType,
     output: string,
-): V5ttgenGifParameters {
+): V5ttgenGifParametersTagged {
     const params = {
-        "@type": "mrtrix.5ttgen.gif" as const,
+        "@type": "gif" as const,
         "input": input,
         "output": output,
     };
@@ -425,9 +428,9 @@ function v_5ttgen_hsvs_params(
     hippocampi: "subfields" | "first" | "aseg" | null = null,
     thalami: "nuclei" | "first" | "aseg" | null = null,
     white_stem: boolean = false,
-): V5ttgenHsvsParameters {
+): V5ttgenHsvsParametersTagged {
     const params = {
-        "@type": "mrtrix.5ttgen.hsvs" as const,
+        "@type": "hsvs" as const,
         "input": input,
         "output": output,
         "white_stem": white_stem,
@@ -479,7 +482,7 @@ function v_5ttgen_hsvs_cargs(
             (params["thalami"] ?? null)
         );
     }
-    if ((params["white_stem"] ?? null)) {
+    if ((params["white_stem"] ?? false)) {
         cargs.push("-white_stem");
     }
     return cargs;
@@ -517,9 +520,9 @@ function v_5ttgen_hsvs_outputs(
 function v_5ttgen_config_params(
     key: string,
     value: string,
-): V5ttgenConfigParameters {
+): V5ttgenConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.5ttgen.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -548,7 +551,7 @@ function v_5ttgen_config_cargs(
 
 
 /**
- * Output object returned when calling `v_5ttgen(...)`.
+ * Output object returned when calling `V5ttgenParameters(...)`.
  *
  * @interface
  */
@@ -585,7 +588,7 @@ interface V5ttgenOutputs {
  * @returns Parameter dictionary
  */
 function v_5ttgen_params(
-    algorithm: V5ttgenFreesurferParameters | V5ttgenFslParameters | V5ttgenGifParameters | V5ttgenHsvsParameters,
+    algorithm: V5ttgenFreesurferParametersTagged | V5ttgenFslParametersTagged | V5ttgenGifParametersTagged | V5ttgenHsvsParametersTagged,
     nocrop: boolean = false,
     sgm_amyg_hipp: boolean = false,
     nocleanup: boolean = false,
@@ -599,9 +602,9 @@ function v_5ttgen_params(
     config: Array<V5ttgenConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): V5ttgenParameters {
+): V5ttgenParametersTagged {
     const params = {
-        "@type": "mrtrix.5ttgen" as const,
+        "@type": "mrtrix/5ttgen" as const,
         "algorithm": algorithm,
         "nocrop": nocrop,
         "sgm_amyg_hipp": sgm_amyg_hipp,
@@ -643,14 +646,14 @@ function v_5ttgen_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("5ttgen");
-    cargs.push(...dynCargs((params["algorithm"] ?? null)["@type"])((params["algorithm"] ?? null), execution));
-    if ((params["nocrop"] ?? null)) {
+    cargs.push(...v_5ttgen_algorithm_cargs_dyn_fn((params["algorithm"] ?? null)["@type"])((params["algorithm"] ?? null), execution));
+    if ((params["nocrop"] ?? false)) {
         cargs.push("-nocrop");
     }
-    if ((params["sgm_amyg_hipp"] ?? null)) {
+    if ((params["sgm_amyg_hipp"] ?? false)) {
         cargs.push("-sgm_amyg_hipp");
     }
-    if ((params["nocleanup"] ?? null)) {
+    if ((params["nocleanup"] ?? false)) {
         cargs.push("-nocleanup");
     }
     if ((params["scratch"] ?? null) !== null) {
@@ -665,16 +668,16 @@ function v_5ttgen_cargs(
             (params["continue"] ?? null)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -684,12 +687,12 @@ function v_5ttgen_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => v_5ttgen_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     return cargs;
@@ -710,7 +713,7 @@ function v_5ttgen_outputs(
 ): V5ttgenOutputs {
     const ret: V5ttgenOutputs = {
         root: execution.outputFile("."),
-        algorithm: dynOutputs((params["algorithm"] ?? null)["@type"])?.((params["algorithm"] ?? null), execution),
+        algorithm: v_5ttgen_algorithm_outputs_dyn_fn((params["algorithm"] ?? null)["@type"])?.((params["algorithm"] ?? null), execution),
     };
     return ret;
 }
@@ -778,7 +781,7 @@ function v_5ttgen_execute(
  * @returns NamedTuple of outputs (described in `V5ttgenOutputs`).
  */
 function v_5ttgen(
-    algorithm: V5ttgenFreesurferParameters | V5ttgenFslParameters | V5ttgenGifParameters | V5ttgenHsvsParameters,
+    algorithm: V5ttgenFreesurferParametersTagged | V5ttgenFslParametersTagged | V5ttgenGifParametersTagged | V5ttgenHsvsParametersTagged,
     nocrop: boolean = false,
     sgm_amyg_hipp: boolean = false,
     nocleanup: boolean = false,
@@ -800,17 +803,11 @@ function v_5ttgen(
 
 
 export {
-      V5ttgenConfigParameters,
       V5ttgenFreesurferOutputs,
-      V5ttgenFreesurferParameters,
       V5ttgenFslOutputs,
-      V5ttgenFslParameters,
       V5ttgenGifOutputs,
-      V5ttgenGifParameters,
       V5ttgenHsvsOutputs,
-      V5ttgenHsvsParameters,
       V5ttgenOutputs,
-      V5ttgenParameters,
       V_5TTGEN_METADATA,
       v_5ttgen,
       v_5ttgen_config_params,

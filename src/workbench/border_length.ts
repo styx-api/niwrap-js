@@ -12,50 +12,18 @@ const BORDER_LENGTH_METADATA: Metadata = {
 
 
 interface BorderLengthParameters {
-    "@type": "workbench.border-length";
+    "@type"?: "workbench/border-length";
     "border": InputPathType;
     "surface": InputPathType;
     "opt_corrected_areas_area_metric"?: InputPathType | null | undefined;
     "opt_separate_pieces": boolean;
     "opt_hide_border_name": boolean;
 }
+type BorderLengthParametersTagged = Required<Pick<BorderLengthParameters, '@type'>> & BorderLengthParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.border-length": border_length_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `border_length(...)`.
+ * Output object returned when calling `BorderLengthParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function border_length_params(
     opt_corrected_areas_area_metric: InputPathType | null = null,
     opt_separate_pieces: boolean = false,
     opt_hide_border_name: boolean = false,
-): BorderLengthParameters {
+): BorderLengthParametersTagged {
     const params = {
-        "@type": "workbench.border-length" as const,
+        "@type": "workbench/border-length" as const,
         "border": border,
         "surface": surface,
         "opt_separate_pieces": opt_separate_pieces,
@@ -122,10 +90,10 @@ function border_length_cargs(
             execution.inputFile((params["opt_corrected_areas_area_metric"] ?? null))
         );
     }
-    if ((params["opt_separate_pieces"] ?? null)) {
+    if ((params["opt_separate_pieces"] ?? false)) {
         cargs.push("-separate-pieces");
     }
-    if ((params["opt_hide_border_name"] ?? null)) {
+    if ((params["opt_hide_border_name"] ?? false)) {
         cargs.push("-hide-border-name");
     }
     return cargs;
@@ -221,7 +189,6 @@ function border_length(
 export {
       BORDER_LENGTH_METADATA,
       BorderLengthOutputs,
-      BorderLengthParameters,
       border_length,
       border_length_execute,
       border_length_params,

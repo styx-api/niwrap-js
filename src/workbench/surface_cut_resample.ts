@@ -12,50 +12,17 @@ const SURFACE_CUT_RESAMPLE_METADATA: Metadata = {
 
 
 interface SurfaceCutResampleParameters {
-    "@type": "workbench.surface-cut-resample";
+    "@type"?: "workbench/surface-cut-resample";
     "surface_in": InputPathType;
     "current_sphere": InputPathType;
     "new_sphere": InputPathType;
     "surface_out": string;
 }
+type SurfaceCutResampleParametersTagged = Required<Pick<SurfaceCutResampleParameters, '@type'>> & SurfaceCutResampleParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-cut-resample": surface_cut_resample_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-cut-resample": surface_cut_resample_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_cut_resample(...)`.
+ * Output object returned when calling `SurfaceCutResampleParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function surface_cut_resample_params(
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     surface_out: string,
-): SurfaceCutResampleParameters {
+): SurfaceCutResampleParametersTagged {
     const params = {
-        "@type": "workbench.surface-cut-resample" as const,
+        "@type": "workbench/surface-cut-resample" as const,
         "surface_in": surface_in,
         "current_sphere": current_sphere,
         "new_sphere": new_sphere,
@@ -205,7 +172,6 @@ function surface_cut_resample(
 export {
       SURFACE_CUT_RESAMPLE_METADATA,
       SurfaceCutResampleOutputs,
-      SurfaceCutResampleParameters,
       surface_cut_resample,
       surface_cut_resample_execute,
       surface_cut_resample_params,

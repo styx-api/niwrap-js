@@ -12,50 +12,17 @@ const MRI_MARK_TEMPORAL_LOBE_METADATA: Metadata = {
 
 
 interface MriMarkTemporalLobeParameters {
-    "@type": "freesurfer.mri_mark_temporal_lobe";
+    "@type"?: "freesurfer/mri_mark_temporal_lobe";
     "spacing"?: string | null | undefined;
     "use_gradient": boolean;
     "subjects": Array<InputPathType>;
     "output_file": string;
 }
+type MriMarkTemporalLobeParametersTagged = Required<Pick<MriMarkTemporalLobeParameters, '@type'>> & MriMarkTemporalLobeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_mark_temporal_lobe": mri_mark_temporal_lobe_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_mark_temporal_lobe": mri_mark_temporal_lobe_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_mark_temporal_lobe(...)`.
+ * Output object returned when calling `MriMarkTemporalLobeParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mri_mark_temporal_lobe_params(
     output_file: string,
     spacing: string | null = null,
     use_gradient: boolean = false,
-): MriMarkTemporalLobeParameters {
+): MriMarkTemporalLobeParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_mark_temporal_lobe" as const,
+        "@type": "freesurfer/mri_mark_temporal_lobe" as const,
         "use_gradient": use_gradient,
         "subjects": subjects,
         "output_file": output_file,
@@ -120,7 +87,7 @@ function mri_mark_temporal_lobe_cargs(
             (params["spacing"] ?? null)
         );
     }
-    if ((params["use_gradient"] ?? null)) {
+    if ((params["use_gradient"] ?? false)) {
         cargs.push(["-gradient", (params["subjects"] ?? null).map(f => execution.inputFile(f)).join(""), (params["output_file"] ?? null)].join(''));
     }
     return cargs;
@@ -207,7 +174,6 @@ function mri_mark_temporal_lobe(
 export {
       MRI_MARK_TEMPORAL_LOBE_METADATA,
       MriMarkTemporalLobeOutputs,
-      MriMarkTemporalLobeParameters,
       mri_mark_temporal_lobe,
       mri_mark_temporal_lobe_execute,
       mri_mark_temporal_lobe_params,

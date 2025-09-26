@@ -12,47 +12,15 @@ const FSLSIZE_METADATA: Metadata = {
 
 
 interface FslsizeParameters {
-    "@type": "fsl.fslsize";
+    "@type"?: "fsl/fslsize";
     "input_file": InputPathType;
     "short_format_flag": boolean;
 }
+type FslsizeParametersTagged = Required<Pick<FslsizeParameters, '@type'>> & FslsizeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslsize": fslsize_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslsize(...)`.
+ * Output object returned when calling `FslsizeParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface FslsizeOutputs {
 function fslsize_params(
     input_file: InputPathType,
     short_format_flag: boolean = false,
-): FslsizeParameters {
+): FslsizeParametersTagged {
     const params = {
-        "@type": "fsl.fslsize" as const,
+        "@type": "fsl/fslsize" as const,
         "input_file": input_file,
         "short_format_flag": short_format_flag,
     };
@@ -100,7 +68,7 @@ function fslsize_cargs(
     const cargs: string[] = [];
     cargs.push("fslsize");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
-    if ((params["short_format_flag"] ?? null)) {
+    if ((params["short_format_flag"] ?? false)) {
         cargs.push("-s");
     }
     return cargs;
@@ -182,7 +150,6 @@ function fslsize(
 export {
       FSLSIZE_METADATA,
       FslsizeOutputs,
-      FslsizeParameters,
       fslsize,
       fslsize_execute,
       fslsize_params,

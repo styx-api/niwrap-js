@@ -12,7 +12,7 @@ const SEGMENT_SUBJECT_OLD_SKULL_STRIP_METADATA: Metadata = {
 
 
 interface SegmentSubjectOldSkullStripParameters {
-    "@type": "freesurfer.segment_subject_old_skull_strip";
+    "@type"?: "freesurfer/segment_subject_old_skull_strip";
     "input_volume": InputPathType;
     "output_xfm": string;
     "log_file"?: string | null | undefined;
@@ -20,44 +20,11 @@ interface SegmentSubjectOldSkullStripParameters {
     "debug_flag": boolean;
     "version_flag": boolean;
 }
+type SegmentSubjectOldSkullStripParametersTagged = Required<Pick<SegmentSubjectOldSkullStripParameters, '@type'>> & SegmentSubjectOldSkullStripParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.segment_subject_old_skull_strip": segment_subject_old_skull_strip_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.segment_subject_old_skull_strip": segment_subject_old_skull_strip_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `segment_subject_old_skull_strip(...)`.
+ * Output object returned when calling `SegmentSubjectOldSkullStripParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +63,9 @@ function segment_subject_old_skull_strip_params(
     help_flag: boolean = false,
     debug_flag: boolean = false,
     version_flag: boolean = false,
-): SegmentSubjectOldSkullStripParameters {
+): SegmentSubjectOldSkullStripParametersTagged {
     const params = {
-        "@type": "freesurfer.segment_subject_old_skull_strip" as const,
+        "@type": "freesurfer/segment_subject_old_skull_strip" as const,
         "input_volume": input_volume,
         "output_xfm": output_xfm,
         "help_flag": help_flag,
@@ -140,13 +107,13 @@ function segment_subject_old_skull_strip_cargs(
             (params["log_file"] ?? null)
         );
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["version_flag"] ?? null)) {
+    if ((params["version_flag"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -238,7 +205,6 @@ function segment_subject_old_skull_strip(
 export {
       SEGMENT_SUBJECT_OLD_SKULL_STRIP_METADATA,
       SegmentSubjectOldSkullStripOutputs,
-      SegmentSubjectOldSkullStripParameters,
       segment_subject_old_skull_strip,
       segment_subject_old_skull_strip_execute,
       segment_subject_old_skull_strip_params,

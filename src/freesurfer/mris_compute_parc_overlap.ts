@@ -12,7 +12,7 @@ const MRIS_COMPUTE_PARC_OVERLAP_METADATA: Metadata = {
 
 
 interface MrisComputeParcOverlapParameters {
-    "@type": "freesurfer.mris_compute_parc_overlap";
+    "@type"?: "freesurfer/mris_compute_parc_overlap";
     "subject": string;
     "hemi": string;
     "annot1"?: InputPathType | null | undefined;
@@ -30,43 +30,11 @@ interface MrisComputeParcOverlapParameters {
     "use_label_xyz": boolean;
     "debug_overlap": boolean;
 }
+type MrisComputeParcOverlapParametersTagged = Required<Pick<MrisComputeParcOverlapParameters, '@type'>> & MrisComputeParcOverlapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_compute_parc_overlap": mris_compute_parc_overlap_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_compute_parc_overlap(...)`.
+ * Output object returned when calling `MrisComputeParcOverlapParameters(...)`.
  *
  * @interface
  */
@@ -117,9 +85,9 @@ function mris_compute_parc_overlap_params(
     use_label2_xyz: boolean = false,
     use_label_xyz: boolean = false,
     debug_overlap: boolean = false,
-): MrisComputeParcOverlapParameters {
+): MrisComputeParcOverlapParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_compute_parc_overlap" as const,
+        "@type": "freesurfer/mris_compute_parc_overlap" as const,
         "subject": subject,
         "hemi": hemi,
         "nocheck_label1_xyz": nocheck_label1_xyz,
@@ -219,25 +187,25 @@ function mris_compute_parc_overlap_cargs(
             execution.inputFile((params["label_list"] ?? null))
         );
     }
-    if ((params["nocheck_label1_xyz"] ?? null)) {
+    if ((params["nocheck_label1_xyz"] ?? false)) {
         cargs.push("--nocheck-label1-xyz");
     }
-    if ((params["nocheck_label2_xyz"] ?? null)) {
+    if ((params["nocheck_label2_xyz"] ?? false)) {
         cargs.push("--nocheck-label2-xyz");
     }
-    if ((params["nocheck_label_xyz"] ?? null)) {
+    if ((params["nocheck_label_xyz"] ?? false)) {
         cargs.push("--nocheck-label-xyz");
     }
-    if ((params["use_label1_xyz"] ?? null)) {
+    if ((params["use_label1_xyz"] ?? false)) {
         cargs.push("--use-label1-xyz");
     }
-    if ((params["use_label2_xyz"] ?? null)) {
+    if ((params["use_label2_xyz"] ?? false)) {
         cargs.push("--use-label2-xyz");
     }
-    if ((params["use_label_xyz"] ?? null)) {
+    if ((params["use_label_xyz"] ?? false)) {
         cargs.push("--use-label-xyz");
     }
-    if ((params["debug_overlap"] ?? null)) {
+    if ((params["debug_overlap"] ?? false)) {
         cargs.push("--debug-overlap");
     }
     return cargs;
@@ -347,7 +315,6 @@ function mris_compute_parc_overlap(
 export {
       MRIS_COMPUTE_PARC_OVERLAP_METADATA,
       MrisComputeParcOverlapOutputs,
-      MrisComputeParcOverlapParameters,
       mris_compute_parc_overlap,
       mris_compute_parc_overlap_execute,
       mris_compute_parc_overlap_params,

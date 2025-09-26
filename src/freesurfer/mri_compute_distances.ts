@@ -12,49 +12,16 @@ const MRI_COMPUTE_DISTANCES_METADATA: Metadata = {
 
 
 interface MriComputeDistancesParameters {
-    "@type": "freesurfer.mri_compute_distances";
+    "@type"?: "freesurfer/mri_compute_distances";
     "source": InputPathType;
     "target": InputPathType;
     "output_xform": string;
 }
+type MriComputeDistancesParametersTagged = Required<Pick<MriComputeDistancesParameters, '@type'>> & MriComputeDistancesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_compute_distances": mri_compute_distances_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_compute_distances": mri_compute_distances_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_compute_distances(...)`.
+ * Output object returned when calling `MriComputeDistancesParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mri_compute_distances_params(
     source: InputPathType,
     target: InputPathType,
     output_xform: string,
-): MriComputeDistancesParameters {
+): MriComputeDistancesParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_compute_distances" as const,
+        "@type": "freesurfer/mri_compute_distances" as const,
         "source": source,
         "target": target,
         "output_xform": output_xform,
@@ -193,7 +160,6 @@ function mri_compute_distances(
 export {
       MRI_COMPUTE_DISTANCES_METADATA,
       MriComputeDistancesOutputs,
-      MriComputeDistancesParameters,
       mri_compute_distances,
       mri_compute_distances_execute,
       mri_compute_distances_params,

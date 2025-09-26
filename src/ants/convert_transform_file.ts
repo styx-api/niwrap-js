@@ -12,7 +12,7 @@ const CONVERT_TRANSFORM_FILE_METADATA: Metadata = {
 
 
 interface ConvertTransformFileParameters {
-    "@type": "ants.ConvertTransformFile";
+    "@type"?: "ants/ConvertTransformFile";
     "dimensions": number;
     "input_transform_file": InputPathType;
     "output_transform_file": string;
@@ -21,43 +21,11 @@ interface ConvertTransformFileParameters {
     "RAS": boolean;
     "convert_to_affine_type": boolean;
 }
+type ConvertTransformFileParametersTagged = Required<Pick<ConvertTransformFileParameters, '@type'>> & ConvertTransformFileParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.ConvertTransformFile": convert_transform_file_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `convert_transform_file(...)`.
+ * Output object returned when calling `ConvertTransformFileParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +58,9 @@ function convert_transform_file_params(
     homogeneous_matrix: boolean = false,
     ras: boolean = false,
     convert_to_affine_type: boolean = false,
-): ConvertTransformFileParameters {
+): ConvertTransformFileParametersTagged {
     const params = {
-        "@type": "ants.ConvertTransformFile" as const,
+        "@type": "ants/ConvertTransformFile" as const,
         "dimensions": dimensions,
         "input_transform_file": input_transform_file,
         "output_transform_file": output_transform_file,
@@ -122,16 +90,16 @@ function convert_transform_file_cargs(
     cargs.push(String((params["dimensions"] ?? null)));
     cargs.push(execution.inputFile((params["input_transform_file"] ?? null)));
     cargs.push((params["output_transform_file"] ?? null));
-    if ((params["matrix"] ?? null)) {
+    if ((params["matrix"] ?? false)) {
         cargs.push("--matrix");
     }
-    if ((params["homogeneous_matrix"] ?? null)) {
+    if ((params["homogeneous_matrix"] ?? false)) {
         cargs.push("--homogeneousMatrix");
     }
-    if ((params["RAS"] ?? null)) {
+    if ((params["RAS"] ?? false)) {
         cargs.push("--RAS");
     }
-    if ((params["convert_to_affine_type"] ?? null)) {
+    if ((params["convert_to_affine_type"] ?? false)) {
         cargs.push("--convertToAffineType");
     }
     return cargs;
@@ -223,7 +191,6 @@ function convert_transform_file(
 export {
       CONVERT_TRANSFORM_FILE_METADATA,
       ConvertTransformFileOutputs,
-      ConvertTransformFileParameters,
       convert_transform_file,
       convert_transform_file_execute,
       convert_transform_file_params,

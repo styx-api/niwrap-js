@@ -12,7 +12,7 @@ const COMPARE_SURFACES_METADATA: Metadata = {
 
 
 interface CompareSurfacesParameters {
-    "@type": "afni.CompareSurfaces";
+    "@type"?: "afni/CompareSurfaces";
     "spec_file": InputPathType;
     "hemisphere": "L" | "R";
     "volume_parent_1": InputPathType;
@@ -29,44 +29,11 @@ interface CompareSurfacesParameters {
     "no_memory_trace": boolean;
     "yes_memory_trace": boolean;
 }
+type CompareSurfacesParametersTagged = Required<Pick<CompareSurfacesParameters, '@type'>> & CompareSurfacesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.CompareSurfaces": compare_surfaces_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.CompareSurfaces": compare_surfaces_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `compare_surfaces(...)`.
+ * Output object returned when calling `CompareSurfacesParameters(...)`.
  *
  * @interface
  */
@@ -123,9 +90,9 @@ function compare_surfaces_params(
     extreme_trace: boolean = false,
     no_memory_trace: boolean = false,
     yes_memory_trace: boolean = false,
-): CompareSurfacesParameters {
+): CompareSurfacesParametersTagged {
     const params = {
-        "@type": "afni.CompareSurfaces" as const,
+        "@type": "afni/CompareSurfaces" as const,
         "spec_file": spec_file,
         "hemisphere": hemisphere,
         "volume_parent_1": volume_parent_1,
@@ -202,13 +169,13 @@ function compare_surfaces_cargs(
             ...(params["node_range"] ?? null).map(String)
         );
     }
-    if ((params["no_consistency_check"] ?? null)) {
+    if ((params["no_consistency_check"] ?? false)) {
         cargs.push("-nocons");
     }
-    if ((params["no_volreg"] ?? null)) {
+    if ((params["no_volreg"] ?? false)) {
         cargs.push("-novolreg");
     }
-    if ((params["no_transform"] ?? null)) {
+    if ((params["no_transform"] ?? false)) {
         cargs.push("-noxform");
     }
     if ((params["set_environment_variable"] ?? null) !== null) {
@@ -217,16 +184,16 @@ function compare_surfaces_cargs(
             (params["set_environment_variable"] ?? null)
         );
     }
-    if ((params["trace"] ?? null)) {
+    if ((params["trace"] ?? false)) {
         cargs.push("-trace");
     }
-    if ((params["extreme_trace"] ?? null)) {
+    if ((params["extreme_trace"] ?? false)) {
         cargs.push("-TRACE");
     }
-    if ((params["no_memory_trace"] ?? null)) {
+    if ((params["no_memory_trace"] ?? false)) {
         cargs.push("-nomall");
     }
-    if ((params["yes_memory_trace"] ?? null)) {
+    if ((params["yes_memory_trace"] ?? false)) {
         cargs.push("-yesmall");
     }
     return cargs;
@@ -336,7 +303,6 @@ function compare_surfaces(
 export {
       COMPARE_SURFACES_METADATA,
       CompareSurfacesOutputs,
-      CompareSurfacesParameters,
       compare_surfaces,
       compare_surfaces_execute,
       compare_surfaces_params,

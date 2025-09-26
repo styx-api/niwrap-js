@@ -12,7 +12,7 @@ const FDRVAL_METADATA: Metadata = {
 
 
 interface FdrvalParameters {
-    "@type": "afni.fdrval";
+    "@type"?: "afni/fdrval";
     "dset": InputPathType;
     "sub": number;
     "val_list": Array<number>;
@@ -22,44 +22,11 @@ interface FdrvalParameters {
     "qinput": boolean;
     "inverse": boolean;
 }
+type FdrvalParametersTagged = Required<Pick<FdrvalParameters, '@type'>> & FdrvalParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.fdrval": fdrval_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.fdrval": fdrval_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fdrval(...)`.
+ * Output object returned when calling `FdrvalParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function fdrval_params(
     qonly: boolean = false,
     qinput: boolean = false,
     inverse: boolean = false,
-): FdrvalParameters {
+): FdrvalParametersTagged {
     const params = {
-        "@type": "afni.fdrval" as const,
+        "@type": "afni/fdrval" as const,
         "dset": dset,
         "sub": sub,
         "val_list": val_list,
@@ -131,19 +98,19 @@ function fdrval_cargs(
     cargs.push(execution.inputFile((params["dset"] ?? null)));
     cargs.push(String((params["sub"] ?? null)));
     cargs.push(...(params["val_list"] ?? null).map(String));
-    if ((params["pval"] ?? null)) {
+    if ((params["pval"] ?? false)) {
         cargs.push("-pval");
     }
-    if ((params["ponly"] ?? null)) {
+    if ((params["ponly"] ?? false)) {
         cargs.push("-ponly");
     }
-    if ((params["qonly"] ?? null)) {
+    if ((params["qonly"] ?? false)) {
         cargs.push("-qonly");
     }
-    if ((params["qinput"] ?? null)) {
+    if ((params["qinput"] ?? false)) {
         cargs.push("-qinput");
     }
-    if ((params["inverse"] ?? null)) {
+    if ((params["inverse"] ?? false)) {
         cargs.push("-inverse");
     }
     return cargs;
@@ -238,7 +205,6 @@ function fdrval(
 export {
       FDRVAL_METADATA,
       FdrvalOutputs,
-      FdrvalParameters,
       fdrval,
       fdrval_execute,
       fdrval_params,

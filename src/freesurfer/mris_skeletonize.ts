@@ -12,7 +12,7 @@ const MRIS_SKELETONIZE_METADATA: Metadata = {
 
 
 interface MrisSkeletonizeParameters {
-    "@type": "freesurfer.mris_skeletonize";
+    "@type"?: "freesurfer/mris_skeletonize";
     "surface": string;
     "surfvals": string;
     "mask": string;
@@ -29,44 +29,11 @@ interface MrisSkeletonizeParameters {
     "cluster"?: number | null | undefined;
     "fwhm"?: number | null | undefined;
 }
+type MrisSkeletonizeParametersTagged = Required<Pick<MrisSkeletonizeParameters, '@type'>> & MrisSkeletonizeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_skeletonize": mris_skeletonize_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_skeletonize": mris_skeletonize_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_skeletonize(...)`.
+ * Output object returned when calling `MrisSkeletonizeParameters(...)`.
  *
  * @interface
  */
@@ -127,9 +94,9 @@ function mris_skeletonize_params(
     threshold: number | null = null,
     cluster: number | null = null,
     fwhm: number | null = null,
-): MrisSkeletonizeParameters {
+): MrisSkeletonizeParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_skeletonize" as const,
+        "@type": "freesurfer/mris_skeletonize" as const,
         "surface": surface,
         "surfvals": surfvals,
         "mask": mask,
@@ -192,16 +159,16 @@ function mris_skeletonize_cargs(
         "--mask",
         (params["mask"] ?? null)
     );
-    if ((params["k1"] ?? null)) {
+    if ((params["k1"] ?? false)) {
         cargs.push("--k1");
     }
-    if ((params["curv_nonmaxsup"] ?? null)) {
+    if ((params["curv_nonmaxsup"] ?? false)) {
         cargs.push("--curv-nonmaxsup");
     }
-    if ((params["gyrus"] ?? null)) {
+    if ((params["gyrus"] ?? false)) {
         cargs.push("--gyrus");
     }
-    if ((params["sulcus"] ?? null)) {
+    if ((params["sulcus"] ?? false)) {
         cargs.push("--sulcus");
     }
     if ((params["outdir"] ?? null) !== null) {
@@ -360,7 +327,6 @@ function mris_skeletonize(
 export {
       MRIS_SKELETONIZE_METADATA,
       MrisSkeletonizeOutputs,
-      MrisSkeletonizeParameters,
       mris_skeletonize,
       mris_skeletonize_execute,
       mris_skeletonize_params,

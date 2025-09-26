@@ -12,49 +12,17 @@ const V__FIND_AFNI_DSET_PATH_METADATA: Metadata = {
 
 
 interface VFindAfniDsetPathParameters {
-    "@type": "afni.@FindAfniDsetPath";
+    "@type"?: "afni/@FindAfniDsetPath";
     "dsetname": string;
     "append_file": boolean;
     "full_path": boolean;
     "help": boolean;
 }
+type VFindAfniDsetPathParametersTagged = Required<Pick<VFindAfniDsetPathParameters, '@type'>> & VFindAfniDsetPathParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@FindAfniDsetPath": v__find_afni_dset_path_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__find_afni_dset_path(...)`.
+ * Output object returned when calling `VFindAfniDsetPathParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function v__find_afni_dset_path_params(
     append_file: boolean = false,
     full_path: boolean = false,
     help: boolean = false,
-): VFindAfniDsetPathParameters {
+): VFindAfniDsetPathParametersTagged {
     const params = {
-        "@type": "afni.@FindAfniDsetPath" as const,
+        "@type": "afni/@FindAfniDsetPath" as const,
         "dsetname": dsetname,
         "append_file": append_file,
         "full_path": full_path,
@@ -108,13 +76,13 @@ function v__find_afni_dset_path_cargs(
     const cargs: string[] = [];
     cargs.push("@FindAfniDsetPath");
     cargs.push((params["dsetname"] ?? null));
-    if ((params["append_file"] ?? null)) {
+    if ((params["append_file"] ?? false)) {
         cargs.push("-append_file");
     }
-    if ((params["full_path"] ?? null)) {
+    if ((params["full_path"] ?? false)) {
         cargs.push("-full_path");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -199,7 +167,6 @@ function v__find_afni_dset_path(
 
 export {
       VFindAfniDsetPathOutputs,
-      VFindAfniDsetPathParameters,
       V__FIND_AFNI_DSET_PATH_METADATA,
       v__find_afni_dset_path,
       v__find_afni_dset_path_execute,

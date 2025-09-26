@@ -12,7 +12,7 @@ const V_3D_UNDUMP_METADATA: Metadata = {
 
 
 interface V3dUndumpParameters {
-    "@type": "afni.3dUndump";
+    "@type"?: "afni/3dUndump";
     "input_files": Array<InputPathType>;
     "prefix"?: string | null | undefined;
     "master"?: InputPathType | null | undefined;
@@ -30,44 +30,11 @@ interface V3dUndumpParameters {
     "roimask"?: InputPathType | null | undefined;
     "allow_nan": boolean;
 }
+type V3dUndumpParametersTagged = Required<Pick<V3dUndumpParameters, '@type'>> & V3dUndumpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dUndump": v_3d_undump_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dUndump": v_3d_undump_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_undump(...)`.
+ * Output object returned when calling `V3dUndumpParameters(...)`.
  *
  * @interface
  */
@@ -122,9 +89,9 @@ function v_3d_undump_params(
     head_only: boolean = false,
     roimask: InputPathType | null = null,
     allow_nan: boolean = false,
-): V3dUndumpParameters {
+): V3dUndumpParametersTagged {
     const params = {
-        "@type": "afni.3dUndump" as const,
+        "@type": "afni/3dUndump" as const,
         "input_files": input_files,
         "ijk": ijk,
         "xyz": xyz,
@@ -223,10 +190,10 @@ function v_3d_undump_cargs(
             String((params["fval"] ?? null))
         );
     }
-    if ((params["ijk"] ?? null)) {
+    if ((params["ijk"] ?? false)) {
         cargs.push("-ijk");
     }
-    if ((params["xyz"] ?? null)) {
+    if ((params["xyz"] ?? false)) {
         cargs.push("-xyz");
     }
     if ((params["sphere_radius"] ?? null) !== null) {
@@ -235,7 +202,7 @@ function v_3d_undump_cargs(
             String((params["sphere_radius"] ?? null))
         );
     }
-    if ((params["cube_mode"] ?? null)) {
+    if ((params["cube_mode"] ?? false)) {
         cargs.push("-cubes");
     }
     if ((params["orient"] ?? null) !== null) {
@@ -244,7 +211,7 @@ function v_3d_undump_cargs(
             (params["orient"] ?? null)
         );
     }
-    if ((params["head_only"] ?? null)) {
+    if ((params["head_only"] ?? false)) {
         cargs.push("-head_only");
     }
     if ((params["roimask"] ?? null) !== null) {
@@ -253,7 +220,7 @@ function v_3d_undump_cargs(
             execution.inputFile((params["roimask"] ?? null))
         );
     }
-    if ((params["allow_nan"] ?? null)) {
+    if ((params["allow_nan"] ?? false)) {
         cargs.push("-allow_NaN");
     }
     return cargs;
@@ -363,7 +330,6 @@ function v_3d_undump(
 
 export {
       V3dUndumpOutputs,
-      V3dUndumpParameters,
       V_3D_UNDUMP_METADATA,
       v_3d_undump,
       v_3d_undump_execute,

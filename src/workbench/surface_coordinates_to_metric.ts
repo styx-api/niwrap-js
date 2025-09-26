@@ -12,48 +12,15 @@ const SURFACE_COORDINATES_TO_METRIC_METADATA: Metadata = {
 
 
 interface SurfaceCoordinatesToMetricParameters {
-    "@type": "workbench.surface-coordinates-to-metric";
+    "@type"?: "workbench/surface-coordinates-to-metric";
     "surface": InputPathType;
     "metric_out": string;
 }
+type SurfaceCoordinatesToMetricParametersTagged = Required<Pick<SurfaceCoordinatesToMetricParameters, '@type'>> & SurfaceCoordinatesToMetricParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-coordinates-to-metric": surface_coordinates_to_metric_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-coordinates-to-metric": surface_coordinates_to_metric_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_coordinates_to_metric(...)`.
+ * Output object returned when calling `SurfaceCoordinatesToMetricParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface SurfaceCoordinatesToMetricOutputs {
 function surface_coordinates_to_metric_params(
     surface: InputPathType,
     metric_out: string,
-): SurfaceCoordinatesToMetricParameters {
+): SurfaceCoordinatesToMetricParametersTagged {
     const params = {
-        "@type": "workbench.surface-coordinates-to-metric" as const,
+        "@type": "workbench/surface-coordinates-to-metric" as const,
         "surface": surface,
         "metric_out": metric_out,
     };
@@ -191,7 +158,6 @@ function surface_coordinates_to_metric(
 export {
       SURFACE_COORDINATES_TO_METRIC_METADATA,
       SurfaceCoordinatesToMetricOutputs,
-      SurfaceCoordinatesToMetricParameters,
       surface_coordinates_to_metric,
       surface_coordinates_to_metric_execute,
       surface_coordinates_to_metric_params,

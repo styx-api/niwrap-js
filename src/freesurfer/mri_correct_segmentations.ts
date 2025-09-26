@@ -12,47 +12,15 @@ const MRI_CORRECT_SEGMENTATIONS_METADATA: Metadata = {
 
 
 interface MriCorrectSegmentationsParameters {
-    "@type": "freesurfer.mri_correct_segmentations";
+    "@type"?: "freesurfer/mri_correct_segmentations";
     "input_file_1": InputPathType;
     "input_file_2": InputPathType;
 }
+type MriCorrectSegmentationsParametersTagged = Required<Pick<MriCorrectSegmentationsParameters, '@type'>> & MriCorrectSegmentationsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_correct_segmentations": mri_correct_segmentations_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_correct_segmentations(...)`.
+ * Output object returned when calling `MriCorrectSegmentationsParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface MriCorrectSegmentationsOutputs {
 function mri_correct_segmentations_params(
     input_file_1: InputPathType,
     input_file_2: InputPathType,
-): MriCorrectSegmentationsParameters {
+): MriCorrectSegmentationsParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_correct_segmentations" as const,
+        "@type": "freesurfer/mri_correct_segmentations" as const,
         "input_file_1": input_file_1,
         "input_file_2": input_file_2,
     };
@@ -180,7 +148,6 @@ function mri_correct_segmentations(
 export {
       MRI_CORRECT_SEGMENTATIONS_METADATA,
       MriCorrectSegmentationsOutputs,
-      MriCorrectSegmentationsParameters,
       mri_correct_segmentations,
       mri_correct_segmentations_execute,
       mri_correct_segmentations_params,

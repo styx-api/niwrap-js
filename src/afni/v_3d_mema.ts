@@ -12,7 +12,7 @@ const V_3D_MEMA_METADATA: Metadata = {
 
 
 interface V3dMemaParameters {
-    "@type": "afni.3dMEMA";
+    "@type"?: "afni/3dMEMA";
     "prefix": string;
     "jobs"?: number | null | undefined;
     "set": Array<string>;
@@ -41,44 +41,11 @@ interface V3dMemaParameters {
     "conditions"?: Array<string> | null | undefined;
     "no_tstat": boolean;
 }
+type V3dMemaParametersTagged = Required<Pick<V3dMemaParameters, '@type'>> & V3dMemaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dMEMA": v_3d_mema_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dMEMA": v_3d_mema_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_mema(...)`.
+ * Output object returned when calling `V3dMemaParameters(...)`.
  *
  * @interface
  */
@@ -155,9 +122,9 @@ function v_3d_mema_params(
     help: boolean = false,
     conditions: Array<string> | null = null,
     no_tstat: boolean = false,
-): V3dMemaParameters {
+): V3dMemaParametersTagged {
     const params = {
-        "@type": "afni.3dMEMA" as const,
+        "@type": "afni/3dMEMA" as const,
         "prefix": prefix,
         "set": set_,
         "cio": cio,
@@ -272,10 +239,10 @@ function v_3d_mema_cargs(
             ...(params["groups"] ?? null)
         );
     }
-    if ((params["cio"] ?? null)) {
+    if ((params["cio"] ?? false)) {
         cargs.push("-cio");
     }
-    if ((params["HKtest"] ?? null)) {
+    if ((params["HKtest"] ?? false)) {
         cargs.push("-HKtest");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -296,7 +263,7 @@ function v_3d_mema_cargs(
             ...(params["missing_data"] ?? null)
         );
     }
-    if ((params["model_outliers"] ?? null)) {
+    if ((params["model_outliers"] ?? false)) {
         cargs.push("-model_outliers");
     }
     if ((params["n_nonzero"] ?? null) !== null) {
@@ -305,25 +272,25 @@ function v_3d_mema_cargs(
             String((params["n_nonzero"] ?? null))
         );
     }
-    if ((params["no_HKtest"] ?? null)) {
+    if ((params["no_HKtest"] ?? false)) {
         cargs.push("-no_HKtest");
     }
-    if ((params["no_model_outliers"] ?? null)) {
+    if ((params["no_model_outliers"] ?? false)) {
         cargs.push("-no_model_outliers");
     }
-    if ((params["no_residual_Z"] ?? null)) {
+    if ((params["no_residual_Z"] ?? false)) {
         cargs.push("-no_residual_Z");
     }
-    if ((params["residual_Z"] ?? null)) {
+    if ((params["residual_Z"] ?? false)) {
         cargs.push("-residual_Z");
     }
-    if ((params["Rio"] ?? null)) {
+    if ((params["Rio"] ?? false)) {
         cargs.push("-Rio");
     }
-    if ((params["equal_variance"] ?? null)) {
+    if ((params["equal_variance"] ?? false)) {
         cargs.push("-equal_variance");
     }
-    if ((params["unequal_variance"] ?? null)) {
+    if ((params["unequal_variance"] ?? false)) {
         cargs.push("-unequal_variance");
     }
     if ((params["verb"] ?? null) !== null) {
@@ -332,10 +299,10 @@ function v_3d_mema_cargs(
             String((params["verb"] ?? null))
         );
     }
-    if ((params["dbgArgs"] ?? null)) {
+    if ((params["dbgArgs"] ?? false)) {
         cargs.push("-dbgArgs");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     if ((params["conditions"] ?? null) !== null) {
@@ -344,7 +311,7 @@ function v_3d_mema_cargs(
             ...(params["conditions"] ?? null)
         );
     }
-    if ((params["no_tstat"] ?? null)) {
+    if ((params["no_tstat"] ?? false)) {
         cargs.push("-no_tstat");
     }
     return cargs;
@@ -476,7 +443,6 @@ function v_3d_mema(
 
 export {
       V3dMemaOutputs,
-      V3dMemaParameters,
       V_3D_MEMA_METADATA,
       v_3d_mema,
       v_3d_mema_execute,

@@ -12,7 +12,7 @@ const BEDPOSTX_METADATA: Metadata = {
 
 
 interface BedpostxParameters {
-    "@type": "fsl.bedpostx";
+    "@type"?: "fsl/bedpostx";
     "subject_dir": string;
     "num_fibres"?: number | null | undefined;
     "ard_weight"?: number | null | undefined;
@@ -22,44 +22,11 @@ interface BedpostxParameters {
     "model_type"?: number | null | undefined;
     "grad_nonlinear": boolean;
 }
+type BedpostxParametersTagged = Required<Pick<BedpostxParameters, '@type'>> & BedpostxParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.bedpostx": bedpostx_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.bedpostx": bedpostx_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `bedpostx(...)`.
+ * Output object returned when calling `BedpostxParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +69,9 @@ function bedpostx_params(
     sample_every: number | null = null,
     model_type: number | null = null,
     grad_nonlinear: boolean = false,
-): BedpostxParameters {
+): BedpostxParametersTagged {
     const params = {
-        "@type": "fsl.bedpostx" as const,
+        "@type": "fsl/bedpostx" as const,
         "subject_dir": subject_dir,
         "grad_nonlinear": grad_nonlinear,
     };
@@ -181,7 +148,7 @@ function bedpostx_cargs(
             String((params["model_type"] ?? null))
         );
     }
-    if ((params["grad_nonlinear"] ?? null)) {
+    if ((params["grad_nonlinear"] ?? false)) {
         cargs.push("-g");
     }
     return cargs;
@@ -277,7 +244,6 @@ function bedpostx(
 export {
       BEDPOSTX_METADATA,
       BedpostxOutputs,
-      BedpostxParameters,
       bedpostx,
       bedpostx_execute,
       bedpostx_params,

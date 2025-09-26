@@ -12,14 +12,15 @@ const ANTS_ATROPOS_N4_SH_METADATA: Metadata = {
 
 
 interface AntsAtroposN4ShSegmentationPriorsParameters {
-    "@type": "ants.antsAtroposN4.sh.segmentation_priors";
+    "@type"?: "segmentation_priors";
     "segmentation_priors_pattern"?: string | null | undefined;
     "segmentation_priors_folder"?: InputPathType | null | undefined;
 }
+type AntsAtroposN4ShSegmentationPriorsParametersTagged = Required<Pick<AntsAtroposN4ShSegmentationPriorsParameters, '@type'>> & AntsAtroposN4ShSegmentationPriorsParameters;
 
 
 interface AntsAtroposN4ShParameters {
-    "@type": "ants.antsAtroposN4.sh";
+    "@type"?: "ants/antsAtroposN4.sh";
     "image_dimension": 2 | 3;
     "input_image": InputPathType;
     "mask_image": InputPathType;
@@ -44,41 +45,7 @@ interface AntsAtroposN4ShParameters {
     "atropos_segmentation_use_euclidean_distance"?: 0 | 1 | null | undefined;
     "test_debug_mode"?: number | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.antsAtroposN4.sh": ants_atropos_n4_sh_cargs,
-        "ants.antsAtroposN4.sh.segmentation_priors": ants_atropos_n4_sh_segmentation_priors_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.antsAtroposN4.sh": ants_atropos_n4_sh_outputs,
-    };
-    return outputsFuncs[t];
-}
+type AntsAtroposN4ShParametersTagged = Required<Pick<AntsAtroposN4ShParameters, '@type'>> & AntsAtroposN4ShParameters;
 
 
 /**
@@ -92,9 +59,9 @@ function dynOutputs(
 function ants_atropos_n4_sh_segmentation_priors_params(
     segmentation_priors_pattern: string | null = null,
     segmentation_priors_folder: InputPathType | null = null,
-): AntsAtroposN4ShSegmentationPriorsParameters {
+): AntsAtroposN4ShSegmentationPriorsParametersTagged {
     const params = {
-        "@type": "ants.antsAtroposN4.sh.segmentation_priors" as const,
+        "@type": "segmentation_priors" as const,
     };
     if (segmentation_priors_pattern !== null) {
         params["segmentation_priors_pattern"] = segmentation_priors_pattern;
@@ -127,7 +94,7 @@ function ants_atropos_n4_sh_segmentation_priors_cargs(
 
 
 /**
- * Output object returned when calling `ants_atropos_n4_sh(...)`.
+ * Output object returned when calling `AntsAtroposN4ShParameters(...)`.
  *
  * @interface
  */
@@ -208,9 +175,9 @@ function ants_atropos_n4_sh_params(
     atropos_segmentation_icm: string | null = null,
     atropos_segmentation_use_euclidean_distance: 0 | 1 | null = null,
     test_debug_mode: number | null = null,
-): AntsAtroposN4ShParameters {
+): AntsAtroposN4ShParametersTagged {
     const params = {
-        "@type": "ants.antsAtroposN4.sh" as const,
+        "@type": "ants/antsAtroposN4.sh" as const,
         "image_dimension": image_dimension,
         "input_image": input_image,
         "mask_image": mask_image,
@@ -321,7 +288,7 @@ function ants_atropos_n4_sh_cargs(
     }
     cargs.push(
         "-p",
-        ...dynCargs((params["segmentation_priors"] ?? null)["@type"])((params["segmentation_priors"] ?? null), execution)
+        ...ants_atropos_n4_sh_segmentation_priors_cargs((params["segmentation_priors"] ?? null), execution)
     );
     if ((params["mrf"] ?? null) !== null) {
         cargs.push(
@@ -541,8 +508,6 @@ function ants_atropos_n4_sh(
 export {
       ANTS_ATROPOS_N4_SH_METADATA,
       AntsAtroposN4ShOutputs,
-      AntsAtroposN4ShParameters,
-      AntsAtroposN4ShSegmentationPriorsParameters,
       ants_atropos_n4_sh,
       ants_atropos_n4_sh_execute,
       ants_atropos_n4_sh_params,

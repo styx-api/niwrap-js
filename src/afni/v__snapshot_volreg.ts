@@ -12,50 +12,17 @@ const V__SNAPSHOT_VOLREG_METADATA: Metadata = {
 
 
 interface VSnapshotVolregParameters {
-    "@type": "afni.@snapshot_volreg";
+    "@type"?: "afni/@snapshot_volreg";
     "anatdataset": InputPathType;
     "epidataset": InputPathType;
     "jname"?: string | null | undefined;
     "xdisplay"?: string | null | undefined;
 }
+type VSnapshotVolregParametersTagged = Required<Pick<VSnapshotVolregParameters, '@type'>> & VSnapshotVolregParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@snapshot_volreg": v__snapshot_volreg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@snapshot_volreg": v__snapshot_volreg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__snapshot_volreg(...)`.
+ * Output object returned when calling `VSnapshotVolregParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function v__snapshot_volreg_params(
     epidataset: InputPathType,
     jname: string | null = null,
     xdisplay: string | null = null,
-): VSnapshotVolregParameters {
+): VSnapshotVolregParametersTagged {
     const params = {
-        "@type": "afni.@snapshot_volreg" as const,
+        "@type": "afni/@snapshot_volreg" as const,
         "anatdataset": anatdataset,
         "epidataset": epidataset,
     };
@@ -207,7 +174,6 @@ function v__snapshot_volreg(
 
 export {
       VSnapshotVolregOutputs,
-      VSnapshotVolregParameters,
       V__SNAPSHOT_VOLREG_METADATA,
       v__snapshot_volreg,
       v__snapshot_volreg_execute,

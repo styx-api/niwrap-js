@@ -12,7 +12,7 @@ const ANALYZETO4DFP_METADATA: Metadata = {
 
 
 interface Analyzeto4dfpParameters {
-    "@type": "freesurfer.analyzeto4dfp";
+    "@type"?: "freesurfer/analyzeto4dfp";
     "analyze_image": InputPathType;
     "rois_scale": boolean;
     "flip_x": boolean;
@@ -21,43 +21,11 @@ interface Analyzeto4dfpParameters {
     "endian"?: string | null | undefined;
     "orientation"?: number | null | undefined;
 }
+type Analyzeto4dfpParametersTagged = Required<Pick<Analyzeto4dfpParameters, '@type'>> & Analyzeto4dfpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.analyzeto4dfp": analyzeto4dfp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `analyzeto4dfp(...)`.
+ * Output object returned when calling `Analyzeto4dfpParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +58,9 @@ function analyzeto4dfp_params(
     flip_z: boolean = false,
     endian: string | null = null,
     orientation: number | null = null,
-): Analyzeto4dfpParameters {
+): Analyzeto4dfpParametersTagged {
     const params = {
-        "@type": "freesurfer.analyzeto4dfp" as const,
+        "@type": "freesurfer/analyzeto4dfp" as const,
         "analyze_image": analyze_image,
         "rois_scale": rois_scale,
         "flip_x": flip_x,
@@ -124,16 +92,16 @@ function analyzeto4dfp_cargs(
     const cargs: string[] = [];
     cargs.push("analyzeto4dfp");
     cargs.push(execution.inputFile((params["analyze_image"] ?? null)));
-    if ((params["rois_scale"] ?? null)) {
+    if ((params["rois_scale"] ?? false)) {
         cargs.push("-s");
     }
-    if ((params["flip_x"] ?? null)) {
+    if ((params["flip_x"] ?? false)) {
         cargs.push("-x");
     }
-    if ((params["flip_y"] ?? null)) {
+    if ((params["flip_y"] ?? false)) {
         cargs.push("-y");
     }
-    if ((params["flip_z"] ?? null)) {
+    if ((params["flip_z"] ?? false)) {
         cargs.push("-z");
     }
     if ((params["endian"] ?? null) !== null) {
@@ -237,7 +205,6 @@ function analyzeto4dfp(
 export {
       ANALYZETO4DFP_METADATA,
       Analyzeto4dfpOutputs,
-      Analyzeto4dfpParameters,
       analyzeto4dfp,
       analyzeto4dfp_execute,
       analyzeto4dfp_params,

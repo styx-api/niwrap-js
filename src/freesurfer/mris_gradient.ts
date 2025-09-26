@@ -12,49 +12,16 @@ const MRIS_GRADIENT_METADATA: Metadata = {
 
 
 interface MrisGradientParameters {
-    "@type": "freesurfer.mris_gradient";
+    "@type"?: "freesurfer/mris_gradient";
     "input_surface": InputPathType;
     "input_vector_field": InputPathType;
     "output_gradient_file": string;
 }
+type MrisGradientParametersTagged = Required<Pick<MrisGradientParameters, '@type'>> & MrisGradientParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_gradient": mris_gradient_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_gradient": mris_gradient_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_gradient(...)`.
+ * Output object returned when calling `MrisGradientParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mris_gradient_params(
     input_surface: InputPathType,
     input_vector_field: InputPathType,
     output_gradient_file: string,
-): MrisGradientParameters {
+): MrisGradientParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_gradient" as const,
+        "@type": "freesurfer/mris_gradient" as const,
         "input_surface": input_surface,
         "input_vector_field": input_vector_field,
         "output_gradient_file": output_gradient_file,
@@ -193,7 +160,6 @@ function mris_gradient(
 export {
       MRIS_GRADIENT_METADATA,
       MrisGradientOutputs,
-      MrisGradientParameters,
       mris_gradient,
       mris_gradient_execute,
       mris_gradient_params,

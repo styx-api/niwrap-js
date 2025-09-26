@@ -12,65 +12,32 @@ const CIFTI_MATH_METADATA: Metadata = {
 
 
 interface CiftiMathSelectParameters {
-    "@type": "workbench.cifti-math.var.select";
+    "@type"?: "select";
     "dim": number;
     "index": string;
     "opt_repeat": boolean;
 }
+type CiftiMathSelectParametersTagged = Required<Pick<CiftiMathSelectParameters, '@type'>> & CiftiMathSelectParameters;
 
 
 interface CiftiMathVarParameters {
-    "@type": "workbench.cifti-math.var";
+    "@type"?: "var";
     "name": string;
     "cifti": InputPathType;
     "select"?: Array<CiftiMathSelectParameters> | null | undefined;
 }
+type CiftiMathVarParametersTagged = Required<Pick<CiftiMathVarParameters, '@type'>> & CiftiMathVarParameters;
 
 
 interface CiftiMathParameters {
-    "@type": "workbench.cifti-math";
+    "@type"?: "workbench/cifti-math";
     "expression": string;
     "cifti_out": string;
     "opt_fixnan_replace"?: number | null | undefined;
     "opt_override_mapping_check": boolean;
     "var"?: Array<CiftiMathVarParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-math": cifti_math_cargs,
-        "workbench.cifti-math.var": cifti_math_var_cargs,
-        "workbench.cifti-math.var.select": cifti_math_select_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-math": cifti_math_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiMathParametersTagged = Required<Pick<CiftiMathParameters, '@type'>> & CiftiMathParameters;
 
 
 /**
@@ -86,9 +53,9 @@ function cifti_math_select_params(
     dim: number,
     index: string,
     opt_repeat: boolean = false,
-): CiftiMathSelectParameters {
+): CiftiMathSelectParametersTagged {
     const params = {
-        "@type": "workbench.cifti-math.var.select" as const,
+        "@type": "select" as const,
         "dim": dim,
         "index": index,
         "opt_repeat": opt_repeat,
@@ -113,7 +80,7 @@ function cifti_math_select_cargs(
     cargs.push("-select");
     cargs.push(String((params["dim"] ?? null)));
     cargs.push((params["index"] ?? null));
-    if ((params["opt_repeat"] ?? null)) {
+    if ((params["opt_repeat"] ?? false)) {
         cargs.push("-repeat");
     }
     return cargs;
@@ -133,9 +100,9 @@ function cifti_math_var_params(
     name: string,
     cifti: InputPathType,
     select: Array<CiftiMathSelectParameters> | null = null,
-): CiftiMathVarParameters {
+): CiftiMathVarParametersTagged {
     const params = {
-        "@type": "workbench.cifti-math.var" as const,
+        "@type": "var" as const,
         "name": name,
         "cifti": cifti,
     };
@@ -163,14 +130,14 @@ function cifti_math_var_cargs(
     cargs.push((params["name"] ?? null));
     cargs.push(execution.inputFile((params["cifti"] ?? null)));
     if ((params["select"] ?? null) !== null) {
-        cargs.push(...(params["select"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["select"] ?? null).map(s => cifti_math_select_cargs(s, execution)).flat());
     }
     return cargs;
 }
 
 
 /**
- * Output object returned when calling `cifti_math(...)`.
+ * Output object returned when calling `CiftiMathParameters(...)`.
  *
  * @interface
  */
@@ -203,9 +170,9 @@ function cifti_math_params(
     opt_fixnan_replace: number | null = null,
     opt_override_mapping_check: boolean = false,
     var_: Array<CiftiMathVarParameters> | null = null,
-): CiftiMathParameters {
+): CiftiMathParametersTagged {
     const params = {
-        "@type": "workbench.cifti-math" as const,
+        "@type": "workbench/cifti-math" as const,
         "expression": expression,
         "cifti_out": cifti_out,
         "opt_override_mapping_check": opt_override_mapping_check,
@@ -243,11 +210,11 @@ function cifti_math_cargs(
             String((params["opt_fixnan_replace"] ?? null))
         );
     }
-    if ((params["opt_override_mapping_check"] ?? null)) {
+    if ((params["opt_override_mapping_check"] ?? false)) {
         cargs.push("-override-mapping-check");
     }
     if ((params["var"] ?? null) !== null) {
-        cargs.push(...(params["var"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["var"] ?? null).map(s => cifti_math_var_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -421,9 +388,6 @@ function cifti_math(
 export {
       CIFTI_MATH_METADATA,
       CiftiMathOutputs,
-      CiftiMathParameters,
-      CiftiMathSelectParameters,
-      CiftiMathVarParameters,
       cifti_math,
       cifti_math_execute,
       cifti_math_params,

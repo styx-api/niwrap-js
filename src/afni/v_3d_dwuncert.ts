@@ -12,7 +12,7 @@ const V_3D_DWUNCERT_METADATA: Metadata = {
 
 
 interface V3dDwuncertParameters {
-    "@type": "afni.3dDWUncert";
+    "@type"?: "afni/3dDWUncert";
     "input_file": InputPathType;
     "input_prefix": string;
     "output_prefix": string;
@@ -23,44 +23,11 @@ interface V3dDwuncertParameters {
     "calc_thr_fa"?: number | null | undefined;
     "csf_fa"?: number | null | undefined;
 }
+type V3dDwuncertParametersTagged = Required<Pick<V3dDwuncertParameters, '@type'>> & V3dDwuncertParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dDWUncert": v_3d_dwuncert_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dDWUncert": v_3d_dwuncert_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_dwuncert(...)`.
+ * Output object returned when calling `V3dDwuncertParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function v_3d_dwuncert_params(
     mask_file: InputPathType | null = null,
     calc_thr_fa: number | null = null,
     csf_fa: number | null = null,
-): V3dDwuncertParameters {
+): V3dDwuncertParametersTagged {
     const params = {
-        "@type": "afni.3dDWUncert" as const,
+        "@type": "afni/3dDWUncert" as const,
         "input_file": input_file,
         "input_prefix": input_prefix,
         "output_prefix": output_prefix,
@@ -285,7 +252,6 @@ function v_3d_dwuncert(
 
 export {
       V3dDwuncertOutputs,
-      V3dDwuncertParameters,
       V_3D_DWUNCERT_METADATA,
       v_3d_dwuncert,
       v_3d_dwuncert_execute,

@@ -12,46 +12,14 @@ const XHEMI_TAL_METADATA: Metadata = {
 
 
 interface XhemiTalParameters {
-    "@type": "freesurfer.xhemi-tal";
+    "@type"?: "freesurfer/xhemi-tal";
     "subject": string;
 }
+type XhemiTalParametersTagged = Required<Pick<XhemiTalParameters, '@type'>> & XhemiTalParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.xhemi-tal": xhemi_tal_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `xhemi_tal(...)`.
+ * Output object returned when calling `XhemiTalParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface XhemiTalOutputs {
  */
 function xhemi_tal_params(
     subject: string,
-): XhemiTalParameters {
+): XhemiTalParametersTagged {
     const params = {
-        "@type": "freesurfer.xhemi-tal" as const,
+        "@type": "freesurfer/xhemi-tal" as const,
         "subject": subject,
     };
     return params;
@@ -176,7 +144,6 @@ function xhemi_tal(
 export {
       XHEMI_TAL_METADATA,
       XhemiTalOutputs,
-      XhemiTalParameters,
       xhemi_tal,
       xhemi_tal_execute,
       xhemi_tal_params,

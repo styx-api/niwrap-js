@@ -12,21 +12,23 @@ const DWI2MASK_METADATA: Metadata = {
 
 
 interface Dwi2maskFslgradParameters {
-    "@type": "mrtrix.dwi2mask.fslgrad";
+    "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
+type Dwi2maskFslgradParametersTagged = Required<Pick<Dwi2maskFslgradParameters, '@type'>> & Dwi2maskFslgradParameters;
 
 
 interface Dwi2maskConfigParameters {
-    "@type": "mrtrix.dwi2mask.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Dwi2maskConfigParametersTagged = Required<Pick<Dwi2maskConfigParameters, '@type'>> & Dwi2maskConfigParameters;
 
 
 interface Dwi2maskParameters {
-    "@type": "mrtrix.dwi2mask";
+    "@type"?: "mrtrix/dwi2mask";
     "clean_scale"?: number | null | undefined;
     "grad"?: InputPathType | null | undefined;
     "fslgrad"?: Dwi2maskFslgradParameters | null | undefined;
@@ -41,42 +43,7 @@ interface Dwi2maskParameters {
     "input": InputPathType;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.dwi2mask": dwi2mask_cargs,
-        "mrtrix.dwi2mask.fslgrad": dwi2mask_fslgrad_cargs,
-        "mrtrix.dwi2mask.config": dwi2mask_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.dwi2mask": dwi2mask_outputs,
-    };
-    return outputsFuncs[t];
-}
+type Dwi2maskParametersTagged = Required<Pick<Dwi2maskParameters, '@type'>> & Dwi2maskParameters;
 
 
 /**
@@ -90,9 +57,9 @@ function dynOutputs(
 function dwi2mask_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
-): Dwi2maskFslgradParameters {
+): Dwi2maskFslgradParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2mask.fslgrad" as const,
+        "@type": "fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -131,9 +98,9 @@ function dwi2mask_fslgrad_cargs(
 function dwi2mask_config_params(
     key: string,
     value: string,
-): Dwi2maskConfigParameters {
+): Dwi2maskConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2mask.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -162,7 +129,7 @@ function dwi2mask_config_cargs(
 
 
 /**
- * Output object returned when calling `dwi2mask(...)`.
+ * Output object returned when calling `Dwi2maskParameters(...)`.
  *
  * @interface
  */
@@ -211,9 +178,9 @@ function dwi2mask_params(
     config: Array<Dwi2maskConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Dwi2maskParameters {
+): Dwi2maskParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2mask" as const,
+        "@type": "mrtrix/dwi2mask" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -269,18 +236,18 @@ function dwi2mask_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
+        cargs.push(...dwi2mask_fslgrad_cargs((params["fslgrad"] ?? null), execution));
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -290,12 +257,12 @@ function dwi2mask_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dwi2mask_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -417,10 +384,7 @@ function dwi2mask(
 
 export {
       DWI2MASK_METADATA,
-      Dwi2maskConfigParameters,
-      Dwi2maskFslgradParameters,
       Dwi2maskOutputs,
-      Dwi2maskParameters,
       dwi2mask,
       dwi2mask_config_params,
       dwi2mask_execute,

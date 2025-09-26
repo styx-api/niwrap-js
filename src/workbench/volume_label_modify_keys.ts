@@ -12,50 +12,17 @@ const VOLUME_LABEL_MODIFY_KEYS_METADATA: Metadata = {
 
 
 interface VolumeLabelModifyKeysParameters {
-    "@type": "workbench.volume-label-modify-keys";
+    "@type"?: "workbench/volume-label-modify-keys";
     "volume_in": InputPathType;
     "remap_file": string;
     "volume_out": string;
     "opt_subvolume_subvolume"?: string | null | undefined;
 }
+type VolumeLabelModifyKeysParametersTagged = Required<Pick<VolumeLabelModifyKeysParameters, '@type'>> & VolumeLabelModifyKeysParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-label-modify-keys": volume_label_modify_keys_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-label-modify-keys": volume_label_modify_keys_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `volume_label_modify_keys(...)`.
+ * Output object returned when calling `VolumeLabelModifyKeysParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function volume_label_modify_keys_params(
     remap_file: string,
     volume_out: string,
     opt_subvolume_subvolume: string | null = null,
-): VolumeLabelModifyKeysParameters {
+): VolumeLabelModifyKeysParametersTagged {
     const params = {
-        "@type": "workbench.volume-label-modify-keys" as const,
+        "@type": "workbench/volume-label-modify-keys" as const,
         "volume_in": volume_in,
         "remap_file": remap_file,
         "volume_out": volume_out,
@@ -224,7 +191,6 @@ function volume_label_modify_keys(
 export {
       VOLUME_LABEL_MODIFY_KEYS_METADATA,
       VolumeLabelModifyKeysOutputs,
-      VolumeLabelModifyKeysParameters,
       volume_label_modify_keys,
       volume_label_modify_keys_execute,
       volume_label_modify_keys_params,

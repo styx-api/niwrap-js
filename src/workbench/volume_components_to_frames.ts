@@ -12,48 +12,15 @@ const VOLUME_COMPONENTS_TO_FRAMES_METADATA: Metadata = {
 
 
 interface VolumeComponentsToFramesParameters {
-    "@type": "workbench.volume-components-to-frames";
+    "@type"?: "workbench/volume-components-to-frames";
     "input": InputPathType;
     "output": string;
 }
+type VolumeComponentsToFramesParametersTagged = Required<Pick<VolumeComponentsToFramesParameters, '@type'>> & VolumeComponentsToFramesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-components-to-frames": volume_components_to_frames_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-components-to-frames": volume_components_to_frames_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `volume_components_to_frames(...)`.
+ * Output object returned when calling `VolumeComponentsToFramesParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface VolumeComponentsToFramesOutputs {
 function volume_components_to_frames_params(
     input: InputPathType,
     output: string,
-): VolumeComponentsToFramesParameters {
+): VolumeComponentsToFramesParametersTagged {
     const params = {
-        "@type": "workbench.volume-components-to-frames" as const,
+        "@type": "workbench/volume-components-to-frames" as const,
         "input": input,
         "output": output,
     };
@@ -191,7 +158,6 @@ function volume_components_to_frames(
 export {
       VOLUME_COMPONENTS_TO_FRAMES_METADATA,
       VolumeComponentsToFramesOutputs,
-      VolumeComponentsToFramesParameters,
       volume_components_to_frames,
       volume_components_to_frames_execute,
       volume_components_to_frames_params,

@@ -12,50 +12,17 @@ const MRI_EXTRACT_METADATA: Metadata = {
 
 
 interface MriExtractParameters {
-    "@type": "freesurfer.mri_extract";
+    "@type"?: "freesurfer/mri_extract";
     "like_template"?: InputPathType | null | undefined;
     "src_volume": InputPathType;
     "dst_volume": InputPathType;
     "coordinates"?: Array<number> | null | undefined;
 }
+type MriExtractParametersTagged = Required<Pick<MriExtractParameters, '@type'>> & MriExtractParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_extract": mri_extract_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_extract": mri_extract_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_extract(...)`.
+ * Output object returned when calling `MriExtractParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mri_extract_params(
     dst_volume: InputPathType,
     like_template: InputPathType | null = null,
     coordinates: Array<number> | null = null,
-): MriExtractParameters {
+): MriExtractParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_extract" as const,
+        "@type": "freesurfer/mri_extract" as const,
         "src_volume": src_volume,
         "dst_volume": dst_volume,
     };
@@ -211,7 +178,6 @@ function mri_extract(
 export {
       MRI_EXTRACT_METADATA,
       MriExtractOutputs,
-      MriExtractParameters,
       mri_extract,
       mri_extract_execute,
       mri_extract_params,

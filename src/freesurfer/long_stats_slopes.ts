@@ -12,7 +12,7 @@ const LONG_STATS_SLOPES_METADATA: Metadata = {
 
 
 interface LongStatsSlopesParameters {
-    "@type": "freesurfer.long_stats_slopes";
+    "@type"?: "freesurfer/long_stats_slopes";
     "qdec_table": InputPathType;
     "stats_file": InputPathType;
     "measure": string;
@@ -41,43 +41,11 @@ interface LongStatsSlopesParameters {
     "stack_spc"?: string | null | undefined;
     "stack_resid"?: string | null | undefined;
 }
+type LongStatsSlopesParametersTagged = Required<Pick<LongStatsSlopesParameters, '@type'>> & LongStatsSlopesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.long_stats_slopes": long_stats_slopes_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `long_stats_slopes(...)`.
+ * Output object returned when calling `LongStatsSlopesParameters(...)`.
  *
  * @interface
  */
@@ -150,9 +118,9 @@ function long_stats_slopes_params(
     stack_pc1: string | null = null,
     stack_spc: string | null = null,
     stack_resid: string | null = null,
-): LongStatsSlopesParameters {
+): LongStatsSlopesParametersTagged {
     const params = {
-        "@type": "freesurfer.long_stats_slopes" as const,
+        "@type": "freesurfer/long_stats_slopes" as const,
         "qdec_table": qdec_table,
         "stats_file": stats_file,
         "measure": measure,
@@ -245,22 +213,22 @@ function long_stats_slopes_cargs(
         "--sd",
         (params["subjects_dir"] ?? null)
     );
-    if ((params["do_avg"] ?? null)) {
+    if ((params["do_avg"] ?? false)) {
         cargs.push("--do-avg");
     }
-    if ((params["do_rate"] ?? null)) {
+    if ((params["do_rate"] ?? false)) {
         cargs.push("--do-rate");
     }
-    if ((params["do_pc1fit"] ?? null)) {
+    if ((params["do_pc1fit"] ?? false)) {
         cargs.push("--do-pc1fit");
     }
-    if ((params["do_pc1"] ?? null)) {
+    if ((params["do_pc1"] ?? false)) {
         cargs.push("--do-pc1");
     }
-    if ((params["do_spc"] ?? null)) {
+    if ((params["do_spc"] ?? false)) {
         cargs.push("--do-spc");
     }
-    if ((params["do_stack"] ?? null)) {
+    if ((params["do_stack"] ?? false)) {
         cargs.push("--do-stack");
     }
     if ((params["resid"] ?? null) !== null) {
@@ -275,10 +243,10 @@ function long_stats_slopes_cargs(
             (params["time_var"] ?? null)
         );
     }
-    if ((params["generic_time"] ?? null)) {
+    if ((params["generic_time"] ?? false)) {
         cargs.push("--generic-time");
     }
-    if ((params["cross_sectional"] ?? null)) {
+    if ((params["cross_sectional"] ?? false)) {
         cargs.push("--cross");
     }
     if ((params["out_avg"] ?? null) !== null) {
@@ -488,7 +456,6 @@ function long_stats_slopes(
 export {
       LONG_STATS_SLOPES_METADATA,
       LongStatsSlopesOutputs,
-      LongStatsSlopesParameters,
       long_stats_slopes,
       long_stats_slopes_execute,
       long_stats_slopes_params,

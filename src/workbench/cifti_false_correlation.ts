@@ -12,28 +12,31 @@ const CIFTI_FALSE_CORRELATION_METADATA: Metadata = {
 
 
 interface CiftiFalseCorrelationLeftSurfaceParameters {
-    "@type": "workbench.cifti-false-correlation.left_surface";
+    "@type"?: "left_surface";
     "surface": InputPathType;
     "opt_dump_text_text_out"?: string | null | undefined;
 }
+type CiftiFalseCorrelationLeftSurfaceParametersTagged = Required<Pick<CiftiFalseCorrelationLeftSurfaceParameters, '@type'>> & CiftiFalseCorrelationLeftSurfaceParameters;
 
 
 interface CiftiFalseCorrelationRightSurfaceParameters {
-    "@type": "workbench.cifti-false-correlation.right_surface";
+    "@type"?: "right_surface";
     "surface": InputPathType;
     "opt_dump_text_text_out"?: string | null | undefined;
 }
+type CiftiFalseCorrelationRightSurfaceParametersTagged = Required<Pick<CiftiFalseCorrelationRightSurfaceParameters, '@type'>> & CiftiFalseCorrelationRightSurfaceParameters;
 
 
 interface CiftiFalseCorrelationCerebellumSurfaceParameters {
-    "@type": "workbench.cifti-false-correlation.cerebellum_surface";
+    "@type"?: "cerebellum_surface";
     "surface": InputPathType;
     "opt_dump_text_text_out"?: string | null | undefined;
 }
+type CiftiFalseCorrelationCerebellumSurfaceParametersTagged = Required<Pick<CiftiFalseCorrelationCerebellumSurfaceParameters, '@type'>> & CiftiFalseCorrelationCerebellumSurfaceParameters;
 
 
 interface CiftiFalseCorrelationParameters {
-    "@type": "workbench.cifti-false-correlation";
+    "@type"?: "workbench/cifti-false-correlation";
     "cifti_in": InputPathType;
     "3d_dist": number;
     "geo_outer": number;
@@ -43,43 +46,7 @@ interface CiftiFalseCorrelationParameters {
     "right_surface"?: CiftiFalseCorrelationRightSurfaceParameters | null | undefined;
     "cerebellum_surface"?: CiftiFalseCorrelationCerebellumSurfaceParameters | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-false-correlation": cifti_false_correlation_cargs,
-        "workbench.cifti-false-correlation.left_surface": cifti_false_correlation_left_surface_cargs,
-        "workbench.cifti-false-correlation.right_surface": cifti_false_correlation_right_surface_cargs,
-        "workbench.cifti-false-correlation.cerebellum_surface": cifti_false_correlation_cerebellum_surface_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-false-correlation": cifti_false_correlation_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiFalseCorrelationParametersTagged = Required<Pick<CiftiFalseCorrelationParameters, '@type'>> & CiftiFalseCorrelationParameters;
 
 
 /**
@@ -93,9 +60,9 @@ function dynOutputs(
 function cifti_false_correlation_left_surface_params(
     surface: InputPathType,
     opt_dump_text_text_out: string | null = null,
-): CiftiFalseCorrelationLeftSurfaceParameters {
+): CiftiFalseCorrelationLeftSurfaceParametersTagged {
     const params = {
-        "@type": "workbench.cifti-false-correlation.left_surface" as const,
+        "@type": "left_surface" as const,
         "surface": surface,
     };
     if (opt_dump_text_text_out !== null) {
@@ -141,9 +108,9 @@ function cifti_false_correlation_left_surface_cargs(
 function cifti_false_correlation_right_surface_params(
     surface: InputPathType,
     opt_dump_text_text_out: string | null = null,
-): CiftiFalseCorrelationRightSurfaceParameters {
+): CiftiFalseCorrelationRightSurfaceParametersTagged {
     const params = {
-        "@type": "workbench.cifti-false-correlation.right_surface" as const,
+        "@type": "right_surface" as const,
         "surface": surface,
     };
     if (opt_dump_text_text_out !== null) {
@@ -189,9 +156,9 @@ function cifti_false_correlation_right_surface_cargs(
 function cifti_false_correlation_cerebellum_surface_params(
     surface: InputPathType,
     opt_dump_text_text_out: string | null = null,
-): CiftiFalseCorrelationCerebellumSurfaceParameters {
+): CiftiFalseCorrelationCerebellumSurfaceParametersTagged {
     const params = {
-        "@type": "workbench.cifti-false-correlation.cerebellum_surface" as const,
+        "@type": "cerebellum_surface" as const,
         "surface": surface,
     };
     if (opt_dump_text_text_out !== null) {
@@ -227,7 +194,7 @@ function cifti_false_correlation_cerebellum_surface_cargs(
 
 
 /**
- * Output object returned when calling `cifti_false_correlation(...)`.
+ * Output object returned when calling `CiftiFalseCorrelationParameters(...)`.
  *
  * @interface
  */
@@ -266,9 +233,9 @@ function cifti_false_correlation_params(
     left_surface: CiftiFalseCorrelationLeftSurfaceParameters | null = null,
     right_surface: CiftiFalseCorrelationRightSurfaceParameters | null = null,
     cerebellum_surface: CiftiFalseCorrelationCerebellumSurfaceParameters | null = null,
-): CiftiFalseCorrelationParameters {
+): CiftiFalseCorrelationParametersTagged {
     const params = {
-        "@type": "workbench.cifti-false-correlation" as const,
+        "@type": "workbench/cifti-false-correlation" as const,
         "cifti_in": cifti_in,
         "3d_dist": v_3d_dist,
         "geo_outer": geo_outer,
@@ -309,13 +276,13 @@ function cifti_false_correlation_cargs(
     cargs.push(String((params["geo_inner"] ?? null)));
     cargs.push((params["cifti_out"] ?? null));
     if ((params["left_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["left_surface"] ?? null)["@type"])((params["left_surface"] ?? null), execution));
+        cargs.push(...cifti_false_correlation_left_surface_cargs((params["left_surface"] ?? null), execution));
     }
     if ((params["right_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["right_surface"] ?? null)["@type"])((params["right_surface"] ?? null), execution));
+        cargs.push(...cifti_false_correlation_right_surface_cargs((params["right_surface"] ?? null), execution));
     }
     if ((params["cerebellum_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["cerebellum_surface"] ?? null)["@type"])((params["cerebellum_surface"] ?? null), execution));
+        cargs.push(...cifti_false_correlation_cerebellum_surface_cargs((params["cerebellum_surface"] ?? null), execution));
     }
     return cargs;
 }
@@ -412,11 +379,7 @@ function cifti_false_correlation(
 
 export {
       CIFTI_FALSE_CORRELATION_METADATA,
-      CiftiFalseCorrelationCerebellumSurfaceParameters,
-      CiftiFalseCorrelationLeftSurfaceParameters,
       CiftiFalseCorrelationOutputs,
-      CiftiFalseCorrelationParameters,
-      CiftiFalseCorrelationRightSurfaceParameters,
       cifti_false_correlation,
       cifti_false_correlation_cerebellum_surface_params,
       cifti_false_correlation_execute,

@@ -12,7 +12,7 @@ const MRIS_VOLSMOOTH_METADATA: Metadata = {
 
 
 interface MrisVolsmoothParameters {
-    "@type": "freesurfer.mris_volsmooth";
+    "@type"?: "freesurfer/mris_volsmooth";
     "input_volume": InputPathType;
     "output_volume": string;
     "registration": InputPathType;
@@ -27,44 +27,11 @@ interface MrisVolsmoothParameters {
     "nocleanup": boolean;
     "debug": boolean;
 }
+type MrisVolsmoothParametersTagged = Required<Pick<MrisVolsmoothParameters, '@type'>> & MrisVolsmoothParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_volsmooth": mris_volsmooth_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_volsmooth": mris_volsmooth_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_volsmooth(...)`.
+ * Output object returned when calling `MrisVolsmoothParameters(...)`.
  *
  * @interface
  */
@@ -121,9 +88,9 @@ function mris_volsmooth_params(
     log: string | null = null,
     nocleanup: boolean = false,
     debug: boolean = false,
-): MrisVolsmoothParameters {
+): MrisVolsmoothParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_volsmooth" as const,
+        "@type": "freesurfer/mris_volsmooth" as const,
         "input_volume": input_volume,
         "output_volume": output_volume,
         "registration": registration,
@@ -194,7 +161,7 @@ function mris_volsmooth_cargs(
             (params["projfrac_avg"] ?? null)
         );
     }
-    if ((params["fill_ribbon"] ?? null)) {
+    if ((params["fill_ribbon"] ?? false)) {
         cargs.push("--fill-ribbon");
     }
     if ((params["surf_out"] ?? null) !== null) {
@@ -227,10 +194,10 @@ function mris_volsmooth_cargs(
             (params["log"] ?? null)
         );
     }
-    if ((params["nocleanup"] ?? null)) {
+    if ((params["nocleanup"] ?? false)) {
         cargs.push("--nocleanup");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -337,7 +304,6 @@ function mris_volsmooth(
 export {
       MRIS_VOLSMOOTH_METADATA,
       MrisVolsmoothOutputs,
-      MrisVolsmoothParameters,
       mris_volsmooth,
       mris_volsmooth_execute,
       mris_volsmooth_params,

@@ -12,48 +12,16 @@ const FSLMODHD_METADATA: Metadata = {
 
 
 interface FslmodhdParameters {
-    "@type": "fsl.fslmodhd";
+    "@type"?: "fsl/fslmodhd";
     "image": InputPathType;
     "keyword": string;
     "value": string;
 }
+type FslmodhdParametersTagged = Required<Pick<FslmodhdParameters, '@type'>> & FslmodhdParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslmodhd": fslmodhd_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslmodhd(...)`.
+ * Output object returned when calling `FslmodhdParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function fslmodhd_params(
     image: InputPathType,
     keyword: string,
     value: string,
-): FslmodhdParameters {
+): FslmodhdParametersTagged {
     const params = {
-        "@type": "fsl.fslmodhd" as const,
+        "@type": "fsl/fslmodhd" as const,
         "image": image,
         "keyword": keyword,
         "value": value,
@@ -187,7 +155,6 @@ function fslmodhd(
 export {
       FSLMODHD_METADATA,
       FslmodhdOutputs,
-      FslmodhdParameters,
       fslmodhd,
       fslmodhd_execute,
       fslmodhd_params,

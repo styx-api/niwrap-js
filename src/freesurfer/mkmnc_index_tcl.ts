@@ -12,48 +12,15 @@ const MKMNC_INDEX_TCL_METADATA: Metadata = {
 
 
 interface MkmncIndexTclParameters {
-    "@type": "freesurfer.mkmnc_index.tcl";
+    "@type"?: "freesurfer/mkmnc_index.tcl";
     "infile": InputPathType;
     "outfile": string;
 }
+type MkmncIndexTclParametersTagged = Required<Pick<MkmncIndexTclParameters, '@type'>> & MkmncIndexTclParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mkmnc_index.tcl": mkmnc_index_tcl_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mkmnc_index.tcl": mkmnc_index_tcl_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mkmnc_index_tcl(...)`.
+ * Output object returned when calling `MkmncIndexTclParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface MkmncIndexTclOutputs {
 function mkmnc_index_tcl_params(
     infile: InputPathType,
     outfile: string,
-): MkmncIndexTclParameters {
+): MkmncIndexTclParametersTagged {
     const params = {
-        "@type": "freesurfer.mkmnc_index.tcl" as const,
+        "@type": "freesurfer/mkmnc_index.tcl" as const,
         "infile": infile,
         "outfile": outfile,
     };
@@ -186,7 +153,6 @@ function mkmnc_index_tcl(
 export {
       MKMNC_INDEX_TCL_METADATA,
       MkmncIndexTclOutputs,
-      MkmncIndexTclParameters,
       mkmnc_index_tcl,
       mkmnc_index_tcl_execute,
       mkmnc_index_tcl_params,

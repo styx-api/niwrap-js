@@ -12,46 +12,14 @@ const FSR_GETXOPTS_METADATA: Metadata = {
 
 
 interface FsrGetxoptsParameters {
-    "@type": "freesurfer.fsr-getxopts";
+    "@type"?: "freesurfer/fsr-getxopts";
     "help": boolean;
 }
+type FsrGetxoptsParametersTagged = Required<Pick<FsrGetxoptsParameters, '@type'>> & FsrGetxoptsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fsr-getxopts": fsr_getxopts_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsr_getxopts(...)`.
+ * Output object returned when calling `FsrGetxoptsParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface FsrGetxoptsOutputs {
  */
 function fsr_getxopts_params(
     help: boolean = false,
-): FsrGetxoptsParameters {
+): FsrGetxoptsParametersTagged {
     const params = {
-        "@type": "freesurfer.fsr-getxopts" as const,
+        "@type": "freesurfer/fsr-getxopts" as const,
         "help": help,
     };
     return params;
@@ -95,7 +63,7 @@ function fsr_getxopts_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("fsr-getxopts");
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -175,7 +143,6 @@ function fsr_getxopts(
 export {
       FSR_GETXOPTS_METADATA,
       FsrGetxoptsOutputs,
-      FsrGetxoptsParameters,
       fsr_getxopts,
       fsr_getxopts_execute,
       fsr_getxopts_params,

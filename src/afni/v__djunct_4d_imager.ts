@@ -12,50 +12,17 @@ const V__DJUNCT_4D_IMAGER_METADATA: Metadata = {
 
 
 interface VDjunct4dImagerParameters {
-    "@type": "afni.@djunct_4d_imager";
+    "@type"?: "afni/@djunct_4d_imager";
     "inset": InputPathType;
     "prefix": string;
     "do_movie"?: "MPEG" | "AGIF" | null | undefined;
     "no_clean": boolean;
 }
+type VDjunct4dImagerParametersTagged = Required<Pick<VDjunct4dImagerParameters, '@type'>> & VDjunct4dImagerParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@djunct_4d_imager": v__djunct_4d_imager_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@djunct_4d_imager": v__djunct_4d_imager_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__djunct_4d_imager(...)`.
+ * Output object returned when calling `VDjunct4dImagerParameters(...)`.
  *
  * @interface
  */
@@ -106,9 +73,9 @@ function v__djunct_4d_imager_params(
     prefix: string,
     do_movie: "MPEG" | "AGIF" | null = null,
     no_clean: boolean = false,
-): VDjunct4dImagerParameters {
+): VDjunct4dImagerParametersTagged {
     const params = {
-        "@type": "afni.@djunct_4d_imager" as const,
+        "@type": "afni/@djunct_4d_imager" as const,
         "inset": inset,
         "prefix": prefix,
         "no_clean": no_clean,
@@ -142,7 +109,7 @@ function v__djunct_4d_imager_cargs(
             (params["do_movie"] ?? null)
         );
     }
-    if ((params["no_clean"] ?? null)) {
+    if ((params["no_clean"] ?? false)) {
         cargs.push("-no_clean");
     }
     return cargs;
@@ -233,7 +200,6 @@ function v__djunct_4d_imager(
 
 export {
       VDjunct4dImagerOutputs,
-      VDjunct4dImagerParameters,
       V__DJUNCT_4D_IMAGER_METADATA,
       v__djunct_4d_imager,
       v__djunct_4d_imager_execute,

@@ -12,48 +12,16 @@ const MASKDYADS_METADATA: Metadata = {
 
 
 interface MaskdyadsParameters {
-    "@type": "fsl.maskdyads";
+    "@type"?: "fsl/maskdyads";
     "dyads": InputPathType;
     "fsamples": InputPathType;
     "threshold"?: number | null | undefined;
 }
+type MaskdyadsParametersTagged = Required<Pick<MaskdyadsParameters, '@type'>> & MaskdyadsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.maskdyads": maskdyads_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `maskdyads(...)`.
+ * Output object returned when calling `MaskdyadsParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function maskdyads_params(
     dyads: InputPathType,
     fsamples: InputPathType,
     threshold: number | null = null,
-): MaskdyadsParameters {
+): MaskdyadsParametersTagged {
     const params = {
-        "@type": "fsl.maskdyads" as const,
+        "@type": "fsl/maskdyads" as const,
         "dyads": dyads,
         "fsamples": fsamples,
     };
@@ -194,7 +162,6 @@ function maskdyads(
 export {
       MASKDYADS_METADATA,
       MaskdyadsOutputs,
-      MaskdyadsParameters,
       maskdyads,
       maskdyads_execute,
       maskdyads_params,

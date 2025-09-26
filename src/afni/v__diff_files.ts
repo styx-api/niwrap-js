@@ -12,7 +12,7 @@ const V__DIFF_FILES_METADATA: Metadata = {
 
 
 interface VDiffFilesParameters {
-    "@type": "afni.@diff.files";
+    "@type"?: "afni/@diff.files";
     "files": Array<string>;
     "old_dir": string;
     "diff_opts"?: string | null | undefined;
@@ -25,43 +25,11 @@ interface VDiffFilesParameters {
     "X_flag": boolean;
     "verbosity"?: number | null | undefined;
 }
+type VDiffFilesParametersTagged = Required<Pick<VDiffFilesParameters, '@type'>> & VDiffFilesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@diff.files": v__diff_files_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__diff_files(...)`.
+ * Output object returned when calling `VDiffFilesParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +70,9 @@ function v__diff_files_params(
     xxdiff: boolean = false,
     x_flag: boolean = false,
     verbosity: number | null = null,
-): VDiffFilesParameters {
+): VDiffFilesParametersTagged {
     const params = {
-        "@type": "afni.@diff.files" as const,
+        "@type": "afni/@diff.files" as const,
         "files": files,
         "old_dir": old_dir,
         "ignore_missing": ignore_missing,
@@ -155,22 +123,22 @@ function v__diff_files_cargs(
             (params["diff_prog"] ?? null)
         );
     }
-    if ((params["ignore_missing"] ?? null)) {
+    if ((params["ignore_missing"] ?? false)) {
         cargs.push("-ignore_missing");
     }
-    if ((params["longlist"] ?? null)) {
+    if ((params["longlist"] ?? false)) {
         cargs.push("-longlist");
     }
-    if ((params["save"] ?? null)) {
+    if ((params["save"] ?? false)) {
         cargs.push("-save");
     }
-    if ((params["show"] ?? null)) {
+    if ((params["show"] ?? false)) {
         cargs.push("-show");
     }
-    if ((params["xxdiff"] ?? null)) {
+    if ((params["xxdiff"] ?? false)) {
         cargs.push("-xxdiff");
     }
-    if ((params["X_flag"] ?? null)) {
+    if ((params["X_flag"] ?? false)) {
         cargs.push("-X");
     }
     if ((params["verbosity"] ?? null) !== null) {
@@ -275,7 +243,6 @@ function v__diff_files(
 
 export {
       VDiffFilesOutputs,
-      VDiffFilesParameters,
       V__DIFF_FILES_METADATA,
       v__diff_files,
       v__diff_files_execute,

@@ -12,49 +12,16 @@ const XFMROT_METADATA: Metadata = {
 
 
 interface XfmrotParameters {
-    "@type": "freesurfer.xfmrot";
+    "@type"?: "freesurfer/xfmrot";
     "transform_file": InputPathType;
     "input_vector_file": InputPathType;
     "output_vector_file"?: string | null | undefined;
 }
+type XfmrotParametersTagged = Required<Pick<XfmrotParameters, '@type'>> & XfmrotParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.xfmrot": xfmrot_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.xfmrot": xfmrot_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `xfmrot(...)`.
+ * Output object returned when calling `XfmrotParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function xfmrot_params(
     transform_file: InputPathType,
     input_vector_file: InputPathType,
     output_vector_file: string | null = null,
-): XfmrotParameters {
+): XfmrotParametersTagged {
     const params = {
-        "@type": "freesurfer.xfmrot" as const,
+        "@type": "freesurfer/xfmrot" as const,
         "transform_file": transform_file,
         "input_vector_file": input_vector_file,
     };
@@ -197,7 +164,6 @@ function xfmrot(
 export {
       XFMROT_METADATA,
       XfmrotOutputs,
-      XfmrotParameters,
       xfmrot,
       xfmrot_execute,
       xfmrot_params,

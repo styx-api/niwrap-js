@@ -12,7 +12,7 @@ const FSDCMDECOMPRESS_METADATA: Metadata = {
 
 
 interface FsdcmdecompressParameters {
-    "@type": "freesurfer.fsdcmdecompress";
+    "@type"?: "freesurfer/fsdcmdecompress";
     "indcmfile": InputPathType;
     "outdcmfile": string;
     "dcmtk": boolean;
@@ -20,44 +20,11 @@ interface FsdcmdecompressParameters {
     "rle": boolean;
     "gdcm": boolean;
 }
+type FsdcmdecompressParametersTagged = Required<Pick<FsdcmdecompressParameters, '@type'>> & FsdcmdecompressParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fsdcmdecompress": fsdcmdecompress_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.fsdcmdecompress": fsdcmdecompress_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsdcmdecompress(...)`.
+ * Output object returned when calling `FsdcmdecompressParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function fsdcmdecompress_params(
     jpeg: boolean = false,
     rle: boolean = false,
     gdcm: boolean = false,
-): FsdcmdecompressParameters {
+): FsdcmdecompressParametersTagged {
     const params = {
-        "@type": "freesurfer.fsdcmdecompress" as const,
+        "@type": "freesurfer/fsdcmdecompress" as const,
         "indcmfile": indcmfile,
         "outdcmfile": outdcmfile,
         "dcmtk": dcmtk,
@@ -128,16 +95,16 @@ function fsdcmdecompress_cargs(
         "--o",
         (params["outdcmfile"] ?? null)
     );
-    if ((params["dcmtk"] ?? null)) {
+    if ((params["dcmtk"] ?? false)) {
         cargs.push("--dcmtk");
     }
-    if ((params["jpeg"] ?? null)) {
+    if ((params["jpeg"] ?? false)) {
         cargs.push("--jpeg");
     }
-    if ((params["rle"] ?? null)) {
+    if ((params["rle"] ?? false)) {
         cargs.push("--rle");
     }
-    if ((params["gdcm"] ?? null)) {
+    if ((params["gdcm"] ?? false)) {
         cargs.push("--gdcm");
     }
     return cargs;
@@ -228,7 +195,6 @@ function fsdcmdecompress(
 export {
       FSDCMDECOMPRESS_METADATA,
       FsdcmdecompressOutputs,
-      FsdcmdecompressParameters,
       fsdcmdecompress,
       fsdcmdecompress_execute,
       fsdcmdecompress_params,

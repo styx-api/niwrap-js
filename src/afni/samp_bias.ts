@@ -12,7 +12,7 @@ const SAMP_BIAS_METADATA: Metadata = {
 
 
 interface SampBiasParameters {
-    "@type": "afni.SampBias";
+    "@type"?: "afni/SampBias";
     "specfile": InputPathType;
     "surfname": string;
     "plimit"?: number | null | undefined;
@@ -21,44 +21,11 @@ interface SampBiasParameters {
     "prefix"?: string | null | undefined;
     "segdo"?: string | null | undefined;
 }
+type SampBiasParametersTagged = Required<Pick<SampBiasParameters, '@type'>> & SampBiasParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.SampBias": samp_bias_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.SampBias": samp_bias_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `samp_bias(...)`.
+ * Output object returned when calling `SampBiasParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +66,9 @@ function samp_bias_params(
     dlimit: number | null = null,
     prefix: string | null = null,
     segdo: string | null = null,
-): SampBiasParameters {
+): SampBiasParametersTagged {
     const params = {
-        "@type": "afni.SampBias" as const,
+        "@type": "afni/SampBias" as const,
         "specfile": specfile,
         "surfname": surfname,
         "outfile": outfile,
@@ -263,7 +230,6 @@ function samp_bias(
 export {
       SAMP_BIAS_METADATA,
       SampBiasOutputs,
-      SampBiasParameters,
       samp_bias,
       samp_bias_execute,
       samp_bias_params,

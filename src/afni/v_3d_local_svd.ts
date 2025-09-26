@@ -12,7 +12,7 @@ const V_3D_LOCAL_SVD_METADATA: Metadata = {
 
 
 interface V3dLocalSvdParameters {
-    "@type": "afni.3dLocalSVD";
+    "@type"?: "afni/3dLocalSVD";
     "auto_mask": boolean;
     "input_file": InputPathType;
     "mask_file"?: InputPathType | null | undefined;
@@ -22,43 +22,11 @@ interface V3dLocalSvdParameters {
     "vnorm": boolean;
     "vproj"?: number | null | undefined;
 }
+type V3dLocalSvdParametersTagged = Required<Pick<V3dLocalSvdParameters, '@type'>> & V3dLocalSvdParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dLocalSVD": v_3d_local_svd_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_local_svd(...)`.
+ * Output object returned when calling `V3dLocalSvdParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +61,9 @@ function v_3d_local_svd_params(
     polort: string | null = null,
     vnorm: boolean = false,
     vproj: number | null = null,
-): V3dLocalSvdParameters {
+): V3dLocalSvdParametersTagged {
     const params = {
-        "@type": "afni.3dLocalSVD" as const,
+        "@type": "afni/3dLocalSVD" as const,
         "auto_mask": auto_mask,
         "input_file": input_file,
         "output_file": output_file,
@@ -131,7 +99,7 @@ function v_3d_local_svd_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("3dLocalSVD");
-    if ((params["auto_mask"] ?? null)) {
+    if ((params["auto_mask"] ?? false)) {
         cargs.push("-automask");
     }
     cargs.push(
@@ -160,7 +128,7 @@ function v_3d_local_svd_cargs(
             (params["polort"] ?? null)
         );
     }
-    if ((params["vnorm"] ?? null)) {
+    if ((params["vnorm"] ?? false)) {
         cargs.push("-vnorm");
     }
     if ((params["vproj"] ?? null) !== null) {
@@ -259,7 +227,6 @@ function v_3d_local_svd(
 
 export {
       V3dLocalSvdOutputs,
-      V3dLocalSvdParameters,
       V_3D_LOCAL_SVD_METADATA,
       v_3d_local_svd,
       v_3d_local_svd_execute,

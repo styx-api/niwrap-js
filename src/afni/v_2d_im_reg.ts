@@ -12,7 +12,7 @@ const V_2D_IM_REG_METADATA: Metadata = {
 
 
 interface V2dImRegParameters {
-    "@type": "afni.2dImReg";
+    "@type"?: "afni/2dImReg";
     "input_file": InputPathType;
     "base_file"?: InputPathType | null | undefined;
     "base"?: number | null | undefined;
@@ -26,44 +26,11 @@ interface V2dImRegParameters {
     "rprefix"?: string | null | undefined;
     "debug": boolean;
 }
+type V2dImRegParametersTagged = Required<Pick<V2dImRegParameters, '@type'>> & V2dImRegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.2dImReg": v_2d_im_reg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.2dImReg": v_2d_im_reg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_2d_im_reg(...)`.
+ * Output object returned when calling `V2dImRegParameters(...)`.
  *
  * @interface
  */
@@ -130,9 +97,9 @@ function v_2d_im_reg_params(
     dmm: boolean = false,
     rprefix: string | null = null,
     debug: boolean = false,
-): V2dImRegParameters {
+): V2dImRegParametersTagged {
     const params = {
-        "@type": "afni.2dImReg" as const,
+        "@type": "afni/2dImReg" as const,
         "input_file": input_file,
         "nofine": nofine,
         "prefix": prefix,
@@ -185,7 +152,7 @@ function v_2d_im_reg_cargs(
     if ((params["base"] ?? null) !== null) {
         cargs.push(String((params["base"] ?? null)));
     }
-    if ((params["nofine"] ?? null)) {
+    if ((params["nofine"] ?? false)) {
         cargs.push("-nofine");
     }
     if ((params["fine_blur"] ?? null) !== null) {
@@ -201,13 +168,13 @@ function v_2d_im_reg_cargs(
     if ((params["dprefix"] ?? null) !== null) {
         cargs.push((params["dprefix"] ?? null));
     }
-    if ((params["dmm"] ?? null)) {
+    if ((params["dmm"] ?? false)) {
         cargs.push("-dmm");
     }
     if ((params["rprefix"] ?? null) !== null) {
         cargs.push((params["rprefix"] ?? null));
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
     return cargs;
@@ -314,7 +281,6 @@ function v_2d_im_reg(
 
 export {
       V2dImRegOutputs,
-      V2dImRegParameters,
       V_2D_IM_REG_METADATA,
       v_2d_im_reg,
       v_2d_im_reg_execute,

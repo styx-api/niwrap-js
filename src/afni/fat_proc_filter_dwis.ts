@@ -12,7 +12,7 @@ const FAT_PROC_FILTER_DWIS_METADATA: Metadata = {
 
 
 interface FatProcFilterDwisParameters {
-    "@type": "afni.fat_proc_filter_dwis";
+    "@type"?: "afni/fat_proc_filter_dwis";
     "input_dwi": InputPathType;
     "input_gradient": InputPathType;
     "select_string": string;
@@ -25,44 +25,11 @@ interface FatProcFilterDwisParameters {
     "no_cmd_out": boolean;
     "do_movie"?: "AGIF" | "MPEG" | null | undefined;
 }
+type FatProcFilterDwisParametersTagged = Required<Pick<FatProcFilterDwisParameters, '@type'>> & FatProcFilterDwisParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.fat_proc_filter_dwis": fat_proc_filter_dwis_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.fat_proc_filter_dwis": fat_proc_filter_dwis_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fat_proc_filter_dwis(...)`.
+ * Output object returned when calling `FatProcFilterDwisParameters(...)`.
  *
  * @interface
  */
@@ -115,9 +82,9 @@ function fat_proc_filter_dwis_params(
     no_qc_view: boolean = false,
     no_cmd_out: boolean = false,
     do_movie: "AGIF" | "MPEG" | null = null,
-): FatProcFilterDwisParameters {
+): FatProcFilterDwisParametersTagged {
     const params = {
-        "@type": "afni.fat_proc_filter_dwis" as const,
+        "@type": "afni/fat_proc_filter_dwis" as const,
         "input_dwi": input_dwi,
         "input_gradient": input_gradient,
         "select_string": select_string,
@@ -184,7 +151,7 @@ function fat_proc_filter_dwis_cargs(
             execution.inputFile((params["input_bvals"] ?? null))
         );
     }
-    if ((params["unit_mag_out"] ?? null)) {
+    if ((params["unit_mag_out"] ?? false)) {
         cargs.push("-unit_mag_out");
     }
     if ((params["qc_prefix"] ?? null) !== null) {
@@ -193,10 +160,10 @@ function fat_proc_filter_dwis_cargs(
             (params["qc_prefix"] ?? null)
         );
     }
-    if ((params["no_qc_view"] ?? null)) {
+    if ((params["no_qc_view"] ?? false)) {
         cargs.push("-no_qc_view");
     }
-    if ((params["no_cmd_out"] ?? null)) {
+    if ((params["no_cmd_out"] ?? false)) {
         cargs.push("-no_cmd_out");
     }
     if ((params["do_movie"] ?? null) !== null) {
@@ -305,7 +272,6 @@ function fat_proc_filter_dwis(
 export {
       FAT_PROC_FILTER_DWIS_METADATA,
       FatProcFilterDwisOutputs,
-      FatProcFilterDwisParameters,
       fat_proc_filter_dwis,
       fat_proc_filter_dwis_execute,
       fat_proc_filter_dwis_params,

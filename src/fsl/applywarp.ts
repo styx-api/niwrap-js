@@ -12,7 +12,7 @@ const APPLYWARP_METADATA: Metadata = {
 
 
 interface ApplywarpParameters {
-    "@type": "fsl.applywarp";
+    "@type"?: "fsl/applywarp";
     "interp"?: "nn" | "trilinear" | "sinc" | "spline" | null | undefined;
     "in_file": InputPathType;
     "ref_file": InputPathType;
@@ -29,44 +29,11 @@ interface ApplywarpParameters {
     "superlevel_2"?: number | null | undefined;
     "supersample": boolean;
 }
+type ApplywarpParametersTagged = Required<Pick<ApplywarpParameters, '@type'>> & ApplywarpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.applywarp": applywarp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.applywarp": applywarp_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `applywarp(...)`.
+ * Output object returned when calling `ApplywarpParameters(...)`.
  *
  * @interface
  */
@@ -119,9 +86,9 @@ function applywarp_params(
     superlevel: "a" | null = null,
     superlevel_2: number | null = null,
     supersample: boolean = false,
-): ApplywarpParameters {
+): ApplywarpParametersTagged {
     const params = {
-        "@type": "fsl.applywarp" as const,
+        "@type": "fsl/applywarp" as const,
         "in_file": in_file,
         "ref_file": ref_file,
         "relwarp": relwarp,
@@ -184,10 +151,10 @@ function applywarp_cargs(
     if ((params["out_file"] ?? null) !== null) {
         cargs.push(["--out=", (params["out_file"] ?? null)].join(''));
     }
-    if ((params["relwarp"] ?? null)) {
+    if ((params["relwarp"] ?? false)) {
         cargs.push("--rel");
     }
-    if ((params["abswarp"] ?? null)) {
+    if ((params["abswarp"] ?? false)) {
         cargs.push("--abs");
     }
     if ((params["datatype"] ?? null) !== null) {
@@ -214,7 +181,7 @@ function applywarp_cargs(
     if ((params["superlevel_2"] ?? null) !== null) {
         cargs.push(["--superlevel=", String((params["superlevel_2"] ?? null))].join(''));
     }
-    if ((params["supersample"] ?? null)) {
+    if ((params["supersample"] ?? false)) {
         cargs.push("--super");
     }
     return cargs;
@@ -323,7 +290,6 @@ function applywarp(
 export {
       APPLYWARP_METADATA,
       ApplywarpOutputs,
-      ApplywarpParameters,
       applywarp,
       applywarp_execute,
       applywarp_params,

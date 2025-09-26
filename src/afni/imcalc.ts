@@ -12,50 +12,17 @@ const IMCALC_METADATA: Metadata = {
 
 
 interface ImcalcParameters {
-    "@type": "afni.imcalc";
+    "@type"?: "afni/imcalc";
     "datum_type"?: string | null | undefined;
     "image_inputs"?: Array<InputPathType> | null | undefined;
     "expression": string;
     "output_name"?: string | null | undefined;
 }
+type ImcalcParametersTagged = Required<Pick<ImcalcParameters, '@type'>> & ImcalcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.imcalc": imcalc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.imcalc": imcalc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `imcalc(...)`.
+ * Output object returned when calling `ImcalcParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function imcalc_params(
     datum_type: string | null = null,
     image_inputs: Array<InputPathType> | null = null,
     output_name: string | null = null,
-): ImcalcParameters {
+): ImcalcParametersTagged {
     const params = {
-        "@type": "afni.imcalc" as const,
+        "@type": "afni/imcalc" as const,
         "expression": expression,
     };
     if (datum_type !== null) {
@@ -224,7 +191,6 @@ function imcalc(
 export {
       IMCALC_METADATA,
       ImcalcOutputs,
-      ImcalcParameters,
       imcalc,
       imcalc_execute,
       imcalc_params,

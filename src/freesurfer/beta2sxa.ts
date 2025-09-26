@@ -12,50 +12,17 @@ const BETA2SXA_METADATA: Metadata = {
 
 
 interface Beta2sxaParameters {
-    "@type": "freesurfer.beta2sxa";
+    "@type"?: "freesurfer/beta2sxa";
     "beta_files": Array<InputPathType>;
     "number_of_conditions": number;
     "number_of_per_subjects": number;
     "sxa_output"?: string | null | undefined;
 }
+type Beta2sxaParametersTagged = Required<Pick<Beta2sxaParameters, '@type'>> & Beta2sxaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.beta2sxa": beta2sxa_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.beta2sxa": beta2sxa_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `beta2sxa(...)`.
+ * Output object returned when calling `Beta2sxaParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function beta2sxa_params(
     number_of_conditions: number,
     number_of_per_subjects: number,
     sxa_output: string | null = null,
-): Beta2sxaParameters {
+): Beta2sxaParametersTagged {
     const params = {
-        "@type": "freesurfer.beta2sxa" as const,
+        "@type": "freesurfer/beta2sxa" as const,
         "beta_files": beta_files,
         "number_of_conditions": number_of_conditions,
         "number_of_per_subjects": number_of_per_subjects,
@@ -216,7 +183,6 @@ function beta2sxa(
 export {
       BETA2SXA_METADATA,
       Beta2sxaOutputs,
-      Beta2sxaParameters,
       beta2sxa,
       beta2sxa_execute,
       beta2sxa_params,

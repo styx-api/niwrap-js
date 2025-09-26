@@ -12,7 +12,7 @@ const MRIS_AUTODET_GWSTATS_METADATA: Metadata = {
 
 
 interface MrisAutodetGwstatsParameters {
-    "@type": "freesurfer.mris_autodet_gwstats";
+    "@type"?: "freesurfer/mris_autodet_gwstats";
     "output_file": string;
     "t1w_volume": InputPathType;
     "wm_volume": InputPathType;
@@ -29,44 +29,11 @@ interface MrisAutodetGwstatsParameters {
     "min_gray_at_csf_border"?: number | null | undefined;
     "max_csf"?: number | null | undefined;
 }
+type MrisAutodetGwstatsParametersTagged = Required<Pick<MrisAutodetGwstatsParameters, '@type'>> & MrisAutodetGwstatsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_autodet_gwstats": mris_autodet_gwstats_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_autodet_gwstats": mris_autodet_gwstats_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_autodet_gwstats(...)`.
+ * Output object returned when calling `MrisAutodetGwstatsParameters(...)`.
  *
  * @interface
  */
@@ -119,9 +86,9 @@ function mris_autodet_gwstats_params(
     max_gray_at_csf_border: number | null = null,
     min_gray_at_csf_border: number | null = null,
     max_csf: number | null = null,
-): MrisAutodetGwstatsParameters {
+): MrisAutodetGwstatsParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_autodet_gwstats" as const,
+        "@type": "freesurfer/mris_autodet_gwstats" as const,
         "output_file": output_file,
         "t1w_volume": t1w_volume,
         "wm_volume": wm_volume,
@@ -358,7 +325,6 @@ function mris_autodet_gwstats(
 export {
       MRIS_AUTODET_GWSTATS_METADATA,
       MrisAutodetGwstatsOutputs,
-      MrisAutodetGwstatsParameters,
       mris_autodet_gwstats,
       mris_autodet_gwstats_execute,
       mris_autodet_gwstats_params,

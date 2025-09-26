@@ -12,49 +12,16 @@ const IMAGES_EQUAL_METADATA: Metadata = {
 
 
 interface ImagesEqualParameters {
-    "@type": "afni.images_equal";
+    "@type"?: "afni/images_equal";
     "file_a": InputPathType;
     "file_b": InputPathType;
     "all_flag": boolean;
 }
+type ImagesEqualParametersTagged = Required<Pick<ImagesEqualParameters, '@type'>> & ImagesEqualParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.images_equal": images_equal_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.images_equal": images_equal_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `images_equal(...)`.
+ * Output object returned when calling `ImagesEqualParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function images_equal_params(
     file_a: InputPathType,
     file_b: InputPathType,
     all_flag: boolean = false,
-): ImagesEqualParameters {
+): ImagesEqualParametersTagged {
     const params = {
-        "@type": "afni.images_equal" as const,
+        "@type": "afni/images_equal" as const,
         "file_a": file_a,
         "file_b": file_b,
         "all_flag": all_flag,
@@ -110,7 +77,7 @@ function images_equal_cargs(
     cargs.push("images_equal");
     cargs.push(execution.inputFile((params["file_a"] ?? null)));
     cargs.push(execution.inputFile((params["file_b"] ?? null)));
-    if ((params["all_flag"] ?? null)) {
+    if ((params["all_flag"] ?? false)) {
         cargs.push("-all");
     }
     return cargs;
@@ -195,7 +162,6 @@ function images_equal(
 export {
       IMAGES_EQUAL_METADATA,
       ImagesEqualOutputs,
-      ImagesEqualParameters,
       images_equal,
       images_equal_execute,
       images_equal_params,

@@ -12,7 +12,7 @@ const TABLE2MAP_METADATA: Metadata = {
 
 
 interface Table2mapParameters {
-    "@type": "freesurfer.table2map";
+    "@type"?: "freesurfer/table2map";
     "input_table": InputPathType;
     "output_map": string;
     "segmentation"?: InputPathType | null | undefined;
@@ -20,43 +20,11 @@ interface Table2mapParameters {
     "columns"?: Array<string> | null | undefined;
     "lookup_table"?: InputPathType | null | undefined;
 }
+type Table2mapParametersTagged = Required<Pick<Table2mapParameters, '@type'>> & Table2mapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.table2map": table2map_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `table2map(...)`.
+ * Output object returned when calling `Table2mapParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function table2map_params(
     parcellation: InputPathType | null = null,
     columns: Array<string> | null = null,
     lookup_table: InputPathType | null = null,
-): Table2mapParameters {
+): Table2mapParametersTagged {
     const params = {
-        "@type": "freesurfer.table2map" as const,
+        "@type": "freesurfer/table2map" as const,
         "input_table": input_table,
         "output_map": output_map,
     };
@@ -242,7 +210,6 @@ function table2map(
 export {
       TABLE2MAP_METADATA,
       Table2mapOutputs,
-      Table2mapParameters,
       table2map,
       table2map_execute,
       table2map_params,

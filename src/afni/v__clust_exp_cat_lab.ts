@@ -12,49 +12,16 @@ const V__CLUST_EXP_CAT_LAB_METADATA: Metadata = {
 
 
 interface VClustExpCatLabParameters {
-    "@type": "afni.@ClustExp_CatLab";
+    "@type"?: "afni/@ClustExp_CatLab";
     "prefix": string;
     "input_file": InputPathType;
     "help": boolean;
 }
+type VClustExpCatLabParametersTagged = Required<Pick<VClustExpCatLabParameters, '@type'>> & VClustExpCatLabParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@ClustExp_CatLab": v__clust_exp_cat_lab_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@ClustExp_CatLab": v__clust_exp_cat_lab_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__clust_exp_cat_lab(...)`.
+ * Output object returned when calling `VClustExpCatLabParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function v__clust_exp_cat_lab_params(
     prefix: string,
     input_file: InputPathType,
     help: boolean = false,
-): VClustExpCatLabParameters {
+): VClustExpCatLabParametersTagged {
     const params = {
-        "@type": "afni.@ClustExp_CatLab" as const,
+        "@type": "afni/@ClustExp_CatLab" as const,
         "prefix": prefix,
         "input_file": input_file,
         "help": help,
@@ -116,7 +83,7 @@ function v__clust_exp_cat_lab_cargs(
         "-input",
         execution.inputFile((params["input_file"] ?? null))
     );
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -200,7 +167,6 @@ function v__clust_exp_cat_lab(
 
 export {
       VClustExpCatLabOutputs,
-      VClustExpCatLabParameters,
       V__CLUST_EXP_CAT_LAB_METADATA,
       v__clust_exp_cat_lab,
       v__clust_exp_cat_lab_execute,

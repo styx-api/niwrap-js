@@ -12,7 +12,7 @@ const STIMBAND_METADATA: Metadata = {
 
 
 interface StimbandParameters {
-    "@type": "afni.stimband";
+    "@type"?: "afni/stimband";
     "verbose_flag": boolean;
     "matrixfiles": Array<InputPathType>;
     "additional_matrixfiles"?: Array<InputPathType> | null | undefined;
@@ -20,44 +20,11 @@ interface StimbandParameters {
     "min_bwidth"?: number | null | undefined;
     "min_pow"?: number | null | undefined;
 }
+type StimbandParametersTagged = Required<Pick<StimbandParameters, '@type'>> & StimbandParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.stimband": stimband_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.stimband": stimband_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `stimband(...)`.
+ * Output object returned when calling `StimbandParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function stimband_params(
     min_freq: number | null = null,
     min_bwidth: number | null = null,
     min_pow: number | null = null,
-): StimbandParameters {
+): StimbandParametersTagged {
     const params = {
-        "@type": "afni.stimband" as const,
+        "@type": "afni/stimband" as const,
         "verbose_flag": verbose_flag,
         "matrixfiles": matrixfiles,
     };
@@ -128,7 +95,7 @@ function stimband_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("stimband");
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-verb");
     }
     cargs.push(...(params["matrixfiles"] ?? null).map(f => execution.inputFile(f)));
@@ -244,7 +211,6 @@ function stimband(
 export {
       STIMBAND_METADATA,
       StimbandOutputs,
-      StimbandParameters,
       stimband,
       stimband_execute,
       stimband_params,

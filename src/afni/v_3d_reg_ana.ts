@@ -12,7 +12,7 @@ const V_3D_REG_ANA_METADATA: Metadata = {
 
 
 interface V3dRegAnaParameters {
-    "@type": "afni.3dRegAna";
+    "@type"?: "afni/3dRegAna";
     "rows": number;
     "cols": number;
     "xydata": Array<string>;
@@ -29,44 +29,11 @@ interface V3dRegAnaParameters {
     "brick"?: Array<string> | null | undefined;
     "datum"?: string | null | undefined;
 }
+type V3dRegAnaParametersTagged = Required<Pick<V3dRegAnaParameters, '@type'>> & V3dRegAnaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dRegAna": v_3d_reg_ana_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dRegAna": v_3d_reg_ana_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_reg_ana(...)`.
+ * Output object returned when calling `V3dRegAnaParameters(...)`.
  *
  * @interface
  */
@@ -135,9 +102,9 @@ function v_3d_reg_ana_params(
     bucket: string | null = null,
     brick: Array<string> | null = null,
     datum: string | null = null,
-): V3dRegAnaParameters {
+): V3dRegAnaParametersTagged {
     const params = {
-        "@type": "afni.3dRegAna" as const,
+        "@type": "afni/3dRegAna" as const,
         "rows": rows,
         "cols": cols,
         "xydata": xydata,
@@ -208,7 +175,7 @@ function v_3d_reg_ana_cargs(
         "-model",
         (params["model"] ?? null)
     );
-    if ((params["diskspace"] ?? null)) {
+    if ((params["diskspace"] ?? false)) {
         cargs.push("-diskspace");
     }
     if ((params["workmem"] ?? null) !== null) {
@@ -380,7 +347,6 @@ function v_3d_reg_ana(
 
 export {
       V3dRegAnaOutputs,
-      V3dRegAnaParameters,
       V_3D_REG_ANA_METADATA,
       v_3d_reg_ana,
       v_3d_reg_ana_execute,

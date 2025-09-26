@@ -12,14 +12,15 @@ const TCK2FIXEL_METADATA: Metadata = {
 
 
 interface Tck2fixelConfigParameters {
-    "@type": "mrtrix.tck2fixel.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Tck2fixelConfigParametersTagged = Required<Pick<Tck2fixelConfigParameters, '@type'>> & Tck2fixelConfigParameters;
 
 
 interface Tck2fixelParameters {
-    "@type": "mrtrix.tck2fixel";
+    "@type"?: "mrtrix/tck2fixel";
     "angle"?: number | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -34,40 +35,7 @@ interface Tck2fixelParameters {
     "fixel_folder_out": string;
     "fixel_data_out": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.tck2fixel": tck2fixel_cargs,
-        "mrtrix.tck2fixel.config": tck2fixel_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type Tck2fixelParametersTagged = Required<Pick<Tck2fixelParameters, '@type'>> & Tck2fixelParameters;
 
 
 /**
@@ -81,9 +49,9 @@ function dynOutputs(
 function tck2fixel_config_params(
     key: string,
     value: string,
-): Tck2fixelConfigParameters {
+): Tck2fixelConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.tck2fixel.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -112,7 +80,7 @@ function tck2fixel_config_cargs(
 
 
 /**
- * Output object returned when calling `tck2fixel(...)`.
+ * Output object returned when calling `Tck2fixelParameters(...)`.
  *
  * @interface
  */
@@ -157,9 +125,9 @@ function tck2fixel_params(
     config: Array<Tck2fixelConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Tck2fixelParameters {
+): Tck2fixelParametersTagged {
     const params = {
-        "@type": "mrtrix.tck2fixel" as const,
+        "@type": "mrtrix/tck2fixel" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -204,16 +172,16 @@ function tck2fixel_cargs(
             String((params["angle"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -223,12 +191,12 @@ function tck2fixel_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => tck2fixel_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["tracks"] ?? null)));
@@ -347,9 +315,7 @@ function tck2fixel(
 
 export {
       TCK2FIXEL_METADATA,
-      Tck2fixelConfigParameters,
       Tck2fixelOutputs,
-      Tck2fixelParameters,
       tck2fixel,
       tck2fixel_config_params,
       tck2fixel_execute,

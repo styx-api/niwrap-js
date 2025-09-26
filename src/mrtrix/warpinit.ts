@@ -12,14 +12,15 @@ const WARPINIT_METADATA: Metadata = {
 
 
 interface WarpinitConfigParameters {
-    "@type": "mrtrix.warpinit.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type WarpinitConfigParametersTagged = Required<Pick<WarpinitConfigParameters, '@type'>> & WarpinitConfigParameters;
 
 
 interface WarpinitParameters {
-    "@type": "mrtrix.warpinit";
+    "@type"?: "mrtrix/warpinit";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -31,41 +32,7 @@ interface WarpinitParameters {
     "template": InputPathType;
     "warp": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.warpinit": warpinit_cargs,
-        "mrtrix.warpinit.config": warpinit_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.warpinit": warpinit_outputs,
-    };
-    return outputsFuncs[t];
-}
+type WarpinitParametersTagged = Required<Pick<WarpinitParameters, '@type'>> & WarpinitParameters;
 
 
 /**
@@ -79,9 +46,9 @@ function dynOutputs(
 function warpinit_config_params(
     key: string,
     value: string,
-): WarpinitConfigParameters {
+): WarpinitConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.warpinit.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -110,7 +77,7 @@ function warpinit_config_cargs(
 
 
 /**
- * Output object returned when calling `warpinit(...)`.
+ * Output object returned when calling `WarpinitParameters(...)`.
  *
  * @interface
  */
@@ -153,9 +120,9 @@ function warpinit_params(
     config: Array<WarpinitConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): WarpinitParameters {
+): WarpinitParametersTagged {
     const params = {
-        "@type": "mrtrix.warpinit" as const,
+        "@type": "mrtrix/warpinit" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -189,16 +156,16 @@ function warpinit_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("warpinit");
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -208,12 +175,12 @@ function warpinit_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => warpinit_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["template"] ?? null)));
@@ -337,9 +304,7 @@ function warpinit(
 
 export {
       WARPINIT_METADATA,
-      WarpinitConfigParameters,
       WarpinitOutputs,
-      WarpinitParameters,
       warpinit,
       warpinit_config_params,
       warpinit_execute,

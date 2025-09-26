@@ -12,51 +12,18 @@ const V_3D_SLICE_NDICE_METADATA: Metadata = {
 
 
 interface V3dSliceNdiceParameters {
-    "@type": "afni.3dSliceNDice";
+    "@type"?: "afni/3dSliceNDice";
     "infile_a": InputPathType;
     "infile_b": InputPathType;
     "output_prefix": string;
     "out_domain"?: "all" | "AorB" | "AandB" | "Amask" | "Bmask" | null | undefined;
     "no_cmd_echo": boolean;
 }
+type V3dSliceNdiceParametersTagged = Required<Pick<V3dSliceNdiceParameters, '@type'>> & V3dSliceNdiceParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dSliceNDice": v_3d_slice_ndice_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dSliceNDice": v_3d_slice_ndice_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_slice_ndice(...)`.
+ * Output object returned when calling `V3dSliceNdiceParameters(...)`.
  *
  * @interface
  */
@@ -97,9 +64,9 @@ function v_3d_slice_ndice_params(
     output_prefix: string,
     out_domain: "all" | "AorB" | "AandB" | "Amask" | "Bmask" | null = null,
     no_cmd_echo: boolean = false,
-): V3dSliceNdiceParameters {
+): V3dSliceNdiceParametersTagged {
     const params = {
-        "@type": "afni.3dSliceNDice" as const,
+        "@type": "afni/3dSliceNDice" as const,
         "infile_a": infile_a,
         "infile_b": infile_b,
         "output_prefix": output_prefix,
@@ -144,7 +111,7 @@ function v_3d_slice_ndice_cargs(
             (params["out_domain"] ?? null)
         );
     }
-    if ((params["no_cmd_echo"] ?? null)) {
+    if ((params["no_cmd_echo"] ?? false)) {
         cargs.push("-no_cmd_echo");
     }
     return cargs;
@@ -234,7 +201,6 @@ function v_3d_slice_ndice(
 
 export {
       V3dSliceNdiceOutputs,
-      V3dSliceNdiceParameters,
       V_3D_SLICE_NDICE_METADATA,
       v_3d_slice_ndice,
       v_3d_slice_ndice_execute,

@@ -12,49 +12,16 @@ const ADJUNCT_COMBINE_STR_PY_METADATA: Metadata = {
 
 
 interface AdjunctCombineStrPyParameters {
-    "@type": "afni.adjunct_combine_str.py";
+    "@type"?: "afni/adjunct_combine_str.py";
     "output_file": string;
     "upper_index": number;
     "string_selectors": Array<string>;
 }
+type AdjunctCombineStrPyParametersTagged = Required<Pick<AdjunctCombineStrPyParameters, '@type'>> & AdjunctCombineStrPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.adjunct_combine_str.py": adjunct_combine_str_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.adjunct_combine_str.py": adjunct_combine_str_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `adjunct_combine_str_py(...)`.
+ * Output object returned when calling `AdjunctCombineStrPyParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function adjunct_combine_str_py_params(
     output_file: string,
     upper_index: number,
     string_selectors: Array<string>,
-): AdjunctCombineStrPyParameters {
+): AdjunctCombineStrPyParametersTagged {
     const params = {
-        "@type": "afni.adjunct_combine_str.py" as const,
+        "@type": "afni/adjunct_combine_str.py" as const,
         "output_file": output_file,
         "upper_index": upper_index,
         "string_selectors": string_selectors,
@@ -193,7 +160,6 @@ function adjunct_combine_str_py(
 export {
       ADJUNCT_COMBINE_STR_PY_METADATA,
       AdjunctCombineStrPyOutputs,
-      AdjunctCombineStrPyParameters,
       adjunct_combine_str_py,
       adjunct_combine_str_py_execute,
       adjunct_combine_str_py_params,

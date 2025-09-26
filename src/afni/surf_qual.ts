@@ -12,7 +12,7 @@ const SURF_QUAL_METADATA: Metadata = {
 
 
 interface SurfQualParameters {
-    "@type": "afni.SurfQual";
+    "@type"?: "afni/SurfQual";
     "spec_file": InputPathType;
     "surface_a": Array<InputPathType>;
     "sphere_flag": boolean;
@@ -20,44 +20,11 @@ interface SurfQualParameters {
     "self_intersect_flag": boolean;
     "output_prefix"?: string | null | undefined;
 }
+type SurfQualParametersTagged = Required<Pick<SurfQualParameters, '@type'>> & SurfQualParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.SurfQual": surf_qual_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.SurfQual": surf_qual_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surf_qual(...)`.
+ * Output object returned when calling `SurfQualParameters(...)`.
  *
  * @interface
  */
@@ -116,9 +83,9 @@ function surf_qual_params(
     summary_flag: boolean = false,
     self_intersect_flag: boolean = false,
     output_prefix: string | null = null,
-): SurfQualParameters {
+): SurfQualParametersTagged {
     const params = {
-        "@type": "afni.SurfQual" as const,
+        "@type": "afni/SurfQual" as const,
         "spec_file": spec_file,
         "surface_a": surface_a,
         "sphere_flag": sphere_flag,
@@ -154,13 +121,13 @@ function surf_qual_cargs(
         "-surf_A",
         ...(params["surface_a"] ?? null).map(f => execution.inputFile(f))
     );
-    if ((params["sphere_flag"] ?? null)) {
+    if ((params["sphere_flag"] ?? false)) {
         cargs.push("-sphere");
     }
-    if ((params["summary_flag"] ?? null)) {
+    if ((params["summary_flag"] ?? false)) {
         cargs.push("-summary");
     }
-    if ((params["self_intersect_flag"] ?? null)) {
+    if ((params["self_intersect_flag"] ?? false)) {
         cargs.push("-self_intersect");
     }
     if ((params["output_prefix"] ?? null) !== null) {
@@ -263,7 +230,6 @@ function surf_qual(
 export {
       SURF_QUAL_METADATA,
       SurfQualOutputs,
-      SurfQualParameters,
       surf_qual,
       surf_qual_execute,
       surf_qual_params,

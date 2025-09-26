@@ -12,49 +12,16 @@ const V_3D_NWARP_ADJUST_METADATA: Metadata = {
 
 
 interface V3dNwarpAdjustParameters {
-    "@type": "afni.3dNwarpAdjust";
+    "@type"?: "afni/3dNwarpAdjust";
     "input_warps": Array<InputPathType>;
     "source_datasets"?: Array<InputPathType> | null | undefined;
     "output_prefix"?: string | null | undefined;
 }
+type V3dNwarpAdjustParametersTagged = Required<Pick<V3dNwarpAdjustParameters, '@type'>> & V3dNwarpAdjustParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dNwarpAdjust": v_3d_nwarp_adjust_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dNwarpAdjust": v_3d_nwarp_adjust_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_nwarp_adjust(...)`.
+ * Output object returned when calling `V3dNwarpAdjustParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +54,9 @@ function v_3d_nwarp_adjust_params(
     input_warps: Array<InputPathType>,
     source_datasets: Array<InputPathType> | null = null,
     output_prefix: string | null = null,
-): V3dNwarpAdjustParameters {
+): V3dNwarpAdjustParametersTagged {
     const params = {
-        "@type": "afni.3dNwarpAdjust" as const,
+        "@type": "afni/3dNwarpAdjust" as const,
         "input_warps": input_warps,
     };
     if (source_datasets !== null) {
@@ -214,7 +181,6 @@ function v_3d_nwarp_adjust(
 
 export {
       V3dNwarpAdjustOutputs,
-      V3dNwarpAdjustParameters,
       V_3D_NWARP_ADJUST_METADATA,
       v_3d_nwarp_adjust,
       v_3d_nwarp_adjust_execute,

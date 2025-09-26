@@ -12,7 +12,7 @@ const METRIC_ROIS_TO_BORDER_METADATA: Metadata = {
 
 
 interface MetricRoisToBorderParameters {
-    "@type": "workbench.metric-rois-to-border";
+    "@type"?: "workbench/metric-rois-to-border";
     "surface": InputPathType;
     "metric": InputPathType;
     "class_name": string;
@@ -20,44 +20,11 @@ interface MetricRoisToBorderParameters {
     "opt_placement_fraction"?: number | null | undefined;
     "opt_column_column"?: string | null | undefined;
 }
+type MetricRoisToBorderParametersTagged = Required<Pick<MetricRoisToBorderParameters, '@type'>> & MetricRoisToBorderParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-rois-to-border": metric_rois_to_border_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.metric-rois-to-border": metric_rois_to_border_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `metric_rois_to_border(...)`.
+ * Output object returned when calling `MetricRoisToBorderParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function metric_rois_to_border_params(
     border_out: string,
     opt_placement_fraction: number | null = null,
     opt_column_column: string | null = null,
-): MetricRoisToBorderParameters {
+): MetricRoisToBorderParametersTagged {
     const params = {
-        "@type": "workbench.metric-rois-to-border" as const,
+        "@type": "workbench/metric-rois-to-border" as const,
         "surface": surface,
         "metric": metric,
         "class_name": class_name,
@@ -233,7 +200,6 @@ function metric_rois_to_border(
 export {
       METRIC_ROIS_TO_BORDER_METADATA,
       MetricRoisToBorderOutputs,
-      MetricRoisToBorderParameters,
       metric_rois_to_border,
       metric_rois_to_border_execute,
       metric_rois_to_border_params,

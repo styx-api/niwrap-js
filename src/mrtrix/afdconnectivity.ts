@@ -12,14 +12,15 @@ const AFDCONNECTIVITY_METADATA: Metadata = {
 
 
 interface AfdconnectivityConfigParameters {
-    "@type": "mrtrix.afdconnectivity.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type AfdconnectivityConfigParametersTagged = Required<Pick<AfdconnectivityConfigParameters, '@type'>> & AfdconnectivityConfigParameters;
 
 
 interface AfdconnectivityParameters {
-    "@type": "mrtrix.afdconnectivity";
+    "@type"?: "mrtrix/afdconnectivity";
     "wbft"?: InputPathType | null | undefined;
     "afd_map"?: string | null | undefined;
     "all_fixels": boolean;
@@ -34,41 +35,7 @@ interface AfdconnectivityParameters {
     "image": InputPathType;
     "tracks": InputPathType;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.afdconnectivity": afdconnectivity_cargs,
-        "mrtrix.afdconnectivity.config": afdconnectivity_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.afdconnectivity": afdconnectivity_outputs,
-    };
-    return outputsFuncs[t];
-}
+type AfdconnectivityParametersTagged = Required<Pick<AfdconnectivityParameters, '@type'>> & AfdconnectivityParameters;
 
 
 /**
@@ -82,9 +49,9 @@ function dynOutputs(
 function afdconnectivity_config_params(
     key: string,
     value: string,
-): AfdconnectivityConfigParameters {
+): AfdconnectivityConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.afdconnectivity.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -113,7 +80,7 @@ function afdconnectivity_config_cargs(
 
 
 /**
- * Output object returned when calling `afdconnectivity(...)`.
+ * Output object returned when calling `AfdconnectivityParameters(...)`.
  *
  * @interface
  */
@@ -162,9 +129,9 @@ function afdconnectivity_params(
     config: Array<AfdconnectivityConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): AfdconnectivityParameters {
+): AfdconnectivityParametersTagged {
     const params = {
-        "@type": "mrtrix.afdconnectivity" as const,
+        "@type": "mrtrix/afdconnectivity" as const,
         "all_fixels": all_fixels,
         "info": info,
         "quiet": quiet,
@@ -217,19 +184,19 @@ function afdconnectivity_cargs(
             (params["afd_map"] ?? null)
         );
     }
-    if ((params["all_fixels"] ?? null)) {
+    if ((params["all_fixels"] ?? false)) {
         cargs.push("-all_fixels");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -239,12 +206,12 @@ function afdconnectivity_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => afdconnectivity_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["image"] ?? null)));
@@ -382,9 +349,7 @@ function afdconnectivity(
 
 export {
       AFDCONNECTIVITY_METADATA,
-      AfdconnectivityConfigParameters,
       AfdconnectivityOutputs,
-      AfdconnectivityParameters,
       afdconnectivity,
       afdconnectivity_config_params,
       afdconnectivity_execute,

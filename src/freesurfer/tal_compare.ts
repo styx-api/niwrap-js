@@ -12,50 +12,17 @@ const TAL_COMPARE_METADATA: Metadata = {
 
 
 interface TalCompareParameters {
-    "@type": "freesurfer.tal_compare";
+    "@type"?: "freesurfer/tal_compare";
     "ref_file": InputPathType;
     "moving_file": InputPathType;
     "output_file": string;
     "verbose": boolean;
 }
+type TalCompareParametersTagged = Required<Pick<TalCompareParameters, '@type'>> & TalCompareParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.tal_compare": tal_compare_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.tal_compare": tal_compare_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tal_compare(...)`.
+ * Output object returned when calling `TalCompareParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function tal_compare_params(
     moving_file: InputPathType,
     output_file: string,
     verbose: boolean = false,
-): TalCompareParameters {
+): TalCompareParametersTagged {
     const params = {
-        "@type": "freesurfer.tal_compare" as const,
+        "@type": "freesurfer/tal_compare" as const,
         "ref_file": ref_file,
         "moving_file": moving_file,
         "output_file": output_file,
@@ -115,7 +82,7 @@ function tal_compare_cargs(
     cargs.push(execution.inputFile((params["ref_file"] ?? null)));
     cargs.push(execution.inputFile((params["moving_file"] ?? null)));
     cargs.push((params["output_file"] ?? null));
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
     return cargs;
@@ -202,7 +169,6 @@ function tal_compare(
 export {
       TAL_COMPARE_METADATA,
       TalCompareOutputs,
-      TalCompareParameters,
       tal_compare,
       tal_compare_execute,
       tal_compare_params,

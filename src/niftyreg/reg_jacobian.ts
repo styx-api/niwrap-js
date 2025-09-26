@@ -12,7 +12,7 @@ const REG_JACOBIAN_METADATA: Metadata = {
 
 
 interface RegJacobianParameters {
-    "@type": "niftyreg.reg_jacobian";
+    "@type"?: "niftyreg/reg_jacobian";
     "reference_image": InputPathType;
     "deformation_field"?: InputPathType | null | undefined;
     "control_point_lattice"?: InputPathType | null | undefined;
@@ -21,44 +21,11 @@ interface RegJacobianParameters {
     "output_log_jacobian"?: string | null | undefined;
     "affine_matrix"?: InputPathType | null | undefined;
 }
+type RegJacobianParametersTagged = Required<Pick<RegJacobianParameters, '@type'>> & RegJacobianParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "niftyreg.reg_jacobian": reg_jacobian_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "niftyreg.reg_jacobian": reg_jacobian_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `reg_jacobian(...)`.
+ * Output object returned when calling `RegJacobianParameters(...)`.
  *
  * @interface
  */
@@ -103,9 +70,9 @@ function reg_jacobian_params(
     output_jacobian_matrix: string | null = null,
     output_log_jacobian: string | null = null,
     affine_matrix: InputPathType | null = null,
-): RegJacobianParameters {
+): RegJacobianParametersTagged {
     const params = {
-        "@type": "niftyreg.reg_jacobian" as const,
+        "@type": "niftyreg/reg_jacobian" as const,
         "reference_image": reference_image,
     };
     if (deformation_field !== null) {
@@ -276,7 +243,6 @@ function reg_jacobian(
 export {
       REG_JACOBIAN_METADATA,
       RegJacobianOutputs,
-      RegJacobianParameters,
       reg_jacobian,
       reg_jacobian_execute,
       reg_jacobian_params,

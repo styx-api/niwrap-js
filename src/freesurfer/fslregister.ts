@@ -12,7 +12,7 @@ const FSLREGISTER_METADATA: Metadata = {
 
 
 interface FslregisterParameters {
-    "@type": "freesurfer.fslregister";
+    "@type"?: "freesurfer/fslregister";
     "subjid": string;
     "mov_vol": string;
     "reg_file": string;
@@ -44,44 +44,11 @@ interface FslregisterParameters {
     "help": boolean;
     "lta_format"?: string | null | undefined;
 }
+type FslregisterParametersTagged = Required<Pick<FslregisterParameters, '@type'>> & FslregisterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fslregister": fslregister_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.fslregister": fslregister_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslregister(...)`.
+ * Output object returned when calling `FslregisterParameters(...)`.
  *
  * @interface
  */
@@ -180,9 +147,9 @@ function fslregister_params(
     version: boolean = false,
     help: boolean = false,
     lta_format: string | null = null,
-): FslregisterParameters {
+): FslregisterParametersTagged {
     const params = {
-        "@type": "freesurfer.fslregister" as const,
+        "@type": "freesurfer/fslregister" as const,
         "subjid": subjid,
         "mov_vol": mov_vol,
         "reg_file": reg_file,
@@ -286,7 +253,7 @@ function fslregister_cargs(
             (params["init_fsl_matrix"] ?? null)
         );
     }
-    if ((params["no_init_xfm"] ?? null)) {
+    if ((params["no_init_xfm"] ?? false)) {
         cargs.push("--noinitxfm");
     }
     if ((params["niters"] ?? null) !== null) {
@@ -319,16 +286,16 @@ function fslregister_cargs(
             String((params["max_angle"] ?? null))
         );
     }
-    if ((params["no_new_schedule"] ?? null)) {
+    if ((params["no_new_schedule"] ?? false)) {
         cargs.push("--no-new-schedule");
     }
-    if ((params["no_allow_swap"] ?? null)) {
+    if ((params["no_allow_swap"] ?? false)) {
         cargs.push("--no-allow-swap");
     }
-    if ((params["no_trans"] ?? null)) {
+    if ((params["no_trans"] ?? false)) {
         cargs.push("--no-trans");
     }
-    if ((params["bet_mov"] ?? null)) {
+    if ((params["bet_mov"] ?? false)) {
         cargs.push("--betmov");
     }
     if ((params["bet_fvalue"] ?? null) !== null) {
@@ -337,10 +304,10 @@ function fslregister_cargs(
             String((params["bet_fvalue"] ?? null))
         );
     }
-    if ((params["bet_func"] ?? null)) {
+    if ((params["bet_func"] ?? false)) {
         cargs.push("--betfunc");
     }
-    if ((params["bet_ref"] ?? null)) {
+    if ((params["bet_ref"] ?? false)) {
         cargs.push("--betref");
     }
     if ((params["frame"] ?? null) !== null) {
@@ -349,7 +316,7 @@ function fslregister_cargs(
             String((params["frame"] ?? null))
         );
     }
-    if ((params["mid_frame"] ?? null)) {
+    if ((params["mid_frame"] ?? false)) {
         cargs.push("--mid-frame");
     }
     if ((params["freesurfer_volume"] ?? null) !== null) {
@@ -382,16 +349,16 @@ function fslregister_cargs(
             (params["tmp_dir"] ?? null)
         );
     }
-    if ((params["no_cleanup"] ?? null)) {
+    if ((params["no_cleanup"] ?? false)) {
         cargs.push("--nocleanup");
     }
-    if ((params["no_log"] ?? null)) {
+    if ((params["no_log"] ?? false)) {
         cargs.push("--nolog");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     if ((params["lta_format"] ?? null) !== null) {
@@ -540,7 +507,6 @@ function fslregister(
 export {
       FSLREGISTER_METADATA,
       FslregisterOutputs,
-      FslregisterParameters,
       fslregister,
       fslregister_execute,
       fslregister_params,

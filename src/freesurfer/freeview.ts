@@ -12,46 +12,14 @@ const FREEVIEW_METADATA: Metadata = {
 
 
 interface FreeviewParameters {
-    "@type": "freesurfer.freeview";
+    "@type"?: "freesurfer/freeview";
     "args"?: string | null | undefined;
 }
+type FreeviewParametersTagged = Required<Pick<FreeviewParameters, '@type'>> & FreeviewParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.freeview": freeview_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `freeview(...)`.
+ * Output object returned when calling `FreeviewParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface FreeviewOutputs {
  */
 function freeview_params(
     args: string | null = null,
-): FreeviewParameters {
+): FreeviewParametersTagged {
     const params = {
-        "@type": "freesurfer.freeview" as const,
+        "@type": "freesurfer/freeview" as const,
     };
     if (args !== null) {
         params["args"] = args;
@@ -177,7 +145,6 @@ function freeview(
 export {
       FREEVIEW_METADATA,
       FreeviewOutputs,
-      FreeviewParameters,
       freeview,
       freeview_execute,
       freeview_params,

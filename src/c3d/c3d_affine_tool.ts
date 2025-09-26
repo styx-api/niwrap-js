@@ -12,7 +12,7 @@ const C3D_AFFINE_TOOL_METADATA: Metadata = {
 
 
 interface C3dAffineToolParameters {
-    "@type": "c3d.c3d_affine_tool";
+    "@type"?: "c3d/c3d_affine_tool";
     "transform_file"?: InputPathType | null | undefined;
     "reference_file"?: InputPathType | null | undefined;
     "source_file"?: InputPathType | null | undefined;
@@ -31,44 +31,11 @@ interface C3dAffineToolParameters {
     "info": boolean;
     "info_full": boolean;
 }
+type C3dAffineToolParametersTagged = Required<Pick<C3dAffineToolParameters, '@type'>> & C3dAffineToolParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "c3d.c3d_affine_tool": c3d_affine_tool_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "c3d.c3d_affine_tool": c3d_affine_tool_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `c3d_affine_tool(...)`.
+ * Output object returned when calling `C3dAffineToolParameters(...)`.
  *
  * @interface
  */
@@ -133,9 +100,9 @@ function c3d_affine_tool_params(
     out_matfile: string | null = null,
     info: boolean = false,
     info_full: boolean = false,
-): C3dAffineToolParameters {
+): C3dAffineToolParametersTagged {
     const params = {
-        "@type": "c3d.c3d_affine_tool" as const,
+        "@type": "c3d/c3d_affine_tool" as const,
         "invert": invert,
         "determinant": determinant,
         "multiply": multiply,
@@ -211,16 +178,16 @@ function c3d_affine_tool_cargs(
             execution.inputFile((params["sform_file"] ?? null))
         );
     }
-    if ((params["invert"] ?? null)) {
+    if ((params["invert"] ?? false)) {
         cargs.push("-inv");
     }
-    if ((params["determinant"] ?? null)) {
+    if ((params["determinant"] ?? false)) {
         cargs.push("-det");
     }
-    if ((params["multiply"] ?? null)) {
+    if ((params["multiply"] ?? false)) {
         cargs.push("-mult");
     }
-    if ((params["sqrt"] ?? null)) {
+    if ((params["sqrt"] ?? false)) {
         cargs.push("-sqrt");
     }
     if ((params["itk_transform"] ?? null) !== null) {
@@ -235,10 +202,10 @@ function c3d_affine_tool_cargs(
             execution.inputFile((params["irtk_transform"] ?? null))
         );
     }
-    if ((params["fsl2ras"] ?? null)) {
+    if ((params["fsl2ras"] ?? false)) {
         cargs.push("-fsl2ras");
     }
-    if ((params["ras2fsl"] ?? null)) {
+    if ((params["ras2fsl"] ?? false)) {
         cargs.push("-ras2fsl");
     }
     if ((params["out_itk_transform"] ?? null) !== null) {
@@ -259,10 +226,10 @@ function c3d_affine_tool_cargs(
             (params["out_matfile"] ?? null)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["info_full"] ?? null)) {
+    if ((params["info_full"] ?? false)) {
         cargs.push("-info-full");
     }
     return cargs;
@@ -377,7 +344,6 @@ function c3d_affine_tool(
 export {
       C3D_AFFINE_TOOL_METADATA,
       C3dAffineToolOutputs,
-      C3dAffineToolParameters,
       c3d_affine_tool,
       c3d_affine_tool_execute,
       c3d_affine_tool_params,

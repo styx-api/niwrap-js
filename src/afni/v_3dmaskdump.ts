@@ -12,7 +12,7 @@ const V_3DMASKDUMP_METADATA: Metadata = {
 
 
 interface V3dmaskdumpParameters {
-    "@type": "afni.3dmaskdump";
+    "@type"?: "afni/3dmaskdump";
     "input_files": Array<InputPathType>;
     "mask_dataset"?: InputPathType | null | undefined;
     "mask_range"?: Array<string> | null | undefined;
@@ -34,44 +34,11 @@ interface V3dmaskdumpParameters {
     "output_niml"?: string | null | undefined;
     "quiet_mode": boolean;
 }
+type V3dmaskdumpParametersTagged = Required<Pick<V3dmaskdumpParameters, '@type'>> & V3dmaskdumpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dmaskdump": v_3dmaskdump_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dmaskdump": v_3dmaskdump_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dmaskdump(...)`.
+ * Output object returned when calling `V3dmaskdumpParameters(...)`.
  *
  * @interface
  */
@@ -134,9 +101,9 @@ function v_3dmaskdump_params(
     random_seed: number | null = null,
     output_niml: string | null = null,
     quiet_mode: boolean = false,
-): V3dmaskdumpParameters {
+): V3dmaskdumpParametersTagged {
     const params = {
-        "@type": "afni.3dmaskdump" as const,
+        "@type": "afni/3dmaskdump" as const,
         "input_files": input_files,
         "output_index": output_index,
         "output_noijk": output_noijk,
@@ -217,13 +184,13 @@ function v_3dmaskdump_cargs(
             ...(params["mask_range"] ?? null)
         );
     }
-    if ((params["output_index"] ?? null)) {
+    if ((params["output_index"] ?? false)) {
         cargs.push("-index");
     }
-    if ((params["output_noijk"] ?? null)) {
+    if ((params["output_noijk"] ?? false)) {
         cargs.push("-noijk");
     }
-    if ((params["output_xyz"] ?? null)) {
+    if ((params["output_xyz"] ?? false)) {
         cargs.push("-xyz");
     }
     if ((params["output_filename"] ?? null) !== null) {
@@ -280,7 +247,7 @@ function v_3dmaskdump_cargs(
             (params["nball_coords"] ?? null)
         );
     }
-    if ((params["nozero_output"] ?? null)) {
+    if ((params["nozero_output"] ?? false)) {
         cargs.push("-nozero");
     }
     if ((params["random_voxels"] ?? null) !== null) {
@@ -301,7 +268,7 @@ function v_3dmaskdump_cargs(
             (params["output_niml"] ?? null)
         );
     }
-    if ((params["quiet_mode"] ?? null)) {
+    if ((params["quiet_mode"] ?? false)) {
         cargs.push("-quiet");
     }
     return cargs;
@@ -419,7 +386,6 @@ function v_3dmaskdump(
 
 export {
       V3dmaskdumpOutputs,
-      V3dmaskdumpParameters,
       V_3DMASKDUMP_METADATA,
       v_3dmaskdump,
       v_3dmaskdump_execute,

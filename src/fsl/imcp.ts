@@ -12,48 +12,15 @@ const IMCP_METADATA: Metadata = {
 
 
 interface ImcpParameters {
-    "@type": "fsl.imcp";
+    "@type"?: "fsl/imcp";
     "infiles": Array<InputPathType>;
     "output_location": string;
 }
+type ImcpParametersTagged = Required<Pick<ImcpParameters, '@type'>> & ImcpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.imcp": imcp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.imcp": imcp_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `imcp(...)`.
+ * Output object returned when calling `ImcpParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface ImcpOutputs {
 function imcp_params(
     infiles: Array<InputPathType>,
     output_location: string,
-): ImcpParameters {
+): ImcpParametersTagged {
     const params = {
-        "@type": "fsl.imcp" as const,
+        "@type": "fsl/imcp" as const,
         "infiles": infiles,
         "output_location": output_location,
     };
@@ -186,7 +153,6 @@ function imcp(
 export {
       IMCP_METADATA,
       ImcpOutputs,
-      ImcpParameters,
       imcp,
       imcp_execute,
       imcp_params,

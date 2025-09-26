@@ -12,7 +12,7 @@ const UBER_SUBJECT_PY_METADATA: Metadata = {
 
 
 interface UberSubjectPyParameters {
-    "@type": "afni.uber_subject.py";
+    "@type"?: "afni/uber_subject.py";
     "qt_opts"?: string | null | undefined;
     "svar"?: string | null | undefined;
     "cvar"?: string | null | undefined;
@@ -57,43 +57,11 @@ interface UberSubjectPyParameters {
     "volreg_base"?: string | null | undefined;
     "verb"?: string | null | undefined;
 }
+type UberSubjectPyParametersTagged = Required<Pick<UberSubjectPyParameters, '@type'>> & UberSubjectPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.uber_subject.py": uber_subject_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `uber_subject_py(...)`.
+ * Output object returned when calling `UberSubjectPyParameters(...)`.
  *
  * @interface
  */
@@ -198,9 +166,9 @@ function uber_subject_py_params(
     tlrc_opts_at: string | null = null,
     volreg_base: string | null = null,
     verb: string | null = null,
-): UberSubjectPyParameters {
+): UberSubjectPyParametersTagged {
     const params = {
-        "@type": "afni.uber_subject.py" as const,
+        "@type": "afni/uber_subject.py" as const,
         "no_gui": no_gui,
         "print_ap_command": print_ap_command,
         "exec_ap_command": exec_ap_command,
@@ -359,10 +327,10 @@ function uber_subject_py_cargs(
             (params["cvar"] ?? null)
         );
     }
-    if ((params["no_gui"] ?? null)) {
+    if ((params["no_gui"] ?? false)) {
         cargs.push("-no_gui");
     }
-    if ((params["print_ap_command"] ?? null)) {
+    if ((params["print_ap_command"] ?? false)) {
         cargs.push("-print_ap_command");
     }
     if ((params["save_ap_command"] ?? null) !== null) {
@@ -371,10 +339,10 @@ function uber_subject_py_cargs(
             (params["save_ap_command"] ?? null)
         );
     }
-    if ((params["exec_ap_command"] ?? null)) {
+    if ((params["exec_ap_command"] ?? false)) {
         cargs.push("-exec_ap_command");
     }
-    if ((params["exec_proc_script"] ?? null)) {
+    if ((params["exec_proc_script"] ?? false)) {
         cargs.push("-exec_proc_script");
     }
     if ((params["align_cost"] ?? null) !== null) {
@@ -748,7 +716,6 @@ function uber_subject_py(
 export {
       UBER_SUBJECT_PY_METADATA,
       UberSubjectPyOutputs,
-      UberSubjectPyParameters,
       uber_subject_py,
       uber_subject_py_execute,
       uber_subject_py_params,

@@ -12,49 +12,16 @@ const MYGET_METADATA: Metadata = {
 
 
 interface MygetParameters {
-    "@type": "afni.myget";
+    "@type"?: "afni/myget";
     "protocol_version"?: "-1" | "-1.1" | null | undefined;
     "url": string;
     "output_file": string;
 }
+type MygetParametersTagged = Required<Pick<MygetParameters, '@type'>> & MygetParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.myget": myget_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.myget": myget_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `myget(...)`.
+ * Output object returned when calling `MygetParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function myget_params(
     url: string,
     output_file: string,
     protocol_version: "-1" | "-1.1" | null = null,
-): MygetParameters {
+): MygetParametersTagged {
     const params = {
-        "@type": "afni.myget" as const,
+        "@type": "afni/myget" as const,
         "url": url,
         "output_file": output_file,
     };
@@ -200,7 +167,6 @@ function myget(
 export {
       MYGET_METADATA,
       MygetOutputs,
-      MygetParameters,
       myget,
       myget_execute,
       myget_params,

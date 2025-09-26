@@ -12,46 +12,14 @@ const RUN_QDEC_GLM_METADATA: Metadata = {
 
 
 interface RunQdecGlmParameters {
-    "@type": "freesurfer.run-qdec-glm";
+    "@type"?: "freesurfer/run-qdec-glm";
     "qdec_directory": string;
 }
+type RunQdecGlmParametersTagged = Required<Pick<RunQdecGlmParameters, '@type'>> & RunQdecGlmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.run-qdec-glm": run_qdec_glm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `run_qdec_glm(...)`.
+ * Output object returned when calling `RunQdecGlmParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface RunQdecGlmOutputs {
  */
 function run_qdec_glm_params(
     qdec_directory: string,
-): RunQdecGlmParameters {
+): RunQdecGlmParametersTagged {
     const params = {
-        "@type": "freesurfer.run-qdec-glm" as const,
+        "@type": "freesurfer/run-qdec-glm" as const,
         "qdec_directory": qdec_directory,
     };
     return params;
@@ -176,7 +144,6 @@ function run_qdec_glm(
 export {
       RUN_QDEC_GLM_METADATA,
       RunQdecGlmOutputs,
-      RunQdecGlmParameters,
       run_qdec_glm,
       run_qdec_glm_execute,
       run_qdec_glm_params,

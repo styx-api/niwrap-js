@@ -12,50 +12,17 @@ const EXTRACTTXT_METADATA: Metadata = {
 
 
 interface ExtracttxtParameters {
-    "@type": "fsl.extracttxt";
+    "@type"?: "fsl/extracttxt";
     "search_word": string;
     "file": InputPathType;
     "num_trailing_lines"?: number | null | undefined;
     "relative_start"?: number | null | undefined;
 }
+type ExtracttxtParametersTagged = Required<Pick<ExtracttxtParameters, '@type'>> & ExtracttxtParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.extracttxt": extracttxt_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.extracttxt": extracttxt_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `extracttxt(...)`.
+ * Output object returned when calling `ExtracttxtParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function extracttxt_params(
     file: InputPathType,
     num_trailing_lines: number | null = null,
     relative_start: number | null = null,
-): ExtracttxtParameters {
+): ExtracttxtParametersTagged {
     const params = {
-        "@type": "fsl.extracttxt" as const,
+        "@type": "fsl/extracttxt" as const,
         "search_word": search_word,
         "file": file,
     };
@@ -208,7 +175,6 @@ function extracttxt(
 export {
       EXTRACTTXT_METADATA,
       ExtracttxtOutputs,
-      ExtracttxtParameters,
       extracttxt,
       extracttxt_execute,
       extracttxt_params,

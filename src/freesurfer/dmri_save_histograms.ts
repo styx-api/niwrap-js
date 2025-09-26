@@ -12,51 +12,18 @@ const DMRI_SAVE_HISTOGRAMS_METADATA: Metadata = {
 
 
 interface DmriSaveHistogramsParameters {
-    "@type": "freesurfer.dmri_saveHistograms";
+    "@type"?: "freesurfer/dmri_saveHistograms";
     "parcellation": InputPathType;
     "number_of_bundles": number;
     "vtk_bundle_list": Array<InputPathType>;
     "output_csv": string;
     "brain_bundle_flag": boolean;
 }
+type DmriSaveHistogramsParametersTagged = Required<Pick<DmriSaveHistogramsParameters, '@type'>> & DmriSaveHistogramsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dmri_saveHistograms": dmri_save_histograms_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.dmri_saveHistograms": dmri_save_histograms_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dmri_save_histograms(...)`.
+ * Output object returned when calling `DmriSaveHistogramsParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function dmri_save_histograms_params(
     vtk_bundle_list: Array<InputPathType>,
     output_csv: string,
     brain_bundle_flag: boolean = false,
-): DmriSaveHistogramsParameters {
+): DmriSaveHistogramsParametersTagged {
     const params = {
-        "@type": "freesurfer.dmri_saveHistograms" as const,
+        "@type": "freesurfer/dmri_saveHistograms" as const,
         "parcellation": parcellation,
         "number_of_bundles": number_of_bundles,
         "vtk_bundle_list": vtk_bundle_list,
@@ -129,7 +96,7 @@ function dmri_save_histograms_cargs(
         "-o",
         (params["output_csv"] ?? null)
     );
-    if ((params["brain_bundle_flag"] ?? null)) {
+    if ((params["brain_bundle_flag"] ?? false)) {
         cargs.push("-bb");
     }
     return cargs;
@@ -218,7 +185,6 @@ function dmri_save_histograms(
 export {
       DMRI_SAVE_HISTOGRAMS_METADATA,
       DmriSaveHistogramsOutputs,
-      DmriSaveHistogramsParameters,
       dmri_save_histograms,
       dmri_save_histograms_execute,
       dmri_save_histograms_params,

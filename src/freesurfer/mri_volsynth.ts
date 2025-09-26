@@ -12,7 +12,7 @@ const MRI_VOLSYNTH_METADATA: Metadata = {
 
 
 interface MriVolsynthParameters {
-    "@type": "freesurfer.mri_volsynth";
+    "@type"?: "freesurfer/mri_volsynth";
     "output_volid": string;
     "template"?: string | null | undefined;
     "nframes"?: number | null | undefined;
@@ -57,43 +57,11 @@ interface MriVolsynthParameters {
     "dim_surf_flag": boolean;
     "ctab"?: InputPathType | null | undefined;
 }
+type MriVolsynthParametersTagged = Required<Pick<MriVolsynthParameters, '@type'>> & MriVolsynthParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_volsynth": mri_volsynth_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_volsynth(...)`.
+ * Output object returned when calling `MriVolsynthParameters(...)`.
  *
  * @interface
  */
@@ -198,9 +166,9 @@ function mri_volsynth_params(
     sum2: InputPathType | null = null,
     dim_surf_flag: boolean = false,
     ctab: InputPathType | null = null,
-): MriVolsynthParameters {
+): MriVolsynthParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_volsynth" as const,
+        "@type": "freesurfer/mri_volsynth" as const,
         "output_volid": output_volid,
         "offset_flag": offset_flag,
         "offset_mid_flag": offset_mid_flag,
@@ -353,10 +321,10 @@ function mri_volsynth_cargs(
             String((params["nframes"] ?? null))
         );
     }
-    if ((params["offset_flag"] ?? null)) {
+    if ((params["offset_flag"] ?? false)) {
         cargs.push("--offset");
     }
-    if ((params["offset_mid_flag"] ?? null)) {
+    if ((params["offset_mid_flag"] ?? false)) {
         cargs.push("--offset-mid");
     }
     if ((params["curv"] ?? null) !== null) {
@@ -503,7 +471,7 @@ function mri_volsynth_cargs(
             String((params["dof_den"] ?? null))
         );
     }
-    if ((params["rescale_flag"] ?? null)) {
+    if ((params["rescale_flag"] ?? false)) {
         cargs.push("--rescale");
     }
     if ((params["val_a"] ?? null) !== null) {
@@ -542,7 +510,7 @@ function mri_volsynth_cargs(
             ...(params["hsc"] ?? null).map(String)
         );
     }
-    if ((params["abs_flag"] ?? null)) {
+    if ((params["abs_flag"] ?? false)) {
         cargs.push("--abs");
     }
     if ((params["cp"] ?? null) !== null) {
@@ -569,7 +537,7 @@ function mri_volsynth_cargs(
             execution.inputFile((params["sum2"] ?? null))
         );
     }
-    if ((params["dim_surf_flag"] ?? null)) {
+    if ((params["dim_surf_flag"] ?? false)) {
         cargs.push("--dim-surf");
     }
     if ((params["ctab"] ?? null) !== null) {
@@ -739,7 +707,6 @@ function mri_volsynth(
 export {
       MRI_VOLSYNTH_METADATA,
       MriVolsynthOutputs,
-      MriVolsynthParameters,
       mri_volsynth,
       mri_volsynth_execute,
       mri_volsynth_params,

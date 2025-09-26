@@ -12,7 +12,7 @@ const V_3D_SURF_MASK_METADATA: Metadata = {
 
 
 interface V3dSurfMaskParameters {
-    "@type": "afni.3dSurfMask";
+    "@type"?: "afni/3dSurfMask";
     "surface_type": string;
     "surface_file": InputPathType;
     "prefix": string;
@@ -23,44 +23,11 @@ interface V3dSurfMaskParameters {
     "flip_orientation": boolean;
     "no_distance": boolean;
 }
+type V3dSurfMaskParametersTagged = Required<Pick<V3dSurfMaskParameters, '@type'>> & V3dSurfMaskParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dSurfMask": v_3d_surf_mask_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dSurfMask": v_3d_surf_mask_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_surf_mask(...)`.
+ * Output object returned when calling `V3dSurfMaskParameters(...)`.
  *
  * @interface
  */
@@ -105,9 +72,9 @@ function v_3d_surf_mask_params(
     mask_only: boolean = false,
     flip_orientation: boolean = false,
     no_distance: boolean = false,
-): V3dSurfMaskParameters {
+): V3dSurfMaskParametersTagged {
     const params = {
-        "@type": "afni.3dSurfMask" as const,
+        "@type": "afni/3dSurfMask" as const,
         "surface_type": surface_type,
         "surface_file": surface_file,
         "prefix": prefix,
@@ -156,13 +123,13 @@ function v_3d_surf_mask_cargs(
             execution.inputFile((params["surface_volume"] ?? null))
         );
     }
-    if ((params["mask_only"] ?? null)) {
+    if ((params["mask_only"] ?? false)) {
         cargs.push("-mask_only");
     }
-    if ((params["flip_orientation"] ?? null)) {
+    if ((params["flip_orientation"] ?? false)) {
         cargs.push("-flip_orientation");
     }
-    if ((params["no_distance"] ?? null)) {
+    if ((params["no_distance"] ?? false)) {
         cargs.push("-no_dist");
     }
     return cargs;
@@ -259,7 +226,6 @@ function v_3d_surf_mask(
 
 export {
       V3dSurfMaskOutputs,
-      V3dSurfMaskParameters,
       V_3D_SURF_MASK_METADATA,
       v_3d_surf_mask,
       v_3d_surf_mask_execute,

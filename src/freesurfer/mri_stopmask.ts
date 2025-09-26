@@ -12,7 +12,7 @@ const MRI_STOPMASK_METADATA: Metadata = {
 
 
 interface MriStopmaskParameters {
-    "@type": "freesurfer.mri_stopmask";
+    "@type"?: "freesurfer/mri_stopmask";
     "output_mask": string;
     "filled": Array<InputPathType>;
     "aseg_presurf": InputPathType;
@@ -26,44 +26,11 @@ interface MriStopmaskParameters {
     "no_wm": boolean;
     "no_bfs": boolean;
 }
+type MriStopmaskParametersTagged = Required<Pick<MriStopmaskParameters, '@type'>> & MriStopmaskParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_stopmask": mri_stopmask_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_stopmask": mri_stopmask_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_stopmask(...)`.
+ * Output object returned when calling `MriStopmaskParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function mri_stopmask_params(
     no_wmsa: boolean = false,
     no_wm: boolean = false,
     no_bfs: boolean = false,
-): MriStopmaskParameters {
+): MriStopmaskParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_stopmask" as const,
+        "@type": "freesurfer/mri_stopmask" as const,
         "output_mask": output_mask,
         "filled": filled,
         "aseg_presurf": aseg_presurf,
@@ -162,7 +129,7 @@ function mri_stopmask_cargs(
         "--aseg",
         execution.inputFile((params["aseg_presurf"] ?? null))
     );
-    if ((params["lateral_ventricles"] ?? null)) {
+    if ((params["lateral_ventricles"] ?? false)) {
         cargs.push("--lv");
     }
     if ((params["wmsa"] ?? null) !== null) {
@@ -183,19 +150,19 @@ function mri_stopmask_cargs(
             execution.inputFile((params["brain_final_surfs"] ?? null))
         );
     }
-    if ((params["no_filled"] ?? null)) {
+    if ((params["no_filled"] ?? false)) {
         cargs.push("--no-filled");
     }
-    if ((params["no_lv"] ?? null)) {
+    if ((params["no_lv"] ?? false)) {
         cargs.push("--no-lv");
     }
-    if ((params["no_wmsa"] ?? null)) {
+    if ((params["no_wmsa"] ?? false)) {
         cargs.push("--no-wmsa");
     }
-    if ((params["no_wm"] ?? null)) {
+    if ((params["no_wm"] ?? false)) {
         cargs.push("--no-wm");
     }
-    if ((params["no_bfs"] ?? null)) {
+    if ((params["no_bfs"] ?? false)) {
         cargs.push("--no-bfs");
     }
     return cargs;
@@ -298,7 +265,6 @@ function mri_stopmask(
 export {
       MRI_STOPMASK_METADATA,
       MriStopmaskOutputs,
-      MriStopmaskParameters,
       mri_stopmask,
       mri_stopmask_execute,
       mri_stopmask_params,

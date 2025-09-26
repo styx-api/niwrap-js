@@ -12,46 +12,14 @@ const MORPH_TABLES_RH_METADATA: Metadata = {
 
 
 interface MorphTablesRhParameters {
-    "@type": "freesurfer.morph_tables-rh";
+    "@type"?: "freesurfer/morph_tables-rh";
     "options"?: string | null | undefined;
 }
+type MorphTablesRhParametersTagged = Required<Pick<MorphTablesRhParameters, '@type'>> & MorphTablesRhParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.morph_tables-rh": morph_tables_rh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `morph_tables_rh(...)`.
+ * Output object returned when calling `MorphTablesRhParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface MorphTablesRhOutputs {
  */
 function morph_tables_rh_params(
     options: string | null = null,
-): MorphTablesRhParameters {
+): MorphTablesRhParametersTagged {
     const params = {
-        "@type": "freesurfer.morph_tables-rh" as const,
+        "@type": "freesurfer/morph_tables-rh" as const,
     };
     if (options !== null) {
         params["options"] = options;
@@ -180,7 +148,6 @@ function morph_tables_rh(
 export {
       MORPH_TABLES_RH_METADATA,
       MorphTablesRhOutputs,
-      MorphTablesRhParameters,
       morph_tables_rh,
       morph_tables_rh_execute,
       morph_tables_rh_params,

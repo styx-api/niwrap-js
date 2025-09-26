@@ -12,49 +12,16 @@ const REGISTER_CSH_METADATA: Metadata = {
 
 
 interface RegisterCshParameters {
-    "@type": "freesurfer.register.csh";
+    "@type"?: "freesurfer/register.csh";
     "base_image": InputPathType;
     "new_image": InputPathType;
     "options"?: string | null | undefined;
 }
+type RegisterCshParametersTagged = Required<Pick<RegisterCshParameters, '@type'>> & RegisterCshParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.register.csh": register_csh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.register.csh": register_csh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `register_csh(...)`.
+ * Output object returned when calling `RegisterCshParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function register_csh_params(
     base_image: InputPathType,
     new_image: InputPathType,
     options: string | null = null,
-): RegisterCshParameters {
+): RegisterCshParametersTagged {
     const params = {
-        "@type": "freesurfer.register.csh" as const,
+        "@type": "freesurfer/register.csh" as const,
         "base_image": base_image,
         "new_image": new_image,
     };
@@ -197,7 +164,6 @@ function register_csh(
 export {
       REGISTER_CSH_METADATA,
       RegisterCshOutputs,
-      RegisterCshParameters,
       register_csh,
       register_csh_execute,
       register_csh_params,

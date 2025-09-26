@@ -12,51 +12,18 @@ const V_3DMASKAVE_METADATA: Metadata = {
 
 
 interface V3dmaskaveParameters {
-    "@type": "afni.3dmaskave";
+    "@type"?: "afni/3dmaskave";
     "in_file": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "num_threads"?: number | null | undefined;
     "outputtype"?: "NIFTI" | "AFNI" | "NIFTI_GZ" | null | undefined;
     "quiet": boolean;
 }
+type V3dmaskaveParametersTagged = Required<Pick<V3dmaskaveParameters, '@type'>> & V3dmaskaveParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dmaskave": v_3dmaskave_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dmaskave": v_3dmaskave_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dmaskave(...)`.
+ * Output object returned when calling `V3dmaskaveParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +60,9 @@ function v_3dmaskave_params(
     num_threads: number | null = null,
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     quiet: boolean = false,
-): V3dmaskaveParameters {
+): V3dmaskaveParametersTagged {
     const params = {
-        "@type": "afni.3dmaskave" as const,
+        "@type": "afni/3dmaskave" as const,
         "in_file": in_file,
         "quiet": quiet,
     };
@@ -139,7 +106,7 @@ function v_3dmaskave_cargs(
     if ((params["outputtype"] ?? null) !== null) {
         cargs.push((params["outputtype"] ?? null));
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
     return cargs;
@@ -228,7 +195,6 @@ function v_3dmaskave(
 
 export {
       V3dmaskaveOutputs,
-      V3dmaskaveParameters,
       V_3DMASKAVE_METADATA,
       v_3dmaskave,
       v_3dmaskave_execute,

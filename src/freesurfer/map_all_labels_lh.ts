@@ -12,7 +12,7 @@ const MAP_ALL_LABELS_LH_METADATA: Metadata = {
 
 
 interface MapAllLabelsLhParameters {
-    "@type": "freesurfer.map_all_labels-lh";
+    "@type"?: "freesurfer/map_all_labels-lh";
     "which": string;
     "fname": string;
     "hemi": string;
@@ -20,44 +20,11 @@ interface MapAllLabelsLhParameters {
     "subjects": Array<string>;
     "output": string;
 }
+type MapAllLabelsLhParametersTagged = Required<Pick<MapAllLabelsLhParameters, '@type'>> & MapAllLabelsLhParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.map_all_labels-lh": map_all_labels_lh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.map_all_labels-lh": map_all_labels_lh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `map_all_labels_lh(...)`.
+ * Output object returned when calling `MapAllLabelsLhParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function map_all_labels_lh_params(
     spherical_surf: InputPathType,
     subjects: Array<string>,
     output: string,
-): MapAllLabelsLhParameters {
+): MapAllLabelsLhParametersTagged {
     const params = {
-        "@type": "freesurfer.map_all_labels-lh" as const,
+        "@type": "freesurfer/map_all_labels-lh" as const,
         "which": which,
         "fname": fname,
         "hemi": hemi,
@@ -217,7 +184,6 @@ function map_all_labels_lh(
 export {
       MAP_ALL_LABELS_LH_METADATA,
       MapAllLabelsLhOutputs,
-      MapAllLabelsLhParameters,
       map_all_labels_lh,
       map_all_labels_lh_execute,
       map_all_labels_lh_params,

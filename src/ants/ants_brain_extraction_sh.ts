@@ -12,7 +12,7 @@ const ANTS_BRAIN_EXTRACTION_SH_METADATA: Metadata = {
 
 
 interface AntsBrainExtractionShParameters {
-    "@type": "ants.antsBrainExtraction.sh";
+    "@type"?: "ants/antsBrainExtraction.sh";
     "image_dimension": number;
     "anatomical_image": InputPathType;
     "template": InputPathType;
@@ -29,44 +29,11 @@ interface AntsBrainExtractionShParameters {
     "debug_mode": boolean;
     "output_prefix"?: string | null | undefined;
 }
+type AntsBrainExtractionShParametersTagged = Required<Pick<AntsBrainExtractionShParameters, '@type'>> & AntsBrainExtractionShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.antsBrainExtraction.sh": ants_brain_extraction_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.antsBrainExtraction.sh": ants_brain_extraction_sh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ants_brain_extraction_sh(...)`.
+ * Output object returned when calling `AntsBrainExtractionShParameters(...)`.
  *
  * @interface
  */
@@ -127,9 +94,9 @@ function ants_brain_extraction_sh_params(
     random_seeding: boolean = false,
     debug_mode: boolean = false,
     output_prefix: string | null = null,
-): AntsBrainExtractionShParameters {
+): AntsBrainExtractionShParametersTagged {
     const params = {
-        "@type": "ants.antsBrainExtraction.sh" as const,
+        "@type": "ants/antsBrainExtraction.sh" as const,
         "image_dimension": image_dimension,
         "anatomical_image": anatomical_image,
         "template": template,
@@ -180,7 +147,7 @@ function ants_brain_extraction_sh_cargs(
     cargs.push("antsBrainExtraction.sh");
     cargs.push(
         "-d",
-        String((params["image_dimension"] ?? null))
+        String((params["image_dimension"] ?? 3))
     );
     cargs.push(
         "-a",
@@ -206,10 +173,10 @@ function ants_brain_extraction_sh_cargs(
             execution.inputFile((params["brain_extraction_registration_mask"] ?? null))
         );
     }
-    if ((params["keep_temporary_files"] ?? null)) {
+    if ((params["keep_temporary_files"] ?? false)) {
         cargs.push("-k");
     }
-    if ((params["single_floating_point_precision"] ?? null)) {
+    if ((params["single_floating_point_precision"] ?? false)) {
         cargs.push("-q");
     }
     if ((params["initial_moving_transform"] ?? null) !== null) {
@@ -236,10 +203,10 @@ function ants_brain_extraction_sh_cargs(
             (params["translation_search_params"] ?? null)
         );
     }
-    if ((params["random_seeding"] ?? null)) {
+    if ((params["random_seeding"] ?? false)) {
         cargs.push("-u");
     }
-    if ((params["debug_mode"] ?? null)) {
+    if ((params["debug_mode"] ?? false)) {
         cargs.push("-z");
     }
     if ((params["output_prefix"] ?? null) !== null) {
@@ -356,7 +323,6 @@ function ants_brain_extraction_sh(
 export {
       ANTS_BRAIN_EXTRACTION_SH_METADATA,
       AntsBrainExtractionShOutputs,
-      AntsBrainExtractionShParameters,
       ants_brain_extraction_sh,
       ants_brain_extraction_sh_execute,
       ants_brain_extraction_sh_params,

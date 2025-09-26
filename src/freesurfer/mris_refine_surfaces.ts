@@ -12,7 +12,7 @@ const MRIS_REFINE_SURFACES_METADATA: Metadata = {
 
 
 interface MrisRefineSurfacesParameters {
-    "@type": "freesurfer.mris_refine_surfaces";
+    "@type"?: "freesurfer/mris_refine_surfaces";
     "subject_name": string;
     "hemi": string;
     "hires_volume": string;
@@ -22,44 +22,11 @@ interface MrisRefineSurfacesParameters {
     "use_mgz": boolean;
     "suffix"?: string | null | undefined;
 }
+type MrisRefineSurfacesParametersTagged = Required<Pick<MrisRefineSurfacesParameters, '@type'>> & MrisRefineSurfacesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_refine_surfaces": mris_refine_surfaces_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_refine_surfaces": mris_refine_surfaces_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_refine_surfaces(...)`.
+ * Output object returned when calling `MrisRefineSurfacesParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +69,9 @@ function mris_refine_surfaces_params(
     sdir: string | null = null,
     use_mgz: boolean = false,
     suffix: string | null = null,
-): MrisRefineSurfacesParameters {
+): MrisRefineSurfacesParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_refine_surfaces" as const,
+        "@type": "freesurfer/mris_refine_surfaces" as const,
         "subject_name": subject_name,
         "hemi": hemi,
         "hires_volume": hires_volume,
@@ -151,7 +118,7 @@ function mris_refine_surfaces_cargs(
             (params["sdir"] ?? null)
         );
     }
-    if ((params["use_mgz"] ?? null)) {
+    if ((params["use_mgz"] ?? false)) {
         cargs.push("-mgz");
     }
     if ((params["suffix"] ?? null) !== null) {
@@ -253,7 +220,6 @@ function mris_refine_surfaces(
 export {
       MRIS_REFINE_SURFACES_METADATA,
       MrisRefineSurfacesOutputs,
-      MrisRefineSurfacesParameters,
       mris_refine_surfaces,
       mris_refine_surfaces_execute,
       mris_refine_surfaces_params,

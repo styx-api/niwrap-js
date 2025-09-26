@@ -12,68 +12,35 @@ const VOLUME_MERGE_METADATA: Metadata = {
 
 
 interface VolumeMergeUpToParameters {
-    "@type": "workbench.volume-merge.volume.subvolume.up_to";
+    "@type"?: "up_to";
     "last_subvol": string;
     "opt_reverse": boolean;
 }
+type VolumeMergeUpToParametersTagged = Required<Pick<VolumeMergeUpToParameters, '@type'>> & VolumeMergeUpToParameters;
 
 
 interface VolumeMergeSubvolumeParameters {
-    "@type": "workbench.volume-merge.volume.subvolume";
+    "@type"?: "subvolume";
     "subvol": string;
     "up_to"?: VolumeMergeUpToParameters | null | undefined;
 }
+type VolumeMergeSubvolumeParametersTagged = Required<Pick<VolumeMergeSubvolumeParameters, '@type'>> & VolumeMergeSubvolumeParameters;
 
 
 interface VolumeMergeVolumeParameters {
-    "@type": "workbench.volume-merge.volume";
+    "@type"?: "volume";
     "volume_in": InputPathType;
     "subvolume"?: Array<VolumeMergeSubvolumeParameters> | null | undefined;
 }
+type VolumeMergeVolumeParametersTagged = Required<Pick<VolumeMergeVolumeParameters, '@type'>> & VolumeMergeVolumeParameters;
 
 
 interface VolumeMergeParameters {
-    "@type": "workbench.volume-merge";
+    "@type"?: "workbench/volume-merge";
     "volume_out": string;
     "volume"?: Array<VolumeMergeVolumeParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-merge": volume_merge_cargs,
-        "workbench.volume-merge.volume": volume_merge_volume_cargs,
-        "workbench.volume-merge.volume.subvolume": volume_merge_subvolume_cargs,
-        "workbench.volume-merge.volume.subvolume.up_to": volume_merge_up_to_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-merge": volume_merge_outputs,
-    };
-    return outputsFuncs[t];
-}
+type VolumeMergeParametersTagged = Required<Pick<VolumeMergeParameters, '@type'>> & VolumeMergeParameters;
 
 
 /**
@@ -87,9 +54,9 @@ function dynOutputs(
 function volume_merge_up_to_params(
     last_subvol: string,
     opt_reverse: boolean = false,
-): VolumeMergeUpToParameters {
+): VolumeMergeUpToParametersTagged {
     const params = {
-        "@type": "workbench.volume-merge.volume.subvolume.up_to" as const,
+        "@type": "up_to" as const,
         "last_subvol": last_subvol,
         "opt_reverse": opt_reverse,
     };
@@ -112,7 +79,7 @@ function volume_merge_up_to_cargs(
     const cargs: string[] = [];
     cargs.push("-up-to");
     cargs.push((params["last_subvol"] ?? null));
-    if ((params["opt_reverse"] ?? null)) {
+    if ((params["opt_reverse"] ?? false)) {
         cargs.push("-reverse");
     }
     return cargs;
@@ -130,9 +97,9 @@ function volume_merge_up_to_cargs(
 function volume_merge_subvolume_params(
     subvol: string,
     up_to: VolumeMergeUpToParameters | null = null,
-): VolumeMergeSubvolumeParameters {
+): VolumeMergeSubvolumeParametersTagged {
     const params = {
-        "@type": "workbench.volume-merge.volume.subvolume" as const,
+        "@type": "subvolume" as const,
         "subvol": subvol,
     };
     if (up_to !== null) {
@@ -158,7 +125,7 @@ function volume_merge_subvolume_cargs(
     cargs.push("-subvolume");
     cargs.push((params["subvol"] ?? null));
     if ((params["up_to"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["up_to"] ?? null)["@type"])((params["up_to"] ?? null), execution));
+        cargs.push(...volume_merge_up_to_cargs((params["up_to"] ?? null), execution));
     }
     return cargs;
 }
@@ -175,9 +142,9 @@ function volume_merge_subvolume_cargs(
 function volume_merge_volume_params(
     volume_in: InputPathType,
     subvolume: Array<VolumeMergeSubvolumeParameters> | null = null,
-): VolumeMergeVolumeParameters {
+): VolumeMergeVolumeParametersTagged {
     const params = {
-        "@type": "workbench.volume-merge.volume" as const,
+        "@type": "volume" as const,
         "volume_in": volume_in,
     };
     if (subvolume !== null) {
@@ -203,14 +170,14 @@ function volume_merge_volume_cargs(
     cargs.push("-volume");
     cargs.push(execution.inputFile((params["volume_in"] ?? null)));
     if ((params["subvolume"] ?? null) !== null) {
-        cargs.push(...(params["subvolume"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["subvolume"] ?? null).map(s => volume_merge_subvolume_cargs(s, execution)).flat());
     }
     return cargs;
 }
 
 
 /**
- * Output object returned when calling `volume_merge(...)`.
+ * Output object returned when calling `VolumeMergeParameters(...)`.
  *
  * @interface
  */
@@ -237,9 +204,9 @@ interface VolumeMergeOutputs {
 function volume_merge_params(
     volume_out: string,
     volume: Array<VolumeMergeVolumeParameters> | null = null,
-): VolumeMergeParameters {
+): VolumeMergeParametersTagged {
     const params = {
-        "@type": "workbench.volume-merge" as const,
+        "@type": "workbench/volume-merge" as const,
         "volume_out": volume_out,
     };
     if (volume !== null) {
@@ -266,7 +233,7 @@ function volume_merge_cargs(
     cargs.push("-volume-merge");
     cargs.push((params["volume_out"] ?? null));
     if ((params["volume"] ?? null) !== null) {
-        cargs.push(...(params["volume"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["volume"] ?? null).map(s => volume_merge_volume_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -360,10 +327,6 @@ function volume_merge(
 export {
       VOLUME_MERGE_METADATA,
       VolumeMergeOutputs,
-      VolumeMergeParameters,
-      VolumeMergeSubvolumeParameters,
-      VolumeMergeUpToParameters,
-      VolumeMergeVolumeParameters,
       volume_merge,
       volume_merge_execute,
       volume_merge_params,

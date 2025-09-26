@@ -12,7 +12,7 @@ const ISOLATE_LABELS_CSH_METADATA: Metadata = {
 
 
 interface IsolateLabelsCshParameters {
-    "@type": "freesurfer.isolate_labels.csh";
+    "@type"?: "freesurfer/isolate_labels.csh";
     "label_volume": InputPathType;
     "output_prefix": string;
     "label_option"?: string | null | undefined;
@@ -21,43 +21,11 @@ interface IsolateLabelsCshParameters {
     "keepval": boolean;
     "help": boolean;
 }
+type IsolateLabelsCshParametersTagged = Required<Pick<IsolateLabelsCshParameters, '@type'>> & IsolateLabelsCshParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.isolate_labels.csh": isolate_labels_csh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `isolate_labels_csh(...)`.
+ * Output object returned when calling `IsolateLabelsCshParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +58,9 @@ function isolate_labels_csh_params(
     version: boolean = false,
     keepval: boolean = false,
     help: boolean = false,
-): IsolateLabelsCshParameters {
+): IsolateLabelsCshParametersTagged {
     const params = {
-        "@type": "freesurfer.isolate_labels.csh" as const,
+        "@type": "freesurfer/isolate_labels.csh" as const,
         "label_volume": label_volume,
         "output_prefix": output_prefix,
         "version": version,
@@ -143,13 +111,13 @@ function isolate_labels_csh_cargs(
             (params["lowercase_label_option"] ?? null)
         );
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["keepval"] ?? null)) {
+    if ((params["keepval"] ?? false)) {
         cargs.push("--keepval");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -241,7 +209,6 @@ function isolate_labels_csh(
 export {
       ISOLATE_LABELS_CSH_METADATA,
       IsolateLabelsCshOutputs,
-      IsolateLabelsCshParameters,
       isolate_labels_csh,
       isolate_labels_csh_execute,
       isolate_labels_csh_params,

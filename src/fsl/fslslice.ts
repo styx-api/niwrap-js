@@ -12,47 +12,15 @@ const FSLSLICE_METADATA: Metadata = {
 
 
 interface FslsliceParameters {
-    "@type": "fsl.fslslice";
+    "@type"?: "fsl/fslslice";
     "volume": InputPathType;
     "output_basename"?: string | null | undefined;
 }
+type FslsliceParametersTagged = Required<Pick<FslsliceParameters, '@type'>> & FslsliceParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslslice": fslslice_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslslice(...)`.
+ * Output object returned when calling `FslsliceParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface FslsliceOutputs {
 function fslslice_params(
     volume: InputPathType,
     output_basename: string | null = null,
-): FslsliceParameters {
+): FslsliceParametersTagged {
     const params = {
-        "@type": "fsl.fslslice" as const,
+        "@type": "fsl/fslslice" as const,
         "volume": volume,
     };
     if (output_basename !== null) {
@@ -184,7 +152,6 @@ function fslslice(
 export {
       FSLSLICE_METADATA,
       FslsliceOutputs,
-      FslsliceParameters,
       fslslice,
       fslslice_execute,
       fslslice_params,

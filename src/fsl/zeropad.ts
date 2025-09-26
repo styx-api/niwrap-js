@@ -12,48 +12,15 @@ const ZEROPAD_METADATA: Metadata = {
 
 
 interface ZeropadParameters {
-    "@type": "fsl.zeropad";
+    "@type"?: "fsl/zeropad";
     "input_number": string;
     "length": number;
 }
+type ZeropadParametersTagged = Required<Pick<ZeropadParameters, '@type'>> & ZeropadParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.zeropad": zeropad_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.zeropad": zeropad_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `zeropad(...)`.
+ * Output object returned when calling `ZeropadParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface ZeropadOutputs {
 function zeropad_params(
     input_number: string,
     length: number,
-): ZeropadParameters {
+): ZeropadParametersTagged {
     const params = {
-        "@type": "fsl.zeropad" as const,
+        "@type": "fsl/zeropad" as const,
         "input_number": input_number,
         "length": length,
     };
@@ -186,7 +153,6 @@ function zeropad(
 export {
       ZEROPAD_METADATA,
       ZeropadOutputs,
-      ZeropadParameters,
       zeropad,
       zeropad_execute,
       zeropad_params,

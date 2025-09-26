@@ -12,7 +12,7 @@ const SURF_EXTREMA_METADATA: Metadata = {
 
 
 interface SurfExtremaParameters {
-    "@type": "afni.SurfExtrema";
+    "@type"?: "afni/SurfExtrema";
     "input"?: InputPathType | null | undefined;
     "hood"?: number | null | undefined;
     "thresh"?: number | null | undefined;
@@ -22,44 +22,11 @@ interface SurfExtremaParameters {
     "prefix": string;
     "table"?: string | null | undefined;
 }
+type SurfExtremaParametersTagged = Required<Pick<SurfExtremaParameters, '@type'>> & SurfExtremaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.SurfExtrema": surf_extrema_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.SurfExtrema": surf_extrema_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surf_extrema(...)`.
+ * Output object returned when calling `SurfExtremaParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +69,9 @@ function surf_extrema_params(
     gscale: "NONE" | "LMEAN" | "GMEAN" | null = null,
     extype: "MAX" | "MIN" | "ABS" | null = null,
     table: string | null = null,
-): SurfExtremaParameters {
+): SurfExtremaParametersTagged {
     const params = {
-        "@type": "afni.SurfExtrema" as const,
+        "@type": "afni/SurfExtrema" as const,
         "prefix": prefix,
     };
     if (input !== null) {
@@ -285,7 +252,6 @@ function surf_extrema(
 export {
       SURF_EXTREMA_METADATA,
       SurfExtremaOutputs,
-      SurfExtremaParameters,
       surf_extrema,
       surf_extrema_execute,
       surf_extrema_params,

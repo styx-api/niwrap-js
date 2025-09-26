@@ -12,48 +12,16 @@ const SPEC_FILE_MERGE_METADATA: Metadata = {
 
 
 interface SpecFileMergeParameters {
-    "@type": "workbench.spec-file-merge";
+    "@type"?: "workbench/spec-file-merge";
     "spec_1": string;
     "spec_2": string;
     "out_spec": string;
 }
+type SpecFileMergeParametersTagged = Required<Pick<SpecFileMergeParameters, '@type'>> & SpecFileMergeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.spec-file-merge": spec_file_merge_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `spec_file_merge(...)`.
+ * Output object returned when calling `SpecFileMergeParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function spec_file_merge_params(
     spec_1: string,
     spec_2: string,
     out_spec: string,
-): SpecFileMergeParameters {
+): SpecFileMergeParametersTagged {
     const params = {
-        "@type": "workbench.spec-file-merge" as const,
+        "@type": "workbench/spec-file-merge" as const,
         "spec_1": spec_1,
         "spec_2": spec_2,
         "out_spec": out_spec,
@@ -192,7 +160,6 @@ function spec_file_merge(
 export {
       SPEC_FILE_MERGE_METADATA,
       SpecFileMergeOutputs,
-      SpecFileMergeParameters,
       spec_file_merge,
       spec_file_merge_execute,
       spec_file_merge_params,

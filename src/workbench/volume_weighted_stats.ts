@@ -12,27 +12,30 @@ const VOLUME_WEIGHTED_STATS_METADATA: Metadata = {
 
 
 interface VolumeWeightedStatsWeightVolumeParameters {
-    "@type": "workbench.volume-weighted-stats.weight_volume";
+    "@type"?: "weight_volume";
     "weight_volume": InputPathType;
     "opt_match_maps": boolean;
 }
+type VolumeWeightedStatsWeightVolumeParametersTagged = Required<Pick<VolumeWeightedStatsWeightVolumeParameters, '@type'>> & VolumeWeightedStatsWeightVolumeParameters;
 
 
 interface VolumeWeightedStatsRoiParameters {
-    "@type": "workbench.volume-weighted-stats.roi";
+    "@type"?: "roi";
     "roi_volume": InputPathType;
     "opt_match_maps": boolean;
 }
+type VolumeWeightedStatsRoiParametersTagged = Required<Pick<VolumeWeightedStatsRoiParameters, '@type'>> & VolumeWeightedStatsRoiParameters;
 
 
 interface VolumeWeightedStatsStdevParameters {
-    "@type": "workbench.volume-weighted-stats.stdev";
+    "@type"?: "stdev";
     "opt_sample": boolean;
 }
+type VolumeWeightedStatsStdevParametersTagged = Required<Pick<VolumeWeightedStatsStdevParameters, '@type'>> & VolumeWeightedStatsStdevParameters;
 
 
 interface VolumeWeightedStatsParameters {
-    "@type": "workbench.volume-weighted-stats";
+    "@type"?: "workbench/volume-weighted-stats";
     "volume_in": InputPathType;
     "weight_volume"?: VolumeWeightedStatsWeightVolumeParameters | null | undefined;
     "opt_subvolume_subvolume"?: string | null | undefined;
@@ -43,42 +46,7 @@ interface VolumeWeightedStatsParameters {
     "opt_sum": boolean;
     "opt_show_map_name": boolean;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-weighted-stats": volume_weighted_stats_cargs,
-        "workbench.volume-weighted-stats.weight_volume": volume_weighted_stats_weight_volume_cargs,
-        "workbench.volume-weighted-stats.roi": volume_weighted_stats_roi_cargs,
-        "workbench.volume-weighted-stats.stdev": volume_weighted_stats_stdev_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type VolumeWeightedStatsParametersTagged = Required<Pick<VolumeWeightedStatsParameters, '@type'>> & VolumeWeightedStatsParameters;
 
 
 /**
@@ -92,9 +60,9 @@ function dynOutputs(
 function volume_weighted_stats_weight_volume_params(
     weight_volume: InputPathType,
     opt_match_maps: boolean = false,
-): VolumeWeightedStatsWeightVolumeParameters {
+): VolumeWeightedStatsWeightVolumeParametersTagged {
     const params = {
-        "@type": "workbench.volume-weighted-stats.weight_volume" as const,
+        "@type": "weight_volume" as const,
         "weight_volume": weight_volume,
         "opt_match_maps": opt_match_maps,
     };
@@ -117,7 +85,7 @@ function volume_weighted_stats_weight_volume_cargs(
     const cargs: string[] = [];
     cargs.push("-weight-volume");
     cargs.push(execution.inputFile((params["weight_volume"] ?? null)));
-    if ((params["opt_match_maps"] ?? null)) {
+    if ((params["opt_match_maps"] ?? false)) {
         cargs.push("-match-maps");
     }
     return cargs;
@@ -135,9 +103,9 @@ function volume_weighted_stats_weight_volume_cargs(
 function volume_weighted_stats_roi_params(
     roi_volume: InputPathType,
     opt_match_maps: boolean = false,
-): VolumeWeightedStatsRoiParameters {
+): VolumeWeightedStatsRoiParametersTagged {
     const params = {
-        "@type": "workbench.volume-weighted-stats.roi" as const,
+        "@type": "roi" as const,
         "roi_volume": roi_volume,
         "opt_match_maps": opt_match_maps,
     };
@@ -160,7 +128,7 @@ function volume_weighted_stats_roi_cargs(
     const cargs: string[] = [];
     cargs.push("-roi");
     cargs.push(execution.inputFile((params["roi_volume"] ?? null)));
-    if ((params["opt_match_maps"] ?? null)) {
+    if ((params["opt_match_maps"] ?? false)) {
         cargs.push("-match-maps");
     }
     return cargs;
@@ -176,9 +144,9 @@ function volume_weighted_stats_roi_cargs(
  */
 function volume_weighted_stats_stdev_params(
     opt_sample: boolean = false,
-): VolumeWeightedStatsStdevParameters {
+): VolumeWeightedStatsStdevParametersTagged {
     const params = {
-        "@type": "workbench.volume-weighted-stats.stdev" as const,
+        "@type": "stdev" as const,
         "opt_sample": opt_sample,
     };
     return params;
@@ -199,7 +167,7 @@ function volume_weighted_stats_stdev_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("-stdev");
-    if ((params["opt_sample"] ?? null)) {
+    if ((params["opt_sample"] ?? false)) {
         cargs.push("-sample");
     }
     return cargs;
@@ -207,7 +175,7 @@ function volume_weighted_stats_stdev_cargs(
 
 
 /**
- * Output object returned when calling `volume_weighted_stats(...)`.
+ * Output object returned when calling `VolumeWeightedStatsParameters(...)`.
  *
  * @interface
  */
@@ -244,9 +212,9 @@ function volume_weighted_stats_params(
     opt_percentile_percent: number | null = null,
     opt_sum: boolean = false,
     opt_show_map_name: boolean = false,
-): VolumeWeightedStatsParameters {
+): VolumeWeightedStatsParametersTagged {
     const params = {
-        "@type": "workbench.volume-weighted-stats" as const,
+        "@type": "workbench/volume-weighted-stats" as const,
         "volume_in": volume_in,
         "opt_mean": opt_mean,
         "opt_sum": opt_sum,
@@ -288,7 +256,7 @@ function volume_weighted_stats_cargs(
     cargs.push("-volume-weighted-stats");
     cargs.push(execution.inputFile((params["volume_in"] ?? null)));
     if ((params["weight_volume"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["weight_volume"] ?? null)["@type"])((params["weight_volume"] ?? null), execution));
+        cargs.push(...volume_weighted_stats_weight_volume_cargs((params["weight_volume"] ?? null), execution));
     }
     if ((params["opt_subvolume_subvolume"] ?? null) !== null) {
         cargs.push(
@@ -297,13 +265,13 @@ function volume_weighted_stats_cargs(
         );
     }
     if ((params["roi"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["roi"] ?? null)["@type"])((params["roi"] ?? null), execution));
+        cargs.push(...volume_weighted_stats_roi_cargs((params["roi"] ?? null), execution));
     }
-    if ((params["opt_mean"] ?? null)) {
+    if ((params["opt_mean"] ?? false)) {
         cargs.push("-mean");
     }
     if ((params["stdev"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["stdev"] ?? null)["@type"])((params["stdev"] ?? null), execution));
+        cargs.push(...volume_weighted_stats_stdev_cargs((params["stdev"] ?? null), execution));
     }
     if ((params["opt_percentile_percent"] ?? null) !== null) {
         cargs.push(
@@ -311,10 +279,10 @@ function volume_weighted_stats_cargs(
             String((params["opt_percentile_percent"] ?? null))
         );
     }
-    if ((params["opt_sum"] ?? null)) {
+    if ((params["opt_sum"] ?? false)) {
         cargs.push("-sum");
     }
-    if ((params["opt_show_map_name"] ?? null)) {
+    if ((params["opt_show_map_name"] ?? false)) {
         cargs.push("-show-map-name");
     }
     return cargs;
@@ -418,10 +386,6 @@ function volume_weighted_stats(
 export {
       VOLUME_WEIGHTED_STATS_METADATA,
       VolumeWeightedStatsOutputs,
-      VolumeWeightedStatsParameters,
-      VolumeWeightedStatsRoiParameters,
-      VolumeWeightedStatsStdevParameters,
-      VolumeWeightedStatsWeightVolumeParameters,
       volume_weighted_stats,
       volume_weighted_stats_execute,
       volume_weighted_stats_params,

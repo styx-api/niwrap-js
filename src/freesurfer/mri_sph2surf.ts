@@ -12,7 +12,7 @@ const MRI_SPH2SURF_METADATA: Metadata = {
 
 
 interface MriSph2surfParameters {
-    "@type": "freesurfer.mri-sph2surf";
+    "@type"?: "freesurfer/mri-sph2surf";
     "instem": string;
     "outstem": string;
     "hemi": string;
@@ -23,44 +23,11 @@ interface MriSph2surfParameters {
     "verbose": boolean;
     "version": boolean;
 }
+type MriSph2surfParametersTagged = Required<Pick<MriSph2surfParameters, '@type'>> & MriSph2surfParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri-sph2surf": mri_sph2surf_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri-sph2surf": mri_sph2surf_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_sph2surf(...)`.
+ * Output object returned when calling `MriSph2surfParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function mri_sph2surf_params(
     umask: string | null = null,
     verbose: boolean = false,
     version: boolean = false,
-): MriSph2surfParameters {
+): MriSph2surfParametersTagged {
     const params = {
-        "@type": "freesurfer.mri-sph2surf" as const,
+        "@type": "freesurfer/mri-sph2surf" as const,
         "instem": instem,
         "outstem": outstem,
         "hemi": hemi,
@@ -172,10 +139,10 @@ function mri_sph2surf_cargs(
             (params["umask"] ?? null)
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verbose");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     return cargs;
@@ -272,7 +239,6 @@ function mri_sph2surf(
 export {
       MRI_SPH2SURF_METADATA,
       MriSph2surfOutputs,
-      MriSph2surfParameters,
       mri_sph2surf,
       mri_sph2surf_execute,
       mri_sph2surf_params,

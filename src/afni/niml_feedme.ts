@@ -12,7 +12,7 @@ const NIML_FEEDME_METADATA: Metadata = {
 
 
 interface NimlFeedmeParameters {
-    "@type": "afni.niml_feedme";
+    "@type"?: "afni/niml_feedme";
     "host"?: string | null | undefined;
     "interval"?: number | null | undefined;
     "verbose": boolean;
@@ -21,43 +21,11 @@ interface NimlFeedmeParameters {
     "drive_cmds"?: Array<string> | null | undefined;
     "dataset": InputPathType;
 }
+type NimlFeedmeParametersTagged = Required<Pick<NimlFeedmeParameters, '@type'>> & NimlFeedmeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.niml_feedme": niml_feedme_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `niml_feedme(...)`.
+ * Output object returned when calling `NimlFeedmeParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +58,9 @@ function niml_feedme_params(
     accum: boolean = false,
     target_dataset: string | null = null,
     drive_cmds: Array<string> | null = null,
-): NimlFeedmeParameters {
+): NimlFeedmeParametersTagged {
     const params = {
-        "@type": "afni.niml_feedme" as const,
+        "@type": "afni/niml_feedme" as const,
         "verbose": verbose,
         "accum": accum,
         "dataset": dataset,
@@ -139,10 +107,10 @@ function niml_feedme_cargs(
             String((params["interval"] ?? null))
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["accum"] ?? null)) {
+    if ((params["accum"] ?? false)) {
         cargs.push("-accum");
     }
     if ((params["target_dataset"] ?? null) !== null) {
@@ -247,7 +215,6 @@ function niml_feedme(
 export {
       NIML_FEEDME_METADATA,
       NimlFeedmeOutputs,
-      NimlFeedmeParameters,
       niml_feedme,
       niml_feedme_execute,
       niml_feedme_params,

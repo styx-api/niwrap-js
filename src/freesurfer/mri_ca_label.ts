@@ -12,7 +12,7 @@ const MRI_CA_LABEL_METADATA: Metadata = {
 
 
 interface MriCaLabelParameters {
-    "@type": "freesurfer.mri_ca_label";
+    "@type"?: "freesurfer/mri_ca_label";
     "input_volumes": Array<InputPathType>;
     "transform_file": InputPathType;
     "gca_file": InputPathType;
@@ -66,44 +66,11 @@ interface MriCaLabelParameters {
     "sa_cblum_from_seg"?: string | null | undefined;
     "threads"?: number | null | undefined;
 }
+type MriCaLabelParametersTagged = Required<Pick<MriCaLabelParameters, '@type'>> & MriCaLabelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_ca_label": mri_ca_label_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_ca_label": mri_ca_label_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_ca_label(...)`.
+ * Output object returned when calling `MriCaLabelParameters(...)`.
  *
  * @interface
  */
@@ -230,9 +197,9 @@ function mri_ca_label_params(
     cblum_from_seg: string | null = null,
     sa_cblum_from_seg: string | null = null,
     threads: number | null = null,
-): MriCaLabelParameters {
+): MriCaLabelParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_ca_label" as const,
+        "@type": "freesurfer/mri_ca_label" as const,
         "input_volumes": input_volumes,
         "transform_file": transform_file,
         "gca_file": gca_file,
@@ -386,10 +353,10 @@ function mri_ca_label_cargs(
     cargs.push(execution.inputFile((params["transform_file"] ?? null)));
     cargs.push(execution.inputFile((params["gca_file"] ?? null)));
     cargs.push((params["output_volume"] ?? null));
-    if ((params["cross_sequence"] ?? null)) {
+    if ((params["cross_sequence"] ?? false)) {
         cargs.push("-cross-sequence");
     }
-    if ((params["no_gibbs"] ?? null)) {
+    if ((params["no_gibbs"] ?? false)) {
         cargs.push("-nogibbs");
     }
     if ((params["wm_segmentation"] ?? null) !== null) {
@@ -398,7 +365,7 @@ function mri_ca_label_cargs(
             (params["wm_segmentation"] ?? null)
         );
     }
-    if ((params["conform"] ?? null)) {
+    if ((params["conform"] ?? false)) {
         cargs.push("-conform");
     }
     if ((params["topo_dist_thresh"] ?? null) !== null) {
@@ -419,7 +386,7 @@ function mri_ca_label_cargs(
             String((params["topo_volume_thresh2"] ?? null))
         );
     }
-    if ((params["norm_pd"] ?? null)) {
+    if ((params["norm_pd"] ?? false)) {
         cargs.push("-normpd");
     }
     if ((params["thin_temporal_lobe"] ?? null) !== null) {
@@ -488,7 +455,7 @@ function mri_ca_label_cargs(
             (params["write_probs"] ?? null)
         );
     }
-    if ((params["novar"] ?? null)) {
+    if ((params["novar"] ?? false)) {
         cargs.push("-novar");
     }
     if ((params["regularize"] ?? null) !== null) {
@@ -497,7 +464,7 @@ function mri_ca_label_cargs(
             String((params["regularize"] ?? null))
         );
     }
-    if ((params["nohippo"] ?? null)) {
+    if ((params["nohippo"] ?? false)) {
         cargs.push("-nohippo");
     }
     if ((params["fixed_white_matter"] ?? null) !== null) {
@@ -524,7 +491,7 @@ function mri_ca_label_cargs(
             execution.inputFile((params["renorm"] ?? null))
         );
     }
-    if ((params["flash"] ?? null)) {
+    if ((params["flash"] ?? false)) {
         cargs.push("-flash");
     }
     if ((params["flash_params"] ?? null) !== null) {
@@ -545,7 +512,7 @@ function mri_ca_label_cargs(
             execution.inputFile((params["set_input_volume"] ?? null))
         );
     }
-    if ((params["histogram_normalize"] ?? null)) {
+    if ((params["histogram_normalize"] ?? false)) {
         cargs.push("-h");
     }
     if ((params["mean_filter"] ?? null) !== null) {
@@ -596,7 +563,7 @@ function mri_ca_label_cargs(
             (params["relabel_unlikely"] ?? null)
         );
     }
-    if ((params["disables_wmsa"] ?? null)) {
+    if ((params["disables_wmsa"] ?? false)) {
         cargs.push("-nowmsa");
     }
     if ((params["fix_ventricle"] ?? null) !== null) {
@@ -827,7 +794,6 @@ function mri_ca_label(
 export {
       MRI_CA_LABEL_METADATA,
       MriCaLabelOutputs,
-      MriCaLabelParameters,
       mri_ca_label,
       mri_ca_label_execute,
       mri_ca_label_params,

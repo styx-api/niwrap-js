@@ -12,7 +12,7 @@ const MRIS_REGISTER_LABEL_MAP_METADATA: Metadata = {
 
 
 interface MrisRegisterLabelMapParameters {
-    "@type": "freesurfer.mris_register_label_map";
+    "@type"?: "freesurfer/mris_register_label_map";
     "subjects_list": string;
     "target_subject": string;
     "prior": string;
@@ -25,43 +25,11 @@ interface MrisRegisterLabelMapParameters {
     "version": boolean;
     "vno"?: number | null | undefined;
 }
+type MrisRegisterLabelMapParametersTagged = Required<Pick<MrisRegisterLabelMapParameters, '@type'>> & MrisRegisterLabelMapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_register_label_map": mris_register_label_map_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_register_label_map(...)`.
+ * Output object returned when calling `MrisRegisterLabelMapParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +70,9 @@ function mris_register_label_map_params(
     subjects_dir: string | null = null,
     version: boolean = false,
     vno: number | null = null,
-): MrisRegisterLabelMapParameters {
+): MrisRegisterLabelMapParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_register_label_map" as const,
+        "@type": "freesurfer/mris_register_label_map" as const,
         "subjects_list": subjects_list,
         "target_subject": target_subject,
         "prior": prior,
@@ -159,13 +127,13 @@ function mris_register_label_map_cargs(
         "--temp-vol",
         execution.inputFile((params["template_volume"] ?? null))
     );
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["check_opts"] ?? null)) {
+    if ((params["check_opts"] ?? false)) {
         cargs.push("--checkopts");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     if ((params["subjects_dir"] ?? null) !== null) {
@@ -174,7 +142,7 @@ function mris_register_label_map_cargs(
             (params["subjects_dir"] ?? null)
         );
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     if ((params["vno"] ?? null) !== null) {
@@ -280,7 +248,6 @@ function mris_register_label_map(
 export {
       MRIS_REGISTER_LABEL_MAP_METADATA,
       MrisRegisterLabelMapOutputs,
-      MrisRegisterLabelMapParameters,
       mris_register_label_map,
       mris_register_label_map_execute,
       mris_register_label_map_params,

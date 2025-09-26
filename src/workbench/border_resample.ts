@@ -12,50 +12,17 @@ const BORDER_RESAMPLE_METADATA: Metadata = {
 
 
 interface BorderResampleParameters {
-    "@type": "workbench.border-resample";
+    "@type"?: "workbench/border-resample";
     "border_in": InputPathType;
     "current_sphere": InputPathType;
     "new_sphere": InputPathType;
     "border_out": string;
 }
+type BorderResampleParametersTagged = Required<Pick<BorderResampleParameters, '@type'>> & BorderResampleParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.border-resample": border_resample_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.border-resample": border_resample_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `border_resample(...)`.
+ * Output object returned when calling `BorderResampleParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function border_resample_params(
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     border_out: string,
-): BorderResampleParameters {
+): BorderResampleParametersTagged {
     const params = {
-        "@type": "workbench.border-resample" as const,
+        "@type": "workbench/border-resample" as const,
         "border_in": border_in,
         "current_sphere": current_sphere,
         "new_sphere": new_sphere,
@@ -205,7 +172,6 @@ function border_resample(
 export {
       BORDER_RESAMPLE_METADATA,
       BorderResampleOutputs,
-      BorderResampleParameters,
       border_resample,
       border_resample_execute,
       border_resample_params,

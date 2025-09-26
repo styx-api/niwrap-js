@@ -12,49 +12,16 @@ const SURFACE_WEDGE_VOLUME_METADATA: Metadata = {
 
 
 interface SurfaceWedgeVolumeParameters {
-    "@type": "workbench.surface-wedge-volume";
+    "@type"?: "workbench/surface-wedge-volume";
     "inner_surface": InputPathType;
     "outer_surface": InputPathType;
     "metric": string;
 }
+type SurfaceWedgeVolumeParametersTagged = Required<Pick<SurfaceWedgeVolumeParameters, '@type'>> & SurfaceWedgeVolumeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-wedge-volume": surface_wedge_volume_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-wedge-volume": surface_wedge_volume_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_wedge_volume(...)`.
+ * Output object returned when calling `SurfaceWedgeVolumeParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function surface_wedge_volume_params(
     inner_surface: InputPathType,
     outer_surface: InputPathType,
     metric: string,
-): SurfaceWedgeVolumeParameters {
+): SurfaceWedgeVolumeParametersTagged {
     const params = {
-        "@type": "workbench.surface-wedge-volume" as const,
+        "@type": "workbench/surface-wedge-volume" as const,
         "inner_surface": inner_surface,
         "outer_surface": outer_surface,
         "metric": metric,
@@ -198,7 +165,6 @@ function surface_wedge_volume(
 export {
       SURFACE_WEDGE_VOLUME_METADATA,
       SurfaceWedgeVolumeOutputs,
-      SurfaceWedgeVolumeParameters,
       surface_wedge_volume,
       surface_wedge_volume_execute,
       surface_wedge_volume_params,

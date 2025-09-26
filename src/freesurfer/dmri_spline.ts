@@ -12,7 +12,7 @@ const DMRI_SPLINE_METADATA: Metadata = {
 
 
 interface DmriSplineParameters {
-    "@type": "freesurfer.dmri_spline";
+    "@type"?: "freesurfer/dmri_spline";
     "control_points_file": InputPathType;
     "mask_volume": InputPathType;
     "output_volume"?: string | null | undefined;
@@ -22,44 +22,11 @@ interface DmriSplineParameters {
     "debug": boolean;
     "check_options": boolean;
 }
+type DmriSplineParametersTagged = Required<Pick<DmriSplineParameters, '@type'>> & DmriSplineParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dmri_spline": dmri_spline_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.dmri_spline": dmri_spline_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dmri_spline(...)`.
+ * Output object returned when calling `DmriSplineParameters(...)`.
  *
  * @interface
  */
@@ -114,9 +81,9 @@ function dmri_spline_params(
     output_vectors_base: string | null = null,
     debug: boolean = false,
     check_options: boolean = false,
-): DmriSplineParameters {
+): DmriSplineParametersTagged {
     const params = {
-        "@type": "freesurfer.dmri_spline" as const,
+        "@type": "freesurfer/dmri_spline" as const,
         "control_points_file": control_points_file,
         "mask_volume": mask_volume,
         "show_points": show_points,
@@ -164,7 +131,7 @@ function dmri_spline_cargs(
             (params["output_volume"] ?? null)
         );
     }
-    if ((params["show_points"] ?? null)) {
+    if ((params["show_points"] ?? false)) {
         cargs.push("--show");
     }
     if ((params["output_points"] ?? null) !== null) {
@@ -179,10 +146,10 @@ function dmri_spline_cargs(
             (params["output_vectors_base"] ?? null)
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["check_options"] ?? null)) {
+    if ((params["check_options"] ?? false)) {
         cargs.push("--checkopts");
     }
     return cargs;
@@ -281,7 +248,6 @@ function dmri_spline(
 export {
       DMRI_SPLINE_METADATA,
       DmriSplineOutputs,
-      DmriSplineParameters,
       dmri_spline,
       dmri_spline_execute,
       dmri_spline_params,

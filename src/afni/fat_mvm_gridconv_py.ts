@@ -12,47 +12,15 @@ const FAT_MVM_GRIDCONV_PY_METADATA: Metadata = {
 
 
 interface FatMvmGridconvPyParameters {
-    "@type": "afni.fat_mvm_gridconv.py";
+    "@type"?: "afni/fat_mvm_gridconv.py";
     "matrix_files"?: string | null | undefined;
     "list_file"?: InputPathType | null | undefined;
 }
+type FatMvmGridconvPyParametersTagged = Required<Pick<FatMvmGridconvPyParameters, '@type'>> & FatMvmGridconvPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.fat_mvm_gridconv.py": fat_mvm_gridconv_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fat_mvm_gridconv_py(...)`.
+ * Output object returned when calling `FatMvmGridconvPyParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface FatMvmGridconvPyOutputs {
 function fat_mvm_gridconv_py_params(
     matrix_files: string | null = null,
     list_file: InputPathType | null = null,
-): FatMvmGridconvPyParameters {
+): FatMvmGridconvPyParametersTagged {
     const params = {
-        "@type": "afni.fat_mvm_gridconv.py" as const,
+        "@type": "afni/fat_mvm_gridconv.py" as const,
     };
     if (matrix_files !== null) {
         params["matrix_files"] = matrix_files;
@@ -194,7 +162,6 @@ function fat_mvm_gridconv_py(
 export {
       FAT_MVM_GRIDCONV_PY_METADATA,
       FatMvmGridconvPyOutputs,
-      FatMvmGridconvPyParameters,
       fat_mvm_gridconv_py,
       fat_mvm_gridconv_py_execute,
       fat_mvm_gridconv_py_params,

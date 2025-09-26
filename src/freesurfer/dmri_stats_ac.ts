@@ -12,51 +12,18 @@ const DMRI_STATS_AC_METADATA: Metadata = {
 
 
 interface DmriStatsAcParameters {
-    "@type": "freesurfer.dmri_stats_ac";
+    "@type"?: "freesurfer/dmri_stats_ac";
     "anatomicuts_folder": string;
     "num_clusters": number;
     "correspondence_file": string;
     "measures": Array<string>;
     "output_file": string;
 }
+type DmriStatsAcParametersTagged = Required<Pick<DmriStatsAcParameters, '@type'>> & DmriStatsAcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dmri_stats_ac": dmri_stats_ac_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.dmri_stats_ac": dmri_stats_ac_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dmri_stats_ac(...)`.
+ * Output object returned when calling `DmriStatsAcParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function dmri_stats_ac_params(
     correspondence_file: string,
     measures: Array<string>,
     output_file: string,
-): DmriStatsAcParameters {
+): DmriStatsAcParametersTagged {
     const params = {
-        "@type": "freesurfer.dmri_stats_ac" as const,
+        "@type": "freesurfer/dmri_stats_ac" as const,
         "anatomicuts_folder": anatomicuts_folder,
         "num_clusters": num_clusters,
         "correspondence_file": correspondence_file,
@@ -222,7 +189,6 @@ function dmri_stats_ac(
 export {
       DMRI_STATS_AC_METADATA,
       DmriStatsAcOutputs,
-      DmriStatsAcParameters,
       dmri_stats_ac,
       dmri_stats_ac_execute,
       dmri_stats_ac_params,

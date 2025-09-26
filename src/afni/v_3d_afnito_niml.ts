@@ -12,49 +12,17 @@ const V_3D_AFNITO_NIML_METADATA: Metadata = {
 
 
 interface V3dAfnitoNimlParameters {
-    "@type": "afni.3dAFNItoNIML";
+    "@type"?: "afni/3dAFNItoNIML";
     "dset": InputPathType;
     "data": boolean;
     "ascii": boolean;
     "tcp"?: string | null | undefined;
 }
+type V3dAfnitoNimlParametersTagged = Required<Pick<V3dAfnitoNimlParameters, '@type'>> & V3dAfnitoNimlParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dAFNItoNIML": v_3d_afnito_niml_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_afnito_niml(...)`.
+ * Output object returned when calling `V3dAfnitoNimlParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function v_3d_afnito_niml_params(
     data: boolean = false,
     ascii: boolean = false,
     tcp: string | null = null,
-): V3dAfnitoNimlParameters {
+): V3dAfnitoNimlParametersTagged {
     const params = {
-        "@type": "afni.3dAFNItoNIML" as const,
+        "@type": "afni/3dAFNItoNIML" as const,
         "dset": dset,
         "data": data,
         "ascii": ascii,
@@ -110,10 +78,10 @@ function v_3d_afnito_niml_cargs(
     const cargs: string[] = [];
     cargs.push("3dAFNItoNIML");
     cargs.push(execution.inputFile((params["dset"] ?? null)));
-    if ((params["data"] ?? null)) {
+    if ((params["data"] ?? false)) {
         cargs.push("-data");
     }
-    if ((params["ascii"] ?? null)) {
+    if ((params["ascii"] ?? false)) {
         cargs.push("-ascii");
     }
     if ((params["tcp"] ?? null) !== null) {
@@ -204,7 +172,6 @@ function v_3d_afnito_niml(
 
 export {
       V3dAfnitoNimlOutputs,
-      V3dAfnitoNimlParameters,
       V_3D_AFNITO_NIML_METADATA,
       v_3d_afnito_niml,
       v_3d_afnito_niml_execute,

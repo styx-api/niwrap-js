@@ -12,51 +12,18 @@ const V_3DMATMULT_METADATA: Metadata = {
 
 
 interface V3dmatmultParameters {
-    "@type": "afni.3dmatmult";
+    "@type"?: "afni/3dmatmult";
     "inputA": InputPathType;
     "inputB": InputPathType;
     "prefix": string;
     "datum"?: string | null | undefined;
     "verb"?: number | null | undefined;
 }
+type V3dmatmultParametersTagged = Required<Pick<V3dmatmultParameters, '@type'>> & V3dmatmultParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dmatmult": v_3dmatmult_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dmatmult": v_3dmatmult_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dmatmult(...)`.
+ * Output object returned when calling `V3dmatmultParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function v_3dmatmult_params(
     prefix: string,
     datum: string | null = null,
     verb: number | null = null,
-): V3dmatmultParameters {
+): V3dmatmultParametersTagged {
     const params = {
-        "@type": "afni.3dmatmult" as const,
+        "@type": "afni/3dmatmult" as const,
         "inputA": input_a,
         "inputB": input_b,
         "prefix": prefix,
@@ -229,7 +196,6 @@ function v_3dmatmult(
 
 export {
       V3dmatmultOutputs,
-      V3dmatmultParameters,
       V_3DMATMULT_METADATA,
       v_3dmatmult,
       v_3dmatmult_execute,

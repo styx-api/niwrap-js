@@ -12,47 +12,14 @@ const INFLATE_SUBJECT_NEW_LH_METADATA: Metadata = {
 
 
 interface InflateSubjectNewLhParameters {
-    "@type": "freesurfer.inflate_subject_new-lh";
+    "@type"?: "freesurfer/inflate_subject_new-lh";
     "subject_dir": string;
 }
+type InflateSubjectNewLhParametersTagged = Required<Pick<InflateSubjectNewLhParameters, '@type'>> & InflateSubjectNewLhParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.inflate_subject_new-lh": inflate_subject_new_lh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.inflate_subject_new-lh": inflate_subject_new_lh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `inflate_subject_new_lh(...)`.
+ * Output object returned when calling `InflateSubjectNewLhParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface InflateSubjectNewLhOutputs {
  */
 function inflate_subject_new_lh_params(
     subject_dir: string,
-): InflateSubjectNewLhParameters {
+): InflateSubjectNewLhParametersTagged {
     const params = {
-        "@type": "freesurfer.inflate_subject_new-lh" as const,
+        "@type": "freesurfer/inflate_subject_new-lh" as const,
         "subject_dir": subject_dir,
     };
     return params;
@@ -182,7 +149,6 @@ function inflate_subject_new_lh(
 export {
       INFLATE_SUBJECT_NEW_LH_METADATA,
       InflateSubjectNewLhOutputs,
-      InflateSubjectNewLhParameters,
       inflate_subject_new_lh,
       inflate_subject_new_lh_execute,
       inflate_subject_new_lh_params,

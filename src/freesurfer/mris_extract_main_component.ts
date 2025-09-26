@@ -12,48 +12,15 @@ const MRIS_EXTRACT_MAIN_COMPONENT_METADATA: Metadata = {
 
 
 interface MrisExtractMainComponentParameters {
-    "@type": "freesurfer.mris_extract_main_component";
+    "@type"?: "freesurfer/mris_extract_main_component";
     "input_surface": InputPathType;
     "output_surface": string;
 }
+type MrisExtractMainComponentParametersTagged = Required<Pick<MrisExtractMainComponentParameters, '@type'>> & MrisExtractMainComponentParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_extract_main_component": mris_extract_main_component_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_extract_main_component": mris_extract_main_component_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_extract_main_component(...)`.
+ * Output object returned when calling `MrisExtractMainComponentParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface MrisExtractMainComponentOutputs {
 function mris_extract_main_component_params(
     input_surface: InputPathType,
     output_surface: string,
-): MrisExtractMainComponentParameters {
+): MrisExtractMainComponentParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_extract_main_component" as const,
+        "@type": "freesurfer/mris_extract_main_component" as const,
         "input_surface": input_surface,
         "output_surface": output_surface,
     };
@@ -186,7 +153,6 @@ function mris_extract_main_component(
 export {
       MRIS_EXTRACT_MAIN_COMPONENT_METADATA,
       MrisExtractMainComponentOutputs,
-      MrisExtractMainComponentParameters,
       mris_extract_main_component,
       mris_extract_main_component_execute,
       mris_extract_main_component_params,

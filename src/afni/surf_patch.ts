@@ -12,7 +12,7 @@ const SURF_PATCH_METADATA: Metadata = {
 
 
 interface SurfPatchParameters {
-    "@type": "afni.SurfPatch";
+    "@type"?: "afni/SurfPatch";
     "spec_file": InputPathType;
     "surf_A": InputPathType;
     "surf_B": InputPathType;
@@ -35,44 +35,11 @@ interface SurfPatchParameters {
     "flip_orientation": boolean;
     "verbosity"?: number | null | undefined;
 }
+type SurfPatchParametersTagged = Required<Pick<SurfPatchParameters, '@type'>> & SurfPatchParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.SurfPatch": surf_patch_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.SurfPatch": surf_patch_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surf_patch(...)`.
+ * Output object returned when calling `SurfPatchParameters(...)`.
  *
  * @interface
  */
@@ -145,9 +112,9 @@ function surf_patch_params(
     stitched_surface: InputPathType | null = null,
     flip_orientation: boolean = false,
     verbosity: number | null = null,
-): SurfPatchParameters {
+): SurfPatchParametersTagged {
     const params = {
-        "@type": "afni.SurfPatch" as const,
+        "@type": "afni/SurfPatch" as const,
         "spec_file": spec_file,
         "surf_A": surf_a,
         "surf_B": surf_b,
@@ -229,13 +196,13 @@ function surf_patch_cargs(
             (params["masklabel"] ?? null)
         );
     }
-    if ((params["vol"] ?? null)) {
+    if ((params["vol"] ?? false)) {
         cargs.push("-vol");
     }
-    if ((params["vol_only"] ?? null)) {
+    if ((params["vol_only"] ?? false)) {
         cargs.push("-vol_only");
     }
-    if ((params["patch2surf"] ?? null)) {
+    if ((params["patch2surf"] ?? false)) {
         cargs.push("-patch2surf");
     }
     if ((params["coord_gain"] ?? null) !== null) {
@@ -244,19 +211,19 @@ function surf_patch_cargs(
             String((params["coord_gain"] ?? null))
         );
     }
-    if ((params["check_bowtie"] ?? null)) {
+    if ((params["check_bowtie"] ?? false)) {
         cargs.push("-check_bowtie");
     }
-    if ((params["fix_bowtie"] ?? null)) {
+    if ((params["fix_bowtie"] ?? false)) {
         cargs.push("-fix_bowtie");
     }
-    if ((params["ok_bowtie"] ?? null)) {
+    if ((params["ok_bowtie"] ?? false)) {
         cargs.push("-ok_bowtie");
     }
-    if ((params["adjust_contour"] ?? null)) {
+    if ((params["adjust_contour"] ?? false)) {
         cargs.push("-adjust_contour");
     }
-    if ((params["do_not_adjust_contour"] ?? null)) {
+    if ((params["do_not_adjust_contour"] ?? false)) {
         cargs.push("-do-not-adjust_contour");
     }
     if ((params["stitched_surface"] ?? null) !== null) {
@@ -265,7 +232,7 @@ function surf_patch_cargs(
             execution.inputFile((params["stitched_surface"] ?? null))
         );
     }
-    if ((params["flip_orientation"] ?? null)) {
+    if ((params["flip_orientation"] ?? false)) {
         cargs.push("-flip_orientation");
     }
     if ((params["verbosity"] ?? null) !== null) {
@@ -394,7 +361,6 @@ function surf_patch(
 export {
       SURF_PATCH_METADATA,
       SurfPatchOutputs,
-      SurfPatchParameters,
       surf_patch,
       surf_patch_execute,
       surf_patch_params,

@@ -12,7 +12,7 @@ const OPTSEQ2_METADATA: Metadata = {
 
 
 interface Optseq2Parameters {
-    "@type": "freesurfer.optseq2";
+    "@type"?: "freesurfer/optseq2";
     "ntp": number;
     "tr": number;
     "tprescan": number;
@@ -46,44 +46,11 @@ interface Optseq2Parameters {
     "help": boolean;
     "version": boolean;
 }
+type Optseq2ParametersTagged = Required<Pick<Optseq2Parameters, '@type'>> & Optseq2Parameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.optseq2": optseq2_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.optseq2": optseq2_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `optseq2(...)`.
+ * Output object returned when calling `Optseq2Parameters(...)`.
  *
  * @interface
  */
@@ -190,9 +157,9 @@ function optseq2_params(
     nosearch: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): Optseq2Parameters {
+): Optseq2ParametersTagged {
     const params = {
-        "@type": "freesurfer.optseq2" as const,
+        "@type": "freesurfer/optseq2" as const,
         "ntp": ntp,
         "tr": tr,
         "tprescan": tprescan,
@@ -386,7 +353,7 @@ function optseq2_cargs(
             (params["cost"] ?? null)
         );
     }
-    if ((params["sumdelays"] ?? null)) {
+    if ((params["sumdelays"] ?? false)) {
         cargs.push("--sumdelays");
     }
     if ((params["seed"] ?? null) !== null) {
@@ -455,13 +422,13 @@ function optseq2_cargs(
             ...(params["input_schedule"] ?? null)
         );
     }
-    if ((params["nosearch"] ?? null)) {
+    if ((params["nosearch"] ?? false)) {
         cargs.push("--nosearch");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -609,7 +576,6 @@ function optseq2(
 export {
       OPTSEQ2_METADATA,
       Optseq2Outputs,
-      Optseq2Parameters,
       optseq2,
       optseq2_execute,
       optseq2_params,

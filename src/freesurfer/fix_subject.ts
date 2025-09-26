@@ -12,46 +12,14 @@ const FIX_SUBJECT_METADATA: Metadata = {
 
 
 interface FixSubjectParameters {
-    "@type": "freesurfer.fix_subject";
+    "@type"?: "freesurfer/fix_subject";
     "arguments"?: string | null | undefined;
 }
+type FixSubjectParametersTagged = Required<Pick<FixSubjectParameters, '@type'>> & FixSubjectParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fix_subject": fix_subject_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fix_subject(...)`.
+ * Output object returned when calling `FixSubjectParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface FixSubjectOutputs {
  */
 function fix_subject_params(
     arguments_: string | null = null,
-): FixSubjectParameters {
+): FixSubjectParametersTagged {
     const params = {
-        "@type": "freesurfer.fix_subject" as const,
+        "@type": "freesurfer/fix_subject" as const,
     };
     if (arguments_ !== null) {
         params["arguments"] = arguments_;
@@ -177,7 +145,6 @@ function fix_subject(
 export {
       FIX_SUBJECT_METADATA,
       FixSubjectOutputs,
-      FixSubjectParameters,
       fix_subject,
       fix_subject_execute,
       fix_subject_params,

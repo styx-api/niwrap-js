@@ -12,50 +12,17 @@ const IMUPSAM_METADATA: Metadata = {
 
 
 interface ImupsamParameters {
-    "@type": "afni.imupsam";
+    "@type"?: "afni/imupsam";
     "ascii_flag": boolean;
     "factor": number;
     "input_image": InputPathType;
     "output_image": string;
 }
+type ImupsamParametersTagged = Required<Pick<ImupsamParameters, '@type'>> & ImupsamParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.imupsam": imupsam_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.imupsam": imupsam_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `imupsam(...)`.
+ * Output object returned when calling `ImupsamParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function imupsam_params(
     input_image: InputPathType,
     output_image: string,
     ascii_flag: boolean = false,
-): ImupsamParameters {
+): ImupsamParametersTagged {
     const params = {
-        "@type": "afni.imupsam" as const,
+        "@type": "afni/imupsam" as const,
         "ascii_flag": ascii_flag,
         "factor": factor,
         "input_image": input_image,
@@ -112,7 +79,7 @@ function imupsam_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("imupsam");
-    if ((params["ascii_flag"] ?? null)) {
+    if ((params["ascii_flag"] ?? false)) {
         cargs.push("-A");
     }
     cargs.push(String((params["factor"] ?? null)));
@@ -202,7 +169,6 @@ function imupsam(
 export {
       IMUPSAM_METADATA,
       ImupsamOutputs,
-      ImupsamParameters,
       imupsam,
       imupsam_execute,
       imupsam_params,

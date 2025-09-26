@@ -12,7 +12,7 @@ const V_3D_SPAT_NORM_METADATA: Metadata = {
 
 
 interface V3dSpatNormParameters {
-    "@type": "afni.3dSpatNorm";
+    "@type"?: "afni/3dSpatNorm";
     "dataset": InputPathType;
     "prefix"?: string | null | undefined;
     "orig_space": boolean;
@@ -23,44 +23,11 @@ interface V3dSpatNormParameters {
     "human": boolean;
     "bottom_cuts"?: string | null | undefined;
 }
+type V3dSpatNormParametersTagged = Required<Pick<V3dSpatNormParameters, '@type'>> & V3dSpatNormParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dSpatNorm": v_3d_spat_norm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dSpatNorm": v_3d_spat_norm_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_spat_norm(...)`.
+ * Output object returned when calling `V3dSpatNormParameters(...)`.
  *
  * @interface
  */
@@ -105,9 +72,9 @@ function v_3d_spat_norm_params(
     rat: boolean = false,
     human: boolean = false,
     bottom_cuts: string | null = null,
-): V3dSpatNormParameters {
+): V3dSpatNormParametersTagged {
     const params = {
-        "@type": "afni.3dSpatNorm" as const,
+        "@type": "afni/3dSpatNorm" as const,
         "dataset": dataset,
         "orig_space": orig_space,
         "verbose": verbose,
@@ -147,22 +114,22 @@ function v_3d_spat_norm_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["orig_space"] ?? null)) {
+    if ((params["orig_space"] ?? false)) {
         cargs.push("-orig_space");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["monkey"] ?? null)) {
+    if ((params["monkey"] ?? false)) {
         cargs.push("-monkey");
     }
-    if ((params["marmot"] ?? null)) {
+    if ((params["marmot"] ?? false)) {
         cargs.push("-marmost");
     }
-    if ((params["rat"] ?? null)) {
+    if ((params["rat"] ?? false)) {
         cargs.push("-rat");
     }
-    if ((params["human"] ?? null)) {
+    if ((params["human"] ?? false)) {
         cargs.push("-human");
     }
     if ((params["bottom_cuts"] ?? null) !== null) {
@@ -265,7 +232,6 @@ function v_3d_spat_norm(
 
 export {
       V3dSpatNormOutputs,
-      V3dSpatNormParameters,
       V_3D_SPAT_NORM_METADATA,
       v_3d_spat_norm,
       v_3d_spat_norm_execute,

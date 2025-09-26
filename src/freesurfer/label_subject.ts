@@ -12,48 +12,15 @@ const LABEL_SUBJECT_METADATA: Metadata = {
 
 
 interface LabelSubjectParameters {
-    "@type": "freesurfer.label_subject";
+    "@type"?: "freesurfer/label_subject";
     "nu_file"?: InputPathType | null | undefined;
     "orig_dir"?: string | null | undefined;
 }
+type LabelSubjectParametersTagged = Required<Pick<LabelSubjectParameters, '@type'>> & LabelSubjectParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.label_subject": label_subject_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.label_subject": label_subject_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `label_subject(...)`.
+ * Output object returned when calling `LabelSubjectParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface LabelSubjectOutputs {
 function label_subject_params(
     nu_file: InputPathType | null = null,
     orig_dir: string | null = null,
-): LabelSubjectParameters {
+): LabelSubjectParametersTagged {
     const params = {
-        "@type": "freesurfer.label_subject" as const,
+        "@type": "freesurfer/label_subject" as const,
     };
     if (nu_file !== null) {
         params["nu_file"] = nu_file;
@@ -194,7 +161,6 @@ function label_subject(
 export {
       LABEL_SUBJECT_METADATA,
       LabelSubjectOutputs,
-      LabelSubjectParameters,
       label_subject,
       label_subject_execute,
       label_subject_params,

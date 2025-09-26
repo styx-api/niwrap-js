@@ -12,48 +12,16 @@ const PTOZ_METADATA: Metadata = {
 
 
 interface PtozParameters {
-    "@type": "fsl.ptoz";
+    "@type"?: "fsl/ptoz";
     "p_value": number;
     "tail_flag": boolean;
     "grf_flag"?: number | null | undefined;
 }
+type PtozParametersTagged = Required<Pick<PtozParameters, '@type'>> & PtozParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.ptoz": ptoz_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ptoz(...)`.
+ * Output object returned when calling `PtozParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function ptoz_params(
     p_value: number,
     tail_flag: boolean = false,
     grf_flag: number | null = null,
-): PtozParameters {
+): PtozParametersTagged {
     const params = {
-        "@type": "fsl.ptoz" as const,
+        "@type": "fsl/ptoz" as const,
         "p_value": p_value,
         "tail_flag": tail_flag,
     };
@@ -106,7 +74,7 @@ function ptoz_cargs(
     const cargs: string[] = [];
     cargs.push("ptoz");
     cargs.push(String((params["p_value"] ?? null)));
-    if ((params["tail_flag"] ?? null)) {
+    if ((params["tail_flag"] ?? false)) {
         cargs.push("-2");
     }
     if ((params["grf_flag"] ?? null) !== null) {
@@ -196,7 +164,6 @@ function ptoz(
 export {
       PTOZ_METADATA,
       PtozOutputs,
-      PtozParameters,
       ptoz,
       ptoz_execute,
       ptoz_params,

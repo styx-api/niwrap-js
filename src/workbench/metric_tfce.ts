@@ -12,21 +12,23 @@ const METRIC_TFCE_METADATA: Metadata = {
 
 
 interface MetricTfcePresmoothParameters {
-    "@type": "workbench.metric-tfce.presmooth";
+    "@type"?: "presmooth";
     "kernel": number;
     "opt_fwhm": boolean;
 }
+type MetricTfcePresmoothParametersTagged = Required<Pick<MetricTfcePresmoothParameters, '@type'>> & MetricTfcePresmoothParameters;
 
 
 interface MetricTfceParametersParameters {
-    "@type": "workbench.metric-tfce.parameters";
+    "@type"?: "parameters";
     "e": number;
     "h": number;
 }
+type MetricTfceParametersParametersTagged = Required<Pick<MetricTfceParametersParameters, '@type'>> & MetricTfceParametersParameters;
 
 
 interface MetricTfceParameters {
-    "@type": "workbench.metric-tfce";
+    "@type"?: "workbench/metric-tfce";
     "surface": InputPathType;
     "metric_in": InputPathType;
     "metric_out": string;
@@ -36,42 +38,7 @@ interface MetricTfceParameters {
     "opt_column_column"?: string | null | undefined;
     "opt_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-tfce": metric_tfce_cargs,
-        "workbench.metric-tfce.presmooth": metric_tfce_presmooth_cargs,
-        "workbench.metric-tfce.parameters": metric_tfce_parameters_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.metric-tfce": metric_tfce_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MetricTfceParametersTagged = Required<Pick<MetricTfceParameters, '@type'>> & MetricTfceParameters;
 
 
 /**
@@ -85,9 +52,9 @@ function dynOutputs(
 function metric_tfce_presmooth_params(
     kernel: number,
     opt_fwhm: boolean = false,
-): MetricTfcePresmoothParameters {
+): MetricTfcePresmoothParametersTagged {
     const params = {
-        "@type": "workbench.metric-tfce.presmooth" as const,
+        "@type": "presmooth" as const,
         "kernel": kernel,
         "opt_fwhm": opt_fwhm,
     };
@@ -110,7 +77,7 @@ function metric_tfce_presmooth_cargs(
     const cargs: string[] = [];
     cargs.push("-presmooth");
     cargs.push(String((params["kernel"] ?? null)));
-    if ((params["opt_fwhm"] ?? null)) {
+    if ((params["opt_fwhm"] ?? false)) {
         cargs.push("-fwhm");
     }
     return cargs;
@@ -128,9 +95,9 @@ function metric_tfce_presmooth_cargs(
 function metric_tfce_parameters_params(
     e: number,
     h: number,
-): MetricTfceParametersParameters {
+): MetricTfceParametersParametersTagged {
     const params = {
-        "@type": "workbench.metric-tfce.parameters" as const,
+        "@type": "parameters" as const,
         "e": e,
         "h": h,
     };
@@ -159,7 +126,7 @@ function metric_tfce_parameters_cargs(
 
 
 /**
- * Output object returned when calling `metric_tfce(...)`.
+ * Output object returned when calling `MetricTfceParameters(...)`.
  *
  * @interface
  */
@@ -198,9 +165,9 @@ function metric_tfce_params(
     parameters: MetricTfceParametersParameters | null = null,
     opt_column_column: string | null = null,
     opt_corrected_areas_area_metric: InputPathType | null = null,
-): MetricTfceParameters {
+): MetricTfceParametersTagged {
     const params = {
-        "@type": "workbench.metric-tfce" as const,
+        "@type": "workbench/metric-tfce" as const,
         "surface": surface,
         "metric_in": metric_in,
         "metric_out": metric_out,
@@ -243,7 +210,7 @@ function metric_tfce_cargs(
     cargs.push(execution.inputFile((params["metric_in"] ?? null)));
     cargs.push((params["metric_out"] ?? null));
     if ((params["presmooth"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["presmooth"] ?? null)["@type"])((params["presmooth"] ?? null), execution));
+        cargs.push(...metric_tfce_presmooth_cargs((params["presmooth"] ?? null), execution));
     }
     if ((params["opt_roi_roi_metric"] ?? null) !== null) {
         cargs.push(
@@ -252,7 +219,7 @@ function metric_tfce_cargs(
         );
     }
     if ((params["parameters"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["parameters"] ?? null)["@type"])((params["parameters"] ?? null), execution));
+        cargs.push(...metric_tfce_parameters_cargs((params["parameters"] ?? null), execution));
     }
     if ((params["opt_column_column"] ?? null) !== null) {
         cargs.push(
@@ -382,9 +349,6 @@ function metric_tfce(
 export {
       METRIC_TFCE_METADATA,
       MetricTfceOutputs,
-      MetricTfceParameters,
-      MetricTfceParametersParameters,
-      MetricTfcePresmoothParameters,
       metric_tfce,
       metric_tfce_execute,
       metric_tfce_parameters_params,

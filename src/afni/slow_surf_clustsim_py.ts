@@ -12,7 +12,7 @@ const SLOW_SURF_CLUSTSIM_PY_METADATA: Metadata = {
 
 
 interface SlowSurfClustsimPyParameters {
-    "@type": "afni.slow_surf_clustsim.py";
+    "@type"?: "afni/slow_surf_clustsim.py";
     "on_surface"?: string | null | undefined;
     "save_script"?: string | null | undefined;
     "print_script": boolean;
@@ -25,43 +25,11 @@ interface SlowSurfClustsimPyParameters {
     "show_valid_opts": boolean;
     "version": boolean;
 }
+type SlowSurfClustsimPyParametersTagged = Required<Pick<SlowSurfClustsimPyParameters, '@type'>> & SlowSurfClustsimPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.slow_surf_clustsim.py": slow_surf_clustsim_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `slow_surf_clustsim_py(...)`.
+ * Output object returned when calling `SlowSurfClustsimPyParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +70,9 @@ function slow_surf_clustsim_py_params(
     show_default_uvars: boolean = false,
     show_valid_opts: boolean = false,
     version: boolean = false,
-): SlowSurfClustsimPyParameters {
+): SlowSurfClustsimPyParametersTagged {
     const params = {
-        "@type": "afni.slow_surf_clustsim.py" as const,
+        "@type": "afni/slow_surf_clustsim.py" as const,
         "print_script": print_script,
         "help": help,
         "hist": hist,
@@ -155,7 +123,7 @@ function slow_surf_clustsim_py_cargs(
             (params["save_script"] ?? null)
         );
     }
-    if ((params["print_script"] ?? null)) {
+    if ((params["print_script"] ?? false)) {
         cargs.push("-print_script");
     }
     if ((params["uvar"] ?? null) !== null) {
@@ -170,22 +138,22 @@ function slow_surf_clustsim_py_cargs(
             String((params["verbosity"] ?? null))
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["hist"] ?? null)) {
+    if ((params["hist"] ?? false)) {
         cargs.push("-hist");
     }
-    if ((params["show_default_cvars"] ?? null)) {
+    if ((params["show_default_cvars"] ?? false)) {
         cargs.push("-show_default_cvars");
     }
-    if ((params["show_default_uvars"] ?? null)) {
+    if ((params["show_default_uvars"] ?? false)) {
         cargs.push("-show_default_uvars");
     }
-    if ((params["show_valid_opts"] ?? null)) {
+    if ((params["show_valid_opts"] ?? false)) {
         cargs.push("-show_valid_opts");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-ver");
     }
     return cargs;
@@ -285,7 +253,6 @@ function slow_surf_clustsim_py(
 export {
       SLOW_SURF_CLUSTSIM_PY_METADATA,
       SlowSurfClustsimPyOutputs,
-      SlowSurfClustsimPyParameters,
       slow_surf_clustsim_py,
       slow_surf_clustsim_py_execute,
       slow_surf_clustsim_py_params,

@@ -12,50 +12,17 @@ const IMSTAT_METADATA: Metadata = {
 
 
 interface ImstatParameters {
-    "@type": "afni.imstat";
+    "@type"?: "afni/imstat";
     "no_label": boolean;
     "quiet": boolean;
     "pixstat_prefix"?: string | null | undefined;
     "image_files": Array<InputPathType>;
 }
+type ImstatParametersTagged = Required<Pick<ImstatParameters, '@type'>> & ImstatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.imstat": imstat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.imstat": imstat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `imstat(...)`.
+ * Output object returned when calling `ImstatParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +57,9 @@ function imstat_params(
     no_label: boolean = false,
     quiet: boolean = false,
     pixstat_prefix: string | null = null,
-): ImstatParameters {
+): ImstatParametersTagged {
     const params = {
-        "@type": "afni.imstat" as const,
+        "@type": "afni/imstat" as const,
         "no_label": no_label,
         "quiet": quiet,
         "image_files": image_files,
@@ -118,10 +85,10 @@ function imstat_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("imstat");
-    if ((params["no_label"] ?? null)) {
+    if ((params["no_label"] ?? false)) {
         cargs.push("-nolabel");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
     if ((params["pixstat_prefix"] ?? null) !== null) {
@@ -216,7 +183,6 @@ function imstat(
 export {
       IMSTAT_METADATA,
       ImstatOutputs,
-      ImstatParameters,
       imstat,
       imstat_execute,
       imstat_params,

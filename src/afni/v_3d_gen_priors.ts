@@ -12,7 +12,7 @@ const V_3D_GEN_PRIORS_METADATA: Metadata = {
 
 
 interface V3dGenPriorsParameters {
-    "@type": "afni.3dGenPriors";
+    "@type"?: "afni/3dGenPriors";
     "sigs": InputPathType;
     "tdist": InputPathType;
     "cprefix": string;
@@ -40,44 +40,11 @@ interface V3dGenPriorsParameters {
     "fast": boolean;
     "slow": boolean;
 }
+type V3dGenPriorsParametersTagged = Required<Pick<V3dGenPriorsParameters, '@type'>> & V3dGenPriorsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dGenPriors": v_3d_gen_priors_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dGenPriors": v_3d_gen_priors_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_gen_priors(...)`.
+ * Output object returned when calling `V3dGenPriorsParameters(...)`.
  *
  * @interface
  */
@@ -156,9 +123,9 @@ function v_3d_gen_priors_params(
     show_this_dist: string | null = null,
     fast: boolean = false,
     slow: boolean = false,
-): V3dGenPriorsParameters {
+): V3dGenPriorsParametersTagged {
     const params = {
-        "@type": "afni.3dGenPriors" as const,
+        "@type": "afni/3dGenPriors" as const,
         "sigs": sigs,
         "tdist": tdist,
         "cprefix": cprefix,
@@ -306,10 +273,10 @@ function v_3d_gen_priors_cargs(
             (params["uid"] ?? null)
         );
     }
-    if ((params["use_tmp"] ?? null)) {
+    if ((params["use_tmp"] ?? false)) {
         cargs.push("-use_tmp");
     }
-    if ((params["no_tmp"] ?? null)) {
+    if ((params["no_tmp"] ?? false)) {
         cargs.push("-no_tmp");
     }
     if ((params["pset"] ?? null) !== null) {
@@ -342,7 +309,7 @@ function v_3d_gen_priors_cargs(
             (params["features"] ?? null)
         );
     }
-    if ((params["strict_feature_match"] ?? null)) {
+    if ((params["strict_feature_match"] ?? false)) {
         cargs.push("-strict_feature_match");
     }
     if ((params["featgroups"] ?? null) !== null) {
@@ -357,10 +324,10 @@ function v_3d_gen_priors_cargs(
             (params["show_this_dist"] ?? null)
         );
     }
-    if ((params["fast"] ?? null)) {
+    if ((params["fast"] ?? false)) {
         cargs.push("-fast");
     }
-    if ((params["slow"] ?? null)) {
+    if ((params["slow"] ?? false)) {
         cargs.push("-slow");
     }
     return cargs;
@@ -491,7 +458,6 @@ function v_3d_gen_priors(
 
 export {
       V3dGenPriorsOutputs,
-      V3dGenPriorsParameters,
       V_3D_GEN_PRIORS_METADATA,
       v_3d_gen_priors,
       v_3d_gen_priors_execute,

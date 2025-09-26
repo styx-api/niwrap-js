@@ -12,61 +12,29 @@ const CIFTI_ESTIMATE_FWHM_METADATA: Metadata = {
 
 
 interface CiftiEstimateFwhmWholeFileParameters {
-    "@type": "workbench.cifti-estimate-fwhm.whole_file";
+    "@type"?: "whole_file";
     "opt_demean": boolean;
 }
+type CiftiEstimateFwhmWholeFileParametersTagged = Required<Pick<CiftiEstimateFwhmWholeFileParameters, '@type'>> & CiftiEstimateFwhmWholeFileParameters;
 
 
 interface CiftiEstimateFwhmSurfaceParameters {
-    "@type": "workbench.cifti-estimate-fwhm.surface";
+    "@type"?: "surface";
     "structure": string;
     "surface": InputPathType;
 }
+type CiftiEstimateFwhmSurfaceParametersTagged = Required<Pick<CiftiEstimateFwhmSurfaceParameters, '@type'>> & CiftiEstimateFwhmSurfaceParameters;
 
 
 interface CiftiEstimateFwhmParameters {
-    "@type": "workbench.cifti-estimate-fwhm";
+    "@type"?: "workbench/cifti-estimate-fwhm";
     "cifti": InputPathType;
     "opt_merged_volume": boolean;
     "opt_column_column"?: number | null | undefined;
     "whole_file"?: CiftiEstimateFwhmWholeFileParameters | null | undefined;
     "surface"?: Array<CiftiEstimateFwhmSurfaceParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-estimate-fwhm": cifti_estimate_fwhm_cargs,
-        "workbench.cifti-estimate-fwhm.whole_file": cifti_estimate_fwhm_whole_file_cargs,
-        "workbench.cifti-estimate-fwhm.surface": cifti_estimate_fwhm_surface_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type CiftiEstimateFwhmParametersTagged = Required<Pick<CiftiEstimateFwhmParameters, '@type'>> & CiftiEstimateFwhmParameters;
 
 
 /**
@@ -78,9 +46,9 @@ function dynOutputs(
  */
 function cifti_estimate_fwhm_whole_file_params(
     opt_demean: boolean = false,
-): CiftiEstimateFwhmWholeFileParameters {
+): CiftiEstimateFwhmWholeFileParametersTagged {
     const params = {
-        "@type": "workbench.cifti-estimate-fwhm.whole_file" as const,
+        "@type": "whole_file" as const,
         "opt_demean": opt_demean,
     };
     return params;
@@ -101,7 +69,7 @@ function cifti_estimate_fwhm_whole_file_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("-whole-file");
-    if ((params["opt_demean"] ?? null)) {
+    if ((params["opt_demean"] ?? false)) {
         cargs.push("-demean");
     }
     return cargs;
@@ -119,9 +87,9 @@ function cifti_estimate_fwhm_whole_file_cargs(
 function cifti_estimate_fwhm_surface_params(
     structure: string,
     surface: InputPathType,
-): CiftiEstimateFwhmSurfaceParameters {
+): CiftiEstimateFwhmSurfaceParametersTagged {
     const params = {
-        "@type": "workbench.cifti-estimate-fwhm.surface" as const,
+        "@type": "surface" as const,
         "structure": structure,
         "surface": surface,
     };
@@ -150,7 +118,7 @@ function cifti_estimate_fwhm_surface_cargs(
 
 
 /**
- * Output object returned when calling `cifti_estimate_fwhm(...)`.
+ * Output object returned when calling `CiftiEstimateFwhmParameters(...)`.
  *
  * @interface
  */
@@ -179,9 +147,9 @@ function cifti_estimate_fwhm_params(
     opt_column_column: number | null = null,
     whole_file: CiftiEstimateFwhmWholeFileParameters | null = null,
     surface: Array<CiftiEstimateFwhmSurfaceParameters> | null = null,
-): CiftiEstimateFwhmParameters {
+): CiftiEstimateFwhmParametersTagged {
     const params = {
-        "@type": "workbench.cifti-estimate-fwhm" as const,
+        "@type": "workbench/cifti-estimate-fwhm" as const,
         "cifti": cifti,
         "opt_merged_volume": opt_merged_volume,
     };
@@ -214,7 +182,7 @@ function cifti_estimate_fwhm_cargs(
     cargs.push("wb_command");
     cargs.push("-cifti-estimate-fwhm");
     cargs.push(execution.inputFile((params["cifti"] ?? null)));
-    if ((params["opt_merged_volume"] ?? null)) {
+    if ((params["opt_merged_volume"] ?? false)) {
         cargs.push("-merged-volume");
     }
     if ((params["opt_column_column"] ?? null) !== null) {
@@ -224,10 +192,10 @@ function cifti_estimate_fwhm_cargs(
         );
     }
     if ((params["whole_file"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["whole_file"] ?? null)["@type"])((params["whole_file"] ?? null), execution));
+        cargs.push(...cifti_estimate_fwhm_whole_file_cargs((params["whole_file"] ?? null), execution));
     }
     if ((params["surface"] ?? null) !== null) {
-        cargs.push(...(params["surface"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["surface"] ?? null).map(s => cifti_estimate_fwhm_surface_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -390,9 +358,6 @@ function cifti_estimate_fwhm(
 export {
       CIFTI_ESTIMATE_FWHM_METADATA,
       CiftiEstimateFwhmOutputs,
-      CiftiEstimateFwhmParameters,
-      CiftiEstimateFwhmSurfaceParameters,
-      CiftiEstimateFwhmWholeFileParameters,
       cifti_estimate_fwhm,
       cifti_estimate_fwhm_execute,
       cifti_estimate_fwhm_params,

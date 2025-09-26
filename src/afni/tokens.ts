@@ -12,47 +12,15 @@ const TOKENS_METADATA: Metadata = {
 
 
 interface TokensParameters {
-    "@type": "afni.tokens";
+    "@type"?: "afni/tokens";
     "infile"?: InputPathType | null | undefined;
     "extra_char"?: Array<string> | null | undefined;
 }
+type TokensParametersTagged = Required<Pick<TokensParameters, '@type'>> & TokensParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.tokens": tokens_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tokens(...)`.
+ * Output object returned when calling `TokensParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface TokensOutputs {
 function tokens_params(
     infile: InputPathType | null = null,
     extra_char: Array<string> | null = null,
-): TokensParameters {
+): TokensParametersTagged {
     const params = {
-        "@type": "afni.tokens" as const,
+        "@type": "afni/tokens" as const,
     };
     if (infile !== null) {
         params["infile"] = infile;
@@ -194,7 +162,6 @@ function tokens(
 export {
       TOKENS_METADATA,
       TokensOutputs,
-      TokensParameters,
       tokens,
       tokens_execute,
       tokens_params,

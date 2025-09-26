@@ -12,7 +12,7 @@ const WARP_TENSOR_IMAGE_MULTI_TRANSFORM_METADATA: Metadata = {
 
 
 interface WarpTensorImageMultiTransformParameters {
-    "@type": "ants.WarpTensorImageMultiTransform";
+    "@type"?: "ants/WarpTensorImageMultiTransform";
     "image_dimension": number;
     "moving_image": InputPathType;
     "output_image": string;
@@ -24,44 +24,11 @@ interface WarpTensorImageMultiTransformParameters {
     "ants_prefix"?: string | null | undefined;
     "ants_prefix_invert"?: string | null | undefined;
 }
+type WarpTensorImageMultiTransformParametersTagged = Required<Pick<WarpTensorImageMultiTransformParameters, '@type'>> & WarpTensorImageMultiTransformParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.WarpTensorImageMultiTransform": warp_tensor_image_multi_transform_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.WarpTensorImageMultiTransform": warp_tensor_image_multi_transform_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `warp_tensor_image_multi_transform(...)`.
+ * Output object returned when calling `WarpTensorImageMultiTransformParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function warp_tensor_image_multi_transform_params(
     use_nearest_neighbor: boolean = false,
     ants_prefix: string | null = null,
     ants_prefix_invert: string | null = null,
-): WarpTensorImageMultiTransformParameters {
+): WarpTensorImageMultiTransformParametersTagged {
     const params = {
-        "@type": "ants.WarpTensorImageMultiTransform" as const,
+        "@type": "ants/WarpTensorImageMultiTransform" as const,
         "image_dimension": image_dimension,
         "moving_image": moving_image,
         "output_image": output_image,
@@ -151,13 +118,13 @@ function warp_tensor_image_multi_transform_cargs(
             execution.inputFile((params["reference_image"] ?? null))
         );
     }
-    if ((params["tightest_bounding_box"] ?? null)) {
+    if ((params["tightest_bounding_box"] ?? false)) {
         cargs.push("--tightest-bounding-box");
     }
-    if ((params["reslice_by_header"] ?? null)) {
+    if ((params["reslice_by_header"] ?? false)) {
         cargs.push("--reslice-by-header");
     }
-    if ((params["use_nearest_neighbor"] ?? null)) {
+    if ((params["use_nearest_neighbor"] ?? false)) {
         cargs.push("--use-NN");
     }
     cargs.push(...(params["transforms"] ?? null));
@@ -269,7 +236,6 @@ function warp_tensor_image_multi_transform(
 export {
       WARP_TENSOR_IMAGE_MULTI_TRANSFORM_METADATA,
       WarpTensorImageMultiTransformOutputs,
-      WarpTensorImageMultiTransformParameters,
       warp_tensor_image_multi_transform,
       warp_tensor_image_multi_transform_execute,
       warp_tensor_image_multi_transform_params,

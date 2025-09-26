@@ -12,50 +12,17 @@ const TRIDEC_METADATA: Metadata = {
 
 
 interface TridecParameters {
-    "@type": "freesurfer.tridec";
+    "@type"?: "freesurfer/tridec";
     "subject_name": string;
     "fine_file": InputPathType;
     "ico_file": InputPathType;
     "out_file": string;
 }
+type TridecParametersTagged = Required<Pick<TridecParameters, '@type'>> & TridecParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.tridec": tridec_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.tridec": tridec_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tridec(...)`.
+ * Output object returned when calling `TridecParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function tridec_params(
     fine_file: InputPathType,
     ico_file: InputPathType,
     out_file: string,
-): TridecParameters {
+): TridecParametersTagged {
     const params = {
-        "@type": "freesurfer.tridec" as const,
+        "@type": "freesurfer/tridec" as const,
         "subject_name": subject_name,
         "fine_file": fine_file,
         "ico_file": ico_file,
@@ -200,7 +167,6 @@ function tridec(
 export {
       TRIDEC_METADATA,
       TridecOutputs,
-      TridecParameters,
       tridec,
       tridec_execute,
       tridec_params,

@@ -12,7 +12,7 @@ const MRI_3D_PHOTO_RECON_METADATA: Metadata = {
 
 
 interface Mri3dPhotoReconParameters {
-    "@type": "freesurfer.mri_3d_photo_recon";
+    "@type"?: "freesurfer/mri_3d_photo_recon";
     "input_photo_dir": Array<InputPathType>;
     "input_segmentation_dir": Array<InputPathType>;
     "slice_thickness": number;
@@ -28,44 +28,11 @@ interface Mri3dPhotoReconParameters {
     "rigid_only_for_photos": boolean;
     "gpu_index"?: number | null | undefined;
 }
+type Mri3dPhotoReconParametersTagged = Required<Pick<Mri3dPhotoReconParameters, '@type'>> & Mri3dPhotoReconParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_3d_photo_recon": mri_3d_photo_recon_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_3d_photo_recon": mri_3d_photo_recon_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_3d_photo_recon(...)`.
+ * Output object returned when calling `Mri3dPhotoReconParameters(...)`.
  *
  * @interface
  */
@@ -120,9 +87,9 @@ function mri_3d_photo_recon_params(
     allow_z_stretch: boolean = false,
     rigid_only_for_photos: boolean = false,
     gpu_index: number | null = null,
-): Mri3dPhotoReconParameters {
+): Mri3dPhotoReconParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_3d_photo_recon" as const,
+        "@type": "freesurfer/mri_3d_photo_recon" as const,
         "input_photo_dir": input_photo_dir,
         "input_segmentation_dir": input_segmentation_dir,
         "slice_thickness": slice_thickness,
@@ -210,16 +177,16 @@ function mri_3d_photo_recon_cargs(
             (params["mesh_reorient_with_indices"] ?? null)
         );
     }
-    if ((params["photos_posterior_side"] ?? null)) {
+    if ((params["photos_posterior_side"] ?? false)) {
         cargs.push("--photos_of_posterior_side");
     }
-    if ((params["order_posterior_to_anterior"] ?? null)) {
+    if ((params["order_posterior_to_anterior"] ?? false)) {
         cargs.push("--order_posterior_to_anterior");
     }
-    if ((params["allow_z_stretch"] ?? null)) {
+    if ((params["allow_z_stretch"] ?? false)) {
         cargs.push("--allow_z_stretch");
     }
-    if ((params["rigid_only_for_photos"] ?? null)) {
+    if ((params["rigid_only_for_photos"] ?? false)) {
         cargs.push("--rigid_only_for_photos");
     }
     if ((params["gpu_index"] ?? null) !== null) {
@@ -333,7 +300,6 @@ function mri_3d_photo_recon(
 export {
       MRI_3D_PHOTO_RECON_METADATA,
       Mri3dPhotoReconOutputs,
-      Mri3dPhotoReconParameters,
       mri_3d_photo_recon,
       mri_3d_photo_recon_execute,
       mri_3d_photo_recon_params,

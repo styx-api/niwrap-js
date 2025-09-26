@@ -12,7 +12,7 @@ const V_3D_STAT_CLUST_METADATA: Metadata = {
 
 
 interface V3dStatClustParameters {
-    "@type": "afni.3dStatClust";
+    "@type"?: "afni/3dStatClust";
     "prefix"?: string | null | undefined;
     "session_dir"?: string | null | undefined;
     "verbose": boolean;
@@ -23,44 +23,11 @@ interface V3dStatClustParameters {
     "nclust": number;
     "datasets": Array<string>;
 }
+type V3dStatClustParametersTagged = Required<Pick<V3dStatClustParameters, '@type'>> & V3dStatClustParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dStatClust": v_3d_stat_clust_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dStatClust": v_3d_stat_clust_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_stat_clust(...)`.
+ * Output object returned when calling `V3dStatClustParameters(...)`.
  *
  * @interface
  */
@@ -105,9 +72,9 @@ function v_3d_stat_clust_params(
     dist_euc: boolean = false,
     dist_ind: boolean = false,
     dist_cor: boolean = false,
-): V3dStatClustParameters {
+): V3dStatClustParametersTagged {
     const params = {
-        "@type": "afni.3dStatClust" as const,
+        "@type": "afni/3dStatClust" as const,
         "verbose": verbose,
         "dist_euc": dist_euc,
         "dist_ind": dist_ind,
@@ -152,16 +119,16 @@ function v_3d_stat_clust_cargs(
             (params["session_dir"] ?? null)
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["dist_euc"] ?? null)) {
+    if ((params["dist_euc"] ?? false)) {
         cargs.push("-dist_euc");
     }
-    if ((params["dist_ind"] ?? null)) {
+    if ((params["dist_ind"] ?? false)) {
         cargs.push("-dist_ind");
     }
-    if ((params["dist_cor"] ?? null)) {
+    if ((params["dist_cor"] ?? false)) {
         cargs.push("-dist_cor");
     }
     cargs.push(
@@ -267,7 +234,6 @@ function v_3d_stat_clust(
 
 export {
       V3dStatClustOutputs,
-      V3dStatClustParameters,
       V_3D_STAT_CLUST_METADATA,
       v_3d_stat_clust,
       v_3d_stat_clust_execute,

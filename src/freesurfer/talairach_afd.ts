@@ -12,50 +12,18 @@ const TALAIRACH_AFD_METADATA: Metadata = {
 
 
 interface TalairachAfdParameters {
-    "@type": "freesurfer.talairach_afd";
+    "@type"?: "freesurfer/talairach_afd";
     "subject_name"?: string | null | undefined;
     "xfm_file"?: InputPathType | null | undefined;
     "p_value_threshold"?: number | null | undefined;
     "afd_directory"?: string | null | undefined;
     "verbose": boolean;
 }
+type TalairachAfdParametersTagged = Required<Pick<TalairachAfdParameters, '@type'>> & TalairachAfdParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.talairach_afd": talairach_afd_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `talairach_afd(...)`.
+ * Output object returned when calling `TalairachAfdParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function talairach_afd_params(
     p_value_threshold: number | null = null,
     afd_directory: string | null = null,
     verbose: boolean = false,
-): TalairachAfdParameters {
+): TalairachAfdParametersTagged {
     const params = {
-        "@type": "freesurfer.talairach_afd" as const,
+        "@type": "freesurfer/talairach_afd" as const,
         "verbose": verbose,
     };
     if (subject_name !== null) {
@@ -143,7 +111,7 @@ function talairach_afd_cargs(
             (params["afd_directory"] ?? null)
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-V");
     }
     return cargs;
@@ -231,7 +199,6 @@ function talairach_afd(
 export {
       TALAIRACH_AFD_METADATA,
       TalairachAfdOutputs,
-      TalairachAfdParameters,
       talairach_afd,
       talairach_afd_execute,
       talairach_afd_params,

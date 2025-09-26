@@ -12,47 +12,14 @@ const MRI_GRADIENT_INFO_METADATA: Metadata = {
 
 
 interface MriGradientInfoParameters {
-    "@type": "freesurfer.mri_gradient_info";
+    "@type"?: "freesurfer/mri_gradient_info";
     "input_image": InputPathType;
 }
+type MriGradientInfoParametersTagged = Required<Pick<MriGradientInfoParameters, '@type'>> & MriGradientInfoParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_gradient_info": mri_gradient_info_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_gradient_info": mri_gradient_info_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_gradient_info(...)`.
+ * Output object returned when calling `MriGradientInfoParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface MriGradientInfoOutputs {
  */
 function mri_gradient_info_params(
     input_image: InputPathType,
-): MriGradientInfoParameters {
+): MriGradientInfoParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_gradient_info" as const,
+        "@type": "freesurfer/mri_gradient_info" as const,
         "input_image": input_image,
     };
     return params;
@@ -179,7 +146,6 @@ function mri_gradient_info(
 export {
       MRI_GRADIENT_INFO_METADATA,
       MriGradientInfoOutputs,
-      MriGradientInfoParameters,
       mri_gradient_info,
       mri_gradient_info_execute,
       mri_gradient_info_params,

@@ -12,28 +12,31 @@ const SHCONV_METADATA: Metadata = {
 
 
 interface ShconvVariousStringParameters {
-    "@type": "mrtrix.shconv.VariousString";
+    "@type"?: "VariousString";
     "obj": string;
 }
+type ShconvVariousStringParametersTagged = Required<Pick<ShconvVariousStringParameters, '@type'>> & ShconvVariousStringParameters;
 
 
 interface ShconvVariousFileParameters {
-    "@type": "mrtrix.shconv.VariousFile";
+    "@type"?: "VariousFile";
     "obj": InputPathType;
 }
+type ShconvVariousFileParametersTagged = Required<Pick<ShconvVariousFileParameters, '@type'>> & ShconvVariousFileParameters;
 
 
 interface ShconvConfigParameters {
-    "@type": "mrtrix.shconv.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type ShconvConfigParametersTagged = Required<Pick<ShconvConfigParameters, '@type'>> & ShconvConfigParameters;
 
 
 interface ShconvParameters {
-    "@type": "mrtrix.shconv";
+    "@type"?: "mrtrix/shconv";
     "datatype"?: string | null | undefined;
-    "strides"?: ShconvVariousStringParameters | ShconvVariousFileParameters | null | undefined;
+    "strides"?: ShconvVariousStringParametersTagged | ShconvVariousFileParametersTagged | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -45,6 +48,7 @@ interface ShconvParameters {
     "odf_response": Array<string>;
     "SH_out": string;
 }
+type ShconvParametersTagged = Required<Pick<ShconvParameters, '@type'>> & ShconvParameters;
 
 
 /**
@@ -54,14 +58,12 @@ interface ShconvParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function shconv_strides_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "mrtrix.shconv": shconv_cargs,
-        "mrtrix.shconv.VariousString": shconv_various_string_cargs,
-        "mrtrix.shconv.VariousFile": shconv_various_file_cargs,
-        "mrtrix.shconv.config": shconv_config_cargs,
+        "VariousString": shconv_various_string_cargs,
+        "VariousFile": shconv_various_file_cargs,
     };
     return cargsFuncs[t];
 }
@@ -74,11 +76,10 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function shconv_strides_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "mrtrix.shconv": shconv_outputs,
     };
     return outputsFuncs[t];
 }
@@ -93,9 +94,9 @@ function dynOutputs(
  */
 function shconv_various_string_params(
     obj: string,
-): ShconvVariousStringParameters {
+): ShconvVariousStringParametersTagged {
     const params = {
-        "@type": "mrtrix.shconv.VariousString" as const,
+        "@type": "VariousString" as const,
         "obj": obj,
     };
     return params;
@@ -129,9 +130,9 @@ function shconv_various_string_cargs(
  */
 function shconv_various_file_params(
     obj: InputPathType,
-): ShconvVariousFileParameters {
+): ShconvVariousFileParametersTagged {
     const params = {
-        "@type": "mrtrix.shconv.VariousFile" as const,
+        "@type": "VariousFile" as const,
         "obj": obj,
     };
     return params;
@@ -167,9 +168,9 @@ function shconv_various_file_cargs(
 function shconv_config_params(
     key: string,
     value: string,
-): ShconvConfigParameters {
+): ShconvConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.shconv.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -198,7 +199,7 @@ function shconv_config_cargs(
 
 
 /**
- * Output object returned when calling `shconv(...)`.
+ * Output object returned when calling `ShconvParameters(...)`.
  *
  * @interface
  */
@@ -236,7 +237,7 @@ function shconv_params(
     odf_response: Array<string>,
     sh_out: string,
     datatype: string | null = null,
-    strides: ShconvVariousStringParameters | ShconvVariousFileParameters | null = null,
+    strides: ShconvVariousStringParametersTagged | ShconvVariousFileParametersTagged | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
@@ -245,9 +246,9 @@ function shconv_params(
     config: Array<ShconvConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): ShconvParameters {
+): ShconvParametersTagged {
     const params = {
-        "@type": "mrtrix.shconv" as const,
+        "@type": "mrtrix/shconv" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -296,19 +297,19 @@ function shconv_cargs(
     if ((params["strides"] ?? null) !== null) {
         cargs.push(
             "-strides",
-            ...dynCargs((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
+            ...shconv_strides_cargs_dyn_fn((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -318,12 +319,12 @@ function shconv_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => shconv_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(...(params["odf_response"] ?? null));
@@ -441,7 +442,7 @@ function shconv(
     odf_response: Array<string>,
     sh_out: string,
     datatype: string | null = null,
-    strides: ShconvVariousStringParameters | ShconvVariousFileParameters | null = null,
+    strides: ShconvVariousStringParametersTagged | ShconvVariousFileParametersTagged | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
@@ -459,11 +460,7 @@ function shconv(
 
 export {
       SHCONV_METADATA,
-      ShconvConfigParameters,
       ShconvOutputs,
-      ShconvParameters,
-      ShconvVariousFileParameters,
-      ShconvVariousStringParameters,
       shconv,
       shconv_config_params,
       shconv_execute,

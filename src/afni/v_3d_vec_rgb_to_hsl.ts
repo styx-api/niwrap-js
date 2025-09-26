@@ -12,50 +12,17 @@ const V_3D_VEC_RGB_TO_HSL_METADATA: Metadata = {
 
 
 interface V3dVecRgbToHslParameters {
-    "@type": "afni.3dVecRGB_to_HSL";
+    "@type"?: "afni/3dVecRGB_to_HSL";
     "prefix": string;
     "in_vec": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "in_scal"?: InputPathType | null | undefined;
 }
+type V3dVecRgbToHslParametersTagged = Required<Pick<V3dVecRgbToHslParameters, '@type'>> & V3dVecRgbToHslParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dVecRGB_to_HSL": v_3d_vec_rgb_to_hsl_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dVecRGB_to_HSL": v_3d_vec_rgb_to_hsl_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_vec_rgb_to_hsl(...)`.
+ * Output object returned when calling `V3dVecRgbToHslParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function v_3d_vec_rgb_to_hsl_params(
     in_vec: InputPathType,
     mask: InputPathType | null = null,
     in_scal: InputPathType | null = null,
-): V3dVecRgbToHslParameters {
+): V3dVecRgbToHslParametersTagged {
     const params = {
-        "@type": "afni.3dVecRGB_to_HSL" as const,
+        "@type": "afni/3dVecRGB_to_HSL" as const,
         "prefix": prefix,
         "in_vec": in_vec,
     };
@@ -219,7 +186,6 @@ function v_3d_vec_rgb_to_hsl(
 
 export {
       V3dVecRgbToHslOutputs,
-      V3dVecRgbToHslParameters,
       V_3D_VEC_RGB_TO_HSL_METADATA,
       v_3d_vec_rgb_to_hsl,
       v_3d_vec_rgb_to_hsl_execute,

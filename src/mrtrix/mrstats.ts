@@ -12,20 +12,22 @@ const MRSTATS_METADATA: Metadata = {
 
 
 interface MrstatsOutputParameters {
-    "@type": "mrtrix.mrstats.output";
+    "@type"?: "output";
     "field": string;
 }
+type MrstatsOutputParametersTagged = Required<Pick<MrstatsOutputParameters, '@type'>> & MrstatsOutputParameters;
 
 
 interface MrstatsConfigParameters {
-    "@type": "mrtrix.mrstats.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MrstatsConfigParametersTagged = Required<Pick<MrstatsConfigParameters, '@type'>> & MrstatsConfigParameters;
 
 
 interface MrstatsParameters {
-    "@type": "mrtrix.mrstats";
+    "@type"?: "mrtrix/mrstats";
     "output"?: Array<MrstatsOutputParameters> | null | undefined;
     "mask"?: InputPathType | null | undefined;
     "ignorezero": boolean;
@@ -40,41 +42,7 @@ interface MrstatsParameters {
     "version": boolean;
     "image": InputPathType;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.mrstats": mrstats_cargs,
-        "mrtrix.mrstats.output": mrstats_output_cargs,
-        "mrtrix.mrstats.config": mrstats_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type MrstatsParametersTagged = Required<Pick<MrstatsParameters, '@type'>> & MrstatsParameters;
 
 
 /**
@@ -86,9 +54,9 @@ function dynOutputs(
  */
 function mrstats_output_params(
     field: string,
-): MrstatsOutputParameters {
+): MrstatsOutputParametersTagged {
     const params = {
-        "@type": "mrtrix.mrstats.output" as const,
+        "@type": "output" as const,
         "field": field,
     };
     return params;
@@ -125,9 +93,9 @@ function mrstats_output_cargs(
 function mrstats_config_params(
     key: string,
     value: string,
-): MrstatsConfigParameters {
+): MrstatsConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.mrstats.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -156,7 +124,7 @@ function mrstats_config_cargs(
 
 
 /**
- * Output object returned when calling `mrstats(...)`.
+ * Output object returned when calling `MrstatsParameters(...)`.
  *
  * @interface
  */
@@ -201,9 +169,9 @@ function mrstats_params(
     config: Array<MrstatsConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrstatsParameters {
+): MrstatsParametersTagged {
     const params = {
-        "@type": "mrtrix.mrstats" as const,
+        "@type": "mrtrix/mrstats" as const,
         "ignorezero": ignorezero,
         "allvolumes": allvolumes,
         "info": info,
@@ -245,7 +213,7 @@ function mrstats_cargs(
     const cargs: string[] = [];
     cargs.push("mrstats");
     if ((params["output"] ?? null) !== null) {
-        cargs.push(...(params["output"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["output"] ?? null).map(s => mrstats_output_cargs(s, execution)).flat());
     }
     if ((params["mask"] ?? null) !== null) {
         cargs.push(
@@ -253,22 +221,22 @@ function mrstats_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["ignorezero"] ?? null)) {
+    if ((params["ignorezero"] ?? false)) {
         cargs.push("-ignorezero");
     }
-    if ((params["allvolumes"] ?? null)) {
+    if ((params["allvolumes"] ?? false)) {
         cargs.push("-allvolumes");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -278,12 +246,12 @@ function mrstats_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => mrstats_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["image"] ?? null)));
@@ -399,10 +367,7 @@ function mrstats(
 
 export {
       MRSTATS_METADATA,
-      MrstatsConfigParameters,
-      MrstatsOutputParameters,
       MrstatsOutputs,
-      MrstatsParameters,
       mrstats,
       mrstats_config_params,
       mrstats_execute,

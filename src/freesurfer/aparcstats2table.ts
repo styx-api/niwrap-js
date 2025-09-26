@@ -12,7 +12,7 @@ const APARCSTATS2TABLE_METADATA: Metadata = {
 
 
 interface Aparcstats2tableParameters {
-    "@type": "freesurfer.aparcstats2table";
+    "@type"?: "freesurfer/aparcstats2table";
     "subjects"?: Array<string> | null | undefined;
     "subjectsfile"?: InputPathType | null | undefined;
     "qdec"?: InputPathType | null | undefined;
@@ -32,44 +32,11 @@ interface Aparcstats2tableParameters {
     "etiv": boolean;
     "scale"?: number | null | undefined;
 }
+type Aparcstats2tableParametersTagged = Required<Pick<Aparcstats2tableParameters, '@type'>> & Aparcstats2tableParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.aparcstats2table": aparcstats2table_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.aparcstats2table": aparcstats2table_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `aparcstats2table(...)`.
+ * Output object returned when calling `Aparcstats2tableParameters(...)`.
  *
  * @interface
  */
@@ -128,9 +95,9 @@ function aparcstats2table_params(
     debug: boolean = false,
     etiv: boolean = false,
     scale: number | null = null,
-): Aparcstats2tableParameters {
+): Aparcstats2tableParametersTagged {
     const params = {
-        "@type": "freesurfer.aparcstats2table" as const,
+        "@type": "freesurfer/aparcstats2table" as const,
         "hemi": hemi,
         "tablefile": tablefile,
         "skip_missing": skip_missing,
@@ -236,13 +203,13 @@ function aparcstats2table_cargs(
             (params["delimiter"] ?? null)
         );
     }
-    if ((params["skip_missing"] ?? null)) {
+    if ((params["skip_missing"] ?? false)) {
         cargs.push("--skip");
     }
-    if ((params["parcid_only"] ?? null)) {
+    if ((params["parcid_only"] ?? false)) {
         cargs.push("--parcid-only");
     }
-    if ((params["common_parcs"] ?? null)) {
+    if ((params["common_parcs"] ?? false)) {
         cargs.push("--common-parcs");
     }
     if ((params["parcs_file"] ?? null) !== null) {
@@ -251,16 +218,16 @@ function aparcstats2table_cargs(
             execution.inputFile((params["parcs_file"] ?? null))
         );
     }
-    if ((params["report_rois"] ?? null)) {
+    if ((params["report_rois"] ?? false)) {
         cargs.push("--report-rois");
     }
-    if ((params["transpose"] ?? null)) {
+    if ((params["transpose"] ?? false)) {
         cargs.push("--transpose");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["etiv"] ?? null)) {
+    if ((params["etiv"] ?? false)) {
         cargs.push("--etiv");
     }
     if ((params["scale"] ?? null) !== null) {
@@ -381,7 +348,6 @@ function aparcstats2table(
 export {
       APARCSTATS2TABLE_METADATA,
       Aparcstats2tableOutputs,
-      Aparcstats2tableParameters,
       aparcstats2table,
       aparcstats2table_execute,
       aparcstats2table_params,

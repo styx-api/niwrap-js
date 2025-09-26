@@ -12,7 +12,7 @@ const V_3DVOLREG_METADATA: Metadata = {
 
 
 interface V3dvolregParameters {
-    "@type": "afni.3dvolreg";
+    "@type"?: "afni/3dvolreg";
     "copyorigin": boolean;
     "twopass": boolean;
     "Fourier": boolean;
@@ -29,44 +29,11 @@ interface V3dvolregParameters {
     "Maxdisp1d"?: string | null | undefined;
     "in_file": InputPathType;
 }
+type V3dvolregParametersTagged = Required<Pick<V3dvolregParameters, '@type'>> & V3dvolregParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dvolreg": v_3dvolreg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dvolreg": v_3dvolreg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dvolreg(...)`.
+ * Output object returned when calling `V3dvolregParameters(...)`.
  *
  * @interface
  */
@@ -143,9 +110,9 @@ function v_3dvolreg_params(
     basefile: InputPathType | null = null,
     zpad: number | null = null,
     maxdisp1d: string | null = null,
-): V3dvolregParameters {
+): V3dvolregParametersTagged {
     const params = {
-        "@type": "afni.3dvolreg" as const,
+        "@type": "afni/3dvolreg" as const,
         "copyorigin": copyorigin,
         "twopass": twopass,
         "Fourier": fourier,
@@ -196,13 +163,13 @@ function v_3dvolreg_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("3dvolreg");
-    if ((params["copyorigin"] ?? null)) {
+    if ((params["copyorigin"] ?? false)) {
         cargs.push("-twodup");
     }
-    if ((params["twopass"] ?? null)) {
+    if ((params["twopass"] ?? false)) {
         cargs.push("-twopass");
     }
-    if ((params["Fourier"] ?? null)) {
+    if ((params["Fourier"] ?? false)) {
         cargs.push("-Fourier");
     }
     if ((params["in_weight_volume"] ?? null) !== null) {
@@ -229,10 +196,10 @@ function v_3dvolreg_cargs(
     if ((params["outputtype"] ?? null) !== null) {
         cargs.push((params["outputtype"] ?? null));
     }
-    if ((params["timeshift"] ?? null)) {
+    if ((params["timeshift"] ?? false)) {
         cargs.push("-tshift 0");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verbose");
     }
     if ((params["basefile"] ?? null) !== null) {
@@ -369,7 +336,6 @@ function v_3dvolreg(
 
 export {
       V3dvolregOutputs,
-      V3dvolregParameters,
       V_3DVOLREG_METADATA,
       v_3dvolreg,
       v_3dvolreg_execute,

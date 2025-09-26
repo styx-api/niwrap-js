@@ -12,7 +12,7 @@ const TFIM_METADATA: Metadata = {
 
 
 interface TfimParameters {
-    "@type": "afni.tfim";
+    "@type"?: "afni/tfim";
     "prefix"?: string | null | undefined;
     "pthresh"?: number | null | undefined;
     "eqcorr"?: number | null | undefined;
@@ -21,44 +21,11 @@ interface TfimParameters {
     "set2_images": Array<InputPathType>;
     "base1_value"?: number | null | undefined;
 }
+type TfimParametersTagged = Required<Pick<TfimParameters, '@type'>> & TfimParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.tfim": tfim_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.tfim": tfim_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tfim(...)`.
+ * Output object returned when calling `TfimParameters(...)`.
  *
  * @interface
  */
@@ -103,9 +70,9 @@ function tfim_params(
     eqcorr: number | null = null,
     paired: boolean = false,
     base1_value: number | null = null,
-): TfimParameters {
+): TfimParametersTagged {
     const params = {
-        "@type": "afni.tfim" as const,
+        "@type": "afni/tfim" as const,
         "paired": paired,
         "set1_images": set1_images,
         "set2_images": set2_images,
@@ -158,7 +125,7 @@ function tfim_cargs(
             String((params["eqcorr"] ?? null))
         );
     }
-    if ((params["paired"] ?? null)) {
+    if ((params["paired"] ?? false)) {
         cargs.push("-paired");
     }
     cargs.push(
@@ -267,7 +234,6 @@ function tfim(
 export {
       TFIM_METADATA,
       TfimOutputs,
-      TfimParameters,
       tfim,
       tfim_execute,
       tfim_params,

@@ -12,49 +12,16 @@ const SBTIV_METADATA: Metadata = {
 
 
 interface SbtivParameters {
-    "@type": "freesurfer.sbtiv";
+    "@type"?: "freesurfer/sbtiv";
     "input_file": InputPathType;
     "output_file"?: string | null | undefined;
     "labels_file"?: InputPathType | null | undefined;
 }
+type SbtivParametersTagged = Required<Pick<SbtivParameters, '@type'>> & SbtivParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.sbtiv": sbtiv_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.sbtiv": sbtiv_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `sbtiv(...)`.
+ * Output object returned when calling `SbtivParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function sbtiv_params(
     input_file: InputPathType,
     output_file: string | null = null,
     labels_file: InputPathType | null = null,
-): SbtivParameters {
+): SbtivParametersTagged {
     const params = {
-        "@type": "freesurfer.sbtiv" as const,
+        "@type": "freesurfer/sbtiv" as const,
         "input_file": input_file,
     };
     if (output_file !== null) {
@@ -207,7 +174,6 @@ function sbtiv(
 export {
       SBTIV_METADATA,
       SbtivOutputs,
-      SbtivParameters,
       sbtiv,
       sbtiv_execute,
       sbtiv_params,

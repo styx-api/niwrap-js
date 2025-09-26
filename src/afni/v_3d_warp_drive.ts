@@ -12,7 +12,7 @@ const V_3D_WARP_DRIVE_METADATA: Metadata = {
 
 
 interface V3dWarpDriveParameters {
-    "@type": "afni.3dWarpDrive";
+    "@type"?: "afni/3dWarpDrive";
     "dataset": InputPathType;
     "base_dataset": InputPathType;
     "prefix": string;
@@ -50,44 +50,11 @@ interface V3dWarpDriveParameters {
     "ashift": boolean;
     "bshift": boolean;
 }
+type V3dWarpDriveParametersTagged = Required<Pick<V3dWarpDriveParameters, '@type'>> & V3dWarpDriveParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dWarpDrive": v_3d_warp_drive_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dWarpDrive": v_3d_warp_drive_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_warp_drive(...)`.
+ * Output object returned when calling `V3dWarpDriveParameters(...)`.
  *
  * @interface
  */
@@ -194,9 +161,9 @@ function v_3d_warp_drive_params(
     slower_s_matrix: boolean = false,
     ashift: boolean = false,
     bshift: boolean = false,
-): V3dWarpDriveParameters {
+): V3dWarpDriveParametersTagged {
     const params = {
-        "@type": "afni.3dWarpDrive" as const,
+        "@type": "afni/3dWarpDrive" as const,
         "dataset": dataset,
         "base_dataset": base_dataset,
         "prefix": prefix,
@@ -281,31 +248,31 @@ function v_3d_warp_drive_cargs(
         "-prefix",
         (params["prefix"] ?? null)
     );
-    if ((params["shift_only"] ?? null)) {
+    if ((params["shift_only"] ?? false)) {
         cargs.push("-shift_only");
     }
-    if ((params["shift_rotate"] ?? null)) {
+    if ((params["shift_rotate"] ?? false)) {
         cargs.push("-shift_rotate");
     }
-    if ((params["shift_rotate_scale"] ?? null)) {
+    if ((params["shift_rotate_scale"] ?? false)) {
         cargs.push("-shift_rotate_scale");
     }
-    if ((params["affine_general"] ?? null)) {
+    if ((params["affine_general"] ?? false)) {
         cargs.push("-affine_general");
     }
-    if ((params["bilinear_general"] ?? null)) {
+    if ((params["bilinear_general"] ?? false)) {
         cargs.push("-bilinear_general");
     }
-    if ((params["linear"] ?? null)) {
+    if ((params["linear"] ?? false)) {
         cargs.push("-linear");
     }
-    if ((params["cubic"] ?? null)) {
+    if ((params["cubic"] ?? false)) {
         cargs.push("-cubic");
     }
-    if ((params["NN"] ?? null)) {
+    if ((params["NN"] ?? false)) {
         cargs.push("-NN");
     }
-    if ((params["quintic"] ?? null)) {
+    if ((params["quintic"] ?? false)) {
         cargs.push("-quintic");
     }
     if ((params["input_dataset"] ?? null) !== null) {
@@ -314,7 +281,7 @@ function v_3d_warp_drive_cargs(
             execution.inputFile((params["input_dataset"] ?? null))
         );
     }
-    if ((params["verbosity_flag"] ?? null)) {
+    if ((params["verbosity_flag"] ?? false)) {
         cargs.push("-verb");
     }
     if ((params["summary_file"] ?? null) !== null) {
@@ -347,7 +314,7 @@ function v_3d_warp_drive_cargs(
             String((params["convergence_thresh"] ?? null))
         );
     }
-    if ((params["twopass"] ?? null)) {
+    if ((params["twopass"] ?? false)) {
         cargs.push("-twopass");
     }
     if ((params["final_mode"] ?? null) !== null) {
@@ -368,10 +335,10 @@ function v_3d_warp_drive_cargs(
             execution.inputFile((params["oned_file"] ?? null))
         );
     }
-    if ((params["float_format"] ?? null)) {
+    if ((params["float_format"] ?? false)) {
         cargs.push("-float");
     }
-    if ((params["coarserot_init"] ?? null)) {
+    if ((params["coarserot_init"] ?? false)) {
         cargs.push("-coarserot");
     }
     if ((params["oned_matrix_save"] ?? null) !== null) {
@@ -380,34 +347,34 @@ function v_3d_warp_drive_cargs(
             execution.inputFile((params["oned_matrix_save"] ?? null))
         );
     }
-    if ((params["sdu_order"] ?? null)) {
+    if ((params["sdu_order"] ?? false)) {
         cargs.push("-SDU");
     }
-    if ((params["sud_order"] ?? null)) {
+    if ((params["sud_order"] ?? false)) {
         cargs.push("-SUD");
     }
-    if ((params["dsu_order"] ?? null)) {
+    if ((params["dsu_order"] ?? false)) {
         cargs.push("-DSU");
     }
-    if ((params["dus_order"] ?? null)) {
+    if ((params["dus_order"] ?? false)) {
         cargs.push("-DUS");
     }
-    if ((params["usd_order"] ?? null)) {
+    if ((params["usd_order"] ?? false)) {
         cargs.push("-USD");
     }
-    if ((params["uds_order"] ?? null)) {
+    if ((params["uds_order"] ?? false)) {
         cargs.push("-UDS");
     }
-    if ((params["supper_s_matrix"] ?? null)) {
+    if ((params["supper_s_matrix"] ?? false)) {
         cargs.push("-Supper");
     }
-    if ((params["slower_s_matrix"] ?? null)) {
+    if ((params["slower_s_matrix"] ?? false)) {
         cargs.push("-Slower");
     }
-    if ((params["ashift"] ?? null)) {
+    if ((params["ashift"] ?? false)) {
         cargs.push("-ashift");
     }
-    if ((params["bshift"] ?? null)) {
+    if ((params["bshift"] ?? false)) {
         cargs.push("-bshift");
     }
     return cargs;
@@ -560,7 +527,6 @@ function v_3d_warp_drive(
 
 export {
       V3dWarpDriveOutputs,
-      V3dWarpDriveParameters,
       V_3D_WARP_DRIVE_METADATA,
       v_3d_warp_drive,
       v_3d_warp_drive_execute,

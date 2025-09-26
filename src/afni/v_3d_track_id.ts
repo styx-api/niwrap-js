@@ -12,7 +12,7 @@ const V_3D_TRACK_ID_METADATA: Metadata = {
 
 
 interface V3dTrackIdParameters {
-    "@type": "afni.3dTrackID";
+    "@type"?: "afni/3dTrackID";
     "mode": "DET" | "MINIP" | "PROB";
     "netrois": InputPathType;
     "prefix": string;
@@ -58,44 +58,11 @@ interface V3dTrackIdParameters {
     "pair_out_power": boolean;
     "verb"?: number | null | undefined;
 }
+type V3dTrackIdParametersTagged = Required<Pick<V3dTrackIdParameters, '@type'>> & V3dTrackIdParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dTrackID": v_3d_track_id_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dTrackID": v_3d_track_id_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_track_id(...)`.
+ * Output object returned when calling `V3dTrackIdParameters(...)`.
  *
  * @interface
  */
@@ -238,9 +205,9 @@ function v_3d_track_id_params(
     write_opts: boolean = false,
     pair_out_power: boolean = false,
     verb: number | null = null,
-): V3dTrackIdParameters {
+): V3dTrackIdParametersTagged {
     const params = {
-        "@type": "afni.3dTrackID" as const,
+        "@type": "afni/3dTrackID" as const,
         "mode": mode,
         "netrois": netrois,
         "prefix": prefix,
@@ -364,7 +331,7 @@ function v_3d_track_id_cargs(
     if ((params["dti_extra"] ?? null) !== null) {
         cargs.push((params["dti_extra"] ?? null));
     }
-    if ((params["dti_search_no"] ?? null)) {
+    if ((params["dti_search_no"] ?? false)) {
         cargs.push("-dti_search_NO");
     }
     if ((params["hardi_gfa"] ?? null) !== null) {
@@ -382,10 +349,10 @@ function v_3d_track_id_cargs(
     if ((params["thru_mask"] ?? null) !== null) {
         cargs.push(execution.inputFile((params["thru_mask"] ?? null)));
     }
-    if ((params["targ_surf_stop"] ?? null)) {
+    if ((params["targ_surf_stop"] ?? false)) {
         cargs.push("-targ_surf_stop");
     }
-    if ((params["targ_surf_twixt"] ?? null)) {
+    if ((params["targ_surf_twixt"] ?? false)) {
         cargs.push("-targ_surf_twixt");
     }
     cargs.push((params["logic"] ?? null));
@@ -431,46 +398,46 @@ function v_3d_track_id_cargs(
     if ((params["alg_nmonte"] ?? null) !== null) {
         cargs.push(String((params["alg_nmonte"] ?? null)));
     }
-    if ((params["extra_tr_par"] ?? null)) {
+    if ((params["extra_tr_par"] ?? false)) {
         cargs.push("-extra_tr_par");
     }
-    if ((params["uncut_at_rois"] ?? null)) {
+    if ((params["uncut_at_rois"] ?? false)) {
         cargs.push("-uncut_at_rois");
     }
     if ((params["dump_rois"] ?? null) !== null) {
         cargs.push((params["dump_rois"] ?? null));
     }
-    if ((params["dump_no_labtab"] ?? null)) {
+    if ((params["dump_no_labtab"] ?? false)) {
         cargs.push("-dump_no_labtab");
     }
-    if ((params["dump_lab_consec"] ?? null)) {
+    if ((params["dump_lab_consec"] ?? false)) {
         cargs.push("-dump_lab_consec");
     }
-    if ((params["posteriori"] ?? null)) {
+    if ((params["posteriori"] ?? false)) {
         cargs.push("-posteriori");
     }
-    if ((params["rec_orig"] ?? null)) {
+    if ((params["rec_orig"] ?? false)) {
         cargs.push("-rec_orig");
     }
-    if ((params["do_trk_out"] ?? null)) {
+    if ((params["do_trk_out"] ?? false)) {
         cargs.push("-do_trk_out");
     }
-    if ((params["trk_opp_orient"] ?? null)) {
+    if ((params["trk_opp_orient"] ?? false)) {
         cargs.push("-trk_opp_orient");
     }
-    if ((params["nifti"] ?? null)) {
+    if ((params["nifti"] ?? false)) {
         cargs.push("-nifti");
     }
-    if ((params["no_indipair_out"] ?? null)) {
+    if ((params["no_indipair_out"] ?? false)) {
         cargs.push("-no_indipair_out");
     }
-    if ((params["write_rois"] ?? null)) {
+    if ((params["write_rois"] ?? false)) {
         cargs.push("-write_rois");
     }
-    if ((params["write_opts"] ?? null)) {
+    if ((params["write_opts"] ?? false)) {
         cargs.push("-write_opts");
     }
-    if ((params["pair_out_power"] ?? null)) {
+    if ((params["pair_out_power"] ?? false)) {
         cargs.push("-pair_out_power");
     }
     if ((params["verb"] ?? null) !== null) {
@@ -647,7 +614,6 @@ function v_3d_track_id(
 
 export {
       V3dTrackIdOutputs,
-      V3dTrackIdParameters,
       V_3D_TRACK_ID_METADATA,
       v_3d_track_id,
       v_3d_track_id_execute,

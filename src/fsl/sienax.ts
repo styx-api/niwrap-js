@@ -12,7 +12,7 @@ const SIENAX_METADATA: Metadata = {
 
 
 interface SienaxParameters {
-    "@type": "fsl.sienax";
+    "@type"?: "fsl/sienax";
     "infile": InputPathType;
     "output_dir"?: string | null | undefined;
     "debug_flag": boolean;
@@ -25,44 +25,11 @@ interface SienaxParameters {
     "lesion_mask"?: InputPathType | null | undefined;
     "fast_options"?: string | null | undefined;
 }
+type SienaxParametersTagged = Required<Pick<SienaxParameters, '@type'>> & SienaxParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.sienax": sienax_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.sienax": sienax_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `sienax(...)`.
+ * Output object returned when calling `SienaxParameters(...)`.
  *
  * @interface
  */
@@ -111,9 +78,9 @@ function sienax_params(
     regional_flag: boolean = false,
     lesion_mask: InputPathType | null = null,
     fast_options: string | null = null,
-): SienaxParameters {
+): SienaxParametersTagged {
     const params = {
-        "@type": "fsl.sienax" as const,
+        "@type": "fsl/sienax" as const,
         "infile": infile,
         "debug_flag": debug_flag,
         "twoclass_segment_flag": twoclass_segment_flag,
@@ -163,7 +130,7 @@ function sienax_cargs(
             (params["output_dir"] ?? null)
         );
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("-d");
     }
     if ((params["bet_options"] ?? null) !== null) {
@@ -172,10 +139,10 @@ function sienax_cargs(
             (params["bet_options"] ?? null)
         );
     }
-    if ((params["twoclass_segment_flag"] ?? null)) {
+    if ((params["twoclass_segment_flag"] ?? false)) {
         cargs.push("-2");
     }
-    if ((params["t2_flag"] ?? null)) {
+    if ((params["t2_flag"] ?? false)) {
         cargs.push("-t2");
     }
     if ((params["top_threshold"] ?? null) !== null) {
@@ -190,7 +157,7 @@ function sienax_cargs(
             String((params["bottom_threshold"] ?? null))
         );
     }
-    if ((params["regional_flag"] ?? null)) {
+    if ((params["regional_flag"] ?? false)) {
         cargs.push("-r");
     }
     if ((params["lesion_mask"] ?? null) !== null) {
@@ -304,7 +271,6 @@ function sienax(
 export {
       SIENAX_METADATA,
       SienaxOutputs,
-      SienaxParameters,
       sienax,
       sienax_execute,
       sienax_params,

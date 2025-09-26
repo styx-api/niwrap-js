@@ -12,51 +12,18 @@ const MRI_BRAINVOL_STATS_METADATA: Metadata = {
 
 
 interface MriBrainvolStatsParameters {
-    "@type": "freesurfer.mri_brainvol_stats";
+    "@type"?: "freesurfer/mri_brainvol_stats";
     "subject_id": string;
     "xml_string"?: string | null | undefined;
     "no_surface": boolean;
     "include_segmentation": boolean;
     "output_file"?: string | null | undefined;
 }
+type MriBrainvolStatsParametersTagged = Required<Pick<MriBrainvolStatsParameters, '@type'>> & MriBrainvolStatsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_brainvol_stats": mri_brainvol_stats_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_brainvol_stats": mri_brainvol_stats_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_brainvol_stats(...)`.
+ * Output object returned when calling `MriBrainvolStatsParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function mri_brainvol_stats_params(
     no_surface: boolean = false,
     include_segmentation: boolean = false,
     output_file: string | null = null,
-): MriBrainvolStatsParameters {
+): MriBrainvolStatsParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_brainvol_stats" as const,
+        "@type": "freesurfer/mri_brainvol_stats" as const,
         "subject_id": subject_id,
         "no_surface": no_surface,
         "include_segmentation": include_segmentation,
@@ -130,10 +97,10 @@ function mri_brainvol_stats_cargs(
             (params["xml_string"] ?? null)
         );
     }
-    if ((params["no_surface"] ?? null)) {
+    if ((params["no_surface"] ?? false)) {
         cargs.push("--no-surface");
     }
-    if ((params["include_segmentation"] ?? null)) {
+    if ((params["include_segmentation"] ?? false)) {
         cargs.push("--seg");
     }
     if ((params["output_file"] ?? null) !== null) {
@@ -228,7 +195,6 @@ function mri_brainvol_stats(
 export {
       MRI_BRAINVOL_STATS_METADATA,
       MriBrainvolStatsOutputs,
-      MriBrainvolStatsParameters,
       mri_brainvol_stats,
       mri_brainvol_stats_execute,
       mri_brainvol_stats_params,

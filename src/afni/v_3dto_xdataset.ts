@@ -12,49 +12,16 @@ const V_3DTO_XDATASET_METADATA: Metadata = {
 
 
 interface V3dtoXdatasetParameters {
-    "@type": "afni.3dtoXdataset";
+    "@type"?: "afni/3dtoXdataset";
     "prefix": string;
     "mask": InputPathType;
     "input_files": Array<InputPathType>;
 }
+type V3dtoXdatasetParametersTagged = Required<Pick<V3dtoXdatasetParameters, '@type'>> & V3dtoXdatasetParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dtoXdataset": v_3dto_xdataset_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dtoXdataset": v_3dto_xdataset_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dto_xdataset(...)`.
+ * Output object returned when calling `V3dtoXdatasetParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function v_3dto_xdataset_params(
     prefix: string,
     mask: InputPathType,
     input_files: Array<InputPathType>,
-): V3dtoXdatasetParameters {
+): V3dtoXdatasetParametersTagged {
     const params = {
-        "@type": "afni.3dtoXdataset" as const,
+        "@type": "afni/3dtoXdataset" as const,
         "prefix": prefix,
         "mask": mask,
         "input_files": input_files,
@@ -195,7 +162,6 @@ function v_3dto_xdataset(
 
 export {
       V3dtoXdatasetOutputs,
-      V3dtoXdatasetParameters,
       V_3DTO_XDATASET_METADATA,
       v_3dto_xdataset,
       v_3dto_xdataset_execute,

@@ -12,49 +12,16 @@ const BIANCA_OVERLAP_MEASURES_METADATA: Metadata = {
 
 
 interface BiancaOverlapMeasuresParameters {
-    "@type": "fsl.bianca_overlap_measures";
+    "@type"?: "fsl/bianca_overlap_measures";
     "lesion_mask": InputPathType;
     "manual_mask": InputPathType;
     "output_dir": string;
 }
+type BiancaOverlapMeasuresParametersTagged = Required<Pick<BiancaOverlapMeasuresParameters, '@type'>> & BiancaOverlapMeasuresParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.bianca_overlap_measures": bianca_overlap_measures_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.bianca_overlap_measures": bianca_overlap_measures_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `bianca_overlap_measures(...)`.
+ * Output object returned when calling `BiancaOverlapMeasuresParameters(...)`.
  *
  * @interface
  */
@@ -111,9 +78,9 @@ function bianca_overlap_measures_params(
     lesion_mask: InputPathType,
     manual_mask: InputPathType,
     output_dir: string,
-): BiancaOverlapMeasuresParameters {
+): BiancaOverlapMeasuresParametersTagged {
     const params = {
-        "@type": "fsl.bianca_overlap_measures" as const,
+        "@type": "fsl/bianca_overlap_measures" as const,
         "lesion_mask": lesion_mask,
         "manual_mask": manual_mask,
         "output_dir": output_dir,
@@ -228,7 +195,6 @@ function bianca_overlap_measures(
 export {
       BIANCA_OVERLAP_MEASURES_METADATA,
       BiancaOverlapMeasuresOutputs,
-      BiancaOverlapMeasuresParameters,
       bianca_overlap_measures,
       bianca_overlap_measures_execute,
       bianca_overlap_measures_params,

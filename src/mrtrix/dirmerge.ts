@@ -12,14 +12,15 @@ const DIRMERGE_METADATA: Metadata = {
 
 
 interface DirmergeConfigParameters {
-    "@type": "mrtrix.dirmerge.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type DirmergeConfigParametersTagged = Required<Pick<DirmergeConfigParameters, '@type'>> & DirmergeConfigParameters;
 
 
 interface DirmergeParameters {
-    "@type": "mrtrix.dirmerge";
+    "@type"?: "mrtrix/dirmerge";
     "unipolar_weight"?: number | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -33,41 +34,7 @@ interface DirmergeParameters {
     "bvalue_files": Array<string>;
     "out": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.dirmerge": dirmerge_cargs,
-        "mrtrix.dirmerge.config": dirmerge_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.dirmerge": dirmerge_outputs,
-    };
-    return outputsFuncs[t];
-}
+type DirmergeParametersTagged = Required<Pick<DirmergeParameters, '@type'>> & DirmergeParameters;
 
 
 /**
@@ -81,9 +48,9 @@ function dynOutputs(
 function dirmerge_config_params(
     key: string,
     value: string,
-): DirmergeConfigParameters {
+): DirmergeConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.dirmerge.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -112,7 +79,7 @@ function dirmerge_config_cargs(
 
 
 /**
- * Output object returned when calling `dirmerge(...)`.
+ * Output object returned when calling `DirmergeParameters(...)`.
  *
  * @interface
  */
@@ -159,9 +126,9 @@ function dirmerge_params(
     config: Array<DirmergeConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): DirmergeParameters {
+): DirmergeParametersTagged {
     const params = {
-        "@type": "mrtrix.dirmerge" as const,
+        "@type": "mrtrix/dirmerge" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -205,16 +172,16 @@ function dirmerge_cargs(
             String((params["unipolar_weight"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -224,12 +191,12 @@ function dirmerge_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dirmerge_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(String((params["subsets"] ?? null)));
@@ -346,9 +313,7 @@ function dirmerge(
 
 export {
       DIRMERGE_METADATA,
-      DirmergeConfigParameters,
       DirmergeOutputs,
-      DirmergeParameters,
       dirmerge,
       dirmerge_config_params,
       dirmerge_execute,

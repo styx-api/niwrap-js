@@ -12,50 +12,17 @@ const MRIS_SEGMENTATION_STATS_METADATA: Metadata = {
 
 
 interface MrisSegmentationStatsParameters {
-    "@type": "freesurfer.mris_segmentation_stats";
+    "@type"?: "freesurfer/mris_segmentation_stats";
     "overlay_name": string;
     "segmentation_label_name": string;
     "subjects": Array<string>;
     "roc_file": string;
 }
+type MrisSegmentationStatsParametersTagged = Required<Pick<MrisSegmentationStatsParameters, '@type'>> & MrisSegmentationStatsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_segmentation_stats": mris_segmentation_stats_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_segmentation_stats": mris_segmentation_stats_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_segmentation_stats(...)`.
+ * Output object returned when calling `MrisSegmentationStatsParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mris_segmentation_stats_params(
     segmentation_label_name: string,
     subjects: Array<string>,
     roc_file: string,
-): MrisSegmentationStatsParameters {
+): MrisSegmentationStatsParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_segmentation_stats" as const,
+        "@type": "freesurfer/mris_segmentation_stats" as const,
         "overlay_name": overlay_name,
         "segmentation_label_name": segmentation_label_name,
         "subjects": subjects,
@@ -200,7 +167,6 @@ function mris_segmentation_stats(
 export {
       MRIS_SEGMENTATION_STATS_METADATA,
       MrisSegmentationStatsOutputs,
-      MrisSegmentationStatsParameters,
       mris_segmentation_stats,
       mris_segmentation_stats_execute,
       mris_segmentation_stats_params,

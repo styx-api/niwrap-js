@@ -12,46 +12,14 @@ const SEGMENT_MONKEY_METADATA: Metadata = {
 
 
 interface SegmentMonkeyParameters {
-    "@type": "freesurfer.segment_monkey";
+    "@type"?: "freesurfer/segment_monkey";
     "control_points": Array<string>;
 }
+type SegmentMonkeyParametersTagged = Required<Pick<SegmentMonkeyParameters, '@type'>> & SegmentMonkeyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.segment_monkey": segment_monkey_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `segment_monkey(...)`.
+ * Output object returned when calling `SegmentMonkeyParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface SegmentMonkeyOutputs {
  */
 function segment_monkey_params(
     control_points: Array<string>,
-): SegmentMonkeyParameters {
+): SegmentMonkeyParametersTagged {
     const params = {
-        "@type": "freesurfer.segment_monkey" as const,
+        "@type": "freesurfer/segment_monkey" as const,
         "control_points": control_points,
     };
     return params;
@@ -173,7 +141,6 @@ function segment_monkey(
 export {
       SEGMENT_MONKEY_METADATA,
       SegmentMonkeyOutputs,
-      SegmentMonkeyParameters,
       segment_monkey,
       segment_monkey_execute,
       segment_monkey_params,

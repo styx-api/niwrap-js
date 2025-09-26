@@ -12,7 +12,7 @@ const V_3D_TSMOOTH_METADATA: Metadata = {
 
 
 interface V3dTsmoothParameters {
-    "@type": "afni.3dTsmooth";
+    "@type"?: "afni/3dTsmooth";
     "input_dataset": InputPathType;
     "prefix"?: string | null | undefined;
     "datum_type"?: string | null | undefined;
@@ -28,44 +28,11 @@ interface V3dTsmoothParameters {
     "trend": boolean;
     "adaptive"?: number | null | undefined;
 }
+type V3dTsmoothParametersTagged = Required<Pick<V3dTsmoothParameters, '@type'>> & V3dTsmoothParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dTsmooth": v_3d_tsmooth_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dTsmooth": v_3d_tsmooth_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_tsmooth(...)`.
+ * Output object returned when calling `V3dTsmoothParameters(...)`.
  *
  * @interface
  */
@@ -116,9 +83,9 @@ function v_3d_tsmooth_params(
     zero: boolean = false,
     trend: boolean = false,
     adaptive: number | null = null,
-): V3dTsmoothParameters {
+): V3dTsmoothParametersTagged {
     const params = {
-        "@type": "afni.3dTsmooth" as const,
+        "@type": "afni/3dTsmooth" as const,
         "input_dataset": input_dataset,
         "lin_filter": lin_filter,
         "med_filter": med_filter,
@@ -179,13 +146,13 @@ function v_3d_tsmooth_cargs(
             (params["datum_type"] ?? null)
         );
     }
-    if ((params["lin_filter"] ?? null)) {
+    if ((params["lin_filter"] ?? false)) {
         cargs.push("-lin");
     }
-    if ((params["med_filter"] ?? null)) {
+    if ((params["med_filter"] ?? false)) {
         cargs.push("-med");
     }
-    if ((params["osf_filter"] ?? null)) {
+    if ((params["osf_filter"] ?? false)) {
         cargs.push("-osf");
     }
     if ((params["lin_filter_custom"] ?? null) !== null) {
@@ -212,13 +179,13 @@ function v_3d_tsmooth_cargs(
             execution.inputFile((params["custom_filter"] ?? null))
         );
     }
-    if ((params["extend"] ?? null)) {
+    if ((params["extend"] ?? false)) {
         cargs.push("-EXTEND");
     }
-    if ((params["zero"] ?? null)) {
+    if ((params["zero"] ?? false)) {
         cargs.push("-ZERO");
     }
-    if ((params["trend"] ?? null)) {
+    if ((params["trend"] ?? false)) {
         cargs.push("-TREND");
     }
     if ((params["adaptive"] ?? null) !== null) {
@@ -330,7 +297,6 @@ function v_3d_tsmooth(
 
 export {
       V3dTsmoothOutputs,
-      V3dTsmoothParameters,
       V_3D_TSMOOTH_METADATA,
       v_3d_tsmooth,
       v_3d_tsmooth_execute,

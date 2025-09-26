@@ -12,44 +12,49 @@ const METRIC_PALETTE_METADATA: Metadata = {
 
 
 interface MetricPalettePosPercentParameters {
-    "@type": "workbench.metric-palette.pos_percent";
+    "@type"?: "pos_percent";
     "pos_min__": number;
     "pos_max__": number;
 }
+type MetricPalettePosPercentParametersTagged = Required<Pick<MetricPalettePosPercentParameters, '@type'>> & MetricPalettePosPercentParameters;
 
 
 interface MetricPaletteNegPercentParameters {
-    "@type": "workbench.metric-palette.neg_percent";
+    "@type"?: "neg_percent";
     "neg_min__": number;
     "neg_max__": number;
 }
+type MetricPaletteNegPercentParametersTagged = Required<Pick<MetricPaletteNegPercentParameters, '@type'>> & MetricPaletteNegPercentParameters;
 
 
 interface MetricPalettePosUserParameters {
-    "@type": "workbench.metric-palette.pos_user";
+    "@type"?: "pos_user";
     "pos_min_user": number;
     "pos_max_user": number;
 }
+type MetricPalettePosUserParametersTagged = Required<Pick<MetricPalettePosUserParameters, '@type'>> & MetricPalettePosUserParameters;
 
 
 interface MetricPaletteNegUserParameters {
-    "@type": "workbench.metric-palette.neg_user";
+    "@type"?: "neg_user";
     "neg_min_user": number;
     "neg_max_user": number;
 }
+type MetricPaletteNegUserParametersTagged = Required<Pick<MetricPaletteNegUserParameters, '@type'>> & MetricPaletteNegUserParameters;
 
 
 interface MetricPaletteThresholdingParameters {
-    "@type": "workbench.metric-palette.thresholding";
+    "@type"?: "thresholding";
     "type": string;
     "test": string;
     "min": number;
     "max": number;
 }
+type MetricPaletteThresholdingParametersTagged = Required<Pick<MetricPaletteThresholdingParameters, '@type'>> & MetricPaletteThresholdingParameters;
 
 
 interface MetricPaletteParameters {
-    "@type": "workbench.metric-palette";
+    "@type"?: "workbench/metric-palette";
     "metric": string;
     "mode": string;
     "opt_column_column"?: string | null | undefined;
@@ -65,44 +70,7 @@ interface MetricPaletteParameters {
     "thresholding"?: MetricPaletteThresholdingParameters | null | undefined;
     "opt_inversion_type"?: string | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-palette": metric_palette_cargs,
-        "workbench.metric-palette.pos_percent": metric_palette_pos_percent_cargs,
-        "workbench.metric-palette.neg_percent": metric_palette_neg_percent_cargs,
-        "workbench.metric-palette.pos_user": metric_palette_pos_user_cargs,
-        "workbench.metric-palette.neg_user": metric_palette_neg_user_cargs,
-        "workbench.metric-palette.thresholding": metric_palette_thresholding_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type MetricPaletteParametersTagged = Required<Pick<MetricPaletteParameters, '@type'>> & MetricPaletteParameters;
 
 
 /**
@@ -116,9 +84,9 @@ function dynOutputs(
 function metric_palette_pos_percent_params(
     pos_min__: number,
     pos_max__: number,
-): MetricPalettePosPercentParameters {
+): MetricPalettePosPercentParametersTagged {
     const params = {
-        "@type": "workbench.metric-palette.pos_percent" as const,
+        "@type": "pos_percent" as const,
         "pos_min__": pos_min__,
         "pos_max__": pos_max__,
     };
@@ -157,9 +125,9 @@ function metric_palette_pos_percent_cargs(
 function metric_palette_neg_percent_params(
     neg_min__: number,
     neg_max__: number,
-): MetricPaletteNegPercentParameters {
+): MetricPaletteNegPercentParametersTagged {
     const params = {
-        "@type": "workbench.metric-palette.neg_percent" as const,
+        "@type": "neg_percent" as const,
         "neg_min__": neg_min__,
         "neg_max__": neg_max__,
     };
@@ -198,9 +166,9 @@ function metric_palette_neg_percent_cargs(
 function metric_palette_pos_user_params(
     pos_min_user: number,
     pos_max_user: number,
-): MetricPalettePosUserParameters {
+): MetricPalettePosUserParametersTagged {
     const params = {
-        "@type": "workbench.metric-palette.pos_user" as const,
+        "@type": "pos_user" as const,
         "pos_min_user": pos_min_user,
         "pos_max_user": pos_max_user,
     };
@@ -239,9 +207,9 @@ function metric_palette_pos_user_cargs(
 function metric_palette_neg_user_params(
     neg_min_user: number,
     neg_max_user: number,
-): MetricPaletteNegUserParameters {
+): MetricPaletteNegUserParametersTagged {
     const params = {
-        "@type": "workbench.metric-palette.neg_user" as const,
+        "@type": "neg_user" as const,
         "neg_min_user": neg_min_user,
         "neg_max_user": neg_max_user,
     };
@@ -284,9 +252,9 @@ function metric_palette_thresholding_params(
     test: string,
     min: number,
     max: number,
-): MetricPaletteThresholdingParameters {
+): MetricPaletteThresholdingParametersTagged {
     const params = {
-        "@type": "workbench.metric-palette.thresholding" as const,
+        "@type": "thresholding" as const,
         "type": type_,
         "test": test,
         "min": min,
@@ -319,7 +287,7 @@ function metric_palette_thresholding_cargs(
 
 
 /**
- * Output object returned when calling `metric_palette(...)`.
+ * Output object returned when calling `MetricPaletteParameters(...)`.
  *
  * @interface
  */
@@ -366,9 +334,9 @@ function metric_palette_params(
     opt_palette_name_name: string | null = null,
     thresholding: MetricPaletteThresholdingParameters | null = null,
     opt_inversion_type: string | null = null,
-): MetricPaletteParameters {
+): MetricPaletteParametersTagged {
     const params = {
-        "@type": "workbench.metric-palette" as const,
+        "@type": "workbench/metric-palette" as const,
         "metric": metric,
         "mode": mode,
     };
@@ -436,16 +404,16 @@ function metric_palette_cargs(
         );
     }
     if ((params["pos_percent"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["pos_percent"] ?? null)["@type"])((params["pos_percent"] ?? null), execution));
+        cargs.push(...metric_palette_pos_percent_cargs((params["pos_percent"] ?? null), execution));
     }
     if ((params["neg_percent"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["neg_percent"] ?? null)["@type"])((params["neg_percent"] ?? null), execution));
+        cargs.push(...metric_palette_neg_percent_cargs((params["neg_percent"] ?? null), execution));
     }
     if ((params["pos_user"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["pos_user"] ?? null)["@type"])((params["pos_user"] ?? null), execution));
+        cargs.push(...metric_palette_pos_user_cargs((params["pos_user"] ?? null), execution));
     }
     if ((params["neg_user"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["neg_user"] ?? null)["@type"])((params["neg_user"] ?? null), execution));
+        cargs.push(...metric_palette_neg_user_cargs((params["neg_user"] ?? null), execution));
     }
     if ((params["opt_interpolate_interpolate"] ?? null) !== null) {
         cargs.push(
@@ -478,7 +446,7 @@ function metric_palette_cargs(
         );
     }
     if ((params["thresholding"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["thresholding"] ?? null)["@type"])((params["thresholding"] ?? null), execution));
+        cargs.push(...metric_palette_thresholding_cargs((params["thresholding"] ?? null), execution));
     }
     if ((params["opt_inversion_type"] ?? null) !== null) {
         cargs.push(
@@ -732,13 +700,7 @@ function metric_palette(
 
 export {
       METRIC_PALETTE_METADATA,
-      MetricPaletteNegPercentParameters,
-      MetricPaletteNegUserParameters,
       MetricPaletteOutputs,
-      MetricPaletteParameters,
-      MetricPalettePosPercentParameters,
-      MetricPalettePosUserParameters,
-      MetricPaletteThresholdingParameters,
       metric_palette,
       metric_palette_execute,
       metric_palette_neg_percent_params,

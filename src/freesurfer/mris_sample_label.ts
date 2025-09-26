@@ -12,49 +12,16 @@ const MRIS_SAMPLE_LABEL_METADATA: Metadata = {
 
 
 interface MrisSampleLabelParameters {
-    "@type": "freesurfer.mris_sample_label";
+    "@type"?: "freesurfer/mris_sample_label";
     "input_label_file": InputPathType;
     "input_surface_file": InputPathType;
     "output_label_file": string;
 }
+type MrisSampleLabelParametersTagged = Required<Pick<MrisSampleLabelParameters, '@type'>> & MrisSampleLabelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_sample_label": mris_sample_label_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_sample_label": mris_sample_label_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_sample_label(...)`.
+ * Output object returned when calling `MrisSampleLabelParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mris_sample_label_params(
     input_label_file: InputPathType,
     input_surface_file: InputPathType,
     output_label_file: string,
-): MrisSampleLabelParameters {
+): MrisSampleLabelParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_sample_label" as const,
+        "@type": "freesurfer/mris_sample_label" as const,
         "input_label_file": input_label_file,
         "input_surface_file": input_surface_file,
         "output_label_file": output_label_file,
@@ -193,7 +160,6 @@ function mris_sample_label(
 export {
       MRIS_SAMPLE_LABEL_METADATA,
       MrisSampleLabelOutputs,
-      MrisSampleLabelParameters,
       mris_sample_label,
       mris_sample_label_execute,
       mris_sample_label_params,

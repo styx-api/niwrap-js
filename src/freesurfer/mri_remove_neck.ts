@@ -12,50 +12,17 @@ const MRI_REMOVE_NECK_METADATA: Metadata = {
 
 
 interface MriRemoveNeckParameters {
-    "@type": "freesurfer.mri_remove_neck";
+    "@type"?: "freesurfer/mri_remove_neck";
     "input_volume": InputPathType;
     "transform": InputPathType;
     "gca": InputPathType;
     "output_volume": string;
 }
+type MriRemoveNeckParametersTagged = Required<Pick<MriRemoveNeckParameters, '@type'>> & MriRemoveNeckParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_remove_neck": mri_remove_neck_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_remove_neck": mri_remove_neck_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_remove_neck(...)`.
+ * Output object returned when calling `MriRemoveNeckParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mri_remove_neck_params(
     transform: InputPathType,
     gca: InputPathType,
     output_volume: string,
-): MriRemoveNeckParameters {
+): MriRemoveNeckParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_remove_neck" as const,
+        "@type": "freesurfer/mri_remove_neck" as const,
         "input_volume": input_volume,
         "transform": transform,
         "gca": gca,
@@ -200,7 +167,6 @@ function mri_remove_neck(
 export {
       MRI_REMOVE_NECK_METADATA,
       MriRemoveNeckOutputs,
-      MriRemoveNeckParameters,
       mri_remove_neck,
       mri_remove_neck_execute,
       mri_remove_neck_params,

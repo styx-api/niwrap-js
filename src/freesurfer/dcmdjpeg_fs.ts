@@ -12,7 +12,7 @@ const DCMDJPEG_FS_METADATA: Metadata = {
 
 
 interface DcmdjpegFsParameters {
-    "@type": "freesurfer.dcmdjpeg.fs";
+    "@type"?: "freesurfer/dcmdjpeg.fs";
     "input_file": InputPathType;
     "output_file": string;
     "help": boolean;
@@ -55,44 +55,11 @@ interface DcmdjpegFsParameters {
     "padding_off": boolean;
     "padding_create"?: Array<number> | null | undefined;
 }
+type DcmdjpegFsParametersTagged = Required<Pick<DcmdjpegFsParameters, '@type'>> & DcmdjpegFsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dcmdjpeg.fs": dcmdjpeg_fs_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.dcmdjpeg.fs": dcmdjpeg_fs_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dcmdjpeg_fs(...)`.
+ * Output object returned when calling `DcmdjpegFsParameters(...)`.
  *
  * @interface
  */
@@ -197,9 +164,9 @@ function dcmdjpeg_fs_params(
     padding_retain: boolean = false,
     padding_off: boolean = false,
     padding_create: Array<number> | null = null,
-): DcmdjpegFsParameters {
+): DcmdjpegFsParametersTagged {
     const params = {
-        "@type": "freesurfer.dcmdjpeg.fs" as const,
+        "@type": "freesurfer/dcmdjpeg.fs" as const,
         "input_file": input_file,
         "output_file": output_file,
         "help": help,
@@ -268,22 +235,22 @@ function dcmdjpeg_fs_cargs(
     cargs.push("dcmdjpeg.fs");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
     cargs.push((params["output_file"] ?? null));
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["arguments"] ?? null)) {
+    if ((params["arguments"] ?? false)) {
         cargs.push("--arguments");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-q");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-d");
     }
     if ((params["log_level"] ?? null) !== null) {
@@ -298,94 +265,94 @@ function dcmdjpeg_fs_cargs(
             execution.inputFile((params["log_config"] ?? null))
         );
     }
-    if ((params["read_file"] ?? null)) {
+    if ((params["read_file"] ?? false)) {
         cargs.push("+f");
     }
-    if ((params["read_file_only"] ?? null)) {
+    if ((params["read_file_only"] ?? false)) {
         cargs.push("+fo");
     }
-    if ((params["read_dataset"] ?? null)) {
+    if ((params["read_dataset"] ?? false)) {
         cargs.push("-f");
     }
-    if ((params["conv_photometric"] ?? null)) {
+    if ((params["conv_photometric"] ?? false)) {
         cargs.push("+cp");
     }
-    if ((params["conv_lossy"] ?? null)) {
+    if ((params["conv_lossy"] ?? false)) {
         cargs.push("+cl");
     }
-    if ((params["conv_guess"] ?? null)) {
+    if ((params["conv_guess"] ?? false)) {
         cargs.push("+cg");
     }
-    if ((params["conv_guess_lossy"] ?? null)) {
+    if ((params["conv_guess_lossy"] ?? false)) {
         cargs.push("+cgl");
     }
-    if ((params["conv_always"] ?? null)) {
+    if ((params["conv_always"] ?? false)) {
         cargs.push("+ca");
     }
-    if ((params["conv_never"] ?? null)) {
+    if ((params["conv_never"] ?? false)) {
         cargs.push("+cn");
     }
-    if ((params["planar_auto"] ?? null)) {
+    if ((params["planar_auto"] ?? false)) {
         cargs.push("+pa");
     }
-    if ((params["color_by_pixel"] ?? null)) {
+    if ((params["color_by_pixel"] ?? false)) {
         cargs.push("+px");
     }
-    if ((params["color_by_plane"] ?? null)) {
+    if ((params["color_by_plane"] ?? false)) {
         cargs.push("+pl");
     }
-    if ((params["uid_default"] ?? null)) {
+    if ((params["uid_default"] ?? false)) {
         cargs.push("+ud");
     }
-    if ((params["uid_always"] ?? null)) {
+    if ((params["uid_always"] ?? false)) {
         cargs.push("+ua");
     }
-    if ((params["workaround_pred6"] ?? null)) {
+    if ((params["workaround_pred6"] ?? false)) {
         cargs.push("+w6");
     }
-    if ((params["workaround_incpl"] ?? null)) {
+    if ((params["workaround_incpl"] ?? false)) {
         cargs.push("+wi");
     }
-    if ((params["write_file"] ?? null)) {
+    if ((params["write_file"] ?? false)) {
         cargs.push("+F");
     }
-    if ((params["write_dataset"] ?? null)) {
+    if ((params["write_dataset"] ?? false)) {
         cargs.push("-F");
     }
-    if ((params["write_xfer_little"] ?? null)) {
+    if ((params["write_xfer_little"] ?? false)) {
         cargs.push("+te");
     }
-    if ((params["write_xfer_big"] ?? null)) {
+    if ((params["write_xfer_big"] ?? false)) {
         cargs.push("+tb");
     }
-    if ((params["write_xfer_implicit"] ?? null)) {
+    if ((params["write_xfer_implicit"] ?? false)) {
         cargs.push("+ti");
     }
-    if ((params["enable_new_vr"] ?? null)) {
+    if ((params["enable_new_vr"] ?? false)) {
         cargs.push("+u");
     }
-    if ((params["disable_new_vr"] ?? null)) {
+    if ((params["disable_new_vr"] ?? false)) {
         cargs.push("-u");
     }
-    if ((params["group_length_recalc"] ?? null)) {
+    if ((params["group_length_recalc"] ?? false)) {
         cargs.push("+g=");
     }
-    if ((params["group_length_create"] ?? null)) {
+    if ((params["group_length_create"] ?? false)) {
         cargs.push("+g");
     }
-    if ((params["group_length_remove"] ?? null)) {
+    if ((params["group_length_remove"] ?? false)) {
         cargs.push("-g");
     }
-    if ((params["length_explicit"] ?? null)) {
+    if ((params["length_explicit"] ?? false)) {
         cargs.push("+e");
     }
-    if ((params["length_undefined"] ?? null)) {
+    if ((params["length_undefined"] ?? false)) {
         cargs.push("-e");
     }
-    if ((params["padding_retain"] ?? null)) {
+    if ((params["padding_retain"] ?? false)) {
         cargs.push("-p=");
     }
-    if ((params["padding_off"] ?? null)) {
+    if ((params["padding_off"] ?? false)) {
         cargs.push("-p");
     }
     if ((params["padding_create"] ?? null) !== null) {
@@ -552,7 +519,6 @@ function dcmdjpeg_fs(
 export {
       DCMDJPEG_FS_METADATA,
       DcmdjpegFsOutputs,
-      DcmdjpegFsParameters,
       dcmdjpeg_fs,
       dcmdjpeg_fs_execute,
       dcmdjpeg_fs_params,

@@ -12,7 +12,7 @@ const MM_METADATA: Metadata = {
 
 
 interface MmParameters {
-    "@type": "fsl.mm";
+    "@type"?: "fsl/mm";
     "spatial_data_file": InputPathType;
     "mask_file": InputPathType;
     "verbose_flag": boolean;
@@ -31,43 +31,11 @@ interface MmParameters {
     "niters"?: number | null | undefined;
     "threshold"?: number | null | undefined;
 }
+type MmParametersTagged = Required<Pick<MmParameters, '@type'>> & MmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.mm": mm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mm(...)`.
+ * Output object returned when calling `MmParameters(...)`.
  *
  * @interface
  */
@@ -120,9 +88,9 @@ function mm_params(
     phi: number | null = null,
     niters: number | null = null,
     threshold: number | null = null,
-): MmParameters {
+): MmParametersTagged {
     const params = {
-        "@type": "fsl.mm" as const,
+        "@type": "fsl/mm" as const,
         "spatial_data_file": spatial_data_file,
         "mask_file": mask_file,
         "verbose_flag": verbose_flag,
@@ -185,7 +153,7 @@ function mm_cargs(
         "-m",
         execution.inputFile((params["mask_file"] ?? null))
     );
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("--verbose");
     }
     if ((params["debug_level"] ?? null) !== null) {
@@ -194,7 +162,7 @@ function mm_cargs(
             (params["debug_level"] ?? null)
         );
     }
-    if ((params["timing_flag"] ?? null)) {
+    if ((params["timing_flag"] ?? false)) {
         cargs.push("--timingon");
     }
     if ((params["example_epi_file"] ?? null) !== null) {
@@ -209,10 +177,10 @@ function mm_cargs(
             (params["log_directory"] ?? null)
         );
     }
-    if ((params["nonspatial_flag"] ?? null)) {
+    if ((params["nonspatial_flag"] ?? false)) {
         cargs.push("--ns");
     }
-    if ((params["fix_mrf_precision_flag"] ?? null)) {
+    if ((params["fix_mrf_precision_flag"] ?? false)) {
         cargs.push("--fmp");
     }
     if ((params["mrf_prec_start"] ?? null) !== null) {
@@ -233,10 +201,10 @@ function mm_cargs(
             String((params["init_multiplier"] ?? null))
         );
     }
-    if ((params["no_update_theta_flag"] ?? null)) {
+    if ((params["no_update_theta_flag"] ?? false)) {
         cargs.push("--nut");
     }
-    if ((params["zfstat_flag"] ?? null)) {
+    if ((params["zfstat_flag"] ?? false)) {
         cargs.push("--zfstatmode");
     }
     if ((params["phi"] ?? null) !== null) {
@@ -366,7 +334,6 @@ function mm(
 export {
       MM_METADATA,
       MmOutputs,
-      MmParameters,
       mm,
       mm_execute,
       mm_params,

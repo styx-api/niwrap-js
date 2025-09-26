@@ -12,48 +12,16 @@ const V_24SWAP_METADATA: Metadata = {
 
 
 interface V24swapParameters {
-    "@type": "afni.24swap";
+    "@type"?: "afni/24swap";
     "quiet": boolean;
     "pattern"?: string | null | undefined;
     "input_files": Array<InputPathType>;
 }
+type V24swapParametersTagged = Required<Pick<V24swapParameters, '@type'>> & V24swapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.24swap": v_24swap_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_24swap(...)`.
+ * Output object returned when calling `V24swapParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function v_24swap_params(
     input_files: Array<InputPathType>,
     quiet: boolean = false,
     pattern: string | null = null,
-): V24swapParameters {
+): V24swapParametersTagged {
     const params = {
-        "@type": "afni.24swap" as const,
+        "@type": "afni/24swap" as const,
         "quiet": quiet,
         "input_files": input_files,
     };
@@ -105,7 +73,7 @@ function v_24swap_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("24swap");
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-q");
     }
     if ((params["pattern"] ?? null) !== null) {
@@ -195,7 +163,6 @@ function v_24swap(
 
 export {
       V24swapOutputs,
-      V24swapParameters,
       V_24SWAP_METADATA,
       v_24swap,
       v_24swap_execute,

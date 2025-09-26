@@ -12,7 +12,7 @@ const BBLABEL_METADATA: Metadata = {
 
 
 interface BblabelParameters {
-    "@type": "freesurfer.bblabel";
+    "@type"?: "freesurfer/bblabel";
     "labelfile": InputPathType;
     "xmin"?: number | null | undefined;
     "xmax"?: number | null | undefined;
@@ -24,44 +24,11 @@ interface BblabelParameters {
     "debug": boolean;
     "umask"?: string | null | undefined;
 }
+type BblabelParametersTagged = Required<Pick<BblabelParameters, '@type'>> & BblabelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.bblabel": bblabel_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.bblabel": bblabel_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `bblabel(...)`.
+ * Output object returned when calling `BblabelParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function bblabel_params(
     zmax: number | null = null,
     debug: boolean = false,
     umask: string | null = null,
-): BblabelParameters {
+): BblabelParametersTagged {
     const params = {
-        "@type": "freesurfer.bblabel" as const,
+        "@type": "freesurfer/bblabel" as const,
         "labelfile": labelfile,
         "outlabelfile": outlabelfile,
         "debug": debug,
@@ -194,7 +161,7 @@ function bblabel_cargs(
         "--o",
         (params["outlabelfile"] ?? null)
     );
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     if ((params["umask"] ?? null) !== null) {
@@ -299,7 +266,6 @@ function bblabel(
 export {
       BBLABEL_METADATA,
       BblabelOutputs,
-      BblabelParameters,
       bblabel,
       bblabel_execute,
       bblabel_params,

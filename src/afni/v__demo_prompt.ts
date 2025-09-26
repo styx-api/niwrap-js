@@ -12,47 +12,14 @@ const V__DEMO_PROMPT_METADATA: Metadata = {
 
 
 interface VDemoPromptParameters {
-    "@type": "afni.@demo_prompt";
+    "@type"?: "afni/@demo_prompt";
     "message": string;
 }
+type VDemoPromptParametersTagged = Required<Pick<VDemoPromptParameters, '@type'>> & VDemoPromptParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@demo_prompt": v__demo_prompt_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@demo_prompt": v__demo_prompt_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__demo_prompt(...)`.
+ * Output object returned when calling `VDemoPromptParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface VDemoPromptOutputs {
  */
 function v__demo_prompt_params(
     message: string,
-): VDemoPromptParameters {
+): VDemoPromptParametersTagged {
     const params = {
-        "@type": "afni.@demo_prompt" as const,
+        "@type": "afni/@demo_prompt" as const,
         "message": message,
     };
     return params;
@@ -178,7 +145,6 @@ function v__demo_prompt(
 
 export {
       VDemoPromptOutputs,
-      VDemoPromptParameters,
       V__DEMO_PROMPT_METADATA,
       v__demo_prompt,
       v__demo_prompt_execute,

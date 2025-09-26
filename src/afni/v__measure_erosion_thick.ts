@@ -12,7 +12,7 @@ const V__MEASURE_EROSION_THICK_METADATA: Metadata = {
 
 
 interface VMeasureErosionThickParameters {
-    "@type": "afni.@measure_erosion_thick";
+    "@type"?: "afni/@measure_erosion_thick";
     "maskset": InputPathType;
     "surfset": InputPathType;
     "outdir"?: string | null | undefined;
@@ -24,44 +24,11 @@ interface VMeasureErosionThickParameters {
     "keep_temp_files": boolean;
     "surfsmooth_method"?: string | null | undefined;
 }
+type VMeasureErosionThickParametersTagged = Required<Pick<VMeasureErosionThickParameters, '@type'>> & VMeasureErosionThickParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@measure_erosion_thick": v__measure_erosion_thick_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@measure_erosion_thick": v__measure_erosion_thick_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__measure_erosion_thick(...)`.
+ * Output object returned when calling `VMeasureErosionThickParameters(...)`.
  *
  * @interface
  */
@@ -136,9 +103,9 @@ function v__measure_erosion_thick_params(
     depthsearch: number | null = null,
     keep_temp_files: boolean = false,
     surfsmooth_method: string | null = null,
-): VMeasureErosionThickParameters {
+): VMeasureErosionThickParametersTagged {
     const params = {
-        "@type": "afni.@measure_erosion_thick" as const,
+        "@type": "afni/@measure_erosion_thick" as const,
         "maskset": maskset,
         "surfset": surfset,
         "keep_temp_files": keep_temp_files,
@@ -226,7 +193,7 @@ function v__measure_erosion_thick_cargs(
             String((params["depthsearch"] ?? null))
         );
     }
-    if ((params["keep_temp_files"] ?? null)) {
+    if ((params["keep_temp_files"] ?? false)) {
         cargs.push("-keep_temp_files");
     }
     if ((params["surfsmooth_method"] ?? null) !== null) {
@@ -338,7 +305,6 @@ function v__measure_erosion_thick(
 
 export {
       VMeasureErosionThickOutputs,
-      VMeasureErosionThickParameters,
       V__MEASURE_EROSION_THICK_METADATA,
       v__measure_erosion_thick,
       v__measure_erosion_thick_execute,

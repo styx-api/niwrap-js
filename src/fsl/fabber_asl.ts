@@ -12,7 +12,7 @@ const FABBER_ASL_METADATA: Metadata = {
 
 
 interface FabberAslParameters {
-    "@type": "fsl.fabber_asl";
+    "@type"?: "fsl/fabber_asl";
     "listmethods": boolean;
     "listmodels": boolean;
     "listparams": boolean;
@@ -46,44 +46,11 @@ interface FabberAslParameters {
     "optfile"?: string | null | undefined;
     "debug": boolean;
 }
+type FabberAslParametersTagged = Required<Pick<FabberAslParameters, '@type'>> & FabberAslParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fabber_asl": fabber_asl_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fabber_asl": fabber_asl_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fabber_asl(...)`.
+ * Output object returned when calling `FabberAslParameters(...)`.
  *
  * @interface
  */
@@ -214,9 +181,9 @@ function fabber_asl_params(
     save_free_energy: boolean = false,
     optfile: string | null = null,
     debug: boolean = false,
-): FabberAslParameters {
+): FabberAslParametersTagged {
     const params = {
-        "@type": "fsl.fabber_asl" as const,
+        "@type": "fsl/fabber_asl" as const,
         "listmethods": listmethods,
         "listmodels": listmodels,
         "listparams": listparams,
@@ -282,19 +249,19 @@ function fabber_asl_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("fabber_asl");
-    if ((params["listmethods"] ?? null)) {
+    if ((params["listmethods"] ?? false)) {
         cargs.push("--listmethods");
     }
-    if ((params["listmodels"] ?? null)) {
+    if ((params["listmodels"] ?? false)) {
         cargs.push("--listmodels");
     }
-    if ((params["listparams"] ?? null)) {
+    if ((params["listparams"] ?? false)) {
         cargs.push("--listparams");
     }
-    if ((params["descparams"] ?? null)) {
+    if ((params["descparams"] ?? false)) {
         cargs.push("--descparams");
     }
-    if ((params["listoutputs"] ?? null)) {
+    if ((params["listoutputs"] ?? false)) {
         cargs.push("--listoutputs");
     }
     if ((params["evaluate"] ?? null) !== null) {
@@ -306,14 +273,14 @@ function fabber_asl_cargs(
     if ((params["evaluate_nt"] ?? null) !== null) {
         cargs.push(String((params["evaluate_nt"] ?? null)));
     }
-    if ((params["simple_output"] ?? null)) {
+    if ((params["simple_output"] ?? false)) {
         cargs.push("--simple-output");
     }
     cargs.push((params["output"] ?? null));
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("--overwrite");
     }
-    if ((params["link_to_latest"] ?? null)) {
+    if ((params["link_to_latest"] ?? false)) {
         cargs.push("--link-to-latest");
     }
     cargs.push((params["method"] ?? null));
@@ -328,46 +295,46 @@ function fabber_asl_cargs(
     if ((params["suppdata"] ?? null) !== null) {
         cargs.push(execution.inputFile((params["suppdata"] ?? null)));
     }
-    if ((params["dump_param_names"] ?? null)) {
+    if ((params["dump_param_names"] ?? false)) {
         cargs.push("--dump-param-names");
     }
-    if ((params["save_model_fit"] ?? null)) {
+    if ((params["save_model_fit"] ?? false)) {
         cargs.push("--save-model-fit");
     }
-    if ((params["save_residuals"] ?? null)) {
+    if ((params["save_residuals"] ?? false)) {
         cargs.push("--save-residuals");
     }
-    if ((params["save_model_extras"] ?? null)) {
+    if ((params["save_model_extras"] ?? false)) {
         cargs.push("--save-model-extras");
     }
-    if ((params["save_mvn"] ?? null)) {
+    if ((params["save_mvn"] ?? false)) {
         cargs.push("--save-mvn");
     }
-    if ((params["save_mean"] ?? null)) {
+    if ((params["save_mean"] ?? false)) {
         cargs.push("--save-mean");
     }
-    if ((params["save_std"] ?? null)) {
+    if ((params["save_std"] ?? false)) {
         cargs.push("--save-std");
     }
-    if ((params["save_var"] ?? null)) {
+    if ((params["save_var"] ?? false)) {
         cargs.push("--save-var");
     }
-    if ((params["save_zstat"] ?? null)) {
+    if ((params["save_zstat"] ?? false)) {
         cargs.push("--save-zstat");
     }
-    if ((params["save_noise_mean"] ?? null)) {
+    if ((params["save_noise_mean"] ?? false)) {
         cargs.push("--save-noise-mean");
     }
-    if ((params["save_noise_std"] ?? null)) {
+    if ((params["save_noise_std"] ?? false)) {
         cargs.push("--save-noise-std");
     }
-    if ((params["save_free_energy"] ?? null)) {
+    if ((params["save_free_energy"] ?? false)) {
         cargs.push("--save-free-energy");
     }
     if ((params["optfile"] ?? null) !== null) {
         cargs.push((params["optfile"] ?? null));
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -521,7 +488,6 @@ function fabber_asl(
 export {
       FABBER_ASL_METADATA,
       FabberAslOutputs,
-      FabberAslParameters,
       fabber_asl,
       fabber_asl_execute,
       fabber_asl_params,

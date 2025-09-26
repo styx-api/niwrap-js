@@ -12,50 +12,18 @@ const APQC_MAKE_TCSH_PY_METADATA: Metadata = {
 
 
 interface ApqcMakeTcshPyParameters {
-    "@type": "afni.apqc_make_tcsh.py";
+    "@type"?: "afni/apqc_make_tcsh.py";
     "uvar_json": InputPathType;
     "subj_dir": string;
     "review_style"?: string | null | undefined;
     "mot_grayplot_off": boolean;
     "vstat_list"?: Array<string> | null | undefined;
 }
+type ApqcMakeTcshPyParametersTagged = Required<Pick<ApqcMakeTcshPyParameters, '@type'>> & ApqcMakeTcshPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.apqc_make_tcsh.py": apqc_make_tcsh_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `apqc_make_tcsh_py(...)`.
+ * Output object returned when calling `ApqcMakeTcshPyParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function apqc_make_tcsh_py_params(
     review_style: string | null = null,
     mot_grayplot_off: boolean = false,
     vstat_list: Array<string> | null = null,
-): ApqcMakeTcshPyParameters {
+): ApqcMakeTcshPyParametersTagged {
     const params = {
-        "@type": "afni.apqc_make_tcsh.py" as const,
+        "@type": "afni/apqc_make_tcsh.py" as const,
         "uvar_json": uvar_json,
         "subj_dir": subj_dir,
         "mot_grayplot_off": mot_grayplot_off,
@@ -129,7 +97,7 @@ function apqc_make_tcsh_py_cargs(
             (params["review_style"] ?? null)
         );
     }
-    if ((params["mot_grayplot_off"] ?? null)) {
+    if ((params["mot_grayplot_off"] ?? false)) {
         cargs.push("-mot_grayplot_off");
     }
     if ((params["vstat_list"] ?? null) !== null) {
@@ -223,7 +191,6 @@ function apqc_make_tcsh_py(
 export {
       APQC_MAKE_TCSH_PY_METADATA,
       ApqcMakeTcshPyOutputs,
-      ApqcMakeTcshPyParameters,
       apqc_make_tcsh_py,
       apqc_make_tcsh_py_execute,
       apqc_make_tcsh_py_params,

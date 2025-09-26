@@ -12,25 +12,28 @@ const SCENE_FILE_UPDATE_METADATA: Metadata = {
 
 
 interface SceneFileUpdateCopyMapOnePaletteParameters {
-    "@type": "workbench.scene-file-update.copy_map_one_palette";
+    "@type"?: "copy_map_one_palette";
     "data_file_name_suffix": string;
 }
+type SceneFileUpdateCopyMapOnePaletteParametersTagged = Required<Pick<SceneFileUpdateCopyMapOnePaletteParameters, '@type'>> & SceneFileUpdateCopyMapOnePaletteParameters;
 
 
 interface SceneFileUpdateDataFileAddParameters {
-    "@type": "workbench.scene-file-update.data_file_add";
+    "@type"?: "data_file_add";
     "name_of_data_file": string;
 }
+type SceneFileUpdateDataFileAddParametersTagged = Required<Pick<SceneFileUpdateDataFileAddParameters, '@type'>> & SceneFileUpdateDataFileAddParameters;
 
 
 interface SceneFileUpdateDataFileRemoveParameters {
-    "@type": "workbench.scene-file-update.data_file_remove";
+    "@type"?: "data_file_remove";
     "name_of_data_file": string;
 }
+type SceneFileUpdateDataFileRemoveParametersTagged = Required<Pick<SceneFileUpdateDataFileRemoveParameters, '@type'>> & SceneFileUpdateDataFileRemoveParameters;
 
 
 interface SceneFileUpdateParameters {
-    "@type": "workbench.scene-file-update";
+    "@type"?: "workbench/scene-file-update";
     "input_scene_file": string;
     "output_scene_file": string;
     "scene_name_or_number": string;
@@ -42,42 +45,7 @@ interface SceneFileUpdateParameters {
     "data_file_add"?: Array<SceneFileUpdateDataFileAddParameters> | null | undefined;
     "data_file_remove"?: Array<SceneFileUpdateDataFileRemoveParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.scene-file-update": scene_file_update_cargs,
-        "workbench.scene-file-update.copy_map_one_palette": scene_file_update_copy_map_one_palette_cargs,
-        "workbench.scene-file-update.data_file_add": scene_file_update_data_file_add_cargs,
-        "workbench.scene-file-update.data_file_remove": scene_file_update_data_file_remove_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type SceneFileUpdateParametersTagged = Required<Pick<SceneFileUpdateParameters, '@type'>> & SceneFileUpdateParameters;
 
 
 /**
@@ -89,9 +57,9 @@ function dynOutputs(
  */
 function scene_file_update_copy_map_one_palette_params(
     data_file_name_suffix: string,
-): SceneFileUpdateCopyMapOnePaletteParameters {
+): SceneFileUpdateCopyMapOnePaletteParametersTagged {
     const params = {
-        "@type": "workbench.scene-file-update.copy_map_one_palette" as const,
+        "@type": "copy_map_one_palette" as const,
         "data_file_name_suffix": data_file_name_suffix,
     };
     return params;
@@ -128,9 +96,9 @@ Example on UNIX to create a text file containing all CIFTI scalar files in the c
  */
 function scene_file_update_data_file_add_params(
     name_of_data_file: string,
-): SceneFileUpdateDataFileAddParameters {
+): SceneFileUpdateDataFileAddParametersTagged {
     const params = {
-        "@type": "workbench.scene-file-update.data_file_add" as const,
+        "@type": "data_file_add" as const,
         "name_of_data_file": name_of_data_file,
     };
     return params;
@@ -167,9 +135,9 @@ Example on UNIX to create a text file containing all CIFTI scalar files in the c
  */
 function scene_file_update_data_file_remove_params(
     name_of_data_file: string,
-): SceneFileUpdateDataFileRemoveParameters {
+): SceneFileUpdateDataFileRemoveParametersTagged {
     const params = {
-        "@type": "workbench.scene-file-update.data_file_remove" as const,
+        "@type": "data_file_remove" as const,
         "name_of_data_file": name_of_data_file,
     };
     return params;
@@ -196,7 +164,7 @@ function scene_file_update_data_file_remove_cargs(
 
 
 /**
- * Output object returned when calling `scene_file_update(...)`.
+ * Output object returned when calling `SceneFileUpdateParameters(...)`.
  *
  * @interface
  */
@@ -235,9 +203,9 @@ function scene_file_update_params(
     copy_map_one_palette: Array<SceneFileUpdateCopyMapOnePaletteParameters> | null = null,
     data_file_add: Array<SceneFileUpdateDataFileAddParameters> | null = null,
     data_file_remove: Array<SceneFileUpdateDataFileRemoveParameters> | null = null,
-): SceneFileUpdateParameters {
+): SceneFileUpdateParametersTagged {
     const params = {
-        "@type": "workbench.scene-file-update" as const,
+        "@type": "workbench/scene-file-update" as const,
         "input_scene_file": input_scene_file,
         "output_scene_file": output_scene_file,
         "scene_name_or_number": scene_name_or_number,
@@ -277,26 +245,26 @@ function scene_file_update_cargs(
     cargs.push((params["input_scene_file"] ?? null));
     cargs.push((params["output_scene_file"] ?? null));
     cargs.push((params["scene_name_or_number"] ?? null));
-    if ((params["opt_fix_map_palette_settings"] ?? null)) {
+    if ((params["opt_fix_map_palette_settings"] ?? false)) {
         cargs.push("-fix-map-palette-settings");
     }
-    if ((params["opt_remove_missing_files"] ?? null)) {
+    if ((params["opt_remove_missing_files"] ?? false)) {
         cargs.push("-remove-missing-files");
     }
-    if ((params["opt_error"] ?? null)) {
+    if ((params["opt_error"] ?? false)) {
         cargs.push("-error");
     }
-    if ((params["opt_verbose"] ?? null)) {
+    if ((params["opt_verbose"] ?? false)) {
         cargs.push("-verbose");
     }
     if ((params["copy_map_one_palette"] ?? null) !== null) {
-        cargs.push(...(params["copy_map_one_palette"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["copy_map_one_palette"] ?? null).map(s => scene_file_update_copy_map_one_palette_cargs(s, execution)).flat());
     }
     if ((params["data_file_add"] ?? null) !== null) {
-        cargs.push(...(params["data_file_add"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["data_file_add"] ?? null).map(s => scene_file_update_data_file_add_cargs(s, execution)).flat());
     }
     if ((params["data_file_remove"] ?? null) !== null) {
-        cargs.push(...(params["data_file_remove"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["data_file_remove"] ?? null).map(s => scene_file_update_data_file_remove_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -414,11 +382,7 @@ function scene_file_update(
 
 export {
       SCENE_FILE_UPDATE_METADATA,
-      SceneFileUpdateCopyMapOnePaletteParameters,
-      SceneFileUpdateDataFileAddParameters,
-      SceneFileUpdateDataFileRemoveParameters,
       SceneFileUpdateOutputs,
-      SceneFileUpdateParameters,
       scene_file_update,
       scene_file_update_copy_map_one_palette_params,
       scene_file_update_data_file_add_params,

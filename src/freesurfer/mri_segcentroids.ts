@@ -12,7 +12,7 @@ const MRI_SEGCENTROIDS_METADATA: Metadata = {
 
 
 interface MriSegcentroidsParameters {
-    "@type": "freesurfer.mri_segcentroids";
+    "@type"?: "freesurfer/mri_segcentroids";
     "input_segmentation": InputPathType;
     "output_file": string;
     "pointset_flag": boolean;
@@ -21,44 +21,11 @@ interface MriSegcentroidsParameters {
     "lut_file"?: InputPathType | null | undefined;
     "default_lut_flag": boolean;
 }
+type MriSegcentroidsParametersTagged = Required<Pick<MriSegcentroidsParameters, '@type'>> & MriSegcentroidsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_segcentroids": mri_segcentroids_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_segcentroids": mri_segcentroids_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_segcentroids(...)`.
+ * Output object returned when calling `MriSegcentroidsParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function mri_segcentroids_params(
     weights_file: InputPathType | null = null,
     lut_file: InputPathType | null = null,
     default_lut_flag: boolean = false,
-): MriSegcentroidsParameters {
+): MriSegcentroidsParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_segcentroids" as const,
+        "@type": "freesurfer/mri_segcentroids" as const,
         "input_segmentation": input_segmentation,
         "output_file": output_file,
         "pointset_flag": pointset_flag,
@@ -138,7 +105,7 @@ function mri_segcentroids_cargs(
         "--o",
         (params["output_file"] ?? null)
     );
-    if ((params["pointset_flag"] ?? null)) {
+    if ((params["pointset_flag"] ?? false)) {
         cargs.push("--p");
     }
     if ((params["registration_file"] ?? null) !== null) {
@@ -159,7 +126,7 @@ function mri_segcentroids_cargs(
             execution.inputFile((params["lut_file"] ?? null))
         );
     }
-    if ((params["default_lut_flag"] ?? null)) {
+    if ((params["default_lut_flag"] ?? false)) {
         cargs.push("--ctab-default");
     }
     return cargs;
@@ -252,7 +219,6 @@ function mri_segcentroids(
 export {
       MRI_SEGCENTROIDS_METADATA,
       MriSegcentroidsOutputs,
-      MriSegcentroidsParameters,
       mri_segcentroids,
       mri_segcentroids_execute,
       mri_segcentroids_params,

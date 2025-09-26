@@ -12,49 +12,16 @@ const HISTO_SYNTHESIZE_METADATA: Metadata = {
 
 
 interface HistoSynthesizeParameters {
-    "@type": "freesurfer.histo_synthesize";
+    "@type"?: "freesurfer/histo_synthesize";
     "mri_volume": InputPathType;
     "histo_volume": InputPathType;
     "synthetic_histo": string;
 }
+type HistoSynthesizeParametersTagged = Required<Pick<HistoSynthesizeParameters, '@type'>> & HistoSynthesizeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.histo_synthesize": histo_synthesize_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.histo_synthesize": histo_synthesize_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `histo_synthesize(...)`.
+ * Output object returned when calling `HistoSynthesizeParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function histo_synthesize_params(
     mri_volume: InputPathType,
     histo_volume: InputPathType,
     synthetic_histo: string,
-): HistoSynthesizeParameters {
+): HistoSynthesizeParametersTagged {
     const params = {
-        "@type": "freesurfer.histo_synthesize" as const,
+        "@type": "freesurfer/histo_synthesize" as const,
         "mri_volume": mri_volume,
         "histo_volume": histo_volume,
         "synthetic_histo": synthetic_histo,
@@ -193,7 +160,6 @@ function histo_synthesize(
 export {
       HISTO_SYNTHESIZE_METADATA,
       HistoSynthesizeOutputs,
-      HistoSynthesizeParameters,
       histo_synthesize,
       histo_synthesize_execute,
       histo_synthesize_params,

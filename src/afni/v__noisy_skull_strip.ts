@@ -12,49 +12,16 @@ const V__NOISY_SKULL_STRIP_METADATA: Metadata = {
 
 
 interface VNoisySkullStripParameters {
-    "@type": "afni.@NoisySkullStrip";
+    "@type"?: "afni/@NoisySkullStrip";
     "input_file": InputPathType;
     "keep_tmp": boolean;
     "3dskullstrip_opts"?: string | null | undefined;
 }
+type VNoisySkullStripParametersTagged = Required<Pick<VNoisySkullStripParameters, '@type'>> & VNoisySkullStripParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@NoisySkullStrip": v__noisy_skull_strip_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@NoisySkullStrip": v__noisy_skull_strip_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__noisy_skull_strip(...)`.
+ * Output object returned when calling `VNoisySkullStripParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function v__noisy_skull_strip_params(
     input_file: InputPathType,
     keep_tmp: boolean = false,
     v_3dskullstrip_opts: string | null = null,
-): VNoisySkullStripParameters {
+): VNoisySkullStripParametersTagged {
     const params = {
-        "@type": "afni.@NoisySkullStrip" as const,
+        "@type": "afni/@NoisySkullStrip" as const,
         "input_file": input_file,
         "keep_tmp": keep_tmp,
     };
@@ -126,7 +93,7 @@ function v__noisy_skull_strip_cargs(
         "-input",
         execution.inputFile((params["input_file"] ?? null))
     );
-    if ((params["keep_tmp"] ?? null)) {
+    if ((params["keep_tmp"] ?? false)) {
         cargs.push("-keep_tmp");
     }
     if ((params["3dskullstrip_opts"] ?? null) !== null) {
@@ -219,7 +186,6 @@ function v__noisy_skull_strip(
 
 export {
       VNoisySkullStripOutputs,
-      VNoisySkullStripParameters,
       V__NOISY_SKULL_STRIP_METADATA,
       v__noisy_skull_strip,
       v__noisy_skull_strip_execute,

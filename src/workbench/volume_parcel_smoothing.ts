@@ -12,7 +12,7 @@ const VOLUME_PARCEL_SMOOTHING_METADATA: Metadata = {
 
 
 interface VolumeParcelSmoothingParameters {
-    "@type": "workbench.volume-parcel-smoothing";
+    "@type"?: "workbench/volume-parcel-smoothing";
     "data_volume": InputPathType;
     "label_volume": InputPathType;
     "kernel": number;
@@ -21,44 +21,11 @@ interface VolumeParcelSmoothingParameters {
     "opt_fix_zeros": boolean;
     "opt_subvolume_subvol"?: string | null | undefined;
 }
+type VolumeParcelSmoothingParametersTagged = Required<Pick<VolumeParcelSmoothingParameters, '@type'>> & VolumeParcelSmoothingParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-parcel-smoothing": volume_parcel_smoothing_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-parcel-smoothing": volume_parcel_smoothing_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `volume_parcel_smoothing(...)`.
+ * Output object returned when calling `VolumeParcelSmoothingParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function volume_parcel_smoothing_params(
     opt_fwhm: boolean = false,
     opt_fix_zeros: boolean = false,
     opt_subvolume_subvol: string | null = null,
-): VolumeParcelSmoothingParameters {
+): VolumeParcelSmoothingParametersTagged {
     const params = {
-        "@type": "workbench.volume-parcel-smoothing" as const,
+        "@type": "workbench/volume-parcel-smoothing" as const,
         "data_volume": data_volume,
         "label_volume": label_volume,
         "kernel": kernel,
@@ -131,10 +98,10 @@ function volume_parcel_smoothing_cargs(
     cargs.push(execution.inputFile((params["label_volume"] ?? null)));
     cargs.push(String((params["kernel"] ?? null)));
     cargs.push((params["volume_out"] ?? null));
-    if ((params["opt_fwhm"] ?? null)) {
+    if ((params["opt_fwhm"] ?? false)) {
         cargs.push("-fwhm");
     }
-    if ((params["opt_fix_zeros"] ?? null)) {
+    if ((params["opt_fix_zeros"] ?? false)) {
         cargs.push("-fix-zeros");
     }
     if ((params["opt_subvolume_subvol"] ?? null) !== null) {
@@ -237,7 +204,6 @@ function volume_parcel_smoothing(
 export {
       VOLUME_PARCEL_SMOOTHING_METADATA,
       VolumeParcelSmoothingOutputs,
-      VolumeParcelSmoothingParameters,
       volume_parcel_smoothing,
       volume_parcel_smoothing_execute,
       volume_parcel_smoothing_params,

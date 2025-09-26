@@ -12,7 +12,7 @@ const V_3DFRACTIONIZE_METADATA: Metadata = {
 
 
 interface V3dfractionizeParameters {
-    "@type": "afni.3dfractionize";
+    "@type"?: "afni/3dfractionize";
     "template": InputPathType;
     "input": InputPathType;
     "prefix"?: string | null | undefined;
@@ -21,44 +21,11 @@ interface V3dfractionizeParameters {
     "preserve": boolean;
     "vote": boolean;
 }
+type V3dfractionizeParametersTagged = Required<Pick<V3dfractionizeParameters, '@type'>> & V3dfractionizeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dfractionize": v_3dfractionize_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dfractionize": v_3dfractionize_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dfractionize(...)`.
+ * Output object returned when calling `V3dfractionizeParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function v_3dfractionize_params(
     warp: InputPathType | null = null,
     preserve: boolean = false,
     vote: boolean = false,
-): V3dfractionizeParameters {
+): V3dfractionizeParametersTagged {
     const params = {
-        "@type": "afni.3dfractionize" as const,
+        "@type": "afni/3dfractionize" as const,
         "template": template,
         "input": input,
         "preserve": preserve,
@@ -156,10 +123,10 @@ function v_3dfractionize_cargs(
             execution.inputFile((params["warp"] ?? null))
         );
     }
-    if ((params["preserve"] ?? null)) {
+    if ((params["preserve"] ?? false)) {
         cargs.push("-preserve");
     }
-    if ((params["vote"] ?? null)) {
+    if ((params["vote"] ?? false)) {
         cargs.push("-vote");
     }
     return cargs;
@@ -251,7 +218,6 @@ function v_3dfractionize(
 
 export {
       V3dfractionizeOutputs,
-      V3dfractionizeParameters,
       V_3DFRACTIONIZE_METADATA,
       v_3dfractionize,
       v_3dfractionize_execute,

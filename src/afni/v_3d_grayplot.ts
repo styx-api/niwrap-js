@@ -12,7 +12,7 @@ const V_3D_GRAYPLOT_METADATA: Metadata = {
 
 
 interface V3dGrayplotParameters {
-    "@type": "afni.3dGrayplot";
+    "@type"?: "afni/3dGrayplot";
     "input": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "prefix"?: string | null | undefined;
@@ -28,44 +28,11 @@ interface V3dGrayplotParameters {
     "percent": boolean;
     "raw_with_bounds"?: Array<number> | null | undefined;
 }
+type V3dGrayplotParametersTagged = Required<Pick<V3dGrayplotParameters, '@type'>> & V3dGrayplotParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dGrayplot": v_3d_grayplot_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dGrayplot": v_3d_grayplot_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_grayplot(...)`.
+ * Output object returned when calling `V3dGrayplotParameters(...)`.
  *
  * @interface
  */
@@ -116,9 +83,9 @@ function v_3d_grayplot_params(
     range: number | null = null,
     percent: boolean = false,
     raw_with_bounds: Array<number> | null = null,
-): V3dGrayplotParameters {
+): V3dGrayplotParametersTagged {
     const params = {
-        "@type": "afni.3dGrayplot" as const,
+        "@type": "afni/3dGrayplot" as const,
         "input": input,
         "resample_old": resample_old,
         "pvorder": pvorder,
@@ -185,7 +152,7 @@ function v_3d_grayplot_cargs(
             ...(params["dimensions"] ?? null).map(String)
         );
     }
-    if ((params["resample_old"] ?? null)) {
+    if ((params["resample_old"] ?? false)) {
         cargs.push("-oldresam");
     }
     if ((params["polort"] ?? null) !== null) {
@@ -200,16 +167,16 @@ function v_3d_grayplot_cargs(
             String((params["fwhm"] ?? null))
         );
     }
-    if ((params["pvorder"] ?? null)) {
+    if ((params["pvorder"] ?? false)) {
         cargs.push("-pvorder");
     }
-    if ((params["LJorder"] ?? null)) {
+    if ((params["LJorder"] ?? false)) {
         cargs.push("-LJorder");
     }
-    if ((params["peelorder"] ?? null)) {
+    if ((params["peelorder"] ?? false)) {
         cargs.push("-peelorder");
     }
-    if ((params["ijkorder"] ?? null)) {
+    if ((params["ijkorder"] ?? false)) {
         cargs.push("-ijkorder");
     }
     if ((params["range"] ?? null) !== null) {
@@ -218,7 +185,7 @@ function v_3d_grayplot_cargs(
             String((params["range"] ?? null))
         );
     }
-    if ((params["percent"] ?? null)) {
+    if ((params["percent"] ?? false)) {
         cargs.push("-percent");
     }
     if ((params["raw_with_bounds"] ?? null) !== null) {
@@ -330,7 +297,6 @@ function v_3d_grayplot(
 
 export {
       V3dGrayplotOutputs,
-      V3dGrayplotParameters,
       V_3D_GRAYPLOT_METADATA,
       v_3d_grayplot,
       v_3d_grayplot_execute,

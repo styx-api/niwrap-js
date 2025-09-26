@@ -12,47 +12,15 @@ const REINFLATE_SUBJECT_RH_METADATA: Metadata = {
 
 
 interface ReinflateSubjectRhParameters {
-    "@type": "freesurfer.reinflate_subject-rh";
+    "@type"?: "freesurfer/reinflate_subject-rh";
     "subject_dir": string;
     "additional_options"?: string | null | undefined;
 }
+type ReinflateSubjectRhParametersTagged = Required<Pick<ReinflateSubjectRhParameters, '@type'>> & ReinflateSubjectRhParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.reinflate_subject-rh": reinflate_subject_rh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `reinflate_subject_rh(...)`.
+ * Output object returned when calling `ReinflateSubjectRhParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface ReinflateSubjectRhOutputs {
 function reinflate_subject_rh_params(
     subject_dir: string,
     additional_options: string | null = null,
-): ReinflateSubjectRhParameters {
+): ReinflateSubjectRhParametersTagged {
     const params = {
-        "@type": "freesurfer.reinflate_subject-rh" as const,
+        "@type": "freesurfer/reinflate_subject-rh" as const,
         "subject_dir": subject_dir,
     };
     if (additional_options !== null) {
@@ -187,7 +155,6 @@ function reinflate_subject_rh(
 export {
       REINFLATE_SUBJECT_RH_METADATA,
       ReinflateSubjectRhOutputs,
-      ReinflateSubjectRhParameters,
       reinflate_subject_rh,
       reinflate_subject_rh_execute,
       reinflate_subject_rh_params,

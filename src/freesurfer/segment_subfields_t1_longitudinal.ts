@@ -12,49 +12,16 @@ const SEGMENT_SUBFIELDS_T1_LONGITUDINAL_METADATA: Metadata = {
 
 
 interface SegmentSubfieldsT1LongitudinalParameters {
-    "@type": "freesurfer.SegmentSubfieldsT1Longitudinal";
+    "@type"?: "freesurfer/SegmentSubfieldsT1Longitudinal";
     "subject_id": string;
     "input_image": InputPathType;
     "output_dir": string;
 }
+type SegmentSubfieldsT1LongitudinalParametersTagged = Required<Pick<SegmentSubfieldsT1LongitudinalParameters, '@type'>> & SegmentSubfieldsT1LongitudinalParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.SegmentSubfieldsT1Longitudinal": segment_subfields_t1_longitudinal_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.SegmentSubfieldsT1Longitudinal": segment_subfields_t1_longitudinal_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `segment_subfields_t1_longitudinal(...)`.
+ * Output object returned when calling `SegmentSubfieldsT1LongitudinalParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function segment_subfields_t1_longitudinal_params(
     subject_id: string,
     input_image: InputPathType,
     output_dir: string,
-): SegmentSubfieldsT1LongitudinalParameters {
+): SegmentSubfieldsT1LongitudinalParametersTagged {
     const params = {
-        "@type": "freesurfer.SegmentSubfieldsT1Longitudinal" as const,
+        "@type": "freesurfer/SegmentSubfieldsT1Longitudinal" as const,
         "subject_id": subject_id,
         "input_image": input_image,
         "output_dir": output_dir,
@@ -193,7 +160,6 @@ function segment_subfields_t1_longitudinal(
 export {
       SEGMENT_SUBFIELDS_T1_LONGITUDINAL_METADATA,
       SegmentSubfieldsT1LongitudinalOutputs,
-      SegmentSubfieldsT1LongitudinalParameters,
       segment_subfields_t1_longitudinal,
       segment_subfields_t1_longitudinal_execute,
       segment_subfields_t1_longitudinal_params,

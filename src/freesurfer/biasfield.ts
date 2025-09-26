@@ -12,7 +12,7 @@ const BIASFIELD_METADATA: Metadata = {
 
 
 interface BiasfieldParameters {
-    "@type": "freesurfer.biasfield";
+    "@type"?: "freesurfer/biasfield";
     "subject": string;
     "tmpdir"?: string | null | undefined;
     "no_cleanup": boolean;
@@ -20,44 +20,11 @@ interface BiasfieldParameters {
     "debug": boolean;
     "version": boolean;
 }
+type BiasfieldParametersTagged = Required<Pick<BiasfieldParameters, '@type'>> & BiasfieldParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.biasfield": biasfield_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.biasfield": biasfield_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `biasfield(...)`.
+ * Output object returned when calling `BiasfieldParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +63,9 @@ function biasfield_params(
     help: boolean = false,
     debug: boolean = false,
     version: boolean = false,
-): BiasfieldParameters {
+): BiasfieldParametersTagged {
     const params = {
-        "@type": "freesurfer.biasfield" as const,
+        "@type": "freesurfer/biasfield" as const,
         "subject": subject,
         "no_cleanup": no_cleanup,
         "help": help,
@@ -136,16 +103,16 @@ function biasfield_cargs(
             (params["tmpdir"] ?? null)
         );
     }
-    if ((params["no_cleanup"] ?? null)) {
+    if ((params["no_cleanup"] ?? false)) {
         cargs.push("--nocleanup");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -237,7 +204,6 @@ function biasfield(
 export {
       BIASFIELD_METADATA,
       BiasfieldOutputs,
-      BiasfieldParameters,
       biasfield,
       biasfield_execute,
       biasfield_params,

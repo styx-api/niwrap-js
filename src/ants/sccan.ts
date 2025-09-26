@@ -12,7 +12,7 @@ const SCCAN_METADATA: Metadata = {
 
 
 interface SccanParameters {
-    "@type": "ants.sccan";
+    "@type"?: "ants/sccan";
     "output"?: string | null | undefined;
     "n_permutations"?: number | null | undefined;
     "smoother"?: number | null | undefined;
@@ -41,43 +41,11 @@ interface SccanParameters {
     "scca"?: string | null | undefined;
     "svd"?: string | null | undefined;
 }
+type SccanParametersTagged = Required<Pick<SccanParameters, '@type'>> & SccanParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.sccan": sccan_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `sccan(...)`.
+ * Output object returned when calling `SccanParameters(...)`.
  *
  * @interface
  */
@@ -150,9 +118,9 @@ function sccan_params(
     imageset_to_projections: string | null = null,
     scca: string | null = null,
     svd: string | null = null,
-): SccanParameters {
+): SccanParametersTagged {
     const params = {
-        "@type": "ants.sccan" as const,
+        "@type": "ants/sccan" as const,
     };
     if (output !== null) {
         params["output"] = output;
@@ -544,7 +512,6 @@ function sccan(
 export {
       SCCAN_METADATA,
       SccanOutputs,
-      SccanParameters,
       sccan,
       sccan_execute,
       sccan_params,

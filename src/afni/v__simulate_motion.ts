@@ -12,7 +12,7 @@ const V__SIMULATE_MOTION_METADATA: Metadata = {
 
 
 interface VSimulateMotionParameters {
-    "@type": "afni.@simulate_motion";
+    "@type"?: "afni/@simulate_motion";
     "epi": InputPathType;
     "motion_file": InputPathType;
     "epi_timing"?: InputPathType | null | undefined;
@@ -30,44 +30,11 @@ interface VSimulateMotionParameters {
     "todo": boolean;
     "ver": boolean;
 }
+type VSimulateMotionParametersTagged = Required<Pick<VSimulateMotionParameters, '@type'>> & VSimulateMotionParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@simulate_motion": v__simulate_motion_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@simulate_motion": v__simulate_motion_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__simulate_motion(...)`.
+ * Output object returned when calling `VSimulateMotionParameters(...)`.
  *
  * @interface
  */
@@ -122,9 +89,9 @@ function v__simulate_motion_params(
     hist: boolean = false,
     todo: boolean = false,
     ver: boolean = false,
-): VSimulateMotionParameters {
+): VSimulateMotionParametersTagged {
     const params = {
-        "@type": "afni.@simulate_motion" as const,
+        "@type": "afni/@simulate_motion" as const,
         "epi": epi,
         "motion_file": motion_file,
         "save_workdir": save_workdir,
@@ -194,10 +161,10 @@ function v__simulate_motion_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["save_workdir"] ?? null)) {
+    if ((params["save_workdir"] ?? false)) {
         cargs.push("-save_workdir");
     }
-    if ((params["test"] ?? null)) {
+    if ((params["test"] ?? false)) {
         cargs.push("-test");
     }
     if ((params["verb_level"] ?? null) !== null) {
@@ -230,19 +197,19 @@ function v__simulate_motion_cargs(
             execution.inputFile((params["warp_master"] ?? null))
         );
     }
-    if ((params["wsinc5"] ?? null)) {
+    if ((params["wsinc5"] ?? false)) {
         cargs.push("-wsinc5");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["hist"] ?? null)) {
+    if ((params["hist"] ?? false)) {
         cargs.push("-hist");
     }
-    if ((params["todo"] ?? null)) {
+    if ((params["todo"] ?? false)) {
         cargs.push("-todo");
     }
-    if ((params["ver"] ?? null)) {
+    if ((params["ver"] ?? false)) {
         cargs.push("-ver");
     }
     return cargs;
@@ -352,7 +319,6 @@ function v__simulate_motion(
 
 export {
       VSimulateMotionOutputs,
-      VSimulateMotionParameters,
       V__SIMULATE_MOTION_METADATA,
       v__simulate_motion,
       v__simulate_motion_execute,

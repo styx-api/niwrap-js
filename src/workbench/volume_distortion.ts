@@ -12,51 +12,18 @@ const VOLUME_DISTORTION_METADATA: Metadata = {
 
 
 interface VolumeDistortionParameters {
-    "@type": "workbench.volume-distortion";
+    "@type"?: "workbench/volume-distortion";
     "warpfield": string;
     "volume_out": string;
     "opt_fnirt_source_volume"?: string | null | undefined;
     "opt_circular": boolean;
     "opt_log2": boolean;
 }
+type VolumeDistortionParametersTagged = Required<Pick<VolumeDistortionParameters, '@type'>> & VolumeDistortionParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-distortion": volume_distortion_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-distortion": volume_distortion_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `volume_distortion(...)`.
+ * Output object returned when calling `VolumeDistortionParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function volume_distortion_params(
     opt_fnirt_source_volume: string | null = null,
     opt_circular: boolean = false,
     opt_log2: boolean = false,
-): VolumeDistortionParameters {
+): VolumeDistortionParametersTagged {
     const params = {
-        "@type": "workbench.volume-distortion" as const,
+        "@type": "workbench/volume-distortion" as const,
         "warpfield": warpfield,
         "volume_out": volume_out,
         "opt_circular": opt_circular,
@@ -127,10 +94,10 @@ function volume_distortion_cargs(
             (params["opt_fnirt_source_volume"] ?? null)
         );
     }
-    if ((params["opt_circular"] ?? null)) {
+    if ((params["opt_circular"] ?? false)) {
         cargs.push("-circular");
     }
-    if ((params["opt_log2"] ?? null)) {
+    if ((params["opt_log2"] ?? false)) {
         cargs.push("-log2");
     }
     return cargs;
@@ -227,7 +194,6 @@ function volume_distortion(
 export {
       VOLUME_DISTORTION_METADATA,
       VolumeDistortionOutputs,
-      VolumeDistortionParameters,
       volume_distortion,
       volume_distortion_execute,
       volume_distortion_params,

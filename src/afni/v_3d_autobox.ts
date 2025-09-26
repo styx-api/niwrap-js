@@ -12,7 +12,7 @@ const V_3D_AUTOBOX_METADATA: Metadata = {
 
 
 interface V3dAutoboxParameters {
-    "@type": "afni.3dAutobox";
+    "@type"?: "afni/3dAutobox";
     "input": InputPathType;
     "prefix"?: string | null | undefined;
     "alt_input"?: InputPathType | null | undefined;
@@ -28,43 +28,11 @@ interface V3dAutoboxParameters {
     "npad"?: number | null | undefined;
     "npad_safety_on": boolean;
 }
+type V3dAutoboxParametersTagged = Required<Pick<V3dAutoboxParameters, '@type'>> & V3dAutoboxParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dAutobox": v_3d_autobox_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_autobox(...)`.
+ * Output object returned when calling `V3dAutoboxParameters(...)`.
  *
  * @interface
  */
@@ -111,9 +79,9 @@ function v_3d_autobox_params(
     extent_xyz_midslice: boolean = false,
     npad: number | null = null,
     npad_safety_on: boolean = false,
-): V3dAutoboxParameters {
+): V3dAutoboxParametersTagged {
     const params = {
-        "@type": "afni.3dAutobox" as const,
+        "@type": "afni/3dAutobox" as const,
         "input": input,
         "noclust": noclust,
         "extent": extent,
@@ -172,13 +140,13 @@ function v_3d_autobox_cargs(
             execution.inputFile((params["alt_input"] ?? null))
         );
     }
-    if ((params["noclust"] ?? null)) {
+    if ((params["noclust"] ?? false)) {
         cargs.push("-noclust");
     }
-    if ((params["extent"] ?? null)) {
+    if ((params["extent"] ?? false)) {
         cargs.push("-extent");
     }
-    if ((params["extent_ijk"] ?? null)) {
+    if ((params["extent_ijk"] ?? false)) {
         cargs.push("-extent_ijk");
     }
     if ((params["extent_ijk_to_file"] ?? null) !== null) {
@@ -187,10 +155,10 @@ function v_3d_autobox_cargs(
             (params["extent_ijk_to_file"] ?? null)
         );
     }
-    if ((params["extent_ijk_midslice"] ?? null)) {
+    if ((params["extent_ijk_midslice"] ?? false)) {
         cargs.push("-extent_ijk_midslice");
     }
-    if ((params["extent_ijkord"] ?? null)) {
+    if ((params["extent_ijkord"] ?? false)) {
         cargs.push("-extent_ijkord");
     }
     if ((params["extent_ijkord_to_file"] ?? null) !== null) {
@@ -205,7 +173,7 @@ function v_3d_autobox_cargs(
             (params["extent_xyz_to_file"] ?? null)
         );
     }
-    if ((params["extent_xyz_midslice"] ?? null)) {
+    if ((params["extent_xyz_midslice"] ?? false)) {
         cargs.push("-extent_xyz_midslice");
     }
     if ((params["npad"] ?? null) !== null) {
@@ -214,7 +182,7 @@ function v_3d_autobox_cargs(
             String((params["npad"] ?? null))
         );
     }
-    if ((params["npad_safety_on"] ?? null)) {
+    if ((params["npad_safety_on"] ?? false)) {
         cargs.push("-npad_safety_on");
     }
     return cargs;
@@ -319,7 +287,6 @@ function v_3d_autobox(
 
 export {
       V3dAutoboxOutputs,
-      V3dAutoboxParameters,
       V_3D_AUTOBOX_METADATA,
       v_3d_autobox,
       v_3d_autobox_execute,

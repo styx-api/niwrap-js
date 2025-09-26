@@ -12,49 +12,16 @@ const VOLUME_LABEL_PROBABILITY_METADATA: Metadata = {
 
 
 interface VolumeLabelProbabilityParameters {
-    "@type": "workbench.volume-label-probability";
+    "@type"?: "workbench/volume-label-probability";
     "label_maps": InputPathType;
     "probability_out": string;
     "opt_exclude_unlabeled": boolean;
 }
+type VolumeLabelProbabilityParametersTagged = Required<Pick<VolumeLabelProbabilityParameters, '@type'>> & VolumeLabelProbabilityParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-label-probability": volume_label_probability_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-label-probability": volume_label_probability_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `volume_label_probability(...)`.
+ * Output object returned when calling `VolumeLabelProbabilityParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function volume_label_probability_params(
     label_maps: InputPathType,
     probability_out: string,
     opt_exclude_unlabeled: boolean = false,
-): VolumeLabelProbabilityParameters {
+): VolumeLabelProbabilityParametersTagged {
     const params = {
-        "@type": "workbench.volume-label-probability" as const,
+        "@type": "workbench/volume-label-probability" as const,
         "label_maps": label_maps,
         "probability_out": probability_out,
         "opt_exclude_unlabeled": opt_exclude_unlabeled,
@@ -111,7 +78,7 @@ function volume_label_probability_cargs(
     cargs.push("-volume-label-probability");
     cargs.push(execution.inputFile((params["label_maps"] ?? null)));
     cargs.push((params["probability_out"] ?? null));
-    if ((params["opt_exclude_unlabeled"] ?? null)) {
+    if ((params["opt_exclude_unlabeled"] ?? false)) {
         cargs.push("-exclude-unlabeled");
     }
     return cargs;
@@ -200,7 +167,6 @@ function volume_label_probability(
 export {
       VOLUME_LABEL_PROBABILITY_METADATA,
       VolumeLabelProbabilityOutputs,
-      VolumeLabelProbabilityParameters,
       volume_label_probability,
       volume_label_probability_execute,
       volume_label_probability_params,

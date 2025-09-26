@@ -12,14 +12,15 @@ const PEAKS2FIXEL_METADATA: Metadata = {
 
 
 interface Peaks2fixelConfigParameters {
-    "@type": "mrtrix.peaks2fixel.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Peaks2fixelConfigParametersTagged = Required<Pick<Peaks2fixelConfigParameters, '@type'>> & Peaks2fixelConfigParameters;
 
 
 interface Peaks2fixelParameters {
-    "@type": "mrtrix.peaks2fixel";
+    "@type"?: "mrtrix/peaks2fixel";
     "dataname"?: string | null | undefined;
     "info": boolean;
     "quiet": boolean;
@@ -32,41 +33,7 @@ interface Peaks2fixelParameters {
     "directions": InputPathType;
     "fixels": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.peaks2fixel": peaks2fixel_cargs,
-        "mrtrix.peaks2fixel.config": peaks2fixel_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.peaks2fixel": peaks2fixel_outputs,
-    };
-    return outputsFuncs[t];
-}
+type Peaks2fixelParametersTagged = Required<Pick<Peaks2fixelParameters, '@type'>> & Peaks2fixelParameters;
 
 
 /**
@@ -80,9 +47,9 @@ function dynOutputs(
 function peaks2fixel_config_params(
     key: string,
     value: string,
-): Peaks2fixelConfigParameters {
+): Peaks2fixelConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.peaks2fixel.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -111,7 +78,7 @@ function peaks2fixel_config_cargs(
 
 
 /**
- * Output object returned when calling `peaks2fixel(...)`.
+ * Output object returned when calling `Peaks2fixelParameters(...)`.
  *
  * @interface
  */
@@ -156,9 +123,9 @@ function peaks2fixel_params(
     config: Array<Peaks2fixelConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Peaks2fixelParameters {
+): Peaks2fixelParametersTagged {
     const params = {
-        "@type": "mrtrix.peaks2fixel" as const,
+        "@type": "mrtrix/peaks2fixel" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -201,16 +168,16 @@ function peaks2fixel_cargs(
             (params["dataname"] ?? null)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -220,12 +187,12 @@ function peaks2fixel_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => peaks2fixel_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["directions"] ?? null)));
@@ -339,9 +306,7 @@ function peaks2fixel(
 
 export {
       PEAKS2FIXEL_METADATA,
-      Peaks2fixelConfigParameters,
       Peaks2fixelOutputs,
-      Peaks2fixelParameters,
       peaks2fixel,
       peaks2fixel_config_params,
       peaks2fixel_execute,

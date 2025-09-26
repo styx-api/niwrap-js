@@ -12,7 +12,7 @@ const MRI_CVS_REGISTER_METADATA: Metadata = {
 
 
 interface MriCvsRegisterParameters {
-    "@type": "freesurfer.mri_cvs_register";
+    "@type"?: "freesurfer/mri_cvs_register";
     "mov_subjid": string;
     "template_subjid"?: string | null | undefined;
     "templatedir"?: string | null | undefined;
@@ -41,44 +41,11 @@ interface MriCvsRegisterParameters {
     "version_flag": boolean;
     "help_flag": boolean;
 }
+type MriCvsRegisterParametersTagged = Required<Pick<MriCvsRegisterParameters, '@type'>> & MriCvsRegisterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_cvs_register": mri_cvs_register_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_cvs_register": mri_cvs_register_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_cvs_register(...)`.
+ * Output object returned when calling `MriCvsRegisterParameters(...)`.
  *
  * @interface
  */
@@ -171,9 +138,9 @@ function mri_cvs_register_params(
     nolog_flag: boolean = false,
     version_flag: boolean = false,
     help_flag: boolean = false,
-): MriCvsRegisterParameters {
+): MriCvsRegisterParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_cvs_register" as const,
+        "@type": "freesurfer/mri_cvs_register" as const,
         "mov_subjid": mov_subjid,
         "mni_flag": mni_flag,
         "step1_flag": step1_flag,
@@ -248,7 +215,7 @@ function mri_cvs_register_cargs(
             (params["templatedir"] ?? null)
         );
     }
-    if ((params["mni_flag"] ?? null)) {
+    if ((params["mni_flag"] ?? false)) {
         cargs.push("--mni");
     }
     if ((params["outdir"] ?? null) !== null) {
@@ -269,52 +236,52 @@ function mri_cvs_register_cargs(
             (params["voltype"] ?? null)
         );
     }
-    if ((params["step1_flag"] ?? null)) {
+    if ((params["step1_flag"] ?? false)) {
         cargs.push("--step1");
     }
-    if ((params["step2_flag"] ?? null)) {
+    if ((params["step2_flag"] ?? false)) {
         cargs.push("--step2");
     }
-    if ((params["step3_flag"] ?? null)) {
+    if ((params["step3_flag"] ?? false)) {
         cargs.push("--step3");
     }
-    if ((params["noaseg_flag"] ?? null)) {
+    if ((params["noaseg_flag"] ?? false)) {
         cargs.push("--noaseg");
     }
-    if ((params["nointensity_flag"] ?? null)) {
+    if ((params["nointensity_flag"] ?? false)) {
         cargs.push("--nointensity");
     }
-    if ((params["hemi_flag"] ?? null)) {
+    if ((params["hemi_flag"] ?? false)) {
         cargs.push("--hemi");
     }
-    if ((params["masktargethemi_flag"] ?? null)) {
+    if ((params["masktargethemi_flag"] ?? false)) {
         cargs.push("--masktargethemi");
     }
-    if ((params["maskmovinghemi_flag"] ?? null)) {
+    if ((params["maskmovinghemi_flag"] ?? false)) {
         cargs.push("--maskmovinghemi");
     }
-    if ((params["nocleanup_flag"] ?? null)) {
+    if ((params["nocleanup_flag"] ?? false)) {
         cargs.push("--nocleanup");
     }
-    if ((params["keepelreg_flag"] ?? null)) {
+    if ((params["keepelreg_flag"] ?? false)) {
         cargs.push("--keepelreg");
     }
-    if ((params["keepallm3z_flag"] ?? null)) {
+    if ((params["keepallm3z_flag"] ?? false)) {
         cargs.push("--keepallm3z");
     }
-    if ((params["cleanall_flag"] ?? null)) {
+    if ((params["cleanall_flag"] ?? false)) {
         cargs.push("--cleanall");
     }
-    if ((params["cleansurfreg_flag"] ?? null)) {
+    if ((params["cleansurfreg_flag"] ?? false)) {
         cargs.push("--cleansurfreg");
     }
-    if ((params["cleanelreg_flag"] ?? null)) {
+    if ((params["cleanelreg_flag"] ?? false)) {
         cargs.push("--cleanelreg");
     }
-    if ((params["cleanvolreg_flag"] ?? null)) {
+    if ((params["cleanvolreg_flag"] ?? false)) {
         cargs.push("--cleanvolreg");
     }
-    if ((params["m3d_flag"] ?? null)) {
+    if ((params["m3d_flag"] ?? false)) {
         cargs.push("--m3d");
     }
     if ((params["openmp"] ?? null) !== null) {
@@ -323,13 +290,13 @@ function mri_cvs_register_cargs(
             String((params["openmp"] ?? null))
         );
     }
-    if ((params["nolog_flag"] ?? null)) {
+    if ((params["nolog_flag"] ?? false)) {
         cargs.push("--nolog");
     }
-    if ((params["version_flag"] ?? null)) {
+    if ((params["version_flag"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -466,7 +433,6 @@ function mri_cvs_register(
 export {
       MRI_CVS_REGISTER_METADATA,
       MriCvsRegisterOutputs,
-      MriCvsRegisterParameters,
       mri_cvs_register,
       mri_cvs_register_execute,
       mri_cvs_register_params,

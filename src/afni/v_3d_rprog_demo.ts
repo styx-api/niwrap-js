@@ -12,7 +12,7 @@ const V_3D_RPROG_DEMO_METADATA: Metadata = {
 
 
 interface V3dRprogDemoParameters {
-    "@type": "afni.3dRprogDemo";
+    "@type"?: "afni/3dRprogDemo";
     "input_dsets": Array<InputPathType>;
     "mask"?: InputPathType | null | undefined;
     "scale": number;
@@ -25,44 +25,11 @@ interface V3dRprogDemoParameters {
     "show_allowed_options": boolean;
     "verbosity_level"?: number | null | undefined;
 }
+type V3dRprogDemoParametersTagged = Required<Pick<V3dRprogDemoParameters, '@type'>> & V3dRprogDemoParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dRprogDemo": v_3d_rprog_demo_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dRprogDemo": v_3d_rprog_demo_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_rprog_demo(...)`.
+ * Output object returned when calling `V3dRprogDemoParameters(...)`.
  *
  * @interface
  */
@@ -107,9 +74,9 @@ function v_3d_rprog_demo_params(
     help: boolean = false,
     show_allowed_options: boolean = false,
     verbosity_level: number | null = null,
-): V3dRprogDemoParameters {
+): V3dRprogDemoParametersTagged {
     const params = {
-        "@type": "afni.3dRprogDemo" as const,
+        "@type": "afni/3dRprogDemo" as const,
         "input_dsets": input_dsets,
         "scale": scale,
         "prefix": prefix,
@@ -159,22 +126,22 @@ function v_3d_rprog_demo_cargs(
         "-prefix",
         (params["prefix"] ?? null)
     );
-    if ((params["help_aspx"] ?? null)) {
+    if ((params["help_aspx"] ?? false)) {
         cargs.push("-h_aspx");
     }
-    if ((params["help_raw"] ?? null)) {
+    if ((params["help_raw"] ?? false)) {
         cargs.push("-h_raw");
     }
-    if ((params["help_spx"] ?? null)) {
+    if ((params["help_spx"] ?? false)) {
         cargs.push("-h_spx");
     }
-    if ((params["help_txt"] ?? null)) {
+    if ((params["help_txt"] ?? false)) {
         cargs.push("-h_txt");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["show_allowed_options"] ?? null)) {
+    if ((params["show_allowed_options"] ?? false)) {
         cargs.push("-show_allowed_options");
     }
     if ((params["verbosity_level"] ?? null) !== null) {
@@ -280,7 +247,6 @@ function v_3d_rprog_demo(
 
 export {
       V3dRprogDemoOutputs,
-      V3dRprogDemoParameters,
       V_3D_RPROG_DEMO_METADATA,
       v_3d_rprog_demo,
       v_3d_rprog_demo_execute,

@@ -12,51 +12,18 @@ const V_3D_BALL_MATCH_METADATA: Metadata = {
 
 
 interface V3dBallMatchParameters {
-    "@type": "afni.3dBallMatch";
+    "@type"?: "afni/3dBallMatch";
     "input_dataset": InputPathType;
     "radius"?: number | null | undefined;
     "dataset_option"?: string | null | undefined;
     "ball_radius"?: number | null | undefined;
     "spheroid_axes"?: Array<number> | null | undefined;
 }
+type V3dBallMatchParametersTagged = Required<Pick<V3dBallMatchParameters, '@type'>> & V3dBallMatchParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dBallMatch": v_3d_ball_match_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dBallMatch": v_3d_ball_match_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_ball_match(...)`.
+ * Output object returned when calling `V3dBallMatchParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function v_3d_ball_match_params(
     dataset_option: string | null = null,
     ball_radius: number | null = null,
     spheroid_axes: Array<number> | null = null,
-): V3dBallMatchParameters {
+): V3dBallMatchParametersTagged {
     const params = {
-        "@type": "afni.3dBallMatch" as const,
+        "@type": "afni/3dBallMatch" as const,
         "input_dataset": input_dataset,
     };
     if (radius !== null) {
@@ -231,7 +198,6 @@ function v_3d_ball_match(
 
 export {
       V3dBallMatchOutputs,
-      V3dBallMatchParameters,
       V_3D_BALL_MATCH_METADATA,
       v_3d_ball_match,
       v_3d_ball_match_execute,

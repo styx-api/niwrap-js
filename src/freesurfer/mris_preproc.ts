@@ -12,7 +12,7 @@ const MRIS_PREPROC_METADATA: Metadata = {
 
 
 interface MrisPreprocParameters {
-    "@type": "freesurfer.mris_preproc";
+    "@type"?: "freesurfer/mris_preproc";
     "outfile": string;
     "target_subject": string;
     "hemi": string;
@@ -63,43 +63,11 @@ interface MrisPreprocParameters {
     "nolog_flag": boolean;
     "debug_flag": boolean;
 }
+type MrisPreprocParametersTagged = Required<Pick<MrisPreprocParameters, '@type'>> & MrisPreprocParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_preproc": mris_preproc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_preproc(...)`.
+ * Output object returned when calling `MrisPreprocParameters(...)`.
  *
  * @interface
  */
@@ -216,9 +184,9 @@ function mris_preproc_params(
     log: string | null = null,
     nolog_flag: boolean = false,
     debug_flag: boolean = false,
-): MrisPreprocParameters {
+): MrisPreprocParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_preproc" as const,
+        "@type": "freesurfer/mris_preproc" as const,
         "outfile": outfile,
         "target_subject": target_subject,
         "hemi": hemi,
@@ -435,7 +403,7 @@ function mris_preproc_cargs(
             ...(params["projfrac_avg"] ?? null).map(String)
         );
     }
-    if ((params["no_mask_non_cortex"] ?? null)) {
+    if ((params["no_mask_non_cortex"] ?? false)) {
         cargs.push("--no-mask-non-cortex");
     }
     if ((params["session_file"] ?? null) !== null) {
@@ -462,10 +430,10 @@ function mris_preproc_cargs(
             (params["contrast"] ?? null)
         );
     }
-    if ((params["cvar_flag"] ?? null)) {
+    if ((params["cvar_flag"] ?? false)) {
         cargs.push("--cvar");
     }
-    if ((params["offset_flag"] ?? null)) {
+    if ((params["offset_flag"] ?? false)) {
         cargs.push("--offset");
     }
     if ((params["map"] ?? null) !== null) {
@@ -474,7 +442,7 @@ function mris_preproc_cargs(
             (params["map"] ?? null)
         );
     }
-    if ((params["etiv_flag"] ?? null)) {
+    if ((params["etiv_flag"] ?? false)) {
         cargs.push("--etiv");
     }
     if ((params["fwhm"] ?? null) !== null) {
@@ -501,16 +469,16 @@ function mris_preproc_cargs(
             String((params["niters_src"] ?? null))
         );
     }
-    if ((params["cortex_only"] ?? null)) {
+    if ((params["cortex_only"] ?? false)) {
         cargs.push("--cortex-only");
     }
-    if ((params["mgz_flag"] ?? null)) {
+    if ((params["mgz_flag"] ?? false)) {
         cargs.push("--mgz");
     }
-    if ((params["no_jac_flag"] ?? null)) {
+    if ((params["no_jac_flag"] ?? false)) {
         cargs.push("--no-jac");
     }
-    if ((params["paired_diff_flag"] ?? null)) {
+    if ((params["paired_diff_flag"] ?? false)) {
         cargs.push("--paired-diff");
     }
     if ((params["cache_out"] ?? null) !== null) {
@@ -531,16 +499,16 @@ function mris_preproc_cargs(
             (params["cache_out_only"] ?? null)
         );
     }
-    if ((params["no_prune_flag"] ?? null)) {
+    if ((params["no_prune_flag"] ?? false)) {
         cargs.push("--no-prune");
     }
-    if ((params["mean_flag"] ?? null)) {
+    if ((params["mean_flag"] ?? false)) {
         cargs.push("--mean");
     }
-    if ((params["std_flag"] ?? null)) {
+    if ((params["std_flag"] ?? false)) {
         cargs.push("--std");
     }
-    if ((params["reshape_flag"] ?? null)) {
+    if ((params["reshape_flag"] ?? false)) {
         cargs.push("--reshape");
     }
     if ((params["surfreg"] ?? null) !== null) {
@@ -555,7 +523,7 @@ function mris_preproc_cargs(
             (params["subjects_dir"] ?? null)
         );
     }
-    if ((params["synth_flag"] ?? null)) {
+    if ((params["synth_flag"] ?? false)) {
         cargs.push("--synth");
     }
     if ((params["tmpdir"] ?? null) !== null) {
@@ -564,10 +532,10 @@ function mris_preproc_cargs(
             (params["tmpdir"] ?? null)
         );
     }
-    if ((params["nocleanup_flag"] ?? null)) {
+    if ((params["nocleanup_flag"] ?? false)) {
         cargs.push("--nocleanup");
     }
-    if ((params["cleanup_flag"] ?? null)) {
+    if ((params["cleanup_flag"] ?? false)) {
         cargs.push("--cleanup");
     }
     if ((params["log"] ?? null) !== null) {
@@ -576,10 +544,10 @@ function mris_preproc_cargs(
             (params["log"] ?? null)
         );
     }
-    if ((params["nolog_flag"] ?? null)) {
+    if ((params["nolog_flag"] ?? false)) {
         cargs.push("--nolog");
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -755,7 +723,6 @@ function mris_preproc(
 export {
       MRIS_PREPROC_METADATA,
       MrisPreprocOutputs,
-      MrisPreprocParameters,
       mris_preproc,
       mris_preproc_execute,
       mris_preproc_params,

@@ -12,7 +12,7 @@ const PCTSURFCON_METADATA: Metadata = {
 
 
 interface PctsurfconParameters {
-    "@type": "freesurfer.pctsurfcon";
+    "@type"?: "freesurfer/pctsurfcon";
     "subject": string;
     "fsvol"?: string | null | undefined;
     "outbase"?: string | null | undefined;
@@ -27,43 +27,11 @@ interface PctsurfconParameters {
     "tmp"?: string | null | undefined;
     "nocleanup": boolean;
 }
+type PctsurfconParametersTagged = Required<Pick<PctsurfconParameters, '@type'>> & PctsurfconParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.pctsurfcon": pctsurfcon_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `pctsurfcon(...)`.
+ * Output object returned when calling `PctsurfconParameters(...)`.
  *
  * @interface
  */
@@ -108,9 +76,9 @@ function pctsurfcon_params(
     pial: boolean = false,
     tmp: string | null = null,
     nocleanup: boolean = false,
-): PctsurfconParameters {
+): PctsurfconParametersTagged {
     const params = {
-        "@type": "freesurfer.pctsurfcon" as const,
+        "@type": "freesurfer/pctsurfcon" as const,
         "subject": subject,
         "lh_only": lh_only,
         "rh_only": rh_only,
@@ -171,10 +139,10 @@ function pctsurfcon_cargs(
             (params["outbase"] ?? null)
         );
     }
-    if ((params["lh_only"] ?? null)) {
+    if ((params["lh_only"] ?? false)) {
         cargs.push("--lh-only");
     }
-    if ((params["rh_only"] ?? null)) {
+    if ((params["rh_only"] ?? false)) {
         cargs.push("--rh-only");
     }
     if ((params["gm_proj_frac"] ?? null) !== null) {
@@ -195,13 +163,13 @@ function pctsurfcon_cargs(
             String((params["wm_proj_abs"] ?? null))
         );
     }
-    if ((params["neg"] ?? null)) {
+    if ((params["neg"] ?? false)) {
         cargs.push("--neg");
     }
-    if ((params["no_mask"] ?? null)) {
+    if ((params["no_mask"] ?? false)) {
         cargs.push("--no-mask");
     }
-    if ((params["pial"] ?? null)) {
+    if ((params["pial"] ?? false)) {
         cargs.push("--pial");
     }
     if ((params["tmp"] ?? null) !== null) {
@@ -210,7 +178,7 @@ function pctsurfcon_cargs(
             (params["tmp"] ?? null)
         );
     }
-    if ((params["nocleanup"] ?? null)) {
+    if ((params["nocleanup"] ?? false)) {
         cargs.push("--nocleanup");
     }
     return cargs;
@@ -314,7 +282,6 @@ function pctsurfcon(
 export {
       PCTSURFCON_METADATA,
       PctsurfconOutputs,
-      PctsurfconParameters,
       pctsurfcon,
       pctsurfcon_execute,
       pctsurfcon_params,

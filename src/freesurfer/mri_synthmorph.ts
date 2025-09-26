@@ -12,7 +12,7 @@ const MRI_SYNTHMORPH_METADATA: Metadata = {
 
 
 interface MriSynthmorphParameters {
-    "@type": "freesurfer.mri_synthmorph";
+    "@type"?: "freesurfer/mri_synthmorph";
     "moving_image": InputPathType;
     "fixed_image": InputPathType;
     "moved_output"?: string | null | undefined;
@@ -27,44 +27,11 @@ interface MriSynthmorphParameters {
     "model_weights"?: InputPathType | null | undefined;
     "inspect_directory"?: string | null | undefined;
 }
+type MriSynthmorphParametersTagged = Required<Pick<MriSynthmorphParameters, '@type'>> & MriSynthmorphParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_synthmorph": mri_synthmorph_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_synthmorph": mri_synthmorph_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_synthmorph(...)`.
+ * Output object returned when calling `MriSynthmorphParameters(...)`.
  *
  * @interface
  */
@@ -117,9 +84,9 @@ function mri_synthmorph_params(
     extent: number | null = null,
     model_weights: InputPathType | null = null,
     inspect_directory: string | null = null,
-): MriSynthmorphParameters {
+): MriSynthmorphParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_synthmorph" as const,
+        "@type": "freesurfer/mri_synthmorph" as const,
         "moving_image": moving_image,
         "fixed_image": fixed_image,
         "header_only": header_only,
@@ -184,7 +151,7 @@ function mri_synthmorph_cargs(
             execution.inputFile((params["transform_output"] ?? null))
         );
     }
-    if ((params["header_only"] ?? null)) {
+    if ((params["header_only"] ?? false)) {
         cargs.push("-H");
     }
     if ((params["transformation_model"] ?? null) !== null) {
@@ -205,7 +172,7 @@ function mri_synthmorph_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["gpu_flag"] ?? null)) {
+    if ((params["gpu_flag"] ?? false)) {
         cargs.push("-g");
     }
     if ((params["smooth"] ?? null) !== null) {
@@ -335,7 +302,6 @@ function mri_synthmorph(
 export {
       MRI_SYNTHMORPH_METADATA,
       MriSynthmorphOutputs,
-      MriSynthmorphParameters,
       mri_synthmorph,
       mri_synthmorph_execute,
       mri_synthmorph_params,

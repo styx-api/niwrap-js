@@ -12,48 +12,15 @@ const MRI_COMPILE_EDITS_METADATA: Metadata = {
 
 
 interface MriCompileEditsParameters {
-    "@type": "freesurfer.mri_compile_edits";
+    "@type"?: "freesurfer/mri_compile_edits";
     "subject_name": string;
     "output_volume": string;
 }
+type MriCompileEditsParametersTagged = Required<Pick<MriCompileEditsParameters, '@type'>> & MriCompileEditsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_compile_edits": mri_compile_edits_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_compile_edits": mri_compile_edits_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_compile_edits(...)`.
+ * Output object returned when calling `MriCompileEditsParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface MriCompileEditsOutputs {
 function mri_compile_edits_params(
     subject_name: string,
     output_volume: string,
-): MriCompileEditsParameters {
+): MriCompileEditsParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_compile_edits" as const,
+        "@type": "freesurfer/mri_compile_edits" as const,
         "subject_name": subject_name,
         "output_volume": output_volume,
     };
@@ -186,7 +153,6 @@ function mri_compile_edits(
 export {
       MRI_COMPILE_EDITS_METADATA,
       MriCompileEditsOutputs,
-      MriCompileEditsParameters,
       mri_compile_edits,
       mri_compile_edits_execute,
       mri_compile_edits_params,

@@ -12,7 +12,7 @@ const FSLROI_METADATA: Metadata = {
 
 
 interface FslroiParameters {
-    "@type": "fsl.fslroi";
+    "@type"?: "fsl/fslroi";
     "infile": InputPathType;
     "outfile": string;
     "xmin"?: number | null | undefined;
@@ -24,44 +24,11 @@ interface FslroiParameters {
     "tmin"?: number | null | undefined;
     "tsize"?: number | null | undefined;
 }
+type FslroiParametersTagged = Required<Pick<FslroiParameters, '@type'>> & FslroiParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslroi": fslroi_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fslroi": fslroi_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslroi(...)`.
+ * Output object returned when calling `FslroiParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function fslroi_params(
     zsize: number | null = null,
     tmin: number | null = null,
     tsize: number | null = null,
-): FslroiParameters {
+): FslroiParametersTagged {
     const params = {
-        "@type": "fsl.fslroi" as const,
+        "@type": "fsl/fslroi" as const,
         "infile": infile,
         "outfile": outfile,
     };
@@ -274,7 +241,6 @@ function fslroi(
 export {
       FSLROI_METADATA,
       FslroiOutputs,
-      FslroiParameters,
       fslroi,
       fslroi_execute,
       fslroi_params,

@@ -12,46 +12,14 @@ const TBSS_1_PREPROC_METADATA: Metadata = {
 
 
 interface Tbss1PreprocParameters {
-    "@type": "fsl.tbss_1_preproc";
+    "@type"?: "fsl/tbss_1_preproc";
     "images": Array<InputPathType>;
 }
+type Tbss1PreprocParametersTagged = Required<Pick<Tbss1PreprocParameters, '@type'>> & Tbss1PreprocParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.tbss_1_preproc": tbss_1_preproc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tbss_1_preproc(...)`.
+ * Output object returned when calling `Tbss1PreprocParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface Tbss1PreprocOutputs {
  */
 function tbss_1_preproc_params(
     images: Array<InputPathType>,
-): Tbss1PreprocParameters {
+): Tbss1PreprocParametersTagged {
     const params = {
-        "@type": "fsl.tbss_1_preproc" as const,
+        "@type": "fsl/tbss_1_preproc" as const,
         "images": images,
     };
     return params;
@@ -173,7 +141,6 @@ function tbss_1_preproc(
 export {
       TBSS_1_PREPROC_METADATA,
       Tbss1PreprocOutputs,
-      Tbss1PreprocParameters,
       tbss_1_preproc,
       tbss_1_preproc_execute,
       tbss_1_preproc_params,

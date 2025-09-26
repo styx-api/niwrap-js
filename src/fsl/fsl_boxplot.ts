@@ -12,7 +12,7 @@ const FSL_BOXPLOT_METADATA: Metadata = {
 
 
 interface FslBoxplotParameters {
-    "@type": "fsl.fsl_boxplot";
+    "@type"?: "fsl/fsl_boxplot";
     "input_files": Array<InputPathType>;
     "output_image": string;
     "help_flag": boolean;
@@ -23,44 +23,11 @@ interface FslBoxplotParameters {
     "plot_height"?: number | null | undefined;
     "plot_width"?: number | null | undefined;
 }
+type FslBoxplotParametersTagged = Required<Pick<FslBoxplotParameters, '@type'>> & FslBoxplotParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fsl_boxplot": fsl_boxplot_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fsl_boxplot": fsl_boxplot_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsl_boxplot(...)`.
+ * Output object returned when calling `FslBoxplotParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function fsl_boxplot_params(
     y_label: string | null = null,
     plot_height: number | null = null,
     plot_width: number | null = null,
-): FslBoxplotParameters {
+): FslBoxplotParametersTagged {
     const params = {
-        "@type": "fsl.fsl_boxplot" as const,
+        "@type": "fsl/fsl_boxplot" as const,
         "input_files": input_files,
         "output_image": output_image,
         "help_flag": help_flag,
@@ -152,7 +119,7 @@ function fsl_boxplot_cargs(
         "--out",
         (params["output_image"] ?? null)
     );
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
     if ((params["title"] ?? null) !== null) {
@@ -285,7 +252,6 @@ function fsl_boxplot(
 export {
       FSL_BOXPLOT_METADATA,
       FslBoxplotOutputs,
-      FslBoxplotParameters,
       fsl_boxplot,
       fsl_boxplot_execute,
       fsl_boxplot_params,

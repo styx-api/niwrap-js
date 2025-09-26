@@ -12,50 +12,17 @@ const MRI_HIRES_REGISTER_METADATA: Metadata = {
 
 
 interface MriHiresRegisterParameters {
-    "@type": "freesurfer.mri_hires_register";
+    "@type"?: "freesurfer/mri_hires_register";
     "hires_labeling": InputPathType;
     "input_intensity": InputPathType;
     "input_aseg": InputPathType;
     "output_xform": string;
 }
+type MriHiresRegisterParametersTagged = Required<Pick<MriHiresRegisterParameters, '@type'>> & MriHiresRegisterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_hires_register": mri_hires_register_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_hires_register": mri_hires_register_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_hires_register(...)`.
+ * Output object returned when calling `MriHiresRegisterParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mri_hires_register_params(
     input_intensity: InputPathType,
     input_aseg: InputPathType,
     output_xform: string,
-): MriHiresRegisterParameters {
+): MriHiresRegisterParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_hires_register" as const,
+        "@type": "freesurfer/mri_hires_register" as const,
         "hires_labeling": hires_labeling,
         "input_intensity": input_intensity,
         "input_aseg": input_aseg,
@@ -200,7 +167,6 @@ function mri_hires_register(
 export {
       MRI_HIRES_REGISTER_METADATA,
       MriHiresRegisterOutputs,
-      MriHiresRegisterParameters,
       mri_hires_register,
       mri_hires_register_execute,
       mri_hires_register_params,

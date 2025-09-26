@@ -12,54 +12,21 @@ const CIFTI_CREATE_PARCELLATED_FROM_TEMPLATE_METADATA: Metadata = {
 
 
 interface CiftiCreateParcellatedFromTemplateCiftiParameters {
-    "@type": "workbench.cifti-create-parcellated-from-template.cifti";
+    "@type"?: "cifti";
     "cifti_in": InputPathType;
 }
+type CiftiCreateParcellatedFromTemplateCiftiParametersTagged = Required<Pick<CiftiCreateParcellatedFromTemplateCiftiParameters, '@type'>> & CiftiCreateParcellatedFromTemplateCiftiParameters;
 
 
 interface CiftiCreateParcellatedFromTemplateParameters {
-    "@type": "workbench.cifti-create-parcellated-from-template";
+    "@type"?: "workbench/cifti-create-parcellated-from-template";
     "cifti_template": InputPathType;
     "modify_direction": string;
     "cifti_out": string;
     "opt_fill_value_value"?: number | null | undefined;
     "cifti"?: Array<CiftiCreateParcellatedFromTemplateCiftiParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-create-parcellated-from-template": cifti_create_parcellated_from_template_cargs,
-        "workbench.cifti-create-parcellated-from-template.cifti": cifti_create_parcellated_from_template_cifti_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-create-parcellated-from-template": cifti_create_parcellated_from_template_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiCreateParcellatedFromTemplateParametersTagged = Required<Pick<CiftiCreateParcellatedFromTemplateParameters, '@type'>> & CiftiCreateParcellatedFromTemplateParameters;
 
 
 /**
@@ -71,9 +38,9 @@ function dynOutputs(
  */
 function cifti_create_parcellated_from_template_cifti_params(
     cifti_in: InputPathType,
-): CiftiCreateParcellatedFromTemplateCiftiParameters {
+): CiftiCreateParcellatedFromTemplateCiftiParametersTagged {
     const params = {
-        "@type": "workbench.cifti-create-parcellated-from-template.cifti" as const,
+        "@type": "cifti" as const,
         "cifti_in": cifti_in,
     };
     return params;
@@ -100,7 +67,7 @@ function cifti_create_parcellated_from_template_cifti_cargs(
 
 
 /**
- * Output object returned when calling `cifti_create_parcellated_from_template(...)`.
+ * Output object returned when calling `CiftiCreateParcellatedFromTemplateParameters(...)`.
  *
  * @interface
  */
@@ -133,9 +100,9 @@ function cifti_create_parcellated_from_template_params(
     cifti_out: string,
     opt_fill_value_value: number | null = null,
     cifti: Array<CiftiCreateParcellatedFromTemplateCiftiParameters> | null = null,
-): CiftiCreateParcellatedFromTemplateParameters {
+): CiftiCreateParcellatedFromTemplateParametersTagged {
     const params = {
-        "@type": "workbench.cifti-create-parcellated-from-template" as const,
+        "@type": "workbench/cifti-create-parcellated-from-template" as const,
         "cifti_template": cifti_template,
         "modify_direction": modify_direction,
         "cifti_out": cifti_out,
@@ -175,7 +142,7 @@ function cifti_create_parcellated_from_template_cargs(
         );
     }
     if ((params["cifti"] ?? null) !== null) {
-        cargs.push(...(params["cifti"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["cifti"] ?? null).map(s => cifti_create_parcellated_from_template_cifti_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -266,9 +233,7 @@ function cifti_create_parcellated_from_template(
 
 export {
       CIFTI_CREATE_PARCELLATED_FROM_TEMPLATE_METADATA,
-      CiftiCreateParcellatedFromTemplateCiftiParameters,
       CiftiCreateParcellatedFromTemplateOutputs,
-      CiftiCreateParcellatedFromTemplateParameters,
       cifti_create_parcellated_from_template,
       cifti_create_parcellated_from_template_cifti_params,
       cifti_create_parcellated_from_template_execute,

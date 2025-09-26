@@ -12,7 +12,7 @@ const EDDY_CUDA9_1_METADATA: Metadata = {
 
 
 interface EddyCuda91Parameters {
-    "@type": "fsl.eddy_cuda9.1";
+    "@type"?: "fsl/eddy_cuda9.1";
     "imain": InputPathType;
     "mask": InputPathType;
     "index": InputPathType;
@@ -58,44 +58,11 @@ interface EddyCuda91Parameters {
     "data_is_shelled": boolean;
     "verbose": boolean;
 }
+type EddyCuda91ParametersTagged = Required<Pick<EddyCuda91Parameters, '@type'>> & EddyCuda91Parameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.eddy_cuda9.1": eddy_cuda9_1_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.eddy_cuda9.1": eddy_cuda9_1_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `eddy_cuda9_1(...)`.
+ * Output object returned when calling `EddyCuda91Parameters(...)`.
  *
  * @interface
  */
@@ -278,9 +245,9 @@ function eddy_cuda9_1_params(
     dont_peas: boolean = false,
     data_is_shelled: boolean = false,
     verbose: boolean = false,
-): EddyCuda91Parameters {
+): EddyCuda91ParametersTagged {
     const params = {
-        "@type": "fsl.eddy_cuda9.1" as const,
+        "@type": "fsl/eddy_cuda9.1" as const,
         "imain": imain,
         "mask": mask,
         "index": index,
@@ -402,7 +369,7 @@ function eddy_cuda9_1_cargs(
     cargs.push(["--acqp=", execution.inputFile((params["acqp"] ?? null))].join(''));
     cargs.push(["--bvecs=", execution.inputFile((params["bvecs"] ?? null))].join(''));
     cargs.push(["--bvals=", execution.inputFile((params["bvals"] ?? null))].join(''));
-    cargs.push(["--out=", (params["out"] ?? null)].join(''));
+    cargs.push(["--out=", (params["out"] ?? "eddy_corrected")].join(''));
     if ((params["mb"] ?? null) !== null) {
         cargs.push(["--mb=", String((params["mb"] ?? null))].join(''));
     }
@@ -445,13 +412,13 @@ function eddy_cuda9_1_cargs(
     if ((params["s2v_niter"] ?? null) !== null) {
         cargs.push(["--s2v_niter=", String((params["s2v_niter"] ?? null))].join(''));
     }
-    if ((params["cnr_maps"] ?? null)) {
+    if ((params["cnr_maps"] ?? false)) {
         cargs.push("--cnr_maps");
     }
-    if ((params["residuals"] ?? null)) {
+    if ((params["residuals"] ?? false)) {
         cargs.push("--residuals");
     }
-    if ((params["fep"] ?? null)) {
+    if ((params["fep"] ?? false)) {
         cargs.push("--fep");
     }
     if ((params["interp"] ?? null) !== null) {
@@ -472,7 +439,7 @@ function eddy_cuda9_1_cargs(
     if ((params["ff"] ?? null) !== null) {
         cargs.push(["--ff=", String((params["ff"] ?? null))].join(''));
     }
-    if ((params["repol"] ?? null)) {
+    if ((params["repol"] ?? false)) {
         cargs.push("--repol");
     }
     if ((params["ol_nstd"] ?? null) !== null) {
@@ -484,13 +451,13 @@ function eddy_cuda9_1_cargs(
     if ((params["ol_type"] ?? null) !== null) {
         cargs.push(["--ol_type=", (params["ol_type"] ?? null)].join(''));
     }
-    if ((params["ol_pos"] ?? null)) {
+    if ((params["ol_pos"] ?? false)) {
         cargs.push("--ol_pos");
     }
-    if ((params["ol_sqr"] ?? null)) {
+    if ((params["ol_sqr"] ?? false)) {
         cargs.push("--ol_sqr");
     }
-    if ((params["estimate_move_by_susceptibility"] ?? null)) {
+    if ((params["estimate_move_by_susceptibility"] ?? false)) {
         cargs.push("--estimate_move_by_susceptibility");
     }
     if ((params["mbs_niter"] ?? null) !== null) {
@@ -502,16 +469,16 @@ function eddy_cuda9_1_cargs(
     if ((params["mbs_ksp"] ?? null) !== null) {
         cargs.push(["--mbs_ksp=", String((params["mbs_ksp"] ?? null))].join(''));
     }
-    if ((params["dont_sep_offs_move"] ?? null)) {
+    if ((params["dont_sep_offs_move"] ?? false)) {
         cargs.push("--dont_sep_offs_move");
     }
-    if ((params["dont_peas"] ?? null)) {
+    if ((params["dont_peas"] ?? false)) {
         cargs.push("--dont_peas");
     }
-    if ((params["data_is_shelled"] ?? null)) {
+    if ((params["data_is_shelled"] ?? false)) {
         cargs.push("--data_is_shelled");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("--verbose");
     }
     return cargs;
@@ -532,25 +499,25 @@ function eddy_cuda9_1_outputs(
 ): EddyCuda91Outputs {
     const ret: EddyCuda91Outputs = {
         root: execution.outputFile("."),
-        out: execution.outputFile([(params["out"] ?? null), ".nii.gz"].join('')),
-        eddy_parameters: execution.outputFile([(params["out"] ?? null), ".eddy_parameters"].join('')),
-        rotated_bvecs: execution.outputFile([(params["out"] ?? null), ".eddy_rotated_bvecs"].join('')),
-        rotated_bvecs_slr: execution.outputFile([(params["out"] ?? null), ".eddy_rotated_bvecs_for_SLR"].join('')),
-        command_txt: execution.outputFile([(params["out"] ?? null), ".eddy_command_txt"].join('')),
-        input_parameters: execution.outputFile([(params["out"] ?? null), ".eddy_values_of_all_input_parameters"].join('')),
-        movement_rms: execution.outputFile([(params["out"] ?? null), ".eddy_movement_rms"].join('')),
-        restricted_movement_rms: execution.outputFile([(params["out"] ?? null), ".eddy_restricted_movement_rms"].join('')),
-        shell_alignment_parameters: execution.outputFile([(params["out"] ?? null), ".eddy_post_eddy_shell_alignment_parameters"].join('')),
-        shell_pe_translation_parameters: execution.outputFile([(params["out"] ?? null), ".eddy_post_eddy_shell_PE_translation_parameters"].join('')),
-        outlier_report: execution.outputFile([(params["out"] ?? null), ".eddy_outlier_report"].join('')),
-        outlier_map: execution.outputFile([(params["out"] ?? null), ".eddy_outlier_map"].join('')),
-        outlier_n_stdev_map: execution.outputFile([(params["out"] ?? null), ".eddy_outlier_n_stdev_map"].join('')),
-        outlier_n_sqr_stdev_map: execution.outputFile([(params["out"] ?? null), ".eddy_outlier_n_sqr_stdev_map"].join('')),
-        outlier_free_data: execution.outputFile([(params["out"] ?? null), ".eddy_outlier_free_data.nii.gz"].join('')),
-        movement_over_time: execution.outputFile([(params["out"] ?? null), ".eddy_movement_over_time"].join('')),
-        mbs_first_order_fields: execution.outputFile([(params["out"] ?? null), ".eddy_mbs_first_order_fields.nii.gz"].join('')),
-        cnr_maps: execution.outputFile([(params["out"] ?? null), ".eddy_cnr_maps"].join('')),
-        residuals: execution.outputFile([(params["out"] ?? null), ".eddy_residuals"].join('')),
+        out: execution.outputFile([(params["out"] ?? "eddy_corrected"), ".nii.gz"].join('')),
+        eddy_parameters: execution.outputFile([(params["out"] ?? "eddy_corrected"), ".eddy_parameters"].join('')),
+        rotated_bvecs: execution.outputFile([(params["out"] ?? "eddy_corrected"), ".eddy_rotated_bvecs"].join('')),
+        rotated_bvecs_slr: execution.outputFile([(params["out"] ?? "eddy_corrected"), ".eddy_rotated_bvecs_for_SLR"].join('')),
+        command_txt: execution.outputFile([(params["out"] ?? "eddy_corrected"), ".eddy_command_txt"].join('')),
+        input_parameters: execution.outputFile([(params["out"] ?? "eddy_corrected"), ".eddy_values_of_all_input_parameters"].join('')),
+        movement_rms: execution.outputFile([(params["out"] ?? "eddy_corrected"), ".eddy_movement_rms"].join('')),
+        restricted_movement_rms: execution.outputFile([(params["out"] ?? "eddy_corrected"), ".eddy_restricted_movement_rms"].join('')),
+        shell_alignment_parameters: execution.outputFile([(params["out"] ?? "eddy_corrected"), ".eddy_post_eddy_shell_alignment_parameters"].join('')),
+        shell_pe_translation_parameters: execution.outputFile([(params["out"] ?? "eddy_corrected"), ".eddy_post_eddy_shell_PE_translation_parameters"].join('')),
+        outlier_report: execution.outputFile([(params["out"] ?? "eddy_corrected"), ".eddy_outlier_report"].join('')),
+        outlier_map: execution.outputFile([(params["out"] ?? "eddy_corrected"), ".eddy_outlier_map"].join('')),
+        outlier_n_stdev_map: execution.outputFile([(params["out"] ?? "eddy_corrected"), ".eddy_outlier_n_stdev_map"].join('')),
+        outlier_n_sqr_stdev_map: execution.outputFile([(params["out"] ?? "eddy_corrected"), ".eddy_outlier_n_sqr_stdev_map"].join('')),
+        outlier_free_data: execution.outputFile([(params["out"] ?? "eddy_corrected"), ".eddy_outlier_free_data.nii.gz"].join('')),
+        movement_over_time: execution.outputFile([(params["out"] ?? "eddy_corrected"), ".eddy_movement_over_time"].join('')),
+        mbs_first_order_fields: execution.outputFile([(params["out"] ?? "eddy_corrected"), ".eddy_mbs_first_order_fields.nii.gz"].join('')),
+        cnr_maps: execution.outputFile([(params["out"] ?? "eddy_corrected"), ".eddy_cnr_maps"].join('')),
+        residuals: execution.outputFile([(params["out"] ?? "eddy_corrected"), ".eddy_residuals"].join('')),
     };
     return ret;
 }
@@ -696,7 +663,6 @@ function eddy_cuda9_1(
 export {
       EDDY_CUDA9_1_METADATA,
       EddyCuda91Outputs,
-      EddyCuda91Parameters,
       eddy_cuda9_1,
       eddy_cuda9_1_execute,
       eddy_cuda9_1_params,

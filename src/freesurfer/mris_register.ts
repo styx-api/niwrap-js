@@ -12,7 +12,7 @@ const MRIS_REGISTER_METADATA: Metadata = {
 
 
 interface MrisRegisterParameters {
-    "@type": "freesurfer.mris_register";
+    "@type"?: "freesurfer/mris_register";
     "surf_fname": InputPathType;
     "target": InputPathType;
     "out_fname": string;
@@ -77,44 +77,11 @@ interface MrisRegisterParameters {
     "threads"?: number | null | undefined;
     "version_flag": boolean;
 }
+type MrisRegisterParametersTagged = Required<Pick<MrisRegisterParameters, '@type'>> & MrisRegisterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_register": mris_register_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_register": mris_register_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_register(...)`.
+ * Output object returned when calling `MrisRegisterParameters(...)`.
  *
  * @interface
  */
@@ -267,9 +234,9 @@ function mris_register_params(
     vector_flag: boolean = false,
     threads: number | null = null,
     version_flag: boolean = false,
-): MrisRegisterParameters {
+): MrisRegisterParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_register" as const,
+        "@type": "freesurfer/mris_register" as const,
         "surf_fname": surf_fname,
         "target": target,
         "out_fname": out_fname,
@@ -441,7 +408,7 @@ function mris_register_cargs(
     cargs.push(execution.inputFile((params["surf_fname"] ?? null)));
     cargs.push(execution.inputFile((params["target"] ?? null)));
     cargs.push((params["out_fname"] ?? null));
-    if ((params["one_flag"] ?? null)) {
+    if ((params["one_flag"] ?? false)) {
         cargs.push("-1");
     }
     if ((params["addframe"] ?? null) !== null) {
@@ -468,7 +435,7 @@ function mris_register_cargs(
             (params["canonical_name"] ?? null)
         );
     }
-    if ((params["inflated"] ?? null)) {
+    if ((params["inflated"] ?? false)) {
         cargs.push("-inflated");
     }
     if ((params["inflated_name"] ?? null) !== null) {
@@ -519,7 +486,7 @@ function mris_register_cargs(
             String((params["n_averages"] ?? null))
         );
     }
-    if ((params["adaptive"] ?? null)) {
+    if ((params["adaptive"] ?? false)) {
         cargs.push("-adaptive");
     }
     if ((params["l_area"] ?? null) !== null) {
@@ -534,7 +501,7 @@ function mris_register_cargs(
             String((params["l_corr"] ?? null))
         );
     }
-    if ((params["curvature_flag"] ?? null)) {
+    if ((params["curvature_flag"] ?? false)) {
         cargs.push("-curv");
     }
     if ((params["l_dist"] ?? null) !== null) {
@@ -573,7 +540,7 @@ function mris_register_cargs(
             String((params["error_ratio"] ?? null))
         );
     }
-    if ((params["initial_flag"] ?? null)) {
+    if ((params["initial_flag"] ?? false)) {
         cargs.push("-init");
     }
     if ((params["l_laplacian"] ?? null) !== null) {
@@ -582,7 +549,7 @@ function mris_register_cargs(
             String((params["l_laplacian"] ?? null))
         );
     }
-    if ((params["line_min"] ?? null)) {
+    if ((params["line_min"] ?? false)) {
         cargs.push("-lm");
     }
     if ((params["momentum"] ?? null) !== null) {
@@ -597,7 +564,7 @@ function mris_register_cargs(
             String((params["max_degrees"] ?? null))
         );
     }
-    if ((params["median"] ?? null)) {
+    if ((params["median"] ?? false)) {
         cargs.push("-median");
     }
     if ((params["min_degrees"] ?? null) !== null) {
@@ -636,16 +603,16 @@ function mris_register_cargs(
             String((params["l_nlarea"] ?? null))
         );
     }
-    if ((params["no_curv"] ?? null)) {
+    if ((params["no_curv"] ?? false)) {
         cargs.push("-nocurv");
     }
-    if ((params["no_normalization"] ?? null)) {
+    if ((params["no_normalization"] ?? false)) {
         cargs.push("-nonorm");
     }
-    if ((params["no_rotation"] ?? null)) {
+    if ((params["no_rotation"] ?? false)) {
         cargs.push("-norot");
     }
-    if ((params["no_sulc"] ?? null)) {
+    if ((params["no_sulc"] ?? false)) {
         cargs.push("-nosulc");
     }
     if ((params["num_surfaces"] ?? null) !== null) {
@@ -678,7 +645,7 @@ function mris_register_cargs(
             String((params["remove_negative"] ?? null))
         );
     }
-    if ((params["reverse"] ?? null)) {
+    if ((params["reverse"] ?? false)) {
         cargs.push("-reverse");
     }
     if ((params["rotate_values"] ?? null) !== null) {
@@ -699,7 +666,7 @@ function mris_register_cargs(
             String((params["scale"] ?? null))
         );
     }
-    if ((params["search_flag"] ?? null)) {
+    if ((params["search_flag"] ?? false)) {
         cargs.push("-search");
     }
     if ((params["spring_value"] ?? null) !== null) {
@@ -714,7 +681,7 @@ function mris_register_cargs(
             String((params["tolerance"] ?? null))
         );
     }
-    if ((params["topology_flag"] ?? null)) {
+    if ((params["topology_flag"] ?? false)) {
         cargs.push("-topology");
     }
     if ((params["vnum"] ?? null) !== null) {
@@ -723,7 +690,7 @@ function mris_register_cargs(
             (params["vnum"] ?? null)
         );
     }
-    if ((params["vsmooth"] ?? null)) {
+    if ((params["vsmooth"] ?? false)) {
         cargs.push("-vsmooth");
     }
     if ((params["write_iterations"] ?? null) !== null) {
@@ -738,7 +705,7 @@ function mris_register_cargs(
             String((params["gdiag_no"] ?? null))
         );
     }
-    if ((params["vector_flag"] ?? null)) {
+    if ((params["vector_flag"] ?? false)) {
         cargs.push("-vector");
     }
     if ((params["threads"] ?? null) !== null) {
@@ -747,7 +714,7 @@ function mris_register_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["version_flag"] ?? null)) {
+    if ((params["version_flag"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -953,7 +920,6 @@ function mris_register(
 export {
       MRIS_REGISTER_METADATA,
       MrisRegisterOutputs,
-      MrisRegisterParameters,
       mris_register,
       mris_register_execute,
       mris_register_params,

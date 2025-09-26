@@ -12,49 +12,17 @@ const FFTEST_METADATA: Metadata = {
 
 
 interface FftestParameters {
-    "@type": "afni.fftest";
+    "@type"?: "afni/fftest";
     "length": number;
     "num_tests": number;
     "vector_size": number;
     "quiet_mode": boolean;
 }
+type FftestParametersTagged = Required<Pick<FftestParameters, '@type'>> & FftestParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.fftest": fftest_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fftest(...)`.
+ * Output object returned when calling `FftestParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function fftest_params(
     num_tests: number,
     vector_size: number,
     quiet_mode: boolean = false,
-): FftestParameters {
+): FftestParametersTagged {
     const params = {
-        "@type": "afni.fftest" as const,
+        "@type": "afni/fftest" as const,
         "length": length,
         "num_tests": num_tests,
         "vector_size": vector_size,
@@ -110,7 +78,7 @@ function fftest_cargs(
     cargs.push(String((params["length"] ?? null)));
     cargs.push(String((params["num_tests"] ?? null)));
     cargs.push(String((params["vector_size"] ?? null)));
-    if ((params["quiet_mode"] ?? null)) {
+    if ((params["quiet_mode"] ?? false)) {
         cargs.push("-q");
     }
     return cargs;
@@ -196,7 +164,6 @@ function fftest(
 export {
       FFTEST_METADATA,
       FftestOutputs,
-      FftestParameters,
       fftest,
       fftest_execute,
       fftest_params,

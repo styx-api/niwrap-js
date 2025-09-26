@@ -12,49 +12,16 @@ const MRI_COMPUTE_VOLUME_INTENSITIES_METADATA: Metadata = {
 
 
 interface MriComputeVolumeIntensitiesParameters {
-    "@type": "freesurfer.mri_compute_volume_intensities";
+    "@type"?: "freesurfer/mri_compute_volume_intensities";
     "input_intensity": InputPathType;
     "volume_fraction_stem": string;
     "output_volume": string;
 }
+type MriComputeVolumeIntensitiesParametersTagged = Required<Pick<MriComputeVolumeIntensitiesParameters, '@type'>> & MriComputeVolumeIntensitiesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_compute_volume_intensities": mri_compute_volume_intensities_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_compute_volume_intensities": mri_compute_volume_intensities_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_compute_volume_intensities(...)`.
+ * Output object returned when calling `MriComputeVolumeIntensitiesParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mri_compute_volume_intensities_params(
     input_intensity: InputPathType,
     volume_fraction_stem: string,
     output_volume: string,
-): MriComputeVolumeIntensitiesParameters {
+): MriComputeVolumeIntensitiesParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_compute_volume_intensities" as const,
+        "@type": "freesurfer/mri_compute_volume_intensities" as const,
         "input_intensity": input_intensity,
         "volume_fraction_stem": volume_fraction_stem,
         "output_volume": output_volume,
@@ -193,7 +160,6 @@ function mri_compute_volume_intensities(
 export {
       MRI_COMPUTE_VOLUME_INTENSITIES_METADATA,
       MriComputeVolumeIntensitiesOutputs,
-      MriComputeVolumeIntensitiesParameters,
       mri_compute_volume_intensities,
       mri_compute_volume_intensities_execute,
       mri_compute_volume_intensities_params,

@@ -12,7 +12,7 @@ const XHEMIREG_METADATA: Metadata = {
 
 
 interface XhemiregParameters {
-    "@type": "freesurfer.xhemireg";
+    "@type"?: "freesurfer/xhemireg";
     "subject": string;
     "output_dir"?: string | null | undefined;
     "map_lh": boolean;
@@ -27,43 +27,11 @@ interface XhemiregParameters {
     "version": boolean;
     "help": boolean;
 }
+type XhemiregParametersTagged = Required<Pick<XhemiregParameters, '@type'>> & XhemiregParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.xhemireg": xhemireg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `xhemireg(...)`.
+ * Output object returned when calling `XhemiregParameters(...)`.
  *
  * @interface
  */
@@ -108,9 +76,9 @@ function xhemireg_params(
     threads: number | null = null,
     version: boolean = false,
     help: boolean = false,
-): XhemiregParameters {
+): XhemiregParametersTagged {
     const params = {
-        "@type": "freesurfer.xhemireg" as const,
+        "@type": "freesurfer/xhemireg" as const,
         "subject": subject,
         "map_lh": map_lh,
         "map_rh": map_rh,
@@ -159,25 +127,25 @@ function xhemireg_cargs(
             (params["output_dir"] ?? null)
         );
     }
-    if ((params["map_lh"] ?? null)) {
+    if ((params["map_lh"] ?? false)) {
         cargs.push("--lh");
     }
-    if ((params["map_rh"] ?? null)) {
+    if ((params["map_rh"] ?? false)) {
         cargs.push("--rh");
     }
-    if ((params["perform_reg"] ?? null)) {
+    if ((params["perform_reg"] ?? false)) {
         cargs.push("--reg");
     }
-    if ((params["tal_compute"] ?? null)) {
+    if ((params["tal_compute"] ?? false)) {
         cargs.push("--tal-compute");
     }
-    if ((params["no_tal_compute"] ?? null)) {
+    if ((params["no_tal_compute"] ?? false)) {
         cargs.push("--no-tal-compute");
     }
-    if ((params["tal_estimate"] ?? null)) {
+    if ((params["tal_estimate"] ?? false)) {
         cargs.push("--tal-estimate");
     }
-    if ((params["no_tal_estimate"] ?? null)) {
+    if ((params["no_tal_estimate"] ?? false)) {
         cargs.push("--no-tal-estimate");
     }
     if ((params["gcaprep"] ?? null) !== null) {
@@ -192,10 +160,10 @@ function xhemireg_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -299,7 +267,6 @@ function xhemireg(
 export {
       XHEMIREG_METADATA,
       XhemiregOutputs,
-      XhemiregParameters,
       xhemireg,
       xhemireg_execute,
       xhemireg_params,

@@ -12,51 +12,18 @@ const V_3D_EXCHANGE_METADATA: Metadata = {
 
 
 interface V3dExchangeParameters {
-    "@type": "afni.3dExchange";
+    "@type"?: "afni/3dExchange";
     "prefix": string;
     "infile": InputPathType;
     "mapfile": InputPathType;
     "version": boolean;
     "help": boolean;
 }
+type V3dExchangeParametersTagged = Required<Pick<V3dExchangeParameters, '@type'>> & V3dExchangeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dExchange": v_3d_exchange_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dExchange": v_3d_exchange_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_exchange(...)`.
+ * Output object returned when calling `V3dExchangeParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +60,9 @@ function v_3d_exchange_params(
     mapfile: InputPathType,
     version: boolean = false,
     help: boolean = false,
-): V3dExchangeParameters {
+): V3dExchangeParametersTagged {
     const params = {
-        "@type": "afni.3dExchange" as const,
+        "@type": "afni/3dExchange" as const,
         "prefix": prefix,
         "infile": infile,
         "mapfile": mapfile,
@@ -132,10 +99,10 @@ function v_3d_exchange_cargs(
         "-map",
         execution.inputFile((params["mapfile"] ?? null))
     );
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-ver");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -224,7 +191,6 @@ function v_3d_exchange(
 
 export {
       V3dExchangeOutputs,
-      V3dExchangeParameters,
       V_3D_EXCHANGE_METADATA,
       v_3d_exchange,
       v_3d_exchange_execute,

@@ -12,50 +12,17 @@ const METRIC_MASK_METADATA: Metadata = {
 
 
 interface MetricMaskParameters {
-    "@type": "workbench.metric-mask";
+    "@type"?: "workbench/metric-mask";
     "metric": InputPathType;
     "mask": InputPathType;
     "metric_out": string;
     "opt_column_column"?: string | null | undefined;
 }
+type MetricMaskParametersTagged = Required<Pick<MetricMaskParameters, '@type'>> & MetricMaskParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-mask": metric_mask_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.metric-mask": metric_mask_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `metric_mask(...)`.
+ * Output object returned when calling `MetricMaskParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function metric_mask_params(
     mask: InputPathType,
     metric_out: string,
     opt_column_column: string | null = null,
-): MetricMaskParameters {
+): MetricMaskParametersTagged {
     const params = {
-        "@type": "workbench.metric-mask" as const,
+        "@type": "workbench/metric-mask" as const,
         "metric": metric,
         "mask": mask,
         "metric_out": metric_out,
@@ -212,7 +179,6 @@ function metric_mask(
 export {
       METRIC_MASK_METADATA,
       MetricMaskOutputs,
-      MetricMaskParameters,
       metric_mask,
       metric_mask_execute,
       metric_mask_params,

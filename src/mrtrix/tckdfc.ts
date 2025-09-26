@@ -12,21 +12,23 @@ const TCKDFC_METADATA: Metadata = {
 
 
 interface TckdfcDynamicParameters {
-    "@type": "mrtrix.tckdfc.dynamic";
+    "@type"?: "dynamic";
     "shape": string;
     "width": number;
 }
+type TckdfcDynamicParametersTagged = Required<Pick<TckdfcDynamicParameters, '@type'>> & TckdfcDynamicParameters;
 
 
 interface TckdfcConfigParameters {
-    "@type": "mrtrix.tckdfc.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type TckdfcConfigParametersTagged = Required<Pick<TckdfcConfigParameters, '@type'>> & TckdfcConfigParameters;
 
 
 interface TckdfcParameters {
-    "@type": "mrtrix.tckdfc";
+    "@type"?: "mrtrix/tckdfc";
     "static": boolean;
     "dynamic"?: TckdfcDynamicParameters | null | undefined;
     "template"?: InputPathType | null | undefined;
@@ -46,42 +48,7 @@ interface TckdfcParameters {
     "fmri": InputPathType;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.tckdfc": tckdfc_cargs,
-        "mrtrix.tckdfc.dynamic": tckdfc_dynamic_cargs,
-        "mrtrix.tckdfc.config": tckdfc_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.tckdfc": tckdfc_outputs,
-    };
-    return outputsFuncs[t];
-}
+type TckdfcParametersTagged = Required<Pick<TckdfcParameters, '@type'>> & TckdfcParameters;
 
 
 /**
@@ -95,9 +62,9 @@ function dynOutputs(
 function tckdfc_dynamic_params(
     shape: string,
     width: number,
-): TckdfcDynamicParameters {
+): TckdfcDynamicParametersTagged {
     const params = {
-        "@type": "mrtrix.tckdfc.dynamic" as const,
+        "@type": "dynamic" as const,
         "shape": shape,
         "width": width,
     };
@@ -136,9 +103,9 @@ function tckdfc_dynamic_cargs(
 function tckdfc_config_params(
     key: string,
     value: string,
-): TckdfcConfigParameters {
+): TckdfcConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.tckdfc.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -167,7 +134,7 @@ function tckdfc_config_cargs(
 
 
 /**
- * Output object returned when calling `tckdfc(...)`.
+ * Output object returned when calling `TckdfcParameters(...)`.
  *
  * @interface
  */
@@ -227,9 +194,9 @@ function tckdfc_params(
     config: Array<TckdfcConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TckdfcParameters {
+): TckdfcParametersTagged {
     const params = {
-        "@type": "mrtrix.tckdfc" as const,
+        "@type": "mrtrix/tckdfc" as const,
         "static": static_,
         "backtrack": backtrack,
         "info": info,
@@ -281,11 +248,11 @@ function tckdfc_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("tckdfc");
-    if ((params["static"] ?? null)) {
+    if ((params["static"] ?? false)) {
         cargs.push("-static");
     }
     if ((params["dynamic"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["dynamic"] ?? null)["@type"])((params["dynamic"] ?? null), execution));
+        cargs.push(...tckdfc_dynamic_cargs((params["dynamic"] ?? null), execution));
     }
     if ((params["template"] ?? null) !== null) {
         cargs.push(
@@ -305,7 +272,7 @@ function tckdfc_cargs(
             (params["stat_vox"] ?? null)
         );
     }
-    if ((params["backtrack"] ?? null)) {
+    if ((params["backtrack"] ?? false)) {
         cargs.push("-backtrack");
     }
     if ((params["upsample"] ?? null) !== null) {
@@ -314,16 +281,16 @@ function tckdfc_cargs(
             String((params["upsample"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -333,12 +300,12 @@ function tckdfc_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => tckdfc_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["tracks"] ?? null)));
@@ -484,10 +451,7 @@ function tckdfc(
 
 export {
       TCKDFC_METADATA,
-      TckdfcConfigParameters,
-      TckdfcDynamicParameters,
       TckdfcOutputs,
-      TckdfcParameters,
       tckdfc,
       tckdfc_config_params,
       tckdfc_dynamic_params,

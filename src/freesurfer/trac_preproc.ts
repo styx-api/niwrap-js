@@ -12,7 +12,7 @@ const TRAC_PREPROC_METADATA: Metadata = {
 
 
 interface TracPreprocParameters {
-    "@type": "freesurfer.trac-preproc";
+    "@type"?: "freesurfer/trac-preproc";
     "dmrirc_file": InputPathType;
     "log_file"?: string | null | undefined;
     "nolog": boolean;
@@ -26,43 +26,11 @@ interface TracPreprocParameters {
     "dontrun": boolean;
     "version": boolean;
 }
+type TracPreprocParametersTagged = Required<Pick<TracPreprocParameters, '@type'>> & TracPreprocParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.trac-preproc": trac_preproc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `trac_preproc(...)`.
+ * Output object returned when calling `TracPreprocParameters(...)`.
  *
  * @interface
  */
@@ -105,9 +73,9 @@ function trac_preproc_params(
     debug: boolean = false,
     dontrun: boolean = false,
     version: boolean = false,
-): TracPreprocParameters {
+): TracPreprocParametersTagged {
     const params = {
-        "@type": "freesurfer.trac-preproc" as const,
+        "@type": "freesurfer/trac-preproc" as const,
         "dmrirc_file": dmrirc_file,
         "nolog": nolog,
         "nocmd": nocmd,
@@ -157,7 +125,7 @@ function trac_preproc_cargs(
             (params["log_file"] ?? null)
         );
     }
-    if ((params["nolog"] ?? null)) {
+    if ((params["nolog"] ?? false)) {
         cargs.push("-nolog");
     }
     if ((params["cmd_file"] ?? null) !== null) {
@@ -166,10 +134,10 @@ function trac_preproc_cargs(
             (params["cmd_file"] ?? null)
         );
     }
-    if ((params["nocmd"] ?? null)) {
+    if ((params["nocmd"] ?? false)) {
         cargs.push("-nocmd");
     }
-    if ((params["no_isrunning"] ?? null)) {
+    if ((params["no_isrunning"] ?? false)) {
         cargs.push("-no-isrunning");
     }
     if ((params["umask"] ?? null) !== null) {
@@ -184,16 +152,16 @@ function trac_preproc_cargs(
             (params["group_id"] ?? null)
         );
     }
-    if ((params["allow_core_dump"] ?? null)) {
+    if ((params["allow_core_dump"] ?? false)) {
         cargs.push("-allowcoredump");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["dontrun"] ?? null)) {
+    if ((params["dontrun"] ?? false)) {
         cargs.push("-dontrun");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     return cargs;
@@ -295,7 +263,6 @@ function trac_preproc(
 export {
       TRAC_PREPROC_METADATA,
       TracPreprocOutputs,
-      TracPreprocParameters,
       trac_preproc,
       trac_preproc_execute,
       trac_preproc_params,

@@ -12,7 +12,7 @@ const GIFTI_TOOL_METADATA: Metadata = {
 
 
 interface GiftiToolParameters {
-    "@type": "afni.gifti_tool";
+    "@type"?: "afni/gifti_tool";
     "infile": InputPathType;
     "new_numda"?: number | null | undefined;
     "new_dtype"?: string | null | undefined;
@@ -36,44 +36,11 @@ interface GiftiToolParameters {
     "compare_verb"?: number | null | undefined;
     "approx_gifti": boolean;
 }
+type GiftiToolParametersTagged = Required<Pick<GiftiToolParameters, '@type'>> & GiftiToolParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.gifti_tool": gifti_tool_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.gifti_tool": gifti_tool_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `gifti_tool(...)`.
+ * Output object returned when calling `GiftiToolParameters(...)`.
  *
  * @interface
  */
@@ -140,9 +107,9 @@ function gifti_tool_params(
     compare_data: boolean = false,
     compare_verb: number | null = null,
     approx_gifti: boolean = false,
-): GiftiToolParameters {
+): GiftiToolParametersTagged {
     const params = {
-        "@type": "afni.gifti_tool" as const,
+        "@type": "afni/gifti_tool" as const,
         "infile": infile,
         "write_gifti": write_gifti,
         "mod_add_data": mod_add_data,
@@ -256,7 +223,7 @@ function gifti_tool_cargs(
             ...(params["set_extern_filelist"] ?? null)
         );
     }
-    if ((params["mod_add_data"] ?? null)) {
+    if ((params["mod_add_data"] ?? false)) {
         cargs.push("-mod_add_data");
     }
     if ((params["verb"] ?? null) !== null) {
@@ -265,7 +232,7 @@ function gifti_tool_cargs(
             String((params["verb"] ?? null))
         );
     }
-    if ((params["show_gifti"] ?? null)) {
+    if ((params["show_gifti"] ?? false)) {
         cargs.push("-show_gifti");
     }
     if ((params["read_das"] ?? null) !== null) {
@@ -304,13 +271,13 @@ function gifti_tool_cargs(
             ...(params["mod_das"] ?? null).map(String)
         );
     }
-    if ((params["new_dset"] ?? null)) {
+    if ((params["new_dset"] ?? false)) {
         cargs.push("-new_dset");
     }
-    if ((params["compare_gifti"] ?? null)) {
+    if ((params["compare_gifti"] ?? false)) {
         cargs.push("-compare_gifti");
     }
-    if ((params["compare_data"] ?? null)) {
+    if ((params["compare_data"] ?? false)) {
         cargs.push("-compare_data");
     }
     if ((params["compare_verb"] ?? null) !== null) {
@@ -319,7 +286,7 @@ function gifti_tool_cargs(
             String((params["compare_verb"] ?? null))
         );
     }
-    if ((params["approx_gifti"] ?? null)) {
+    if ((params["approx_gifti"] ?? false)) {
         cargs.push("-approx_gifti");
     }
     return cargs;
@@ -442,7 +409,6 @@ function gifti_tool(
 export {
       GIFTI_TOOL_METADATA,
       GiftiToolOutputs,
-      GiftiToolParameters,
       gifti_tool,
       gifti_tool_execute,
       gifti_tool_params,

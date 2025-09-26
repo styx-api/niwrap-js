@@ -12,14 +12,15 @@ const METRIC_STATS_METADATA: Metadata = {
 
 
 interface MetricStatsRoiParameters {
-    "@type": "workbench.metric-stats.roi";
+    "@type"?: "roi";
     "roi_metric": InputPathType;
     "opt_match_maps": boolean;
 }
+type MetricStatsRoiParametersTagged = Required<Pick<MetricStatsRoiParameters, '@type'>> & MetricStatsRoiParameters;
 
 
 interface MetricStatsParameters {
-    "@type": "workbench.metric-stats";
+    "@type"?: "workbench/metric-stats";
     "metric_in": InputPathType;
     "opt_reduce_operation"?: string | null | undefined;
     "opt_percentile_percent"?: number | null | undefined;
@@ -27,40 +28,7 @@ interface MetricStatsParameters {
     "roi"?: MetricStatsRoiParameters | null | undefined;
     "opt_show_map_name": boolean;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-stats": metric_stats_cargs,
-        "workbench.metric-stats.roi": metric_stats_roi_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type MetricStatsParametersTagged = Required<Pick<MetricStatsParameters, '@type'>> & MetricStatsParameters;
 
 
 /**
@@ -74,9 +42,9 @@ function dynOutputs(
 function metric_stats_roi_params(
     roi_metric: InputPathType,
     opt_match_maps: boolean = false,
-): MetricStatsRoiParameters {
+): MetricStatsRoiParametersTagged {
     const params = {
-        "@type": "workbench.metric-stats.roi" as const,
+        "@type": "roi" as const,
         "roi_metric": roi_metric,
         "opt_match_maps": opt_match_maps,
     };
@@ -99,7 +67,7 @@ function metric_stats_roi_cargs(
     const cargs: string[] = [];
     cargs.push("-roi");
     cargs.push(execution.inputFile((params["roi_metric"] ?? null)));
-    if ((params["opt_match_maps"] ?? null)) {
+    if ((params["opt_match_maps"] ?? false)) {
         cargs.push("-match-maps");
     }
     return cargs;
@@ -107,7 +75,7 @@ function metric_stats_roi_cargs(
 
 
 /**
- * Output object returned when calling `metric_stats(...)`.
+ * Output object returned when calling `MetricStatsParameters(...)`.
  *
  * @interface
  */
@@ -138,9 +106,9 @@ function metric_stats_params(
     opt_column_column: string | null = null,
     roi: MetricStatsRoiParameters | null = null,
     opt_show_map_name: boolean = false,
-): MetricStatsParameters {
+): MetricStatsParametersTagged {
     const params = {
-        "@type": "workbench.metric-stats" as const,
+        "@type": "workbench/metric-stats" as const,
         "metric_in": metric_in,
         "opt_show_map_name": opt_show_map_name,
     };
@@ -195,9 +163,9 @@ function metric_stats_cargs(
         );
     }
     if ((params["roi"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["roi"] ?? null)["@type"])((params["roi"] ?? null), execution));
+        cargs.push(...metric_stats_roi_cargs((params["roi"] ?? null), execution));
     }
-    if ((params["opt_show_map_name"] ?? null)) {
+    if ((params["opt_show_map_name"] ?? false)) {
         cargs.push("-show-map-name");
     }
     return cargs;
@@ -331,8 +299,6 @@ function metric_stats(
 export {
       METRIC_STATS_METADATA,
       MetricStatsOutputs,
-      MetricStatsParameters,
-      MetricStatsRoiParameters,
       metric_stats,
       metric_stats_execute,
       metric_stats_params,

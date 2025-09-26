@@ -12,50 +12,17 @@ const ESTNOISE_METADATA: Metadata = {
 
 
 interface EstnoiseParameters {
-    "@type": "fsl.estnoise";
+    "@type"?: "fsl/estnoise";
     "input_4d_data": InputPathType;
     "spatial_sigma"?: number | null | undefined;
     "temp_hp_sigma"?: number | null | undefined;
     "temp_lp_sigma"?: number | null | undefined;
 }
+type EstnoiseParametersTagged = Required<Pick<EstnoiseParameters, '@type'>> & EstnoiseParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.estnoise": estnoise_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.estnoise": estnoise_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `estnoise(...)`.
+ * Output object returned when calling `EstnoiseParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function estnoise_params(
     spatial_sigma: number | null = null,
     temp_hp_sigma: number | null = null,
     temp_lp_sigma: number | null = null,
-): EstnoiseParameters {
+): EstnoiseParametersTagged {
     const params = {
-        "@type": "fsl.estnoise" as const,
+        "@type": "fsl/estnoise" as const,
         "input_4d_data": input_4d_data,
     };
     if (spatial_sigma !== null) {
@@ -212,7 +179,6 @@ function estnoise(
 export {
       ESTNOISE_METADATA,
       EstnoiseOutputs,
-      EstnoiseParameters,
       estnoise,
       estnoise_execute,
       estnoise_params,

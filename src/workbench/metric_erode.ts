@@ -12,7 +12,7 @@ const METRIC_ERODE_METADATA: Metadata = {
 
 
 interface MetricErodeParameters {
-    "@type": "workbench.metric-erode";
+    "@type"?: "workbench/metric-erode";
     "metric": InputPathType;
     "surface": InputPathType;
     "distance": number;
@@ -21,44 +21,11 @@ interface MetricErodeParameters {
     "opt_column_column"?: string | null | undefined;
     "opt_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
+type MetricErodeParametersTagged = Required<Pick<MetricErodeParameters, '@type'>> & MetricErodeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-erode": metric_erode_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.metric-erode": metric_erode_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `metric_erode(...)`.
+ * Output object returned when calling `MetricErodeParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function metric_erode_params(
     opt_roi_roi_metric: InputPathType | null = null,
     opt_column_column: string | null = null,
     opt_corrected_areas_area_metric: InputPathType | null = null,
-): MetricErodeParameters {
+): MetricErodeParametersTagged {
     const params = {
-        "@type": "workbench.metric-erode" as const,
+        "@type": "workbench/metric-erode" as const,
         "metric": metric,
         "surface": surface,
         "distance": distance,
@@ -251,7 +218,6 @@ function metric_erode(
 export {
       METRIC_ERODE_METADATA,
       MetricErodeOutputs,
-      MetricErodeParameters,
       metric_erode,
       metric_erode_execute,
       metric_erode_params,

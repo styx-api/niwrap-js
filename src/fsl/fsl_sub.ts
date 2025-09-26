@@ -12,7 +12,7 @@ const FSL_SUB_METADATA: Metadata = {
 
 
 interface FslSubParameters {
-    "@type": "fsl.fsl_sub";
+    "@type"?: "fsl/fsl_sub";
     "arch"?: string | null | undefined;
     "coprocessor"?: string | null | undefined;
     "coprocessor_multi"?: number | null | undefined;
@@ -48,43 +48,11 @@ interface FslSubParameters {
     "version": boolean;
     "fileisimage"?: InputPathType | null | undefined;
 }
+type FslSubParametersTagged = Required<Pick<FslSubParameters, '@type'>> & FslSubParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fsl_sub": fsl_sub_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsl_sub(...)`.
+ * Output object returned when calling `FslSubParameters(...)`.
  *
  * @interface
  */
@@ -171,9 +139,9 @@ function fsl_sub_params(
     verbose: boolean = false,
     version: boolean = false,
     fileisimage: InputPathType | null = null,
-): FslSubParameters {
+): FslSubParametersTagged {
     const params = {
-        "@type": "fsl.fsl_sub" as const,
+        "@type": "fsl/fsl_sub" as const,
         "coprocessor_class_strict": coprocessor_class_strict,
         "usescript": usescript,
         "not_requeueable": not_requeueable,
@@ -299,7 +267,7 @@ function fsl_sub_cargs(
             (params["coprocessor_class"] ?? null)
         );
     }
-    if ((params["coprocessor_class_strict"] ?? null)) {
+    if ((params["coprocessor_class_strict"] ?? false)) {
         cargs.push("--coprocessor_class_strict");
     }
     if ((params["coprocessor_toolkit"] ?? null) !== null) {
@@ -308,7 +276,7 @@ function fsl_sub_cargs(
             (params["coprocessor_toolkit"] ?? null)
         );
     }
-    if ((params["usescript"] ?? null)) {
+    if ((params["usescript"] ?? false)) {
         cargs.push("-F");
     }
     if ((params["jobhold"] ?? null) !== null) {
@@ -317,7 +285,7 @@ function fsl_sub_cargs(
             (params["jobhold"] ?? null)
         );
     }
-    if ((params["not_requeueable"] ?? null)) {
+    if ((params["not_requeueable"] ?? false)) {
         cargs.push("--not_requeueable");
     }
     if ((params["array_hold"] ?? null) !== null) {
@@ -344,7 +312,7 @@ function fsl_sub_cargs(
             (params["mailto"] ?? null)
         );
     }
-    if ((params["novalidation"] ?? null)) {
+    if ((params["novalidation"] ?? false)) {
         cargs.push("-n");
     }
     if ((params["name"] ?? null) !== null) {
@@ -407,7 +375,7 @@ function fsl_sub_cargs(
             String((params["array_limit"] ?? null))
         );
     }
-    if ((params["keep_jobscript"] ?? null)) {
+    if ((params["keep_jobscript"] ?? false)) {
         cargs.push("--keep_jobscript");
     }
     if ((params["project"] ?? null) !== null) {
@@ -416,7 +384,7 @@ function fsl_sub_cargs(
             (params["project"] ?? null)
         );
     }
-    if ((params["noramsplit"] ?? null)) {
+    if ((params["noramsplit"] ?? false)) {
         cargs.push("-S");
     }
     if ((params["jobtime"] ?? null) !== null) {
@@ -431,16 +399,16 @@ function fsl_sub_cargs(
             (params["has_coprocessor"] ?? null)
         );
     }
-    if ((params["has_queues"] ?? null)) {
+    if ((params["has_queues"] ?? false)) {
         cargs.push("--has_queues");
     }
-    if ((params["show_config"] ?? null)) {
+    if ((params["show_config"] ?? false)) {
         cargs.push("--show_config");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-V");
     }
     if ((params["fileisimage"] ?? null) !== null) {
@@ -592,7 +560,6 @@ function fsl_sub(
 export {
       FSL_SUB_METADATA,
       FslSubOutputs,
-      FslSubParameters,
       fsl_sub,
       fsl_sub_execute,
       fsl_sub_params,

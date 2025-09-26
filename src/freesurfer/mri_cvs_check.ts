@@ -12,50 +12,18 @@ const MRI_CVS_CHECK_METADATA: Metadata = {
 
 
 interface MriCvsCheckParameters {
-    "@type": "freesurfer.mri_cvs_check";
+    "@type"?: "freesurfer/mri_cvs_check";
     "mov_subjid": string;
     "template_subjid"?: string | null | undefined;
     "hemi"?: "lh" | "rh" | null | undefined;
     "help": boolean;
     "version": boolean;
 }
+type MriCvsCheckParametersTagged = Required<Pick<MriCvsCheckParameters, '@type'>> & MriCvsCheckParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_cvs_check": mri_cvs_check_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_cvs_check(...)`.
+ * Output object returned when calling `MriCvsCheckParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function mri_cvs_check_params(
     hemi: "lh" | "rh" | null = null,
     help: boolean = false,
     version: boolean = false,
-): MriCvsCheckParameters {
+): MriCvsCheckParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_cvs_check" as const,
+        "@type": "freesurfer/mri_cvs_check" as const,
         "mov_subjid": mov_subjid,
         "help": help,
         "version": version,
@@ -131,10 +99,10 @@ function mri_cvs_check_cargs(
             (params["hemi"] ?? null)
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -222,7 +190,6 @@ function mri_cvs_check(
 export {
       MRI_CVS_CHECK_METADATA,
       MriCvsCheckOutputs,
-      MriCvsCheckParameters,
       mri_cvs_check,
       mri_cvs_check_execute,
       mri_cvs_check_params,

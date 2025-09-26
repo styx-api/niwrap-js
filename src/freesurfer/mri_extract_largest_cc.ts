@@ -12,7 +12,7 @@ const MRI_EXTRACT_LARGEST_CC_METADATA: Metadata = {
 
 
 interface MriExtractLargestCcParameters {
-    "@type": "freesurfer.mri_extract_largest_CC";
+    "@type"?: "freesurfer/mri_extract_largest_CC";
     "input_volume": InputPathType;
     "output_volume": string;
     "threshold"?: number | null | undefined;
@@ -21,44 +21,11 @@ interface MriExtractLargestCcParameters {
     "original_volume"?: InputPathType | null | undefined;
     "label_value"?: number | null | undefined;
 }
+type MriExtractLargestCcParametersTagged = Required<Pick<MriExtractLargestCcParameters, '@type'>> & MriExtractLargestCcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_extract_largest_CC": mri_extract_largest_cc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_extract_largest_CC": mri_extract_largest_cc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_extract_largest_cc(...)`.
+ * Output object returned when calling `MriExtractLargestCcParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function mri_extract_largest_cc_params(
     largest_cc_in_bg: boolean = false,
     original_volume: InputPathType | null = null,
     label_value: number | null = null,
-): MriExtractLargestCcParameters {
+): MriExtractLargestCcParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_extract_largest_CC" as const,
+        "@type": "freesurfer/mri_extract_largest_CC" as const,
         "input_volume": input_volume,
         "output_volume": output_volume,
         "largest_cc_in_bg": largest_cc_in_bg,
@@ -146,7 +113,7 @@ function mri_extract_largest_cc_cargs(
             (params["hemisphere"] ?? null)
         );
     }
-    if ((params["largest_cc_in_bg"] ?? null)) {
+    if ((params["largest_cc_in_bg"] ?? false)) {
         cargs.push("-I");
     }
     if ((params["original_volume"] ?? null) !== null) {
@@ -251,7 +218,6 @@ function mri_extract_largest_cc(
 export {
       MRI_EXTRACT_LARGEST_CC_METADATA,
       MriExtractLargestCcOutputs,
-      MriExtractLargestCcParameters,
       mri_extract_largest_cc,
       mri_extract_largest_cc_execute,
       mri_extract_largest_cc_params,

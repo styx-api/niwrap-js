@@ -12,47 +12,14 @@ const V__DO_EXAMPLES_METADATA: Metadata = {
 
 
 interface VDoExamplesParameters {
-    "@type": "afni.@DO.examples";
+    "@type"?: "afni/@DO.examples";
     "auto_test": boolean;
 }
+type VDoExamplesParametersTagged = Required<Pick<VDoExamplesParameters, '@type'>> & VDoExamplesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@DO.examples": v__do_examples_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@DO.examples": v__do_examples_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__do_examples(...)`.
+ * Output object returned when calling `VDoExamplesParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface VDoExamplesOutputs {
  */
 function v__do_examples_params(
     auto_test: boolean = false,
-): VDoExamplesParameters {
+): VDoExamplesParametersTagged {
     const params = {
-        "@type": "afni.@DO.examples" as const,
+        "@type": "afni/@DO.examples" as const,
         "auto_test": auto_test,
     };
     return params;
@@ -100,7 +67,7 @@ function v__do_examples_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("@DO.examples");
-    if ((params["auto_test"] ?? null)) {
+    if ((params["auto_test"] ?? false)) {
         cargs.push("-auto_test");
     }
     return cargs;
@@ -180,7 +147,6 @@ function v__do_examples(
 
 export {
       VDoExamplesOutputs,
-      VDoExamplesParameters,
       V__DO_EXAMPLES_METADATA,
       v__do_examples,
       v__do_examples_execute,

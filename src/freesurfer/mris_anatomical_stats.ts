@@ -12,7 +12,7 @@ const MRIS_ANATOMICAL_STATS_METADATA: Metadata = {
 
 
 interface MrisAnatomicalStatsParameters {
-    "@type": "freesurfer.mris_anatomical_stats";
+    "@type"?: "freesurfer/mris_anatomical_stats";
     "subjectname": string;
     "hemisphere": string;
     "surfacename"?: string | null | undefined;
@@ -28,44 +28,11 @@ interface MrisAnatomicalStatsParameters {
     "noglobal": boolean;
     "th3_computation": boolean;
 }
+type MrisAnatomicalStatsParametersTagged = Required<Pick<MrisAnatomicalStatsParameters, '@type'>> & MrisAnatomicalStatsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_anatomical_stats": mris_anatomical_stats_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_anatomical_stats": mris_anatomical_stats_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_anatomical_stats(...)`.
+ * Output object returned when calling `MrisAnatomicalStatsParameters(...)`.
  *
  * @interface
  */
@@ -124,9 +91,9 @@ function mris_anatomical_stats_params(
     color_table: string | null = null,
     noglobal: boolean = false,
     th3_computation: boolean = false,
-): MrisAnatomicalStatsParameters {
+): MrisAnatomicalStatsParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_anatomical_stats" as const,
+        "@type": "freesurfer/mris_anatomical_stats" as const,
         "subjectname": subjectname,
         "hemisphere": hemisphere,
         "tabular_output": tabular_output,
@@ -207,7 +174,7 @@ function mris_anatomical_stats_cargs(
             execution.inputFile((params["annotation_file"] ?? null))
         );
     }
-    if ((params["tabular_output"] ?? null)) {
+    if ((params["tabular_output"] ?? false)) {
         cargs.push("-b");
     }
     if ((params["tablefile"] ?? null) !== null) {
@@ -234,10 +201,10 @@ function mris_anatomical_stats_cargs(
             (params["color_table"] ?? null)
         );
     }
-    if ((params["noglobal"] ?? null)) {
+    if ((params["noglobal"] ?? false)) {
         cargs.push("-noglobal");
     }
-    if ((params["th3_computation"] ?? null)) {
+    if ((params["th3_computation"] ?? false)) {
         cargs.push("-th3");
     }
     return cargs;
@@ -346,7 +313,6 @@ function mris_anatomical_stats(
 export {
       MRIS_ANATOMICAL_STATS_METADATA,
       MrisAnatomicalStatsOutputs,
-      MrisAnatomicalStatsParameters,
       mris_anatomical_stats,
       mris_anatomical_stats_execute,
       mris_anatomical_stats_params,

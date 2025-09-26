@@ -12,46 +12,14 @@ const V__SURF_SMOOTH_HEAT_07_EXAMPLES_METADATA: Metadata = {
 
 
 interface VSurfSmoothHeat07ExamplesParameters {
-    "@type": "afni.@SurfSmooth.HEAT_07.examples";
+    "@type"?: "afni/@SurfSmooth.HEAT_07.examples";
     "path_to_suma_demo": string;
 }
+type VSurfSmoothHeat07ExamplesParametersTagged = Required<Pick<VSurfSmoothHeat07ExamplesParameters, '@type'>> & VSurfSmoothHeat07ExamplesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@SurfSmooth.HEAT_07.examples": v__surf_smooth_heat_07_examples_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__surf_smooth_heat_07_examples(...)`.
+ * Output object returned when calling `VSurfSmoothHeat07ExamplesParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface VSurfSmoothHeat07ExamplesOutputs {
  */
 function v__surf_smooth_heat_07_examples_params(
     path_to_suma_demo: string,
-): VSurfSmoothHeat07ExamplesParameters {
+): VSurfSmoothHeat07ExamplesParametersTagged {
     const params = {
-        "@type": "afni.@SurfSmooth.HEAT_07.examples" as const,
+        "@type": "afni/@SurfSmooth.HEAT_07.examples" as const,
         "path_to_suma_demo": path_to_suma_demo,
     };
     return params;
@@ -172,7 +140,6 @@ function v__surf_smooth_heat_07_examples(
 
 export {
       VSurfSmoothHeat07ExamplesOutputs,
-      VSurfSmoothHeat07ExamplesParameters,
       V__SURF_SMOOTH_HEAT_07_EXAMPLES_METADATA,
       v__surf_smooth_heat_07_examples,
       v__surf_smooth_heat_07_examples_execute,

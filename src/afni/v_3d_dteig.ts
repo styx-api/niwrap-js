@@ -12,51 +12,18 @@ const V_3D_DTEIG_METADATA: Metadata = {
 
 
 interface V3dDteigParameters {
-    "@type": "afni.3dDTeig";
+    "@type"?: "afni/3dDTeig";
     "input_dataset": string;
     "prefix"?: string | null | undefined;
     "datum"?: "byte" | "short" | "float" | null | undefined;
     "sep_dsets": boolean;
     "uddata": boolean;
 }
+type V3dDteigParametersTagged = Required<Pick<V3dDteigParameters, '@type'>> & V3dDteigParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dDTeig": v_3d_dteig_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dDTeig": v_3d_dteig_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_dteig(...)`.
+ * Output object returned when calling `V3dDteigParameters(...)`.
  *
  * @interface
  */
@@ -105,9 +72,9 @@ function v_3d_dteig_params(
     datum: "byte" | "short" | "float" | null = null,
     sep_dsets: boolean = false,
     uddata: boolean = false,
-): V3dDteigParameters {
+): V3dDteigParametersTagged {
     const params = {
-        "@type": "afni.3dDTeig" as const,
+        "@type": "afni/3dDTeig" as const,
         "input_dataset": input_dataset,
         "sep_dsets": sep_dsets,
         "uddata": uddata,
@@ -149,10 +116,10 @@ function v_3d_dteig_cargs(
             (params["datum"] ?? null)
         );
     }
-    if ((params["sep_dsets"] ?? null)) {
+    if ((params["sep_dsets"] ?? false)) {
         cargs.push("-sep_dsets");
     }
-    if ((params["uddata"] ?? null)) {
+    if ((params["uddata"] ?? false)) {
         cargs.push("-uddata");
     }
     return cargs;
@@ -244,7 +211,6 @@ function v_3d_dteig(
 
 export {
       V3dDteigOutputs,
-      V3dDteigParameters,
       V_3D_DTEIG_METADATA,
       v_3d_dteig,
       v_3d_dteig_execute,

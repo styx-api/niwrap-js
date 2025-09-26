@@ -12,7 +12,7 @@ const V_3D_TSGEN_METADATA: Metadata = {
 
 
 interface V3dTsgenParameters {
-    "@type": "afni.3dTSgen";
+    "@type"?: "afni/3dTSgen";
     "input_file": InputPathType;
     "in_tr_flag": boolean;
     "signal_label": string;
@@ -27,43 +27,11 @@ interface V3dTsgenParameters {
     "bucket_config"?: string | null | undefined;
     "brick_config"?: string | null | undefined;
 }
+type V3dTsgenParametersTagged = Required<Pick<V3dTsgenParameters, '@type'>> & V3dTsgenParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dTSgen": v_3d_tsgen_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_tsgen(...)`.
+ * Output object returned when calling `V3dTsgenParameters(...)`.
  *
  * @interface
  */
@@ -108,9 +76,9 @@ function v_3d_tsgen_params(
     noise_coef: string | null = null,
     bucket_config: string | null = null,
     brick_config: string | null = null,
-): V3dTsgenParameters {
+): V3dTsgenParametersTagged {
     const params = {
-        "@type": "afni.3dTSgen" as const,
+        "@type": "afni/3dTSgen" as const,
         "input_file": input_file,
         "in_tr_flag": in_tr_flag,
         "signal_label": signal_label,
@@ -158,7 +126,7 @@ function v_3d_tsgen_cargs(
     const cargs: string[] = [];
     cargs.push("3dTSgen");
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
-    if ((params["in_tr_flag"] ?? null)) {
+    if ((params["in_tr_flag"] ?? false)) {
         cargs.push("-inTR");
     }
     cargs.push(
@@ -319,7 +287,6 @@ function v_3d_tsgen(
 
 export {
       V3dTsgenOutputs,
-      V3dTsgenParameters,
       V_3D_TSGEN_METADATA,
       v_3d_tsgen,
       v_3d_tsgen_execute,

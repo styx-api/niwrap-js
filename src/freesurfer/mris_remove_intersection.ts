@@ -12,51 +12,18 @@ const MRIS_REMOVE_INTERSECTION_METADATA: Metadata = {
 
 
 interface MrisRemoveIntersectionParameters {
-    "@type": "freesurfer.mris_remove_intersection";
+    "@type"?: "freesurfer/mris_remove_intersection";
     "surface_in_file": InputPathType;
     "corrected_surface_out_file": string;
     "fill_holes": boolean;
     "map_option"?: InputPathType | null | undefined;
     "projdistmm"?: number | null | undefined;
 }
+type MrisRemoveIntersectionParametersTagged = Required<Pick<MrisRemoveIntersectionParameters, '@type'>> & MrisRemoveIntersectionParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_remove_intersection": mris_remove_intersection_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_remove_intersection": mris_remove_intersection_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_remove_intersection(...)`.
+ * Output object returned when calling `MrisRemoveIntersectionParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +60,9 @@ function mris_remove_intersection_params(
     fill_holes: boolean = false,
     map_option: InputPathType | null = null,
     projdistmm: number | null = null,
-): MrisRemoveIntersectionParameters {
+): MrisRemoveIntersectionParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_remove_intersection" as const,
+        "@type": "freesurfer/mris_remove_intersection" as const,
         "surface_in_file": surface_in_file,
         "corrected_surface_out_file": corrected_surface_out_file,
         "fill_holes": fill_holes,
@@ -126,7 +93,7 @@ function mris_remove_intersection_cargs(
     cargs.push("mris_remove_intersection");
     cargs.push(execution.inputFile((params["surface_in_file"] ?? null)));
     cargs.push((params["corrected_surface_out_file"] ?? null));
-    if ((params["fill_holes"] ?? null)) {
+    if ((params["fill_holes"] ?? false)) {
         cargs.push("-fill-holes");
     }
     if ((params["map_option"] ?? null) !== null) {
@@ -225,7 +192,6 @@ function mris_remove_intersection(
 export {
       MRIS_REMOVE_INTERSECTION_METADATA,
       MrisRemoveIntersectionOutputs,
-      MrisRemoveIntersectionParameters,
       mris_remove_intersection,
       mris_remove_intersection_execute,
       mris_remove_intersection_params,

@@ -12,14 +12,15 @@ const CIFTI_EXTREMA_METADATA: Metadata = {
 
 
 interface CiftiExtremaThresholdParameters {
-    "@type": "workbench.cifti-extrema.threshold";
+    "@type"?: "threshold";
     "low": number;
     "high": number;
 }
+type CiftiExtremaThresholdParametersTagged = Required<Pick<CiftiExtremaThresholdParameters, '@type'>> & CiftiExtremaThresholdParameters;
 
 
 interface CiftiExtremaParameters {
-    "@type": "workbench.cifti-extrema";
+    "@type"?: "workbench/cifti-extrema";
     "cifti": InputPathType;
     "surface_distance": number;
     "volume_distance": number;
@@ -38,41 +39,7 @@ interface CiftiExtremaParameters {
     "opt_only_maxima": boolean;
     "opt_only_minima": boolean;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-extrema": cifti_extrema_cargs,
-        "workbench.cifti-extrema.threshold": cifti_extrema_threshold_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-extrema": cifti_extrema_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiExtremaParametersTagged = Required<Pick<CiftiExtremaParameters, '@type'>> & CiftiExtremaParameters;
 
 
 /**
@@ -86,9 +53,9 @@ function dynOutputs(
 function cifti_extrema_threshold_params(
     low: number,
     high: number,
-): CiftiExtremaThresholdParameters {
+): CiftiExtremaThresholdParametersTagged {
     const params = {
-        "@type": "workbench.cifti-extrema.threshold" as const,
+        "@type": "threshold" as const,
         "low": low,
         "high": high,
     };
@@ -117,7 +84,7 @@ function cifti_extrema_threshold_cargs(
 
 
 /**
- * Output object returned when calling `cifti_extrema(...)`.
+ * Output object returned when calling `CiftiExtremaParameters(...)`.
  *
  * @interface
  */
@@ -174,9 +141,9 @@ function cifti_extrema_params(
     opt_consolidate_mode: boolean = false,
     opt_only_maxima: boolean = false,
     opt_only_minima: boolean = false,
-): CiftiExtremaParameters {
+): CiftiExtremaParametersTagged {
     const params = {
-        "@type": "workbench.cifti-extrema" as const,
+        "@type": "workbench/cifti-extrema" as const,
         "cifti": cifti,
         "surface_distance": surface_distance,
         "volume_distance": volume_distance,
@@ -261,25 +228,25 @@ function cifti_extrema_cargs(
             String((params["opt_volume_presmooth_volume_kernel"] ?? null))
         );
     }
-    if ((params["opt_presmooth_fwhm"] ?? null)) {
+    if ((params["opt_presmooth_fwhm"] ?? false)) {
         cargs.push("-presmooth-fwhm");
     }
     if ((params["threshold"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["threshold"] ?? null)["@type"])((params["threshold"] ?? null), execution));
+        cargs.push(...cifti_extrema_threshold_cargs((params["threshold"] ?? null), execution));
     }
-    if ((params["opt_merged_volume"] ?? null)) {
+    if ((params["opt_merged_volume"] ?? false)) {
         cargs.push("-merged-volume");
     }
-    if ((params["opt_sum_maps"] ?? null)) {
+    if ((params["opt_sum_maps"] ?? false)) {
         cargs.push("-sum-maps");
     }
-    if ((params["opt_consolidate_mode"] ?? null)) {
+    if ((params["opt_consolidate_mode"] ?? false)) {
         cargs.push("-consolidate-mode");
     }
-    if ((params["opt_only_maxima"] ?? null)) {
+    if ((params["opt_only_maxima"] ?? false)) {
         cargs.push("-only-maxima");
     }
-    if ((params["opt_only_minima"] ?? null)) {
+    if ((params["opt_only_minima"] ?? false)) {
         cargs.push("-only-minima");
     }
     return cargs;
@@ -396,8 +363,6 @@ function cifti_extrema(
 export {
       CIFTI_EXTREMA_METADATA,
       CiftiExtremaOutputs,
-      CiftiExtremaParameters,
-      CiftiExtremaThresholdParameters,
       cifti_extrema,
       cifti_extrema_execute,
       cifti_extrema_params,

@@ -12,7 +12,7 @@ const DMRI_EXTRACT_SURFACE_MEASUREMENTS_METADATA: Metadata = {
 
 
 interface DmriExtractSurfaceMeasurementsParameters {
-    "@type": "freesurfer.dmri_extractSurfaceMeasurements";
+    "@type"?: "freesurfer/dmri_extractSurfaceMeasurements";
     "streamline_file": InputPathType;
     "lh_surface_file": InputPathType;
     "lh_thickness_overlay": InputPathType;
@@ -27,43 +27,11 @@ interface DmriExtractSurfaceMeasurementsParameters {
     "annotation_file"?: InputPathType | null | undefined;
     "fa_options"?: Array<string> | null | undefined;
 }
+type DmriExtractSurfaceMeasurementsParametersTagged = Required<Pick<DmriExtractSurfaceMeasurementsParameters, '@type'>> & DmriExtractSurfaceMeasurementsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dmri_extractSurfaceMeasurements": dmri_extract_surface_measurements_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dmri_extract_surface_measurements(...)`.
+ * Output object returned when calling `DmriExtractSurfaceMeasurementsParameters(...)`.
  *
  * @interface
  */
@@ -108,9 +76,9 @@ function dmri_extract_surface_measurements_params(
     transformation: InputPathType | null = null,
     annotation_file: InputPathType | null = null,
     fa_options: Array<string> | null = null,
-): DmriExtractSurfaceMeasurementsParameters {
+): DmriExtractSurfaceMeasurementsParametersTagged {
     const params = {
-        "@type": "freesurfer.dmri_extractSurfaceMeasurements" as const,
+        "@type": "freesurfer/dmri_extractSurfaceMeasurements" as const,
         "streamline_file": streamline_file,
         "lh_surface_file": lh_surface_file,
         "lh_thickness_overlay": lh_thickness_overlay,
@@ -316,7 +284,6 @@ function dmri_extract_surface_measurements(
 export {
       DMRI_EXTRACT_SURFACE_MEASUREMENTS_METADATA,
       DmriExtractSurfaceMeasurementsOutputs,
-      DmriExtractSurfaceMeasurementsParameters,
       dmri_extract_surface_measurements,
       dmri_extract_surface_measurements_execute,
       dmri_extract_surface_measurements_params,

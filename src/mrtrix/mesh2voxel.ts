@@ -12,14 +12,15 @@ const MESH2VOXEL_METADATA: Metadata = {
 
 
 interface Mesh2voxelConfigParameters {
-    "@type": "mrtrix.mesh2voxel.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Mesh2voxelConfigParametersTagged = Required<Pick<Mesh2voxelConfigParameters, '@type'>> & Mesh2voxelConfigParameters;
 
 
 interface Mesh2voxelParameters {
-    "@type": "mrtrix.mesh2voxel";
+    "@type"?: "mrtrix/mesh2voxel";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -32,41 +33,7 @@ interface Mesh2voxelParameters {
     "template": InputPathType;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.mesh2voxel": mesh2voxel_cargs,
-        "mrtrix.mesh2voxel.config": mesh2voxel_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.mesh2voxel": mesh2voxel_outputs,
-    };
-    return outputsFuncs[t];
-}
+type Mesh2voxelParametersTagged = Required<Pick<Mesh2voxelParameters, '@type'>> & Mesh2voxelParameters;
 
 
 /**
@@ -80,9 +47,9 @@ function dynOutputs(
 function mesh2voxel_config_params(
     key: string,
     value: string,
-): Mesh2voxelConfigParameters {
+): Mesh2voxelConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.mesh2voxel.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -111,7 +78,7 @@ function mesh2voxel_config_cargs(
 
 
 /**
- * Output object returned when calling `mesh2voxel(...)`.
+ * Output object returned when calling `Mesh2voxelParameters(...)`.
  *
  * @interface
  */
@@ -156,9 +123,9 @@ function mesh2voxel_params(
     config: Array<Mesh2voxelConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Mesh2voxelParameters {
+): Mesh2voxelParametersTagged {
     const params = {
-        "@type": "mrtrix.mesh2voxel" as const,
+        "@type": "mrtrix/mesh2voxel" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -193,16 +160,16 @@ function mesh2voxel_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("mesh2voxel");
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -212,12 +179,12 @@ function mesh2voxel_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => mesh2voxel_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["source"] ?? null)));
@@ -332,9 +299,7 @@ function mesh2voxel(
 
 export {
       MESH2VOXEL_METADATA,
-      Mesh2voxelConfigParameters,
       Mesh2voxelOutputs,
-      Mesh2voxelParameters,
       mesh2voxel,
       mesh2voxel_config_params,
       mesh2voxel_execute,

@@ -12,7 +12,7 @@ const V_3D_LOCAL_BISTAT_METADATA: Metadata = {
 
 
 interface V3dLocalBistatParameters {
-    "@type": "afni.3dLocalBistat";
+    "@type"?: "afni/3dLocalBistat";
     "nbhd": string;
     "stats": Array<string>;
     "mask"?: InputPathType | null | undefined;
@@ -26,44 +26,11 @@ interface V3dLocalBistatParameters {
     "dataset1": InputPathType;
     "dataset2": InputPathType;
 }
+type V3dLocalBistatParametersTagged = Required<Pick<V3dLocalBistatParameters, '@type'>> & V3dLocalBistatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dLocalBistat": v_3d_local_bistat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dLocalBistat": v_3d_local_bistat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_local_bistat(...)`.
+ * Output object returned when calling `V3dLocalBistatParameters(...)`.
  *
  * @interface
  */
@@ -114,9 +81,9 @@ function v_3d_local_bistat_params(
     histbin: number | null = null,
     hclip1: Array<string> | null = null,
     hclip2: Array<string> | null = null,
-): V3dLocalBistatParameters {
+): V3dLocalBistatParametersTagged {
     const params = {
-        "@type": "afni.3dLocalBistat" as const,
+        "@type": "afni/3dLocalBistat" as const,
         "nbhd": nbhd,
         "stats": stats,
         "automask": automask,
@@ -174,7 +141,7 @@ function v_3d_local_bistat_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     if ((params["weight"] ?? null) !== null) {
@@ -313,7 +280,6 @@ function v_3d_local_bistat(
 
 export {
       V3dLocalBistatOutputs,
-      V3dLocalBistatParameters,
       V_3D_LOCAL_BISTAT_METADATA,
       v_3d_local_bistat,
       v_3d_local_bistat_execute,

@@ -12,73 +12,41 @@ const CIFTI_EXPORT_DENSE_MAPPING_METADATA: Metadata = {
 
 
 interface CiftiExportDenseMappingVolumeAllParameters {
-    "@type": "workbench.cifti-export-dense-mapping.volume_all";
+    "@type"?: "volume_all";
     "text_out": string;
     "opt_no_cifti_index": boolean;
     "opt_structure": boolean;
 }
+type CiftiExportDenseMappingVolumeAllParametersTagged = Required<Pick<CiftiExportDenseMappingVolumeAllParameters, '@type'>> & CiftiExportDenseMappingVolumeAllParameters;
 
 
 interface CiftiExportDenseMappingSurfaceParameters {
-    "@type": "workbench.cifti-export-dense-mapping.surface";
+    "@type"?: "surface";
     "structure": string;
     "text_out": string;
     "opt_no_cifti_index": boolean;
 }
+type CiftiExportDenseMappingSurfaceParametersTagged = Required<Pick<CiftiExportDenseMappingSurfaceParameters, '@type'>> & CiftiExportDenseMappingSurfaceParameters;
 
 
 interface CiftiExportDenseMappingVolumeParameters {
-    "@type": "workbench.cifti-export-dense-mapping.volume";
+    "@type"?: "volume";
     "structure": string;
     "text_out": string;
     "opt_no_cifti_index": boolean;
 }
+type CiftiExportDenseMappingVolumeParametersTagged = Required<Pick<CiftiExportDenseMappingVolumeParameters, '@type'>> & CiftiExportDenseMappingVolumeParameters;
 
 
 interface CiftiExportDenseMappingParameters {
-    "@type": "workbench.cifti-export-dense-mapping";
+    "@type"?: "workbench/cifti-export-dense-mapping";
     "cifti": InputPathType;
     "direction": string;
     "volume_all"?: CiftiExportDenseMappingVolumeAllParameters | null | undefined;
     "surface"?: Array<CiftiExportDenseMappingSurfaceParameters> | null | undefined;
     "volume"?: Array<CiftiExportDenseMappingVolumeParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-export-dense-mapping": cifti_export_dense_mapping_cargs,
-        "workbench.cifti-export-dense-mapping.volume_all": cifti_export_dense_mapping_volume_all_cargs,
-        "workbench.cifti-export-dense-mapping.surface": cifti_export_dense_mapping_surface_cargs,
-        "workbench.cifti-export-dense-mapping.volume": cifti_export_dense_mapping_volume_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type CiftiExportDenseMappingParametersTagged = Required<Pick<CiftiExportDenseMappingParameters, '@type'>> & CiftiExportDenseMappingParameters;
 
 
 /**
@@ -94,9 +62,9 @@ function cifti_export_dense_mapping_volume_all_params(
     text_out: string,
     opt_no_cifti_index: boolean = false,
     opt_structure: boolean = false,
-): CiftiExportDenseMappingVolumeAllParameters {
+): CiftiExportDenseMappingVolumeAllParametersTagged {
     const params = {
-        "@type": "workbench.cifti-export-dense-mapping.volume_all" as const,
+        "@type": "volume_all" as const,
         "text_out": text_out,
         "opt_no_cifti_index": opt_no_cifti_index,
         "opt_structure": opt_structure,
@@ -120,10 +88,10 @@ function cifti_export_dense_mapping_volume_all_cargs(
     const cargs: string[] = [];
     cargs.push("-volume-all");
     cargs.push((params["text_out"] ?? null));
-    if ((params["opt_no_cifti_index"] ?? null)) {
+    if ((params["opt_no_cifti_index"] ?? false)) {
         cargs.push("-no-cifti-index");
     }
-    if ((params["opt_structure"] ?? null)) {
+    if ((params["opt_structure"] ?? false)) {
         cargs.push("-structure");
     }
     return cargs;
@@ -143,9 +111,9 @@ function cifti_export_dense_mapping_surface_params(
     structure: string,
     text_out: string,
     opt_no_cifti_index: boolean = false,
-): CiftiExportDenseMappingSurfaceParameters {
+): CiftiExportDenseMappingSurfaceParametersTagged {
     const params = {
-        "@type": "workbench.cifti-export-dense-mapping.surface" as const,
+        "@type": "surface" as const,
         "structure": structure,
         "text_out": text_out,
         "opt_no_cifti_index": opt_no_cifti_index,
@@ -170,7 +138,7 @@ function cifti_export_dense_mapping_surface_cargs(
     cargs.push("-surface");
     cargs.push((params["structure"] ?? null));
     cargs.push((params["text_out"] ?? null));
-    if ((params["opt_no_cifti_index"] ?? null)) {
+    if ((params["opt_no_cifti_index"] ?? false)) {
         cargs.push("-no-cifti-index");
     }
     return cargs;
@@ -190,9 +158,9 @@ function cifti_export_dense_mapping_volume_params(
     structure: string,
     text_out: string,
     opt_no_cifti_index: boolean = false,
-): CiftiExportDenseMappingVolumeParameters {
+): CiftiExportDenseMappingVolumeParametersTagged {
     const params = {
-        "@type": "workbench.cifti-export-dense-mapping.volume" as const,
+        "@type": "volume" as const,
         "structure": structure,
         "text_out": text_out,
         "opt_no_cifti_index": opt_no_cifti_index,
@@ -217,7 +185,7 @@ function cifti_export_dense_mapping_volume_cargs(
     cargs.push("-volume");
     cargs.push((params["structure"] ?? null));
     cargs.push((params["text_out"] ?? null));
-    if ((params["opt_no_cifti_index"] ?? null)) {
+    if ((params["opt_no_cifti_index"] ?? false)) {
         cargs.push("-no-cifti-index");
     }
     return cargs;
@@ -225,7 +193,7 @@ function cifti_export_dense_mapping_volume_cargs(
 
 
 /**
- * Output object returned when calling `cifti_export_dense_mapping(...)`.
+ * Output object returned when calling `CiftiExportDenseMappingParameters(...)`.
  *
  * @interface
  */
@@ -254,9 +222,9 @@ function cifti_export_dense_mapping_params(
     volume_all: CiftiExportDenseMappingVolumeAllParameters | null = null,
     surface: Array<CiftiExportDenseMappingSurfaceParameters> | null = null,
     volume: Array<CiftiExportDenseMappingVolumeParameters> | null = null,
-): CiftiExportDenseMappingParameters {
+): CiftiExportDenseMappingParametersTagged {
     const params = {
-        "@type": "workbench.cifti-export-dense-mapping" as const,
+        "@type": "workbench/cifti-export-dense-mapping" as const,
         "cifti": cifti,
         "direction": direction,
     };
@@ -291,13 +259,13 @@ function cifti_export_dense_mapping_cargs(
     cargs.push(execution.inputFile((params["cifti"] ?? null)));
     cargs.push((params["direction"] ?? null));
     if ((params["volume_all"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["volume_all"] ?? null)["@type"])((params["volume_all"] ?? null), execution));
+        cargs.push(...cifti_export_dense_mapping_volume_all_cargs((params["volume_all"] ?? null), execution));
     }
     if ((params["surface"] ?? null) !== null) {
-        cargs.push(...(params["surface"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["surface"] ?? null).map(s => cifti_export_dense_mapping_surface_cargs(s, execution)).flat());
     }
     if ((params["volume"] ?? null) !== null) {
-        cargs.push(...(params["volume"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["volume"] ?? null).map(s => cifti_export_dense_mapping_volume_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -472,10 +440,6 @@ function cifti_export_dense_mapping(
 export {
       CIFTI_EXPORT_DENSE_MAPPING_METADATA,
       CiftiExportDenseMappingOutputs,
-      CiftiExportDenseMappingParameters,
-      CiftiExportDenseMappingSurfaceParameters,
-      CiftiExportDenseMappingVolumeAllParameters,
-      CiftiExportDenseMappingVolumeParameters,
       cifti_export_dense_mapping,
       cifti_export_dense_mapping_execute,
       cifti_export_dense_mapping_params,

@@ -12,51 +12,18 @@ const MRI_RIBBON_METADATA: Metadata = {
 
 
 interface MriRibbonParameters {
-    "@type": "freesurfer.mri_ribbon";
+    "@type"?: "freesurfer/mri_ribbon";
     "label_file"?: InputPathType | null | undefined;
     "inner_surface": InputPathType;
     "outer_surface": InputPathType;
     "input_volume": string;
     "output_volume": string;
 }
+type MriRibbonParametersTagged = Required<Pick<MriRibbonParameters, '@type'>> & MriRibbonParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_ribbon": mri_ribbon_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_ribbon": mri_ribbon_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_ribbon(...)`.
+ * Output object returned when calling `MriRibbonParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function mri_ribbon_params(
     input_volume: string,
     output_volume: string,
     label_file: InputPathType | null = null,
-): MriRibbonParameters {
+): MriRibbonParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_ribbon" as const,
+        "@type": "freesurfer/mri_ribbon" as const,
         "inner_surface": inner_surface,
         "outer_surface": outer_surface,
         "input_volume": input_volume,
@@ -214,7 +181,6 @@ function mri_ribbon(
 export {
       MRI_RIBBON_METADATA,
       MriRibbonOutputs,
-      MriRibbonParameters,
       mri_ribbon,
       mri_ribbon_execute,
       mri_ribbon_params,

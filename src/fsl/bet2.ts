@@ -12,7 +12,7 @@ const BET2_METADATA: Metadata = {
 
 
 interface Bet2Parameters {
-    "@type": "fsl.bet2";
+    "@type"?: "fsl/bet2";
     "input_fileroot": string;
     "output_fileroot": string;
     "fractional_intensity"?: number | null | undefined;
@@ -29,44 +29,11 @@ interface Bet2Parameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
+type Bet2ParametersTagged = Required<Pick<Bet2Parameters, '@type'>> & Bet2Parameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.bet2": bet2_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.bet2": bet2_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `bet2(...)`.
+ * Output object returned when calling `Bet2Parameters(...)`.
  *
  * @interface
  */
@@ -131,9 +98,9 @@ function bet2_params(
     threshold_flag: boolean = false,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): Bet2Parameters {
+): Bet2ParametersTagged {
     const params = {
-        "@type": "fsl.bet2" as const,
+        "@type": "fsl/bet2" as const,
         "input_fileroot": input_fileroot,
         "output_fileroot": output_fileroot,
         "outline_flag": outline_flag,
@@ -198,19 +165,19 @@ function bet2_cargs(
             ...(params["center_of_gravity"] ?? null).map(String)
         );
     }
-    if ((params["outline_flag"] ?? null)) {
+    if ((params["outline_flag"] ?? false)) {
         cargs.push("-o");
     }
-    if ((params["mask_flag"] ?? null)) {
+    if ((params["mask_flag"] ?? false)) {
         cargs.push("-m");
     }
-    if ((params["skull_flag"] ?? null)) {
+    if ((params["skull_flag"] ?? false)) {
         cargs.push("-s");
     }
-    if ((params["no_output_flag"] ?? null)) {
+    if ((params["no_output_flag"] ?? false)) {
         cargs.push("-n");
     }
-    if ((params["mesh_flag"] ?? null)) {
+    if ((params["mesh_flag"] ?? false)) {
         cargs.push("-e");
     }
     if ((params["head_radius"] ?? null) !== null) {
@@ -225,13 +192,13 @@ function bet2_cargs(
             String((params["smooth_factor"] ?? null))
         );
     }
-    if ((params["threshold_flag"] ?? null)) {
+    if ((params["threshold_flag"] ?? false)) {
         cargs.push("-t");
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -343,7 +310,6 @@ function bet2(
 export {
       BET2_METADATA,
       Bet2Outputs,
-      Bet2Parameters,
       bet2,
       bet2_execute,
       bet2_params,

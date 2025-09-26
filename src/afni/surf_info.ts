@@ -12,7 +12,7 @@ const SURF_INFO_METADATA: Metadata = {
 
 
 interface SurfInfoParameters {
-    "@type": "afni.SurfInfo";
+    "@type"?: "afni/SurfInfo";
     "surface": InputPathType;
     "com": boolean;
     "debug_level"?: number | null | undefined;
@@ -34,44 +34,11 @@ interface SurfInfoParameters {
     "nomall": boolean;
     "yesmall": boolean;
 }
+type SurfInfoParametersTagged = Required<Pick<SurfInfoParameters, '@type'>> & SurfInfoParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.SurfInfo": surf_info_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.SurfInfo": surf_info_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surf_info(...)`.
+ * Output object returned when calling `SurfInfoParameters(...)`.
  *
  * @interface
  */
@@ -134,9 +101,9 @@ function surf_info_params(
     extreme_trace: boolean = false,
     nomall: boolean = false,
     yesmall: boolean = false,
-): SurfInfoParameters {
+): SurfInfoParametersTagged {
     const params = {
-        "@type": "afni.SurfInfo" as const,
+        "@type": "afni/SurfInfo" as const,
         "surface": surface,
         "com": com,
         "n_node": n_node,
@@ -193,7 +160,7 @@ function surf_info_cargs(
     const cargs: string[] = [];
     cargs.push("SurfInfo");
     cargs.push(execution.inputFile((params["surface"] ?? null)));
-    if ((params["com"] ?? null)) {
+    if ((params["com"] ?? false)) {
         cargs.push("-COM");
     }
     if ((params["debug_level"] ?? null) !== null) {
@@ -208,16 +175,16 @@ function surf_info_cargs(
             String((params["detail_level"] ?? null))
         );
     }
-    if ((params["n_node"] ?? null)) {
+    if ((params["n_node"] ?? false)) {
         cargs.push("-N_Node");
     }
-    if ((params["n_faceset"] ?? null)) {
+    if ((params["n_faceset"] ?? false)) {
         cargs.push("-N_FaceSet");
     }
-    if ((params["n_tri"] ?? null)) {
+    if ((params["n_tri"] ?? false)) {
         cargs.push("-N_Tri");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
     if ((params["separator"] ?? null) !== null) {
@@ -250,10 +217,10 @@ function surf_info_cargs(
             execution.inputFile((params["spec_file"] ?? null))
         );
     }
-    if ((params["novolreg"] ?? null)) {
+    if ((params["novolreg"] ?? false)) {
         cargs.push("-novolreg");
     }
-    if ((params["noxform"] ?? null)) {
+    if ((params["noxform"] ?? false)) {
         cargs.push("-noxform");
     }
     if ((params["setenv"] ?? null) !== null) {
@@ -262,16 +229,16 @@ function surf_info_cargs(
             (params["setenv"] ?? null)
         );
     }
-    if ((params["trace"] ?? null)) {
+    if ((params["trace"] ?? false)) {
         cargs.push("-trace");
     }
-    if ((params["extreme_trace"] ?? null)) {
+    if ((params["extreme_trace"] ?? false)) {
         cargs.push("-TRACE");
     }
-    if ((params["nomall"] ?? null)) {
+    if ((params["nomall"] ?? false)) {
         cargs.push("-nomall");
     }
-    if ((params["yesmall"] ?? null)) {
+    if ((params["yesmall"] ?? false)) {
         cargs.push("-yesmall");
     }
     return cargs;
@@ -390,7 +357,6 @@ function surf_info(
 export {
       SURF_INFO_METADATA,
       SurfInfoOutputs,
-      SurfInfoParameters,
       surf_info,
       surf_info_execute,
       surf_info_params,

@@ -12,51 +12,18 @@ const V_1D_NLFIT_METADATA: Metadata = {
 
 
 interface V1dNlfitParameters {
-    "@type": "afni.1dNLfit";
+    "@type"?: "afni/1dNLfit";
     "expression": string;
     "independent_variable": string;
     "parameters": Array<string>;
     "dependent_data": InputPathType;
     "method"?: number | null | undefined;
 }
+type V1dNlfitParametersTagged = Required<Pick<V1dNlfitParameters, '@type'>> & V1dNlfitParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.1dNLfit": v_1d_nlfit_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.1dNLfit": v_1d_nlfit_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_1d_nlfit(...)`.
+ * Output object returned when calling `V1dNlfitParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function v_1d_nlfit_params(
     parameters: Array<string>,
     dependent_data: InputPathType,
     method: number | null = null,
-): V1dNlfitParameters {
+): V1dNlfitParametersTagged {
     const params = {
-        "@type": "afni.1dNLfit" as const,
+        "@type": "afni/1dNLfit" as const,
         "expression": expression,
         "independent_variable": independent_variable,
         "parameters": parameters,
@@ -225,7 +192,6 @@ function v_1d_nlfit(
 
 export {
       V1dNlfitOutputs,
-      V1dNlfitParameters,
       V_1D_NLFIT_METADATA,
       v_1d_nlfit,
       v_1d_nlfit_execute,

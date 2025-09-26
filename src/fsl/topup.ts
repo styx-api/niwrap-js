@@ -12,7 +12,7 @@ const TOPUP_METADATA: Metadata = {
 
 
 interface TopupParameters {
-    "@type": "fsl.topup";
+    "@type"?: "fsl/topup";
     "imain": InputPathType;
     "datain": InputPathType;
     "out"?: string | null | undefined;
@@ -37,44 +37,11 @@ interface TopupParameters {
     "nthr"?: number | null | undefined;
     "verbose": boolean;
 }
+type TopupParametersTagged = Required<Pick<TopupParameters, '@type'>> & TopupParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.topup": topup_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.topup": topup_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `topup(...)`.
+ * Output object returned when calling `TopupParameters(...)`.
  *
  * @interface
  */
@@ -159,9 +126,9 @@ function topup_params(
     regrid: boolean = false,
     nthr: number | null = null,
     verbose: boolean = false,
-): TopupParameters {
+): TopupParametersTagged {
     const params = {
-        "@type": "fsl.topup" as const,
+        "@type": "fsl/topup" as const,
         "imain": imain,
         "datain": datain,
         "ssqlambda": ssqlambda,
@@ -268,13 +235,13 @@ function topup_cargs(
     if ((params["lambda"] ?? null) !== null) {
         cargs.push(["--lambda=", String((params["lambda"] ?? null))].join(''));
     }
-    if ((params["ssqlambda"] ?? null)) {
+    if ((params["ssqlambda"] ?? false)) {
         cargs.push("--ssqlambda");
     }
     if ((params["regmod"] ?? null) !== null) {
         cargs.push(["--regmod=", (params["regmod"] ?? null)].join(''));
     }
-    if ((params["estmov"] ?? null)) {
+    if ((params["estmov"] ?? false)) {
         cargs.push("--estmov");
     }
     if ((params["minmet"] ?? null) !== null) {
@@ -289,16 +256,16 @@ function topup_cargs(
     if ((params["interp"] ?? null) !== null) {
         cargs.push(["--interp=", (params["interp"] ?? null)].join(''));
     }
-    if ((params["scale"] ?? null)) {
+    if ((params["scale"] ?? false)) {
         cargs.push("--scale");
     }
-    if ((params["regrid"] ?? null)) {
+    if ((params["regrid"] ?? false)) {
         cargs.push("--regrid");
     }
     if ((params["nthr"] ?? null) !== null) {
         cargs.push(["--nthr=", String((params["nthr"] ?? null))].join(''));
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("--verbose");
     }
     return cargs;
@@ -427,7 +394,6 @@ function topup(
 export {
       TOPUP_METADATA,
       TopupOutputs,
-      TopupParameters,
       topup,
       topup_execute,
       topup_params,

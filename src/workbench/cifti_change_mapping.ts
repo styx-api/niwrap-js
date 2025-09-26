@@ -12,28 +12,31 @@ const CIFTI_CHANGE_MAPPING_METADATA: Metadata = {
 
 
 interface CiftiChangeMappingSeriesParameters {
-    "@type": "workbench.cifti-change-mapping.series";
+    "@type"?: "series";
     "step": number;
     "start": number;
     "opt_unit_unit"?: string | null | undefined;
 }
+type CiftiChangeMappingSeriesParametersTagged = Required<Pick<CiftiChangeMappingSeriesParameters, '@type'>> & CiftiChangeMappingSeriesParameters;
 
 
 interface CiftiChangeMappingScalarParameters {
-    "@type": "workbench.cifti-change-mapping.scalar";
+    "@type"?: "scalar";
     "opt_name_file_file"?: string | null | undefined;
 }
+type CiftiChangeMappingScalarParametersTagged = Required<Pick<CiftiChangeMappingScalarParameters, '@type'>> & CiftiChangeMappingScalarParameters;
 
 
 interface CiftiChangeMappingFromCiftiParameters {
-    "@type": "workbench.cifti-change-mapping.from_cifti";
+    "@type"?: "from_cifti";
     "template_cifti": InputPathType;
     "direction": string;
 }
+type CiftiChangeMappingFromCiftiParametersTagged = Required<Pick<CiftiChangeMappingFromCiftiParameters, '@type'>> & CiftiChangeMappingFromCiftiParameters;
 
 
 interface CiftiChangeMappingParameters {
-    "@type": "workbench.cifti-change-mapping";
+    "@type"?: "workbench/cifti-change-mapping";
     "data_cifti": InputPathType;
     "direction": string;
     "cifti_out": string;
@@ -41,43 +44,7 @@ interface CiftiChangeMappingParameters {
     "scalar"?: CiftiChangeMappingScalarParameters | null | undefined;
     "from_cifti"?: CiftiChangeMappingFromCiftiParameters | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-change-mapping": cifti_change_mapping_cargs,
-        "workbench.cifti-change-mapping.series": cifti_change_mapping_series_cargs,
-        "workbench.cifti-change-mapping.scalar": cifti_change_mapping_scalar_cargs,
-        "workbench.cifti-change-mapping.from_cifti": cifti_change_mapping_from_cifti_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-change-mapping": cifti_change_mapping_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiChangeMappingParametersTagged = Required<Pick<CiftiChangeMappingParameters, '@type'>> & CiftiChangeMappingParameters;
 
 
 /**
@@ -93,9 +60,9 @@ function cifti_change_mapping_series_params(
     step: number,
     start: number,
     opt_unit_unit: string | null = null,
-): CiftiChangeMappingSeriesParameters {
+): CiftiChangeMappingSeriesParametersTagged {
     const params = {
-        "@type": "workbench.cifti-change-mapping.series" as const,
+        "@type": "series" as const,
         "step": step,
         "start": start,
     };
@@ -141,9 +108,9 @@ function cifti_change_mapping_series_cargs(
  */
 function cifti_change_mapping_scalar_params(
     opt_name_file_file: string | null = null,
-): CiftiChangeMappingScalarParameters {
+): CiftiChangeMappingScalarParametersTagged {
     const params = {
-        "@type": "workbench.cifti-change-mapping.scalar" as const,
+        "@type": "scalar" as const,
     };
     if (opt_name_file_file !== null) {
         params["opt_name_file_file"] = opt_name_file_file;
@@ -187,9 +154,9 @@ function cifti_change_mapping_scalar_cargs(
 function cifti_change_mapping_from_cifti_params(
     template_cifti: InputPathType,
     direction: string,
-): CiftiChangeMappingFromCiftiParameters {
+): CiftiChangeMappingFromCiftiParametersTagged {
     const params = {
-        "@type": "workbench.cifti-change-mapping.from_cifti" as const,
+        "@type": "from_cifti" as const,
         "template_cifti": template_cifti,
         "direction": direction,
     };
@@ -218,7 +185,7 @@ function cifti_change_mapping_from_cifti_cargs(
 
 
 /**
- * Output object returned when calling `cifti_change_mapping(...)`.
+ * Output object returned when calling `CiftiChangeMappingParameters(...)`.
  *
  * @interface
  */
@@ -253,9 +220,9 @@ function cifti_change_mapping_params(
     series: CiftiChangeMappingSeriesParameters | null = null,
     scalar: CiftiChangeMappingScalarParameters | null = null,
     from_cifti: CiftiChangeMappingFromCiftiParameters | null = null,
-): CiftiChangeMappingParameters {
+): CiftiChangeMappingParametersTagged {
     const params = {
-        "@type": "workbench.cifti-change-mapping" as const,
+        "@type": "workbench/cifti-change-mapping" as const,
         "data_cifti": data_cifti,
         "direction": direction,
         "cifti_out": cifti_out,
@@ -292,13 +259,13 @@ function cifti_change_mapping_cargs(
     cargs.push((params["direction"] ?? null));
     cargs.push((params["cifti_out"] ?? null));
     if ((params["series"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["series"] ?? null)["@type"])((params["series"] ?? null), execution));
+        cargs.push(...cifti_change_mapping_series_cargs((params["series"] ?? null), execution));
     }
     if ((params["scalar"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["scalar"] ?? null)["@type"])((params["scalar"] ?? null), execution));
+        cargs.push(...cifti_change_mapping_scalar_cargs((params["scalar"] ?? null), execution));
     }
     if ((params["from_cifti"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["from_cifti"] ?? null)["@type"])((params["from_cifti"] ?? null), execution));
+        cargs.push(...cifti_change_mapping_from_cifti_cargs((params["from_cifti"] ?? null), execution));
     }
     return cargs;
 }
@@ -405,11 +372,7 @@ function cifti_change_mapping(
 
 export {
       CIFTI_CHANGE_MAPPING_METADATA,
-      CiftiChangeMappingFromCiftiParameters,
       CiftiChangeMappingOutputs,
-      CiftiChangeMappingParameters,
-      CiftiChangeMappingScalarParameters,
-      CiftiChangeMappingSeriesParameters,
       cifti_change_mapping,
       cifti_change_mapping_execute,
       cifti_change_mapping_from_cifti_params,

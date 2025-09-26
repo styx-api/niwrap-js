@@ -12,7 +12,7 @@ const PNM_EVS_METADATA: Metadata = {
 
 
 interface PnmEvsParameters {
-    "@type": "fsl.pnm_evs";
+    "@type"?: "fsl/pnm_evs";
     "input_file": InputPathType;
     "output_file": string;
     "tr_value": number;
@@ -34,44 +34,11 @@ interface PnmEvsParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
+type PnmEvsParametersTagged = Required<Pick<PnmEvsParameters, '@type'>> & PnmEvsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.pnm_evs": pnm_evs_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.pnm_evs": pnm_evs_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `pnm_evs(...)`.
+ * Output object returned when calling `PnmEvsParameters(...)`.
  *
  * @interface
  */
@@ -134,9 +101,9 @@ function pnm_evs_params(
     debug_flag: boolean = false,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): PnmEvsParameters {
+): PnmEvsParametersTagged {
     const params = {
-        "@type": "fsl.pnm_evs" as const,
+        "@type": "fsl/pnm_evs" as const,
         "input_file": input_file,
         "output_file": output_file,
         "tr_value": tr_value,
@@ -300,13 +267,13 @@ function pnm_evs_cargs(
             execution.inputFile((params["slice_timing_file"] ?? null))
         );
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("--verbose");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -425,7 +392,6 @@ function pnm_evs(
 export {
       PNM_EVS_METADATA,
       PnmEvsOutputs,
-      PnmEvsParameters,
       pnm_evs,
       pnm_evs_execute,
       pnm_evs_params,

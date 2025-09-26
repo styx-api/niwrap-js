@@ -12,7 +12,7 @@ const MRIS_MAKE_TEMPLATE_METADATA: Metadata = {
 
 
 interface MrisMakeTemplateParameters {
-    "@type": "freesurfer.mris_make_template";
+    "@type"?: "freesurfer/mris_make_template";
     "hemi": string;
     "surface_name": string;
     "subjects": Array<string>;
@@ -29,43 +29,11 @@ interface MrisMakeTemplateParameters {
     "smooth_iterations"?: number | null | undefined;
     "subjects_dir"?: string | null | undefined;
 }
+type MrisMakeTemplateParametersTagged = Required<Pick<MrisMakeTemplateParameters, '@type'>> & MrisMakeTemplateParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_make_template": mris_make_template_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_make_template(...)`.
+ * Output object returned when calling `MrisMakeTemplateParameters(...)`.
  *
  * @interface
  */
@@ -114,9 +82,9 @@ function mris_make_template_params(
     surf_dir: string | null = null,
     smooth_iterations: number | null = null,
     subjects_dir: string | null = null,
-): MrisMakeTemplateParameters {
+): MrisMakeTemplateParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_make_template" as const,
+        "@type": "freesurfer/mris_make_template" as const,
         "hemi": hemi,
         "surface_name": surface_name,
         "subjects": subjects,
@@ -175,16 +143,16 @@ function mris_make_template_cargs(
             ...(params["addframe_parameters"] ?? null)
         );
     }
-    if ((params["vector"] ?? null)) {
+    if ((params["vector"] ?? false)) {
         cargs.push("-vector");
     }
-    if ((params["norot"] ?? null)) {
+    if ((params["norot"] ?? false)) {
         cargs.push("-norot");
     }
-    if ((params["rot"] ?? null)) {
+    if ((params["rot"] ?? false)) {
         cargs.push("-rot");
     }
-    if ((params["annot"] ?? null)) {
+    if ((params["annot"] ?? false)) {
         cargs.push("-annot");
     }
     if ((params["overlay_parameters"] ?? null) !== null) {
@@ -328,7 +296,6 @@ function mris_make_template(
 export {
       MRIS_MAKE_TEMPLATE_METADATA,
       MrisMakeTemplateOutputs,
-      MrisMakeTemplateParameters,
       mris_make_template,
       mris_make_template_execute,
       mris_make_template_params,

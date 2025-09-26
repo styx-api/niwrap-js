@@ -12,47 +12,14 @@ const V__2DWARPER_METADATA: Metadata = {
 
 
 interface V2dwarperParameters {
-    "@type": "afni.@2dwarper";
+    "@type"?: "afni/@2dwarper";
     "input_dataset": InputPathType;
 }
+type V2dwarperParametersTagged = Required<Pick<V2dwarperParameters, '@type'>> & V2dwarperParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@2dwarper": v__2dwarper_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@2dwarper": v__2dwarper_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__2dwarper(...)`.
+ * Output object returned when calling `V2dwarperParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface V2dwarperOutputs {
  */
 function v__2dwarper_params(
     input_dataset: InputPathType,
-): V2dwarperParameters {
+): V2dwarperParametersTagged {
     const params = {
-        "@type": "afni.@2dwarper" as const,
+        "@type": "afni/@2dwarper" as const,
         "input_dataset": input_dataset,
     };
     return params;
@@ -178,7 +145,6 @@ function v__2dwarper(
 
 export {
       V2dwarperOutputs,
-      V2dwarperParameters,
       V__2DWARPER_METADATA,
       v__2dwarper,
       v__2dwarper_execute,

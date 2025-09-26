@@ -12,7 +12,7 @@ const TKREGISTER2_METADATA: Metadata = {
 
 
 interface Tkregister2Parameters {
-    "@type": "freesurfer.tkregister2";
+    "@type"?: "freesurfer/tkregister2";
     "fixed_volume": InputPathType;
     "moving_volume": InputPathType;
     "reg_file": InputPathType;
@@ -22,44 +22,11 @@ interface Tkregister2Parameters {
     "reg_only": boolean;
     "help": boolean;
 }
+type Tkregister2ParametersTagged = Required<Pick<Tkregister2Parameters, '@type'>> & Tkregister2Parameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.tkregister2": tkregister2_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.tkregister2": tkregister2_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tkregister2(...)`.
+ * Output object returned when calling `Tkregister2Parameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function tkregister2_params(
     surf_reg: boolean = false,
     reg_only: boolean = false,
     help: boolean = false,
-): Tkregister2Parameters {
+): Tkregister2ParametersTagged {
     const params = {
-        "@type": "freesurfer.tkregister2" as const,
+        "@type": "freesurfer/tkregister2" as const,
         "fixed_volume": fixed_volume,
         "moving_volume": moving_volume,
         "reg_file": reg_file,
@@ -131,19 +98,19 @@ function tkregister2_cargs(
     cargs.push(execution.inputFile((params["fixed_volume"] ?? null)));
     cargs.push(execution.inputFile((params["moving_volume"] ?? null)));
     cargs.push(execution.inputFile((params["reg_file"] ?? null)));
-    if ((params["noedit"] ?? null)) {
+    if ((params["noedit"] ?? false)) {
         cargs.push("--noedit");
     }
-    if ((params["lta"] ?? null)) {
+    if ((params["lta"] ?? false)) {
         cargs.push("--lta");
     }
-    if ((params["surf_reg"] ?? null)) {
+    if ((params["surf_reg"] ?? false)) {
         cargs.push("--surf");
     }
-    if ((params["reg_only"] ?? null)) {
+    if ((params["reg_only"] ?? false)) {
         cargs.push("--regonly");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -238,7 +205,6 @@ function tkregister2(
 export {
       TKREGISTER2_METADATA,
       Tkregister2Outputs,
-      Tkregister2Parameters,
       tkregister2,
       tkregister2_execute,
       tkregister2_params,

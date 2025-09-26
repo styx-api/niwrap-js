@@ -12,7 +12,7 @@ const V_3D_TNORM_METADATA: Metadata = {
 
 
 interface V3dTnormParameters {
-    "@type": "afni.3dTnorm";
+    "@type"?: "afni/3dTnorm";
     "prefix"?: string | null | undefined;
     "norm2": boolean;
     "normR": boolean;
@@ -22,44 +22,11 @@ interface V3dTnormParameters {
     "L1fit": boolean;
     "input_dataset": InputPathType;
 }
+type V3dTnormParametersTagged = Required<Pick<V3dTnormParameters, '@type'>> & V3dTnormParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dTnorm": v_3d_tnorm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dTnorm": v_3d_tnorm_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_tnorm(...)`.
+ * Output object returned when calling `V3dTnormParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function v_3d_tnorm_params(
     normx: boolean = false,
     polort: number | null = null,
     l1fit: boolean = false,
-): V3dTnormParameters {
+): V3dTnormParametersTagged {
     const params = {
-        "@type": "afni.3dTnorm" as const,
+        "@type": "afni/3dTnorm" as const,
         "norm2": norm2,
         "normR": norm_r,
         "norm1": norm1,
@@ -138,16 +105,16 @@ function v_3d_tnorm_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["norm2"] ?? null)) {
+    if ((params["norm2"] ?? false)) {
         cargs.push("-norm2");
     }
-    if ((params["normR"] ?? null)) {
+    if ((params["normR"] ?? false)) {
         cargs.push("-normR");
     }
-    if ((params["norm1"] ?? null)) {
+    if ((params["norm1"] ?? false)) {
         cargs.push("-norm1");
     }
-    if ((params["normx"] ?? null)) {
+    if ((params["normx"] ?? false)) {
         cargs.push("-normx");
     }
     if ((params["polort"] ?? null) !== null) {
@@ -156,7 +123,7 @@ function v_3d_tnorm_cargs(
             String((params["polort"] ?? null))
         );
     }
-    if ((params["L1fit"] ?? null)) {
+    if ((params["L1fit"] ?? false)) {
         cargs.push("-L1fit");
     }
     cargs.push(execution.inputFile((params["input_dataset"] ?? null)));
@@ -251,7 +218,6 @@ function v_3d_tnorm(
 
 export {
       V3dTnormOutputs,
-      V3dTnormParameters,
       V_3D_TNORM_METADATA,
       v_3d_tnorm,
       v_3d_tnorm_execute,

@@ -12,7 +12,7 @@ const FIND_VARIANCE_LINES_TCSH_METADATA: Metadata = {
 
 
 interface FindVarianceLinesTcshParameters {
-    "@type": "afni.find_variance_lines.tcsh";
+    "@type"?: "afni/find_variance_lines.tcsh";
     "input_files": Array<InputPathType>;
     "mask"?: string | null | undefined;
     "min_cvox"?: number | null | undefined;
@@ -29,44 +29,11 @@ interface FindVarianceLinesTcshParameters {
     "hist": boolean;
     "ver": boolean;
 }
+type FindVarianceLinesTcshParametersTagged = Required<Pick<FindVarianceLinesTcshParameters, '@type'>> & FindVarianceLinesTcshParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.find_variance_lines.tcsh": find_variance_lines_tcsh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.find_variance_lines.tcsh": find_variance_lines_tcsh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `find_variance_lines_tcsh(...)`.
+ * Output object returned when calling `FindVarianceLinesTcshParameters(...)`.
  *
  * @interface
  */
@@ -119,9 +86,9 @@ function find_variance_lines_tcsh_params(
     help: boolean = false,
     hist: boolean = false,
     ver: boolean = false,
-): FindVarianceLinesTcshParameters {
+): FindVarianceLinesTcshParametersTagged {
     const params = {
-        "@type": "afni.find_variance_lines.tcsh" as const,
+        "@type": "afni/find_variance_lines.tcsh" as const,
         "input_files": input_files,
         "echo": echo,
         "help": help,
@@ -237,16 +204,16 @@ function find_variance_lines_tcsh_cargs(
             String((params["do_img"] ?? null))
         );
     }
-    if ((params["echo"] ?? null)) {
+    if ((params["echo"] ?? false)) {
         cargs.push("-echo");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["hist"] ?? null)) {
+    if ((params["hist"] ?? false)) {
         cargs.push("-hist");
     }
-    if ((params["ver"] ?? null)) {
+    if ((params["ver"] ?? false)) {
         cargs.push("-ver");
     }
     return cargs;
@@ -355,7 +322,6 @@ function find_variance_lines_tcsh(
 export {
       FIND_VARIANCE_LINES_TCSH_METADATA,
       FindVarianceLinesTcshOutputs,
-      FindVarianceLinesTcshParameters,
       find_variance_lines_tcsh,
       find_variance_lines_tcsh_execute,
       find_variance_lines_tcsh_params,

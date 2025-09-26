@@ -12,7 +12,7 @@ const V_3DEDGE3_METADATA: Metadata = {
 
 
 interface V3dedge3Parameters {
-    "@type": "afni.3dedge3";
+    "@type"?: "afni/3dedge3";
     "input_file": InputPathType;
     "verbose": boolean;
     "prefix"?: string | null | undefined;
@@ -23,44 +23,11 @@ interface V3dedge3Parameters {
     "scale_floats"?: number | null | undefined;
     "automask": boolean;
 }
+type V3dedge3ParametersTagged = Required<Pick<V3dedge3Parameters, '@type'>> & V3dedge3Parameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dedge3": v_3dedge3_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dedge3": v_3dedge3_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dedge3(...)`.
+ * Output object returned when calling `V3dedge3Parameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function v_3dedge3_params(
     nscale: boolean = false,
     scale_floats: number | null = null,
     automask: boolean = false,
-): V3dedge3Parameters {
+): V3dedge3ParametersTagged {
     const params = {
-        "@type": "afni.3dedge3" as const,
+        "@type": "afni/3dedge3" as const,
         "input_file": input_file,
         "verbose": verbose,
         "fscale": fscale,
@@ -142,7 +109,7 @@ function v_3dedge3_cargs(
         "-input",
         execution.inputFile((params["input_file"] ?? null))
     );
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verbose");
     }
     if ((params["prefix"] ?? null) !== null) {
@@ -157,13 +124,13 @@ function v_3dedge3_cargs(
             (params["datum"] ?? null)
         );
     }
-    if ((params["fscale"] ?? null)) {
+    if ((params["fscale"] ?? false)) {
         cargs.push("-fscale");
     }
-    if ((params["gscale"] ?? null)) {
+    if ((params["gscale"] ?? false)) {
         cargs.push("-gscale");
     }
-    if ((params["nscale"] ?? null)) {
+    if ((params["nscale"] ?? false)) {
         cargs.push("-nscale");
     }
     if ((params["scale_floats"] ?? null) !== null) {
@@ -172,7 +139,7 @@ function v_3dedge3_cargs(
             String((params["scale_floats"] ?? null))
         );
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     return cargs;
@@ -268,7 +235,6 @@ function v_3dedge3(
 
 export {
       V3dedge3Outputs,
-      V3dedge3Parameters,
       V_3DEDGE3_METADATA,
       v_3dedge3,
       v_3dedge3_execute,

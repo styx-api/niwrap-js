@@ -12,49 +12,16 @@ const FSLFFT_METADATA: Metadata = {
 
 
 interface FslfftParameters {
-    "@type": "fsl.fslfft";
+    "@type"?: "fsl/fslfft";
     "input_volume": InputPathType;
     "output_volume": string;
     "inverse_flag": boolean;
 }
+type FslfftParametersTagged = Required<Pick<FslfftParameters, '@type'>> & FslfftParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslfft": fslfft_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fslfft": fslfft_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslfft(...)`.
+ * Output object returned when calling `FslfftParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function fslfft_params(
     input_volume: InputPathType,
     output_volume: string,
     inverse_flag: boolean = false,
-): FslfftParameters {
+): FslfftParametersTagged {
     const params = {
-        "@type": "fsl.fslfft" as const,
+        "@type": "fsl/fslfft" as const,
         "input_volume": input_volume,
         "output_volume": output_volume,
         "inverse_flag": inverse_flag,
@@ -110,7 +77,7 @@ function fslfft_cargs(
     cargs.push("fslfft");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
     cargs.push((params["output_volume"] ?? null));
-    if ((params["inverse_flag"] ?? null)) {
+    if ((params["inverse_flag"] ?? false)) {
         cargs.push("-inv");
     }
     return cargs;
@@ -195,7 +162,6 @@ function fslfft(
 export {
       FSLFFT_METADATA,
       FslfftOutputs,
-      FslfftParameters,
       fslfft,
       fslfft_execute,
       fslfft_params,

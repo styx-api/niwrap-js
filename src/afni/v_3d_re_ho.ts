@@ -12,7 +12,7 @@ const V_3D_RE_HO_METADATA: Metadata = {
 
 
 interface V3dReHoParameters {
-    "@type": "afni.3dReHo";
+    "@type"?: "afni/3dReHo";
     "prefix": string;
     "inset": InputPathType;
     "nneigh"?: string | null | undefined;
@@ -28,44 +28,11 @@ interface V3dReHoParameters {
     "box_z"?: number | null | undefined;
     "in_rois"?: InputPathType | null | undefined;
 }
+type V3dReHoParametersTagged = Required<Pick<V3dReHoParameters, '@type'>> & V3dReHoParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dReHo": v_3d_re_ho_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dReHo": v_3d_re_ho_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_re_ho(...)`.
+ * Output object returned when calling `V3dReHoParameters(...)`.
  *
  * @interface
  */
@@ -128,9 +95,9 @@ function v_3d_re_ho_params(
     box_y: number | null = null,
     box_z: number | null = null,
     in_rois: InputPathType | null = null,
-): V3dReHoParameters {
+): V3dReHoParametersTagged {
     const params = {
-        "@type": "afni.3dReHo" as const,
+        "@type": "afni/3dReHo" as const,
         "prefix": prefix,
         "inset": inset,
         "chi_sq": chi_sq,
@@ -200,7 +167,7 @@ function v_3d_re_ho_cargs(
             (params["nneigh"] ?? null)
         );
     }
-    if ((params["chi_sq"] ?? null)) {
+    if ((params["chi_sq"] ?? false)) {
         cargs.push("-chi_sq");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -369,7 +336,6 @@ function v_3d_re_ho(
 
 export {
       V3dReHoOutputs,
-      V3dReHoParameters,
       V_3D_RE_HO_METADATA,
       v_3d_re_ho,
       v_3d_re_ho_execute,

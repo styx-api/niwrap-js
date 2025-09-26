@@ -12,7 +12,7 @@ const RBOX_METADATA: Metadata = {
 
 
 interface RboxParameters {
-    "@type": "afni.rbox";
+    "@type"?: "afni/rbox";
     "number_points": string;
     "dimension"?: string | null | undefined;
     "unit_cube": boolean;
@@ -35,43 +35,11 @@ interface RboxParameters {
     "user_seed"?: number | null | undefined;
     "mesh_lattice"?: Array<string> | null | undefined;
 }
+type RboxParametersTagged = Required<Pick<RboxParameters, '@type'>> & RboxParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.rbox": rbox_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `rbox(...)`.
+ * Output object returned when calling `RboxParameters(...)`.
  *
  * @interface
  */
@@ -132,9 +100,9 @@ function rbox_params(
     offset: number | null = null,
     user_seed: number | null = null,
     mesh_lattice: Array<string> | null = null,
-): RboxParameters {
+): RboxParametersTagged {
     const params = {
-        "@type": "afni.rbox" as const,
+        "@type": "afni/rbox" as const,
         "number_points": number_points,
         "unit_cube": unit_cube,
         "unit_diamond": unit_diamond,
@@ -195,25 +163,25 @@ function rbox_cargs(
     if ((params["dimension"] ?? null) !== null) {
         cargs.push((params["dimension"] ?? null));
     }
-    if ((params["unit_cube"] ?? null)) {
+    if ((params["unit_cube"] ?? false)) {
         cargs.push("c");
     }
-    if ((params["unit_diamond"] ?? null)) {
+    if ((params["unit_diamond"] ?? false)) {
         cargs.push("d");
     }
-    if ((params["spiral"] ?? null)) {
+    if ((params["spiral"] ?? false)) {
         cargs.push("l");
     }
-    if ((params["regular_polygon"] ?? null)) {
+    if ((params["regular_polygon"] ?? false)) {
         cargs.push("r");
     }
-    if ((params["cospherical_points"] ?? null)) {
+    if ((params["cospherical_points"] ?? false)) {
         cargs.push("s");
     }
-    if ((params["simplex_points"] ?? null)) {
+    if ((params["simplex_points"] ?? false)) {
         cargs.push("x");
     }
-    if ((params["simplex_plus_points"] ?? null)) {
+    if ((params["simplex_plus_points"] ?? false)) {
         cargs.push("y");
     }
     if ((params["add_point"] ?? null) !== null) {
@@ -228,7 +196,7 @@ function rbox_cargs(
             (params["lens_distribution"] ?? null)
         );
     }
-    if ((params["random_within"] ?? null)) {
+    if ((params["random_within"] ?? false)) {
         cargs.push("W");
     }
     if ((params["random_disk"] ?? null) !== null) {
@@ -243,16 +211,16 @@ function rbox_cargs(
             String((params["bounding_box"] ?? null))
         );
     }
-    if ((params["homogeneous_coordinates"] ?? null)) {
+    if ((params["homogeneous_coordinates"] ?? false)) {
         cargs.push("h");
     }
-    if ((params["remove_command_line"] ?? null)) {
+    if ((params["remove_command_line"] ?? false)) {
         cargs.push("n");
     }
-    if ((params["time_seed"] ?? null)) {
+    if ((params["time_seed"] ?? false)) {
         cargs.push("t");
     }
-    if ((params["integer_coordinates"] ?? null)) {
+    if ((params["integer_coordinates"] ?? false)) {
         cargs.push("z");
     }
     if ((params["offset"] ?? null) !== null) {
@@ -390,7 +358,6 @@ function rbox(
 export {
       RBOX_METADATA,
       RboxOutputs,
-      RboxParameters,
       rbox,
       rbox_execute,
       rbox_params,

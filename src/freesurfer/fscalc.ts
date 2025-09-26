@@ -12,7 +12,7 @@ const FSCALC_METADATA: Metadata = {
 
 
 interface FscalcParameters {
-    "@type": "freesurfer.fscalc";
+    "@type"?: "freesurfer/fscalc";
     "input1": string;
     "operation": string;
     "input2"?: string | null | undefined;
@@ -23,44 +23,11 @@ interface FscalcParameters {
     "nocleanup": boolean;
     "log_file"?: string | null | undefined;
 }
+type FscalcParametersTagged = Required<Pick<FscalcParameters, '@type'>> & FscalcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fscalc": fscalc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.fscalc": fscalc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fscalc(...)`.
+ * Output object returned when calling `FscalcParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function fscalc_params(
     tmpdir: string | null = null,
     nocleanup: boolean = false,
     log_file: string | null = null,
-): FscalcParameters {
+): FscalcParametersTagged {
     const params = {
-        "@type": "freesurfer.fscalc" as const,
+        "@type": "freesurfer/fscalc" as const,
         "input1": input1,
         "operation": operation,
         "output_file": output_file,
@@ -155,7 +122,7 @@ function fscalc_cargs(
             (params["output_data_type"] ?? null)
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     if ((params["tmpdir"] ?? null) !== null) {
@@ -164,7 +131,7 @@ function fscalc_cargs(
             (params["tmpdir"] ?? null)
         );
     }
-    if ((params["nocleanup"] ?? null)) {
+    if ((params["nocleanup"] ?? false)) {
         cargs.push("--nocleanup");
     }
     if ((params["log_file"] ?? null) !== null) {
@@ -267,7 +234,6 @@ function fscalc(
 export {
       FSCALC_METADATA,
       FscalcOutputs,
-      FscalcParameters,
       fscalc,
       fscalc_execute,
       fscalc_params,

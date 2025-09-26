@@ -12,7 +12,7 @@ const MRI_TESSELLATE_METADATA: Metadata = {
 
 
 interface MriTessellateParameters {
-    "@type": "freesurfer.mri_tessellate";
+    "@type"?: "freesurfer/mri_tessellate";
     "input_volume": InputPathType;
     "label_value": number;
     "output_surf": string;
@@ -20,44 +20,11 @@ interface MriTessellateParameters {
     "max_vertices"?: number | null | undefined;
     "real_ras": boolean;
 }
+type MriTessellateParametersTagged = Required<Pick<MriTessellateParameters, '@type'>> & MriTessellateParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_tessellate": mri_tessellate_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_tessellate": mri_tessellate_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_tessellate(...)`.
+ * Output object returned when calling `MriTessellateParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function mri_tessellate_params(
     different_labels: boolean = false,
     max_vertices: number | null = null,
     real_ras: boolean = false,
-): MriTessellateParameters {
+): MriTessellateParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_tessellate" as const,
+        "@type": "freesurfer/mri_tessellate" as const,
         "input_volume": input_volume,
         "label_value": label_value,
         "output_surf": output_surf,
@@ -125,7 +92,7 @@ function mri_tessellate_cargs(
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
     cargs.push(String((params["label_value"] ?? null)));
     cargs.push((params["output_surf"] ?? null));
-    if ((params["different_labels"] ?? null)) {
+    if ((params["different_labels"] ?? false)) {
         cargs.push("-a");
     }
     if ((params["max_vertices"] ?? null) !== null) {
@@ -134,7 +101,7 @@ function mri_tessellate_cargs(
             String((params["max_vertices"] ?? null))
         );
     }
-    if ((params["real_ras"] ?? null)) {
+    if ((params["real_ras"] ?? false)) {
         cargs.push("-n");
     }
     return cargs;
@@ -225,7 +192,6 @@ function mri_tessellate(
 export {
       MRI_TESSELLATE_METADATA,
       MriTessellateOutputs,
-      MriTessellateParameters,
       mri_tessellate,
       mri_tessellate_execute,
       mri_tessellate_params,

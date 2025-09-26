@@ -12,7 +12,7 @@ const PREDICT_V1_SH_METADATA: Metadata = {
 
 
 interface PredictV1ShParameters {
-    "@type": "freesurfer.predict_v1.sh";
+    "@type"?: "freesurfer/predict_v1.sh";
     "template"?: string | null | undefined;
     "inflated_surface_flag": boolean;
     "hemisphere"?: string | null | undefined;
@@ -20,43 +20,11 @@ interface PredictV1ShParameters {
     "subjects": Array<string>;
     "usage_flag": boolean;
 }
+type PredictV1ShParametersTagged = Required<Pick<PredictV1ShParameters, '@type'>> & PredictV1ShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.predict_v1.sh": predict_v1_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `predict_v1_sh(...)`.
+ * Output object returned when calling `PredictV1ShParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function predict_v1_sh_params(
     hemisphere: string | null = null,
     print_mode_flag: boolean = false,
     usage_flag: boolean = false,
-): PredictV1ShParameters {
+): PredictV1ShParametersTagged {
     const params = {
-        "@type": "freesurfer.predict_v1.sh" as const,
+        "@type": "freesurfer/predict_v1.sh" as const,
         "inflated_surface_flag": inflated_surface_flag,
         "print_mode_flag": print_mode_flag,
         "subjects": subjects,
@@ -125,7 +93,7 @@ function predict_v1_sh_cargs(
             (params["template"] ?? null)
         );
     }
-    if ((params["inflated_surface_flag"] ?? null)) {
+    if ((params["inflated_surface_flag"] ?? false)) {
         cargs.push("-i");
     }
     if ((params["hemisphere"] ?? null) !== null) {
@@ -134,11 +102,11 @@ function predict_v1_sh_cargs(
             (params["hemisphere"] ?? null)
         );
     }
-    if ((params["print_mode_flag"] ?? null)) {
+    if ((params["print_mode_flag"] ?? false)) {
         cargs.push("-p");
     }
     cargs.push(...(params["subjects"] ?? null));
-    if ((params["usage_flag"] ?? null)) {
+    if ((params["usage_flag"] ?? false)) {
         cargs.push("-u");
     }
     return cargs;
@@ -228,7 +196,6 @@ function predict_v1_sh(
 export {
       PREDICT_V1_SH_METADATA,
       PredictV1ShOutputs,
-      PredictV1ShParameters,
       predict_v1_sh,
       predict_v1_sh_execute,
       predict_v1_sh_params,

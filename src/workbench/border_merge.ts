@@ -12,68 +12,35 @@ const BORDER_MERGE_METADATA: Metadata = {
 
 
 interface BorderMergeUpToParameters {
-    "@type": "workbench.border-merge.border.select.up_to";
+    "@type"?: "up_to";
     "last_border": string;
     "opt_reverse": boolean;
 }
+type BorderMergeUpToParametersTagged = Required<Pick<BorderMergeUpToParameters, '@type'>> & BorderMergeUpToParameters;
 
 
 interface BorderMergeSelectParameters {
-    "@type": "workbench.border-merge.border.select";
+    "@type"?: "select";
     "border": string;
     "up_to"?: BorderMergeUpToParameters | null | undefined;
 }
+type BorderMergeSelectParametersTagged = Required<Pick<BorderMergeSelectParameters, '@type'>> & BorderMergeSelectParameters;
 
 
 interface BorderMergeBorderParameters {
-    "@type": "workbench.border-merge.border";
+    "@type"?: "border";
     "border_file_in": InputPathType;
     "select"?: Array<BorderMergeSelectParameters> | null | undefined;
 }
+type BorderMergeBorderParametersTagged = Required<Pick<BorderMergeBorderParameters, '@type'>> & BorderMergeBorderParameters;
 
 
 interface BorderMergeParameters {
-    "@type": "workbench.border-merge";
+    "@type"?: "workbench/border-merge";
     "border_file_out": string;
     "border"?: Array<BorderMergeBorderParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.border-merge": border_merge_cargs,
-        "workbench.border-merge.border": border_merge_border_cargs,
-        "workbench.border-merge.border.select": border_merge_select_cargs,
-        "workbench.border-merge.border.select.up_to": border_merge_up_to_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.border-merge": border_merge_outputs,
-    };
-    return outputsFuncs[t];
-}
+type BorderMergeParametersTagged = Required<Pick<BorderMergeParameters, '@type'>> & BorderMergeParameters;
 
 
 /**
@@ -87,9 +54,9 @@ function dynOutputs(
 function border_merge_up_to_params(
     last_border: string,
     opt_reverse: boolean = false,
-): BorderMergeUpToParameters {
+): BorderMergeUpToParametersTagged {
     const params = {
-        "@type": "workbench.border-merge.border.select.up_to" as const,
+        "@type": "up_to" as const,
         "last_border": last_border,
         "opt_reverse": opt_reverse,
     };
@@ -112,7 +79,7 @@ function border_merge_up_to_cargs(
     const cargs: string[] = [];
     cargs.push("-up-to");
     cargs.push((params["last_border"] ?? null));
-    if ((params["opt_reverse"] ?? null)) {
+    if ((params["opt_reverse"] ?? false)) {
         cargs.push("-reverse");
     }
     return cargs;
@@ -130,9 +97,9 @@ function border_merge_up_to_cargs(
 function border_merge_select_params(
     border: string,
     up_to: BorderMergeUpToParameters | null = null,
-): BorderMergeSelectParameters {
+): BorderMergeSelectParametersTagged {
     const params = {
-        "@type": "workbench.border-merge.border.select" as const,
+        "@type": "select" as const,
         "border": border,
     };
     if (up_to !== null) {
@@ -158,7 +125,7 @@ function border_merge_select_cargs(
     cargs.push("-select");
     cargs.push((params["border"] ?? null));
     if ((params["up_to"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["up_to"] ?? null)["@type"])((params["up_to"] ?? null), execution));
+        cargs.push(...border_merge_up_to_cargs((params["up_to"] ?? null), execution));
     }
     return cargs;
 }
@@ -175,9 +142,9 @@ function border_merge_select_cargs(
 function border_merge_border_params(
     border_file_in: InputPathType,
     select: Array<BorderMergeSelectParameters> | null = null,
-): BorderMergeBorderParameters {
+): BorderMergeBorderParametersTagged {
     const params = {
-        "@type": "workbench.border-merge.border" as const,
+        "@type": "border" as const,
         "border_file_in": border_file_in,
     };
     if (select !== null) {
@@ -203,14 +170,14 @@ function border_merge_border_cargs(
     cargs.push("-border");
     cargs.push(execution.inputFile((params["border_file_in"] ?? null)));
     if ((params["select"] ?? null) !== null) {
-        cargs.push(...(params["select"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["select"] ?? null).map(s => border_merge_select_cargs(s, execution)).flat());
     }
     return cargs;
 }
 
 
 /**
- * Output object returned when calling `border_merge(...)`.
+ * Output object returned when calling `BorderMergeParameters(...)`.
  *
  * @interface
  */
@@ -237,9 +204,9 @@ interface BorderMergeOutputs {
 function border_merge_params(
     border_file_out: string,
     border: Array<BorderMergeBorderParameters> | null = null,
-): BorderMergeParameters {
+): BorderMergeParametersTagged {
     const params = {
-        "@type": "workbench.border-merge" as const,
+        "@type": "workbench/border-merge" as const,
         "border_file_out": border_file_out,
     };
     if (border !== null) {
@@ -266,7 +233,7 @@ function border_merge_cargs(
     cargs.push("-border-merge");
     cargs.push((params["border_file_out"] ?? null));
     if ((params["border"] ?? null) !== null) {
-        cargs.push(...(params["border"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["border"] ?? null).map(s => border_merge_border_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -359,11 +326,7 @@ function border_merge(
 
 export {
       BORDER_MERGE_METADATA,
-      BorderMergeBorderParameters,
       BorderMergeOutputs,
-      BorderMergeParameters,
-      BorderMergeSelectParameters,
-      BorderMergeUpToParameters,
       border_merge,
       border_merge_border_params,
       border_merge_execute,

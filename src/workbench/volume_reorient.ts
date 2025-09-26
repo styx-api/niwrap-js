@@ -12,48 +12,16 @@ const VOLUME_REORIENT_METADATA: Metadata = {
 
 
 interface VolumeReorientParameters {
-    "@type": "workbench.volume-reorient";
+    "@type"?: "workbench/volume-reorient";
     "volume": InputPathType;
     "orient_string": string;
     "volume_out": string;
 }
+type VolumeReorientParametersTagged = Required<Pick<VolumeReorientParameters, '@type'>> & VolumeReorientParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-reorient": volume_reorient_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `volume_reorient(...)`.
+ * Output object returned when calling `VolumeReorientParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function volume_reorient_params(
     volume: InputPathType,
     orient_string: string,
     volume_out: string,
-): VolumeReorientParameters {
+): VolumeReorientParametersTagged {
     const params = {
-        "@type": "workbench.volume-reorient" as const,
+        "@type": "workbench/volume-reorient" as const,
         "volume": volume,
         "orient_string": orient_string,
         "volume_out": volume_out,
@@ -206,7 +174,6 @@ function volume_reorient(
 export {
       VOLUME_REORIENT_METADATA,
       VolumeReorientOutputs,
-      VolumeReorientParameters,
       volume_reorient,
       volume_reorient_execute,
       volume_reorient_params,

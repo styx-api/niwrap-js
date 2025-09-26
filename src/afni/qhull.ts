@@ -12,7 +12,7 @@ const QHULL_METADATA: Metadata = {
 
 
 interface QhullParameters {
-    "@type": "afni.qhull";
+    "@type"?: "afni/qhull";
     "input_coords": string;
     "delaunay": boolean;
     "furthest_delaunay": boolean;
@@ -35,44 +35,11 @@ interface QhullParameters {
     "print_facets"?: string | null | undefined;
     "output_file"?: string | null | undefined;
 }
+type QhullParametersTagged = Required<Pick<QhullParameters, '@type'>> & QhullParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.qhull": qhull_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.qhull": qhull_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `qhull(...)`.
+ * Output object returned when calling `QhullParameters(...)`.
  *
  * @interface
  */
@@ -137,9 +104,9 @@ function qhull_params(
     mathematica_output: boolean = false,
     print_facets: string | null = null,
     output_file: string | null = null,
-): QhullParameters {
+): QhullParametersTagged {
     const params = {
-        "@type": "afni.qhull" as const,
+        "@type": "afni/qhull" as const,
         "input_coords": input_coords,
         "delaunay": delaunay,
         "furthest_delaunay": furthest_delaunay,
@@ -185,58 +152,58 @@ function qhull_cargs(
     const cargs: string[] = [];
     cargs.push("qhull");
     cargs.push((params["input_coords"] ?? null));
-    if ((params["delaunay"] ?? null)) {
+    if ((params["delaunay"] ?? false)) {
         cargs.push("d");
     }
-    if ((params["furthest_delaunay"] ?? null)) {
+    if ((params["furthest_delaunay"] ?? false)) {
         cargs.push("d Qu");
     }
-    if ((params["voronoi"] ?? null)) {
+    if ((params["voronoi"] ?? false)) {
         cargs.push("v");
     }
-    if ((params["furthest_voronoi"] ?? null)) {
+    if ((params["furthest_voronoi"] ?? false)) {
         cargs.push("v Qu");
     }
-    if ((params["halfspace_intersection"] ?? null)) {
+    if ((params["halfspace_intersection"] ?? false)) {
         cargs.push("H1,1");
     }
-    if ((params["triangulated_output"] ?? null)) {
+    if ((params["triangulated_output"] ?? false)) {
         cargs.push("Qt");
     }
-    if ((params["joggled_input"] ?? null)) {
+    if ((params["joggled_input"] ?? false)) {
         cargs.push("QJ");
     }
-    if ((params["verify"] ?? null)) {
+    if ((params["verify"] ?? false)) {
         cargs.push("Tv");
     }
-    if ((params["summary"] ?? null)) {
+    if ((params["summary"] ?? false)) {
         cargs.push("s");
     }
-    if ((params["vertices_incident"] ?? null)) {
+    if ((params["vertices_incident"] ?? false)) {
         cargs.push("i");
     }
-    if ((params["normals"] ?? null)) {
+    if ((params["normals"] ?? false)) {
         cargs.push("n");
     }
-    if ((params["vertex_coordinates"] ?? null)) {
+    if ((params["vertex_coordinates"] ?? false)) {
         cargs.push("p");
     }
-    if ((params["halfspace_intersections"] ?? null)) {
+    if ((params["halfspace_intersections"] ?? false)) {
         cargs.push("Fp");
     }
-    if ((params["extreme_points"] ?? null)) {
+    if ((params["extreme_points"] ?? false)) {
         cargs.push("Fx");
     }
-    if ((params["total_area_volume"] ?? null)) {
+    if ((params["total_area_volume"] ?? false)) {
         cargs.push("FA");
     }
-    if ((params["off_format"] ?? null)) {
+    if ((params["off_format"] ?? false)) {
         cargs.push("o");
     }
-    if ((params["geomview_output"] ?? null)) {
+    if ((params["geomview_output"] ?? false)) {
         cargs.push("G");
     }
-    if ((params["mathematica_output"] ?? null)) {
+    if ((params["mathematica_output"] ?? false)) {
         cargs.push("m");
     }
     if ((params["print_facets"] ?? null) !== null) {
@@ -369,7 +336,6 @@ function qhull(
 export {
       QHULL_METADATA,
       QhullOutputs,
-      QhullParameters,
       qhull,
       qhull_execute,
       qhull_params,

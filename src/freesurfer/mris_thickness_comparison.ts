@@ -12,50 +12,18 @@ const MRIS_THICKNESS_COMPARISON_METADATA: Metadata = {
 
 
 interface MrisThicknessComparisonParameters {
-    "@type": "freesurfer.mris_thickness_comparison";
+    "@type"?: "freesurfer/mris_thickness_comparison";
     "subject": string;
     "hemi": string;
     "thickness_file": InputPathType;
     "w_file": InputPathType;
     "labels": Array<string>;
 }
+type MrisThicknessComparisonParametersTagged = Required<Pick<MrisThicknessComparisonParameters, '@type'>> & MrisThicknessComparisonParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_thickness_comparison": mris_thickness_comparison_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_thickness_comparison(...)`.
+ * Output object returned when calling `MrisThicknessComparisonParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function mris_thickness_comparison_params(
     thickness_file: InputPathType,
     w_file: InputPathType,
     labels: Array<string>,
-): MrisThicknessComparisonParameters {
+): MrisThicknessComparisonParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_thickness_comparison" as const,
+        "@type": "freesurfer/mris_thickness_comparison" as const,
         "subject": subject,
         "hemi": hemi,
         "thickness_file": thickness_file,
@@ -201,7 +169,6 @@ function mris_thickness_comparison(
 export {
       MRIS_THICKNESS_COMPARISON_METADATA,
       MrisThicknessComparisonOutputs,
-      MrisThicknessComparisonParameters,
       mris_thickness_comparison,
       mris_thickness_comparison_execute,
       mris_thickness_comparison_params,

@@ -12,49 +12,16 @@ const V_3D_OVERLAP_METADATA: Metadata = {
 
 
 interface V3dOverlapParameters {
-    "@type": "afni.3dOverlap";
+    "@type"?: "afni/3dOverlap";
     "dataset1": InputPathType;
     "dataset2": Array<InputPathType>;
     "save_prefix"?: string | null | undefined;
 }
+type V3dOverlapParametersTagged = Required<Pick<V3dOverlapParameters, '@type'>> & V3dOverlapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dOverlap": v_3d_overlap_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dOverlap": v_3d_overlap_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_overlap(...)`.
+ * Output object returned when calling `V3dOverlapParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +54,9 @@ function v_3d_overlap_params(
     dataset1: InputPathType,
     dataset2: Array<InputPathType>,
     save_prefix: string | null = null,
-): V3dOverlapParameters {
+): V3dOverlapParametersTagged {
     const params = {
-        "@type": "afni.3dOverlap" as const,
+        "@type": "afni/3dOverlap" as const,
         "dataset1": dataset1,
         "dataset2": dataset2,
     };
@@ -204,7 +171,6 @@ function v_3d_overlap(
 
 export {
       V3dOverlapOutputs,
-      V3dOverlapParameters,
       V_3D_OVERLAP_METADATA,
       v_3d_overlap,
       v_3d_overlap_execute,

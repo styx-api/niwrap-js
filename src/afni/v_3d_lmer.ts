@@ -12,7 +12,7 @@ const V_3D_LMER_METADATA: Metadata = {
 
 
 interface V3dLmerParameters {
-    "@type": "afni.3dLMEr";
+    "@type"?: "afni/3dLMEr";
     "bound_lower"?: number | null | undefined;
     "bound_upper"?: number | null | undefined;
     "cio": boolean;
@@ -36,44 +36,11 @@ interface V3dLmerParameters {
     "vvar_centers"?: string | null | undefined;
     "vvars"?: string | null | undefined;
 }
+type V3dLmerParametersTagged = Required<Pick<V3dLmerParameters, '@type'>> & V3dLmerParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dLMEr": v_3d_lmer_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dLMEr": v_3d_lmer_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_lmer(...)`.
+ * Output object returned when calling `V3dLmerParameters(...)`.
  *
  * @interface
  */
@@ -144,9 +111,9 @@ function v_3d_lmer_params(
     trr: boolean = false,
     vvar_centers: string | null = null,
     vvars: string | null = null,
-): V3dLmerParameters {
+): V3dLmerParametersTagged {
     const params = {
-        "@type": "afni.3dLMEr" as const,
+        "@type": "afni/3dLMEr" as const,
         "cio": cio,
         "data_table": data_table,
         "debug_args": debug_args,
@@ -220,14 +187,14 @@ function v_3d_lmer_cargs(
     if ((params["bound_upper"] ?? null) !== null) {
         cargs.push(String((params["bound_upper"] ?? null)));
     }
-    if ((params["cio"] ?? null)) {
+    if ((params["cio"] ?? false)) {
         cargs.push("-cio");
     }
     cargs.push(
         "-dataTable",
         execution.inputFile((params["data_table"] ?? null))
     );
-    if ((params["debug_args"] ?? null)) {
+    if ((params["debug_args"] ?? false)) {
         cargs.push("-dbgArgs");
     }
     if ((params["glf_code"] ?? null) !== null) {
@@ -242,7 +209,7 @@ function v_3d_lmer_cargs(
             (params["glt_code"] ?? null)
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     if ((params["input_file_column"] ?? null) !== null) {
@@ -289,10 +256,10 @@ function v_3d_lmer_cargs(
             (params["resid"] ?? null)
         );
     }
-    if ((params["rio"] ?? null)) {
+    if ((params["rio"] ?? false)) {
         cargs.push("-Rio");
     }
-    if ((params["show_options"] ?? null)) {
+    if ((params["show_options"] ?? false)) {
         cargs.push("-show_allowed_options");
     }
     if ((params["ss_type"] ?? null) !== null) {
@@ -301,7 +268,7 @@ function v_3d_lmer_cargs(
             String((params["ss_type"] ?? null))
         );
     }
-    if ((params["trr"] ?? null)) {
+    if ((params["trr"] ?? false)) {
         cargs.push("-TRR");
     }
     if ((params["vvar_centers"] ?? null) !== null) {
@@ -436,7 +403,6 @@ function v_3d_lmer(
 
 export {
       V3dLmerOutputs,
-      V3dLmerParameters,
       V_3D_LMER_METADATA,
       v_3d_lmer,
       v_3d_lmer_execute,

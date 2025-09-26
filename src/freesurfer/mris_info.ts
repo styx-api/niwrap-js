@@ -12,7 +12,7 @@ const MRIS_INFO_METADATA: Metadata = {
 
 
 interface MrisInfoParameters {
-    "@type": "freesurfer.mris_info";
+    "@type"?: "freesurfer/mris_info";
     "surfacefile": InputPathType;
     "outfile"?: InputPathType | null | undefined;
     "subject_hemi_surfname"?: string | null | undefined;
@@ -37,44 +37,11 @@ interface MrisInfoParameters {
     "version_flag": boolean;
     "help_flag": boolean;
 }
+type MrisInfoParametersTagged = Required<Pick<MrisInfoParameters, '@type'>> & MrisInfoParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_info": mris_info_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_info": mris_info_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_info(...)`.
+ * Output object returned when calling `MrisInfoParameters(...)`.
  *
  * @interface
  */
@@ -147,9 +114,9 @@ function mris_info_params(
     nogifti_flag: boolean = false,
     version_flag: boolean = false,
     help_flag: boolean = false,
-): MrisInfoParameters {
+): MrisInfoParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_info" as const,
+        "@type": "freesurfer/mris_info" as const,
         "surfacefile": surfacefile,
         "talairach_xfm_flag": talairach_xfm_flag,
         "rescale_flag": rescale_flag,
@@ -233,10 +200,10 @@ function mris_info_cargs(
             (params["subject_hemi_surfname"] ?? null)
         );
     }
-    if ((params["talairach_xfm_flag"] ?? null)) {
+    if ((params["talairach_xfm_flag"] ?? false)) {
         cargs.push("--t");
     }
-    if ((params["rescale_flag"] ?? null)) {
+    if ((params["rescale_flag"] ?? false)) {
         cargs.push("--r");
     }
     if ((params["patchfile"] ?? null) !== null) {
@@ -269,7 +236,7 @@ function mris_info_cargs(
             execution.inputFile((params["annotfile"] ?? null))
         );
     }
-    if ((params["area_stats_flag"] ?? null)) {
+    if ((params["area_stats_flag"] ?? false)) {
         cargs.push("--area-stats");
     }
     if ((params["edge_stats_id"] ?? null) !== null) {
@@ -296,10 +263,10 @@ function mris_info_cargs(
             (params["matrix_format"] ?? null)
         );
     }
-    if ((params["quality_stats_flag"] ?? null)) {
+    if ((params["quality_stats_flag"] ?? false)) {
         cargs.push("--quality");
     }
-    if ((params["intersections_flag"] ?? null)) {
+    if ((params["intersections_flag"] ?? false)) {
         cargs.push("--intersections");
     }
     if ((params["mask_file"] ?? null) !== null) {
@@ -320,13 +287,13 @@ function mris_info_cargs(
             execution.inputFile((params["edge_file"] ?? null))
         );
     }
-    if ((params["nogifti_flag"] ?? null)) {
+    if ((params["nogifti_flag"] ?? false)) {
         cargs.push("--nogifti-disp-image");
     }
-    if ((params["version_flag"] ?? null)) {
+    if ((params["version_flag"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -452,7 +419,6 @@ function mris_info(
 export {
       MRIS_INFO_METADATA,
       MrisInfoOutputs,
-      MrisInfoParameters,
       mris_info,
       mris_info_execute,
       mris_info_params,

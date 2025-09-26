@@ -12,49 +12,16 @@ const SPHERE_SUBJECT_METADATA: Metadata = {
 
 
 interface SphereSubjectParameters {
-    "@type": "freesurfer.sphere_subject";
+    "@type"?: "freesurfer/sphere_subject";
     "input_dir": string;
     "output_file": string;
     "license_file"?: string | null | undefined;
 }
+type SphereSubjectParametersTagged = Required<Pick<SphereSubjectParameters, '@type'>> & SphereSubjectParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.sphere_subject": sphere_subject_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.sphere_subject": sphere_subject_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `sphere_subject(...)`.
+ * Output object returned when calling `SphereSubjectParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function sphere_subject_params(
     input_dir: string,
     output_file: string,
     license_file: string | null = null,
-): SphereSubjectParameters {
+): SphereSubjectParametersTagged {
     const params = {
-        "@type": "freesurfer.sphere_subject" as const,
+        "@type": "freesurfer/sphere_subject" as const,
         "input_dir": input_dir,
         "output_file": output_file,
     };
@@ -197,7 +164,6 @@ function sphere_subject(
 export {
       SPHERE_SUBJECT_METADATA,
       SphereSubjectOutputs,
-      SphereSubjectParameters,
       sphere_subject,
       sphere_subject_execute,
       sphere_subject_params,

@@ -12,47 +12,15 @@ const MRI_HISTO_EQ_METADATA: Metadata = {
 
 
 interface MriHistoEqParameters {
-    "@type": "freesurfer.mri_histo_eq";
+    "@type"?: "freesurfer/mri_histo_eq";
     "input_volume_1": InputPathType;
     "input_volume_2": InputPathType;
 }
+type MriHistoEqParametersTagged = Required<Pick<MriHistoEqParameters, '@type'>> & MriHistoEqParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_histo_eq": mri_histo_eq_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_histo_eq(...)`.
+ * Output object returned when calling `MriHistoEqParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface MriHistoEqOutputs {
 function mri_histo_eq_params(
     input_volume_1: InputPathType,
     input_volume_2: InputPathType,
-): MriHistoEqParameters {
+): MriHistoEqParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_histo_eq" as const,
+        "@type": "freesurfer/mri_histo_eq" as const,
         "input_volume_1": input_volume_1,
         "input_volume_2": input_volume_2,
     };
@@ -180,7 +148,6 @@ function mri_histo_eq(
 export {
       MRI_HISTO_EQ_METADATA,
       MriHistoEqOutputs,
-      MriHistoEqParameters,
       mri_histo_eq,
       mri_histo_eq_execute,
       mri_histo_eq_params,

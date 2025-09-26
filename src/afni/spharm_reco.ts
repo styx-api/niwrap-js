@@ -12,7 +12,7 @@ const SPHARM_RECO_METADATA: Metadata = {
 
 
 interface SpharmRecoParameters {
-    "@type": "afni.SpharmReco";
+    "@type"?: "afni/SpharmReco";
     "input_surface": string;
     "decomposition_order": number;
     "bases_prefix": string;
@@ -22,43 +22,11 @@ interface SpharmRecoParameters {
     "debug"?: number | null | undefined;
     "smoothing"?: number | null | undefined;
 }
+type SpharmRecoParametersTagged = Required<Pick<SpharmRecoParameters, '@type'>> & SpharmRecoParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.SpharmReco": spharm_reco_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `spharm_reco(...)`.
+ * Output object returned when calling `SpharmRecoParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +61,9 @@ function spharm_reco_params(
     output_surface: Array<string> | null = null,
     debug: number | null = null,
     smoothing: number | null = null,
-): SpharmRecoParameters {
+): SpharmRecoParametersTagged {
     const params = {
-        "@type": "afni.SpharmReco" as const,
+        "@type": "afni/SpharmReco" as const,
         "input_surface": input_surface,
         "decomposition_order": decomposition_order,
         "bases_prefix": bases_prefix,
@@ -262,7 +230,6 @@ function spharm_reco(
 export {
       SPHARM_RECO_METADATA,
       SpharmRecoOutputs,
-      SpharmRecoParameters,
       spharm_reco,
       spharm_reco_execute,
       spharm_reco_params,

@@ -12,7 +12,7 @@ const RTFEEDME_METADATA: Metadata = {
 
 
 interface RtfeedmeParameters {
-    "@type": "afni.rtfeedme";
+    "@type"?: "afni/rtfeedme";
     "datasets": Array<InputPathType>;
     "host"?: string | null | undefined;
     "interval_ms"?: number | null | undefined;
@@ -25,43 +25,11 @@ interface RtfeedmeParameters {
     "note"?: Array<string> | null | undefined;
     "yrange"?: number | null | undefined;
 }
+type RtfeedmeParametersTagged = Required<Pick<RtfeedmeParameters, '@type'>> & RtfeedmeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.rtfeedme": rtfeedme_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `rtfeedme(...)`.
+ * Output object returned when calling `RtfeedmeParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +70,9 @@ function rtfeedme_params(
     drive_cmd: Array<string> | null = null,
     note: Array<string> | null = null,
     yrange: number | null = null,
-): RtfeedmeParameters {
+): RtfeedmeParametersTagged {
     const params = {
-        "@type": "afni.rtfeedme" as const,
+        "@type": "afni/rtfeedme" as const,
         "datasets": datasets,
         "send_3d": send_3d,
         "verbose": verbose,
@@ -162,7 +130,7 @@ function rtfeedme_cargs(
             String((params["interval_ms"] ?? null))
         );
     }
-    if ((params["send_3d"] ?? null)) {
+    if ((params["send_3d"] ?? false)) {
         cargs.push("-3D");
     }
     if ((params["buffer_mb"] ?? null) !== null) {
@@ -171,10 +139,10 @@ function rtfeedme_cargs(
             String((params["buffer_mb"] ?? null))
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verbose");
     }
-    if ((params["swap_bytes"] ?? null)) {
+    if ((params["swap_bytes"] ?? false)) {
         cargs.push("-swap2");
     }
     if ((params["nz_fake"] ?? null) !== null) {
@@ -298,7 +266,6 @@ function rtfeedme(
 export {
       RTFEEDME_METADATA,
       RtfeedmeOutputs,
-      RtfeedmeParameters,
       rtfeedme,
       rtfeedme_execute,
       rtfeedme_params,

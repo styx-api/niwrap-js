@@ -12,49 +12,16 @@ const SURFMATHS_METADATA: Metadata = {
 
 
 interface SurfmathsParameters {
-    "@type": "fsl.surfmaths";
+    "@type"?: "fsl/surfmaths";
     "first_input": InputPathType;
     "operations_inputs"?: Array<string> | null | undefined;
     "output": string;
 }
+type SurfmathsParametersTagged = Required<Pick<SurfmathsParameters, '@type'>> & SurfmathsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.surfmaths": surfmaths_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.surfmaths": surfmaths_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surfmaths(...)`.
+ * Output object returned when calling `SurfmathsParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function surfmaths_params(
     first_input: InputPathType,
     output: string,
     operations_inputs: Array<string> | null = null,
-): SurfmathsParameters {
+): SurfmathsParametersTagged {
     const params = {
-        "@type": "fsl.surfmaths" as const,
+        "@type": "fsl/surfmaths" as const,
         "first_input": first_input,
         "output": output,
     };
@@ -197,7 +164,6 @@ function surfmaths(
 export {
       SURFMATHS_METADATA,
       SurfmathsOutputs,
-      SurfmathsParameters,
       surfmaths,
       surfmaths_execute,
       surfmaths_params,

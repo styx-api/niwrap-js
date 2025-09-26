@@ -12,48 +12,15 @@ const IMLN_METADATA: Metadata = {
 
 
 interface ImlnParameters {
-    "@type": "fsl.imln";
+    "@type"?: "fsl/imln";
     "input_file": InputPathType;
     "link_name": string;
 }
+type ImlnParametersTagged = Required<Pick<ImlnParameters, '@type'>> & ImlnParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.imln": imln_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.imln": imln_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `imln(...)`.
+ * Output object returned when calling `ImlnParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface ImlnOutputs {
 function imln_params(
     input_file: InputPathType,
     link_name: string,
-): ImlnParameters {
+): ImlnParametersTagged {
     const params = {
-        "@type": "fsl.imln" as const,
+        "@type": "fsl/imln" as const,
         "input_file": input_file,
         "link_name": link_name,
     };
@@ -186,7 +153,6 @@ function imln(
 export {
       IMLN_METADATA,
       ImlnOutputs,
-      ImlnParameters,
       imln,
       imln_execute,
       imln_params,

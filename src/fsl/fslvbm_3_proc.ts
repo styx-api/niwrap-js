@@ -12,7 +12,7 @@ const FSLVBM_3_PROC_METADATA: Metadata = {
 
 
 interface Fslvbm3ProcParameters {
-    "@type": "fsl.fslvbm_3_proc";
+    "@type"?: "fsl/fslvbm_3_proc";
     "arch"?: string | null | undefined;
     "coprocessor"?: string | null | undefined;
     "coprocessor_multi"?: string | null | undefined;
@@ -46,44 +46,11 @@ interface Fslvbm3ProcParameters {
     "version": boolean;
     "config_file"?: InputPathType | null | undefined;
 }
+type Fslvbm3ProcParametersTagged = Required<Pick<Fslvbm3ProcParameters, '@type'>> & Fslvbm3ProcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslvbm_3_proc": fslvbm_3_proc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fslvbm_3_proc": fslvbm_3_proc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslvbm_3_proc(...)`.
+ * Output object returned when calling `Fslvbm3ProcParameters(...)`.
  *
  * @interface
  */
@@ -170,9 +137,9 @@ function fslvbm_3_proc_params(
     verbose: boolean = false,
     version: boolean = false,
     config_file: InputPathType | null = null,
-): Fslvbm3ProcParameters {
+): Fslvbm3ProcParametersTagged {
     const params = {
-        "@type": "fsl.fslvbm_3_proc" as const,
+        "@type": "fsl/fslvbm_3_proc" as const,
         "coprocessor_class_strict": coprocessor_class_strict,
         "not_requeueable": not_requeueable,
         "keep_jobscript": keep_jobscript,
@@ -296,7 +263,7 @@ function fslvbm_3_proc_cargs(
             (params["coprocessor_class"] ?? null)
         );
     }
-    if ((params["coprocessor_class_strict"] ?? null)) {
+    if ((params["coprocessor_class_strict"] ?? false)) {
         cargs.push("--coprocessor_class_strict");
     }
     if ((params["coprocessor_toolkit"] ?? null) !== null) {
@@ -305,7 +272,7 @@ function fslvbm_3_proc_cargs(
             (params["coprocessor_toolkit"] ?? null)
         );
     }
-    if ((params["not_requeueable"] ?? null)) {
+    if ((params["not_requeueable"] ?? false)) {
         cargs.push("-F");
     }
     if ((params["jobhold"] ?? null) !== null) {
@@ -398,7 +365,7 @@ function fslvbm_3_proc_cargs(
             String((params["number_jobscripts"] ?? null))
         );
     }
-    if ((params["keep_jobscript"] ?? null)) {
+    if ((params["keep_jobscript"] ?? false)) {
         cargs.push("--keep_jobscript");
     }
     if ((params["coprocessor_name"] ?? null) !== null) {
@@ -407,7 +374,7 @@ function fslvbm_3_proc_cargs(
             (params["coprocessor_name"] ?? null)
         );
     }
-    if ((params["has_queues"] ?? null)) {
+    if ((params["has_queues"] ?? false)) {
         cargs.push("--has_queues");
     }
     if ((params["project"] ?? null) !== null) {
@@ -416,7 +383,7 @@ function fslvbm_3_proc_cargs(
             (params["project"] ?? null)
         );
     }
-    if ((params["submit_scheduler"] ?? null)) {
+    if ((params["submit_scheduler"] ?? false)) {
         cargs.push("-S");
     }
     if ((params["runtime_limit"] ?? null) !== null) {
@@ -425,13 +392,13 @@ function fslvbm_3_proc_cargs(
             String((params["runtime_limit"] ?? null))
         );
     }
-    if ((params["show_config"] ?? null)) {
+    if ((params["show_config"] ?? false)) {
         cargs.push("--show_config");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-V");
     }
     if ((params["config_file"] ?? null) !== null) {
@@ -580,7 +547,6 @@ function fslvbm_3_proc(
 export {
       FSLVBM_3_PROC_METADATA,
       Fslvbm3ProcOutputs,
-      Fslvbm3ProcParameters,
       fslvbm_3_proc,
       fslvbm_3_proc_execute,
       fslvbm_3_proc_params,

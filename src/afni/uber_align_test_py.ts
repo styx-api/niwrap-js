@@ -12,7 +12,7 @@ const UBER_ALIGN_TEST_PY_METADATA: Metadata = {
 
 
 interface UberAlignTestPyParameters {
-    "@type": "afni.uber_align_test.py";
+    "@type"?: "afni/uber_align_test.py";
     "no_gui": boolean;
     "print_script": boolean;
     "save_script"?: string | null | undefined;
@@ -24,43 +24,11 @@ interface UberAlignTestPyParameters {
     "show_valid_opts": boolean;
     "version": boolean;
 }
+type UberAlignTestPyParametersTagged = Required<Pick<UberAlignTestPyParameters, '@type'>> & UberAlignTestPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.uber_align_test.py": uber_align_test_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `uber_align_test_py(...)`.
+ * Output object returned when calling `UberAlignTestPyParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +67,9 @@ function uber_align_test_py_params(
     history: boolean = false,
     show_valid_opts: boolean = false,
     version: boolean = false,
-): UberAlignTestPyParameters {
+): UberAlignTestPyParametersTagged {
     const params = {
-        "@type": "afni.uber_align_test.py" as const,
+        "@type": "afni/uber_align_test.py" as const,
         "no_gui": no_gui,
         "print_script": print_script,
         "help": help,
@@ -137,10 +105,10 @@ function uber_align_test_py_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("uber_align_test.py");
-    if ((params["no_gui"] ?? null)) {
+    if ((params["no_gui"] ?? false)) {
         cargs.push("-no_gui");
     }
-    if ((params["print_script"] ?? null)) {
+    if ((params["print_script"] ?? false)) {
         cargs.push("-print_script");
     }
     if ((params["save_script"] ?? null) !== null) {
@@ -161,19 +129,19 @@ function uber_align_test_py_cargs(
             (params["qt_opts"] ?? null)
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["help_gui"] ?? null)) {
+    if ((params["help_gui"] ?? false)) {
         cargs.push("-help_gui");
     }
-    if ((params["history"] ?? null)) {
+    if ((params["history"] ?? false)) {
         cargs.push("-hist");
     }
-    if ((params["show_valid_opts"] ?? null)) {
+    if ((params["show_valid_opts"] ?? false)) {
         cargs.push("-show_valid_opts");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-ver");
     }
     return cargs;
@@ -271,7 +239,6 @@ function uber_align_test_py(
 export {
       UBER_ALIGN_TEST_PY_METADATA,
       UberAlignTestPyOutputs,
-      UberAlignTestPyParameters,
       uber_align_test_py,
       uber_align_test_py_execute,
       uber_align_test_py_params,

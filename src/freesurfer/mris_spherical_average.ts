@@ -12,7 +12,7 @@ const MRIS_SPHERICAL_AVERAGE_METADATA: Metadata = {
 
 
 interface MrisSphericalAverageParameters {
-    "@type": "freesurfer.mris_spherical_average";
+    "@type"?: "freesurfer/mris_spherical_average";
     "which": "coords" | "label" | "vals" | "curv" | "area";
     "fname": string;
     "hemi": "lh" | "rh";
@@ -28,43 +28,11 @@ interface MrisSphericalAverageParameters {
     "average_area": boolean;
     "summary_statistics"?: string | null | undefined;
 }
+type MrisSphericalAverageParametersTagged = Required<Pick<MrisSphericalAverageParameters, '@type'>> & MrisSphericalAverageParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_spherical_average": mris_spherical_average_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_spherical_average(...)`.
+ * Output object returned when calling `MrisSphericalAverageParameters(...)`.
  *
  * @interface
  */
@@ -111,9 +79,9 @@ function mris_spherical_average_params(
     subjects_dir: string | null = null,
     average_area: boolean = false,
     summary_statistics: string | null = null,
-): MrisSphericalAverageParameters {
+): MrisSphericalAverageParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_spherical_average" as const,
+        "@type": "freesurfer/mris_spherical_average" as const,
         "which": which,
         "fname": fname,
         "hemi": hemi,
@@ -163,10 +131,10 @@ function mris_spherical_average_cargs(
     cargs.push((params["spherical_surf"] ?? null));
     cargs.push(...(params["subjects"] ?? null));
     cargs.push((params["output"] ?? null));
-    if ((params["segment"] ?? null)) {
+    if ((params["segment"] ?? false)) {
         cargs.push("-segment");
     }
-    if ((params["normalize"] ?? null)) {
+    if ((params["normalize"] ?? false)) {
         cargs.push("-n");
     }
     if ((params["orig"] ?? null) !== null) {
@@ -193,7 +161,7 @@ function mris_spherical_average_cargs(
             (params["subjects_dir"] ?? null)
         );
     }
-    if ((params["average_area"] ?? null)) {
+    if ((params["average_area"] ?? false)) {
         cargs.push("-average_area");
     }
     if ((params["summary_statistics"] ?? null) !== null) {
@@ -305,7 +273,6 @@ function mris_spherical_average(
 export {
       MRIS_SPHERICAL_AVERAGE_METADATA,
       MrisSphericalAverageOutputs,
-      MrisSphericalAverageParameters,
       mris_spherical_average,
       mris_spherical_average_execute,
       mris_spherical_average_params,

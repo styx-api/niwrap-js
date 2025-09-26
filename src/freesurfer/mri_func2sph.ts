@@ -12,7 +12,7 @@ const MRI_FUNC2SPH_METADATA: Metadata = {
 
 
 interface MriFunc2sphParameters {
-    "@type": "freesurfer.mri-func2sph";
+    "@type"?: "freesurfer/mri-func2sph";
     "instem": string;
     "outstem": string;
     "hemisphere": "lh" | "rh";
@@ -22,43 +22,11 @@ interface MriFunc2sphParameters {
     "input_type"?: string | null | undefined;
     "umask"?: string | null | undefined;
 }
+type MriFunc2sphParametersTagged = Required<Pick<MriFunc2sphParameters, '@type'>> & MriFunc2sphParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri-func2sph": mri_func2sph_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_func2sph(...)`.
+ * Output object returned when calling `MriFunc2sphParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +61,9 @@ function mri_func2sph_params(
     icosahedron_size: number | null = null,
     input_type: string | null = null,
     umask: string | null = null,
-): MriFunc2sphParameters {
+): MriFunc2sphParametersTagged {
     const params = {
-        "@type": "freesurfer.mri-func2sph" as const,
+        "@type": "freesurfer/mri-func2sph" as const,
         "instem": instem,
         "outstem": outstem,
         "hemisphere": hemisphere,
@@ -262,7 +230,6 @@ function mri_func2sph(
 export {
       MRI_FUNC2SPH_METADATA,
       MriFunc2sphOutputs,
-      MriFunc2sphParameters,
       mri_func2sph,
       mri_func2sph_execute,
       mri_func2sph_params,

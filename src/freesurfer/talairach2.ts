@@ -12,47 +12,15 @@ const TALAIRACH2_METADATA: Metadata = {
 
 
 interface Talairach2Parameters {
-    "@type": "freesurfer.talairach2";
+    "@type"?: "freesurfer/talairach2";
     "subject_id": string;
     "mgz_flag"?: string | null | undefined;
 }
+type Talairach2ParametersTagged = Required<Pick<Talairach2Parameters, '@type'>> & Talairach2Parameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.talairach2": talairach2_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `talairach2(...)`.
+ * Output object returned when calling `Talairach2Parameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface Talairach2Outputs {
 function talairach2_params(
     subject_id: string,
     mgz_flag: string | null = null,
-): Talairach2Parameters {
+): Talairach2ParametersTagged {
     const params = {
-        "@type": "freesurfer.talairach2" as const,
+        "@type": "freesurfer/talairach2" as const,
         "subject_id": subject_id,
     };
     if (mgz_flag !== null) {
@@ -184,7 +152,6 @@ function talairach2(
 export {
       TALAIRACH2_METADATA,
       Talairach2Outputs,
-      Talairach2Parameters,
       talairach2,
       talairach2_execute,
       talairach2_params,

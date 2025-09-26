@@ -12,49 +12,17 @@ const MRIS_RF_TRAIN_METADATA: Metadata = {
 
 
 interface MrisRfTrainParameters {
-    "@type": "freesurfer.mris_rf_train";
+    "@type"?: "freesurfer/mris_rf_train";
     "subjects": Array<string>;
     "output_name": string;
     "hemi"?: string | null | undefined;
     "surf"?: string | null | undefined;
 }
+type MrisRfTrainParametersTagged = Required<Pick<MrisRfTrainParameters, '@type'>> & MrisRfTrainParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_rf_train": mris_rf_train_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_rf_train(...)`.
+ * Output object returned when calling `MrisRfTrainParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function mris_rf_train_params(
     output_name: string,
     hemi: string | null = null,
     surf: string | null = null,
-): MrisRfTrainParameters {
+): MrisRfTrainParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_rf_train" as const,
+        "@type": "freesurfer/mris_rf_train" as const,
         "subjects": subjects,
         "output_name": output_name,
     };
@@ -208,7 +176,6 @@ function mris_rf_train(
 export {
       MRIS_RF_TRAIN_METADATA,
       MrisRfTrainOutputs,
-      MrisRfTrainParameters,
       mris_rf_train,
       mris_rf_train_execute,
       mris_rf_train_params,

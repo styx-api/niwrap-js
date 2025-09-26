@@ -12,7 +12,7 @@ const MRIS_DIVIDE_PARCELLATION_METADATA: Metadata = {
 
 
 interface MrisDivideParcellationParameters {
-    "@type": "freesurfer.mris_divide_parcellation";
+    "@type"?: "freesurfer/mris_divide_parcellation";
     "subject": string;
     "hemi": string;
     "sourceannot": InputPathType;
@@ -21,44 +21,11 @@ interface MrisDivideParcellationParameters {
     "scale"?: number | null | undefined;
     "label_name"?: string | null | undefined;
 }
+type MrisDivideParcellationParametersTagged = Required<Pick<MrisDivideParcellationParameters, '@type'>> & MrisDivideParcellationParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_divide_parcellation": mris_divide_parcellation_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_divide_parcellation": mris_divide_parcellation_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_divide_parcellation(...)`.
+ * Output object returned when calling `MrisDivideParcellationParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function mris_divide_parcellation_params(
     outannot: string,
     scale: number | null = null,
     label_name: string | null = null,
-): MrisDivideParcellationParameters {
+): MrisDivideParcellationParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_divide_parcellation" as const,
+        "@type": "freesurfer/mris_divide_parcellation" as const,
         "subject": subject,
         "hemi": hemi,
         "sourceannot": sourceannot,
@@ -235,7 +202,6 @@ function mris_divide_parcellation(
 export {
       MRIS_DIVIDE_PARCELLATION_METADATA,
       MrisDivideParcellationOutputs,
-      MrisDivideParcellationParameters,
       mris_divide_parcellation,
       mris_divide_parcellation_execute,
       mris_divide_parcellation_params,

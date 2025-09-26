@@ -12,7 +12,7 @@ const MRIS_VOLMASK_VTK_METADATA: Metadata = {
 
 
 interface MrisVolmaskVtkParameters {
-    "@type": "freesurfer.mris_volmask_vtk";
+    "@type"?: "freesurfer/mris_volmask_vtk";
     "cap_distance"?: number | null | undefined;
     "label_background"?: number | null | undefined;
     "label_left_white"?: number | null | undefined;
@@ -32,44 +32,11 @@ interface MrisVolmaskVtkParameters {
     "save_ribbon": boolean;
     "io_param": string;
 }
+type MrisVolmaskVtkParametersTagged = Required<Pick<MrisVolmaskVtkParameters, '@type'>> & MrisVolmaskVtkParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_volmask_vtk": mris_volmask_vtk_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_volmask_vtk": mris_volmask_vtk_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_volmask_vtk(...)`.
+ * Output object returned when calling `MrisVolmaskVtkParameters(...)`.
  *
  * @interface
  */
@@ -156,9 +123,9 @@ function mris_volmask_vtk_params(
     parallel: boolean = false,
     edit_aseg: boolean = false,
     save_ribbon: boolean = false,
-): MrisVolmaskVtkParameters {
+): MrisVolmaskVtkParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_volmask_vtk" as const,
+        "@type": "freesurfer/mris_volmask_vtk" as const,
         "save_distance": save_distance,
         "lh_only": lh_only,
         "rh_only": rh_only,
@@ -284,22 +251,22 @@ function mris_volmask_vtk_cargs(
             (params["subjects_dir"] ?? null)
         );
     }
-    if ((params["save_distance"] ?? null)) {
+    if ((params["save_distance"] ?? false)) {
         cargs.push("--save_distance");
     }
-    if ((params["lh_only"] ?? null)) {
+    if ((params["lh_only"] ?? false)) {
         cargs.push("--lh-only");
     }
-    if ((params["rh_only"] ?? null)) {
+    if ((params["rh_only"] ?? false)) {
         cargs.push("--rh-only");
     }
-    if ((params["parallel"] ?? null)) {
+    if ((params["parallel"] ?? false)) {
         cargs.push("--parallel");
     }
-    if ((params["edit_aseg"] ?? null)) {
+    if ((params["edit_aseg"] ?? false)) {
         cargs.push("--edit_aseg");
     }
-    if ((params["save_ribbon"] ?? null)) {
+    if ((params["save_ribbon"] ?? false)) {
         cargs.push("--save_ribbon");
     }
     cargs.push((params["io_param"] ?? null));
@@ -422,7 +389,6 @@ function mris_volmask_vtk(
 export {
       MRIS_VOLMASK_VTK_METADATA,
       MrisVolmaskVtkOutputs,
-      MrisVolmaskVtkParameters,
       mris_volmask_vtk,
       mris_volmask_vtk_execute,
       mris_volmask_vtk_params,

@@ -12,14 +12,15 @@ const MRCHECKERBOARDMASK_METADATA: Metadata = {
 
 
 interface MrcheckerboardmaskConfigParameters {
-    "@type": "mrtrix.mrcheckerboardmask.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MrcheckerboardmaskConfigParametersTagged = Required<Pick<MrcheckerboardmaskConfigParameters, '@type'>> & MrcheckerboardmaskConfigParameters;
 
 
 interface MrcheckerboardmaskParameters {
-    "@type": "mrtrix.mrcheckerboardmask";
+    "@type"?: "mrtrix/mrcheckerboardmask";
     "tiles"?: number | null | undefined;
     "invert": boolean;
     "nan": boolean;
@@ -34,41 +35,7 @@ interface MrcheckerboardmaskParameters {
     "input": InputPathType;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.mrcheckerboardmask": mrcheckerboardmask_cargs,
-        "mrtrix.mrcheckerboardmask.config": mrcheckerboardmask_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.mrcheckerboardmask": mrcheckerboardmask_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MrcheckerboardmaskParametersTagged = Required<Pick<MrcheckerboardmaskParameters, '@type'>> & MrcheckerboardmaskParameters;
 
 
 /**
@@ -82,9 +49,9 @@ function dynOutputs(
 function mrcheckerboardmask_config_params(
     key: string,
     value: string,
-): MrcheckerboardmaskConfigParameters {
+): MrcheckerboardmaskConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcheckerboardmask.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -113,7 +80,7 @@ function mrcheckerboardmask_config_cargs(
 
 
 /**
- * Output object returned when calling `mrcheckerboardmask(...)`.
+ * Output object returned when calling `MrcheckerboardmaskParameters(...)`.
  *
  * @interface
  */
@@ -162,9 +129,9 @@ function mrcheckerboardmask_params(
     config: Array<MrcheckerboardmaskConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrcheckerboardmaskParameters {
+): MrcheckerboardmaskParametersTagged {
     const params = {
-        "@type": "mrtrix.mrcheckerboardmask" as const,
+        "@type": "mrtrix/mrcheckerboardmask" as const,
         "invert": invert,
         "nan": nan,
         "info": info,
@@ -209,22 +176,22 @@ function mrcheckerboardmask_cargs(
             String((params["tiles"] ?? null))
         );
     }
-    if ((params["invert"] ?? null)) {
+    if ((params["invert"] ?? false)) {
         cargs.push("-invert");
     }
-    if ((params["nan"] ?? null)) {
+    if ((params["nan"] ?? false)) {
         cargs.push("-nan");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -234,12 +201,12 @@ function mrcheckerboardmask_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => mrcheckerboardmask_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -357,9 +324,7 @@ function mrcheckerboardmask(
 
 export {
       MRCHECKERBOARDMASK_METADATA,
-      MrcheckerboardmaskConfigParameters,
       MrcheckerboardmaskOutputs,
-      MrcheckerboardmaskParameters,
       mrcheckerboardmask,
       mrcheckerboardmask_config_params,
       mrcheckerboardmask_execute,

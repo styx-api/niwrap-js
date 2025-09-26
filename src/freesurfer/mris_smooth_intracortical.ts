@@ -12,7 +12,7 @@ const MRIS_SMOOTH_INTRACORTICAL_METADATA: Metadata = {
 
 
 interface MrisSmoothIntracorticalParameters {
-    "@type": "freesurfer.mris_smooth_intracortical";
+    "@type"?: "freesurfer/mris_smooth_intracortical";
     "surf_dir": string;
     "surf_name": string;
     "overlay_dir": string;
@@ -24,44 +24,11 @@ interface MrisSmoothIntracorticalParameters {
     "rad_start"?: number | null | undefined;
     "tan_weights"?: string | null | undefined;
 }
+type MrisSmoothIntracorticalParametersTagged = Required<Pick<MrisSmoothIntracorticalParameters, '@type'>> & MrisSmoothIntracorticalParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_smooth_intracortical": mris_smooth_intracortical_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_smooth_intracortical": mris_smooth_intracortical_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_smooth_intracortical(...)`.
+ * Output object returned when calling `MrisSmoothIntracorticalParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function mris_smooth_intracortical_params(
     rad_size: number | null = null,
     rad_start: number | null = null,
     tan_weights: string | null = null,
-): MrisSmoothIntracorticalParameters {
+): MrisSmoothIntracorticalParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_smooth_intracortical" as const,
+        "@type": "freesurfer/mris_smooth_intracortical" as const,
         "surf_dir": surf_dir,
         "surf_name": surf_name,
         "overlay_dir": overlay_dir,
@@ -296,7 +263,6 @@ function mris_smooth_intracortical(
 export {
       MRIS_SMOOTH_INTRACORTICAL_METADATA,
       MrisSmoothIntracorticalOutputs,
-      MrisSmoothIntracorticalParameters,
       mris_smooth_intracortical,
       mris_smooth_intracortical_execute,
       mris_smooth_intracortical_params,

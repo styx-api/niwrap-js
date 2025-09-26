@@ -12,47 +12,14 @@ const V__NP_METADATA: Metadata = {
 
 
 interface VNpParameters {
-    "@type": "afni.@np";
+    "@type"?: "afni/@np";
     "prefix": string;
 }
+type VNpParametersTagged = Required<Pick<VNpParameters, '@type'>> & VNpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@np": v__np_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@np": v__np_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__np(...)`.
+ * Output object returned when calling `VNpParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface VNpOutputs {
  */
 function v__np_params(
     prefix: string,
-): VNpParameters {
+): VNpParametersTagged {
     const params = {
-        "@type": "afni.@np" as const,
+        "@type": "afni/@np" as const,
         "prefix": prefix,
     };
     return params;
@@ -178,7 +145,6 @@ function v__np(
 
 export {
       VNpOutputs,
-      VNpParameters,
       V__NP_METADATA,
       v__np,
       v__np_execute,

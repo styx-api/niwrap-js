@@ -12,7 +12,7 @@ const ROIGROW_METADATA: Metadata = {
 
 
 interface RoigrowParameters {
-    "@type": "afni.ROIgrow";
+    "@type"?: "afni/ROIgrow";
     "input_surface": string;
     "roi_labels": string;
     "lim_distance": number;
@@ -22,44 +22,11 @@ interface RoigrowParameters {
     "insphere_diameter"?: number | null | undefined;
     "inbox_edges"?: Array<number> | null | undefined;
 }
+type RoigrowParametersTagged = Required<Pick<RoigrowParameters, '@type'>> & RoigrowParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.ROIgrow": roigrow_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.ROIgrow": roigrow_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `roigrow(...)`.
+ * Output object returned when calling `RoigrowParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function roigrow_params(
     grow_from_edge: boolean = false,
     insphere_diameter: number | null = null,
     inbox_edges: Array<number> | null = null,
-): RoigrowParameters {
+): RoigrowParametersTagged {
     const params = {
-        "@type": "afni.ROIgrow" as const,
+        "@type": "afni/ROIgrow" as const,
         "input_surface": input_surface,
         "roi_labels": roi_labels,
         "lim_distance": lim_distance,
@@ -152,10 +119,10 @@ function roigrow_cargs(
             (params["output_prefix"] ?? null)
         );
     }
-    if ((params["full_list"] ?? null)) {
+    if ((params["full_list"] ?? false)) {
         cargs.push("-full_list");
     }
-    if ((params["grow_from_edge"] ?? null)) {
+    if ((params["grow_from_edge"] ?? false)) {
         cargs.push("-grow_from_edge");
     }
     if ((params["insphere_diameter"] ?? null) !== null) {
@@ -262,7 +229,6 @@ function roigrow(
 export {
       ROIGROW_METADATA,
       RoigrowOutputs,
-      RoigrowParameters,
       roigrow,
       roigrow_execute,
       roigrow_params,

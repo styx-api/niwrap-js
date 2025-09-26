@@ -12,46 +12,14 @@ const IMRM_METADATA: Metadata = {
 
 
 interface ImrmParameters {
-    "@type": "fsl.imrm";
+    "@type"?: "fsl/imrm";
     "images_to_remove": Array<string>;
 }
+type ImrmParametersTagged = Required<Pick<ImrmParameters, '@type'>> & ImrmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.imrm": imrm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `imrm(...)`.
+ * Output object returned when calling `ImrmParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface ImrmOutputs {
  */
 function imrm_params(
     images_to_remove: Array<string>,
-): ImrmParameters {
+): ImrmParametersTagged {
     const params = {
-        "@type": "fsl.imrm" as const,
+        "@type": "fsl/imrm" as const,
         "images_to_remove": images_to_remove,
     };
     return params;
@@ -173,7 +141,6 @@ function imrm(
 export {
       IMRM_METADATA,
       ImrmOutputs,
-      ImrmParameters,
       imrm,
       imrm_execute,
       imrm_params,

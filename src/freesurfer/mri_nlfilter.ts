@@ -12,7 +12,7 @@ const MRI_NLFILTER_METADATA: Metadata = {
 
 
 interface MriNlfilterParameters {
-    "@type": "freesurfer.mri_nlfilter";
+    "@type"?: "freesurfer/mri_nlfilter";
     "input_image": InputPathType;
     "output_image": string;
     "blur_sigma"?: number | null | undefined;
@@ -26,44 +26,11 @@ interface MriNlfilterParameters {
     "version_flag": boolean;
     "help_flag": boolean;
 }
+type MriNlfilterParametersTagged = Required<Pick<MriNlfilterParameters, '@type'>> & MriNlfilterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_nlfilter": mri_nlfilter_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_nlfilter": mri_nlfilter_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_nlfilter(...)`.
+ * Output object returned when calling `MriNlfilterParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function mri_nlfilter_params(
     no_crop_flag: boolean = false,
     version_flag: boolean = false,
     help_flag: boolean = false,
-): MriNlfilterParameters {
+): MriNlfilterParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_nlfilter" as const,
+        "@type": "freesurfer/mri_nlfilter" as const,
         "input_image": input_image,
         "output_image": output_image,
         "mean_flag": mean_flag,
@@ -164,7 +131,7 @@ function mri_nlfilter_cargs(
             String((params["gaussian_sigma"] ?? null))
         );
     }
-    if ((params["mean_flag"] ?? null)) {
+    if ((params["mean_flag"] ?? false)) {
         cargs.push("-mean");
     }
     if ((params["window_size"] ?? null) !== null) {
@@ -173,22 +140,22 @@ function mri_nlfilter_cargs(
             String((params["window_size"] ?? null))
         );
     }
-    if ((params["cplov_flag"] ?? null)) {
+    if ((params["cplov_flag"] ?? false)) {
         cargs.push("-cplov");
     }
-    if ((params["minmax_flag"] ?? null)) {
+    if ((params["minmax_flag"] ?? false)) {
         cargs.push("-minmax");
     }
-    if ((params["no_offsets_flag"] ?? null)) {
+    if ((params["no_offsets_flag"] ?? false)) {
         cargs.push("-n");
     }
-    if ((params["no_crop_flag"] ?? null)) {
+    if ((params["no_crop_flag"] ?? false)) {
         cargs.push("-nc");
     }
-    if ((params["version_flag"] ?? null)) {
+    if ((params["version_flag"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -291,7 +258,6 @@ function mri_nlfilter(
 export {
       MRI_NLFILTER_METADATA,
       MriNlfilterOutputs,
-      MriNlfilterParameters,
       mri_nlfilter,
       mri_nlfilter_execute,
       mri_nlfilter_params,

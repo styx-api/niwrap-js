@@ -12,7 +12,7 @@ const IMG2STDCOORD_METADATA: Metadata = {
 
 
 interface Img2stdcoordParameters {
-    "@type": "fsl.img2stdcoord";
+    "@type"?: "fsl/img2stdcoord";
     "coordinate_file": string;
     "input_image": InputPathType;
     "standard_image"?: InputPathType | null | undefined;
@@ -25,43 +25,11 @@ interface Img2stdcoordParameters {
     "verbose_flag_2": boolean;
     "help_flag": boolean;
 }
+type Img2stdcoordParametersTagged = Required<Pick<Img2stdcoordParameters, '@type'>> & Img2stdcoordParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.img2stdcoord": img2stdcoord_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `img2stdcoord(...)`.
+ * Output object returned when calling `Img2stdcoordParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +70,9 @@ function img2stdcoord_params(
     verbose_flag_1: boolean = false,
     verbose_flag_2: boolean = false,
     help_flag: boolean = false,
-): Img2stdcoordParameters {
+): Img2stdcoordParametersTagged {
     const params = {
-        "@type": "fsl.img2stdcoord" as const,
+        "@type": "fsl/img2stdcoord" as const,
         "coordinate_file": coordinate_file,
         "input_image": input_image,
         "voxel_flag": voxel_flag,
@@ -172,19 +140,19 @@ function img2stdcoord_cargs(
             execution.inputFile((params["prewarp_affine_transform"] ?? null))
         );
     }
-    if ((params["voxel_flag"] ?? null)) {
+    if ((params["voxel_flag"] ?? false)) {
         cargs.push("-vox");
     }
-    if ((params["mm_flag"] ?? null)) {
+    if ((params["mm_flag"] ?? false)) {
         cargs.push("-mm");
     }
-    if ((params["verbose_flag_1"] ?? null)) {
+    if ((params["verbose_flag_1"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["verbose_flag_2"] ?? null)) {
+    if ((params["verbose_flag_2"] ?? false)) {
         cargs.push("-verbose");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -284,7 +252,6 @@ function img2stdcoord(
 export {
       IMG2STDCOORD_METADATA,
       Img2stdcoordOutputs,
-      Img2stdcoordParameters,
       img2stdcoord,
       img2stdcoord_execute,
       img2stdcoord_params,

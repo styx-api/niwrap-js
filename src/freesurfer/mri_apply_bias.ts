@@ -12,49 +12,16 @@ const MRI_APPLY_BIAS_METADATA: Metadata = {
 
 
 interface MriApplyBiasParameters {
-    "@type": "freesurfer.mri_apply_bias";
+    "@type"?: "freesurfer/mri_apply_bias";
     "input_volume": InputPathType;
     "bias_volume": InputPathType;
     "output_volume": string;
 }
+type MriApplyBiasParametersTagged = Required<Pick<MriApplyBiasParameters, '@type'>> & MriApplyBiasParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_apply_bias": mri_apply_bias_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_apply_bias": mri_apply_bias_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_apply_bias(...)`.
+ * Output object returned when calling `MriApplyBiasParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mri_apply_bias_params(
     input_volume: InputPathType,
     bias_volume: InputPathType,
     output_volume: string,
-): MriApplyBiasParameters {
+): MriApplyBiasParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_apply_bias" as const,
+        "@type": "freesurfer/mri_apply_bias" as const,
         "input_volume": input_volume,
         "bias_volume": bias_volume,
         "output_volume": output_volume,
@@ -193,7 +160,6 @@ function mri_apply_bias(
 export {
       MRI_APPLY_BIAS_METADATA,
       MriApplyBiasOutputs,
-      MriApplyBiasParameters,
       mri_apply_bias,
       mri_apply_bias_execute,
       mri_apply_bias_params,

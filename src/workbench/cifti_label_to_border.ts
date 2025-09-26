@@ -12,55 +12,21 @@ const CIFTI_LABEL_TO_BORDER_METADATA: Metadata = {
 
 
 interface CiftiLabelToBorderBorderParameters {
-    "@type": "workbench.cifti-label-to-border.border";
+    "@type"?: "border";
     "surface": InputPathType;
     "border_out": string;
 }
+type CiftiLabelToBorderBorderParametersTagged = Required<Pick<CiftiLabelToBorderBorderParameters, '@type'>> & CiftiLabelToBorderBorderParameters;
 
 
 interface CiftiLabelToBorderParameters {
-    "@type": "workbench.cifti-label-to-border";
+    "@type"?: "workbench/cifti-label-to-border";
     "cifti_in": InputPathType;
     "opt_placement_fraction"?: number | null | undefined;
     "opt_column_column"?: string | null | undefined;
     "border"?: Array<CiftiLabelToBorderBorderParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-label-to-border": cifti_label_to_border_cargs,
-        "workbench.cifti-label-to-border.border": cifti_label_to_border_border_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-label-to-border": cifti_label_to_border_outputs,
-        "workbench.cifti-label-to-border.border": cifti_label_to_border_border_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiLabelToBorderParametersTagged = Required<Pick<CiftiLabelToBorderParameters, '@type'>> & CiftiLabelToBorderParameters;
 
 
 /**
@@ -91,9 +57,9 @@ interface CiftiLabelToBorderBorderOutputs {
 function cifti_label_to_border_border_params(
     surface: InputPathType,
     border_out: string,
-): CiftiLabelToBorderBorderParameters {
+): CiftiLabelToBorderBorderParametersTagged {
     const params = {
-        "@type": "workbench.cifti-label-to-border.border" as const,
+        "@type": "border" as const,
         "surface": surface,
         "border_out": border_out,
     };
@@ -142,7 +108,7 @@ function cifti_label_to_border_border_outputs(
 
 
 /**
- * Output object returned when calling `cifti_label_to_border(...)`.
+ * Output object returned when calling `CiftiLabelToBorderParameters(...)`.
  *
  * @interface
  */
@@ -173,9 +139,9 @@ function cifti_label_to_border_params(
     opt_placement_fraction: number | null = null,
     opt_column_column: string | null = null,
     border: Array<CiftiLabelToBorderBorderParameters> | null = null,
-): CiftiLabelToBorderParameters {
+): CiftiLabelToBorderParametersTagged {
     const params = {
-        "@type": "workbench.cifti-label-to-border" as const,
+        "@type": "workbench/cifti-label-to-border" as const,
         "cifti_in": cifti_in,
     };
     if (opt_placement_fraction !== null) {
@@ -220,7 +186,7 @@ function cifti_label_to_border_cargs(
         );
     }
     if ((params["border"] ?? null) !== null) {
-        cargs.push(...(params["border"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["border"] ?? null).map(s => cifti_label_to_border_border_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -240,7 +206,7 @@ function cifti_label_to_border_outputs(
 ): CiftiLabelToBorderOutputs {
     const ret: CiftiLabelToBorderOutputs = {
         root: execution.outputFile("."),
-        border: (params["border"] ?? null) ? (params["border"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null) : null,
+        border: (params["border"] ?? null) ? (params["border"] ?? null).map(i => cifti_label_to_border_border_outputs(i, execution) ?? null) : null,
     };
     return ret;
 }
@@ -310,9 +276,7 @@ function cifti_label_to_border(
 export {
       CIFTI_LABEL_TO_BORDER_METADATA,
       CiftiLabelToBorderBorderOutputs,
-      CiftiLabelToBorderBorderParameters,
       CiftiLabelToBorderOutputs,
-      CiftiLabelToBorderParameters,
       cifti_label_to_border,
       cifti_label_to_border_border_params,
       cifti_label_to_border_execute,

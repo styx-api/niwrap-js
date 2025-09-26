@@ -12,7 +12,7 @@ const LONG_SUBMIT_JOBS_METADATA: Metadata = {
 
 
 interface LongSubmitJobsParameters {
-    "@type": "freesurfer.long_submit_jobs";
+    "@type"?: "freesurfer/long_submit_jobs";
     "qdec": InputPathType;
     "cdir": string;
     "bdir"?: string | null | undefined;
@@ -39,43 +39,11 @@ interface LongSubmitJobsParameters {
     "bnodes"?: number | null | undefined;
     "lnodes"?: number | null | undefined;
 }
+type LongSubmitJobsParametersTagged = Required<Pick<LongSubmitJobsParameters, '@type'>> & LongSubmitJobsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.long_submit_jobs": long_submit_jobs_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `long_submit_jobs(...)`.
+ * Output object returned when calling `LongSubmitJobsParameters(...)`.
  *
  * @interface
  */
@@ -144,9 +112,9 @@ function long_submit_jobs_params(
     cnodes: number | null = null,
     bnodes: number | null = null,
     lnodes: number | null = null,
-): LongSubmitJobsParameters {
+): LongSubmitJobsParametersTagged {
     const params = {
-        "@type": "freesurfer.long_submit_jobs" as const,
+        "@type": "freesurfer/long_submit_jobs" as const,
         "qdec": qdec,
         "cdir": cdir,
         "cross": cross,
@@ -247,13 +215,13 @@ function long_submit_jobs_cargs(
             (params["scriptsdir"] ?? null)
         );
     }
-    if ((params["cross"] ?? null)) {
+    if ((params["cross"] ?? false)) {
         cargs.push("--cross");
     }
-    if ((params["base"] ?? null)) {
+    if ((params["base"] ?? false)) {
         cargs.push("--base");
     }
-    if ((params["long"] ?? null)) {
+    if ((params["long"] ?? false)) {
         cargs.push("--long");
     }
     if ((params["cflags"] ?? null) !== null) {
@@ -274,19 +242,19 @@ function long_submit_jobs_cargs(
             (params["lflags"] ?? null)
         );
     }
-    if ((params["affine"] ?? null)) {
+    if ((params["affine"] ?? false)) {
         cargs.push("--affine");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("--force");
     }
-    if ((params["simulate"] ?? null)) {
+    if ((params["simulate"] ?? false)) {
         cargs.push("--simulate");
     }
-    if ((params["simfiles"] ?? null)) {
+    if ((params["simfiles"] ?? false)) {
         cargs.push("--simfiles");
     }
-    if ((params["check"] ?? null)) {
+    if ((params["check"] ?? false)) {
         cargs.push("--check");
     }
     if ((params["pause"] ?? null) !== null) {
@@ -468,7 +436,6 @@ function long_submit_jobs(
 export {
       LONG_SUBMIT_JOBS_METADATA,
       LongSubmitJobsOutputs,
-      LongSubmitJobsParameters,
       long_submit_jobs,
       long_submit_jobs_execute,
       long_submit_jobs_params,

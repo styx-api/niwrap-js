@@ -12,7 +12,7 @@ const CONF2HIRES_METADATA: Metadata = {
 
 
 interface Conf2hiresParameters {
-    "@type": "freesurfer.conf2hires";
+    "@type"?: "freesurfer/conf2hires";
     "subject": string;
     "t2": boolean;
     "no_t2": boolean;
@@ -35,43 +35,11 @@ interface Conf2hiresParameters {
     "expert"?: string | null | undefined;
     "force_update": boolean;
 }
+type Conf2hiresParametersTagged = Required<Pick<Conf2hiresParameters, '@type'>> & Conf2hiresParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.conf2hires": conf2hires_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `conf2hires(...)`.
+ * Output object returned when calling `Conf2hiresParameters(...)`.
  *
  * @interface
  */
@@ -132,9 +100,9 @@ function conf2hires_params(
     stopmask: string | null = null,
     expert: string | null = null,
     force_update: boolean = false,
-): Conf2hiresParameters {
+): Conf2hiresParametersTagged {
     const params = {
-        "@type": "freesurfer.conf2hires" as const,
+        "@type": "freesurfer/conf2hires" as const,
         "subject": subject,
         "t2": t2,
         "no_t2": no_t2,
@@ -189,10 +157,10 @@ function conf2hires_cargs(
         "--s",
         (params["subject"] ?? null)
     );
-    if ((params["t2"] ?? null)) {
+    if ((params["t2"] ?? false)) {
         cargs.push("--t2");
     }
-    if ((params["no_t2"] ?? null)) {
+    if ((params["no_t2"] ?? false)) {
         cargs.push("--no-t2");
     }
     if ((params["mm_norm_sigma"] ?? null) !== null) {
@@ -201,10 +169,10 @@ function conf2hires_cargs(
             String((params["mm_norm_sigma"] ?? null))
         );
     }
-    if ((params["flair"] ?? null)) {
+    if ((params["flair"] ?? false)) {
         cargs.push("--flair");
     }
-    if ((params["no_flair"] ?? null)) {
+    if ((params["no_flair"] ?? false)) {
         cargs.push("--no-flair");
     }
     if ((params["threads"] ?? null) !== null) {
@@ -213,22 +181,22 @@ function conf2hires_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["copy_bias_from_conf"] ?? null)) {
+    if ((params["copy_bias_from_conf"] ?? false)) {
         cargs.push("--copy-bias-from-conf");
     }
-    if ((params["norm_opts_rca"] ?? null)) {
+    if ((params["norm_opts_rca"] ?? false)) {
         cargs.push("--norm-opts-rca");
     }
-    if ((params["cubic"] ?? null)) {
+    if ((params["cubic"] ?? false)) {
         cargs.push("--cubic");
     }
-    if ((params["trilin"] ?? null)) {
+    if ((params["trilin"] ?? false)) {
         cargs.push("--trilin");
     }
-    if ((params["dev"] ?? null)) {
+    if ((params["dev"] ?? false)) {
         cargs.push("--dev");
     }
-    if ((params["no_dev"] ?? null)) {
+    if ((params["no_dev"] ?? false)) {
         cargs.push("--no-dev");
     }
     if ((params["bbr_con"] ?? null) !== null) {
@@ -237,16 +205,16 @@ function conf2hires_cargs(
             (params["bbr_con"] ?? null)
         );
     }
-    if ((params["bbr_t1"] ?? null)) {
+    if ((params["bbr_t1"] ?? false)) {
         cargs.push("--bbr-t1");
     }
-    if ((params["bbr_t2"] ?? null)) {
+    if ((params["bbr_t2"] ?? false)) {
         cargs.push("--bbr-t2");
     }
-    if ((params["first_peak_d1"] ?? null)) {
+    if ((params["first_peak_d1"] ?? false)) {
         cargs.push("--first-peak-d1");
     }
-    if ((params["first_peak_d2"] ?? null)) {
+    if ((params["first_peak_d2"] ?? false)) {
         cargs.push("--first-peak-d2");
     }
     if ((params["stopmask"] ?? null) !== null) {
@@ -261,7 +229,7 @@ function conf2hires_cargs(
             (params["expert"] ?? null)
         );
     }
-    if ((params["force_update"] ?? null)) {
+    if ((params["force_update"] ?? false)) {
         cargs.push("--force-update");
     }
     return cargs;
@@ -381,7 +349,6 @@ function conf2hires(
 export {
       CONF2HIRES_METADATA,
       Conf2hiresOutputs,
-      Conf2hiresParameters,
       conf2hires,
       conf2hires_execute,
       conf2hires_params,

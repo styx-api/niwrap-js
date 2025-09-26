@@ -12,49 +12,16 @@ const CIFTI_ALL_LABELS_TO_ROIS_METADATA: Metadata = {
 
 
 interface CiftiAllLabelsToRoisParameters {
-    "@type": "workbench.cifti-all-labels-to-rois";
+    "@type"?: "workbench/cifti-all-labels-to-rois";
     "label_in": InputPathType;
     "map": string;
     "cifti_out": string;
 }
+type CiftiAllLabelsToRoisParametersTagged = Required<Pick<CiftiAllLabelsToRoisParameters, '@type'>> & CiftiAllLabelsToRoisParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-all-labels-to-rois": cifti_all_labels_to_rois_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-all-labels-to-rois": cifti_all_labels_to_rois_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `cifti_all_labels_to_rois(...)`.
+ * Output object returned when calling `CiftiAllLabelsToRoisParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function cifti_all_labels_to_rois_params(
     label_in: InputPathType,
     map: string,
     cifti_out: string,
-): CiftiAllLabelsToRoisParameters {
+): CiftiAllLabelsToRoisParametersTagged {
     const params = {
-        "@type": "workbench.cifti-all-labels-to-rois" as const,
+        "@type": "workbench/cifti-all-labels-to-rois" as const,
         "label_in": label_in,
         "map": map,
         "cifti_out": cifti_out,
@@ -202,7 +169,6 @@ function cifti_all_labels_to_rois(
 export {
       CIFTI_ALL_LABELS_TO_ROIS_METADATA,
       CiftiAllLabelsToRoisOutputs,
-      CiftiAllLabelsToRoisParameters,
       cifti_all_labels_to_rois,
       cifti_all_labels_to_rois_execute,
       cifti_all_labels_to_rois_params,

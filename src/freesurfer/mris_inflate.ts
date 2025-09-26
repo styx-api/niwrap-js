@@ -12,7 +12,7 @@ const MRIS_INFLATE_METADATA: Metadata = {
 
 
 interface MrisInflateParameters {
-    "@type": "freesurfer.mris_inflate";
+    "@type"?: "freesurfer/mris_inflate";
     "input_surface": InputPathType;
     "output_surface": string;
     "max_iterations"?: number | null | undefined;
@@ -23,44 +23,11 @@ interface MrisInflateParameters {
     "mm_flag": boolean;
     "scale_flag"?: number | null | undefined;
 }
+type MrisInflateParametersTagged = Required<Pick<MrisInflateParameters, '@type'>> & MrisInflateParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_inflate": mris_inflate_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_inflate": mris_inflate_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_inflate(...)`.
+ * Output object returned when calling `MrisInflateParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function mris_inflate_params(
     sulcname: string | null = null,
     mm_flag: boolean = false,
     scale_flag: number | null = null,
-): MrisInflateParameters {
+): MrisInflateParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_inflate" as const,
+        "@type": "freesurfer/mris_inflate" as const,
         "input_surface": input_surface,
         "output_surface": output_surface,
         "no_save_sulc": no_save_sulc,
@@ -162,7 +129,7 @@ function mris_inflate_cargs(
             String((params["dist_coefficient"] ?? null))
         );
     }
-    if ((params["no_save_sulc"] ?? null)) {
+    if ((params["no_save_sulc"] ?? false)) {
         cargs.push("-no-save-sulc");
     }
     if ((params["sulcname"] ?? null) !== null) {
@@ -171,7 +138,7 @@ function mris_inflate_cargs(
             (params["sulcname"] ?? null)
         );
     }
-    if ((params["mm_flag"] ?? null)) {
+    if ((params["mm_flag"] ?? false)) {
         cargs.push("-mm");
     }
     if ((params["scale_flag"] ?? null) !== null) {
@@ -274,7 +241,6 @@ function mris_inflate(
 export {
       MRIS_INFLATE_METADATA,
       MrisInflateOutputs,
-      MrisInflateParameters,
       mris_inflate,
       mris_inflate_execute,
       mris_inflate_params,

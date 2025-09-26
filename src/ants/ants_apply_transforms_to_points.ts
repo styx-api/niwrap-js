@@ -12,25 +12,28 @@ const ANTS_APPLY_TRANSFORMS_TO_POINTS_METADATA: Metadata = {
 
 
 interface AntsApplyTransformsToPointsSingleTransformParameters {
-    "@type": "ants.antsApplyTransformsToPoints.single_transform";
+    "@type"?: "single_transform";
 }
+type AntsApplyTransformsToPointsSingleTransformParametersTagged = Required<Pick<AntsApplyTransformsToPointsSingleTransformParameters, '@type'>> & AntsApplyTransformsToPointsSingleTransformParameters;
 
 
 interface AntsApplyTransformsToPointsInverseTransformParameters {
-    "@type": "ants.antsApplyTransformsToPoints.inverse_transform";
+    "@type"?: "inverse_transform";
     "transform_file": InputPathType;
 }
+type AntsApplyTransformsToPointsInverseTransformParametersTagged = Required<Pick<AntsApplyTransformsToPointsInverseTransformParameters, '@type'>> & AntsApplyTransformsToPointsInverseTransformParameters;
 
 
 interface AntsApplyTransformsToPointsParameters {
-    "@type": "ants.antsApplyTransformsToPoints";
+    "@type"?: "ants/antsApplyTransformsToPoints";
     "dimensionality"?: 2 | 3 | null | undefined;
     "precision"?: 0 | 1 | null | undefined;
     "forantsr"?: 0 | 1 | null | undefined;
     "input": InputPathType;
     "output": string;
-    "transform"?: AntsApplyTransformsToPointsSingleTransformParameters | AntsApplyTransformsToPointsInverseTransformParameters | null | undefined;
+    "transform"?: AntsApplyTransformsToPointsSingleTransformParametersTagged | AntsApplyTransformsToPointsInverseTransformParametersTagged | null | undefined;
 }
+type AntsApplyTransformsToPointsParametersTagged = Required<Pick<AntsApplyTransformsToPointsParameters, '@type'>> & AntsApplyTransformsToPointsParameters;
 
 
 /**
@@ -40,13 +43,12 @@ interface AntsApplyTransformsToPointsParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function ants_apply_transforms_to_points_transform_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "ants.antsApplyTransformsToPoints": ants_apply_transforms_to_points_cargs,
-        "ants.antsApplyTransformsToPoints.single_transform": ants_apply_transforms_to_points_single_transform_cargs,
-        "ants.antsApplyTransformsToPoints.inverse_transform": ants_apply_transforms_to_points_inverse_transform_cargs,
+        "single_transform": ants_apply_transforms_to_points_single_transform_cargs,
+        "inverse_transform": ants_apply_transforms_to_points_inverse_transform_cargs,
     };
     return cargsFuncs[t];
 }
@@ -59,11 +61,10 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function ants_apply_transforms_to_points_transform_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "ants.antsApplyTransformsToPoints": ants_apply_transforms_to_points_outputs,
     };
     return outputsFuncs[t];
 }
@@ -75,9 +76,9 @@ function dynOutputs(
  * @returns Parameter dictionary
  */
 function ants_apply_transforms_to_points_single_transform_params(
-): AntsApplyTransformsToPointsSingleTransformParameters {
+): AntsApplyTransformsToPointsSingleTransformParametersTagged {
     const params = {
-        "@type": "ants.antsApplyTransformsToPoints.single_transform" as const,
+        "@type": "single_transform" as const,
     };
     return params;
 }
@@ -109,9 +110,9 @@ function ants_apply_transforms_to_points_single_transform_cargs(
  */
 function ants_apply_transforms_to_points_inverse_transform_params(
     transform_file: InputPathType,
-): AntsApplyTransformsToPointsInverseTransformParameters {
+): AntsApplyTransformsToPointsInverseTransformParametersTagged {
     const params = {
-        "@type": "ants.antsApplyTransformsToPoints.inverse_transform" as const,
+        "@type": "inverse_transform" as const,
         "transform_file": transform_file,
     };
     return params;
@@ -137,7 +138,7 @@ function ants_apply_transforms_to_points_inverse_transform_cargs(
 
 
 /**
- * Output object returned when calling `ants_apply_transforms_to_points(...)`.
+ * Output object returned when calling `AntsApplyTransformsToPointsParameters(...)`.
  *
  * @interface
  */
@@ -171,10 +172,10 @@ function ants_apply_transforms_to_points_params(
     dimensionality: 2 | 3 | null = null,
     precision: 0 | 1 | null = null,
     forantsr: 0 | 1 | null = null,
-    transform: AntsApplyTransformsToPointsSingleTransformParameters | AntsApplyTransformsToPointsInverseTransformParameters | null = null,
-): AntsApplyTransformsToPointsParameters {
+    transform: AntsApplyTransformsToPointsSingleTransformParametersTagged | AntsApplyTransformsToPointsInverseTransformParametersTagged | null = null,
+): AntsApplyTransformsToPointsParametersTagged {
     const params = {
-        "@type": "ants.antsApplyTransformsToPoints" as const,
+        "@type": "ants/antsApplyTransformsToPoints" as const,
         "input": input,
         "output": output,
     };
@@ -237,7 +238,7 @@ function ants_apply_transforms_to_points_cargs(
     if ((params["transform"] ?? null) !== null) {
         cargs.push(
             "-t",
-            ...dynCargs((params["transform"] ?? null)["@type"])((params["transform"] ?? null), execution)
+            ...ants_apply_transforms_to_points_transform_cargs_dyn_fn((params["transform"] ?? null)["@type"])((params["transform"] ?? null), execution)
         );
     }
     return cargs;
@@ -317,7 +318,7 @@ function ants_apply_transforms_to_points(
     dimensionality: 2 | 3 | null = null,
     precision: 0 | 1 | null = null,
     forantsr: 0 | 1 | null = null,
-    transform: AntsApplyTransformsToPointsSingleTransformParameters | AntsApplyTransformsToPointsInverseTransformParameters | null = null,
+    transform: AntsApplyTransformsToPointsSingleTransformParametersTagged | AntsApplyTransformsToPointsInverseTransformParametersTagged | null = null,
     runner: Runner | null = null,
 ): AntsApplyTransformsToPointsOutputs {
     const params = ants_apply_transforms_to_points_params(input, output, dimensionality, precision, forantsr, transform)
@@ -327,10 +328,7 @@ function ants_apply_transforms_to_points(
 
 export {
       ANTS_APPLY_TRANSFORMS_TO_POINTS_METADATA,
-      AntsApplyTransformsToPointsInverseTransformParameters,
       AntsApplyTransformsToPointsOutputs,
-      AntsApplyTransformsToPointsParameters,
-      AntsApplyTransformsToPointsSingleTransformParameters,
       ants_apply_transforms_to_points,
       ants_apply_transforms_to_points_execute,
       ants_apply_transforms_to_points_inverse_transform_params,

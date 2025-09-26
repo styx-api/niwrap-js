@@ -12,7 +12,7 @@ const SIGLOSS_METADATA: Metadata = {
 
 
 interface SiglossParameters {
-    "@type": "fsl.sigloss";
+    "@type"?: "fsl/sigloss";
     "input_b0map": InputPathType;
     "output_sigloss": string;
     "input_mask"?: InputPathType | null | undefined;
@@ -21,43 +21,11 @@ interface SiglossParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
+type SiglossParametersTagged = Required<Pick<SiglossParameters, '@type'>> & SiglossParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.sigloss": sigloss_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `sigloss(...)`.
+ * Output object returned when calling `SiglossParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +58,9 @@ function sigloss_params(
     slice_direction: "x" | "y" | "z" | null = null,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): SiglossParameters {
+): SiglossParametersTagged {
     const params = {
-        "@type": "fsl.sigloss" as const,
+        "@type": "fsl/sigloss" as const,
         "input_b0map": input_b0map,
         "output_sigloss": output_sigloss,
         "verbose_flag": verbose_flag,
@@ -151,10 +119,10 @@ function sigloss_cargs(
             (params["slice_direction"] ?? null)
         );
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -246,7 +214,6 @@ function sigloss(
 export {
       SIGLOSS_METADATA,
       SiglossOutputs,
-      SiglossParameters,
       sigloss,
       sigloss_execute,
       sigloss_params,

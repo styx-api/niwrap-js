@@ -12,48 +12,16 @@ const SURFACE_MATCH_METADATA: Metadata = {
 
 
 interface SurfaceMatchParameters {
-    "@type": "workbench.surface-match";
+    "@type"?: "workbench/surface-match";
     "match_surface_file": InputPathType;
     "input_surface_file": InputPathType;
     "output_surface_name": string;
 }
+type SurfaceMatchParametersTagged = Required<Pick<SurfaceMatchParameters, '@type'>> & SurfaceMatchParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-match": surface_match_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_match(...)`.
+ * Output object returned when calling `SurfaceMatchParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function surface_match_params(
     match_surface_file: InputPathType,
     input_surface_file: InputPathType,
     output_surface_name: string,
-): SurfaceMatchParameters {
+): SurfaceMatchParametersTagged {
     const params = {
-        "@type": "workbench.surface-match" as const,
+        "@type": "workbench/surface-match" as const,
         "match_surface_file": match_surface_file,
         "input_surface_file": input_surface_file,
         "output_surface_name": output_surface_name,
@@ -192,7 +160,6 @@ function surface_match(
 export {
       SURFACE_MATCH_METADATA,
       SurfaceMatchOutputs,
-      SurfaceMatchParameters,
       surface_match,
       surface_match_execute,
       surface_match_params,

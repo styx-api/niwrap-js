@@ -12,46 +12,14 @@ const CREATE_LUT_METADATA: Metadata = {
 
 
 interface CreateLutParameters {
-    "@type": "fsl.create_lut";
+    "@type"?: "fsl/create_lut";
     "output_file_root": string;
 }
+type CreateLutParametersTagged = Required<Pick<CreateLutParameters, '@type'>> & CreateLutParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.create_lut": create_lut_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `create_lut(...)`.
+ * Output object returned when calling `CreateLutParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface CreateLutOutputs {
  */
 function create_lut_params(
     output_file_root: string,
-): CreateLutParameters {
+): CreateLutParametersTagged {
     const params = {
-        "@type": "fsl.create_lut" as const,
+        "@type": "fsl/create_lut" as const,
         "output_file_root": output_file_root,
     };
     return params;
@@ -173,7 +141,6 @@ function create_lut(
 export {
       CREATE_LUT_METADATA,
       CreateLutOutputs,
-      CreateLutParameters,
       create_lut,
       create_lut_execute,
       create_lut_params,

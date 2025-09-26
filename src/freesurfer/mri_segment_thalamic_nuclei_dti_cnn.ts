@@ -12,7 +12,7 @@ const MRI_SEGMENT_THALAMIC_NUCLEI_DTI_CNN_METADATA: Metadata = {
 
 
 interface MriSegmentThalamicNucleiDtiCnnParameters {
-    "@type": "freesurfer.mri_segment_thalamic_nuclei_dti_cnn";
+    "@type"?: "freesurfer/mri_segment_thalamic_nuclei_dti_cnn";
     "t1_images": InputPathType;
     "aseg"?: InputPathType | null | undefined;
     "fa": InputPathType;
@@ -24,44 +24,11 @@ interface MriSegmentThalamicNucleiDtiCnnParameters {
     "force_cpu": boolean;
     "model"?: InputPathType | null | undefined;
 }
+type MriSegmentThalamicNucleiDtiCnnParametersTagged = Required<Pick<MriSegmentThalamicNucleiDtiCnnParameters, '@type'>> & MriSegmentThalamicNucleiDtiCnnParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_segment_thalamic_nuclei_dti_cnn": mri_segment_thalamic_nuclei_dti_cnn_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_segment_thalamic_nuclei_dti_cnn": mri_segment_thalamic_nuclei_dti_cnn_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_segment_thalamic_nuclei_dti_cnn(...)`.
+ * Output object returned when calling `MriSegmentThalamicNucleiDtiCnnParameters(...)`.
  *
  * @interface
  */
@@ -112,9 +79,9 @@ function mri_segment_thalamic_nuclei_dti_cnn_params(
     threads: number | null = null,
     force_cpu: boolean = false,
     model: InputPathType | null = null,
-): MriSegmentThalamicNucleiDtiCnnParameters {
+): MriSegmentThalamicNucleiDtiCnnParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_segment_thalamic_nuclei_dti_cnn" as const,
+        "@type": "freesurfer/mri_segment_thalamic_nuclei_dti_cnn" as const,
         "t1_images": t1_images,
         "fa": fa,
         "v1": v1,
@@ -194,7 +161,7 @@ function mri_segment_thalamic_nuclei_dti_cnn_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["force_cpu"] ?? null)) {
+    if ((params["force_cpu"] ?? false)) {
         cargs.push("--cpu");
     }
     if ((params["model"] ?? null) !== null) {
@@ -301,7 +268,6 @@ function mri_segment_thalamic_nuclei_dti_cnn(
 export {
       MRI_SEGMENT_THALAMIC_NUCLEI_DTI_CNN_METADATA,
       MriSegmentThalamicNucleiDtiCnnOutputs,
-      MriSegmentThalamicNucleiDtiCnnParameters,
       mri_segment_thalamic_nuclei_dti_cnn,
       mri_segment_thalamic_nuclei_dti_cnn_execute,
       mri_segment_thalamic_nuclei_dti_cnn_params,

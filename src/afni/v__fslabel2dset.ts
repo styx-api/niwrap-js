@@ -12,50 +12,18 @@ const V__FSLABEL2DSET_METADATA: Metadata = {
 
 
 interface VFslabel2dsetParameters {
-    "@type": "afni.@FSlabel2dset";
+    "@type"?: "afni/@FSlabel2dset";
     "fs_label_file": InputPathType;
     "val"?: number | null | undefined;
     "help": boolean;
     "echo": boolean;
     "keep_tmp": boolean;
 }
+type VFslabel2dsetParametersTagged = Required<Pick<VFslabel2dsetParameters, '@type'>> & VFslabel2dsetParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@FSlabel2dset": v__fslabel2dset_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__fslabel2dset(...)`.
+ * Output object returned when calling `VFslabel2dsetParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function v__fslabel2dset_params(
     help: boolean = false,
     echo: boolean = false,
     keep_tmp: boolean = false,
-): VFslabel2dsetParameters {
+): VFslabel2dsetParametersTagged {
     const params = {
-        "@type": "afni.@FSlabel2dset" as const,
+        "@type": "afni/@FSlabel2dset" as const,
         "fs_label_file": fs_label_file,
         "help": help,
         "echo": echo,
@@ -123,13 +91,13 @@ function v__fslabel2dset_cargs(
             String((params["val"] ?? null))
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["echo"] ?? null)) {
+    if ((params["echo"] ?? false)) {
         cargs.push("-echo");
     }
-    if ((params["keep_tmp"] ?? null)) {
+    if ((params["keep_tmp"] ?? false)) {
         cargs.push("-keep_tmp");
     }
     return cargs;
@@ -216,7 +184,6 @@ function v__fslabel2dset(
 
 export {
       VFslabel2dsetOutputs,
-      VFslabel2dsetParameters,
       V__FSLABEL2DSET_METADATA,
       v__fslabel2dset,
       v__fslabel2dset_execute,

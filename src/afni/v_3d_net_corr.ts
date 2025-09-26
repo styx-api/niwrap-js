@@ -12,7 +12,7 @@ const V_3D_NET_CORR_METADATA: Metadata = {
 
 
 interface V3dNetCorrParameters {
-    "@type": "afni.3dNetCorr";
+    "@type"?: "afni/3dNetCorr";
     "prefix": string;
     "inset": InputPathType;
     "in_rois": InputPathType;
@@ -34,44 +34,11 @@ interface V3dNetCorrParameters {
     "automask_off": boolean;
     "ignore_LT": boolean;
 }
+type V3dNetCorrParametersTagged = Required<Pick<V3dNetCorrParameters, '@type'>> & V3dNetCorrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dNetCorr": v_3d_net_corr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dNetCorr": v_3d_net_corr_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_net_corr(...)`.
+ * Output object returned when calling `V3dNetCorrParameters(...)`.
  *
  * @interface
  */
@@ -158,9 +125,9 @@ function v_3d_net_corr_params(
     allow_roi_zeros: boolean = false,
     automask_off: boolean = false,
     ignore_lt: boolean = false,
-): V3dNetCorrParameters {
+): V3dNetCorrParametersTagged {
     const params = {
-        "@type": "afni.3dNetCorr" as const,
+        "@type": "afni/3dNetCorr" as const,
         "prefix": prefix,
         "inset": inset,
         "in_rois": in_rois,
@@ -215,25 +182,25 @@ function v_3d_net_corr_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["fish_z"] ?? null)) {
+    if ((params["fish_z"] ?? false)) {
         cargs.push("-fish_z");
     }
-    if ((params["part_corr"] ?? null)) {
+    if ((params["part_corr"] ?? false)) {
         cargs.push("-part_corr");
     }
-    if ((params["ts_out"] ?? null)) {
+    if ((params["ts_out"] ?? false)) {
         cargs.push("-ts_out");
     }
-    if ((params["ts_label"] ?? null)) {
+    if ((params["ts_label"] ?? false)) {
         cargs.push("-ts_label");
     }
-    if ((params["ts_indiv"] ?? null)) {
+    if ((params["ts_indiv"] ?? false)) {
         cargs.push("-ts_indiv");
     }
-    if ((params["ts_wb_corr"] ?? null)) {
+    if ((params["ts_wb_corr"] ?? false)) {
         cargs.push("-ts_wb_corr");
     }
-    if ((params["ts_wb_Z"] ?? null)) {
+    if ((params["ts_wb_Z"] ?? false)) {
         cargs.push("-ts_wb_Z");
     }
     if ((params["weight_ts"] ?? null) !== null) {
@@ -248,25 +215,25 @@ function v_3d_net_corr_cargs(
             execution.inputFile((params["weight_corr"] ?? null))
         );
     }
-    if ((params["ts_wb_strlabel"] ?? null)) {
+    if ((params["ts_wb_strlabel"] ?? false)) {
         cargs.push("-ts_wb_strlabel");
     }
-    if ((params["nifti"] ?? null)) {
+    if ((params["nifti"] ?? false)) {
         cargs.push("-nifti");
     }
-    if ((params["output_mask_nonnull"] ?? null)) {
+    if ((params["output_mask_nonnull"] ?? false)) {
         cargs.push("-output_mask_nonnull");
     }
-    if ((params["push_thru_many_zeros"] ?? null)) {
+    if ((params["push_thru_many_zeros"] ?? false)) {
         cargs.push("-push_thru_many_zeros");
     }
-    if ((params["allow_roi_zeros"] ?? null)) {
+    if ((params["allow_roi_zeros"] ?? false)) {
         cargs.push("-allow_roi_zeros");
     }
-    if ((params["automask_off"] ?? null)) {
+    if ((params["automask_off"] ?? false)) {
         cargs.push("-automask_off");
     }
-    if ((params["ignore_LT"] ?? null)) {
+    if ((params["ignore_LT"] ?? false)) {
         cargs.push("-ignore_LT");
     }
     return cargs;
@@ -390,7 +357,6 @@ function v_3d_net_corr(
 
 export {
       V3dNetCorrOutputs,
-      V3dNetCorrParameters,
       V_3D_NET_CORR_METADATA,
       v_3d_net_corr,
       v_3d_net_corr_execute,

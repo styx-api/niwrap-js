@@ -12,7 +12,7 @@ const BUILD_AFNI_PY_METADATA: Metadata = {
 
 
 interface BuildAfniPyParameters {
-    "@type": "afni.build_afni.py";
+    "@type"?: "afni/build_afni.py";
     "build_root": string;
     "clean_root"?: string | null | undefined;
     "git_branch"?: string | null | undefined;
@@ -30,44 +30,11 @@ interface BuildAfniPyParameters {
     "show_valid_opts": boolean;
     "version": boolean;
 }
+type BuildAfniPyParametersTagged = Required<Pick<BuildAfniPyParameters, '@type'>> & BuildAfniPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.build_afni.py": build_afni_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.build_afni.py": build_afni_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `build_afni_py(...)`.
+ * Output object returned when calling `BuildAfniPyParameters(...)`.
  *
  * @interface
  */
@@ -126,9 +93,9 @@ function build_afni_py_params(
     history: boolean = false,
     show_valid_opts: boolean = false,
     version: boolean = false,
-): BuildAfniPyParameters {
+): BuildAfniPyParametersTagged {
     const params = {
-        "@type": "afni.build_afni.py" as const,
+        "@type": "afni/build_afni.py" as const,
         "build_root": build_root,
         "prep_only": prep_only,
         "help": help,
@@ -230,7 +197,7 @@ function build_afni_py_cargs(
             (params["package"] ?? null)
         );
     }
-    if ((params["prep_only"] ?? null)) {
+    if ((params["prep_only"] ?? false)) {
         cargs.push("-prep_only");
     }
     if ((params["run_cmake"] ?? null) !== null) {
@@ -251,16 +218,16 @@ function build_afni_py_cargs(
             String((params["verbose_level"] ?? null))
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["history"] ?? null)) {
+    if ((params["history"] ?? false)) {
         cargs.push("-hist");
     }
-    if ((params["show_valid_opts"] ?? null)) {
+    if ((params["show_valid_opts"] ?? false)) {
         cargs.push("-show_valid_opts");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-ver");
     }
     return cargs;
@@ -372,7 +339,6 @@ function build_afni_py(
 export {
       BUILD_AFNI_PY_METADATA,
       BuildAfniPyOutputs,
-      BuildAfniPyParameters,
       build_afni_py,
       build_afni_py_execute,
       build_afni_py_params,

@@ -12,47 +12,15 @@ const MRI_STRIP_SUBJECT_INFO_METADATA: Metadata = {
 
 
 interface MriStripSubjectInfoParameters {
-    "@type": "freesurfer.mri_strip_subject_info";
+    "@type"?: "freesurfer/mri_strip_subject_info";
     "input_files": Array<InputPathType>;
     "output_directory": string;
 }
+type MriStripSubjectInfoParametersTagged = Required<Pick<MriStripSubjectInfoParameters, '@type'>> & MriStripSubjectInfoParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_strip_subject_info": mri_strip_subject_info_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_strip_subject_info(...)`.
+ * Output object returned when calling `MriStripSubjectInfoParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface MriStripSubjectInfoOutputs {
 function mri_strip_subject_info_params(
     input_files: Array<InputPathType>,
     output_directory: string,
-): MriStripSubjectInfoParameters {
+): MriStripSubjectInfoParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_strip_subject_info" as const,
+        "@type": "freesurfer/mri_strip_subject_info" as const,
         "input_files": input_files,
         "output_directory": output_directory,
     };
@@ -180,7 +148,6 @@ function mri_strip_subject_info(
 export {
       MRI_STRIP_SUBJECT_INFO_METADATA,
       MriStripSubjectInfoOutputs,
-      MriStripSubjectInfoParameters,
       mri_strip_subject_info,
       mri_strip_subject_info_execute,
       mri_strip_subject_info_params,

@@ -12,7 +12,7 @@ const MRI_SCLIMBIC_SEG_METADATA: Metadata = {
 
 
 interface MriSclimbicSegParameters {
-    "@type": "freesurfer.mri_sclimbic_seg";
+    "@type"?: "freesurfer/mri_sclimbic_seg";
     "input_file": string;
     "output_file": string;
     "subjects"?: Array<string> | null | undefined;
@@ -39,44 +39,11 @@ interface MriSclimbicSegParameters {
     "no_cite": boolean;
     "nchannels"?: number | null | undefined;
 }
+type MriSclimbicSegParametersTagged = Required<Pick<MriSclimbicSegParameters, '@type'>> & MriSclimbicSegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_sclimbic_seg": mri_sclimbic_seg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_sclimbic_seg": mri_sclimbic_seg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_sclimbic_seg(...)`.
+ * Output object returned when calling `MriSclimbicSegParameters(...)`.
  *
  * @interface
  */
@@ -149,9 +116,9 @@ function mri_sclimbic_seg_params(
     output_base: string | null = null,
     no_cite: boolean = false,
     nchannels: number | null = null,
-): MriSclimbicSegParameters {
+): MriSclimbicSegParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_sclimbic_seg" as const,
+        "@type": "freesurfer/mri_sclimbic_seg" as const,
         "input_file": input_file,
         "output_file": output_file,
         "conform": conform,
@@ -240,10 +207,10 @@ function mri_sclimbic_seg_cargs(
             (params["subjects_dir"] ?? null)
         );
     }
-    if ((params["conform"] ?? null)) {
+    if ((params["conform"] ?? false)) {
         cargs.push("--conform");
     }
-    if ((params["etiv"] ?? null)) {
+    if ((params["etiv"] ?? false)) {
         cargs.push("--etiv");
     }
     if ((params["exclude_labels"] ?? null) !== null) {
@@ -252,10 +219,10 @@ function mri_sclimbic_seg_cargs(
             ...(params["exclude_labels"] ?? null)
         );
     }
-    if ((params["keep_ac"] ?? null)) {
+    if ((params["keep_ac"] ?? false)) {
         cargs.push("--keep_ac");
     }
-    if ((params["vox_count_volumes"] ?? null)) {
+    if ((params["vox_count_volumes"] ?? false)) {
         cargs.push("--vox-count-volumes");
     }
     if ((params["model_file"] ?? null) !== null) {
@@ -276,10 +243,10 @@ function mri_sclimbic_seg_cargs(
             execution.inputFile((params["population_stats"] ?? null))
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["vmp"] ?? null)) {
+    if ((params["vmp"] ?? false)) {
         cargs.push("--vmp");
     }
     if ((params["threads"] ?? null) !== null) {
@@ -294,16 +261,16 @@ function mri_sclimbic_seg_cargs(
             (params["tal_xfm"] ?? null)
         );
     }
-    if ((params["write_posteriors"] ?? null)) {
+    if ((params["write_posteriors"] ?? false)) {
         cargs.push("--write_posteriors");
     }
-    if ((params["write_volumes"] ?? null)) {
+    if ((params["write_volumes"] ?? false)) {
         cargs.push("--write_volumes");
     }
-    if ((params["write_qa_stats"] ?? null)) {
+    if ((params["write_qa_stats"] ?? false)) {
         cargs.push("--write_qa_stats");
     }
-    if ((params["preprocess_7T"] ?? null)) {
+    if ((params["preprocess_7T"] ?? false)) {
         cargs.push("--7T");
     }
     if ((params["percentile"] ?? null) !== null) {
@@ -324,7 +291,7 @@ function mri_sclimbic_seg_cargs(
             (params["output_base"] ?? null)
         );
     }
-    if ((params["no_cite"] ?? null)) {
+    if ((params["no_cite"] ?? false)) {
         cargs.push("--no-cite-sclimbic");
     }
     if ((params["nchannels"] ?? null) !== null) {
@@ -459,7 +426,6 @@ function mri_sclimbic_seg(
 export {
       MRI_SCLIMBIC_SEG_METADATA,
       MriSclimbicSegOutputs,
-      MriSclimbicSegParameters,
       mri_sclimbic_seg,
       mri_sclimbic_seg_execute,
       mri_sclimbic_seg_params,

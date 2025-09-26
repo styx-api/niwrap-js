@@ -12,7 +12,7 @@ const V__QUIET_TALKERS_METADATA: Metadata = {
 
 
 interface VQuietTalkersParameters {
-    "@type": "afni.@Quiet_Talkers";
+    "@type"?: "afni/@Quiet_Talkers";
     "sudo": boolean;
     "prog"?: Array<string> | null | undefined;
     "npb_val"?: Array<number> | null | undefined;
@@ -22,43 +22,11 @@ interface VQuietTalkersParameters {
     "list": boolean;
     "quiet": boolean;
 }
+type VQuietTalkersParametersTagged = Required<Pick<VQuietTalkersParameters, '@type'>> & VQuietTalkersParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@Quiet_Talkers": v__quiet_talkers_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__quiet_talkers(...)`.
+ * Output object returned when calling `VQuietTalkersParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +61,9 @@ function v__quiet_talkers_params(
     no_npb: boolean = false,
     list: boolean = false,
     quiet: boolean = false,
-): VQuietTalkersParameters {
+): VQuietTalkersParametersTagged {
     const params = {
-        "@type": "afni.@Quiet_Talkers" as const,
+        "@type": "afni/@Quiet_Talkers" as const,
         "sudo": sudo,
         "no_npb": no_npb,
         "list": list,
@@ -131,7 +99,7 @@ function v__quiet_talkers_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("@Quiet_Talkers");
-    if ((params["sudo"] ?? null)) {
+    if ((params["sudo"] ?? false)) {
         cargs.push("-sudo");
     }
     if ((params["prog"] ?? null) !== null) {
@@ -158,13 +126,13 @@ function v__quiet_talkers_cargs(
             (params["pif_key"] ?? null)
         );
     }
-    if ((params["no_npb"] ?? null)) {
+    if ((params["no_npb"] ?? false)) {
         cargs.push("-no_npb");
     }
-    if ((params["list"] ?? null)) {
+    if ((params["list"] ?? false)) {
         cargs.push("-list");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
     return cargs;
@@ -257,7 +225,6 @@ function v__quiet_talkers(
 
 export {
       VQuietTalkersOutputs,
-      VQuietTalkersParameters,
       V__QUIET_TALKERS_METADATA,
       v__quiet_talkers,
       v__quiet_talkers_execute,

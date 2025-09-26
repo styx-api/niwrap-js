@@ -12,7 +12,7 @@ const FAT_PROC_CONNEC_VIS_METADATA: Metadata = {
 
 
 interface FatProcConnecVisParameters {
-    "@type": "afni.fat_proc_connec_vis";
+    "@type"?: "afni/fat_proc_connec_vis";
     "in_rois": string;
     "prefix": string;
     "prefix_file"?: string | null | undefined;
@@ -25,44 +25,11 @@ interface FatProcConnecVisParameters {
     "wdir"?: string | null | undefined;
     "no_clean": boolean;
 }
+type FatProcConnecVisParametersTagged = Required<Pick<FatProcConnecVisParameters, '@type'>> & FatProcConnecVisParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.fat_proc_connec_vis": fat_proc_connec_vis_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.fat_proc_connec_vis": fat_proc_connec_vis_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fat_proc_connec_vis(...)`.
+ * Output object returned when calling `FatProcConnecVisParameters(...)`.
  *
  * @interface
  */
@@ -115,9 +82,9 @@ function fat_proc_connec_vis_params(
     output_tstat: boolean = false,
     wdir: string | null = null,
     no_clean: boolean = false,
-): FatProcConnecVisParameters {
+): FatProcConnecVisParametersTagged {
     const params = {
-        "@type": "afni.fat_proc_connec_vis" as const,
+        "@type": "afni/fat_proc_connec_vis" as const,
         "in_rois": in_rois,
         "prefix": prefix,
         "trackid_no_or": trackid_no_or,
@@ -184,13 +151,13 @@ function fat_proc_connec_vis_cargs(
             (params["iso_opt"] ?? null)
         );
     }
-    if ((params["trackid_no_or"] ?? null)) {
+    if ((params["trackid_no_or"] ?? false)) {
         cargs.push("-trackid_no_or");
     }
-    if ((params["output_tcat"] ?? null)) {
+    if ((params["output_tcat"] ?? false)) {
         cargs.push("-output_tcat");
     }
-    if ((params["output_tstat"] ?? null)) {
+    if ((params["output_tstat"] ?? false)) {
         cargs.push("-output_tstat");
     }
     if ((params["wdir"] ?? null) !== null) {
@@ -199,7 +166,7 @@ function fat_proc_connec_vis_cargs(
             (params["wdir"] ?? null)
         );
     }
-    if ((params["no_clean"] ?? null)) {
+    if ((params["no_clean"] ?? false)) {
         cargs.push("-no_clean");
     }
     return cargs;
@@ -302,7 +269,6 @@ function fat_proc_connec_vis(
 export {
       FAT_PROC_CONNEC_VIS_METADATA,
       FatProcConnecVisOutputs,
-      FatProcConnecVisParameters,
       fat_proc_connec_vis,
       fat_proc_connec_vis_execute,
       fat_proc_connec_vis_params,

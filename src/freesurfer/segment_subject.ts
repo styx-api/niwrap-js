@@ -12,7 +12,7 @@ const SEGMENT_SUBJECT_METADATA: Metadata = {
 
 
 interface SegmentSubjectParameters {
-    "@type": "freesurfer.segment_subject";
+    "@type"?: "freesurfer/segment_subject";
     "input_volume": InputPathType;
     "output_xfm": string;
     "log_file"?: string | null | undefined;
@@ -20,44 +20,11 @@ interface SegmentSubjectParameters {
     "debug_flag": boolean;
     "version_flag": boolean;
 }
+type SegmentSubjectParametersTagged = Required<Pick<SegmentSubjectParameters, '@type'>> & SegmentSubjectParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.segment_subject": segment_subject_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.segment_subject": segment_subject_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `segment_subject(...)`.
+ * Output object returned when calling `SegmentSubjectParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function segment_subject_params(
     help_flag: boolean = false,
     debug_flag: boolean = false,
     version_flag: boolean = false,
-): SegmentSubjectParameters {
+): SegmentSubjectParametersTagged {
     const params = {
-        "@type": "freesurfer.segment_subject" as const,
+        "@type": "freesurfer/segment_subject" as const,
         "input_volume": input_volume,
         "output_xfm": output_xfm,
         "help_flag": help_flag,
@@ -136,13 +103,13 @@ function segment_subject_cargs(
             (params["log_file"] ?? null)
         );
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["version_flag"] ?? null)) {
+    if ((params["version_flag"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -233,7 +200,6 @@ function segment_subject(
 export {
       SEGMENT_SUBJECT_METADATA,
       SegmentSubjectOutputs,
-      SegmentSubjectParameters,
       segment_subject,
       segment_subject_execute,
       segment_subject_params,

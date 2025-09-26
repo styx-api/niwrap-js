@@ -12,7 +12,7 @@ const SURF_LOCALSTAT_METADATA: Metadata = {
 
 
 interface SurfLocalstatParameters {
-    "@type": "afni.SurfLocalstat";
+    "@type"?: "afni/SurfLocalstat";
     "hood"?: number | null | undefined;
     "nbhd_rad"?: number | null | undefined;
     "prefix": string;
@@ -20,44 +20,11 @@ interface SurfLocalstatParameters {
     "input_dataset": InputPathType;
     "surface": InputPathType;
 }
+type SurfLocalstatParametersTagged = Required<Pick<SurfLocalstatParameters, '@type'>> & SurfLocalstatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.SurfLocalstat": surf_localstat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.SurfLocalstat": surf_localstat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surf_localstat(...)`.
+ * Output object returned when calling `SurfLocalstatParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function surf_localstat_params(
     surface: InputPathType,
     hood: number | null = null,
     nbhd_rad: number | null = null,
-): SurfLocalstatParameters {
+): SurfLocalstatParametersTagged {
     const params = {
-        "@type": "afni.SurfLocalstat" as const,
+        "@type": "afni/SurfLocalstat" as const,
         "prefix": prefix,
         "stat": stat,
         "input_dataset": input_dataset,
@@ -240,7 +207,6 @@ function surf_localstat(
 export {
       SURF_LOCALSTAT_METADATA,
       SurfLocalstatOutputs,
-      SurfLocalstatParameters,
       surf_localstat,
       surf_localstat_execute,
       surf_localstat_params,

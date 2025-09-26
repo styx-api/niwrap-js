@@ -12,50 +12,17 @@ const FSLINTERLEAVE_METADATA: Metadata = {
 
 
 interface FslinterleaveParameters {
-    "@type": "fsl.fslinterleave";
+    "@type"?: "fsl/fslinterleave";
     "infile1": InputPathType;
     "infile2": InputPathType;
     "outfile": string;
     "reverse_slice_order_flag": boolean;
 }
+type FslinterleaveParametersTagged = Required<Pick<FslinterleaveParameters, '@type'>> & FslinterleaveParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslinterleave": fslinterleave_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fslinterleave": fslinterleave_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslinterleave(...)`.
+ * Output object returned when calling `FslinterleaveParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function fslinterleave_params(
     infile2: InputPathType,
     outfile: string,
     reverse_slice_order_flag: boolean = false,
-): FslinterleaveParameters {
+): FslinterleaveParametersTagged {
     const params = {
-        "@type": "fsl.fslinterleave" as const,
+        "@type": "fsl/fslinterleave" as const,
         "infile1": infile1,
         "infile2": infile2,
         "outfile": outfile,
@@ -115,7 +82,7 @@ function fslinterleave_cargs(
     cargs.push(execution.inputFile((params["infile1"] ?? null)));
     cargs.push(execution.inputFile((params["infile2"] ?? null)));
     cargs.push((params["outfile"] ?? null));
-    if ((params["reverse_slice_order_flag"] ?? null)) {
+    if ((params["reverse_slice_order_flag"] ?? false)) {
         cargs.push("-i");
     }
     return cargs;
@@ -202,7 +169,6 @@ function fslinterleave(
 export {
       FSLINTERLEAVE_METADATA,
       FslinterleaveOutputs,
-      FslinterleaveParameters,
       fslinterleave,
       fslinterleave_execute,
       fslinterleave_params,

@@ -12,20 +12,22 @@ const TCKSTATS_METADATA: Metadata = {
 
 
 interface TckstatsOutputParameters {
-    "@type": "mrtrix.tckstats.output";
+    "@type"?: "output";
     "field": string;
 }
+type TckstatsOutputParametersTagged = Required<Pick<TckstatsOutputParameters, '@type'>> & TckstatsOutputParameters;
 
 
 interface TckstatsConfigParameters {
-    "@type": "mrtrix.tckstats.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type TckstatsConfigParametersTagged = Required<Pick<TckstatsConfigParameters, '@type'>> & TckstatsConfigParameters;
 
 
 interface TckstatsParameters {
-    "@type": "mrtrix.tckstats";
+    "@type"?: "mrtrix/tckstats";
     "output"?: Array<TckstatsOutputParameters> | null | undefined;
     "histogram"?: string | null | undefined;
     "dump"?: string | null | undefined;
@@ -41,42 +43,7 @@ interface TckstatsParameters {
     "version": boolean;
     "tracks_in": InputPathType;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.tckstats": tckstats_cargs,
-        "mrtrix.tckstats.output": tckstats_output_cargs,
-        "mrtrix.tckstats.config": tckstats_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.tckstats": tckstats_outputs,
-    };
-    return outputsFuncs[t];
-}
+type TckstatsParametersTagged = Required<Pick<TckstatsParameters, '@type'>> & TckstatsParameters;
 
 
 /**
@@ -88,9 +55,9 @@ function dynOutputs(
  */
 function tckstats_output_params(
     field: string,
-): TckstatsOutputParameters {
+): TckstatsOutputParametersTagged {
     const params = {
-        "@type": "mrtrix.tckstats.output" as const,
+        "@type": "output" as const,
         "field": field,
     };
     return params;
@@ -127,9 +94,9 @@ function tckstats_output_cargs(
 function tckstats_config_params(
     key: string,
     value: string,
-): TckstatsConfigParameters {
+): TckstatsConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.tckstats.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -158,7 +125,7 @@ function tckstats_config_cargs(
 
 
 /**
- * Output object returned when calling `tckstats(...)`.
+ * Output object returned when calling `TckstatsParameters(...)`.
  *
  * @interface
  */
@@ -213,9 +180,9 @@ function tckstats_params(
     config: Array<TckstatsConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TckstatsParameters {
+): TckstatsParametersTagged {
     const params = {
-        "@type": "mrtrix.tckstats" as const,
+        "@type": "mrtrix/tckstats" as const,
         "ignorezero": ignorezero,
         "info": info,
         "quiet": quiet,
@@ -262,7 +229,7 @@ function tckstats_cargs(
     const cargs: string[] = [];
     cargs.push("tckstats");
     if ((params["output"] ?? null) !== null) {
-        cargs.push(...(params["output"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["output"] ?? null).map(s => tckstats_output_cargs(s, execution)).flat());
     }
     if ((params["histogram"] ?? null) !== null) {
         cargs.push(
@@ -276,7 +243,7 @@ function tckstats_cargs(
             (params["dump"] ?? null)
         );
     }
-    if ((params["ignorezero"] ?? null)) {
+    if ((params["ignorezero"] ?? false)) {
         cargs.push("-ignorezero");
     }
     if ((params["tck_weights_in"] ?? null) !== null) {
@@ -285,16 +252,16 @@ function tckstats_cargs(
             execution.inputFile((params["tck_weights_in"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -304,12 +271,12 @@ function tckstats_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => tckstats_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["tracks_in"] ?? null)));
@@ -429,10 +396,7 @@ function tckstats(
 
 export {
       TCKSTATS_METADATA,
-      TckstatsConfigParameters,
-      TckstatsOutputParameters,
       TckstatsOutputs,
-      TckstatsParameters,
       tckstats,
       tckstats_config_params,
       tckstats_execute,

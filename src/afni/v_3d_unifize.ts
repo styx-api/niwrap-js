@@ -12,7 +12,7 @@ const V_3D_UNIFIZE_METADATA: Metadata = {
 
 
 interface V3dUnifizeParameters {
-    "@type": "afni.3dUnifize";
+    "@type"?: "afni/3dUnifize";
     "cl_frac"?: number | null | undefined;
     "epi": boolean;
     "gm": boolean;
@@ -28,44 +28,11 @@ interface V3dUnifizeParameters {
     "urad"?: number | null | undefined;
     "in_file": InputPathType;
 }
+type V3dUnifizeParametersTagged = Required<Pick<V3dUnifizeParameters, '@type'>> & V3dUnifizeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dUnifize": v_3d_unifize_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dUnifize": v_3d_unifize_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_unifize(...)`.
+ * Output object returned when calling `V3dUnifizeParameters(...)`.
  *
  * @interface
  */
@@ -120,9 +87,9 @@ function v_3d_unifize_params(
     t2: boolean = false,
     t2_up: number | null = null,
     urad: number | null = null,
-): V3dUnifizeParameters {
+): V3dUnifizeParametersTagged {
     const params = {
-        "@type": "afni.3dUnifize" as const,
+        "@type": "afni/3dUnifize" as const,
         "epi": epi,
         "gm": gm,
         "no_duplo": no_duplo,
@@ -178,13 +145,13 @@ function v_3d_unifize_cargs(
             String((params["cl_frac"] ?? null))
         );
     }
-    if ((params["epi"] ?? null)) {
+    if ((params["epi"] ?? false)) {
         cargs.push("-EPI");
     }
-    if ((params["gm"] ?? null)) {
+    if ((params["gm"] ?? false)) {
         cargs.push("-GM");
     }
-    if ((params["no_duplo"] ?? null)) {
+    if ((params["no_duplo"] ?? false)) {
         cargs.push("-noduplo");
     }
     if ((params["num_threads"] ?? null) !== null) {
@@ -193,7 +160,7 @@ function v_3d_unifize_cargs(
     if ((params["outputtype"] ?? null) !== null) {
         cargs.push((params["outputtype"] ?? null));
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
     if ((params["rbt"] ?? null) !== null) {
@@ -214,7 +181,7 @@ function v_3d_unifize_cargs(
             execution.inputFile((params["scale_file"] ?? null))
         );
     }
-    if ((params["t2"] ?? null)) {
+    if ((params["t2"] ?? false)) {
         cargs.push("-T2");
     }
     if ((params["t2_up"] ?? null) !== null) {
@@ -351,7 +318,6 @@ function v_3d_unifize(
 
 export {
       V3dUnifizeOutputs,
-      V3dUnifizeParameters,
       V_3D_UNIFIZE_METADATA,
       v_3d_unifize,
       v_3d_unifize_execute,

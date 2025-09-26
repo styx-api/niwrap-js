@@ -12,7 +12,7 @@ const V_3D_LRFLIP_METADATA: Metadata = {
 
 
 interface V3dLrflipParameters {
-    "@type": "afni.3dLRflip";
+    "@type"?: "afni/3dLRflip";
     "flip_lr": boolean;
     "flip_ap": boolean;
     "flip_is": boolean;
@@ -22,43 +22,11 @@ interface V3dLrflipParameters {
     "output_prefix"?: string | null | undefined;
     "datasets": Array<InputPathType>;
 }
+type V3dLrflipParametersTagged = Required<Pick<V3dLrflipParameters, '@type'>> & V3dLrflipParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dLRflip": v_3d_lrflip_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_lrflip(...)`.
+ * Output object returned when calling `V3dLrflipParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +61,9 @@ function v_3d_lrflip_params(
     flip_y: boolean = false,
     flip_z: boolean = false,
     output_prefix: string | null = null,
-): V3dLrflipParameters {
+): V3dLrflipParametersTagged {
     const params = {
-        "@type": "afni.3dLRflip" as const,
+        "@type": "afni/3dLRflip" as const,
         "flip_lr": flip_lr,
         "flip_ap": flip_ap,
         "flip_is": flip_is,
@@ -125,22 +93,22 @@ function v_3d_lrflip_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("3dLRflip");
-    if ((params["flip_lr"] ?? null)) {
+    if ((params["flip_lr"] ?? false)) {
         cargs.push("-LR");
     }
-    if ((params["flip_ap"] ?? null)) {
+    if ((params["flip_ap"] ?? false)) {
         cargs.push("-AP");
     }
-    if ((params["flip_is"] ?? null)) {
+    if ((params["flip_is"] ?? false)) {
         cargs.push("-IS");
     }
-    if ((params["flip_x"] ?? null)) {
+    if ((params["flip_x"] ?? false)) {
         cargs.push("-X");
     }
-    if ((params["flip_y"] ?? null)) {
+    if ((params["flip_y"] ?? false)) {
         cargs.push("-Y");
     }
-    if ((params["flip_z"] ?? null)) {
+    if ((params["flip_z"] ?? false)) {
         cargs.push("-Z");
     }
     if ((params["output_prefix"] ?? null) !== null) {
@@ -240,7 +208,6 @@ function v_3d_lrflip(
 
 export {
       V3dLrflipOutputs,
-      V3dLrflipParameters,
       V_3D_LRFLIP_METADATA,
       v_3d_lrflip,
       v_3d_lrflip_execute,

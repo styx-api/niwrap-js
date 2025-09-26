@@ -12,7 +12,7 @@ const SURF_DIST_METADATA: Metadata = {
 
 
 interface SurfDistParameters {
-    "@type": "afni.SurfDist";
+    "@type"?: "afni/SurfDist";
     "surface": InputPathType;
     "nodepairs": InputPathType;
     "node_path_do"?: string | null | undefined;
@@ -22,44 +22,11 @@ interface SurfDistParameters {
     "from_node"?: string | null | undefined;
     "to_nodes"?: InputPathType | null | undefined;
 }
+type SurfDistParametersTagged = Required<Pick<SurfDistParameters, '@type'>> & SurfDistParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.SurfDist": surf_dist_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.SurfDist": surf_dist_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surf_dist(...)`.
+ * Output object returned when calling `SurfDistParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function surf_dist_params(
     graph: boolean = false,
     from_node: string | null = null,
     to_nodes: InputPathType | null = null,
-): SurfDistParameters {
+): SurfDistParametersTagged {
     const params = {
-        "@type": "afni.SurfDist" as const,
+        "@type": "afni/SurfDist" as const,
         "surface": surface,
         "nodepairs": nodepairs,
         "euclidean": euclidean,
@@ -142,13 +109,13 @@ function surf_dist_cargs(
             (params["node_path_do"] ?? null)
         );
     }
-    if ((params["euclidean"] ?? null)) {
+    if ((params["euclidean"] ?? false)) {
         cargs.push("-Euclidean");
     }
-    if ((params["euclidian"] ?? null)) {
+    if ((params["euclidian"] ?? false)) {
         cargs.push("-Euclidian");
     }
-    if ((params["graph"] ?? null)) {
+    if ((params["graph"] ?? false)) {
         cargs.push("-graph");
     }
     if ((params["from_node"] ?? null) !== null) {
@@ -255,7 +222,6 @@ function surf_dist(
 export {
       SURF_DIST_METADATA,
       SurfDistOutputs,
-      SurfDistParameters,
       surf_dist,
       surf_dist_execute,
       surf_dist_params,

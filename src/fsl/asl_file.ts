@@ -12,7 +12,7 @@ const ASL_FILE_METADATA: Metadata = {
 
 
 interface AslFileParameters {
-    "@type": "fsl.asl_file";
+    "@type"?: "fsl/asl_file";
     "datafile": InputPathType;
     "ntis": number;
     "mask"?: InputPathType | null | undefined;
@@ -41,44 +41,11 @@ interface AslFileParameters {
     "help": boolean;
     "version": boolean;
 }
+type AslFileParametersTagged = Required<Pick<AslFileParameters, '@type'>> & AslFileParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.asl_file": asl_file_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.asl_file": asl_file_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `asl_file(...)`.
+ * Output object returned when calling `AslFileParameters(...)`.
  *
  * @interface
  */
@@ -159,9 +126,9 @@ function asl_file_params(
     aif: InputPathType | null = null,
     help: boolean = false,
     version: boolean = false,
-): AslFileParameters {
+): AslFileParametersTagged {
     const params = {
-        "@type": "fsl.asl_file" as const,
+        "@type": "fsl/asl_file" as const,
         "datafile": datafile,
         "ntis": ntis,
         "pairs": pairs,
@@ -268,19 +235,19 @@ function asl_file_cargs(
             (params["rpts"] ?? null)
         );
     }
-    if ((params["pairs"] ?? null)) {
+    if ((params["pairs"] ?? false)) {
         cargs.push("--pairs");
     }
-    if ((params["spairs"] ?? null)) {
+    if ((params["spairs"] ?? false)) {
         cargs.push("--spairs");
     }
-    if ((params["diff"] ?? null)) {
+    if ((params["diff"] ?? false)) {
         cargs.push("--diff");
     }
-    if ((params["surrdiff"] ?? null)) {
+    if ((params["surrdiff"] ?? false)) {
         cargs.push("--surrdiff");
     }
-    if ((params["extrapolate"] ?? null)) {
+    if ((params["extrapolate"] ?? false)) {
         cargs.push("--extrapolate");
     }
     if ((params["neighbour"] ?? null) !== null) {
@@ -317,7 +284,7 @@ function asl_file_cargs(
             (params["outblockform"] ?? null)
         );
     }
-    if ((params["mean"] ?? null)) {
+    if ((params["mean"] ?? false)) {
         cargs.push("--mean");
     }
     if ((params["split"] ?? null) !== null) {
@@ -326,7 +293,7 @@ function asl_file_cargs(
             (params["split"] ?? null)
         );
     }
-    if ((params["epoch"] ?? null)) {
+    if ((params["epoch"] ?? false)) {
         cargs.push("--epoch");
     }
     if ((params["epoch_length"] ?? null) !== null) {
@@ -347,7 +314,7 @@ function asl_file_cargs(
             (params["epoch_unit"] ?? null)
         );
     }
-    if ((params["deconv"] ?? null)) {
+    if ((params["deconv"] ?? false)) {
         cargs.push("--deconv");
     }
     if ((params["aif"] ?? null) !== null) {
@@ -356,10 +323,10 @@ function asl_file_cargs(
             execution.inputFile((params["aif"] ?? null))
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-v");
     }
     return cargs;
@@ -493,7 +460,6 @@ function asl_file(
 export {
       ASL_FILE_METADATA,
       AslFileOutputs,
-      AslFileParameters,
       asl_file,
       asl_file_execute,
       asl_file_params,

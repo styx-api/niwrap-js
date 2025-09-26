@@ -12,47 +12,15 @@ const REGDAT2XFM_METADATA: Metadata = {
 
 
 interface Regdat2xfmParameters {
-    "@type": "freesurfer.regdat2xfm";
+    "@type"?: "freesurfer/regdat2xfm";
     "input_file": InputPathType;
     "output_file": string;
 }
+type Regdat2xfmParametersTagged = Required<Pick<Regdat2xfmParameters, '@type'>> & Regdat2xfmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.regdat2xfm": regdat2xfm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `regdat2xfm(...)`.
+ * Output object returned when calling `Regdat2xfmParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface Regdat2xfmOutputs {
 function regdat2xfm_params(
     input_file: InputPathType,
     output_file: string,
-): Regdat2xfmParameters {
+): Regdat2xfmParametersTagged {
     const params = {
-        "@type": "freesurfer.regdat2xfm" as const,
+        "@type": "freesurfer/regdat2xfm" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -180,7 +148,6 @@ function regdat2xfm(
 export {
       REGDAT2XFM_METADATA,
       Regdat2xfmOutputs,
-      Regdat2xfmParameters,
       regdat2xfm,
       regdat2xfm_execute,
       regdat2xfm_params,

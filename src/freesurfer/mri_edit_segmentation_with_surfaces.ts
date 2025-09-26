@@ -12,7 +12,7 @@ const MRI_EDIT_SEGMENTATION_WITH_SURFACES_METADATA: Metadata = {
 
 
 interface MriEditSegmentationWithSurfacesParameters {
-    "@type": "freesurfer.mri_edit_segmentation_with_surfaces";
+    "@type"?: "freesurfer/mri_edit_segmentation_with_surfaces";
     "aseg_name": InputPathType;
     "surface_dir": string;
     "norm_volume": InputPathType;
@@ -23,44 +23,11 @@ interface MriEditSegmentationWithSurfacesParameters {
     "cortex_flag"?: "1" | "0" | null | undefined;
     "annotation_file"?: InputPathType | null | undefined;
 }
+type MriEditSegmentationWithSurfacesParametersTagged = Required<Pick<MriEditSegmentationWithSurfacesParameters, '@type'>> & MriEditSegmentationWithSurfacesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_edit_segmentation_with_surfaces": mri_edit_segmentation_with_surfaces_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_edit_segmentation_with_surfaces": mri_edit_segmentation_with_surfaces_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_edit_segmentation_with_surfaces(...)`.
+ * Output object returned when calling `MriEditSegmentationWithSurfacesParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function mri_edit_segmentation_with_surfaces_params(
     cerebellum_flag: "1" | "0" | null = null,
     cortex_flag: "1" | "0" | null = null,
     annotation_file: InputPathType | null = null,
-): MriEditSegmentationWithSurfacesParameters {
+): MriEditSegmentationWithSurfacesParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_edit_segmentation_with_surfaces" as const,
+        "@type": "freesurfer/mri_edit_segmentation_with_surfaces" as const,
         "aseg_name": aseg_name,
         "surface_dir": surface_dir,
         "norm_volume": norm_volume,
@@ -270,7 +237,6 @@ function mri_edit_segmentation_with_surfaces(
 export {
       MRI_EDIT_SEGMENTATION_WITH_SURFACES_METADATA,
       MriEditSegmentationWithSurfacesOutputs,
-      MriEditSegmentationWithSurfacesParameters,
       mri_edit_segmentation_with_surfaces,
       mri_edit_segmentation_with_surfaces_execute,
       mri_edit_segmentation_with_surfaces_params,

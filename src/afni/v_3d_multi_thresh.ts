@@ -12,7 +12,7 @@ const V_3D_MULTI_THRESH_METADATA: Metadata = {
 
 
 interface V3dMultiThreshParameters {
-    "@type": "afni.3dMultiThresh";
+    "@type"?: "afni/3dMultiThresh";
     "mthresh_file": InputPathType;
     "input_file": InputPathType;
     "index"?: number | null | undefined;
@@ -25,44 +25,11 @@ interface V3dMultiThreshParameters {
     "no_zero_flag": boolean;
     "quiet_flag": boolean;
 }
+type V3dMultiThreshParametersTagged = Required<Pick<V3dMultiThreshParameters, '@type'>> & V3dMultiThreshParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dMultiThresh": v_3d_multi_thresh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dMultiThresh": v_3d_multi_thresh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_multi_thresh(...)`.
+ * Output object returned when calling `V3dMultiThreshParameters(...)`.
  *
  * @interface
  */
@@ -115,9 +82,9 @@ function v_3d_multi_thresh_params(
     all_mask: string | null = null,
     no_zero_flag: boolean = false,
     quiet_flag: boolean = false,
-): V3dMultiThreshParameters {
+): V3dMultiThreshParametersTagged {
     const params = {
-        "@type": "afni.3dMultiThresh" as const,
+        "@type": "afni/3dMultiThresh" as const,
         "mthresh_file": mthresh_file,
         "input_file": input_file,
         "positive_sign_flag": positive_sign_flag,
@@ -176,10 +143,10 @@ function v_3d_multi_thresh_cargs(
             (params["signed_flag"] ?? null)
         );
     }
-    if ((params["positive_sign_flag"] ?? null)) {
+    if ((params["positive_sign_flag"] ?? false)) {
         cargs.push("-pos");
     }
-    if ((params["negative_sign_flag"] ?? null)) {
+    if ((params["negative_sign_flag"] ?? false)) {
         cargs.push("-neg");
     }
     if ((params["prefix"] ?? null) !== null) {
@@ -188,7 +155,7 @@ function v_3d_multi_thresh_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["mask_only_flag"] ?? null)) {
+    if ((params["mask_only_flag"] ?? false)) {
         cargs.push("-maskonly");
     }
     if ((params["all_mask"] ?? null) !== null) {
@@ -197,10 +164,10 @@ function v_3d_multi_thresh_cargs(
             (params["all_mask"] ?? null)
         );
     }
-    if ((params["no_zero_flag"] ?? null)) {
+    if ((params["no_zero_flag"] ?? false)) {
         cargs.push("-nozero");
     }
-    if ((params["quiet_flag"] ?? null)) {
+    if ((params["quiet_flag"] ?? false)) {
         cargs.push("-quiet");
     }
     return cargs;
@@ -302,7 +269,6 @@ function v_3d_multi_thresh(
 
 export {
       V3dMultiThreshOutputs,
-      V3dMultiThreshParameters,
       V_3D_MULTI_THRESH_METADATA,
       v_3d_multi_thresh,
       v_3d_multi_thresh_execute,

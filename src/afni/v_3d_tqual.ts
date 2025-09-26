@@ -12,7 +12,7 @@ const V_3D_TQUAL_METADATA: Metadata = {
 
 
 interface V3dTqualParameters {
-    "@type": "afni.3dTqual";
+    "@type"?: "afni/3dTqual";
     "dataset": InputPathType;
     "spearman": boolean;
     "quadrant": boolean;
@@ -22,44 +22,11 @@ interface V3dTqualParameters {
     "mask"?: InputPathType | null | undefined;
     "range": boolean;
 }
+type V3dTqualParametersTagged = Required<Pick<V3dTqualParameters, '@type'>> & V3dTqualParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dTqual": v_3d_tqual_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dTqual": v_3d_tqual_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_tqual(...)`.
+ * Output object returned when calling `V3dTqualParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function v_3d_tqual_params(
     clip: number | null = null,
     mask: InputPathType | null = null,
     range: boolean = false,
-): V3dTqualParameters {
+): V3dTqualParametersTagged {
     const params = {
-        "@type": "afni.3dTqual" as const,
+        "@type": "afni/3dTqual" as const,
         "dataset": dataset,
         "spearman": spearman,
         "quadrant": quadrant,
@@ -133,16 +100,16 @@ function v_3d_tqual_cargs(
     const cargs: string[] = [];
     cargs.push("3dTqual");
     cargs.push(execution.inputFile((params["dataset"] ?? null)));
-    if ((params["spearman"] ?? null)) {
+    if ((params["spearman"] ?? false)) {
         cargs.push("-spearman");
     }
-    if ((params["quadrant"] ?? null)) {
+    if ((params["quadrant"] ?? false)) {
         cargs.push("-quadrant");
     }
-    if ((params["autoclip"] ?? null)) {
+    if ((params["autoclip"] ?? false)) {
         cargs.push("-autoclip");
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     if ((params["clip"] ?? null) !== null) {
@@ -157,7 +124,7 @@ function v_3d_tqual_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["range"] ?? null)) {
+    if ((params["range"] ?? false)) {
         cargs.push("-range");
     }
     return cargs;
@@ -251,7 +218,6 @@ function v_3d_tqual(
 
 export {
       V3dTqualOutputs,
-      V3dTqualParameters,
       V_3D_TQUAL_METADATA,
       v_3d_tqual,
       v_3d_tqual_execute,

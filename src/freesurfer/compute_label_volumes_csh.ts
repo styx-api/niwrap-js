@@ -12,55 +12,22 @@ const COMPUTE_LABEL_VOLUMES_CSH_METADATA: Metadata = {
 
 
 interface ComputeLabelVolumesCshLabelLParameters {
-    "@type": "freesurfer.compute_label_volumes.csh.label_L";
+    "@type"?: "label_L";
     "upper_L"?: string | null | undefined;
     "lower_L"?: string | null | undefined;
 }
+type ComputeLabelVolumesCshLabelLParametersTagged = Required<Pick<ComputeLabelVolumesCshLabelLParameters, '@type'>> & ComputeLabelVolumesCshLabelLParameters;
 
 
 interface ComputeLabelVolumesCshParameters {
-    "@type": "freesurfer.compute_label_volumes.csh";
+    "@type"?: "freesurfer/compute_label_volumes.csh";
     "label_vol": InputPathType;
     "output_file": string;
     "label_L"?: ComputeLabelVolumesCshLabelLParameters | null | undefined;
     "version": boolean;
     "help": boolean;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.compute_label_volumes.csh": compute_label_volumes_csh_cargs,
-        "freesurfer.compute_label_volumes.csh.label_L": compute_label_volumes_csh_label_l_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.compute_label_volumes.csh": compute_label_volumes_csh_outputs,
-    };
-    return outputsFuncs[t];
-}
+type ComputeLabelVolumesCshParametersTagged = Required<Pick<ComputeLabelVolumesCshParameters, '@type'>> & ComputeLabelVolumesCshParameters;
 
 
 /**
@@ -74,9 +41,9 @@ function dynOutputs(
 function compute_label_volumes_csh_label_l_params(
     upper_l: string | null = null,
     lower_l: string | null = null,
-): ComputeLabelVolumesCshLabelLParameters {
+): ComputeLabelVolumesCshLabelLParametersTagged {
     const params = {
-        "@type": "freesurfer.compute_label_volumes.csh.label_L" as const,
+        "@type": "label_L" as const,
     };
     if (upper_l !== null) {
         params["upper_L"] = upper_l;
@@ -118,7 +85,7 @@ function compute_label_volumes_csh_label_l_cargs(
 
 
 /**
- * Output object returned when calling `compute_label_volumes_csh(...)`.
+ * Output object returned when calling `ComputeLabelVolumesCshParameters(...)`.
  *
  * @interface
  */
@@ -151,9 +118,9 @@ function compute_label_volumes_csh_params(
     label_l: ComputeLabelVolumesCshLabelLParameters | null = null,
     version: boolean = false,
     help: boolean = false,
-): ComputeLabelVolumesCshParameters {
+): ComputeLabelVolumesCshParametersTagged {
     const params = {
-        "@type": "freesurfer.compute_label_volumes.csh" as const,
+        "@type": "freesurfer/compute_label_volumes.csh" as const,
         "label_vol": label_vol,
         "output_file": output_file,
         "version": version,
@@ -189,12 +156,12 @@ function compute_label_volumes_csh_cargs(
         (params["output_file"] ?? null)
     );
     if ((params["label_L"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["label_L"] ?? null)["@type"])((params["label_L"] ?? null), execution));
+        cargs.push(...compute_label_volumes_csh_label_l_cargs((params["label_L"] ?? null), execution));
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -282,9 +249,7 @@ function compute_label_volumes_csh(
 
 export {
       COMPUTE_LABEL_VOLUMES_CSH_METADATA,
-      ComputeLabelVolumesCshLabelLParameters,
       ComputeLabelVolumesCshOutputs,
-      ComputeLabelVolumesCshParameters,
       compute_label_volumes_csh,
       compute_label_volumes_csh_execute,
       compute_label_volumes_csh_label_l_params,

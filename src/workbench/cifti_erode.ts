@@ -12,28 +12,31 @@ const CIFTI_ERODE_METADATA: Metadata = {
 
 
 interface CiftiErodeLeftSurfaceParameters {
-    "@type": "workbench.cifti-erode.left_surface";
+    "@type"?: "left_surface";
     "surface": InputPathType;
     "opt_left_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
+type CiftiErodeLeftSurfaceParametersTagged = Required<Pick<CiftiErodeLeftSurfaceParameters, '@type'>> & CiftiErodeLeftSurfaceParameters;
 
 
 interface CiftiErodeRightSurfaceParameters {
-    "@type": "workbench.cifti-erode.right_surface";
+    "@type"?: "right_surface";
     "surface": InputPathType;
     "opt_right_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
+type CiftiErodeRightSurfaceParametersTagged = Required<Pick<CiftiErodeRightSurfaceParameters, '@type'>> & CiftiErodeRightSurfaceParameters;
 
 
 interface CiftiErodeCerebellumSurfaceParameters {
-    "@type": "workbench.cifti-erode.cerebellum_surface";
+    "@type"?: "cerebellum_surface";
     "surface": InputPathType;
     "opt_cerebellum_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
+type CiftiErodeCerebellumSurfaceParametersTagged = Required<Pick<CiftiErodeCerebellumSurfaceParameters, '@type'>> & CiftiErodeCerebellumSurfaceParameters;
 
 
 interface CiftiErodeParameters {
-    "@type": "workbench.cifti-erode";
+    "@type"?: "workbench/cifti-erode";
     "cifti_in": InputPathType;
     "direction": string;
     "surface_distance": number;
@@ -44,43 +47,7 @@ interface CiftiErodeParameters {
     "cerebellum_surface"?: CiftiErodeCerebellumSurfaceParameters | null | undefined;
     "opt_merged_volume": boolean;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-erode": cifti_erode_cargs,
-        "workbench.cifti-erode.left_surface": cifti_erode_left_surface_cargs,
-        "workbench.cifti-erode.right_surface": cifti_erode_right_surface_cargs,
-        "workbench.cifti-erode.cerebellum_surface": cifti_erode_cerebellum_surface_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-erode": cifti_erode_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiErodeParametersTagged = Required<Pick<CiftiErodeParameters, '@type'>> & CiftiErodeParameters;
 
 
 /**
@@ -94,9 +61,9 @@ function dynOutputs(
 function cifti_erode_left_surface_params(
     surface: InputPathType,
     opt_left_corrected_areas_area_metric: InputPathType | null = null,
-): CiftiErodeLeftSurfaceParameters {
+): CiftiErodeLeftSurfaceParametersTagged {
     const params = {
-        "@type": "workbench.cifti-erode.left_surface" as const,
+        "@type": "left_surface" as const,
         "surface": surface,
     };
     if (opt_left_corrected_areas_area_metric !== null) {
@@ -142,9 +109,9 @@ function cifti_erode_left_surface_cargs(
 function cifti_erode_right_surface_params(
     surface: InputPathType,
     opt_right_corrected_areas_area_metric: InputPathType | null = null,
-): CiftiErodeRightSurfaceParameters {
+): CiftiErodeRightSurfaceParametersTagged {
     const params = {
-        "@type": "workbench.cifti-erode.right_surface" as const,
+        "@type": "right_surface" as const,
         "surface": surface,
     };
     if (opt_right_corrected_areas_area_metric !== null) {
@@ -190,9 +157,9 @@ function cifti_erode_right_surface_cargs(
 function cifti_erode_cerebellum_surface_params(
     surface: InputPathType,
     opt_cerebellum_corrected_areas_area_metric: InputPathType | null = null,
-): CiftiErodeCerebellumSurfaceParameters {
+): CiftiErodeCerebellumSurfaceParametersTagged {
     const params = {
-        "@type": "workbench.cifti-erode.cerebellum_surface" as const,
+        "@type": "cerebellum_surface" as const,
         "surface": surface,
     };
     if (opt_cerebellum_corrected_areas_area_metric !== null) {
@@ -228,7 +195,7 @@ function cifti_erode_cerebellum_surface_cargs(
 
 
 /**
- * Output object returned when calling `cifti_erode(...)`.
+ * Output object returned when calling `CiftiErodeParameters(...)`.
  *
  * @interface
  */
@@ -269,9 +236,9 @@ function cifti_erode_params(
     right_surface: CiftiErodeRightSurfaceParameters | null = null,
     cerebellum_surface: CiftiErodeCerebellumSurfaceParameters | null = null,
     opt_merged_volume: boolean = false,
-): CiftiErodeParameters {
+): CiftiErodeParametersTagged {
     const params = {
-        "@type": "workbench.cifti-erode" as const,
+        "@type": "workbench/cifti-erode" as const,
         "cifti_in": cifti_in,
         "direction": direction,
         "surface_distance": surface_distance,
@@ -313,15 +280,15 @@ function cifti_erode_cargs(
     cargs.push(String((params["volume_distance"] ?? null)));
     cargs.push((params["cifti_out"] ?? null));
     if ((params["left_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["left_surface"] ?? null)["@type"])((params["left_surface"] ?? null), execution));
+        cargs.push(...cifti_erode_left_surface_cargs((params["left_surface"] ?? null), execution));
     }
     if ((params["right_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["right_surface"] ?? null)["@type"])((params["right_surface"] ?? null), execution));
+        cargs.push(...cifti_erode_right_surface_cargs((params["right_surface"] ?? null), execution));
     }
     if ((params["cerebellum_surface"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["cerebellum_surface"] ?? null)["@type"])((params["cerebellum_surface"] ?? null), execution));
+        cargs.push(...cifti_erode_cerebellum_surface_cargs((params["cerebellum_surface"] ?? null), execution));
     }
-    if ((params["opt_merged_volume"] ?? null)) {
+    if ((params["opt_merged_volume"] ?? false)) {
         cargs.push("-merged-volume");
     }
     return cargs;
@@ -425,11 +392,7 @@ function cifti_erode(
 
 export {
       CIFTI_ERODE_METADATA,
-      CiftiErodeCerebellumSurfaceParameters,
-      CiftiErodeLeftSurfaceParameters,
       CiftiErodeOutputs,
-      CiftiErodeParameters,
-      CiftiErodeRightSurfaceParameters,
       cifti_erode,
       cifti_erode_cerebellum_surface_params,
       cifti_erode_execute,

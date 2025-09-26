@@ -12,49 +12,16 @@ const MRI_LINEAR_REGISTER_METADATA: Metadata = {
 
 
 interface MriLinearRegisterParameters {
-    "@type": "freesurfer.mri_linear_register";
+    "@type"?: "freesurfer/mri_linear_register";
     "input_brain": InputPathType;
     "template": InputPathType;
     "output_file": string;
 }
+type MriLinearRegisterParametersTagged = Required<Pick<MriLinearRegisterParameters, '@type'>> & MriLinearRegisterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_linear_register": mri_linear_register_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_linear_register": mri_linear_register_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_linear_register(...)`.
+ * Output object returned when calling `MriLinearRegisterParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mri_linear_register_params(
     input_brain: InputPathType,
     template: InputPathType,
     output_file: string,
-): MriLinearRegisterParameters {
+): MriLinearRegisterParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_linear_register" as const,
+        "@type": "freesurfer/mri_linear_register" as const,
         "input_brain": input_brain,
         "template": template,
         "output_file": output_file,
@@ -193,7 +160,6 @@ function mri_linear_register(
 export {
       MRI_LINEAR_REGISTER_METADATA,
       MriLinearRegisterOutputs,
-      MriLinearRegisterParameters,
       mri_linear_register,
       mri_linear_register_execute,
       mri_linear_register_params,

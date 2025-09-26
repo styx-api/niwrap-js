@@ -12,21 +12,23 @@ const LABEL_RESAMPLE_METADATA: Metadata = {
 
 
 interface LabelResampleAreaSurfsParameters {
-    "@type": "workbench.label-resample.area_surfs";
+    "@type"?: "area_surfs";
     "current_area": InputPathType;
     "new_area": InputPathType;
 }
+type LabelResampleAreaSurfsParametersTagged = Required<Pick<LabelResampleAreaSurfsParameters, '@type'>> & LabelResampleAreaSurfsParameters;
 
 
 interface LabelResampleAreaMetricsParameters {
-    "@type": "workbench.label-resample.area_metrics";
+    "@type"?: "area_metrics";
     "current_area": InputPathType;
     "new_area": InputPathType;
 }
+type LabelResampleAreaMetricsParametersTagged = Required<Pick<LabelResampleAreaMetricsParameters, '@type'>> & LabelResampleAreaMetricsParameters;
 
 
 interface LabelResampleParameters {
-    "@type": "workbench.label-resample";
+    "@type"?: "workbench/label-resample";
     "label_in": InputPathType;
     "current_sphere": InputPathType;
     "new_sphere": InputPathType;
@@ -39,42 +41,7 @@ interface LabelResampleParameters {
     "opt_largest": boolean;
     "opt_bypass_sphere_check": boolean;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.label-resample": label_resample_cargs,
-        "workbench.label-resample.area_surfs": label_resample_area_surfs_cargs,
-        "workbench.label-resample.area_metrics": label_resample_area_metrics_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.label-resample": label_resample_outputs,
-    };
-    return outputsFuncs[t];
-}
+type LabelResampleParametersTagged = Required<Pick<LabelResampleParameters, '@type'>> & LabelResampleParameters;
 
 
 /**
@@ -88,9 +55,9 @@ function dynOutputs(
 function label_resample_area_surfs_params(
     current_area: InputPathType,
     new_area: InputPathType,
-): LabelResampleAreaSurfsParameters {
+): LabelResampleAreaSurfsParametersTagged {
     const params = {
-        "@type": "workbench.label-resample.area_surfs" as const,
+        "@type": "area_surfs" as const,
         "current_area": current_area,
         "new_area": new_area,
     };
@@ -129,9 +96,9 @@ function label_resample_area_surfs_cargs(
 function label_resample_area_metrics_params(
     current_area: InputPathType,
     new_area: InputPathType,
-): LabelResampleAreaMetricsParameters {
+): LabelResampleAreaMetricsParametersTagged {
     const params = {
-        "@type": "workbench.label-resample.area_metrics" as const,
+        "@type": "area_metrics" as const,
         "current_area": current_area,
         "new_area": new_area,
     };
@@ -160,7 +127,7 @@ function label_resample_area_metrics_cargs(
 
 
 /**
- * Output object returned when calling `label_resample(...)`.
+ * Output object returned when calling `LabelResampleParameters(...)`.
  *
  * @interface
  */
@@ -209,9 +176,9 @@ function label_resample_params(
     opt_valid_roi_out_roi_out: string | null = null,
     opt_largest: boolean = false,
     opt_bypass_sphere_check: boolean = false,
-): LabelResampleParameters {
+): LabelResampleParametersTagged {
     const params = {
-        "@type": "workbench.label-resample" as const,
+        "@type": "workbench/label-resample" as const,
         "label_in": label_in,
         "current_sphere": current_sphere,
         "new_sphere": new_sphere,
@@ -257,10 +224,10 @@ function label_resample_cargs(
     cargs.push((params["method"] ?? null));
     cargs.push((params["label_out"] ?? null));
     if ((params["area_surfs"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["area_surfs"] ?? null)["@type"])((params["area_surfs"] ?? null), execution));
+        cargs.push(...label_resample_area_surfs_cargs((params["area_surfs"] ?? null), execution));
     }
     if ((params["area_metrics"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["area_metrics"] ?? null)["@type"])((params["area_metrics"] ?? null), execution));
+        cargs.push(...label_resample_area_metrics_cargs((params["area_metrics"] ?? null), execution));
     }
     if ((params["opt_current_roi_roi_metric"] ?? null) !== null) {
         cargs.push(
@@ -274,10 +241,10 @@ function label_resample_cargs(
             (params["opt_valid_roi_out_roi_out"] ?? null)
         );
     }
-    if ((params["opt_largest"] ?? null)) {
+    if ((params["opt_largest"] ?? false)) {
         cargs.push("-largest");
     }
-    if ((params["opt_bypass_sphere_check"] ?? null)) {
+    if ((params["opt_bypass_sphere_check"] ?? false)) {
         cargs.push("-bypass-sphere-check");
     }
     return cargs;
@@ -406,10 +373,7 @@ function label_resample(
 
 export {
       LABEL_RESAMPLE_METADATA,
-      LabelResampleAreaMetricsParameters,
-      LabelResampleAreaSurfsParameters,
       LabelResampleOutputs,
-      LabelResampleParameters,
       label_resample,
       label_resample_area_metrics_params,
       label_resample_area_surfs_params,

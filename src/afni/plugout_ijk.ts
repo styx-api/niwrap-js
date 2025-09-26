@@ -12,7 +12,7 @@ const PLUGOUT_IJK_METADATA: Metadata = {
 
 
 interface PlugoutIjkParameters {
-    "@type": "afni.plugout_ijk";
+    "@type"?: "afni/plugout_ijk";
     "host"?: string | null | undefined;
     "verbose": boolean;
     "port"?: number | null | undefined;
@@ -25,43 +25,11 @@ interface PlugoutIjkParameters {
     "num_assigned_ports": boolean;
     "num_assigned_ports_quiet": boolean;
 }
+type PlugoutIjkParametersTagged = Required<Pick<PlugoutIjkParameters, '@type'>> & PlugoutIjkParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.plugout_ijk": plugout_ijk_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `plugout_ijk(...)`.
+ * Output object returned when calling `PlugoutIjkParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +70,9 @@ function plugout_ijk_params(
     max_bloc_quiet: boolean = false,
     num_assigned_ports: boolean = false,
     num_assigned_ports_quiet: boolean = false,
-): PlugoutIjkParameters {
+): PlugoutIjkParametersTagged {
     const params = {
-        "@type": "afni.plugout_ijk" as const,
+        "@type": "afni/plugout_ijk" as const,
         "verbose": verbose,
         "max_bloc": max_bloc,
         "max_bloc_quiet": max_bloc_quiet,
@@ -153,7 +121,7 @@ function plugout_ijk_cargs(
             (params["host"] ?? null)
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
     if ((params["port"] ?? null) !== null) {
@@ -186,16 +154,16 @@ function plugout_ijk_cargs(
             String((params["port_bloc_offset"] ?? null))
         );
     }
-    if ((params["max_bloc"] ?? null)) {
+    if ((params["max_bloc"] ?? false)) {
         cargs.push("-max_port_bloc");
     }
-    if ((params["max_bloc_quiet"] ?? null)) {
+    if ((params["max_bloc_quiet"] ?? false)) {
         cargs.push("-max_port_bloc_quiet");
     }
-    if ((params["num_assigned_ports"] ?? null)) {
+    if ((params["num_assigned_ports"] ?? false)) {
         cargs.push("-num_assigned_ports");
     }
-    if ((params["num_assigned_ports_quiet"] ?? null)) {
+    if ((params["num_assigned_ports_quiet"] ?? false)) {
         cargs.push("-num_assigned_ports_quiet");
     }
     return cargs;
@@ -295,7 +263,6 @@ function plugout_ijk(
 export {
       PLUGOUT_IJK_METADATA,
       PlugoutIjkOutputs,
-      PlugoutIjkParameters,
       plugout_ijk,
       plugout_ijk_execute,
       plugout_ijk_params,

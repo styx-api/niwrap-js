@@ -12,7 +12,7 @@ const MRI_MCSIM_METADATA: Metadata = {
 
 
 interface MriMcsimParameters {
-    "@type": "freesurfer.mri_mcsim";
+    "@type"?: "freesurfer/mri_mcsim";
     "top_output_dir": string;
     "base_name": string;
     "surface": Array<string>;
@@ -37,44 +37,11 @@ interface MriMcsimParameters {
     "help": boolean;
     "version": boolean;
 }
+type MriMcsimParametersTagged = Required<Pick<MriMcsimParameters, '@type'>> & MriMcsimParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_mcsim": mri_mcsim_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_mcsim": mri_mcsim_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_mcsim(...)`.
+ * Output object returned when calling `MriMcsimParameters(...)`.
  *
  * @interface
  */
@@ -155,9 +122,9 @@ function mri_mcsim_params(
     check_opts: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): MriMcsimParameters {
+): MriMcsimParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_mcsim" as const,
+        "@type": "freesurfer/mri_mcsim" as const,
         "top_output_dir": top_output_dir,
         "base_name": base_name,
         "surface": surface,
@@ -250,7 +217,7 @@ function mri_mcsim_cargs(
             String((params["fwhm_max"] ?? null))
         );
     }
-    if ((params["avg_vertex_area"] ?? null)) {
+    if ((params["avg_vertex_area"] ?? false)) {
         cargs.push("--avgvtxarea");
     }
     if ((params["random_seed"] ?? null) !== null) {
@@ -271,10 +238,10 @@ function mri_mcsim_cargs(
             execution.inputFile((params["mask_file"] ?? null))
         );
     }
-    if ((params["no_label"] ?? null)) {
+    if ((params["no_label"] ?? false)) {
         cargs.push("--no-label");
     }
-    if ((params["no_save_mask"] ?? null)) {
+    if ((params["no_save_mask"] ?? false)) {
         cargs.push("--no-save-mask");
     }
     if ((params["surface_name"] ?? null) !== null) {
@@ -307,7 +274,7 @@ function mri_mcsim_cargs(
             (params["save_file"] ?? null)
         );
     }
-    if ((params["save_iter"] ?? null)) {
+    if ((params["save_iter"] ?? false)) {
         cargs.push("--save-iter");
     }
     if ((params["subjects_dir"] ?? null) !== null) {
@@ -316,16 +283,16 @@ function mri_mcsim_cargs(
             (params["subjects_dir"] ?? null)
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["check_opts"] ?? null)) {
+    if ((params["check_opts"] ?? false)) {
         cargs.push("--checkopts");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -453,7 +420,6 @@ function mri_mcsim(
 export {
       MRI_MCSIM_METADATA,
       MriMcsimOutputs,
-      MriMcsimParameters,
       mri_mcsim,
       mri_mcsim_execute,
       mri_mcsim_params,

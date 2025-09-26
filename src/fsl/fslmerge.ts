@@ -12,7 +12,7 @@ const FSLMERGE_METADATA: Metadata = {
 
 
 interface FslmergeParameters {
-    "@type": "fsl.fslmerge";
+    "@type"?: "fsl/fslmerge";
     "merge_time": boolean;
     "merge_x": boolean;
     "merge_y": boolean;
@@ -24,44 +24,11 @@ interface FslmergeParameters {
     "volume_number"?: number | null | undefined;
     "tr_value"?: number | null | undefined;
 }
+type FslmergeParametersTagged = Required<Pick<FslmergeParameters, '@type'>> & FslmergeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslmerge": fslmerge_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fslmerge": fslmerge_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslmerge(...)`.
+ * Output object returned when calling `FslmergeParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function fslmerge_params(
     merge_set_tr: boolean = false,
     volume_number: number | null = null,
     tr_value: number | null = null,
-): FslmergeParameters {
+): FslmergeParametersTagged {
     const params = {
-        "@type": "fsl.fslmerge" as const,
+        "@type": "fsl/fslmerge" as const,
         "merge_time": merge_time,
         "merge_x": merge_x,
         "merge_y": merge_y,
@@ -140,22 +107,22 @@ function fslmerge_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("fslmerge");
-    if ((params["merge_time"] ?? null)) {
+    if ((params["merge_time"] ?? false)) {
         cargs.push("-t");
     }
-    if ((params["merge_x"] ?? null)) {
+    if ((params["merge_x"] ?? false)) {
         cargs.push("-x");
     }
-    if ((params["merge_y"] ?? null)) {
+    if ((params["merge_y"] ?? false)) {
         cargs.push("-y");
     }
-    if ((params["merge_z"] ?? null)) {
+    if ((params["merge_z"] ?? false)) {
         cargs.push("-z");
     }
-    if ((params["auto_choose"] ?? null)) {
+    if ((params["auto_choose"] ?? false)) {
         cargs.push("-a");
     }
-    if ((params["merge_set_tr"] ?? null)) {
+    if ((params["merge_set_tr"] ?? false)) {
         cargs.push("-tr");
     }
     cargs.push((params["output_file"] ?? null));
@@ -265,7 +232,6 @@ function fslmerge(
 export {
       FSLMERGE_METADATA,
       FslmergeOutputs,
-      FslmergeParameters,
       fslmerge,
       fslmerge_execute,
       fslmerge_params,

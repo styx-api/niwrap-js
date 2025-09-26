@@ -12,49 +12,16 @@ const HISTO_COMPUTE_JOINT_DENSITY_METADATA: Metadata = {
 
 
 interface HistoComputeJointDensityParameters {
-    "@type": "freesurfer.histo_compute_joint_density";
+    "@type"?: "freesurfer/histo_compute_joint_density";
     "volume1": InputPathType;
     "volume2": InputPathType;
     "joint_density_file": string;
 }
+type HistoComputeJointDensityParametersTagged = Required<Pick<HistoComputeJointDensityParameters, '@type'>> & HistoComputeJointDensityParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.histo_compute_joint_density": histo_compute_joint_density_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.histo_compute_joint_density": histo_compute_joint_density_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `histo_compute_joint_density(...)`.
+ * Output object returned when calling `HistoComputeJointDensityParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function histo_compute_joint_density_params(
     volume1: InputPathType,
     volume2: InputPathType,
     joint_density_file: string,
-): HistoComputeJointDensityParameters {
+): HistoComputeJointDensityParametersTagged {
     const params = {
-        "@type": "freesurfer.histo_compute_joint_density" as const,
+        "@type": "freesurfer/histo_compute_joint_density" as const,
         "volume1": volume1,
         "volume2": volume2,
         "joint_density_file": joint_density_file,
@@ -193,7 +160,6 @@ function histo_compute_joint_density(
 export {
       HISTO_COMPUTE_JOINT_DENSITY_METADATA,
       HistoComputeJointDensityOutputs,
-      HistoComputeJointDensityParameters,
       histo_compute_joint_density,
       histo_compute_joint_density_execute,
       histo_compute_joint_density_params,

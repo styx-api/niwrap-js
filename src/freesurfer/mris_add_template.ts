@@ -12,47 +12,14 @@ const MRIS_ADD_TEMPLATE_METADATA: Metadata = {
 
 
 interface MrisAddTemplateParameters {
-    "@type": "freesurfer.mris_add_template";
+    "@type"?: "freesurfer/mris_add_template";
     "placeholder_input"?: string | null | undefined;
 }
+type MrisAddTemplateParametersTagged = Required<Pick<MrisAddTemplateParameters, '@type'>> & MrisAddTemplateParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_add_template": mris_add_template_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_add_template": mris_add_template_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_add_template(...)`.
+ * Output object returned when calling `MrisAddTemplateParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface MrisAddTemplateOutputs {
  */
 function mris_add_template_params(
     placeholder_input: string | null = null,
-): MrisAddTemplateParameters {
+): MrisAddTemplateParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_add_template" as const,
+        "@type": "freesurfer/mris_add_template" as const,
     };
     if (placeholder_input !== null) {
         params["placeholder_input"] = placeholder_input;
@@ -183,7 +150,6 @@ function mris_add_template(
 export {
       MRIS_ADD_TEMPLATE_METADATA,
       MrisAddTemplateOutputs,
-      MrisAddTemplateParameters,
       mris_add_template,
       mris_add_template_execute,
       mris_add_template_params,

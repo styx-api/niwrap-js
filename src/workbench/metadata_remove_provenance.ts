@@ -12,47 +12,15 @@ const METADATA_REMOVE_PROVENANCE_METADATA: Metadata = {
 
 
 interface MetadataRemoveProvenanceParameters {
-    "@type": "workbench.metadata-remove-provenance";
+    "@type"?: "workbench/metadata-remove-provenance";
     "input_file": string;
     "output_file": string;
 }
+type MetadataRemoveProvenanceParametersTagged = Required<Pick<MetadataRemoveProvenanceParameters, '@type'>> & MetadataRemoveProvenanceParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metadata-remove-provenance": metadata_remove_provenance_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `metadata_remove_provenance(...)`.
+ * Output object returned when calling `MetadataRemoveProvenanceParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface MetadataRemoveProvenanceOutputs {
 function metadata_remove_provenance_params(
     input_file: string,
     output_file: string,
-): MetadataRemoveProvenanceParameters {
+): MetadataRemoveProvenanceParametersTagged {
     const params = {
-        "@type": "workbench.metadata-remove-provenance" as const,
+        "@type": "workbench/metadata-remove-provenance" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -185,7 +153,6 @@ function metadata_remove_provenance(
 export {
       METADATA_REMOVE_PROVENANCE_METADATA,
       MetadataRemoveProvenanceOutputs,
-      MetadataRemoveProvenanceParameters,
       metadata_remove_provenance,
       metadata_remove_provenance_execute,
       metadata_remove_provenance_params,

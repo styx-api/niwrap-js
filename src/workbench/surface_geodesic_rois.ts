@@ -12,7 +12,7 @@ const SURFACE_GEODESIC_ROIS_METADATA: Metadata = {
 
 
 interface SurfaceGeodesicRoisParameters {
-    "@type": "workbench.surface-geodesic-rois";
+    "@type"?: "workbench/surface-geodesic-rois";
     "surface": InputPathType;
     "limit": number;
     "vertex_list_file": string;
@@ -22,44 +22,11 @@ interface SurfaceGeodesicRoisParameters {
     "opt_names_name_list_file"?: string | null | undefined;
     "opt_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
+type SurfaceGeodesicRoisParametersTagged = Required<Pick<SurfaceGeodesicRoisParameters, '@type'>> & SurfaceGeodesicRoisParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-geodesic-rois": surface_geodesic_rois_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-geodesic-rois": surface_geodesic_rois_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_geodesic_rois(...)`.
+ * Output object returned when calling `SurfaceGeodesicRoisParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function surface_geodesic_rois_params(
     opt_overlap_logic_method: string | null = null,
     opt_names_name_list_file: string | null = null,
     opt_corrected_areas_area_metric: InputPathType | null = null,
-): SurfaceGeodesicRoisParameters {
+): SurfaceGeodesicRoisParametersTagged {
     const params = {
-        "@type": "workbench.surface-geodesic-rois" as const,
+        "@type": "workbench/surface-geodesic-rois" as const,
         "surface": surface,
         "limit": limit,
         "vertex_list_file": vertex_list_file,
@@ -261,7 +228,6 @@ function surface_geodesic_rois(
 export {
       SURFACE_GEODESIC_ROIS_METADATA,
       SurfaceGeodesicRoisOutputs,
-      SurfaceGeodesicRoisParameters,
       surface_geodesic_rois,
       surface_geodesic_rois_execute,
       surface_geodesic_rois_params,

@@ -12,7 +12,7 @@ const MRI_RF_TRAIN_METADATA: Metadata = {
 
 
 interface MriRfTrainParameters {
-    "@type": "freesurfer.mri_rf_train";
+    "@type"?: "freesurfer/mri_rf_train";
     "seg_volume": string;
     "atlas_transform": string;
     "mask_volume"?: string | null | undefined;
@@ -23,43 +23,11 @@ interface MriRfTrainParameters {
     "subjects": Array<string>;
     "output_rfa": string;
 }
+type MriRfTrainParametersTagged = Required<Pick<MriRfTrainParameters, '@type'>> & MriRfTrainParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_rf_train": mri_rf_train_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_rf_train(...)`.
+ * Output object returned when calling `MriRfTrainParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +64,9 @@ function mri_rf_train_params(
     prior_spacing: number | null = null,
     input_training_data: Array<string> | null = null,
     sanity_check: boolean = false,
-): MriRfTrainParameters {
+): MriRfTrainParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_rf_train" as const,
+        "@type": "freesurfer/mri_rf_train" as const,
         "seg_volume": seg_volume,
         "atlas_transform": atlas_transform,
         "sanity_check": sanity_check,
@@ -167,7 +135,7 @@ function mri_rf_train_cargs(
             ...(params["input_training_data"] ?? null)
         );
     }
-    if ((params["sanity_check"] ?? null)) {
+    if ((params["sanity_check"] ?? false)) {
         cargs.push("-check");
     }
     cargs.push(...(params["subjects"] ?? null));
@@ -265,7 +233,6 @@ function mri_rf_train(
 export {
       MRI_RF_TRAIN_METADATA,
       MriRfTrainOutputs,
-      MriRfTrainParameters,
       mri_rf_train,
       mri_rf_train_execute,
       mri_rf_train_params,

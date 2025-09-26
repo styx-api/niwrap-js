@@ -12,7 +12,7 @@ const SURF_TO_SURF_METADATA: Metadata = {
 
 
 interface SurfToSurfParameters {
-    "@type": "afni.SurfToSurf";
+    "@type"?: "afni/SurfToSurf";
     "input_surface_1": InputPathType;
     "input_surface_2": InputPathType;
     "surface_volume"?: InputPathType | null | undefined;
@@ -27,44 +27,11 @@ interface SurfToSurfParameters {
     "dset"?: InputPathType | null | undefined;
     "mapfile"?: InputPathType | null | undefined;
 }
+type SurfToSurfParametersTagged = Required<Pick<SurfToSurfParameters, '@type'>> & SurfToSurfParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.SurfToSurf": surf_to_surf_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.SurfToSurf": surf_to_surf_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surf_to_surf(...)`.
+ * Output object returned when calling `SurfToSurfParameters(...)`.
  *
  * @interface
  */
@@ -113,9 +80,9 @@ function surf_to_surf_params(
     make_consistent: boolean = false,
     dset: InputPathType | null = null,
     mapfile: InputPathType | null = null,
-): SurfToSurfParameters {
+): SurfToSurfParametersTagged {
     const params = {
-        "@type": "afni.SurfToSurf" as const,
+        "@type": "afni/SurfToSurf" as const,
         "input_surface_1": input_surface_1,
         "input_surface_2": input_surface_2,
         "make_consistent": make_consistent,
@@ -218,7 +185,7 @@ function surf_to_surf_cargs(
             String((params["debug_level"] ?? null))
         );
     }
-    if ((params["make_consistent"] ?? null)) {
+    if ((params["make_consistent"] ?? false)) {
         cargs.push("-make_consistent");
     }
     if ((params["dset"] ?? null) !== null) {
@@ -335,7 +302,6 @@ function surf_to_surf(
 export {
       SURF_TO_SURF_METADATA,
       SurfToSurfOutputs,
-      SurfToSurfParameters,
       surf_to_surf,
       surf_to_surf_execute,
       surf_to_surf_params,

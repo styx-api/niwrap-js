@@ -12,7 +12,7 @@ const MRI_RELABEL_NONWM_HYPOS_METADATA: Metadata = {
 
 
 interface MriRelabelNonwmHyposParameters {
-    "@type": "freesurfer.mri_relabel_nonwm_hypos";
+    "@type"?: "freesurfer/mri_relabel_nonwm_hypos";
     "inputseg": InputPathType;
     "outputseg": string;
     "segments"?: Array<string> | null | undefined;
@@ -20,44 +20,11 @@ interface MriRelabelNonwmHyposParameters {
     "debug": boolean;
     "checkopts": boolean;
 }
+type MriRelabelNonwmHyposParametersTagged = Required<Pick<MriRelabelNonwmHyposParameters, '@type'>> & MriRelabelNonwmHyposParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_relabel_nonwm_hypos": mri_relabel_nonwm_hypos_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_relabel_nonwm_hypos": mri_relabel_nonwm_hypos_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_relabel_nonwm_hypos(...)`.
+ * Output object returned when calling `MriRelabelNonwmHyposParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function mri_relabel_nonwm_hypos_params(
     seg_default: boolean = false,
     debug: boolean = false,
     checkopts: boolean = false,
-): MriRelabelNonwmHyposParameters {
+): MriRelabelNonwmHyposParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_relabel_nonwm_hypos" as const,
+        "@type": "freesurfer/mri_relabel_nonwm_hypos" as const,
         "inputseg": inputseg,
         "outputseg": outputseg,
         "seg_default": seg_default,
@@ -136,13 +103,13 @@ function mri_relabel_nonwm_hypos_cargs(
             ...(params["segments"] ?? null)
         );
     }
-    if ((params["seg_default"] ?? null)) {
+    if ((params["seg_default"] ?? false)) {
         cargs.push("--seg-default");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["checkopts"] ?? null)) {
+    if ((params["checkopts"] ?? false)) {
         cargs.push("--checkopts");
     }
     return cargs;
@@ -233,7 +200,6 @@ function mri_relabel_nonwm_hypos(
 export {
       MRI_RELABEL_NONWM_HYPOS_METADATA,
       MriRelabelNonwmHyposOutputs,
-      MriRelabelNonwmHyposParameters,
       mri_relabel_nonwm_hypos,
       mri_relabel_nonwm_hypos_execute,
       mri_relabel_nonwm_hypos_params,

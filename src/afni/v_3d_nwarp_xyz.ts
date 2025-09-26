@@ -12,50 +12,17 @@ const V_3D_NWARP_XYZ_METADATA: Metadata = {
 
 
 interface V3dNwarpXyzParameters {
-    "@type": "afni.3dNwarpXYZ";
+    "@type"?: "afni/3dNwarpXYZ";
     "xyzfile": InputPathType;
     "warp_spec": string;
     "iwarp": boolean;
     "output_file": string;
 }
+type V3dNwarpXyzParametersTagged = Required<Pick<V3dNwarpXyzParameters, '@type'>> & V3dNwarpXyzParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dNwarpXYZ": v_3d_nwarp_xyz_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dNwarpXYZ": v_3d_nwarp_xyz_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_nwarp_xyz(...)`.
+ * Output object returned when calling `V3dNwarpXyzParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function v_3d_nwarp_xyz_params(
     warp_spec: string,
     output_file: string,
     iwarp: boolean = false,
-): V3dNwarpXyzParameters {
+): V3dNwarpXyzParametersTagged {
     const params = {
-        "@type": "afni.3dNwarpXYZ" as const,
+        "@type": "afni/3dNwarpXYZ" as const,
         "xyzfile": xyzfile,
         "warp_spec": warp_spec,
         "iwarp": iwarp,
@@ -117,7 +84,7 @@ function v_3d_nwarp_xyz_cargs(
         "-nwarp",
         (params["warp_spec"] ?? null)
     );
-    if ((params["iwarp"] ?? null)) {
+    if ((params["iwarp"] ?? false)) {
         cargs.push("-iwarp");
     }
     cargs.push(["> ", (params["output_file"] ?? null)].join(''));
@@ -204,7 +171,6 @@ function v_3d_nwarp_xyz(
 
 export {
       V3dNwarpXyzOutputs,
-      V3dNwarpXyzParameters,
       V_3D_NWARP_XYZ_METADATA,
       v_3d_nwarp_xyz,
       v_3d_nwarp_xyz_execute,

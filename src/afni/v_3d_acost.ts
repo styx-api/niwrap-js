@@ -12,50 +12,17 @@ const V_3D_ACOST_METADATA: Metadata = {
 
 
 interface V3dAcostParameters {
-    "@type": "afni.3dAcost";
+    "@type"?: "afni/3dAcost";
     "infile": InputPathType;
     "basefile": InputPathType;
     "outfile": string;
     "all_cost": boolean;
 }
+type V3dAcostParametersTagged = Required<Pick<V3dAcostParameters, '@type'>> & V3dAcostParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dAcost": v_3d_acost_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dAcost": v_3d_acost_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_acost(...)`.
+ * Output object returned when calling `V3dAcostParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +57,9 @@ function v_3d_acost_params(
     basefile: InputPathType,
     outfile: string,
     all_cost: boolean = false,
-): V3dAcostParameters {
+): V3dAcostParametersTagged {
     const params = {
-        "@type": "afni.3dAcost" as const,
+        "@type": "afni/3dAcost" as const,
         "infile": infile,
         "basefile": basefile,
         "outfile": outfile,
@@ -125,7 +92,7 @@ function v_3d_acost_cargs(
         "-prefix",
         (params["outfile"] ?? null)
     );
-    if ((params["all_cost"] ?? null)) {
+    if ((params["all_cost"] ?? false)) {
         cargs.push("-allcostX");
     }
     return cargs;
@@ -212,7 +179,6 @@ function v_3d_acost(
 
 export {
       V3dAcostOutputs,
-      V3dAcostParameters,
       V_3D_ACOST_METADATA,
       v_3d_acost,
       v_3d_acost_execute,

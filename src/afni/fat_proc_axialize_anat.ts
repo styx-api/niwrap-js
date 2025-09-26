@@ -12,7 +12,7 @@ const FAT_PROC_AXIALIZE_ANAT_METADATA: Metadata = {
 
 
 interface FatProcAxializeAnatParameters {
-    "@type": "afni.fat_proc_axialize_anat";
+    "@type"?: "afni/fat_proc_axialize_anat";
     "in_file": InputPathType;
     "ref_file": InputPathType;
     "prefix": string;
@@ -36,44 +36,11 @@ interface FatProcAxializeAnatParameters {
     "no_qc_view": boolean;
     "qc_prefix"?: string | null | undefined;
 }
+type FatProcAxializeAnatParametersTagged = Required<Pick<FatProcAxializeAnatParameters, '@type'>> & FatProcAxializeAnatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.fat_proc_axialize_anat": fat_proc_axialize_anat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.fat_proc_axialize_anat": fat_proc_axialize_anat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fat_proc_axialize_anat(...)`.
+ * Output object returned when calling `FatProcAxializeAnatParameters(...)`.
  *
  * @interface
  */
@@ -144,9 +111,9 @@ function fat_proc_axialize_anat_params(
     qc_ulay_range: Array<number> | null = null,
     no_qc_view: boolean = false,
     qc_prefix: string | null = null,
-): FatProcAxializeAnatParameters {
+): FatProcAxializeAnatParametersTagged {
     const params = {
-        "@type": "afni.fat_proc_axialize_anat" as const,
+        "@type": "afni/fat_proc_axialize_anat" as const,
         "in_file": in_file,
         "ref_file": ref_file,
         "prefix": prefix,
@@ -207,10 +174,10 @@ function fat_proc_axialize_anat_cargs(
     cargs.push(execution.inputFile((params["in_file"] ?? null)));
     cargs.push(execution.inputFile((params["ref_file"] ?? null)));
     cargs.push((params["prefix"] ?? null));
-    if ((params["mode_t2w"] ?? null)) {
+    if ((params["mode_t2w"] ?? false)) {
         cargs.push("-mode_t2w");
     }
-    if ((params["mode_t1w"] ?? null)) {
+    if ((params["mode_t1w"] ?? false)) {
         cargs.push("-mode_t1w");
     }
     if ((params["workdir"] ?? null) !== null) {
@@ -219,10 +186,10 @@ function fat_proc_axialize_anat_cargs(
             (params["workdir"] ?? null)
         );
     }
-    if ((params["out_match_ref"] ?? null)) {
+    if ((params["out_match_ref"] ?? false)) {
         cargs.push("-out_match_ref");
     }
-    if ((params["do_ceil_out"] ?? null)) {
+    if ((params["do_ceil_out"] ?? false)) {
         cargs.push("-do_ceil_out");
     }
     if ((params["extra_al_wtmask"] ?? null) !== null) {
@@ -249,7 +216,7 @@ function fat_proc_axialize_anat_cargs(
             execution.inputFile((params["focus_mask"] ?? null))
         );
     }
-    if ((params["focus_by_ss"] ?? null)) {
+    if ((params["focus_by_ss"] ?? false)) {
         cargs.push("-focus_by_ss");
     }
     if ((params["remove_inf_sli"] ?? null) !== null) {
@@ -258,19 +225,19 @@ function fat_proc_axialize_anat_cargs(
             String((params["remove_inf_sli"] ?? null))
         );
     }
-    if ((params["pre_align_center_mass"] ?? null)) {
+    if ((params["pre_align_center_mass"] ?? false)) {
         cargs.push("-pre_align_center_mass");
     }
-    if ((params["pre_center_mass"] ?? null)) {
+    if ((params["pre_center_mass"] ?? false)) {
         cargs.push("-pre_center_mass");
     }
-    if ((params["post_lr_symm"] ?? null)) {
+    if ((params["post_lr_symm"] ?? false)) {
         cargs.push("-post_lr_symm");
     }
-    if ((params["no_pre_lr_symm"] ?? null)) {
+    if ((params["no_pre_lr_symm"] ?? false)) {
         cargs.push("-no_pre_lr_symm");
     }
-    if ((params["no_clean"] ?? null)) {
+    if ((params["no_clean"] ?? false)) {
         cargs.push("-no_clean");
     }
     if ((params["qc_ulay_range"] ?? null) !== null) {
@@ -279,7 +246,7 @@ function fat_proc_axialize_anat_cargs(
             ...(params["qc_ulay_range"] ?? null).map(String)
         );
     }
-    if ((params["no_qc_view"] ?? null)) {
+    if ((params["no_qc_view"] ?? false)) {
         cargs.push("-no_qc_view");
     }
     if ((params["qc_prefix"] ?? null) !== null) {
@@ -409,7 +376,6 @@ function fat_proc_axialize_anat(
 export {
       FAT_PROC_AXIALIZE_ANAT_METADATA,
       FatProcAxializeAnatOutputs,
-      FatProcAxializeAnatParameters,
       fat_proc_axialize_anat,
       fat_proc_axialize_anat_execute,
       fat_proc_axialize_anat_params,

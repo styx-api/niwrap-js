@@ -12,7 +12,7 @@ const V_3D_SIGNATURES_METADATA: Metadata = {
 
 
 interface V3dSignaturesParameters {
-    "@type": "afni.3dSignatures";
+    "@type"?: "afni/3dSignatures";
     "infile": InputPathType;
     "outfile": string;
     "segmentation": boolean;
@@ -20,44 +20,11 @@ interface V3dSignaturesParameters {
     "threshold"?: number | null | undefined;
     "smoothing"?: number | null | undefined;
 }
+type V3dSignaturesParametersTagged = Required<Pick<V3dSignaturesParameters, '@type'>> & V3dSignaturesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dSignatures": v_3d_signatures_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dSignatures": v_3d_signatures_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_signatures(...)`.
+ * Output object returned when calling `V3dSignaturesParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function v_3d_signatures_params(
     filter: boolean = false,
     threshold: number | null = null,
     smoothing: number | null = null,
-): V3dSignaturesParameters {
+): V3dSignaturesParametersTagged {
     const params = {
-        "@type": "afni.3dSignatures" as const,
+        "@type": "afni/3dSignatures" as const,
         "infile": infile,
         "outfile": outfile,
         "segmentation": segmentation,
@@ -126,10 +93,10 @@ function v_3d_signatures_cargs(
     cargs.push("3dSignatures");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
     cargs.push((params["outfile"] ?? null));
-    if ((params["segmentation"] ?? null)) {
+    if ((params["segmentation"] ?? false)) {
         cargs.push("--segmentation");
     }
-    if ((params["filter"] ?? null)) {
+    if ((params["filter"] ?? false)) {
         cargs.push("--filter");
     }
     if ((params["threshold"] ?? null) !== null) {
@@ -231,7 +198,6 @@ function v_3d_signatures(
 
 export {
       V3dSignaturesOutputs,
-      V3dSignaturesParameters,
       V_3D_SIGNATURES_METADATA,
       v_3d_signatures,
       v_3d_signatures_execute,

@@ -12,49 +12,16 @@ const MRIS_REMOVE_NEGATIVE_VERTICES_METADATA: Metadata = {
 
 
 interface MrisRemoveNegativeVerticesParameters {
-    "@type": "freesurfer.mris_remove_negative_vertices";
+    "@type"?: "freesurfer/mris_remove_negative_vertices";
     "surface_file": InputPathType;
     "patch_file": InputPathType;
     "output_patch": string;
 }
+type MrisRemoveNegativeVerticesParametersTagged = Required<Pick<MrisRemoveNegativeVerticesParameters, '@type'>> & MrisRemoveNegativeVerticesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_remove_negative_vertices": mris_remove_negative_vertices_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_remove_negative_vertices": mris_remove_negative_vertices_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_remove_negative_vertices(...)`.
+ * Output object returned when calling `MrisRemoveNegativeVerticesParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mris_remove_negative_vertices_params(
     surface_file: InputPathType,
     patch_file: InputPathType,
     output_patch: string,
-): MrisRemoveNegativeVerticesParameters {
+): MrisRemoveNegativeVerticesParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_remove_negative_vertices" as const,
+        "@type": "freesurfer/mris_remove_negative_vertices" as const,
         "surface_file": surface_file,
         "patch_file": patch_file,
         "output_patch": output_patch,
@@ -193,7 +160,6 @@ function mris_remove_negative_vertices(
 export {
       MRIS_REMOVE_NEGATIVE_VERTICES_METADATA,
       MrisRemoveNegativeVerticesOutputs,
-      MrisRemoveNegativeVerticesParameters,
       mris_remove_negative_vertices,
       mris_remove_negative_vertices_execute,
       mris_remove_negative_vertices_params,

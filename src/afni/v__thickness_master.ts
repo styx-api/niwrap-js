@@ -12,49 +12,16 @@ const V__THICKNESS_MASTER_METADATA: Metadata = {
 
 
 interface VThicknessMasterParameters {
-    "@type": "afni.@thickness_master";
+    "@type"?: "afni/@thickness_master";
     "maskset": InputPathType;
     "surfset": InputPathType;
     "outdir"?: string | null | undefined;
 }
+type VThicknessMasterParametersTagged = Required<Pick<VThicknessMasterParameters, '@type'>> & VThicknessMasterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@thickness_master": v__thickness_master_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@thickness_master": v__thickness_master_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__thickness_master(...)`.
+ * Output object returned when calling `VThicknessMasterParameters(...)`.
  *
  * @interface
  */
@@ -91,9 +58,9 @@ function v__thickness_master_params(
     maskset: InputPathType,
     surfset: InputPathType,
     outdir: string | null = null,
-): VThicknessMasterParameters {
+): VThicknessMasterParametersTagged {
     const params = {
-        "@type": "afni.@thickness_master" as const,
+        "@type": "afni/@thickness_master" as const,
         "maskset": maskset,
         "surfset": surfset,
     };
@@ -215,7 +182,6 @@ function v__thickness_master(
 
 export {
       VThicknessMasterOutputs,
-      VThicknessMasterParameters,
       V__THICKNESS_MASTER_METADATA,
       v__thickness_master,
       v__thickness_master_execute,

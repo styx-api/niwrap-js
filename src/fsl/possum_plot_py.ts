@@ -12,47 +12,15 @@ const POSSUM_PLOT_PY_METADATA: Metadata = {
 
 
 interface PossumPlotPyParameters {
-    "@type": "fsl.possum_plot.py";
+    "@type"?: "fsl/possum_plot.py";
     "input_file": InputPathType;
     "output_basename": string;
 }
+type PossumPlotPyParametersTagged = Required<Pick<PossumPlotPyParameters, '@type'>> & PossumPlotPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.possum_plot.py": possum_plot_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `possum_plot_py(...)`.
+ * Output object returned when calling `PossumPlotPyParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface PossumPlotPyOutputs {
 function possum_plot_py_params(
     input_file: InputPathType,
     output_basename: string,
-): PossumPlotPyParameters {
+): PossumPlotPyParametersTagged {
     const params = {
-        "@type": "fsl.possum_plot.py" as const,
+        "@type": "fsl/possum_plot.py" as const,
         "input_file": input_file,
         "output_basename": output_basename,
     };
@@ -180,7 +148,6 @@ function possum_plot_py(
 export {
       POSSUM_PLOT_PY_METADATA,
       PossumPlotPyOutputs,
-      PossumPlotPyParameters,
       possum_plot_py,
       possum_plot_py_execute,
       possum_plot_py_params,

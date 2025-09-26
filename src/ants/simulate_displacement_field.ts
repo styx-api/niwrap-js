@@ -12,20 +12,22 @@ const SIMULATE_DISPLACEMENT_FIELD_METADATA: Metadata = {
 
 
 interface SimulateDisplacementFieldBsplineOptionsParameters {
-    "@type": "ants.SimulateDisplacementField.bspline_options";
+    "@type"?: "bspline_options";
     "number_of_fitting_levels"?: number | null | undefined;
     "number_of_control_points"?: number | null | undefined;
 }
+type SimulateDisplacementFieldBsplineOptionsParametersTagged = Required<Pick<SimulateDisplacementFieldBsplineOptionsParameters, '@type'>> & SimulateDisplacementFieldBsplineOptionsParameters;
 
 
 interface SimulateDisplacementFieldExponentialOptionsParameters {
-    "@type": "ants.SimulateDisplacementField.exponential_options";
+    "@type"?: "exponential_options";
     "smoothing_standard_deviation"?: number | null | undefined;
 }
+type SimulateDisplacementFieldExponentialOptionsParametersTagged = Required<Pick<SimulateDisplacementFieldExponentialOptionsParameters, '@type'>> & SimulateDisplacementFieldExponentialOptionsParameters;
 
 
 interface SimulateDisplacementFieldParameters {
-    "@type": "ants.SimulateDisplacementField";
+    "@type"?: "ants/SimulateDisplacementField";
     "image_dimension": number;
     "displacement_field_type": "BSpline" | "Exponential";
     "domain_image": InputPathType;
@@ -33,8 +35,9 @@ interface SimulateDisplacementFieldParameters {
     "number_of_random_points"?: number | null | undefined;
     "standard_deviation_displacement_field"?: number | null | undefined;
     "enforce_stationary_boundary"?: number | null | undefined;
-    "displacement_specific_options"?: SimulateDisplacementFieldBsplineOptionsParameters | SimulateDisplacementFieldExponentialOptionsParameters | null | undefined;
+    "displacement_specific_options"?: SimulateDisplacementFieldBsplineOptionsParametersTagged | SimulateDisplacementFieldExponentialOptionsParametersTagged | null | undefined;
 }
+type SimulateDisplacementFieldParametersTagged = Required<Pick<SimulateDisplacementFieldParameters, '@type'>> & SimulateDisplacementFieldParameters;
 
 
 /**
@@ -44,13 +47,12 @@ interface SimulateDisplacementFieldParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function simulate_displacement_field_displacement_specific_options_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "ants.SimulateDisplacementField": simulate_displacement_field_cargs,
-        "ants.SimulateDisplacementField.bspline_options": simulate_displacement_field_bspline_options_cargs,
-        "ants.SimulateDisplacementField.exponential_options": simulate_displacement_field_exponential_options_cargs,
+        "bspline_options": simulate_displacement_field_bspline_options_cargs,
+        "exponential_options": simulate_displacement_field_exponential_options_cargs,
     };
     return cargsFuncs[t];
 }
@@ -63,11 +65,10 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function simulate_displacement_field_displacement_specific_options_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "ants.SimulateDisplacementField": simulate_displacement_field_outputs,
     };
     return outputsFuncs[t];
 }
@@ -84,9 +85,9 @@ function dynOutputs(
 function simulate_displacement_field_bspline_options_params(
     number_of_fitting_levels: number | null = null,
     number_of_control_points: number | null = null,
-): SimulateDisplacementFieldBsplineOptionsParameters {
+): SimulateDisplacementFieldBsplineOptionsParametersTagged {
     const params = {
-        "@type": "ants.SimulateDisplacementField.bspline_options" as const,
+        "@type": "bspline_options" as const,
     };
     if (number_of_fitting_levels !== null) {
         params["number_of_fitting_levels"] = number_of_fitting_levels;
@@ -130,9 +131,9 @@ function simulate_displacement_field_bspline_options_cargs(
  */
 function simulate_displacement_field_exponential_options_params(
     smoothing_standard_deviation: number | null = null,
-): SimulateDisplacementFieldExponentialOptionsParameters {
+): SimulateDisplacementFieldExponentialOptionsParametersTagged {
     const params = {
-        "@type": "ants.SimulateDisplacementField.exponential_options" as const,
+        "@type": "exponential_options" as const,
     };
     if (smoothing_standard_deviation !== null) {
         params["smoothing_standard_deviation"] = smoothing_standard_deviation;
@@ -162,7 +163,7 @@ function simulate_displacement_field_exponential_options_cargs(
 
 
 /**
- * Output object returned when calling `simulate_displacement_field(...)`.
+ * Output object returned when calling `SimulateDisplacementFieldParameters(...)`.
  *
  * @interface
  */
@@ -200,10 +201,10 @@ function simulate_displacement_field_params(
     number_of_random_points: number | null = null,
     standard_deviation_displacement_field: number | null = null,
     enforce_stationary_boundary: number | null = null,
-    displacement_specific_options: SimulateDisplacementFieldBsplineOptionsParameters | SimulateDisplacementFieldExponentialOptionsParameters | null = null,
-): SimulateDisplacementFieldParameters {
+    displacement_specific_options: SimulateDisplacementFieldBsplineOptionsParametersTagged | SimulateDisplacementFieldExponentialOptionsParametersTagged | null = null,
+): SimulateDisplacementFieldParametersTagged {
     const params = {
-        "@type": "ants.SimulateDisplacementField" as const,
+        "@type": "ants/SimulateDisplacementField" as const,
         "image_dimension": image_dimension,
         "displacement_field_type": displacement_field_type,
         "domain_image": domain_image,
@@ -253,7 +254,7 @@ function simulate_displacement_field_cargs(
         cargs.push(String((params["enforce_stationary_boundary"] ?? null)));
     }
     if ((params["displacement_specific_options"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["displacement_specific_options"] ?? null)["@type"])((params["displacement_specific_options"] ?? null), execution));
+        cargs.push(...simulate_displacement_field_displacement_specific_options_cargs_dyn_fn((params["displacement_specific_options"] ?? null)["@type"])((params["displacement_specific_options"] ?? null), execution));
     }
     return cargs;
 }
@@ -336,7 +337,7 @@ function simulate_displacement_field(
     number_of_random_points: number | null = null,
     standard_deviation_displacement_field: number | null = null,
     enforce_stationary_boundary: number | null = null,
-    displacement_specific_options: SimulateDisplacementFieldBsplineOptionsParameters | SimulateDisplacementFieldExponentialOptionsParameters | null = null,
+    displacement_specific_options: SimulateDisplacementFieldBsplineOptionsParametersTagged | SimulateDisplacementFieldExponentialOptionsParametersTagged | null = null,
     runner: Runner | null = null,
 ): SimulateDisplacementFieldOutputs {
     const params = simulate_displacement_field_params(image_dimension, displacement_field_type, domain_image, output_field, number_of_random_points, standard_deviation_displacement_field, enforce_stationary_boundary, displacement_specific_options)
@@ -346,10 +347,7 @@ function simulate_displacement_field(
 
 export {
       SIMULATE_DISPLACEMENT_FIELD_METADATA,
-      SimulateDisplacementFieldBsplineOptionsParameters,
-      SimulateDisplacementFieldExponentialOptionsParameters,
       SimulateDisplacementFieldOutputs,
-      SimulateDisplacementFieldParameters,
       simulate_displacement_field,
       simulate_displacement_field_bspline_options_params,
       simulate_displacement_field_execute,

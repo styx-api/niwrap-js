@@ -12,7 +12,7 @@ const MRI_BINARIZE_METADATA: Metadata = {
 
 
 interface MriBinarizeParameters {
-    "@type": "freesurfer.mri_binarize";
+    "@type"?: "freesurfer/mri_binarize";
     "input_volume": InputPathType;
     "output_volume": string;
     "min_threshold"?: number | null | undefined;
@@ -48,44 +48,11 @@ interface MriBinarizeParameters {
     "noverbose_flag": boolean;
     "debug_flag": boolean;
 }
+type MriBinarizeParametersTagged = Required<Pick<MriBinarizeParameters, '@type'>> & MriBinarizeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_binarize": mri_binarize_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_binarize": mri_binarize_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_binarize(...)`.
+ * Output object returned when calling `MriBinarizeParameters(...)`.
  *
  * @interface
  */
@@ -176,9 +143,9 @@ function mri_binarize_params(
     fill_holes_flag: boolean = false,
     noverbose_flag: boolean = false,
     debug_flag: boolean = false,
-): MriBinarizeParameters {
+): MriBinarizeParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_binarize" as const,
+        "@type": "freesurfer/mri_binarize" as const,
         "input_volume": input_volume,
         "output_volume": output_volume,
         "ctx_wm_flag": ctx_wm_flag,
@@ -378,34 +345,34 @@ function mri_binarize_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["ctx_wm_flag"] ?? null)) {
+    if ((params["ctx_wm_flag"] ?? false)) {
         cargs.push("--ctx-wm");
     }
-    if ((params["all_wm_flag"] ?? null)) {
+    if ((params["all_wm_flag"] ?? false)) {
         cargs.push("--all-wm");
     }
-    if ((params["ventricles_flag"] ?? null)) {
+    if ((params["ventricles_flag"] ?? false)) {
         cargs.push("--ventricles");
     }
-    if ((params["wm_vcsf_flag"] ?? null)) {
+    if ((params["wm_vcsf_flag"] ?? false)) {
         cargs.push("--wm+vcsf");
     }
-    if ((params["gm_flag"] ?? null)) {
+    if ((params["gm_flag"] ?? false)) {
         cargs.push("--gm");
     }
-    if ((params["subcort_gm_flag"] ?? null)) {
+    if ((params["subcort_gm_flag"] ?? false)) {
         cargs.push("--subcort-gm");
     }
-    if ((params["scm_lh_flag"] ?? null)) {
+    if ((params["scm_lh_flag"] ?? false)) {
         cargs.push("--scm-lh");
     }
-    if ((params["scm_rh_flag"] ?? null)) {
+    if ((params["scm_rh_flag"] ?? false)) {
         cargs.push("--scm-rh");
     }
-    if ((params["zero_edges_flag"] ?? null)) {
+    if ((params["zero_edges_flag"] ?? false)) {
         cargs.push("--zero-edges");
     }
-    if ((params["zero_slice_edges_flag"] ?? null)) {
+    if ((params["zero_slice_edges_flag"] ?? false)) {
         cargs.push("--zero-slice-edges");
     }
     if ((params["dilate_vertex"] ?? null) !== null) {
@@ -414,16 +381,16 @@ function mri_binarize_cargs(
             (params["dilate_vertex"] ?? null)
         );
     }
-    if ((params["remove_islands_flag"] ?? null)) {
+    if ((params["remove_islands_flag"] ?? false)) {
         cargs.push("--remove-islands");
     }
-    if ((params["fill_holes_flag"] ?? null)) {
+    if ((params["fill_holes_flag"] ?? false)) {
         cargs.push("--fill-holes");
     }
-    if ((params["noverbose_flag"] ?? null)) {
+    if ((params["noverbose_flag"] ?? false)) {
         cargs.push("--noverbose");
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -570,7 +537,6 @@ function mri_binarize(
 export {
       MRI_BINARIZE_METADATA,
       MriBinarizeOutputs,
-      MriBinarizeParameters,
       mri_binarize,
       mri_binarize_execute,
       mri_binarize_params,

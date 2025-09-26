@@ -12,51 +12,18 @@ const R_PKGS_INSTALL_METADATA: Metadata = {
 
 
 interface RPkgsInstallParameters {
-    "@type": "afni.rPkgsInstall";
+    "@type"?: "afni/rPkgsInstall";
     "packages": string;
     "download_site"?: string | null | undefined;
     "check": boolean;
     "update": boolean;
     "remove": boolean;
 }
+type RPkgsInstallParametersTagged = Required<Pick<RPkgsInstallParameters, '@type'>> & RPkgsInstallParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.rPkgsInstall": r_pkgs_install_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.rPkgsInstall": r_pkgs_install_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `r_pkgs_install(...)`.
+ * Output object returned when calling `RPkgsInstallParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function r_pkgs_install_params(
     check: boolean = false,
     update: boolean = false,
     remove: boolean = false,
-): RPkgsInstallParameters {
+): RPkgsInstallParametersTagged {
     const params = {
-        "@type": "afni.rPkgsInstall" as const,
+        "@type": "afni/rPkgsInstall" as const,
         "packages": packages,
         "check": check,
         "update": update,
@@ -128,13 +95,13 @@ function r_pkgs_install_cargs(
             (params["download_site"] ?? null)
         );
     }
-    if ((params["check"] ?? null)) {
+    if ((params["check"] ?? false)) {
         cargs.push("-check");
     }
-    if ((params["update"] ?? null)) {
+    if ((params["update"] ?? false)) {
         cargs.push("-update");
     }
-    if ((params["remove"] ?? null)) {
+    if ((params["remove"] ?? false)) {
         cargs.push("-remove");
     }
     return cargs;
@@ -222,7 +189,6 @@ function r_pkgs_install(
 
 export {
       RPkgsInstallOutputs,
-      RPkgsInstallParameters,
       R_PKGS_INSTALL_METADATA,
       r_pkgs_install,
       r_pkgs_install_execute,

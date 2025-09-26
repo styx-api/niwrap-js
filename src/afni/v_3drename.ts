@@ -12,47 +12,15 @@ const V_3DRENAME_METADATA: Metadata = {
 
 
 interface V3drenameParameters {
-    "@type": "afni.3drename";
+    "@type"?: "afni/3drename";
     "old_prefix": string;
     "new_prefix": string;
 }
+type V3drenameParametersTagged = Required<Pick<V3drenameParameters, '@type'>> & V3drenameParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3drename": v_3drename_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3drename(...)`.
+ * Output object returned when calling `V3drenameParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface V3drenameOutputs {
 function v_3drename_params(
     old_prefix: string,
     new_prefix: string,
-): V3drenameParameters {
+): V3drenameParametersTagged {
     const params = {
-        "@type": "afni.3drename" as const,
+        "@type": "afni/3drename" as const,
         "old_prefix": old_prefix,
         "new_prefix": new_prefix,
     };
@@ -179,7 +147,6 @@ function v_3drename(
 
 export {
       V3drenameOutputs,
-      V3drenameParameters,
       V_3DRENAME_METADATA,
       v_3drename,
       v_3drename_execute,

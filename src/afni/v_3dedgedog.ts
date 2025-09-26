@@ -12,7 +12,7 @@ const V_3DEDGEDOG_METADATA: Metadata = {
 
 
 interface V3dedgedogParameters {
-    "@type": "afni.3dedgedog";
+    "@type"?: "afni/3dedgedog";
     "input": InputPathType;
     "prefix": string;
     "mask"?: InputPathType | null | undefined;
@@ -26,44 +26,11 @@ interface V3dedgedogParameters {
     "edge_bnd_scale": boolean;
     "only2d"?: string | null | undefined;
 }
+type V3dedgedogParametersTagged = Required<Pick<V3dedgedogParameters, '@type'>> & V3dedgedogParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dedgedog": v_3dedgedog_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dedgedog": v_3dedgedog_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dedgedog(...)`.
+ * Output object returned when calling `V3dedgedogParameters(...)`.
  *
  * @interface
  */
@@ -126,9 +93,9 @@ function v_3dedgedog_params(
     edge_bnd_side: string | null = null,
     edge_bnd_scale: boolean = false,
     only2d: string | null = null,
-): V3dedgedogParameters {
+): V3dedgedogParametersTagged {
     const params = {
-        "@type": "afni.3dedgedog" as const,
+        "@type": "afni/3dedgedog" as const,
         "input": input,
         "prefix": prefix,
         "output_intermed": output_intermed,
@@ -208,7 +175,7 @@ function v_3dedgedog_cargs(
             String((params["ratio_sigma"] ?? null))
         );
     }
-    if ((params["output_intermed"] ?? null)) {
+    if ((params["output_intermed"] ?? false)) {
         cargs.push("-output_intermed");
     }
     if ((params["edge_bnd_nn"] ?? null) !== null) {
@@ -223,7 +190,7 @@ function v_3dedgedog_cargs(
             (params["edge_bnd_side"] ?? null)
         );
     }
-    if ((params["edge_bnd_scale"] ?? null)) {
+    if ((params["edge_bnd_scale"] ?? false)) {
         cargs.push("-edge_bnd_scale");
     }
     if ((params["only2d"] ?? null) !== null) {
@@ -335,7 +302,6 @@ function v_3dedgedog(
 
 export {
       V3dedgedogOutputs,
-      V3dedgedogParameters,
       V_3DEDGEDOG_METADATA,
       v_3dedgedog,
       v_3dedgedog_execute,

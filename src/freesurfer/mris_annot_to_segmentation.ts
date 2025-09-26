@@ -12,7 +12,7 @@ const MRIS_ANNOT_TO_SEGMENTATION_METADATA: Metadata = {
 
 
 interface MrisAnnotToSegmentationParameters {
-    "@type": "freesurfer.mris_annot_to_segmentation";
+    "@type"?: "freesurfer/mris_annot_to_segmentation";
     "subject_name": string;
     "hemi": string;
     "surface": string;
@@ -20,44 +20,11 @@ interface MrisAnnotToSegmentationParameters {
     "color_table": InputPathType;
     "output_volume": string;
 }
+type MrisAnnotToSegmentationParametersTagged = Required<Pick<MrisAnnotToSegmentationParameters, '@type'>> & MrisAnnotToSegmentationParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_annot_to_segmentation": mris_annot_to_segmentation_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_annot_to_segmentation": mris_annot_to_segmentation_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_annot_to_segmentation(...)`.
+ * Output object returned when calling `MrisAnnotToSegmentationParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function mris_annot_to_segmentation_params(
     annot_file: InputPathType,
     color_table: InputPathType,
     output_volume: string,
-): MrisAnnotToSegmentationParameters {
+): MrisAnnotToSegmentationParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_annot_to_segmentation" as const,
+        "@type": "freesurfer/mris_annot_to_segmentation" as const,
         "subject_name": subject_name,
         "hemi": hemi,
         "surface": surface,
@@ -214,7 +181,6 @@ function mris_annot_to_segmentation(
 export {
       MRIS_ANNOT_TO_SEGMENTATION_METADATA,
       MrisAnnotToSegmentationOutputs,
-      MrisAnnotToSegmentationParameters,
       mris_annot_to_segmentation,
       mris_annot_to_segmentation_execute,
       mris_annot_to_segmentation_params,

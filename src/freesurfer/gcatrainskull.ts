@@ -12,46 +12,14 @@ const GCATRAINSKULL_METADATA: Metadata = {
 
 
 interface GcatrainskullParameters {
-    "@type": "freesurfer.gcatrainskull";
+    "@type"?: "freesurfer/gcatrainskull";
     "gcatrain_dir": string;
 }
+type GcatrainskullParametersTagged = Required<Pick<GcatrainskullParameters, '@type'>> & GcatrainskullParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.gcatrainskull": gcatrainskull_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `gcatrainskull(...)`.
+ * Output object returned when calling `GcatrainskullParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface GcatrainskullOutputs {
  */
 function gcatrainskull_params(
     gcatrain_dir: string,
-): GcatrainskullParameters {
+): GcatrainskullParametersTagged {
     const params = {
-        "@type": "freesurfer.gcatrainskull" as const,
+        "@type": "freesurfer/gcatrainskull" as const,
         "gcatrain_dir": gcatrain_dir,
     };
     return params;
@@ -176,7 +144,6 @@ function gcatrainskull(
 export {
       GCATRAINSKULL_METADATA,
       GcatrainskullOutputs,
-      GcatrainskullParameters,
       gcatrainskull,
       gcatrainskull_execute,
       gcatrainskull_params,

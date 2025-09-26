@@ -12,7 +12,7 @@ const V__COMPUTE_OC_WEIGHTS_METADATA: Metadata = {
 
 
 interface VComputeOcWeightsParameters {
-    "@type": "afni.@compute_OC_weights";
+    "@type"?: "afni/@compute_OC_weights";
     "echo_times"?: string | null | undefined;
     "echo_times_file"?: InputPathType | null | undefined;
     "echo_dsets": Array<string>;
@@ -24,44 +24,11 @@ interface VComputeOcWeightsParameters {
     "work_dir"?: string | null | undefined;
     "verbosity": boolean;
 }
+type VComputeOcWeightsParametersTagged = Required<Pick<VComputeOcWeightsParameters, '@type'>> & VComputeOcWeightsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@compute_OC_weights": v__compute_oc_weights_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@compute_OC_weights": v__compute_oc_weights_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__compute_oc_weights(...)`.
+ * Output object returned when calling `VComputeOcWeightsParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function v__compute_oc_weights_params(
     t2_star_limit: number | null = null,
     work_dir: string | null = null,
     verbosity: boolean = false,
-): VComputeOcWeightsParameters {
+): VComputeOcWeightsParametersTagged {
     const params = {
-        "@type": "afni.@compute_OC_weights" as const,
+        "@type": "afni/@compute_OC_weights" as const,
         "echo_dsets": echo_dsets,
         "verbosity": verbosity,
     };
@@ -204,7 +171,7 @@ function v__compute_oc_weights_cargs(
             (params["work_dir"] ?? null)
         );
     }
-    if ((params["verbosity"] ?? null)) {
+    if ((params["verbosity"] ?? false)) {
         cargs.push("-verb");
     }
     return cargs;
@@ -302,7 +269,6 @@ function v__compute_oc_weights(
 
 export {
       VComputeOcWeightsOutputs,
-      VComputeOcWeightsParameters,
       V__COMPUTE_OC_WEIGHTS_METADATA,
       v__compute_oc_weights,
       v__compute_oc_weights_execute,

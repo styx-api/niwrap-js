@@ -12,7 +12,7 @@ const P2DSETSTAT_METADATA: Metadata = {
 
 
 interface P2dsetstatParameters {
-    "@type": "afni.p2dsetstat";
+    "@type"?: "afni/p2dsetstat";
     "dataset": string;
     "pvalue": number;
     "bisided": boolean;
@@ -20,44 +20,11 @@ interface P2dsetstatParameters {
     "onesided": boolean;
     "quiet": boolean;
 }
+type P2dsetstatParametersTagged = Required<Pick<P2dsetstatParameters, '@type'>> & P2dsetstatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.p2dsetstat": p2dsetstat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.p2dsetstat": p2dsetstat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `p2dsetstat(...)`.
+ * Output object returned when calling `P2dsetstatParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function p2dsetstat_params(
     twosided: boolean = false,
     onesided: boolean = false,
     quiet: boolean = false,
-): P2dsetstatParameters {
+): P2dsetstatParametersTagged {
     const params = {
-        "@type": "afni.p2dsetstat" as const,
+        "@type": "afni/p2dsetstat" as const,
         "dataset": dataset,
         "pvalue": pvalue,
         "bisided": bisided,
@@ -128,16 +95,16 @@ function p2dsetstat_cargs(
         "-pval",
         String((params["pvalue"] ?? null))
     );
-    if ((params["bisided"] ?? null)) {
+    if ((params["bisided"] ?? false)) {
         cargs.push("-bisided");
     }
-    if ((params["twosided"] ?? null)) {
+    if ((params["twosided"] ?? false)) {
         cargs.push("-2sided");
     }
-    if ((params["onesided"] ?? null)) {
+    if ((params["onesided"] ?? false)) {
         cargs.push("-1sided");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
     return cargs;
@@ -228,7 +195,6 @@ function p2dsetstat(
 export {
       P2DSETSTAT_METADATA,
       P2dsetstatOutputs,
-      P2dsetstatParameters,
       p2dsetstat,
       p2dsetstat_execute,
       p2dsetstat_params,

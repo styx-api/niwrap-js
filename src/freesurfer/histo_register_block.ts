@@ -12,7 +12,7 @@ const HISTO_REGISTER_BLOCK_METADATA: Metadata = {
 
 
 interface HistoRegisterBlockParameters {
-    "@type": "freesurfer.histo_register_block";
+    "@type"?: "freesurfer/histo_register_block";
     "seg_time1": InputPathType;
     "seg_time2": InputPathType;
     "transform1": InputPathType;
@@ -21,44 +21,11 @@ interface HistoRegisterBlockParameters {
     "out_like"?: InputPathType | null | undefined;
     "invert_transform": boolean;
 }
+type HistoRegisterBlockParametersTagged = Required<Pick<HistoRegisterBlockParameters, '@type'>> & HistoRegisterBlockParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.histo_register_block": histo_register_block_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.histo_register_block": histo_register_block_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `histo_register_block(...)`.
+ * Output object returned when calling `HistoRegisterBlockParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function histo_register_block_params(
     output_file: string,
     out_like: InputPathType | null = null,
     invert_transform: boolean = false,
-): HistoRegisterBlockParameters {
+): HistoRegisterBlockParametersTagged {
     const params = {
-        "@type": "freesurfer.histo_register_block" as const,
+        "@type": "freesurfer/histo_register_block" as const,
         "seg_time1": seg_time1,
         "seg_time2": seg_time2,
         "transform1": transform1,
@@ -137,7 +104,7 @@ function histo_register_block_cargs(
             execution.inputFile((params["out_like"] ?? null))
         );
     }
-    if ((params["invert_transform"] ?? null)) {
+    if ((params["invert_transform"] ?? false)) {
         cargs.push("-I");
     }
     return cargs;
@@ -230,7 +197,6 @@ function histo_register_block(
 export {
       HISTO_REGISTER_BLOCK_METADATA,
       HistoRegisterBlockOutputs,
-      HistoRegisterBlockParameters,
       histo_register_block,
       histo_register_block_execute,
       histo_register_block_params,

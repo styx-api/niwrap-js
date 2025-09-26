@@ -12,7 +12,7 @@ const METRIC_LABEL_IMPORT_METADATA: Metadata = {
 
 
 interface MetricLabelImportParameters {
-    "@type": "workbench.metric-label-import";
+    "@type"?: "workbench/metric-label-import";
     "input": InputPathType;
     "label_list_file": string;
     "output": string;
@@ -21,44 +21,11 @@ interface MetricLabelImportParameters {
     "opt_column_column"?: string | null | undefined;
     "opt_drop_unused_labels": boolean;
 }
+type MetricLabelImportParametersTagged = Required<Pick<MetricLabelImportParameters, '@type'>> & MetricLabelImportParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-label-import": metric_label_import_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.metric-label-import": metric_label_import_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `metric_label_import(...)`.
+ * Output object returned when calling `MetricLabelImportParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function metric_label_import_params(
     opt_unlabeled_value_value: number | null = null,
     opt_column_column: string | null = null,
     opt_drop_unused_labels: boolean = false,
-): MetricLabelImportParameters {
+): MetricLabelImportParametersTagged {
     const params = {
-        "@type": "workbench.metric-label-import" as const,
+        "@type": "workbench/metric-label-import" as const,
         "input": input,
         "label_list_file": label_list_file,
         "output": output,
@@ -132,7 +99,7 @@ function metric_label_import_cargs(
     cargs.push(execution.inputFile((params["input"] ?? null)));
     cargs.push((params["label_list_file"] ?? null));
     cargs.push((params["output"] ?? null));
-    if ((params["opt_discard_others"] ?? null)) {
+    if ((params["opt_discard_others"] ?? false)) {
         cargs.push("-discard-others");
     }
     if ((params["opt_unlabeled_value_value"] ?? null) !== null) {
@@ -147,7 +114,7 @@ function metric_label_import_cargs(
             (params["opt_column_column"] ?? null)
         );
     }
-    if ((params["opt_drop_unused_labels"] ?? null)) {
+    if ((params["opt_drop_unused_labels"] ?? false)) {
         cargs.push("-drop-unused-labels");
     }
     return cargs;
@@ -260,7 +227,6 @@ function metric_label_import(
 export {
       METRIC_LABEL_IMPORT_METADATA,
       MetricLabelImportOutputs,
-      MetricLabelImportParameters,
       metric_label_import,
       metric_label_import_execute,
       metric_label_import_params,

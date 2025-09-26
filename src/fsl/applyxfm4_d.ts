@@ -12,7 +12,7 @@ const APPLYXFM4_D_METADATA: Metadata = {
 
 
 interface Applyxfm4DParameters {
-    "@type": "fsl.applyxfm4D";
+    "@type"?: "fsl/applyxfm4D";
     "input_volume": InputPathType;
     "ref_volume": InputPathType;
     "output_volume": string;
@@ -22,44 +22,11 @@ interface Applyxfm4DParameters {
     "four_digit_flag": boolean;
     "user_prefix"?: string | null | undefined;
 }
+type Applyxfm4DParametersTagged = Required<Pick<Applyxfm4DParameters, '@type'>> & Applyxfm4DParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.applyxfm4D": applyxfm4_d_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.applyxfm4D": applyxfm4_d_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `applyxfm4_d(...)`.
+ * Output object returned when calling `Applyxfm4DParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function applyxfm4_d_params(
     single_matrix_flag: boolean = false,
     four_digit_flag: boolean = false,
     user_prefix: string | null = null,
-): Applyxfm4DParameters {
+): Applyxfm4DParametersTagged {
     const params = {
-        "@type": "fsl.applyxfm4D" as const,
+        "@type": "fsl/applyxfm4D" as const,
         "input_volume": input_volume,
         "ref_volume": ref_volume,
         "output_volume": output_volume,
@@ -142,10 +109,10 @@ function applyxfm4_d_cargs(
             (params["interpolation_method"] ?? null)
         );
     }
-    if ((params["single_matrix_flag"] ?? null)) {
+    if ((params["single_matrix_flag"] ?? false)) {
         cargs.push("--singlematrix, -singlematrix");
     }
-    if ((params["four_digit_flag"] ?? null)) {
+    if ((params["four_digit_flag"] ?? false)) {
         cargs.push("--fourdigit, -fourdigit");
     }
     if ((params["user_prefix"] ?? null) !== null) {
@@ -246,7 +213,6 @@ function applyxfm4_d(
 export {
       APPLYXFM4_D_METADATA,
       Applyxfm4DOutputs,
-      Applyxfm4DParameters,
       applyxfm4_d,
       applyxfm4_d_execute,
       applyxfm4_d_params,

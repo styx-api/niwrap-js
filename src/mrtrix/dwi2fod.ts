@@ -12,40 +12,45 @@ const DWI2FOD_METADATA: Metadata = {
 
 
 interface Dwi2fodFslgradParameters {
-    "@type": "mrtrix.dwi2fod.fslgrad";
+    "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
+type Dwi2fodFslgradParametersTagged = Required<Pick<Dwi2fodFslgradParameters, '@type'>> & Dwi2fodFslgradParameters;
 
 
 interface Dwi2fodVariousStringParameters {
-    "@type": "mrtrix.dwi2fod.VariousString";
+    "@type"?: "VariousString";
     "obj": string;
 }
+type Dwi2fodVariousStringParametersTagged = Required<Pick<Dwi2fodVariousStringParameters, '@type'>> & Dwi2fodVariousStringParameters;
 
 
 interface Dwi2fodVariousFileParameters {
-    "@type": "mrtrix.dwi2fod.VariousFile";
+    "@type"?: "VariousFile";
     "obj": InputPathType;
 }
+type Dwi2fodVariousFileParametersTagged = Required<Pick<Dwi2fodVariousFileParameters, '@type'>> & Dwi2fodVariousFileParameters;
 
 
 interface Dwi2fodConfigParameters {
-    "@type": "mrtrix.dwi2fod.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type Dwi2fodConfigParametersTagged = Required<Pick<Dwi2fodConfigParameters, '@type'>> & Dwi2fodConfigParameters;
 
 
 interface Dwi2fodResponseOdfParameters {
-    "@type": "mrtrix.dwi2fod.response_odf";
+    "@type"?: "response_odf";
     "response": InputPathType;
     "odf": string;
 }
+type Dwi2fodResponseOdfParametersTagged = Required<Pick<Dwi2fodResponseOdfParameters, '@type'>> & Dwi2fodResponseOdfParameters;
 
 
 interface Dwi2fodParameters {
-    "@type": "mrtrix.dwi2fod";
+    "@type"?: "mrtrix/dwi2fod";
     "grad"?: InputPathType | null | undefined;
     "fslgrad"?: Dwi2fodFslgradParameters | null | undefined;
     "shells"?: Array<number> | null | undefined;
@@ -60,7 +65,7 @@ interface Dwi2fodParameters {
     "norm_lambda_1"?: number | null | undefined;
     "neg_lambda_1"?: number | null | undefined;
     "predicted_signal"?: string | null | undefined;
-    "strides"?: Dwi2fodVariousStringParameters | Dwi2fodVariousFileParameters | null | undefined;
+    "strides"?: Dwi2fodVariousStringParametersTagged | Dwi2fodVariousFileParametersTagged | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -73,6 +78,7 @@ interface Dwi2fodParameters {
     "dwi": InputPathType;
     "response_odf": Array<Dwi2fodResponseOdfParameters>;
 }
+type Dwi2fodParametersTagged = Required<Pick<Dwi2fodParameters, '@type'>> & Dwi2fodParameters;
 
 
 /**
@@ -82,16 +88,12 @@ interface Dwi2fodParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function dwi2fod_strides_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "mrtrix.dwi2fod": dwi2fod_cargs,
-        "mrtrix.dwi2fod.fslgrad": dwi2fod_fslgrad_cargs,
-        "mrtrix.dwi2fod.VariousString": dwi2fod_various_string_cargs,
-        "mrtrix.dwi2fod.VariousFile": dwi2fod_various_file_cargs,
-        "mrtrix.dwi2fod.config": dwi2fod_config_cargs,
-        "mrtrix.dwi2fod.response_odf": dwi2fod_response_odf_cargs,
+        "VariousString": dwi2fod_various_string_cargs,
+        "VariousFile": dwi2fod_various_file_cargs,
     };
     return cargsFuncs[t];
 }
@@ -104,12 +106,10 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function dwi2fod_strides_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "mrtrix.dwi2fod": dwi2fod_outputs,
-        "mrtrix.dwi2fod.response_odf": dwi2fod_response_odf_outputs,
     };
     return outputsFuncs[t];
 }
@@ -126,9 +126,9 @@ function dynOutputs(
 function dwi2fod_fslgrad_params(
     bvecs: InputPathType,
     bvals: InputPathType,
-): Dwi2fodFslgradParameters {
+): Dwi2fodFslgradParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2fod.fslgrad" as const,
+        "@type": "fslgrad" as const,
         "bvecs": bvecs,
         "bvals": bvals,
     };
@@ -165,9 +165,9 @@ function dwi2fod_fslgrad_cargs(
  */
 function dwi2fod_various_string_params(
     obj: string,
-): Dwi2fodVariousStringParameters {
+): Dwi2fodVariousStringParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2fod.VariousString" as const,
+        "@type": "VariousString" as const,
         "obj": obj,
     };
     return params;
@@ -201,9 +201,9 @@ function dwi2fod_various_string_cargs(
  */
 function dwi2fod_various_file_params(
     obj: InputPathType,
-): Dwi2fodVariousFileParameters {
+): Dwi2fodVariousFileParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2fod.VariousFile" as const,
+        "@type": "VariousFile" as const,
         "obj": obj,
     };
     return params;
@@ -239,9 +239,9 @@ function dwi2fod_various_file_cargs(
 function dwi2fod_config_params(
     key: string,
     value: string,
-): Dwi2fodConfigParameters {
+): Dwi2fodConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2fod.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -297,9 +297,9 @@ interface Dwi2fodResponseOdfOutputs {
 function dwi2fod_response_odf_params(
     response: InputPathType,
     odf: string,
-): Dwi2fodResponseOdfParameters {
+): Dwi2fodResponseOdfParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2fod.response_odf" as const,
+        "@type": "response_odf" as const,
         "response": response,
         "odf": odf,
     };
@@ -347,7 +347,7 @@ function dwi2fod_response_odf_outputs(
 
 
 /**
- * Output object returned when calling `dwi2fod(...)`.
+ * Output object returned when calling `Dwi2fodParameters(...)`.
  *
  * @interface
  */
@@ -418,7 +418,7 @@ function dwi2fod_params(
     norm_lambda_1: number | null = null,
     neg_lambda_1: number | null = null,
     predicted_signal: string | null = null,
-    strides: Dwi2fodVariousStringParameters | Dwi2fodVariousFileParameters | null = null,
+    strides: Dwi2fodVariousStringParametersTagged | Dwi2fodVariousFileParametersTagged | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
@@ -427,9 +427,9 @@ function dwi2fod_params(
     config: Array<Dwi2fodConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Dwi2fodParameters {
+): Dwi2fodParametersTagged {
     const params = {
-        "@type": "mrtrix.dwi2fod" as const,
+        "@type": "mrtrix/dwi2fod" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -516,7 +516,7 @@ function dwi2fod_cargs(
         );
     }
     if ((params["fslgrad"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["fslgrad"] ?? null)["@type"])((params["fslgrad"] ?? null), execution));
+        cargs.push(...dwi2fod_fslgrad_cargs((params["fslgrad"] ?? null), execution));
     }
     if ((params["shells"] ?? null) !== null) {
         cargs.push(
@@ -593,19 +593,19 @@ function dwi2fod_cargs(
     if ((params["strides"] ?? null) !== null) {
         cargs.push(
             "-strides",
-            ...dynCargs((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
+            ...dwi2fod_strides_cargs_dyn_fn((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -615,17 +615,17 @@ function dwi2fod_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dwi2fod_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push((params["algorithm"] ?? null));
     cargs.push(execution.inputFile((params["dwi"] ?? null)));
-    cargs.push(...(params["response_odf"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+    cargs.push(...(params["response_odf"] ?? null).map(s => dwi2fod_response_odf_cargs(s, execution)).flat());
     return cargs;
 }
 
@@ -645,7 +645,7 @@ function dwi2fod_outputs(
     const ret: Dwi2fodOutputs = {
         root: execution.outputFile("."),
         predicted_signal: ((params["predicted_signal"] ?? null) !== null) ? execution.outputFile([(params["predicted_signal"] ?? null)].join('')) : null,
-        response_odf: (params["response_odf"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null),
+        response_odf: (params["response_odf"] ?? null).map(i => dwi2fod_response_odf_outputs(i, execution) ?? null),
     };
     return ret;
 }
@@ -763,7 +763,7 @@ function dwi2fod(
     norm_lambda_1: number | null = null,
     neg_lambda_1: number | null = null,
     predicted_signal: string | null = null,
-    strides: Dwi2fodVariousStringParameters | Dwi2fodVariousFileParameters | null = null,
+    strides: Dwi2fodVariousStringParametersTagged | Dwi2fodVariousFileParametersTagged | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
@@ -781,14 +781,8 @@ function dwi2fod(
 
 export {
       DWI2FOD_METADATA,
-      Dwi2fodConfigParameters,
-      Dwi2fodFslgradParameters,
       Dwi2fodOutputs,
-      Dwi2fodParameters,
       Dwi2fodResponseOdfOutputs,
-      Dwi2fodResponseOdfParameters,
-      Dwi2fodVariousFileParameters,
-      Dwi2fodVariousStringParameters,
       dwi2fod,
       dwi2fod_config_params,
       dwi2fod_execute,

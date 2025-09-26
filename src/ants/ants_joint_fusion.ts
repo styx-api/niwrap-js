@@ -12,7 +12,7 @@ const ANTS_JOINT_FUSION_METADATA: Metadata = {
 
 
 interface AntsJointFusionParameters {
-    "@type": "ants.antsJointFusion";
+    "@type"?: "ants/antsJointFusion";
     "image_dimensionality"?: 2 | 3 | 4 | null | undefined;
     "target_image": Array<InputPathType>;
     "atlas_image": Array<InputPathType>;
@@ -28,44 +28,11 @@ interface AntsJointFusionParameters {
     "output": string;
     "verbose"?: 0 | 1 | null | undefined;
 }
+type AntsJointFusionParametersTagged = Required<Pick<AntsJointFusionParameters, '@type'>> & AntsJointFusionParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.antsJointFusion": ants_joint_fusion_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.antsJointFusion": ants_joint_fusion_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ants_joint_fusion(...)`.
+ * Output object returned when calling `AntsJointFusionParameters(...)`.
  *
  * @interface
  */
@@ -128,9 +95,9 @@ function ants_joint_fusion_params(
     exclusion_image: InputPathType | null = null,
     mask_image: InputPathType | null = null,
     verbose: 0 | 1 | null = null,
-): AntsJointFusionParameters {
+): AntsJointFusionParametersTagged {
     const params = {
-        "@type": "ants.antsJointFusion" as const,
+        "@type": "ants/antsJointFusion" as const,
         "target_image": target_image,
         "atlas_image": atlas_image,
         "atlas_segmentation": atlas_segmentation,
@@ -367,7 +334,6 @@ function ants_joint_fusion(
 export {
       ANTS_JOINT_FUSION_METADATA,
       AntsJointFusionOutputs,
-      AntsJointFusionParameters,
       ants_joint_fusion,
       ants_joint_fusion_execute,
       ants_joint_fusion_params,

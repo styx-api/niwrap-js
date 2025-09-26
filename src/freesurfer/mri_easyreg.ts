@@ -12,7 +12,7 @@ const MRI_EASYREG_METADATA: Metadata = {
 
 
 interface MriEasyregParameters {
-    "@type": "freesurfer.mri_easyreg";
+    "@type"?: "freesurfer/mri_easyreg";
     "reference_image": InputPathType;
     "reference_segmentation"?: InputPathType | null | undefined;
     "floating_image": InputPathType;
@@ -24,44 +24,11 @@ interface MriEasyregParameters {
     "affine_only": boolean;
     "threads"?: number | null | undefined;
 }
+type MriEasyregParametersTagged = Required<Pick<MriEasyregParameters, '@type'>> & MriEasyregParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_easyreg": mri_easyreg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_easyreg": mri_easyreg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_easyreg(...)`.
+ * Output object returned when calling `MriEasyregParameters(...)`.
  *
  * @interface
  */
@@ -116,9 +83,9 @@ function mri_easyreg_params(
     inverse_field: InputPathType | null = null,
     affine_only: boolean = false,
     threads: number | null = null,
-): MriEasyregParameters {
+): MriEasyregParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_easyreg" as const,
+        "@type": "freesurfer/mri_easyreg" as const,
         "reference_image": reference_image,
         "floating_image": floating_image,
         "affine_only": affine_only,
@@ -206,7 +173,7 @@ function mri_easyreg_cargs(
             execution.inputFile((params["inverse_field"] ?? null))
         );
     }
-    if ((params["affine_only"] ?? null)) {
+    if ((params["affine_only"] ?? false)) {
         cargs.push("--affine_only");
     }
     if ((params["threads"] ?? null) !== null) {
@@ -314,7 +281,6 @@ function mri_easyreg(
 export {
       MRI_EASYREG_METADATA,
       MriEasyregOutputs,
-      MriEasyregParameters,
       mri_easyreg,
       mri_easyreg_execute,
       mri_easyreg_params,

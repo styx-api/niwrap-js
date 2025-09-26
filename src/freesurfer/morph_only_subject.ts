@@ -12,46 +12,14 @@ const MORPH_ONLY_SUBJECT_METADATA: Metadata = {
 
 
 interface MorphOnlySubjectParameters {
-    "@type": "freesurfer.morph_only_subject";
+    "@type"?: "freesurfer/morph_only_subject";
     "placeholder_input"?: string | null | undefined;
 }
+type MorphOnlySubjectParametersTagged = Required<Pick<MorphOnlySubjectParameters, '@type'>> & MorphOnlySubjectParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.morph_only_subject": morph_only_subject_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `morph_only_subject(...)`.
+ * Output object returned when calling `MorphOnlySubjectParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface MorphOnlySubjectOutputs {
  */
 function morph_only_subject_params(
     placeholder_input: string | null = null,
-): MorphOnlySubjectParameters {
+): MorphOnlySubjectParametersTagged {
     const params = {
-        "@type": "freesurfer.morph_only_subject" as const,
+        "@type": "freesurfer/morph_only_subject" as const,
     };
     if (placeholder_input !== null) {
         params["placeholder_input"] = placeholder_input;
@@ -177,7 +145,6 @@ function morph_only_subject(
 export {
       MORPH_ONLY_SUBJECT_METADATA,
       MorphOnlySubjectOutputs,
-      MorphOnlySubjectParameters,
       morph_only_subject,
       morph_only_subject_execute,
       morph_only_subject_params,

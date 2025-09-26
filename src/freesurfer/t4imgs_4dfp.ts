@@ -12,7 +12,7 @@ const T4IMGS_4DFP_METADATA: Metadata = {
 
 
 interface T4imgs4dfpParameters {
-    "@type": "freesurfer.t4imgs_4dfp";
+    "@type"?: "freesurfer/t4imgs_4dfp";
     "sqrt_normalize": boolean;
     "cubic_spline": boolean;
     "output_nan": boolean;
@@ -27,44 +27,11 @@ interface T4imgs4dfpParameters {
     "input_images": Array<InputPathType>;
     "output_image": string;
 }
+type T4imgs4dfpParametersTagged = Required<Pick<T4imgs4dfpParameters, '@type'>> & T4imgs4dfpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.t4imgs_4dfp": t4imgs_4dfp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.t4imgs_4dfp": t4imgs_4dfp_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `t4imgs_4dfp(...)`.
+ * Output object returned when calling `T4imgs4dfpParameters(...)`.
  *
  * @interface
  */
@@ -113,9 +80,9 @@ function t4imgs_4dfp_params(
     duplicate_dimensions: string | null = null,
     big_endian: boolean = false,
     little_endian: boolean = false,
-): T4imgs4dfpParameters {
+): T4imgs4dfpParametersTagged {
     const params = {
-        "@type": "freesurfer.t4imgs_4dfp" as const,
+        "@type": "freesurfer/t4imgs_4dfp" as const,
         "sqrt_normalize": sqrt_normalize,
         "cubic_spline": cubic_spline,
         "output_nan": output_nan,
@@ -152,25 +119,25 @@ function t4imgs_4dfp_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("t4imgs_4dfp");
-    if ((params["sqrt_normalize"] ?? null)) {
+    if ((params["sqrt_normalize"] ?? false)) {
         cargs.push("-z");
     }
-    if ((params["cubic_spline"] ?? null)) {
+    if ((params["cubic_spline"] ?? false)) {
         cargs.push("-s");
     }
-    if ((params["output_nan"] ?? null)) {
+    if ((params["output_nan"] ?? false)) {
         cargs.push("-N");
     }
-    if ((params["convert_t4"] ?? null)) {
+    if ((params["convert_t4"] ?? false)) {
         cargs.push("-B");
     }
-    if ((params["nearest_neighbor"] ?? null)) {
+    if ((params["nearest_neighbor"] ?? false)) {
         cargs.push("-n");
     }
-    if ((params["output_111_space"] ?? null)) {
+    if ((params["output_111_space"] ?? false)) {
         cargs.push("-O111");
     }
-    if ((params["output_222_space"] ?? null)) {
+    if ((params["output_222_space"] ?? false)) {
         cargs.push("-O222");
     }
     if ((params["output_333n_space"] ?? null) !== null) {
@@ -185,10 +152,10 @@ function t4imgs_4dfp_cargs(
             (params["duplicate_dimensions"] ?? null)
         );
     }
-    if ((params["big_endian"] ?? null)) {
+    if ((params["big_endian"] ?? false)) {
         cargs.push("-@b");
     }
-    if ((params["little_endian"] ?? null)) {
+    if ((params["little_endian"] ?? false)) {
         cargs.push("-@l");
     }
     cargs.push(...(params["input_images"] ?? null).map(f => execution.inputFile(f)));
@@ -295,7 +262,6 @@ function t4imgs_4dfp(
 export {
       T4IMGS_4DFP_METADATA,
       T4imgs4dfpOutputs,
-      T4imgs4dfpParameters,
       t4imgs_4dfp,
       t4imgs_4dfp_execute,
       t4imgs_4dfp_params,

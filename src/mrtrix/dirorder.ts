@@ -12,14 +12,15 @@ const DIRORDER_METADATA: Metadata = {
 
 
 interface DirorderConfigParameters {
-    "@type": "mrtrix.dirorder.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type DirorderConfigParametersTagged = Required<Pick<DirorderConfigParameters, '@type'>> & DirorderConfigParameters;
 
 
 interface DirorderParameters {
-    "@type": "mrtrix.dirorder";
+    "@type"?: "mrtrix/dirorder";
     "cartesian": boolean;
     "info": boolean;
     "quiet": boolean;
@@ -32,41 +33,7 @@ interface DirorderParameters {
     "input": InputPathType;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.dirorder": dirorder_cargs,
-        "mrtrix.dirorder.config": dirorder_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.dirorder": dirorder_outputs,
-    };
-    return outputsFuncs[t];
-}
+type DirorderParametersTagged = Required<Pick<DirorderParameters, '@type'>> & DirorderParameters;
 
 
 /**
@@ -80,9 +47,9 @@ function dynOutputs(
 function dirorder_config_params(
     key: string,
     value: string,
-): DirorderConfigParameters {
+): DirorderConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.dirorder.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -111,7 +78,7 @@ function dirorder_config_cargs(
 
 
 /**
- * Output object returned when calling `dirorder(...)`.
+ * Output object returned when calling `DirorderParameters(...)`.
  *
  * @interface
  */
@@ -156,9 +123,9 @@ function dirorder_params(
     config: Array<DirorderConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): DirorderParameters {
+): DirorderParametersTagged {
     const params = {
-        "@type": "mrtrix.dirorder" as const,
+        "@type": "mrtrix/dirorder" as const,
         "cartesian": cartesian,
         "info": info,
         "quiet": quiet,
@@ -193,19 +160,19 @@ function dirorder_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("dirorder");
-    if ((params["cartesian"] ?? null)) {
+    if ((params["cartesian"] ?? false)) {
         cargs.push("-cartesian");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -215,12 +182,12 @@ function dirorder_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dirorder_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -334,9 +301,7 @@ function dirorder(
 
 export {
       DIRORDER_METADATA,
-      DirorderConfigParameters,
       DirorderOutputs,
-      DirorderParameters,
       dirorder,
       dirorder_config_params,
       dirorder_execute,

@@ -12,7 +12,7 @@ const PROBTRACKX_METADATA: Metadata = {
 
 
 interface ProbtrackxParameters {
-    "@type": "fsl.probtrackx";
+    "@type"?: "fsl/probtrackx";
     "samples": InputPathType;
     "mask": InputPathType;
     "seed": InputPathType;
@@ -48,43 +48,11 @@ interface ProbtrackxParameters {
     "rseed"?: number | null | undefined;
     "s2tastext": boolean;
 }
+type ProbtrackxParametersTagged = Required<Pick<ProbtrackxParameters, '@type'>> & ProbtrackxParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.probtrackx": probtrackx_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `probtrackx(...)`.
+ * Output object returned when calling `ProbtrackxParameters(...)`.
  *
  * @interface
  */
@@ -171,9 +139,9 @@ function probtrackx_params(
     modeuler: boolean = false,
     rseed: number | null = null,
     s2tastext: boolean = false,
-): ProbtrackxParameters {
+): ProbtrackxParametersTagged {
     const params = {
-        "@type": "fsl.probtrackx" as const,
+        "@type": "fsl/probtrackx" as const,
         "samples": samples,
         "mask": mask,
         "seed": seed,
@@ -281,7 +249,7 @@ function probtrackx_cargs(
     );
     cargs.push(
         "-o",
-        (params["out"] ?? null)
+        (params["out"] ?? "fdt_paths")
     );
     if ((params["verbose"] ?? null) !== null) {
         cargs.push(
@@ -307,7 +275,7 @@ function probtrackx_cargs(
             execution.inputFile((params["waypoints"] ?? null))
         );
     }
-    if ((params["network"] ?? null)) {
+    if ((params["network"] ?? false)) {
         cargs.push("--network");
     }
     if ((params["mesh"] ?? null) !== null) {
@@ -328,16 +296,16 @@ function probtrackx_cargs(
             (params["dir"] ?? null)
         );
     }
-    if ((params["forcedir"] ?? null)) {
+    if ((params["forcedir"] ?? false)) {
         cargs.push("--forcedir");
     }
-    if ((params["opd"] ?? null)) {
+    if ((params["opd"] ?? false)) {
         cargs.push("--opd");
     }
-    if ((params["pd"] ?? null)) {
+    if ((params["pd"] ?? false)) {
         cargs.push("--pd");
     }
-    if ((params["os2t"] ?? null)) {
+    if ((params["os2t"] ?? false)) {
         cargs.push("--os2t");
     }
     if ((params["avoid"] ?? null) !== null) {
@@ -394,7 +362,7 @@ function probtrackx_cargs(
             String((params["fibthresh"] ?? null))
         );
     }
-    if ((params["sampvox"] ?? null)) {
+    if ((params["sampvox"] ?? false)) {
         cargs.push("--sampvox");
     }
     if ((params["steplength"] ?? null) !== null) {
@@ -403,10 +371,10 @@ function probtrackx_cargs(
             String((params["steplength"] ?? null))
         );
     }
-    if ((params["loopcheck"] ?? null)) {
+    if ((params["loopcheck"] ?? false)) {
         cargs.push("-l");
     }
-    if ((params["usef"] ?? null)) {
+    if ((params["usef"] ?? false)) {
         cargs.push("-f");
     }
     if ((params["randfib"] ?? null) !== null) {
@@ -421,7 +389,7 @@ function probtrackx_cargs(
             String((params["fibst"] ?? null))
         );
     }
-    if ((params["modeuler"] ?? null)) {
+    if ((params["modeuler"] ?? false)) {
         cargs.push("--modeuler");
     }
     if ((params["rseed"] ?? null) !== null) {
@@ -430,7 +398,7 @@ function probtrackx_cargs(
             String((params["rseed"] ?? null))
         );
     }
-    if ((params["s2tastext"] ?? null)) {
+    if ((params["s2tastext"] ?? false)) {
         cargs.push("--s2tastext");
     }
     return cargs;
@@ -576,7 +544,6 @@ function probtrackx(
 export {
       PROBTRACKX_METADATA,
       ProbtrackxOutputs,
-      ProbtrackxParameters,
       probtrackx,
       probtrackx_execute,
       probtrackx_params,

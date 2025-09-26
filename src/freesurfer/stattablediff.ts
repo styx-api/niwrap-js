@@ -12,7 +12,7 @@ const STATTABLEDIFF_METADATA: Metadata = {
 
 
 interface StattablediffParameters {
-    "@type": "freesurfer.stattablediff";
+    "@type"?: "freesurfer/stattablediff";
     "t1": InputPathType;
     "t2": InputPathType;
     "output": string;
@@ -26,44 +26,11 @@ interface StattablediffParameters {
     "diff_subjects": boolean;
     "noreplace53": boolean;
 }
+type StattablediffParametersTagged = Required<Pick<StattablediffParameters, '@type'>> & StattablediffParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.stattablediff": stattablediff_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.stattablediff": stattablediff_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `stattablediff(...)`.
+ * Output object returned when calling `StattablediffParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function stattablediff_params(
     remove_exvivo: boolean = false,
     diff_subjects: boolean = false,
     noreplace53: boolean = false,
-): StattablediffParameters {
+): StattablediffParametersTagged {
     const params = {
-        "@type": "freesurfer.stattablediff" as const,
+        "@type": "freesurfer/stattablediff" as const,
         "t1": t1,
         "t2": t2,
         "output": output,
@@ -151,13 +118,13 @@ function stattablediff_cargs(
     cargs.push(execution.inputFile((params["t1"] ?? null)));
     cargs.push(execution.inputFile((params["t2"] ?? null)));
     cargs.push((params["output"] ?? null));
-    if ((params["percent_diff"] ?? null)) {
+    if ((params["percent_diff"] ?? false)) {
         cargs.push("--percent");
     }
-    if ((params["percent_diff_t1"] ?? null)) {
+    if ((params["percent_diff_t1"] ?? false)) {
         cargs.push("--percent1");
     }
-    if ((params["percent_diff_t2"] ?? null)) {
+    if ((params["percent_diff_t2"] ?? false)) {
         cargs.push("--percent2");
     }
     if ((params["multiply"] ?? null) !== null) {
@@ -172,16 +139,16 @@ function stattablediff_cargs(
             String((params["divide"] ?? null))
         );
     }
-    if ((params["common"] ?? null)) {
+    if ((params["common"] ?? false)) {
         cargs.push("--common");
     }
-    if ((params["remove_exvivo"] ?? null)) {
+    if ((params["remove_exvivo"] ?? false)) {
         cargs.push("--rm-exvivo");
     }
-    if ((params["diff_subjects"] ?? null)) {
+    if ((params["diff_subjects"] ?? false)) {
         cargs.push("--diff-subjs");
     }
-    if ((params["noreplace53"] ?? null)) {
+    if ((params["noreplace53"] ?? false)) {
         cargs.push("--noreplace53");
     }
     return cargs;
@@ -284,7 +251,6 @@ function stattablediff(
 export {
       STATTABLEDIFF_METADATA,
       StattablediffOutputs,
-      StattablediffParameters,
       stattablediff,
       stattablediff_execute,
       stattablediff_params,

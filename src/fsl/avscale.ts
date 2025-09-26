@@ -12,49 +12,17 @@ const AVSCALE_METADATA: Metadata = {
 
 
 interface AvscaleParameters {
-    "@type": "fsl.avscale";
+    "@type"?: "fsl/avscale";
     "allparams_flag": boolean;
     "inverteddies_flag": boolean;
     "matrix_file": InputPathType;
     "non_reference_volume"?: InputPathType | null | undefined;
 }
+type AvscaleParametersTagged = Required<Pick<AvscaleParameters, '@type'>> & AvscaleParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.avscale": avscale_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `avscale(...)`.
+ * Output object returned when calling `AvscaleParameters(...)`.
  *
  * @interface
  */
@@ -85,9 +53,9 @@ function avscale_params(
     allparams_flag: boolean = false,
     inverteddies_flag: boolean = false,
     non_reference_volume: InputPathType | null = null,
-): AvscaleParameters {
+): AvscaleParametersTagged {
     const params = {
-        "@type": "fsl.avscale" as const,
+        "@type": "fsl/avscale" as const,
         "allparams_flag": allparams_flag,
         "inverteddies_flag": inverteddies_flag,
         "matrix_file": matrix_file,
@@ -113,10 +81,10 @@ function avscale_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("avscale");
-    if ((params["allparams_flag"] ?? null)) {
+    if ((params["allparams_flag"] ?? false)) {
         cargs.push("--allparams");
     }
-    if ((params["inverteddies_flag"] ?? null)) {
+    if ((params["inverteddies_flag"] ?? false)) {
         cargs.push("--inverteddies");
     }
     cargs.push(execution.inputFile((params["matrix_file"] ?? null)));
@@ -207,7 +175,6 @@ function avscale(
 export {
       AVSCALE_METADATA,
       AvscaleOutputs,
-      AvscaleParameters,
       avscale,
       avscale_execute,
       avscale_params,

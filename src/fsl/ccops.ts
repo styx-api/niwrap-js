@@ -12,7 +12,7 @@ const CCOPS_METADATA: Metadata = {
 
 
 interface CcopsParameters {
-    "@type": "fsl.ccops";
+    "@type"?: "fsl/ccops";
     "basename": string;
     "infile"?: InputPathType | null | undefined;
     "tract_dir"?: string | null | undefined;
@@ -28,44 +28,11 @@ interface CcopsParameters {
     "nclusters"?: number | null | undefined;
     "help": boolean;
 }
+type CcopsParametersTagged = Required<Pick<CcopsParameters, '@type'>> & CcopsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.ccops": ccops_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.ccops": ccops_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ccops(...)`.
+ * Output object returned when calling `CcopsParameters(...)`.
  *
  * @interface
  */
@@ -116,9 +83,9 @@ function ccops_params(
     scheme: string | null = null,
     nclusters: number | null = null,
     help: boolean = false,
-): CcopsParameters {
+): CcopsParametersTagged {
     const params = {
-        "@type": "fsl.ccops" as const,
+        "@type": "fsl/ccops" as const,
         "basename": basename,
         "reorder_seedspace": reorder_seedspace,
         "reorder_tractspace": reorder_tractspace,
@@ -192,13 +159,13 @@ function ccops_cargs(
             execution.inputFile((params["exclusion_mask"] ?? null))
         );
     }
-    if ((params["reorder_seedspace"] ?? null)) {
+    if ((params["reorder_seedspace"] ?? false)) {
         cargs.push("--r1");
     }
-    if ((params["reorder_tractspace"] ?? null)) {
+    if ((params["reorder_tractspace"] ?? false)) {
         cargs.push("--r2");
     }
-    if ((params["tract_reord"] ?? null)) {
+    if ((params["tract_reord"] ?? false)) {
         cargs.push("--tractreord");
     }
     if ((params["connexity_constraint"] ?? null) !== null) {
@@ -237,7 +204,7 @@ function ccops_cargs(
             String((params["nclusters"] ?? null))
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -344,7 +311,6 @@ function ccops(
 export {
       CCOPS_METADATA,
       CcopsOutputs,
-      CcopsParameters,
       ccops,
       ccops_execute,
       ccops_params,

@@ -12,7 +12,7 @@ const MRI_CNR_METADATA: Metadata = {
 
 
 interface MriCnrParameters {
-    "@type": "freesurfer.mri_cnr";
+    "@type"?: "freesurfer/mri_cnr";
     "surf_dir": string;
     "volume_files": Array<InputPathType>;
     "slope"?: Array<string> | null | undefined;
@@ -22,43 +22,11 @@ interface MriCnrParameters {
     "version_flag": boolean;
     "help_flag": boolean;
 }
+type MriCnrParametersTagged = Required<Pick<MriCnrParameters, '@type'>> & MriCnrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_cnr": mri_cnr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_cnr(...)`.
+ * Output object returned when calling `MriCnrParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +61,9 @@ function mri_cnr_params(
     print_total_cnr: boolean = false,
     version_flag: boolean = false,
     help_flag: boolean = false,
-): MriCnrParameters {
+): MriCnrParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_cnr" as const,
+        "@type": "freesurfer/mri_cnr" as const,
         "surf_dir": surf_dir,
         "volume_files": volume_files,
         "print_total_cnr": print_total_cnr,
@@ -149,13 +117,13 @@ function mri_cnr_cargs(
             ...(params["labels"] ?? null)
         );
     }
-    if ((params["print_total_cnr"] ?? null)) {
+    if ((params["print_total_cnr"] ?? false)) {
         cargs.push("-t");
     }
-    if ((params["version_flag"] ?? null)) {
+    if ((params["version_flag"] ?? false)) {
         cargs.push("-version");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -249,7 +217,6 @@ function mri_cnr(
 export {
       MRI_CNR_METADATA,
       MriCnrOutputs,
-      MriCnrParameters,
       mri_cnr,
       mri_cnr_execute,
       mri_cnr_params,

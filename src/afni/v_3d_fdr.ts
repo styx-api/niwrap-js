@@ -12,7 +12,7 @@ const V_3D_FDR_METADATA: Metadata = {
 
 
 interface V3dFdrParameters {
-    "@type": "afni.3dFDR";
+    "@type"?: "afni/3dFDR";
     "input_file": InputPathType;
     "input1d_file"?: InputPathType | null | undefined;
     "mask_file"?: InputPathType | null | undefined;
@@ -28,44 +28,11 @@ interface V3dFdrParameters {
     "float": boolean;
     "qval": boolean;
 }
+type V3dFdrParametersTagged = Required<Pick<V3dFdrParameters, '@type'>> & V3dFdrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dFDR": v_3d_fdr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dFDR": v_3d_fdr_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_fdr(...)`.
+ * Output object returned when calling `V3dFdrParameters(...)`.
  *
  * @interface
  */
@@ -124,9 +91,9 @@ function v_3d_fdr_params(
     force: boolean = false,
     float: boolean = false,
     qval: boolean = false,
-): V3dFdrParameters {
+): V3dFdrParametersTagged {
     const params = {
-        "@type": "afni.3dFDR" as const,
+        "@type": "afni/3dFDR" as const,
         "input_file": input_file,
         "quiet": quiet,
         "list": list,
@@ -198,10 +165,10 @@ function v_3d_fdr_cargs(
             (params["constant_type"] ?? null)
         );
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["list"] ?? null)) {
+    if ((params["list"] ?? false)) {
         cargs.push("-list");
     }
     cargs.push(
@@ -214,19 +181,19 @@ function v_3d_fdr_cargs(
             (params["mode_option"] ?? null)
         );
     }
-    if ((params["pmask"] ?? null)) {
+    if ((params["pmask"] ?? false)) {
         cargs.push("-pmask");
     }
-    if ((params["nopmask"] ?? null)) {
+    if ((params["nopmask"] ?? false)) {
         cargs.push("-nopmask");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
-    if ((params["float"] ?? null)) {
+    if ((params["float"] ?? false)) {
         cargs.push("-float");
     }
-    if ((params["qval"] ?? null)) {
+    if ((params["qval"] ?? false)) {
         cargs.push("-qval");
     }
     return cargs;
@@ -334,7 +301,6 @@ function v_3d_fdr(
 
 export {
       V3dFdrOutputs,
-      V3dFdrParameters,
       V_3D_FDR_METADATA,
       v_3d_fdr,
       v_3d_fdr_execute,

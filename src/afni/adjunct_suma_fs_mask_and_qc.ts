@@ -12,7 +12,7 @@ const ADJUNCT_SUMA_FS_MASK_AND_QC_METADATA: Metadata = {
 
 
 interface AdjunctSumaFsMaskAndQcParameters {
-    "@type": "afni.adjunct_suma_fs_mask_and_qc";
+    "@type"?: "afni/adjunct_suma_fs_mask_and_qc";
     "subj_id": string;
     "suma_dir": string;
     "no_clean": boolean;
@@ -20,44 +20,11 @@ interface AdjunctSumaFsMaskAndQcParameters {
     "hview": boolean;
     "version": boolean;
 }
+type AdjunctSumaFsMaskAndQcParametersTagged = Required<Pick<AdjunctSumaFsMaskAndQcParameters, '@type'>> & AdjunctSumaFsMaskAndQcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.adjunct_suma_fs_mask_and_qc": adjunct_suma_fs_mask_and_qc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.adjunct_suma_fs_mask_and_qc": adjunct_suma_fs_mask_and_qc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `adjunct_suma_fs_mask_and_qc(...)`.
+ * Output object returned when calling `AdjunctSumaFsMaskAndQcParameters(...)`.
  *
  * @interface
  */
@@ -116,9 +83,9 @@ function adjunct_suma_fs_mask_and_qc_params(
     help: boolean = false,
     hview: boolean = false,
     version: boolean = false,
-): AdjunctSumaFsMaskAndQcParameters {
+): AdjunctSumaFsMaskAndQcParametersTagged {
     const params = {
-        "@type": "afni.adjunct_suma_fs_mask_and_qc" as const,
+        "@type": "afni/adjunct_suma_fs_mask_and_qc" as const,
         "subj_id": subj_id,
         "suma_dir": suma_dir,
         "no_clean": no_clean,
@@ -152,16 +119,16 @@ function adjunct_suma_fs_mask_and_qc_cargs(
         "-suma_dir",
         (params["suma_dir"] ?? null)
     );
-    if ((params["no_clean"] ?? null)) {
+    if ((params["no_clean"] ?? false)) {
         cargs.push("-no_clean");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["hview"] ?? null)) {
+    if ((params["hview"] ?? false)) {
         cargs.push("-hview");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-ver");
     }
     return cargs;
@@ -258,7 +225,6 @@ function adjunct_suma_fs_mask_and_qc(
 export {
       ADJUNCT_SUMA_FS_MASK_AND_QC_METADATA,
       AdjunctSumaFsMaskAndQcOutputs,
-      AdjunctSumaFsMaskAndQcParameters,
       adjunct_suma_fs_mask_and_qc,
       adjunct_suma_fs_mask_and_qc_execute,
       adjunct_suma_fs_mask_and_qc_params,

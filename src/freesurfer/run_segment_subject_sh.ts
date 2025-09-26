@@ -12,48 +12,15 @@ const RUN_SEGMENT_SUBJECT_SH_METADATA: Metadata = {
 
 
 interface RunSegmentSubjectShParameters {
-    "@type": "freesurfer.run_SegmentSubject.sh";
+    "@type"?: "freesurfer/run_SegmentSubject.sh";
     "deployedMCRroot": string;
     "arguments"?: string | null | undefined;
 }
+type RunSegmentSubjectShParametersTagged = Required<Pick<RunSegmentSubjectShParameters, '@type'>> & RunSegmentSubjectShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.run_SegmentSubject.sh": run_segment_subject_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.run_SegmentSubject.sh": run_segment_subject_sh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `run_segment_subject_sh(...)`.
+ * Output object returned when calling `RunSegmentSubjectShParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface RunSegmentSubjectShOutputs {
 function run_segment_subject_sh_params(
     deployed_mcrroot: string,
     arguments_: string | null = null,
-): RunSegmentSubjectShParameters {
+): RunSegmentSubjectShParametersTagged {
     const params = {
-        "@type": "freesurfer.run_SegmentSubject.sh" as const,
+        "@type": "freesurfer/run_SegmentSubject.sh" as const,
         "deployedMCRroot": deployed_mcrroot,
     };
     if (arguments_ !== null) {
@@ -190,7 +157,6 @@ function run_segment_subject_sh(
 export {
       RUN_SEGMENT_SUBJECT_SH_METADATA,
       RunSegmentSubjectShOutputs,
-      RunSegmentSubjectShParameters,
       run_segment_subject_sh,
       run_segment_subject_sh_execute,
       run_segment_subject_sh_params,

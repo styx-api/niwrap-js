@@ -12,51 +12,18 @@ const MRI_STATS2SEG_METADATA: Metadata = {
 
 
 interface MriStats2segParameters {
-    "@type": "freesurfer.mri_stats2seg";
+    "@type"?: "freesurfer/mri_stats2seg";
     "stat_file": InputPathType;
     "segmentation_volume": InputPathType;
     "output_file": string;
     "debug": boolean;
     "check_opts": boolean;
 }
+type MriStats2segParametersTagged = Required<Pick<MriStats2segParameters, '@type'>> & MriStats2segParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_stats2seg": mri_stats2seg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_stats2seg": mri_stats2seg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_stats2seg(...)`.
+ * Output object returned when calling `MriStats2segParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function mri_stats2seg_params(
     output_file: string,
     debug: boolean = false,
     check_opts: boolean = false,
-): MriStats2segParameters {
+): MriStats2segParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_stats2seg" as const,
+        "@type": "freesurfer/mri_stats2seg" as const,
         "stat_file": stat_file,
         "segmentation_volume": segmentation_volume,
         "output_file": output_file,
@@ -128,10 +95,10 @@ function mri_stats2seg_cargs(
         "--o",
         (params["output_file"] ?? null)
     );
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["check_opts"] ?? null)) {
+    if ((params["check_opts"] ?? false)) {
         cargs.push("--checkopts");
     }
     return cargs;
@@ -220,7 +187,6 @@ function mri_stats2seg(
 export {
       MRI_STATS2SEG_METADATA,
       MriStats2segOutputs,
-      MriStats2segParameters,
       mri_stats2seg,
       mri_stats2seg_execute,
       mri_stats2seg_params,

@@ -12,54 +12,21 @@ const SURFACE_APPLY_AFFINE_METADATA: Metadata = {
 
 
 interface SurfaceApplyAffineFlirtParameters {
-    "@type": "workbench.surface-apply-affine.flirt";
+    "@type"?: "flirt";
     "source_volume": string;
     "target_volume": string;
 }
+type SurfaceApplyAffineFlirtParametersTagged = Required<Pick<SurfaceApplyAffineFlirtParameters, '@type'>> & SurfaceApplyAffineFlirtParameters;
 
 
 interface SurfaceApplyAffineParameters {
-    "@type": "workbench.surface-apply-affine";
+    "@type"?: "workbench/surface-apply-affine";
     "in_surf": InputPathType;
     "affine": string;
     "out_surf": string;
     "flirt"?: SurfaceApplyAffineFlirtParameters | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-apply-affine": surface_apply_affine_cargs,
-        "workbench.surface-apply-affine.flirt": surface_apply_affine_flirt_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-apply-affine": surface_apply_affine_outputs,
-    };
-    return outputsFuncs[t];
-}
+type SurfaceApplyAffineParametersTagged = Required<Pick<SurfaceApplyAffineParameters, '@type'>> & SurfaceApplyAffineParameters;
 
 
 /**
@@ -73,9 +40,9 @@ function dynOutputs(
 function surface_apply_affine_flirt_params(
     source_volume: string,
     target_volume: string,
-): SurfaceApplyAffineFlirtParameters {
+): SurfaceApplyAffineFlirtParametersTagged {
     const params = {
-        "@type": "workbench.surface-apply-affine.flirt" as const,
+        "@type": "flirt" as const,
         "source_volume": source_volume,
         "target_volume": target_volume,
     };
@@ -104,7 +71,7 @@ function surface_apply_affine_flirt_cargs(
 
 
 /**
- * Output object returned when calling `surface_apply_affine(...)`.
+ * Output object returned when calling `SurfaceApplyAffineParameters(...)`.
  *
  * @interface
  */
@@ -135,9 +102,9 @@ function surface_apply_affine_params(
     affine: string,
     out_surf: string,
     flirt: SurfaceApplyAffineFlirtParameters | null = null,
-): SurfaceApplyAffineParameters {
+): SurfaceApplyAffineParametersTagged {
     const params = {
-        "@type": "workbench.surface-apply-affine" as const,
+        "@type": "workbench/surface-apply-affine" as const,
         "in_surf": in_surf,
         "affine": affine,
         "out_surf": out_surf,
@@ -168,7 +135,7 @@ function surface_apply_affine_cargs(
     cargs.push((params["affine"] ?? null));
     cargs.push((params["out_surf"] ?? null));
     if ((params["flirt"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["flirt"] ?? null)["@type"])((params["flirt"] ?? null), execution));
+        cargs.push(...surface_apply_affine_flirt_cargs((params["flirt"] ?? null), execution));
     }
     return cargs;
 }
@@ -257,9 +224,7 @@ function surface_apply_affine(
 
 export {
       SURFACE_APPLY_AFFINE_METADATA,
-      SurfaceApplyAffineFlirtParameters,
       SurfaceApplyAffineOutputs,
-      SurfaceApplyAffineParameters,
       surface_apply_affine,
       surface_apply_affine_execute,
       surface_apply_affine_flirt_params,

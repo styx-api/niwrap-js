@@ -12,7 +12,7 @@ const LABEL_ERODE_METADATA: Metadata = {
 
 
 interface LabelErodeParameters {
-    "@type": "workbench.label-erode";
+    "@type"?: "workbench/label-erode";
     "label": InputPathType;
     "surface": InputPathType;
     "erode_dist": number;
@@ -21,44 +21,11 @@ interface LabelErodeParameters {
     "opt_column_column"?: string | null | undefined;
     "opt_corrected_areas_area_metric"?: InputPathType | null | undefined;
 }
+type LabelErodeParametersTagged = Required<Pick<LabelErodeParameters, '@type'>> & LabelErodeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.label-erode": label_erode_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.label-erode": label_erode_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `label_erode(...)`.
+ * Output object returned when calling `LabelErodeParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function label_erode_params(
     opt_roi_roi_metric: InputPathType | null = null,
     opt_column_column: string | null = null,
     opt_corrected_areas_area_metric: InputPathType | null = null,
-): LabelErodeParameters {
+): LabelErodeParametersTagged {
     const params = {
-        "@type": "workbench.label-erode" as const,
+        "@type": "workbench/label-erode" as const,
         "label": label,
         "surface": surface,
         "erode_dist": erode_dist,
@@ -251,7 +218,6 @@ function label_erode(
 export {
       LABEL_ERODE_METADATA,
       LabelErodeOutputs,
-      LabelErodeParameters,
       label_erode,
       label_erode_execute,
       label_erode_params,

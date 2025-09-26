@@ -12,34 +12,38 @@ const MRREGISTER_METADATA: Metadata = {
 
 
 interface MrregisterTransformedParameters {
-    "@type": "mrtrix.mrregister.transformed";
+    "@type"?: "transformed";
     "image": string;
 }
+type MrregisterTransformedParametersTagged = Required<Pick<MrregisterTransformedParameters, '@type'>> & MrregisterTransformedParameters;
 
 
 interface MrregisterTransformedMidwayParameters {
-    "@type": "mrtrix.mrregister.transformed_midway";
+    "@type"?: "transformed_midway";
     "image1_transformed": string;
     "image2_transformed": string;
 }
+type MrregisterTransformedMidwayParametersTagged = Required<Pick<MrregisterTransformedMidwayParameters, '@type'>> & MrregisterTransformedMidwayParameters;
 
 
 interface MrregisterNlWarpParameters {
-    "@type": "mrtrix.mrregister.nl_warp";
+    "@type"?: "nl_warp";
     "warp1": string;
     "warp2": string;
 }
+type MrregisterNlWarpParametersTagged = Required<Pick<MrregisterNlWarpParameters, '@type'>> & MrregisterNlWarpParameters;
 
 
 interface MrregisterConfigParameters {
-    "@type": "mrtrix.mrregister.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MrregisterConfigParametersTagged = Required<Pick<MrregisterConfigParameters, '@type'>> & MrregisterConfigParameters;
 
 
 interface MrregisterParameters {
-    "@type": "mrtrix.mrregister";
+    "@type"?: "mrtrix/mrregister";
     "type"?: string | null | undefined;
     "transformed"?: Array<MrregisterTransformedParameters> | null | undefined;
     "transformed_midway"?: Array<MrregisterTransformedMidwayParameters> | null | undefined;
@@ -109,47 +113,7 @@ interface MrregisterParameters {
     "image1_image2": InputPathType;
     "contrast1_contrast2"?: Array<InputPathType> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.mrregister": mrregister_cargs,
-        "mrtrix.mrregister.transformed": mrregister_transformed_cargs,
-        "mrtrix.mrregister.transformed_midway": mrregister_transformed_midway_cargs,
-        "mrtrix.mrregister.nl_warp": mrregister_nl_warp_cargs,
-        "mrtrix.mrregister.config": mrregister_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.mrregister": mrregister_outputs,
-        "mrtrix.mrregister.transformed": mrregister_transformed_outputs,
-        "mrtrix.mrregister.transformed_midway": mrregister_transformed_midway_outputs,
-        "mrtrix.mrregister.nl_warp": mrregister_nl_warp_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MrregisterParametersTagged = Required<Pick<MrregisterParameters, '@type'>> & MrregisterParameters;
 
 
 /**
@@ -178,9 +142,9 @@ interface MrregisterTransformedOutputs {
  */
 function mrregister_transformed_params(
     image: string,
-): MrregisterTransformedParameters {
+): MrregisterTransformedParametersTagged {
     const params = {
-        "@type": "mrtrix.mrregister.transformed" as const,
+        "@type": "transformed" as const,
         "image": image,
     };
     return params;
@@ -258,9 +222,9 @@ interface MrregisterTransformedMidwayOutputs {
 function mrregister_transformed_midway_params(
     image1_transformed: string,
     image2_transformed: string,
-): MrregisterTransformedMidwayParameters {
+): MrregisterTransformedMidwayParametersTagged {
     const params = {
-        "@type": "mrtrix.mrregister.transformed_midway" as const,
+        "@type": "transformed_midway" as const,
         "image1_transformed": image1_transformed,
         "image2_transformed": image2_transformed,
     };
@@ -341,9 +305,9 @@ interface MrregisterNlWarpOutputs {
 function mrregister_nl_warp_params(
     warp1: string,
     warp2: string,
-): MrregisterNlWarpParameters {
+): MrregisterNlWarpParametersTagged {
     const params = {
-        "@type": "mrtrix.mrregister.nl_warp" as const,
+        "@type": "nl_warp" as const,
         "warp1": warp1,
         "warp2": warp2,
     };
@@ -403,9 +367,9 @@ function mrregister_nl_warp_outputs(
 function mrregister_config_params(
     key: string,
     value: string,
-): MrregisterConfigParameters {
+): MrregisterConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.mrregister.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -434,7 +398,7 @@ function mrregister_config_cargs(
 
 
 /**
- * Output object returned when calling `mrregister(...)`.
+ * Output object returned when calling `MrregisterParameters(...)`.
  *
  * @interface
  */
@@ -649,9 +613,9 @@ function mrregister_params(
     help: boolean = false,
     version: boolean = false,
     contrast1_contrast2: Array<InputPathType> | null = null,
-): MrregisterParameters {
+): MrregisterParametersTagged {
     const params = {
-        "@type": "mrtrix.mrregister" as const,
+        "@type": "mrtrix/mrregister" as const,
         "nan": nan,
         "init_translation_unmasked1": init_translation_unmasked1,
         "init_translation_unmasked2": init_translation_unmasked2,
@@ -854,10 +818,10 @@ function mrregister_cargs(
         );
     }
     if ((params["transformed"] ?? null) !== null) {
-        cargs.push(...(params["transformed"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["transformed"] ?? null).map(s => mrregister_transformed_cargs(s, execution)).flat());
     }
     if ((params["transformed_midway"] ?? null) !== null) {
-        cargs.push(...(params["transformed_midway"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["transformed_midway"] ?? null).map(s => mrregister_transformed_midway_cargs(s, execution)).flat());
     }
     if ((params["mask1"] ?? null) !== null) {
         cargs.push(
@@ -871,7 +835,7 @@ function mrregister_cargs(
             execution.inputFile((params["mask2"] ?? null))
         );
     }
-    if ((params["nan"] ?? null)) {
+    if ((params["nan"] ?? false)) {
         cargs.push("-nan");
     }
     if ((params["rigid"] ?? null) !== null) {
@@ -1018,16 +982,16 @@ function mrregister_cargs(
             (params["affine_log"] ?? null)
         );
     }
-    if ((params["init_translation_unmasked1"] ?? null)) {
+    if ((params["init_translation_unmasked1"] ?? false)) {
         cargs.push("-init_translation.unmasked1");
     }
-    if ((params["init_translation_unmasked2"] ?? null)) {
+    if ((params["init_translation_unmasked2"] ?? false)) {
         cargs.push("-init_translation.unmasked2");
     }
-    if ((params["init_rotation_unmasked1"] ?? null)) {
+    if ((params["init_rotation_unmasked1"] ?? false)) {
         cargs.push("-init_rotation.unmasked1");
     }
-    if ((params["init_rotation_unmasked2"] ?? null)) {
+    if ((params["init_rotation_unmasked2"] ?? false)) {
         cargs.push("-init_rotation.unmasked2");
     }
     if ((params["init_rotation_search_angles"] ?? null) !== null) {
@@ -1048,7 +1012,7 @@ function mrregister_cargs(
             String((params["init_rotation_search_directions"] ?? null))
         );
     }
-    if ((params["init_rotation_search_run_global"] ?? null)) {
+    if ((params["init_rotation_search_run_global"] ?? false)) {
         cargs.push("-init_rotation.search.run_global");
     }
     if ((params["init_rotation_search_global_iterations"] ?? null) !== null) {
@@ -1088,7 +1052,7 @@ function mrregister_cargs(
         );
     }
     if ((params["nl_warp"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["nl_warp"] ?? null)["@type"])((params["nl_warp"] ?? null), execution));
+        cargs.push(...mrregister_nl_warp_cargs((params["nl_warp"] ?? null), execution));
     }
     if ((params["nl_warp_full"] ?? null) !== null) {
         cargs.push(
@@ -1150,7 +1114,7 @@ function mrregister_cargs(
             execution.inputFile((params["directions"] ?? null))
         );
     }
-    if ((params["noreorientation"] ?? null)) {
+    if ((params["noreorientation"] ?? false)) {
         cargs.push("-noreorientation");
     }
     if ((params["mc_weights"] ?? null) !== null) {
@@ -1165,16 +1129,16 @@ function mrregister_cargs(
             (params["datatype"] ?? null)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -1184,12 +1148,12 @@ function mrregister_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => mrregister_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["image1_image2"] ?? null)));
@@ -1223,9 +1187,9 @@ function mrregister_outputs(
         affine_2tomidway: ((params["affine_2tomidway"] ?? null) !== null) ? execution.outputFile([(params["affine_2tomidway"] ?? null)].join('')) : null,
         affine_log: ((params["affine_log"] ?? null) !== null) ? execution.outputFile([(params["affine_log"] ?? null)].join('')) : null,
         nl_warp_full: ((params["nl_warp_full"] ?? null) !== null) ? execution.outputFile([(params["nl_warp_full"] ?? null)].join('')) : null,
-        transformed: (params["transformed"] ?? null) ? (params["transformed"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null) : null,
-        transformed_midway: (params["transformed_midway"] ?? null) ? (params["transformed_midway"] ?? null).map(i => dynOutputs(i["@type"])?.(i, execution) ?? null) : null,
-        nl_warp: (params["nl_warp"] ?? null) ? (dynOutputs((params["nl_warp"] ?? null)["@type"])?.((params["nl_warp"] ?? null), execution) ?? null) : null,
+        transformed: (params["transformed"] ?? null) ? (params["transformed"] ?? null).map(i => mrregister_transformed_outputs(i, execution) ?? null) : null,
+        transformed_midway: (params["transformed_midway"] ?? null) ? (params["transformed_midway"] ?? null).map(i => mrregister_transformed_midway_outputs(i, execution) ?? null) : null,
+        nl_warp: (params["nl_warp"] ?? null) ? (mrregister_nl_warp_outputs((params["nl_warp"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }
@@ -1456,15 +1420,10 @@ function mrregister(
 
 export {
       MRREGISTER_METADATA,
-      MrregisterConfigParameters,
       MrregisterNlWarpOutputs,
-      MrregisterNlWarpParameters,
       MrregisterOutputs,
-      MrregisterParameters,
       MrregisterTransformedMidwayOutputs,
-      MrregisterTransformedMidwayParameters,
       MrregisterTransformedOutputs,
-      MrregisterTransformedParameters,
       mrregister,
       mrregister_config_params,
       mrregister_execute,

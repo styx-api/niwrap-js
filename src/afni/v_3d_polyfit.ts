@@ -12,7 +12,7 @@ const V_3D_POLYFIT_METADATA: Metadata = {
 
 
 interface V3dPolyfitParameters {
-    "@type": "afni.3dPolyfit";
+    "@type"?: "afni/3dPolyfit";
     "input_dataset": InputPathType;
     "poly_order"?: number | null | undefined;
     "blur"?: number | null | undefined;
@@ -28,44 +28,11 @@ interface V3dPolyfitParameters {
     "base_dataset"?: InputPathType | null | undefined;
     "verbose": boolean;
 }
+type V3dPolyfitParametersTagged = Required<Pick<V3dPolyfitParameters, '@type'>> & V3dPolyfitParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dPolyfit": v_3d_polyfit_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dPolyfit": v_3d_polyfit_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_polyfit(...)`.
+ * Output object returned when calling `V3dPolyfitParameters(...)`.
  *
  * @interface
  */
@@ -124,9 +91,9 @@ function v_3d_polyfit_params(
     fit_method: number | null = null,
     base_dataset: InputPathType | null = null,
     verbose: boolean = false,
-): V3dPolyfitParameters {
+): V3dPolyfitParametersTagged {
     const params = {
-        "@type": "afni.3dPolyfit" as const,
+        "@type": "afni/3dPolyfit" as const,
         "input_dataset": input_dataset,
         "automask": automask,
         "mean_scale": mean_scale,
@@ -215,7 +182,7 @@ function v_3d_polyfit_cargs(
             (params["coeff_output"] ?? null)
         );
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     if ((params["mask_dataset"] ?? null) !== null) {
@@ -224,10 +191,10 @@ function v_3d_polyfit_cargs(
             execution.inputFile((params["mask_dataset"] ?? null))
         );
     }
-    if ((params["mean_scale"] ?? null)) {
+    if ((params["mean_scale"] ?? false)) {
         cargs.push("-mone");
     }
-    if ((params["clip_box"] ?? null)) {
+    if ((params["clip_box"] ?? false)) {
         cargs.push("-mclip");
     }
     if ((params["fit_method"] ?? null) !== null) {
@@ -242,7 +209,7 @@ function v_3d_polyfit_cargs(
             execution.inputFile((params["base_dataset"] ?? null))
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
     return cargs;
@@ -350,7 +317,6 @@ function v_3d_polyfit(
 
 export {
       V3dPolyfitOutputs,
-      V3dPolyfitParameters,
       V_3D_POLYFIT_METADATA,
       v_3d_polyfit,
       v_3d_polyfit_execute,

@@ -12,7 +12,7 @@ const FABBER_DCE_METADATA: Metadata = {
 
 
 interface FabberDceParameters {
-    "@type": "fsl.fabber_dce";
+    "@type"?: "fsl/fabber_dce";
     "output_directory": string;
     "inference_method": string;
     "forward_model": string;
@@ -50,44 +50,11 @@ interface FabberDceParameters {
     "option_file"?: InputPathType | null | undefined;
     "debug": boolean;
 }
+type FabberDceParametersTagged = Required<Pick<FabberDceParameters, '@type'>> & FabberDceParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fabber_dce": fabber_dce_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fabber_dce": fabber_dce_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fabber_dce(...)`.
+ * Output object returned when calling `FabberDceParameters(...)`.
  *
  * @interface
  */
@@ -182,9 +149,9 @@ function fabber_dce_params(
     save_free_energy: boolean = false,
     option_file: InputPathType | null = null,
     debug: boolean = false,
-): FabberDceParameters {
+): FabberDceParametersTagged {
     const params = {
-        "@type": "fsl.fabber_dce" as const,
+        "@type": "fsl/fabber_dce" as const,
         "output_directory": output_directory,
         "inference_method": inference_method,
         "forward_model": forward_model,
@@ -276,22 +243,22 @@ function fabber_dce_cargs(
         "--data",
         execution.inputFile((params["input_data"] ?? null))
     );
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["list_methods"] ?? null)) {
+    if ((params["list_methods"] ?? false)) {
         cargs.push("--listmethods");
     }
-    if ((params["list_models"] ?? null)) {
+    if ((params["list_models"] ?? false)) {
         cargs.push("--listmodels");
     }
-    if ((params["list_params"] ?? null)) {
+    if ((params["list_params"] ?? false)) {
         cargs.push("--listparams");
     }
-    if ((params["describe_params"] ?? null)) {
+    if ((params["describe_params"] ?? false)) {
         cargs.push("--descparams");
     }
-    if ((params["list_outputs"] ?? null)) {
+    if ((params["list_outputs"] ?? false)) {
         cargs.push("--listoutputs");
     }
     if ((params["evaluate_model"] ?? null) !== null) {
@@ -312,13 +279,13 @@ function fabber_dce_cargs(
             String((params["evaluate_nt"] ?? null))
         );
     }
-    if ((params["simple_output"] ?? null)) {
+    if ((params["simple_output"] ?? false)) {
         cargs.push("--simple-output");
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("--overwrite");
     }
-    if ((params["link_to_latest"] ?? null)) {
+    if ((params["link_to_latest"] ?? false)) {
         cargs.push("--link-to-latest");
     }
     if ((params["load_models"] ?? null) !== null) {
@@ -357,40 +324,40 @@ function fabber_dce_cargs(
             execution.inputFile((params["supplemental_data"] ?? null))
         );
     }
-    if ((params["dump_param_names"] ?? null)) {
+    if ((params["dump_param_names"] ?? false)) {
         cargs.push("--dump-param-names");
     }
-    if ((params["save_model_fit"] ?? null)) {
+    if ((params["save_model_fit"] ?? false)) {
         cargs.push("--save-model-fit");
     }
-    if ((params["save_residuals"] ?? null)) {
+    if ((params["save_residuals"] ?? false)) {
         cargs.push("--save-residuals");
     }
-    if ((params["save_model_extras"] ?? null)) {
+    if ((params["save_model_extras"] ?? false)) {
         cargs.push("--save-model-extras");
     }
-    if ((params["save_mvn"] ?? null)) {
+    if ((params["save_mvn"] ?? false)) {
         cargs.push("--save-mvn");
     }
-    if ((params["save_mean"] ?? null)) {
+    if ((params["save_mean"] ?? false)) {
         cargs.push("--save-mean");
     }
-    if ((params["save_std"] ?? null)) {
+    if ((params["save_std"] ?? false)) {
         cargs.push("--save-std");
     }
-    if ((params["save_variances"] ?? null)) {
+    if ((params["save_variances"] ?? false)) {
         cargs.push("--save-var");
     }
-    if ((params["save_zstat"] ?? null)) {
+    if ((params["save_zstat"] ?? false)) {
         cargs.push("--save-zstat");
     }
-    if ((params["save_noise_mean"] ?? null)) {
+    if ((params["save_noise_mean"] ?? false)) {
         cargs.push("--save-noise-mean");
     }
-    if ((params["save_noise_std"] ?? null)) {
+    if ((params["save_noise_std"] ?? false)) {
         cargs.push("--save-noise-std");
     }
-    if ((params["save_free_energy"] ?? null)) {
+    if ((params["save_free_energy"] ?? false)) {
         cargs.push("--save-free-energy");
     }
     if ((params["option_file"] ?? null) !== null) {
@@ -399,7 +366,7 @@ function fabber_dce_cargs(
             execution.inputFile((params["option_file"] ?? null))
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -550,7 +517,6 @@ function fabber_dce(
 export {
       FABBER_DCE_METADATA,
       FabberDceOutputs,
-      FabberDceParameters,
       fabber_dce,
       fabber_dce_execute,
       fabber_dce_params,

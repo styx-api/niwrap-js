@@ -12,50 +12,18 @@ const ZIP_SPEC_FILE_METADATA: Metadata = {
 
 
 interface ZipSpecFileParameters {
-    "@type": "workbench.zip-spec-file";
+    "@type"?: "workbench/zip-spec-file";
     "spec_file": string;
     "extract_folder": string;
     "zip_file": string;
     "opt_base_dir_directory"?: string | null | undefined;
     "opt_skip_missing": boolean;
 }
+type ZipSpecFileParametersTagged = Required<Pick<ZipSpecFileParameters, '@type'>> & ZipSpecFileParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.zip-spec-file": zip_spec_file_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `zip_spec_file(...)`.
+ * Output object returned when calling `ZipSpecFileParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function zip_spec_file_params(
     zip_file: string,
     opt_base_dir_directory: string | null = null,
     opt_skip_missing: boolean = false,
-): ZipSpecFileParameters {
+): ZipSpecFileParametersTagged {
     const params = {
-        "@type": "workbench.zip-spec-file" as const,
+        "@type": "workbench/zip-spec-file" as const,
         "spec_file": spec_file,
         "extract_folder": extract_folder,
         "zip_file": zip_file,
@@ -123,7 +91,7 @@ function zip_spec_file_cargs(
             (params["opt_base_dir_directory"] ?? null)
         );
     }
-    if ((params["opt_skip_missing"] ?? null)) {
+    if ((params["opt_skip_missing"] ?? false)) {
         cargs.push("-skip-missing");
     }
     return cargs;
@@ -215,7 +183,6 @@ function zip_spec_file(
 export {
       ZIP_SPEC_FILE_METADATA,
       ZipSpecFileOutputs,
-      ZipSpecFileParameters,
       zip_spec_file,
       zip_spec_file_execute,
       zip_spec_file_params,

@@ -12,14 +12,15 @@ const TCKSIFT_METADATA: Metadata = {
 
 
 interface TcksiftConfigParameters {
-    "@type": "mrtrix.tcksift.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type TcksiftConfigParametersTagged = Required<Pick<TcksiftConfigParameters, '@type'>> & TcksiftConfigParameters;
 
 
 interface TcksiftParameters {
-    "@type": "mrtrix.tcksift";
+    "@type"?: "mrtrix/tcksift";
     "nofilter": boolean;
     "output_at_counts"?: Array<number> | null | undefined;
     "proc_mask"?: InputPathType | null | undefined;
@@ -48,41 +49,7 @@ interface TcksiftParameters {
     "in_fod": InputPathType;
     "out_tracks": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.tcksift": tcksift_cargs,
-        "mrtrix.tcksift.config": tcksift_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.tcksift": tcksift_outputs,
-    };
-    return outputsFuncs[t];
-}
+type TcksiftParametersTagged = Required<Pick<TcksiftParameters, '@type'>> & TcksiftParameters;
 
 
 /**
@@ -96,9 +63,9 @@ function dynOutputs(
 function tcksift_config_params(
     key: string,
     value: string,
-): TcksiftConfigParameters {
+): TcksiftConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.tcksift.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -127,7 +94,7 @@ function tcksift_config_cargs(
 
 
 /**
- * Output object returned when calling `tcksift(...)`.
+ * Output object returned when calling `TcksiftParameters(...)`.
  *
  * @interface
  */
@@ -217,9 +184,9 @@ function tcksift_params(
     config: Array<TcksiftConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TcksiftParameters {
+): TcksiftParametersTagged {
     const params = {
-        "@type": "mrtrix.tcksift" as const,
+        "@type": "mrtrix/tcksift" as const,
         "nofilter": nofilter,
         "fd_scale_gm": fd_scale_gm,
         "no_dilate_lut": no_dilate_lut,
@@ -290,7 +257,7 @@ function tcksift_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("tcksift");
-    if ((params["nofilter"] ?? null)) {
+    if ((params["nofilter"] ?? false)) {
         cargs.push("-nofilter");
     }
     if ((params["output_at_counts"] ?? null) !== null) {
@@ -311,16 +278,16 @@ function tcksift_cargs(
             execution.inputFile((params["act"] ?? null))
         );
     }
-    if ((params["fd_scale_gm"] ?? null)) {
+    if ((params["fd_scale_gm"] ?? false)) {
         cargs.push("-fd_scale_gm");
     }
-    if ((params["no_dilate_lut"] ?? null)) {
+    if ((params["no_dilate_lut"] ?? false)) {
         cargs.push("-no_dilate_lut");
     }
-    if ((params["make_null_lobes"] ?? null)) {
+    if ((params["make_null_lobes"] ?? false)) {
         cargs.push("-make_null_lobes");
     }
-    if ((params["remove_untracked"] ?? null)) {
+    if ((params["remove_untracked"] ?? false)) {
         cargs.push("-remove_untracked");
     }
     if ((params["fd_thresh"] ?? null) !== null) {
@@ -341,7 +308,7 @@ function tcksift_cargs(
             (params["out_mu"] ?? null)
         );
     }
-    if ((params["output_debug"] ?? null)) {
+    if ((params["output_debug"] ?? false)) {
         cargs.push("-output_debug");
     }
     if ((params["out_selection"] ?? null) !== null) {
@@ -368,16 +335,16 @@ function tcksift_cargs(
             String((params["term_mu"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -387,12 +354,12 @@ function tcksift_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => tcksift_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["in_tracks"] ?? null)));
@@ -543,9 +510,7 @@ function tcksift(
 
 export {
       TCKSIFT_METADATA,
-      TcksiftConfigParameters,
       TcksiftOutputs,
-      TcksiftParameters,
       tcksift,
       tcksift_config_params,
       tcksift_execute,

@@ -12,7 +12,7 @@ const FAT_PROC_CONVERT_DCM_ANAT_METADATA: Metadata = {
 
 
 interface FatProcConvertDcmAnatParameters {
-    "@type": "afni.fat_proc_convert_dcm_anat";
+    "@type"?: "afni/fat_proc_convert_dcm_anat";
     "dicom_directory"?: string | null | undefined;
     "nifti_input"?: InputPathType | null | undefined;
     "prefix": string;
@@ -24,44 +24,11 @@ interface FatProcConvertDcmAnatParameters {
     "no_cmd_out": boolean;
     "no_qc_view": boolean;
 }
+type FatProcConvertDcmAnatParametersTagged = Required<Pick<FatProcConvertDcmAnatParameters, '@type'>> & FatProcConvertDcmAnatParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.fat_proc_convert_dcm_anat": fat_proc_convert_dcm_anat_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.fat_proc_convert_dcm_anat": fat_proc_convert_dcm_anat_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fat_proc_convert_dcm_anat(...)`.
+ * Output object returned when calling `FatProcConvertDcmAnatParameters(...)`.
  *
  * @interface
  */
@@ -104,9 +71,9 @@ function fat_proc_convert_dcm_anat_params(
     qc_prefix: string | null = null,
     no_cmd_out: boolean = false,
     no_qc_view: boolean = false,
-): FatProcConvertDcmAnatParameters {
+): FatProcConvertDcmAnatParametersTagged {
     const params = {
-        "@type": "afni.fat_proc_convert_dcm_anat" as const,
+        "@type": "afni/fat_proc_convert_dcm_anat" as const,
         "prefix": prefix,
         "no_clean": no_clean,
         "reorig_reorient_off": reorig_reorient_off,
@@ -174,10 +141,10 @@ function fat_proc_convert_dcm_anat_cargs(
             (params["orient"] ?? null)
         );
     }
-    if ((params["no_clean"] ?? null)) {
+    if ((params["no_clean"] ?? false)) {
         cargs.push("-no_clean");
     }
-    if ((params["reorig_reorient_off"] ?? null)) {
+    if ((params["reorig_reorient_off"] ?? false)) {
         cargs.push("-reorig_reorient_off");
     }
     if ((params["qc_prefix"] ?? null) !== null) {
@@ -186,10 +153,10 @@ function fat_proc_convert_dcm_anat_cargs(
             (params["qc_prefix"] ?? null)
         );
     }
-    if ((params["no_cmd_out"] ?? null)) {
+    if ((params["no_cmd_out"] ?? false)) {
         cargs.push("-no_cmd_out");
     }
-    if ((params["no_qc_view"] ?? null)) {
+    if ((params["no_qc_view"] ?? false)) {
         cargs.push("-no_qc_view");
     }
     return cargs;
@@ -288,7 +255,6 @@ function fat_proc_convert_dcm_anat(
 export {
       FAT_PROC_CONVERT_DCM_ANAT_METADATA,
       FatProcConvertDcmAnatOutputs,
-      FatProcConvertDcmAnatParameters,
       fat_proc_convert_dcm_anat,
       fat_proc_convert_dcm_anat_execute,
       fat_proc_convert_dcm_anat_params,

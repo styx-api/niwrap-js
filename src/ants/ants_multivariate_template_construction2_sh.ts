@@ -12,7 +12,7 @@ const ANTS_MULTIVARIATE_TEMPLATE_CONSTRUCTION2_SH_METADATA: Metadata = {
 
 
 interface AntsMultivariateTemplateConstruction2ShParameters {
-    "@type": "ants.antsMultivariateTemplateConstruction2.sh";
+    "@type"?: "ants/antsMultivariateTemplateConstruction2.sh";
     "dimension": 2 | 3 | 4;
     "output_prefix"?: string | null | undefined;
     "image_statistic"?: 0 | 1 | 2 | null | undefined;
@@ -41,44 +41,11 @@ interface AntsMultivariateTemplateConstruction2ShParameters {
     "target_volume"?: Array<InputPathType> | null | undefined;
     "input_images": Array<InputPathType>;
 }
+type AntsMultivariateTemplateConstruction2ShParametersTagged = Required<Pick<AntsMultivariateTemplateConstruction2ShParameters, '@type'>> & AntsMultivariateTemplateConstruction2ShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.antsMultivariateTemplateConstruction2.sh": ants_multivariate_template_construction2_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.antsMultivariateTemplateConstruction2.sh": ants_multivariate_template_construction2_sh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ants_multivariate_template_construction2_sh(...)`.
+ * Output object returned when calling `AntsMultivariateTemplateConstruction2ShParameters(...)`.
  *
  * @interface
  */
@@ -155,9 +122,9 @@ function ants_multivariate_template_construction2_sh_params(
     xgrid_args: string | null = null,
     update_template: 0 | 1 | null = null,
     target_volume: Array<InputPathType> | null = null,
-): AntsMultivariateTemplateConstruction2ShParameters {
+): AntsMultivariateTemplateConstruction2ShParametersTagged {
     const params = {
-        "@type": "ants.antsMultivariateTemplateConstruction2.sh" as const,
+        "@type": "ants/antsMultivariateTemplateConstruction2.sh" as const,
         "dimension": dimension,
         "input_images": input_images,
     };
@@ -539,7 +506,6 @@ function ants_multivariate_template_construction2_sh(
 export {
       ANTS_MULTIVARIATE_TEMPLATE_CONSTRUCTION2_SH_METADATA,
       AntsMultivariateTemplateConstruction2ShOutputs,
-      AntsMultivariateTemplateConstruction2ShParameters,
       ants_multivariate_template_construction2_sh,
       ants_multivariate_template_construction2_sh_execute,
       ants_multivariate_template_construction2_sh_params,

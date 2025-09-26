@@ -12,7 +12,7 @@ const CONVERT_FIBER_ORIENTATIONS_METADATA: Metadata = {
 
 
 interface ConvertFiberOrientationsFiberParameters {
-    "@type": "workbench.convert-fiber-orientations.fiber";
+    "@type"?: "fiber";
     "mean_f": InputPathType;
     "stdev_f": InputPathType;
     "theta": InputPathType;
@@ -21,49 +21,16 @@ interface ConvertFiberOrientationsFiberParameters {
     "ka": InputPathType;
     "kb": InputPathType;
 }
+type ConvertFiberOrientationsFiberParametersTagged = Required<Pick<ConvertFiberOrientationsFiberParameters, '@type'>> & ConvertFiberOrientationsFiberParameters;
 
 
 interface ConvertFiberOrientationsParameters {
-    "@type": "workbench.convert-fiber-orientations";
+    "@type"?: "workbench/convert-fiber-orientations";
     "label_volume": InputPathType;
     "fiber_out": string;
     "fiber"?: Array<ConvertFiberOrientationsFiberParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.convert-fiber-orientations": convert_fiber_orientations_cargs,
-        "workbench.convert-fiber-orientations.fiber": convert_fiber_orientations_fiber_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.convert-fiber-orientations": convert_fiber_orientations_outputs,
-    };
-    return outputsFuncs[t];
-}
+type ConvertFiberOrientationsParametersTagged = Required<Pick<ConvertFiberOrientationsParameters, '@type'>> & ConvertFiberOrientationsParameters;
 
 
 /**
@@ -87,9 +54,9 @@ function convert_fiber_orientations_fiber_params(
     psi: InputPathType,
     ka: InputPathType,
     kb: InputPathType,
-): ConvertFiberOrientationsFiberParameters {
+): ConvertFiberOrientationsFiberParametersTagged {
     const params = {
-        "@type": "workbench.convert-fiber-orientations.fiber" as const,
+        "@type": "fiber" as const,
         "mean_f": mean_f,
         "stdev_f": stdev_f,
         "theta": theta,
@@ -128,7 +95,7 @@ function convert_fiber_orientations_fiber_cargs(
 
 
 /**
- * Output object returned when calling `convert_fiber_orientations(...)`.
+ * Output object returned when calling `ConvertFiberOrientationsParameters(...)`.
  *
  * @interface
  */
@@ -157,9 +124,9 @@ function convert_fiber_orientations_params(
     label_volume: InputPathType,
     fiber_out: string,
     fiber: Array<ConvertFiberOrientationsFiberParameters> | null = null,
-): ConvertFiberOrientationsParameters {
+): ConvertFiberOrientationsParametersTagged {
     const params = {
-        "@type": "workbench.convert-fiber-orientations" as const,
+        "@type": "workbench/convert-fiber-orientations" as const,
         "label_volume": label_volume,
         "fiber_out": fiber_out,
     };
@@ -188,7 +155,7 @@ function convert_fiber_orientations_cargs(
     cargs.push(execution.inputFile((params["label_volume"] ?? null)));
     cargs.push((params["fiber_out"] ?? null));
     if ((params["fiber"] ?? null) !== null) {
-        cargs.push(...(params["fiber"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["fiber"] ?? null).map(s => convert_fiber_orientations_fiber_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -345,9 +312,7 @@ function convert_fiber_orientations(
 
 export {
       CONVERT_FIBER_ORIENTATIONS_METADATA,
-      ConvertFiberOrientationsFiberParameters,
       ConvertFiberOrientationsOutputs,
-      ConvertFiberOrientationsParameters,
       convert_fiber_orientations,
       convert_fiber_orientations_execute,
       convert_fiber_orientations_fiber_params,

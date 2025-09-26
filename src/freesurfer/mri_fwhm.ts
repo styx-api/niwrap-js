@@ -12,7 +12,7 @@ const MRI_FWHM_METADATA: Metadata = {
 
 
 interface MriFwhmParameters {
-    "@type": "freesurfer.mri_fwhm";
+    "@type"?: "freesurfer/mri_fwhm";
     "inputvol": InputPathType;
     "outputvol": string;
     "save_detrended": boolean;
@@ -49,44 +49,11 @@ interface MriFwhmParameters {
     "checkopts": boolean;
     "version": boolean;
 }
+type MriFwhmParametersTagged = Required<Pick<MriFwhmParameters, '@type'>> & MriFwhmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_fwhm": mri_fwhm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_fwhm": mri_fwhm_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_fwhm(...)`.
+ * Output object returned when calling `MriFwhmParameters(...)`.
  *
  * @interface
  */
@@ -203,9 +170,9 @@ function mri_fwhm_params(
     debug: boolean = false,
     checkopts: boolean = false,
     version: boolean = false,
-): MriFwhmParameters {
+): MriFwhmParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_fwhm" as const,
+        "@type": "freesurfer/mri_fwhm" as const,
         "inputvol": inputvol,
         "outputvol": outputvol,
         "save_detrended": save_detrended,
@@ -314,13 +281,13 @@ function mri_fwhm_cargs(
         "--o",
         (params["outputvol"] ?? null)
     );
-    if ((params["save_detrended"] ?? null)) {
+    if ((params["save_detrended"] ?? false)) {
         cargs.push("--save-detrended");
     }
-    if ((params["save_unmasked"] ?? null)) {
+    if ((params["save_unmasked"] ?? false)) {
         cargs.push("--save-unmasked");
     }
-    if ((params["smooth_only"] ?? null)) {
+    if ((params["smooth_only"] ?? false)) {
         cargs.push("--smooth-only");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -347,7 +314,7 @@ function mri_fwhm_cargs(
             String((params["nerode"] ?? null))
         );
     }
-    if ((params["mask_inv"] ?? null)) {
+    if ((params["mask_inv"] ?? false)) {
         cargs.push("--mask-inv");
     }
     if ((params["out_mask"] ?? null) !== null) {
@@ -368,7 +335,7 @@ function mri_fwhm_cargs(
             String((params["detrend_order"] ?? null))
         );
     }
-    if ((params["square_input"] ?? null)) {
+    if ((params["square_input"] ?? false)) {
         cargs.push("--sqr");
     }
     if ((params["smooth_by_fwhm"] ?? null) !== null) {
@@ -443,7 +410,7 @@ function mri_fwhm_cargs(
             (params["fwhm_vol"] ?? null)
         );
     }
-    if ((params["synth"] ?? null)) {
+    if ((params["synth"] ?? false)) {
         cargs.push("--synth");
     }
     if ((params["synth_frames"] ?? null) !== null) {
@@ -458,7 +425,7 @@ function mri_fwhm_cargs(
             String((params["nframes_min"] ?? null))
         );
     }
-    if ((params["ispm"] ?? null)) {
+    if ((params["ispm"] ?? false)) {
         cargs.push("--ispm");
     }
     if ((params["nspm_zero_padding"] ?? null) !== null) {
@@ -473,13 +440,13 @@ function mri_fwhm_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["checkopts"] ?? null)) {
+    if ((params["checkopts"] ?? false)) {
         cargs.push("--checkopts");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -634,7 +601,6 @@ function mri_fwhm(
 export {
       MRI_FWHM_METADATA,
       MriFwhmOutputs,
-      MriFwhmParameters,
       mri_fwhm,
       mri_fwhm_execute,
       mri_fwhm_params,

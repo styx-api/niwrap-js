@@ -12,7 +12,7 @@ const V__EXTRACT_MEICA_ORTVEC_METADATA: Metadata = {
 
 
 interface VExtractMeicaOrtvecParameters {
-    "@type": "afni.@extract_meica_ortvec";
+    "@type"?: "afni/@extract_meica_ortvec";
     "prefix": string;
     "meica_dir"?: string | null | undefined;
     "reject_ignored"?: number | null | undefined;
@@ -20,44 +20,11 @@ interface VExtractMeicaOrtvecParameters {
     "work_dir"?: string | null | undefined;
     "verbosity"?: string | null | undefined;
 }
+type VExtractMeicaOrtvecParametersTagged = Required<Pick<VExtractMeicaOrtvecParameters, '@type'>> & VExtractMeicaOrtvecParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@extract_meica_ortvec": v__extract_meica_ortvec_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@extract_meica_ortvec": v__extract_meica_ortvec_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__extract_meica_ortvec(...)`.
+ * Output object returned when calling `VExtractMeicaOrtvecParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function v__extract_meica_ortvec_params(
     reject_midk: number | null = null,
     work_dir: string | null = null,
     verbosity: string | null = null,
-): VExtractMeicaOrtvecParameters {
+): VExtractMeicaOrtvecParametersTagged {
     const params = {
-        "@type": "afni.@extract_meica_ortvec" as const,
+        "@type": "afni/@extract_meica_ortvec" as const,
         "prefix": prefix,
     };
     if (meica_dir !== null) {
@@ -251,7 +218,6 @@ function v__extract_meica_ortvec(
 
 export {
       VExtractMeicaOrtvecOutputs,
-      VExtractMeicaOrtvecParameters,
       V__EXTRACT_MEICA_ORTVEC_METADATA,
       v__extract_meica_ortvec,
       v__extract_meica_ortvec_execute,

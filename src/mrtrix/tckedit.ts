@@ -12,74 +12,85 @@ const TCKEDIT_METADATA: Metadata = {
 
 
 interface TckeditVariousStringParameters {
-    "@type": "mrtrix.tckedit.include.VariousString";
+    "@type"?: "VariousString";
     "obj": string;
 }
+type TckeditVariousStringParametersTagged = Required<Pick<TckeditVariousStringParameters, '@type'>> & TckeditVariousStringParameters;
 
 
 interface TckeditVariousFileParameters {
-    "@type": "mrtrix.tckedit.include.VariousFile";
+    "@type"?: "VariousFile";
     "obj": InputPathType;
 }
+type TckeditVariousFileParametersTagged = Required<Pick<TckeditVariousFileParameters, '@type'>> & TckeditVariousFileParameters;
 
 
 interface TckeditIncludeParameters {
-    "@type": "mrtrix.tckedit.include";
-    "spec": TckeditVariousStringParameters | TckeditVariousFileParameters;
+    "@type"?: "include";
+    "spec": TckeditVariousStringParametersTagged | TckeditVariousFileParametersTagged;
 }
+type TckeditIncludeParametersTagged = Required<Pick<TckeditIncludeParameters, '@type'>> & TckeditIncludeParameters;
 
 
 interface TckeditIncludeOrderedParameters {
-    "@type": "mrtrix.tckedit.include_ordered";
+    "@type"?: "include_ordered";
     "image": string;
 }
+type TckeditIncludeOrderedParametersTagged = Required<Pick<TckeditIncludeOrderedParameters, '@type'>> & TckeditIncludeOrderedParameters;
 
 
 interface TckeditVariousString1Parameters {
-    "@type": "mrtrix.tckedit.exclude.VariousString";
+    "@type"?: "VariousString_1";
     "obj": string;
 }
+type TckeditVariousString1ParametersTagged = Required<Pick<TckeditVariousString1Parameters, '@type'>> & TckeditVariousString1Parameters;
 
 
 interface TckeditVariousFile1Parameters {
-    "@type": "mrtrix.tckedit.exclude.VariousFile";
+    "@type"?: "VariousFile_1";
     "obj": InputPathType;
 }
+type TckeditVariousFile1ParametersTagged = Required<Pick<TckeditVariousFile1Parameters, '@type'>> & TckeditVariousFile1Parameters;
 
 
 interface TckeditExcludeParameters {
-    "@type": "mrtrix.tckedit.exclude";
-    "spec": TckeditVariousString1Parameters | TckeditVariousFile1Parameters;
+    "@type"?: "exclude";
+    "spec": TckeditVariousString1ParametersTagged | TckeditVariousFile1ParametersTagged;
 }
+type TckeditExcludeParametersTagged = Required<Pick<TckeditExcludeParameters, '@type'>> & TckeditExcludeParameters;
 
 
 interface TckeditVariousString2Parameters {
-    "@type": "mrtrix.tckedit.mask.VariousString";
+    "@type"?: "VariousString_2";
     "obj": string;
 }
+type TckeditVariousString2ParametersTagged = Required<Pick<TckeditVariousString2Parameters, '@type'>> & TckeditVariousString2Parameters;
 
 
 interface TckeditVariousFile2Parameters {
-    "@type": "mrtrix.tckedit.mask.VariousFile";
+    "@type"?: "VariousFile_2";
     "obj": InputPathType;
 }
+type TckeditVariousFile2ParametersTagged = Required<Pick<TckeditVariousFile2Parameters, '@type'>> & TckeditVariousFile2Parameters;
 
 
 interface TckeditMaskParameters {
-    "@type": "mrtrix.tckedit.mask";
-    "spec": TckeditVariousString2Parameters | TckeditVariousFile2Parameters;
+    "@type"?: "mask";
+    "spec": TckeditVariousString2ParametersTagged | TckeditVariousFile2ParametersTagged;
 }
+type TckeditMaskParametersTagged = Required<Pick<TckeditMaskParameters, '@type'>> & TckeditMaskParameters;
 
 
 interface TckeditConfigParameters {
-    "@type": "mrtrix.tckedit.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type TckeditConfigParametersTagged = Required<Pick<TckeditConfigParameters, '@type'>> & TckeditConfigParameters;
 
 
 interface TckeditParameters {
-    "@type": "mrtrix.tckedit";
+    "@type"?: "mrtrix/tckedit";
     "include"?: Array<TckeditIncludeParameters> | null | undefined;
     "include_ordered"?: Array<TckeditIncludeOrderedParameters> | null | undefined;
     "exclude"?: Array<TckeditExcludeParameters> | null | undefined;
@@ -105,6 +116,7 @@ interface TckeditParameters {
     "tracks_in": Array<InputPathType>;
     "tracks_out": string;
 }
+type TckeditParametersTagged = Required<Pick<TckeditParameters, '@type'>> & TckeditParameters;
 
 
 /**
@@ -114,22 +126,12 @@ interface TckeditParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function tckedit_spec_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "mrtrix.tckedit": tckedit_cargs,
-        "mrtrix.tckedit.include": tckedit_include_cargs,
-        "mrtrix.tckedit.include.VariousString": tckedit_various_string_cargs,
-        "mrtrix.tckedit.include.VariousFile": tckedit_various_file_cargs,
-        "mrtrix.tckedit.include_ordered": tckedit_include_ordered_cargs,
-        "mrtrix.tckedit.exclude": tckedit_exclude_cargs,
-        "mrtrix.tckedit.exclude.VariousString": tckedit_various_string_1_cargs,
-        "mrtrix.tckedit.exclude.VariousFile": tckedit_various_file_1_cargs,
-        "mrtrix.tckedit.mask": tckedit_mask_cargs,
-        "mrtrix.tckedit.mask.VariousString": tckedit_various_string_2_cargs,
-        "mrtrix.tckedit.mask.VariousFile": tckedit_various_file_2_cargs,
-        "mrtrix.tckedit.config": tckedit_config_cargs,
+        "VariousString": tckedit_various_string_cargs,
+        "VariousFile": tckedit_various_file_cargs,
     };
     return cargsFuncs[t];
 }
@@ -142,11 +144,78 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function tckedit_spec_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "mrtrix.tckedit": tckedit_outputs,
+    };
+    return outputsFuncs[t];
+}
+
+
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
+function tckedit_spec_cargs_dyn_fn_(
+    t: string,
+): Function | undefined {
+    const cargsFuncs = {
+        "VariousString_1": tckedit_various_string_1_cargs,
+        "VariousFile_1": tckedit_various_file_1_cargs,
+    };
+    return cargsFuncs[t];
+}
+
+
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
+function tckedit_spec_outputs_dyn_fn_(
+    t: string,
+): Function | undefined {
+    const outputsFuncs = {
+    };
+    return outputsFuncs[t];
+}
+
+
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
+function tckedit_spec_cargs_dyn_fn_2(
+    t: string,
+): Function | undefined {
+    const cargsFuncs = {
+        "VariousString_2": tckedit_various_string_2_cargs,
+        "VariousFile_2": tckedit_various_file_2_cargs,
+    };
+    return cargsFuncs[t];
+}
+
+
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
+function tckedit_spec_outputs_dyn_fn_2(
+    t: string,
+): Function | undefined {
+    const outputsFuncs = {
     };
     return outputsFuncs[t];
 }
@@ -161,9 +230,9 @@ function dynOutputs(
  */
 function tckedit_various_string_params(
     obj: string,
-): TckeditVariousStringParameters {
+): TckeditVariousStringParametersTagged {
     const params = {
-        "@type": "mrtrix.tckedit.include.VariousString" as const,
+        "@type": "VariousString" as const,
         "obj": obj,
     };
     return params;
@@ -197,9 +266,9 @@ function tckedit_various_string_cargs(
  */
 function tckedit_various_file_params(
     obj: InputPathType,
-): TckeditVariousFileParameters {
+): TckeditVariousFileParametersTagged {
     const params = {
-        "@type": "mrtrix.tckedit.include.VariousFile" as const,
+        "@type": "VariousFile" as const,
         "obj": obj,
     };
     return params;
@@ -232,10 +301,10 @@ function tckedit_various_file_cargs(
  * @returns Parameter dictionary
  */
 function tckedit_include_params(
-    spec: TckeditVariousStringParameters | TckeditVariousFileParameters,
-): TckeditIncludeParameters {
+    spec: TckeditVariousStringParametersTagged | TckeditVariousFileParametersTagged,
+): TckeditIncludeParametersTagged {
     const params = {
-        "@type": "mrtrix.tckedit.include" as const,
+        "@type": "include" as const,
         "spec": spec,
     };
     return params;
@@ -256,7 +325,7 @@ function tckedit_include_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("-include");
-    cargs.push(...dynCargs((params["spec"] ?? null)["@type"])((params["spec"] ?? null), execution));
+    cargs.push(...tckedit_spec_cargs_dyn_fn((params["spec"] ?? null)["@type"])((params["spec"] ?? null), execution));
     return cargs;
 }
 
@@ -270,9 +339,9 @@ function tckedit_include_cargs(
  */
 function tckedit_include_ordered_params(
     image: string,
-): TckeditIncludeOrderedParameters {
+): TckeditIncludeOrderedParametersTagged {
     const params = {
-        "@type": "mrtrix.tckedit.include_ordered" as const,
+        "@type": "include_ordered" as const,
         "image": image,
     };
     return params;
@@ -307,9 +376,9 @@ function tckedit_include_ordered_cargs(
  */
 function tckedit_various_string_1_params(
     obj: string,
-): TckeditVariousString1Parameters {
+): TckeditVariousString1ParametersTagged {
     const params = {
-        "@type": "mrtrix.tckedit.exclude.VariousString" as const,
+        "@type": "VariousString_1" as const,
         "obj": obj,
     };
     return params;
@@ -343,9 +412,9 @@ function tckedit_various_string_1_cargs(
  */
 function tckedit_various_file_1_params(
     obj: InputPathType,
-): TckeditVariousFile1Parameters {
+): TckeditVariousFile1ParametersTagged {
     const params = {
-        "@type": "mrtrix.tckedit.exclude.VariousFile" as const,
+        "@type": "VariousFile_1" as const,
         "obj": obj,
     };
     return params;
@@ -378,10 +447,10 @@ function tckedit_various_file_1_cargs(
  * @returns Parameter dictionary
  */
 function tckedit_exclude_params(
-    spec: TckeditVariousString1Parameters | TckeditVariousFile1Parameters,
-): TckeditExcludeParameters {
+    spec: TckeditVariousString1ParametersTagged | TckeditVariousFile1ParametersTagged,
+): TckeditExcludeParametersTagged {
     const params = {
-        "@type": "mrtrix.tckedit.exclude" as const,
+        "@type": "exclude" as const,
         "spec": spec,
     };
     return params;
@@ -402,7 +471,7 @@ function tckedit_exclude_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("-exclude");
-    cargs.push(...dynCargs((params["spec"] ?? null)["@type"])((params["spec"] ?? null), execution));
+    cargs.push(...tckedit_spec_cargs_dyn_fn_((params["spec"] ?? null)["@type"])((params["spec"] ?? null), execution));
     return cargs;
 }
 
@@ -416,9 +485,9 @@ function tckedit_exclude_cargs(
  */
 function tckedit_various_string_2_params(
     obj: string,
-): TckeditVariousString2Parameters {
+): TckeditVariousString2ParametersTagged {
     const params = {
-        "@type": "mrtrix.tckedit.mask.VariousString" as const,
+        "@type": "VariousString_2" as const,
         "obj": obj,
     };
     return params;
@@ -452,9 +521,9 @@ function tckedit_various_string_2_cargs(
  */
 function tckedit_various_file_2_params(
     obj: InputPathType,
-): TckeditVariousFile2Parameters {
+): TckeditVariousFile2ParametersTagged {
     const params = {
-        "@type": "mrtrix.tckedit.mask.VariousFile" as const,
+        "@type": "VariousFile_2" as const,
         "obj": obj,
     };
     return params;
@@ -487,10 +556,10 @@ function tckedit_various_file_2_cargs(
  * @returns Parameter dictionary
  */
 function tckedit_mask_params(
-    spec: TckeditVariousString2Parameters | TckeditVariousFile2Parameters,
-): TckeditMaskParameters {
+    spec: TckeditVariousString2ParametersTagged | TckeditVariousFile2ParametersTagged,
+): TckeditMaskParametersTagged {
     const params = {
-        "@type": "mrtrix.tckedit.mask" as const,
+        "@type": "mask" as const,
         "spec": spec,
     };
     return params;
@@ -511,7 +580,7 @@ function tckedit_mask_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("-mask");
-    cargs.push(...dynCargs((params["spec"] ?? null)["@type"])((params["spec"] ?? null), execution));
+    cargs.push(...tckedit_spec_cargs_dyn_fn_2((params["spec"] ?? null)["@type"])((params["spec"] ?? null), execution));
     return cargs;
 }
 
@@ -527,9 +596,9 @@ function tckedit_mask_cargs(
 function tckedit_config_params(
     key: string,
     value: string,
-): TckeditConfigParameters {
+): TckeditConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.tckedit.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -558,7 +627,7 @@ function tckedit_config_cargs(
 
 
 /**
- * Output object returned when calling `tckedit(...)`.
+ * Output object returned when calling `TckeditParameters(...)`.
  *
  * @interface
  */
@@ -633,9 +702,9 @@ function tckedit_params(
     config: Array<TckeditConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TckeditParameters {
+): TckeditParametersTagged {
     const params = {
-        "@type": "mrtrix.tckedit" as const,
+        "@type": "mrtrix/tckedit" as const,
         "inverse": inverse,
         "ends_only": ends_only,
         "info": info,
@@ -708,16 +777,16 @@ function tckedit_cargs(
     const cargs: string[] = [];
     cargs.push("tckedit");
     if ((params["include"] ?? null) !== null) {
-        cargs.push(...(params["include"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["include"] ?? null).map(s => tckedit_include_cargs(s, execution)).flat());
     }
     if ((params["include_ordered"] ?? null) !== null) {
-        cargs.push(...(params["include_ordered"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["include_ordered"] ?? null).map(s => tckedit_include_ordered_cargs(s, execution)).flat());
     }
     if ((params["exclude"] ?? null) !== null) {
-        cargs.push(...(params["exclude"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["exclude"] ?? null).map(s => tckedit_exclude_cargs(s, execution)).flat());
     }
     if ((params["mask"] ?? null) !== null) {
-        cargs.push(...(params["mask"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["mask"] ?? null).map(s => tckedit_mask_cargs(s, execution)).flat());
     }
     if ((params["maxlength"] ?? null) !== null) {
         cargs.push(
@@ -755,10 +824,10 @@ function tckedit_cargs(
             String((params["minweight"] ?? null))
         );
     }
-    if ((params["inverse"] ?? null)) {
+    if ((params["inverse"] ?? false)) {
         cargs.push("-inverse");
     }
-    if ((params["ends_only"] ?? null)) {
+    if ((params["ends_only"] ?? false)) {
         cargs.push("-ends_only");
     }
     if ((params["tck_weights_in"] ?? null) !== null) {
@@ -773,16 +842,16 @@ function tckedit_cargs(
             (params["tck_weights_out"] ?? null)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -792,12 +861,12 @@ function tckedit_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => tckedit_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(...(params["tracks_in"] ?? null).map(f => execution.inputFile(f)));
@@ -938,19 +1007,7 @@ function tckedit(
 
 export {
       TCKEDIT_METADATA,
-      TckeditConfigParameters,
-      TckeditExcludeParameters,
-      TckeditIncludeOrderedParameters,
-      TckeditIncludeParameters,
-      TckeditMaskParameters,
       TckeditOutputs,
-      TckeditParameters,
-      TckeditVariousFile1Parameters,
-      TckeditVariousFile2Parameters,
-      TckeditVariousFileParameters,
-      TckeditVariousString1Parameters,
-      TckeditVariousString2Parameters,
-      TckeditVariousStringParameters,
       tckedit,
       tckedit_config_params,
       tckedit_exclude_params,

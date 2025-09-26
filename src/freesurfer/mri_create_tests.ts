@@ -12,7 +12,7 @@ const MRI_CREATE_TESTS_METADATA: Metadata = {
 
 
 interface MriCreateTestsParameters {
-    "@type": "freesurfer.mri_create_tests";
+    "@type"?: "freesurfer/mri_create_tests";
     "input_file": InputPathType;
     "out_src": string;
     "out_target": string;
@@ -33,43 +33,11 @@ interface MriCreateTestsParameters {
     "lta_outt"?: string | null | undefined;
     "iscale_out"?: string | null | undefined;
 }
+type MriCreateTestsParametersTagged = Required<Pick<MriCreateTestsParameters, '@type'>> & MriCreateTestsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_create_tests": mri_create_tests_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_create_tests(...)`.
+ * Output object returned when calling `MriCreateTestsParameters(...)`.
  *
  * @interface
  */
@@ -126,9 +94,9 @@ function mri_create_tests_params(
     lta_outs: string | null = null,
     lta_outt: string | null = null,
     iscale_out: string | null = null,
-): MriCreateTestsParameters {
+): MriCreateTestsParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_create_tests" as const,
+        "@type": "freesurfer/mri_create_tests" as const,
         "input_file": input_file,
         "out_src": out_src,
         "out_target": out_target,
@@ -241,7 +209,7 @@ function mri_create_tests_cargs(
             String((params["outlier_box"] ?? null))
         );
     }
-    if ((params["translation_flag"] ?? null)) {
+    if ((params["translation_flag"] ?? false)) {
         cargs.push("--translation");
     }
     if ((params["transdist"] ?? null) !== null) {
@@ -250,7 +218,7 @@ function mri_create_tests_cargs(
             String((params["transdist"] ?? null))
         );
     }
-    if ((params["rotation_flag"] ?? null)) {
+    if ((params["rotation_flag"] ?? false)) {
         cargs.push("--rotation");
     }
     if ((params["maxdeg"] ?? null) !== null) {
@@ -259,7 +227,7 @@ function mri_create_tests_cargs(
             String((params["maxdeg"] ?? null))
         );
     }
-    if ((params["intensity_flag"] ?? null)) {
+    if ((params["intensity_flag"] ?? false)) {
         cargs.push("--intensity");
     }
     if ((params["iscale"] ?? null) !== null) {
@@ -405,7 +373,6 @@ function mri_create_tests(
 export {
       MRI_CREATE_TESTS_METADATA,
       MriCreateTestsOutputs,
-      MriCreateTestsParameters,
       mri_create_tests,
       mri_create_tests_execute,
       mri_create_tests_params,

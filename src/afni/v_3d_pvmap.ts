@@ -12,50 +12,17 @@ const V_3D_PVMAP_METADATA: Metadata = {
 
 
 interface V3dPvmapParameters {
-    "@type": "afni.3dPVmap";
+    "@type"?: "afni/3dPVmap";
     "prefix"?: string | null | undefined;
     "mask"?: InputPathType | null | undefined;
     "automask": boolean;
     "inputdataset": InputPathType;
 }
+type V3dPvmapParametersTagged = Required<Pick<V3dPvmapParameters, '@type'>> & V3dPvmapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dPVmap": v_3d_pvmap_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dPVmap": v_3d_pvmap_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_pvmap(...)`.
+ * Output object returned when calling `V3dPvmapParameters(...)`.
  *
  * @interface
  */
@@ -94,9 +61,9 @@ function v_3d_pvmap_params(
     prefix: string | null = null,
     mask: InputPathType | null = null,
     automask: boolean = false,
-): V3dPvmapParameters {
+): V3dPvmapParametersTagged {
     const params = {
-        "@type": "afni.3dPVmap" as const,
+        "@type": "afni/3dPVmap" as const,
         "automask": automask,
         "inputdataset": inputdataset,
     };
@@ -136,7 +103,7 @@ function v_3d_pvmap_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     cargs.push(execution.inputFile((params["inputdataset"] ?? null)));
@@ -225,7 +192,6 @@ function v_3d_pvmap(
 
 export {
       V3dPvmapOutputs,
-      V3dPvmapParameters,
       V_3D_PVMAP_METADATA,
       v_3d_pvmap,
       v_3d_pvmap_execute,

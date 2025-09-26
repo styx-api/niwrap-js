@@ -12,49 +12,17 @@ const CALC_GRAD_PERC_DEV_METADATA: Metadata = {
 
 
 interface CalcGradPercDevParameters {
-    "@type": "fsl.calc_grad_perc_dev";
+    "@type"?: "fsl/calc_grad_perc_dev";
     "fullwarp_image": InputPathType;
     "out_basename": string;
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
+type CalcGradPercDevParametersTagged = Required<Pick<CalcGradPercDevParameters, '@type'>> & CalcGradPercDevParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.calc_grad_perc_dev": calc_grad_perc_dev_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `calc_grad_perc_dev(...)`.
+ * Output object returned when calling `CalcGradPercDevParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function calc_grad_perc_dev_params(
     out_basename: string,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): CalcGradPercDevParameters {
+): CalcGradPercDevParametersTagged {
     const params = {
-        "@type": "fsl.calc_grad_perc_dev" as const,
+        "@type": "fsl/calc_grad_perc_dev" as const,
         "fullwarp_image": fullwarp_image,
         "out_basename": out_basename,
         "verbose_flag": verbose_flag,
@@ -115,10 +83,10 @@ function calc_grad_perc_dev_cargs(
         "-o,--out",
         (params["out_basename"] ?? null)
     );
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v,--verbose");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h,--help");
     }
     return cargs;
@@ -204,7 +172,6 @@ function calc_grad_perc_dev(
 export {
       CALC_GRAD_PERC_DEV_METADATA,
       CalcGradPercDevOutputs,
-      CalcGradPercDevParameters,
       calc_grad_perc_dev,
       calc_grad_perc_dev_execute,
       calc_grad_perc_dev_params,

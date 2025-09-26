@@ -12,7 +12,7 @@ const MRI_APARC2ASEG_METADATA: Metadata = {
 
 
 interface MriAparc2asegParameters {
-    "@type": "freesurfer.mri_aparc2aseg";
+    "@type"?: "freesurfer/mri_aparc2aseg";
     "subject"?: string | null | undefined;
     "output_volfile"?: string | null | undefined;
     "old_ribbon": boolean;
@@ -35,44 +35,11 @@ interface MriAparc2asegParameters {
     "help": boolean;
     "version": boolean;
 }
+type MriAparc2asegParametersTagged = Required<Pick<MriAparc2asegParameters, '@type'>> & MriAparc2asegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_aparc2aseg": mri_aparc2aseg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_aparc2aseg": mri_aparc2aseg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_aparc2aseg(...)`.
+ * Output object returned when calling `MriAparc2asegParameters(...)`.
  *
  * @interface
  */
@@ -137,9 +104,9 @@ function mri_aparc2aseg_params(
     threads: number | null = null,
     help: boolean = false,
     version: boolean = false,
-): MriAparc2asegParameters {
+): MriAparc2asegParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_aparc2aseg" as const,
+        "@type": "freesurfer/mri_aparc2aseg" as const,
         "old_ribbon": old_ribbon,
         "new_ribbon": new_ribbon,
         "a2005s": a2005s,
@@ -210,16 +177,16 @@ function mri_aparc2aseg_cargs(
             (params["output_volfile"] ?? null)
         );
     }
-    if ((params["old_ribbon"] ?? null)) {
+    if ((params["old_ribbon"] ?? false)) {
         cargs.push("--old-ribbon");
     }
-    if ((params["new_ribbon"] ?? null)) {
+    if ((params["new_ribbon"] ?? false)) {
         cargs.push("--new-ribbon");
     }
-    if ((params["a2005s"] ?? null)) {
+    if ((params["a2005s"] ?? false)) {
         cargs.push("--a2005s");
     }
-    if ((params["a2009s"] ?? null)) {
+    if ((params["a2009s"] ?? false)) {
         cargs.push("--a2009s");
     }
     if ((params["annot_name"] ?? null) !== null) {
@@ -240,7 +207,7 @@ function mri_aparc2aseg_cargs(
             String((params["base_offset"] ?? null))
         );
     }
-    if ((params["label_wm"] ?? null)) {
+    if ((params["label_wm"] ?? false)) {
         cargs.push("--labelwm");
     }
     if ((params["wmparc_dmax"] ?? null) !== null) {
@@ -249,13 +216,13 @@ function mri_aparc2aseg_cargs(
             String((params["wmparc_dmax"] ?? null))
         );
     }
-    if ((params["rip_unknown"] ?? null)) {
+    if ((params["rip_unknown"] ?? false)) {
         cargs.push("--rip-unknown");
     }
-    if ((params["hypo_as_wm"] ?? null)) {
+    if ((params["hypo_as_wm"] ?? false)) {
         cargs.push("--hypo-as-wm");
     }
-    if ((params["no_fix_parahip"] ?? null)) {
+    if ((params["no_fix_parahip"] ?? false)) {
         cargs.push("--no-fix-parahip");
     }
     if ((params["smooth_normals"] ?? null) !== null) {
@@ -270,10 +237,10 @@ function mri_aparc2aseg_cargs(
             (params["crs_test"] ?? null)
         );
     }
-    if ((params["left_hemisphere"] ?? null)) {
+    if ((params["left_hemisphere"] ?? false)) {
         cargs.push("--lh");
     }
-    if ((params["right_hemisphere"] ?? null)) {
+    if ((params["right_hemisphere"] ?? false)) {
         cargs.push("--rh");
     }
     if ((params["threads"] ?? null) !== null) {
@@ -282,10 +249,10 @@ function mri_aparc2aseg_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -406,7 +373,6 @@ function mri_aparc2aseg(
 export {
       MRI_APARC2ASEG_METADATA,
       MriAparc2asegOutputs,
-      MriAparc2asegParameters,
       mri_aparc2aseg,
       mri_aparc2aseg_execute,
       mri_aparc2aseg_params,

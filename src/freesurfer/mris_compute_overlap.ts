@@ -12,7 +12,7 @@ const MRIS_COMPUTE_OVERLAP_METADATA: Metadata = {
 
 
 interface MrisComputeOverlapParameters {
-    "@type": "freesurfer.mris_compute_overlap";
+    "@type"?: "freesurfer/mris_compute_overlap";
     "subject": string;
     "hemi": string;
     "surface": string;
@@ -22,43 +22,11 @@ interface MrisComputeOverlapParameters {
     "log_file"?: string | null | undefined;
     "brain_volume"?: InputPathType | null | undefined;
 }
+type MrisComputeOverlapParametersTagged = Required<Pick<MrisComputeOverlapParameters, '@type'>> & MrisComputeOverlapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_compute_overlap": mris_compute_overlap_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_compute_overlap(...)`.
+ * Output object returned when calling `MrisComputeOverlapParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +61,9 @@ function mris_compute_overlap_params(
     percentage: boolean = false,
     log_file: string | null = null,
     brain_volume: InputPathType | null = null,
-): MrisComputeOverlapParameters {
+): MrisComputeOverlapParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_compute_overlap" as const,
+        "@type": "freesurfer/mris_compute_overlap" as const,
         "subject": subject,
         "hemi": hemi,
         "surface": surface,
@@ -132,7 +100,7 @@ function mris_compute_overlap_cargs(
     cargs.push((params["surface"] ?? null));
     cargs.push((params["annotation"] ?? null));
     cargs.push(...(params["labels"] ?? null));
-    if ((params["percentage"] ?? null)) {
+    if ((params["percentage"] ?? false)) {
         cargs.push("-p");
     }
     if ((params["log_file"] ?? null) !== null) {
@@ -238,7 +206,6 @@ function mris_compute_overlap(
 export {
       MRIS_COMPUTE_OVERLAP_METADATA,
       MrisComputeOverlapOutputs,
-      MrisComputeOverlapParameters,
       mris_compute_overlap,
       mris_compute_overlap_execute,
       mris_compute_overlap_params,

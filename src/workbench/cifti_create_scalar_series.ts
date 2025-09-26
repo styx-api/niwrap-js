@@ -12,56 +12,23 @@ const CIFTI_CREATE_SCALAR_SERIES_METADATA: Metadata = {
 
 
 interface CiftiCreateScalarSeriesSeriesParameters {
-    "@type": "workbench.cifti-create-scalar-series.series";
+    "@type"?: "series";
     "unit": string;
     "start": number;
     "step": number;
 }
+type CiftiCreateScalarSeriesSeriesParametersTagged = Required<Pick<CiftiCreateScalarSeriesSeriesParameters, '@type'>> & CiftiCreateScalarSeriesSeriesParameters;
 
 
 interface CiftiCreateScalarSeriesParameters {
-    "@type": "workbench.cifti-create-scalar-series";
+    "@type"?: "workbench/cifti-create-scalar-series";
     "input": string;
     "cifti_out": string;
     "opt_transpose": boolean;
     "opt_name_file_file"?: string | null | undefined;
     "series"?: CiftiCreateScalarSeriesSeriesParameters | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-create-scalar-series": cifti_create_scalar_series_cargs,
-        "workbench.cifti-create-scalar-series.series": cifti_create_scalar_series_series_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-create-scalar-series": cifti_create_scalar_series_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiCreateScalarSeriesParametersTagged = Required<Pick<CiftiCreateScalarSeriesParameters, '@type'>> & CiftiCreateScalarSeriesParameters;
 
 
 /**
@@ -77,9 +44,9 @@ function cifti_create_scalar_series_series_params(
     unit: string,
     start: number,
     step: number,
-): CiftiCreateScalarSeriesSeriesParameters {
+): CiftiCreateScalarSeriesSeriesParametersTagged {
     const params = {
-        "@type": "workbench.cifti-create-scalar-series.series" as const,
+        "@type": "series" as const,
         "unit": unit,
         "start": start,
         "step": step,
@@ -110,7 +77,7 @@ function cifti_create_scalar_series_series_cargs(
 
 
 /**
- * Output object returned when calling `cifti_create_scalar_series(...)`.
+ * Output object returned when calling `CiftiCreateScalarSeriesParameters(...)`.
  *
  * @interface
  */
@@ -143,9 +110,9 @@ function cifti_create_scalar_series_params(
     opt_transpose: boolean = false,
     opt_name_file_file: string | null = null,
     series: CiftiCreateScalarSeriesSeriesParameters | null = null,
-): CiftiCreateScalarSeriesParameters {
+): CiftiCreateScalarSeriesParametersTagged {
     const params = {
-        "@type": "workbench.cifti-create-scalar-series" as const,
+        "@type": "workbench/cifti-create-scalar-series" as const,
         "input": input,
         "cifti_out": cifti_out,
         "opt_transpose": opt_transpose,
@@ -177,7 +144,7 @@ function cifti_create_scalar_series_cargs(
     cargs.push("-cifti-create-scalar-series");
     cargs.push((params["input"] ?? null));
     cargs.push((params["cifti_out"] ?? null));
-    if ((params["opt_transpose"] ?? null)) {
+    if ((params["opt_transpose"] ?? false)) {
         cargs.push("-transpose");
     }
     if ((params["opt_name_file_file"] ?? null) !== null) {
@@ -187,7 +154,7 @@ function cifti_create_scalar_series_cargs(
         );
     }
     if ((params["series"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["series"] ?? null)["@type"])((params["series"] ?? null), execution));
+        cargs.push(...cifti_create_scalar_series_series_cargs((params["series"] ?? null), execution));
     }
     return cargs;
 }
@@ -293,8 +260,6 @@ function cifti_create_scalar_series(
 export {
       CIFTI_CREATE_SCALAR_SERIES_METADATA,
       CiftiCreateScalarSeriesOutputs,
-      CiftiCreateScalarSeriesParameters,
-      CiftiCreateScalarSeriesSeriesParameters,
       cifti_create_scalar_series,
       cifti_create_scalar_series_execute,
       cifti_create_scalar_series_params,

@@ -12,7 +12,7 @@ const ATROPOS_METADATA: Metadata = {
 
 
 interface AtroposParameters {
-    "@type": "ants.Atropos";
+    "@type"?: "ants/Atropos";
     "image_dimensionality"?: 2 | 3 | 4 | null | undefined;
     "intensity_image": string;
     "bspline"?: string | null | undefined;
@@ -33,44 +33,11 @@ interface AtroposParameters {
     "label_propagation"?: string | null | undefined;
     "verbose"?: 0 | 1 | null | undefined;
 }
+type AtroposParametersTagged = Required<Pick<AtroposParameters, '@type'>> & AtroposParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.Atropos": atropos_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.Atropos": atropos_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `atropos(...)`.
+ * Output object returned when calling `AtroposParameters(...)`.
  *
  * @interface
  */
@@ -135,9 +102,9 @@ function atropos_params(
     use_euclidean_distance: 0 | 1 | null = null,
     label_propagation: string | null = null,
     verbose: 0 | 1 | null = null,
-): AtroposParameters {
+): AtroposParametersTagged {
     const params = {
-        "@type": "ants.Atropos" as const,
+        "@type": "ants/Atropos" as const,
         "intensity_image": intensity_image,
         "initialization": initialization,
         "mask_image": mask_image,
@@ -419,7 +386,6 @@ function atropos(
 export {
       ATROPOS_METADATA,
       AtroposOutputs,
-      AtroposParameters,
       atropos,
       atropos_execute,
       atropos_params,

@@ -12,48 +12,15 @@ const SURFACE_CREATE_SPHERE_METADATA: Metadata = {
 
 
 interface SurfaceCreateSphereParameters {
-    "@type": "workbench.surface-create-sphere";
+    "@type"?: "workbench/surface-create-sphere";
     "num_vertices": number;
     "sphere_out": string;
 }
+type SurfaceCreateSphereParametersTagged = Required<Pick<SurfaceCreateSphereParameters, '@type'>> & SurfaceCreateSphereParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-create-sphere": surface_create_sphere_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-create-sphere": surface_create_sphere_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_create_sphere(...)`.
+ * Output object returned when calling `SurfaceCreateSphereParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface SurfaceCreateSphereOutputs {
 function surface_create_sphere_params(
     num_vertices: number,
     sphere_out: string,
-): SurfaceCreateSphereParameters {
+): SurfaceCreateSphereParametersTagged {
     const params = {
-        "@type": "workbench.surface-create-sphere" as const,
+        "@type": "workbench/surface-create-sphere" as const,
         "num_vertices": num_vertices,
         "sphere_out": sphere_out,
     };
@@ -201,7 +168,6 @@ function surface_create_sphere(
 export {
       SURFACE_CREATE_SPHERE_METADATA,
       SurfaceCreateSphereOutputs,
-      SurfaceCreateSphereParameters,
       surface_create_sphere,
       surface_create_sphere_execute,
       surface_create_sphere_params,

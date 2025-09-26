@@ -12,47 +12,14 @@ const V__PARSE_AFNI_NAME_METADATA: Metadata = {
 
 
 interface VParseAfniNameParameters {
-    "@type": "afni.@parse_afni_name";
+    "@type"?: "afni/@parse_afni_name";
     "afni_name": string;
 }
+type VParseAfniNameParametersTagged = Required<Pick<VParseAfniNameParameters, '@type'>> & VParseAfniNameParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@parse_afni_name": v__parse_afni_name_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@parse_afni_name": v__parse_afni_name_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__parse_afni_name(...)`.
+ * Output object returned when calling `VParseAfniNameParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ interface VParseAfniNameOutputs {
  */
 function v__parse_afni_name_params(
     afni_name: string,
-): VParseAfniNameParameters {
+): VParseAfniNameParametersTagged {
     const params = {
-        "@type": "afni.@parse_afni_name" as const,
+        "@type": "afni/@parse_afni_name" as const,
         "afni_name": afni_name,
     };
     return params;
@@ -193,7 +160,6 @@ function v__parse_afni_name(
 
 export {
       VParseAfniNameOutputs,
-      VParseAfniNameParameters,
       V__PARSE_AFNI_NAME_METADATA,
       v__parse_afni_name,
       v__parse_afni_name_execute,

@@ -12,48 +12,15 @@ const MRIS_SURF2VTK_METADATA: Metadata = {
 
 
 interface MrisSurf2vtkParameters {
-    "@type": "freesurfer.mris_surf2vtk";
+    "@type"?: "freesurfer/mris_surf2vtk";
     "input_surface": InputPathType;
     "output_surface": string;
 }
+type MrisSurf2vtkParametersTagged = Required<Pick<MrisSurf2vtkParameters, '@type'>> & MrisSurf2vtkParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_surf2vtk": mris_surf2vtk_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_surf2vtk": mris_surf2vtk_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_surf2vtk(...)`.
+ * Output object returned when calling `MrisSurf2vtkParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface MrisSurf2vtkOutputs {
 function mris_surf2vtk_params(
     input_surface: InputPathType,
     output_surface: string,
-): MrisSurf2vtkParameters {
+): MrisSurf2vtkParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_surf2vtk" as const,
+        "@type": "freesurfer/mris_surf2vtk" as const,
         "input_surface": input_surface,
         "output_surface": output_surface,
     };
@@ -192,7 +159,6 @@ function mris_surf2vtk(
 export {
       MRIS_SURF2VTK_METADATA,
       MrisSurf2vtkOutputs,
-      MrisSurf2vtkParameters,
       mris_surf2vtk,
       mris_surf2vtk_execute,
       mris_surf2vtk_params,

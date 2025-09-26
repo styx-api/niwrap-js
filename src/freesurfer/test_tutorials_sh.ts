@@ -12,7 +12,7 @@ const TEST_TUTORIALS_SH_METADATA: Metadata = {
 
 
 interface TestTutorialsShParameters {
-    "@type": "freesurfer.test_tutorials.sh";
+    "@type"?: "freesurfer/test_tutorials.sh";
     "all_tutorials": boolean;
     "quick_test": boolean;
     "auto_quit_freeview": boolean;
@@ -30,43 +30,11 @@ interface TestTutorialsShParameters {
     "fsfast": boolean;
     "multimodal": boolean;
 }
+type TestTutorialsShParametersTagged = Required<Pick<TestTutorialsShParameters, '@type'>> & TestTutorialsShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.test_tutorials.sh": test_tutorials_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `test_tutorials_sh(...)`.
+ * Output object returned when calling `TestTutorialsShParameters(...)`.
  *
  * @interface
  */
@@ -117,9 +85,9 @@ function test_tutorials_sh_params(
     tracula: boolean = false,
     fsfast: boolean = false,
     multimodal: boolean = false,
-): TestTutorialsShParameters {
+): TestTutorialsShParametersTagged {
     const params = {
-        "@type": "freesurfer.test_tutorials.sh" as const,
+        "@type": "freesurfer/test_tutorials.sh" as const,
         "all_tutorials": all_tutorials,
         "quick_test": quick_test,
         "auto_quit_freeview": auto_quit_freeview,
@@ -155,52 +123,52 @@ function test_tutorials_sh_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("test_tutorials.sh");
-    if ((params["all_tutorials"] ?? null)) {
+    if ((params["all_tutorials"] ?? false)) {
         cargs.push("-all");
     }
-    if ((params["quick_test"] ?? null)) {
+    if ((params["quick_test"] ?? false)) {
         cargs.push("-quick");
     }
-    if ((params["auto_quit_freeview"] ?? null)) {
+    if ((params["auto_quit_freeview"] ?? false)) {
         cargs.push("-auto_quit_freeview");
     }
-    if ((params["skip_all_guis"] ?? null)) {
+    if ((params["skip_all_guis"] ?? false)) {
         cargs.push("-skip_all_guis");
     }
-    if ((params["skip_tk_guis"] ?? null)) {
+    if ((params["skip_tk_guis"] ?? false)) {
         cargs.push("-skip_tk_guis");
     }
-    if ((params["skip_qdec_guis"] ?? null)) {
+    if ((params["skip_qdec_guis"] ?? false)) {
         cargs.push("-skip_qdec_guis");
     }
-    if ((params["individual_subject"] ?? null)) {
+    if ((params["individual_subject"] ?? false)) {
         cargs.push("-individual_subject");
     }
-    if ((params["troubleshooting"] ?? null)) {
+    if ((params["troubleshooting"] ?? false)) {
         cargs.push("-troubleshooting");
     }
-    if ((params["group_analysis"] ?? null)) {
+    if ((params["group_analysis"] ?? false)) {
         cargs.push("-group_analysis");
     }
-    if ((params["qdec"] ?? null)) {
+    if ((params["qdec"] ?? false)) {
         cargs.push("-qdec");
     }
-    if ((params["longitudinal"] ?? null)) {
+    if ((params["longitudinal"] ?? false)) {
         cargs.push("-longitudinal");
     }
-    if ((params["roi_analysis"] ?? null)) {
+    if ((params["roi_analysis"] ?? false)) {
         cargs.push("-roi_analysis");
     }
-    if ((params["diffusion"] ?? null)) {
+    if ((params["diffusion"] ?? false)) {
         cargs.push("-diffusion");
     }
-    if ((params["tracula"] ?? null)) {
+    if ((params["tracula"] ?? false)) {
         cargs.push("-tracula");
     }
-    if ((params["fsfast"] ?? null)) {
+    if ((params["fsfast"] ?? false)) {
         cargs.push("-fsfast");
     }
-    if ((params["multimodal"] ?? null)) {
+    if ((params["multimodal"] ?? false)) {
         cargs.push("-multimodal");
     }
     return cargs;
@@ -310,7 +278,6 @@ function test_tutorials_sh(
 export {
       TEST_TUTORIALS_SH_METADATA,
       TestTutorialsShOutputs,
-      TestTutorialsShParameters,
       test_tutorials_sh,
       test_tutorials_sh_execute,
       test_tutorials_sh_params,

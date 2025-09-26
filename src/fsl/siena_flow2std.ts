@@ -12,49 +12,17 @@ const SIENA_FLOW2STD_METADATA: Metadata = {
 
 
 interface SienaFlow2stdParameters {
-    "@type": "fsl.siena_flow2std";
+    "@type"?: "fsl/siena_flow2std";
     "fileroot1": string;
     "fileroot2": string;
     "sigma"?: number | null | undefined;
     "debug_flag": boolean;
 }
+type SienaFlow2stdParametersTagged = Required<Pick<SienaFlow2stdParameters, '@type'>> & SienaFlow2stdParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.siena_flow2std": siena_flow2std_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `siena_flow2std(...)`.
+ * Output object returned when calling `SienaFlow2stdParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function siena_flow2std_params(
     fileroot2: string,
     sigma: number | null = null,
     debug_flag: boolean = false,
-): SienaFlow2stdParameters {
+): SienaFlow2stdParametersTagged {
     const params = {
-        "@type": "fsl.siena_flow2std" as const,
+        "@type": "fsl/siena_flow2std" as const,
         "fileroot1": fileroot1,
         "fileroot2": fileroot2,
         "debug_flag": debug_flag,
@@ -117,7 +85,7 @@ function siena_flow2std_cargs(
             String((params["sigma"] ?? null))
         );
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("-d");
     }
     return cargs;
@@ -203,7 +171,6 @@ function siena_flow2std(
 export {
       SIENA_FLOW2STD_METADATA,
       SienaFlow2stdOutputs,
-      SienaFlow2stdParameters,
       siena_flow2std,
       siena_flow2std_execute,
       siena_flow2std_params,

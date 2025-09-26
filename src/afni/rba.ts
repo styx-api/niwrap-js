@@ -12,7 +12,7 @@ const RBA_METADATA: Metadata = {
 
 
 interface RbaParameters {
-    "@type": "afni.RBA";
+    "@type"?: "afni/RBA";
     "prefix": string;
     "dataTable": InputPathType;
     "chains"?: number | null | undefined;
@@ -40,44 +40,11 @@ interface RbaParameters {
     "md": boolean;
     "r2z": boolean;
 }
+type RbaParametersTagged = Required<Pick<RbaParameters, '@type'>> & RbaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.RBA": rba_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.RBA": rba_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `rba(...)`.
+ * Output object returned when calling `RbaParameters(...)`.
  *
  * @interface
  */
@@ -156,9 +123,9 @@ function rba_params(
     verbose: number | null = null,
     md: boolean = false,
     r2z: boolean = false,
-): RbaParameters {
+): RbaParametersTagged {
     const params = {
-        "@type": "afni.RBA" as const,
+        "@type": "afni/RBA" as const,
         "prefix": prefix,
         "dataTable": data_table,
         "debug": debug,
@@ -374,7 +341,7 @@ function rba_cargs(
             (params["sigma"] ?? null)
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-dbgArgs");
     }
     if ((params["verbose"] ?? null) !== null) {
@@ -383,10 +350,10 @@ function rba_cargs(
             String((params["verbose"] ?? null))
         );
     }
-    if ((params["md"] ?? null)) {
+    if ((params["md"] ?? false)) {
         cargs.push("-MD");
     }
-    if ((params["r2z"] ?? null)) {
+    if ((params["r2z"] ?? false)) {
         cargs.push("-r2z");
     }
     return cargs;
@@ -518,7 +485,6 @@ function rba(
 export {
       RBA_METADATA,
       RbaOutputs,
-      RbaParameters,
       rba,
       rba_execute,
       rba_params,

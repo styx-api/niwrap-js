@@ -12,49 +12,17 @@ const FS_RUN_FROM_MCR_METADATA: Metadata = {
 
 
 interface FsRunFromMcrParameters {
-    "@type": "freesurfer.fs_run_from_mcr";
+    "@type"?: "freesurfer/fs_run_from_mcr";
     "name"?: string | null | undefined;
     "command"?: string | null | undefined;
     "zeroth_flag": boolean;
     "empty_env_flag": boolean;
 }
+type FsRunFromMcrParametersTagged = Required<Pick<FsRunFromMcrParameters, '@type'>> & FsRunFromMcrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fs_run_from_mcr": fs_run_from_mcr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fs_run_from_mcr(...)`.
+ * Output object returned when calling `FsRunFromMcrParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function fs_run_from_mcr_params(
     command: string | null = null,
     zeroth_flag: boolean = false,
     empty_env_flag: boolean = false,
-): FsRunFromMcrParameters {
+): FsRunFromMcrParametersTagged {
     const params = {
-        "@type": "freesurfer.fs_run_from_mcr" as const,
+        "@type": "freesurfer/fs_run_from_mcr" as const,
         "zeroth_flag": zeroth_flag,
         "empty_env_flag": empty_env_flag,
     };
@@ -120,10 +88,10 @@ function fs_run_from_mcr_cargs(
     if ((params["command"] ?? null) !== null) {
         cargs.push((params["command"] ?? null));
     }
-    if ((params["zeroth_flag"] ?? null)) {
+    if ((params["zeroth_flag"] ?? false)) {
         cargs.push("-l");
     }
-    if ((params["empty_env_flag"] ?? null)) {
+    if ((params["empty_env_flag"] ?? false)) {
         cargs.push("-c");
     }
     return cargs;
@@ -209,7 +177,6 @@ function fs_run_from_mcr(
 export {
       FS_RUN_FROM_MCR_METADATA,
       FsRunFromMcrOutputs,
-      FsRunFromMcrParameters,
       fs_run_from_mcr,
       fs_run_from_mcr_execute,
       fs_run_from_mcr_params,

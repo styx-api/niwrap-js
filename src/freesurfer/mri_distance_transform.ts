@@ -12,51 +12,18 @@ const MRI_DISTANCE_TRANSFORM_METADATA: Metadata = {
 
 
 interface MriDistanceTransformParameters {
-    "@type": "freesurfer.mri_distance_transform";
+    "@type"?: "freesurfer/mri_distance_transform";
     "input_volume": InputPathType;
     "label": number;
     "max_distance": number;
     "mode"?: number | null | undefined;
     "output_volume": string;
 }
+type MriDistanceTransformParametersTagged = Required<Pick<MriDistanceTransformParameters, '@type'>> & MriDistanceTransformParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_distance_transform": mri_distance_transform_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_distance_transform": mri_distance_transform_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_distance_transform(...)`.
+ * Output object returned when calling `MriDistanceTransformParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function mri_distance_transform_params(
     max_distance: number,
     output_volume: string,
     mode: number | null = null,
-): MriDistanceTransformParameters {
+): MriDistanceTransformParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_distance_transform" as const,
+        "@type": "freesurfer/mri_distance_transform" as const,
         "input_volume": input_volume,
         "label": label,
         "max_distance": max_distance,
@@ -211,7 +178,6 @@ function mri_distance_transform(
 export {
       MRI_DISTANCE_TRANSFORM_METADATA,
       MriDistanceTransformOutputs,
-      MriDistanceTransformParameters,
       mri_distance_transform,
       mri_distance_transform_execute,
       mri_distance_transform_params,

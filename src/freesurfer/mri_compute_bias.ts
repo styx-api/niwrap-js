@@ -12,48 +12,15 @@ const MRI_COMPUTE_BIAS_METADATA: Metadata = {
 
 
 interface MriComputeBiasParameters {
-    "@type": "freesurfer.mri_compute_bias";
+    "@type"?: "freesurfer/mri_compute_bias";
     "subjects": Array<string>;
     "output_volume": string;
 }
+type MriComputeBiasParametersTagged = Required<Pick<MriComputeBiasParameters, '@type'>> & MriComputeBiasParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_compute_bias": mri_compute_bias_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_compute_bias": mri_compute_bias_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_compute_bias(...)`.
+ * Output object returned when calling `MriComputeBiasParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface MriComputeBiasOutputs {
 function mri_compute_bias_params(
     subjects: Array<string>,
     output_volume: string,
-): MriComputeBiasParameters {
+): MriComputeBiasParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_compute_bias" as const,
+        "@type": "freesurfer/mri_compute_bias" as const,
         "subjects": subjects,
         "output_volume": output_volume,
     };
@@ -186,7 +153,6 @@ function mri_compute_bias(
 export {
       MRI_COMPUTE_BIAS_METADATA,
       MriComputeBiasOutputs,
-      MriComputeBiasParameters,
       mri_compute_bias,
       mri_compute_bias_execute,
       mri_compute_bias_params,

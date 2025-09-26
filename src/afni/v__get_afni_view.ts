@@ -12,47 +12,14 @@ const V__GET_AFNI_VIEW_METADATA: Metadata = {
 
 
 interface VGetAfniViewParameters {
-    "@type": "afni.@GetAfniView";
+    "@type"?: "afni/@GetAfniView";
     "dataset_name": string;
 }
+type VGetAfniViewParametersTagged = Required<Pick<VGetAfniViewParameters, '@type'>> & VGetAfniViewParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@GetAfniView": v__get_afni_view_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@GetAfniView": v__get_afni_view_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__get_afni_view(...)`.
+ * Output object returned when calling `VGetAfniViewParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface VGetAfniViewOutputs {
  */
 function v__get_afni_view_params(
     dataset_name: string,
-): VGetAfniViewParameters {
+): VGetAfniViewParametersTagged {
     const params = {
-        "@type": "afni.@GetAfniView" as const,
+        "@type": "afni/@GetAfniView" as const,
         "dataset_name": dataset_name,
     };
     return params;
@@ -178,7 +145,6 @@ function v__get_afni_view(
 
 export {
       VGetAfniViewOutputs,
-      VGetAfniViewParameters,
       V__GET_AFNI_VIEW_METADATA,
       v__get_afni_view,
       v__get_afni_view_execute,

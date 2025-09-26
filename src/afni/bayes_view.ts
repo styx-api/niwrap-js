@@ -12,48 +12,16 @@ const BAYES_VIEW_METADATA: Metadata = {
 
 
 interface BayesViewParameters {
-    "@type": "afni.bayes_view";
+    "@type"?: "afni/bayes_view";
     "input_folder": string;
     "help": boolean;
     "shiny_folder"?: string | null | undefined;
 }
+type BayesViewParametersTagged = Required<Pick<BayesViewParameters, '@type'>> & BayesViewParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.bayes_view": bayes_view_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `bayes_view(...)`.
+ * Output object returned when calling `BayesViewParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function bayes_view_params(
     input_folder: string,
     help: boolean = false,
     shiny_folder: string | null = null,
-): BayesViewParameters {
+): BayesViewParametersTagged {
     const params = {
-        "@type": "afni.bayes_view" as const,
+        "@type": "afni/bayes_view" as const,
         "input_folder": input_folder,
         "help": help,
     };
@@ -106,7 +74,7 @@ function bayes_view_cargs(
     const cargs: string[] = [];
     cargs.push("bayes_view");
     cargs.push((params["input_folder"] ?? null));
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     if ((params["shiny_folder"] ?? null) !== null) {
@@ -196,7 +164,6 @@ function bayes_view(
 export {
       BAYES_VIEW_METADATA,
       BayesViewOutputs,
-      BayesViewParameters,
       bayes_view,
       bayes_view_execute,
       bayes_view_params,

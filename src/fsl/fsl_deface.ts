@@ -12,7 +12,7 @@ const FSL_DEFACE_METADATA: Metadata = {
 
 
 interface FslDefaceParameters {
-    "@type": "fsl.fsl_deface";
+    "@type"?: "fsl/fsl_deface";
     "infile": InputPathType;
     "outfile": string;
     "cropped_defacing_flag": boolean;
@@ -27,44 +27,11 @@ interface FslDefaceParameters {
     "center_of_gravity"?: Array<number> | null | undefined;
     "qc_images"?: string | null | undefined;
 }
+type FslDefaceParametersTagged = Required<Pick<FslDefaceParameters, '@type'>> & FslDefaceParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fsl_deface": fsl_deface_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fsl_deface": fsl_deface_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsl_deface(...)`.
+ * Output object returned when calling `FslDefaceParameters(...)`.
  *
  * @interface
  */
@@ -141,9 +108,9 @@ function fsl_deface_params(
     bias_correct_flag: boolean = false,
     center_of_gravity: Array<number> | null = null,
     qc_images: string | null = null,
-): FslDefaceParameters {
+): FslDefaceParametersTagged {
     const params = {
-        "@type": "fsl.fsl_deface" as const,
+        "@type": "fsl/fsl_deface" as const,
         "infile": infile,
         "outfile": outfile,
         "cropped_defacing_flag": cropped_defacing_flag,
@@ -196,7 +163,7 @@ function fsl_deface_cargs(
     cargs.push("fsl_deface");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
     cargs.push((params["outfile"] ?? null));
-    if ((params["cropped_defacing_flag"] ?? null)) {
+    if ((params["cropped_defacing_flag"] ?? false)) {
         cargs.push("-k");
     }
     if ((params["defacing_mask"] ?? null) !== null) {
@@ -241,7 +208,7 @@ function fsl_deface_cargs(
             String((params["fractional_intensity"] ?? null))
         );
     }
-    if ((params["bias_correct_flag"] ?? null)) {
+    if ((params["bias_correct_flag"] ?? false)) {
         cargs.push("-B");
     }
     if ((params["center_of_gravity"] ?? null) !== null) {
@@ -365,7 +332,6 @@ function fsl_deface(
 export {
       FSL_DEFACE_METADATA,
       FslDefaceOutputs,
-      FslDefaceParameters,
       fsl_deface,
       fsl_deface_execute,
       fsl_deface_params,

@@ -12,7 +12,7 @@ const FSLSMOOTHFILL_METADATA: Metadata = {
 
 
 interface FslsmoothfillParameters {
-    "@type": "fsl.fslsmoothfill";
+    "@type"?: "fsl/fslsmoothfill";
     "input_image": InputPathType;
     "mask_image": InputPathType;
     "output_image": string;
@@ -20,43 +20,11 @@ interface FslsmoothfillParameters {
     "debug_flag": boolean;
     "verbose_flag": boolean;
 }
+type FslsmoothfillParametersTagged = Required<Pick<FslsmoothfillParameters, '@type'>> & FslsmoothfillParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslsmoothfill": fslsmoothfill_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslsmoothfill(...)`.
+ * Output object returned when calling `FslsmoothfillParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function fslsmoothfill_params(
     number_of_iterations: number | null = null,
     debug_flag: boolean = false,
     verbose_flag: boolean = false,
-): FslsmoothfillParameters {
+): FslsmoothfillParametersTagged {
     const params = {
-        "@type": "fsl.fslsmoothfill" as const,
+        "@type": "fsl/fslsmoothfill" as const,
         "input_image": input_image,
         "mask_image": mask_image,
         "output_image": output_image,
@@ -126,10 +94,10 @@ function fslsmoothfill_cargs(
             String((params["number_of_iterations"] ?? null))
         );
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("--verbose");
     }
     return cargs;
@@ -219,7 +187,6 @@ function fslsmoothfill(
 export {
       FSLSMOOTHFILL_METADATA,
       FslsmoothfillOutputs,
-      FslsmoothfillParameters,
       fslsmoothfill,
       fslsmoothfill_execute,
       fslsmoothfill_params,

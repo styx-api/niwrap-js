@@ -12,7 +12,7 @@ const V_3D_TCORR1_D_METADATA: Metadata = {
 
 
 interface V3dTcorr1DParameters {
-    "@type": "afni.3dTcorr1D";
+    "@type"?: "afni/3dTcorr1D";
     "ktaub": boolean;
     "num_threads"?: number | null | undefined;
     "outputtype"?: "NIFTI" | "AFNI" | "NIFTI_GZ" | null | undefined;
@@ -22,44 +22,11 @@ interface V3dTcorr1DParameters {
     "xset": InputPathType;
     "y_1d": InputPathType;
 }
+type V3dTcorr1DParametersTagged = Required<Pick<V3dTcorr1DParameters, '@type'>> & V3dTcorr1DParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dTcorr1D": v_3d_tcorr1_d_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dTcorr1D": v_3d_tcorr1_d_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_tcorr1_d(...)`.
+ * Output object returned when calling `V3dTcorr1DParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +69,9 @@ function v_3d_tcorr1_d_params(
     pearson: boolean = false,
     quadrant: boolean = false,
     spearman: boolean = false,
-): V3dTcorr1DParameters {
+): V3dTcorr1DParametersTagged {
     const params = {
-        "@type": "afni.3dTcorr1D" as const,
+        "@type": "afni/3dTcorr1D" as const,
         "ktaub": ktaub,
         "pearson": pearson,
         "quadrant": quadrant,
@@ -136,7 +103,7 @@ function v_3d_tcorr1_d_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("3dTcorr1D");
-    if ((params["ktaub"] ?? null)) {
+    if ((params["ktaub"] ?? false)) {
         cargs.push("-ktaub");
     }
     if ((params["num_threads"] ?? null) !== null) {
@@ -145,13 +112,13 @@ function v_3d_tcorr1_d_cargs(
     if ((params["outputtype"] ?? null) !== null) {
         cargs.push((params["outputtype"] ?? null));
     }
-    if ((params["pearson"] ?? null)) {
+    if ((params["pearson"] ?? false)) {
         cargs.push("-pearson");
     }
-    if ((params["quadrant"] ?? null)) {
+    if ((params["quadrant"] ?? false)) {
         cargs.push("-quadrant");
     }
-    if ((params["spearman"] ?? null)) {
+    if ((params["spearman"] ?? false)) {
         cargs.push(["-spearman", execution.inputFile((params["xset"] ?? null)), execution.inputFile((params["y_1d"] ?? null))].join(''));
     }
     return cargs;
@@ -246,7 +213,6 @@ function v_3d_tcorr1_d(
 
 export {
       V3dTcorr1DOutputs,
-      V3dTcorr1DParameters,
       V_3D_TCORR1_D_METADATA,
       v_3d_tcorr1_d,
       v_3d_tcorr1_d_execute,

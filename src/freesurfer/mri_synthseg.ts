@@ -12,7 +12,7 @@ const MRI_SYNTHSEG_METADATA: Metadata = {
 
 
 interface MriSynthsegParameters {
-    "@type": "freesurfer.mri_synthseg";
+    "@type"?: "freesurfer/mri_synthseg";
     "input_image": InputPathType;
     "output_segmentation": string;
     "cortex_parcellation": boolean;
@@ -29,44 +29,11 @@ interface MriSynthsegParameters {
     "version_1": boolean;
     "photo_synthseg"?: string | null | undefined;
 }
+type MriSynthsegParametersTagged = Required<Pick<MriSynthsegParameters, '@type'>> & MriSynthsegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_synthseg": mri_synthseg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_synthseg": mri_synthseg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_synthseg(...)`.
+ * Output object returned when calling `MriSynthsegParameters(...)`.
  *
  * @interface
  */
@@ -135,9 +102,9 @@ function mri_synthseg_params(
     cpu: boolean = false,
     version_1: boolean = false,
     photo_synthseg: string | null = null,
-): MriSynthsegParameters {
+): MriSynthsegParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_synthseg" as const,
+        "@type": "freesurfer/mri_synthseg" as const,
         "input_image": input_image,
         "output_segmentation": output_segmentation,
         "cortex_parcellation": cortex_parcellation,
@@ -188,16 +155,16 @@ function mri_synthseg_cargs(
     cargs.push("mri_synthseg");
     cargs.push(execution.inputFile((params["input_image"] ?? null)));
     cargs.push((params["output_segmentation"] ?? null));
-    if ((params["cortex_parcellation"] ?? null)) {
+    if ((params["cortex_parcellation"] ?? false)) {
         cargs.push("--parc");
     }
-    if ((params["robust_prediction"] ?? null)) {
+    if ((params["robust_prediction"] ?? false)) {
         cargs.push("--robust");
     }
-    if ((params["fast_prediction"] ?? null)) {
+    if ((params["fast_prediction"] ?? false)) {
         cargs.push("--fast");
     }
-    if ((params["clip_ct"] ?? null)) {
+    if ((params["clip_ct"] ?? false)) {
         cargs.push("--ct");
     }
     if ((params["output_volume"] ?? null) !== null) {
@@ -218,10 +185,10 @@ function mri_synthseg_cargs(
     if ((params["threads"] ?? null) !== null) {
         cargs.push(String((params["threads"] ?? null)));
     }
-    if ((params["cpu"] ?? null)) {
+    if ((params["cpu"] ?? false)) {
         cargs.push("--cpu");
     }
-    if ((params["version_1"] ?? null)) {
+    if ((params["version_1"] ?? false)) {
         cargs.push("--v1");
     }
     if ((params["photo_synthseg"] ?? null) !== null) {
@@ -337,7 +304,6 @@ function mri_synthseg(
 export {
       MRI_SYNTHSEG_METADATA,
       MriSynthsegOutputs,
-      MriSynthsegParameters,
       mri_synthseg,
       mri_synthseg_execute,
       mri_synthseg_params,

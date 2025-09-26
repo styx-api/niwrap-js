@@ -12,51 +12,18 @@ const MRIS_TRANSLATE_ANNOTATION_METADATA: Metadata = {
 
 
 interface MrisTranslateAnnotationParameters {
-    "@type": "freesurfer.mris_translate_annotation";
+    "@type"?: "freesurfer/mris_translate_annotation";
     "subject": string;
     "hemi": string;
     "in_annot": InputPathType;
     "translation_file": InputPathType;
     "out_annot": string;
 }
+type MrisTranslateAnnotationParametersTagged = Required<Pick<MrisTranslateAnnotationParameters, '@type'>> & MrisTranslateAnnotationParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_translate_annotation": mris_translate_annotation_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_translate_annotation": mris_translate_annotation_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_translate_annotation(...)`.
+ * Output object returned when calling `MrisTranslateAnnotationParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function mris_translate_annotation_params(
     in_annot: InputPathType,
     translation_file: InputPathType,
     out_annot: string,
-): MrisTranslateAnnotationParameters {
+): MrisTranslateAnnotationParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_translate_annotation" as const,
+        "@type": "freesurfer/mris_translate_annotation" as const,
         "subject": subject,
         "hemi": hemi,
         "in_annot": in_annot,
@@ -207,7 +174,6 @@ function mris_translate_annotation(
 export {
       MRIS_TRANSLATE_ANNOTATION_METADATA,
       MrisTranslateAnnotationOutputs,
-      MrisTranslateAnnotationParameters,
       mris_translate_annotation,
       mris_translate_annotation_execute,
       mris_translate_annotation_params,

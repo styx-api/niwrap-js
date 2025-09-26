@@ -12,7 +12,7 @@ const MRI_GTMPVC_METADATA: Metadata = {
 
 
 interface MriGtmpvcParameters {
-    "@type": "freesurfer.mri_gtmpvc";
+    "@type"?: "freesurfer/mri_gtmpvc";
     "input_volume": InputPathType;
     "frame"?: number | null | undefined;
     "psf": number;
@@ -76,44 +76,11 @@ interface MriGtmpvcParameters {
     "help": boolean;
     "version": boolean;
 }
+type MriGtmpvcParametersTagged = Required<Pick<MriGtmpvcParameters, '@type'>> & MriGtmpvcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_gtmpvc": mri_gtmpvc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_gtmpvc": mri_gtmpvc_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_gtmpvc(...)`.
+ * Output object returned when calling `MriGtmpvcParameters(...)`.
  *
  * @interface
  */
@@ -304,9 +271,9 @@ function mri_gtmpvc_params(
     checkopts: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): MriGtmpvcParameters {
+): MriGtmpvcParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_gtmpvc" as const,
+        "@type": "freesurfer/mri_gtmpvc" as const,
         "input_volume": input_volume,
         "psf": psf,
         "segmentation": segmentation,
@@ -458,10 +425,10 @@ function mri_gtmpvc_cargs(
             execution.inputFile((params["registration"] ?? null))
         );
     }
-    if ((params["regheader"] ?? null)) {
+    if ((params["regheader"] ?? false)) {
         cargs.push("--regheader");
     }
-    if ((params["reg_identity"] ?? null)) {
+    if ((params["reg_identity"] ?? false)) {
         cargs.push("--reg-identity");
     }
     cargs.push(
@@ -480,10 +447,10 @@ function mri_gtmpvc_cargs(
             String((params["auto_mask"] ?? null))
         );
     }
-    if ((params["no_reduce_fov"] ?? null)) {
+    if ((params["no_reduce_fov"] ?? false)) {
         cargs.push("--no-reduce-fov");
     }
-    if ((params["reduce_fov_eqodd"] ?? null)) {
+    if ((params["reduce_fov_eqodd"] ?? false)) {
         cargs.push("--reduce-fov-eqodd");
     }
     if ((params["contrast_matrix"] ?? null) !== null) {
@@ -492,16 +459,16 @@ function mri_gtmpvc_cargs(
             execution.inputFile((params["contrast_matrix"] ?? null))
         );
     }
-    if ((params["default_seg_merge"] ?? null)) {
+    if ((params["default_seg_merge"] ?? false)) {
         cargs.push("--default-seg-merge");
     }
-    if ((params["merge_hypos"] ?? null)) {
+    if ((params["merge_hypos"] ?? false)) {
         cargs.push("--merge-hypos");
     }
-    if ((params["merge_cblum_wm_gyri"] ?? null)) {
+    if ((params["merge_cblum_wm_gyri"] ?? false)) {
         cargs.push("--merge-cblum-wm-gyri");
     }
-    if ((params["tt_reduce"] ?? null)) {
+    if ((params["tt_reduce"] ?? false)) {
         cargs.push("--tt-reduce");
     }
     if ((params["replace_seg"] ?? null) !== null) {
@@ -522,7 +489,7 @@ function mri_gtmpvc_cargs(
             (params["rescale"] ?? null)
         );
     }
-    if ((params["no_rescale"] ?? null)) {
+    if ((params["no_rescale"] ?? false)) {
         cargs.push("--no-rescale");
     }
     if ((params["scale_refval"] ?? null) !== null) {
@@ -537,19 +504,19 @@ function mri_gtmpvc_cargs(
             execution.inputFile((params["ctab"] ?? null))
         );
     }
-    if ((params["ctab_default"] ?? null)) {
+    if ((params["ctab_default"] ?? false)) {
         cargs.push("--ctab-default");
     }
-    if ((params["tt_update"] ?? null)) {
+    if ((params["tt_update"] ?? false)) {
         cargs.push("--tt-update");
     }
-    if ((params["lateralization"] ?? null)) {
+    if ((params["lateralization"] ?? false)) {
         cargs.push("--lat");
     }
-    if ((params["no_tfe"] ?? null)) {
+    if ((params["no_tfe"] ?? false)) {
         cargs.push("--no-tfe");
     }
-    if ((params["no_pvc"] ?? null)) {
+    if ((params["no_pvc"] ?? false)) {
         cargs.push("--no-pvc");
     }
     if ((params["segpvfres"] ?? null) !== null) {
@@ -558,7 +525,7 @@ function mri_gtmpvc_cargs(
             String((params["segpvfres"] ?? null))
         );
     }
-    if ((params["rbv"] ?? null)) {
+    if ((params["rbv"] ?? false)) {
         cargs.push("--rbv");
     }
     if ((params["rbv_res"] ?? null) !== null) {
@@ -573,10 +540,10 @@ function mri_gtmpvc_cargs(
             (params["mueller_pvc"] ?? null)
         );
     }
-    if ((params["mg_ref_cerebral_wm"] ?? null)) {
+    if ((params["mg_ref_cerebral_wm"] ?? false)) {
         cargs.push("--mg-ref-cerebral-wm");
     }
-    if ((params["mg_ref_lobes_wm"] ?? null)) {
+    if ((params["mg_ref_lobes_wm"] ?? false)) {
         cargs.push("--mg-ref-lobes-wm");
     }
     if ((params["glm_mg_pvc"] ?? null) !== null) {
@@ -603,25 +570,25 @@ function mri_gtmpvc_cargs(
             (params["steady_state"] ?? null)
         );
     }
-    if ((params["save_x"] ?? null)) {
+    if ((params["save_x"] ?? false)) {
         cargs.push("--X");
     }
-    if ((params["save_y"] ?? null)) {
+    if ((params["save_y"] ?? false)) {
         cargs.push("--y");
     }
-    if ((params["save_beta"] ?? null)) {
+    if ((params["save_beta"] ?? false)) {
         cargs.push("--beta");
     }
-    if ((params["save_x0"] ?? null)) {
+    if ((params["save_x0"] ?? false)) {
         cargs.push("--X0");
     }
-    if ((params["save_input"] ?? null)) {
+    if ((params["save_input"] ?? false)) {
         cargs.push("--save-input");
     }
-    if ((params["save_eres"] ?? null)) {
+    if ((params["save_eres"] ?? false)) {
         cargs.push("--save-eres");
     }
-    if ((params["save_yhat"] ?? null)) {
+    if ((params["save_yhat"] ?? false)) {
         cargs.push("--save-yhat");
     }
     if ((params["save_yhat_noise"] ?? null) !== null) {
@@ -630,10 +597,10 @@ function mri_gtmpvc_cargs(
             (params["save_yhat_noise"] ?? null)
         );
     }
-    if ((params["save_yhat_full_fov"] ?? null)) {
+    if ((params["save_yhat_full_fov"] ?? false)) {
         cargs.push("--save-yhat-full-fov");
     }
-    if ((params["save_yhat0"] ?? null)) {
+    if ((params["save_yhat0"] ?? false)) {
         cargs.push("--save-yhat0");
     }
     if ((params["synth"] ?? null) !== null) {
@@ -642,13 +609,13 @@ function mri_gtmpvc_cargs(
             (params["synth"] ?? null)
         );
     }
-    if ((params["synth_only"] ?? null)) {
+    if ((params["synth_only"] ?? false)) {
         cargs.push("--synth-only");
     }
-    if ((params["synth_save"] ?? null)) {
+    if ((params["synth_save"] ?? false)) {
         cargs.push("--synth-save");
     }
-    if ((params["save_text"] ?? null)) {
+    if ((params["save_text"] ?? false)) {
         cargs.push("--save-text");
     }
     if ((params["threads"] ?? null) !== null) {
@@ -657,10 +624,10 @@ function mri_gtmpvc_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["max_threads"] ?? null)) {
+    if ((params["max_threads"] ?? false)) {
         cargs.push("--max-threads");
     }
-    if ((params["max_threads_minus_one"] ?? null)) {
+    if ((params["max_threads_minus_one"] ?? false)) {
         cargs.push("--max-threads-minus-1");
     }
     if ((params["subjects_dir"] ?? null) !== null) {
@@ -681,16 +648,16 @@ function mri_gtmpvc_cargs(
             String((params["gdiag"] ?? null))
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["checkopts"] ?? null)) {
+    if ((params["checkopts"] ?? false)) {
         cargs.push("--checkopts");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
     return cargs;
@@ -904,7 +871,6 @@ function mri_gtmpvc(
 export {
       MRI_GTMPVC_METADATA,
       MriGtmpvcOutputs,
-      MriGtmpvcParameters,
       mri_gtmpvc,
       mri_gtmpvc_execute,
       mri_gtmpvc_params,

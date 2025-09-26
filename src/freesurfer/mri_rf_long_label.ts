@@ -12,46 +12,14 @@ const MRI_RF_LONG_LABEL_METADATA: Metadata = {
 
 
 interface MriRfLongLabelParameters {
-    "@type": "freesurfer.mri_rf_long_label";
+    "@type"?: "freesurfer/mri_rf_long_label";
     "help_flag"?: string | null | undefined;
 }
+type MriRfLongLabelParametersTagged = Required<Pick<MriRfLongLabelParameters, '@type'>> & MriRfLongLabelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_rf_long_label": mri_rf_long_label_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_rf_long_label(...)`.
+ * Output object returned when calling `MriRfLongLabelParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface MriRfLongLabelOutputs {
  */
 function mri_rf_long_label_params(
     help_flag: string | null = null,
-): MriRfLongLabelParameters {
+): MriRfLongLabelParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_rf_long_label" as const,
+        "@type": "freesurfer/mri_rf_long_label" as const,
     };
     if (help_flag !== null) {
         params["help_flag"] = help_flag;
@@ -177,7 +145,6 @@ function mri_rf_long_label(
 export {
       MRI_RF_LONG_LABEL_METADATA,
       MriRfLongLabelOutputs,
-      MriRfLongLabelParameters,
       mri_rf_long_label,
       mri_rf_long_label_execute,
       mri_rf_long_label_params,

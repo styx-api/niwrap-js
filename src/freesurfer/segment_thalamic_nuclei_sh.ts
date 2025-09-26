@@ -12,48 +12,15 @@ const SEGMENT_THALAMIC_NUCLEI_SH_METADATA: Metadata = {
 
 
 interface SegmentThalamicNucleiShParameters {
-    "@type": "freesurfer.segmentThalamicNuclei.sh";
+    "@type"?: "freesurfer/segmentThalamicNuclei.sh";
     "subject_id": string;
     "output_dir": string;
 }
+type SegmentThalamicNucleiShParametersTagged = Required<Pick<SegmentThalamicNucleiShParameters, '@type'>> & SegmentThalamicNucleiShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.segmentThalamicNuclei.sh": segment_thalamic_nuclei_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.segmentThalamicNuclei.sh": segment_thalamic_nuclei_sh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `segment_thalamic_nuclei_sh(...)`.
+ * Output object returned when calling `SegmentThalamicNucleiShParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface SegmentThalamicNucleiShOutputs {
 function segment_thalamic_nuclei_sh_params(
     subject_id: string,
     output_dir: string,
-): SegmentThalamicNucleiShParameters {
+): SegmentThalamicNucleiShParametersTagged {
     const params = {
-        "@type": "freesurfer.segmentThalamicNuclei.sh" as const,
+        "@type": "freesurfer/segmentThalamicNuclei.sh" as const,
         "subject_id": subject_id,
         "output_dir": output_dir,
     };
@@ -186,7 +153,6 @@ function segment_thalamic_nuclei_sh(
 export {
       SEGMENT_THALAMIC_NUCLEI_SH_METADATA,
       SegmentThalamicNucleiShOutputs,
-      SegmentThalamicNucleiShParameters,
       segment_thalamic_nuclei_sh,
       segment_thalamic_nuclei_sh_execute,
       segment_thalamic_nuclei_sh_params,

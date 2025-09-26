@@ -12,47 +12,15 @@ const PNGAPPEND_METADATA: Metadata = {
 
 
 interface PngappendParameters {
-    "@type": "fsl.pngappend";
+    "@type"?: "fsl/pngappend";
     "input_files_and_options": Array<string>;
     "output_file": InputPathType;
 }
+type PngappendParametersTagged = Required<Pick<PngappendParameters, '@type'>> & PngappendParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.pngappend": pngappend_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `pngappend(...)`.
+ * Output object returned when calling `PngappendParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface PngappendOutputs {
 function pngappend_params(
     input_files_and_options: Array<string>,
     output_file: InputPathType,
-): PngappendParameters {
+): PngappendParametersTagged {
     const params = {
-        "@type": "fsl.pngappend" as const,
+        "@type": "fsl/pngappend" as const,
         "input_files_and_options": input_files_and_options,
         "output_file": output_file,
     };
@@ -180,7 +148,6 @@ function pngappend(
 export {
       PNGAPPEND_METADATA,
       PngappendOutputs,
-      PngappendParameters,
       pngappend,
       pngappend_execute,
       pngappend_params,

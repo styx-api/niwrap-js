@@ -12,48 +12,15 @@ const PREWHITEN_METADATA: Metadata = {
 
 
 interface PrewhitenParameters {
-    "@type": "fsl.prewhiten";
+    "@type"?: "fsl/prewhiten";
     "feat_directory": string;
     "output_directory"?: string | null | undefined;
 }
+type PrewhitenParametersTagged = Required<Pick<PrewhitenParameters, '@type'>> & PrewhitenParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.prewhiten": prewhiten_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.prewhiten": prewhiten_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `prewhiten(...)`.
+ * Output object returned when calling `PrewhitenParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface PrewhitenOutputs {
 function prewhiten_params(
     feat_directory: string,
     output_directory: string | null = null,
-): PrewhitenParameters {
+): PrewhitenParametersTagged {
     const params = {
-        "@type": "fsl.prewhiten" as const,
+        "@type": "fsl/prewhiten" as const,
         "feat_directory": feat_directory,
     };
     if (output_directory !== null) {
@@ -193,7 +160,6 @@ function prewhiten(
 export {
       PREWHITEN_METADATA,
       PrewhitenOutputs,
-      PrewhitenParameters,
       prewhiten,
       prewhiten_execute,
       prewhiten_params,

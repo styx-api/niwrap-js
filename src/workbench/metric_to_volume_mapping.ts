@@ -12,17 +12,18 @@ const METRIC_TO_VOLUME_MAPPING_METADATA: Metadata = {
 
 
 interface MetricToVolumeMappingRibbonConstrainedParameters {
-    "@type": "workbench.metric-to-volume-mapping.ribbon_constrained";
+    "@type"?: "ribbon_constrained";
     "inner_surf": InputPathType;
     "outer_surf": InputPathType;
     "opt_voxel_subdiv_subdiv_num"?: number | null | undefined;
     "opt_greedy": boolean;
     "opt_thick_columns": boolean;
 }
+type MetricToVolumeMappingRibbonConstrainedParametersTagged = Required<Pick<MetricToVolumeMappingRibbonConstrainedParameters, '@type'>> & MetricToVolumeMappingRibbonConstrainedParameters;
 
 
 interface MetricToVolumeMappingParameters {
-    "@type": "workbench.metric-to-volume-mapping";
+    "@type"?: "workbench/metric-to-volume-mapping";
     "metric": InputPathType;
     "surface": InputPathType;
     "volume_space": InputPathType;
@@ -30,41 +31,7 @@ interface MetricToVolumeMappingParameters {
     "opt_nearest_vertex_distance"?: number | null | undefined;
     "ribbon_constrained"?: MetricToVolumeMappingRibbonConstrainedParameters | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-to-volume-mapping": metric_to_volume_mapping_cargs,
-        "workbench.metric-to-volume-mapping.ribbon_constrained": metric_to_volume_mapping_ribbon_constrained_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.metric-to-volume-mapping": metric_to_volume_mapping_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MetricToVolumeMappingParametersTagged = Required<Pick<MetricToVolumeMappingParameters, '@type'>> & MetricToVolumeMappingParameters;
 
 
 /**
@@ -84,9 +51,9 @@ function metric_to_volume_mapping_ribbon_constrained_params(
     opt_voxel_subdiv_subdiv_num: number | null = null,
     opt_greedy: boolean = false,
     opt_thick_columns: boolean = false,
-): MetricToVolumeMappingRibbonConstrainedParameters {
+): MetricToVolumeMappingRibbonConstrainedParametersTagged {
     const params = {
-        "@type": "workbench.metric-to-volume-mapping.ribbon_constrained" as const,
+        "@type": "ribbon_constrained" as const,
         "inner_surf": inner_surf,
         "outer_surf": outer_surf,
         "opt_greedy": opt_greedy,
@@ -121,10 +88,10 @@ function metric_to_volume_mapping_ribbon_constrained_cargs(
             String((params["opt_voxel_subdiv_subdiv_num"] ?? null))
         );
     }
-    if ((params["opt_greedy"] ?? null)) {
+    if ((params["opt_greedy"] ?? false)) {
         cargs.push("-greedy");
     }
-    if ((params["opt_thick_columns"] ?? null)) {
+    if ((params["opt_thick_columns"] ?? false)) {
         cargs.push("-thick-columns");
     }
     return cargs;
@@ -132,7 +99,7 @@ function metric_to_volume_mapping_ribbon_constrained_cargs(
 
 
 /**
- * Output object returned when calling `metric_to_volume_mapping(...)`.
+ * Output object returned when calling `MetricToVolumeMappingParameters(...)`.
  *
  * @interface
  */
@@ -167,9 +134,9 @@ function metric_to_volume_mapping_params(
     volume_out: string,
     opt_nearest_vertex_distance: number | null = null,
     ribbon_constrained: MetricToVolumeMappingRibbonConstrainedParameters | null = null,
-): MetricToVolumeMappingParameters {
+): MetricToVolumeMappingParametersTagged {
     const params = {
-        "@type": "workbench.metric-to-volume-mapping" as const,
+        "@type": "workbench/metric-to-volume-mapping" as const,
         "metric": metric,
         "surface": surface,
         "volume_space": volume_space,
@@ -211,7 +178,7 @@ function metric_to_volume_mapping_cargs(
         );
     }
     if ((params["ribbon_constrained"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["ribbon_constrained"] ?? null)["@type"])((params["ribbon_constrained"] ?? null), execution));
+        cargs.push(...metric_to_volume_mapping_ribbon_constrained_cargs((params["ribbon_constrained"] ?? null), execution));
     }
     return cargs;
 }
@@ -305,8 +272,6 @@ function metric_to_volume_mapping(
 export {
       METRIC_TO_VOLUME_MAPPING_METADATA,
       MetricToVolumeMappingOutputs,
-      MetricToVolumeMappingParameters,
-      MetricToVolumeMappingRibbonConstrainedParameters,
       metric_to_volume_mapping,
       metric_to_volume_mapping_execute,
       metric_to_volume_mapping_params,

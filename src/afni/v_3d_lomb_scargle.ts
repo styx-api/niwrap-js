@@ -12,7 +12,7 @@ const V_3D_LOMB_SCARGLE_METADATA: Metadata = {
 
 
 interface V3dLombScargleParameters {
-    "@type": "afni.3dLombScargle";
+    "@type"?: "afni/3dLombScargle";
     "prefix": string;
     "inset": InputPathType;
     "censor_1d"?: InputPathType | null | undefined;
@@ -22,44 +22,11 @@ interface V3dLombScargleParameters {
     "nyquist_multiplier"?: number | null | undefined;
     "nifti": boolean;
 }
+type V3dLombScargleParametersTagged = Required<Pick<V3dLombScargleParameters, '@type'>> & V3dLombScargleParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dLombScargle": v_3d_lomb_scargle_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dLombScargle": v_3d_lomb_scargle_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_lomb_scargle(...)`.
+ * Output object returned when calling `V3dLombScargleParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function v_3d_lomb_scargle_params(
     out_pow_spec: boolean = false,
     nyquist_multiplier: number | null = null,
     nifti: boolean = false,
-): V3dLombScargleParameters {
+): V3dLombScargleParametersTagged {
     const params = {
-        "@type": "afni.3dLombScargle" as const,
+        "@type": "afni/3dLombScargle" as const,
         "prefix": prefix,
         "inset": inset,
         "out_pow_spec": out_pow_spec,
@@ -174,7 +141,7 @@ function v_3d_lomb_scargle_cargs(
             execution.inputFile((params["mask_file"] ?? null))
         );
     }
-    if ((params["out_pow_spec"] ?? null)) {
+    if ((params["out_pow_spec"] ?? false)) {
         cargs.push("-out_pow_spec");
     }
     if ((params["nyquist_multiplier"] ?? null) !== null) {
@@ -183,7 +150,7 @@ function v_3d_lomb_scargle_cargs(
             String((params["nyquist_multiplier"] ?? null))
         );
     }
-    if ((params["nifti"] ?? null)) {
+    if ((params["nifti"] ?? false)) {
         cargs.push("-nifti");
     }
     return cargs;
@@ -280,7 +247,6 @@ function v_3d_lomb_scargle(
 
 export {
       V3dLombScargleOutputs,
-      V3dLombScargleParameters,
       V_3D_LOMB_SCARGLE_METADATA,
       v_3d_lomb_scargle,
       v_3d_lomb_scargle_execute,

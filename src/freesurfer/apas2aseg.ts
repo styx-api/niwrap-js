@@ -12,49 +12,16 @@ const APAS2ASEG_METADATA: Metadata = {
 
 
 interface Apas2asegParameters {
-    "@type": "freesurfer.apas2aseg";
+    "@type"?: "freesurfer/apas2aseg";
     "subject"?: string | null | undefined;
     "input_aparc_aseg"?: InputPathType | null | undefined;
     "output_seg"?: string | null | undefined;
 }
+type Apas2asegParametersTagged = Required<Pick<Apas2asegParameters, '@type'>> & Apas2asegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.apas2aseg": apas2aseg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.apas2aseg": apas2aseg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `apas2aseg(...)`.
+ * Output object returned when calling `Apas2asegParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function apas2aseg_params(
     subject: string | null = null,
     input_aparc_aseg: InputPathType | null = null,
     output_seg: string | null = null,
-): Apas2asegParameters {
+): Apas2asegParametersTagged {
     const params = {
-        "@type": "freesurfer.apas2aseg" as const,
+        "@type": "freesurfer/apas2aseg" as const,
     };
     if (subject !== null) {
         params["subject"] = subject;
@@ -214,7 +181,6 @@ function apas2aseg(
 export {
       APAS2ASEG_METADATA,
       Apas2asegOutputs,
-      Apas2asegParameters,
       apas2aseg,
       apas2aseg_execute,
       apas2aseg_params,

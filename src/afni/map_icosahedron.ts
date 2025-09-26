@@ -12,7 +12,7 @@ const MAP_ICOSAHEDRON_METADATA: Metadata = {
 
 
 interface MapIcosahedronParameters {
-    "@type": "afni.MapIcosahedron";
+    "@type"?: "afni/MapIcosahedron";
     "spec_file": InputPathType;
     "rec_depth"?: number | null | undefined;
     "lin_depth"?: number | null | undefined;
@@ -25,43 +25,11 @@ interface MapIcosahedronParameters {
     "verbosity": boolean;
     "help": boolean;
 }
+type MapIcosahedronParametersTagged = Required<Pick<MapIcosahedronParameters, '@type'>> & MapIcosahedronParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.MapIcosahedron": map_icosahedron_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `map_icosahedron(...)`.
+ * Output object returned when calling `MapIcosahedronParameters(...)`.
  *
  * @interface
  */
@@ -102,9 +70,9 @@ function map_icosahedron_params(
     fix_cut_surfaces: boolean = false,
     verbosity: boolean = false,
     help: boolean = false,
-): MapIcosahedronParameters {
+): MapIcosahedronParametersTagged {
     const params = {
-        "@type": "afni.MapIcosahedron" as const,
+        "@type": "afni/MapIcosahedron" as const,
         "spec_file": spec_file,
         "fix_cut_surfaces": fix_cut_surfaces,
         "verbosity": verbosity,
@@ -192,13 +160,13 @@ function map_icosahedron_cargs(
             (params["dset"] ?? null)
         );
     }
-    if ((params["fix_cut_surfaces"] ?? null)) {
+    if ((params["fix_cut_surfaces"] ?? false)) {
         cargs.push("-fix_cut_surfaces");
     }
-    if ((params["verbosity"] ?? null)) {
+    if ((params["verbosity"] ?? false)) {
         cargs.push("-verb");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -298,7 +266,6 @@ function map_icosahedron(
 export {
       MAP_ICOSAHEDRON_METADATA,
       MapIcosahedronOutputs,
-      MapIcosahedronParameters,
       map_icosahedron,
       map_icosahedron_execute,
       map_icosahedron_params,

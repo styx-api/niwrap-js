@@ -12,7 +12,7 @@ const V__DJUNCT_MONTAGE_COORDINATOR_METADATA: Metadata = {
 
 
 interface VDjunctMontageCoordinatorParameters {
-    "@type": "afni.@djunct_montage_coordinator";
+    "@type"?: "afni/@djunct_montage_coordinator";
     "input_file": InputPathType;
     "montx": number;
     "monty": number;
@@ -21,44 +21,11 @@ interface VDjunctMontageCoordinatorParameters {
     "help": boolean;
     "version": boolean;
 }
+type VDjunctMontageCoordinatorParametersTagged = Required<Pick<VDjunctMontageCoordinatorParameters, '@type'>> & VDjunctMontageCoordinatorParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@djunct_montage_coordinator": v__djunct_montage_coordinator_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@djunct_montage_coordinator": v__djunct_montage_coordinator_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__djunct_montage_coordinator(...)`.
+ * Output object returned when calling `VDjunctMontageCoordinatorParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function v__djunct_montage_coordinator_params(
     out_xyz: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): VDjunctMontageCoordinatorParameters {
+): VDjunctMontageCoordinatorParametersTagged {
     const params = {
-        "@type": "afni.@djunct_montage_coordinator" as const,
+        "@type": "afni/@djunct_montage_coordinator" as const,
         "input_file": input_file,
         "montx": montx,
         "monty": monty,
@@ -136,16 +103,16 @@ function v__djunct_montage_coordinator_cargs(
         "-monty",
         String((params["monty"] ?? null))
     );
-    if ((params["out_ijk"] ?? null)) {
+    if ((params["out_ijk"] ?? false)) {
         cargs.push("-out_ijk");
     }
-    if ((params["out_xyz"] ?? null)) {
+    if ((params["out_xyz"] ?? false)) {
         cargs.push("-out_xyz");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-ver");
     }
     return cargs;
@@ -237,7 +204,6 @@ function v__djunct_montage_coordinator(
 
 export {
       VDjunctMontageCoordinatorOutputs,
-      VDjunctMontageCoordinatorParameters,
       V__DJUNCT_MONTAGE_COORDINATOR_METADATA,
       v__djunct_montage_coordinator,
       v__djunct_montage_coordinator_execute,

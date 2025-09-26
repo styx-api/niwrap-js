@@ -12,46 +12,14 @@ const GCAINIT_METADATA: Metadata = {
 
 
 interface GcainitParameters {
-    "@type": "freesurfer.gcainit";
+    "@type"?: "freesurfer/gcainit";
     "gcadir": string;
 }
+type GcainitParametersTagged = Required<Pick<GcainitParameters, '@type'>> & GcainitParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.gcainit": gcainit_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `gcainit(...)`.
+ * Output object returned when calling `GcainitParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface GcainitOutputs {
  */
 function gcainit_params(
     gcadir: string,
-): GcainitParameters {
+): GcainitParametersTagged {
     const params = {
-        "@type": "freesurfer.gcainit" as const,
+        "@type": "freesurfer/gcainit" as const,
         "gcadir": gcadir,
     };
     return params;
@@ -176,7 +144,6 @@ function gcainit(
 export {
       GCAINIT_METADATA,
       GcainitOutputs,
-      GcainitParameters,
       gcainit,
       gcainit_execute,
       gcainit_params,

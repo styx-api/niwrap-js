@@ -12,46 +12,14 @@ const IS_SURFACE_METADATA: Metadata = {
 
 
 interface IsSurfaceParameters {
-    "@type": "freesurfer.is-surface";
+    "@type"?: "freesurfer/is-surface";
     "infile": InputPathType;
 }
+type IsSurfaceParametersTagged = Required<Pick<IsSurfaceParameters, '@type'>> & IsSurfaceParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.is-surface": is_surface_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `is_surface(...)`.
+ * Output object returned when calling `IsSurfaceParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface IsSurfaceOutputs {
  */
 function is_surface_params(
     infile: InputPathType,
-): IsSurfaceParameters {
+): IsSurfaceParametersTagged {
     const params = {
-        "@type": "freesurfer.is-surface" as const,
+        "@type": "freesurfer/is-surface" as const,
         "infile": infile,
     };
     return params;
@@ -176,7 +144,6 @@ function is_surface(
 export {
       IS_SURFACE_METADATA,
       IsSurfaceOutputs,
-      IsSurfaceParameters,
       is_surface,
       is_surface_execute,
       is_surface_params,

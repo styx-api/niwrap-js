@@ -12,50 +12,18 @@ const AFNI_BATCH_R_METADATA: Metadata = {
 
 
 interface AfniBatchRParameters {
-    "@type": "afni.AFNI_Batch_R";
+    "@type"?: "afni/AFNI_Batch_R";
     "no_restore": boolean;
     "save_workspace": boolean;
     "no_readline": boolean;
     "vanilla_mode": boolean;
     "help": boolean;
 }
+type AfniBatchRParametersTagged = Required<Pick<AfniBatchRParameters, '@type'>> & AfniBatchRParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.AFNI_Batch_R": afni_batch_r_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `afni_batch_r(...)`.
+ * Output object returned when calling `AfniBatchRParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function afni_batch_r_params(
     no_readline: boolean = false,
     vanilla_mode: boolean = false,
     help: boolean = false,
-): AfniBatchRParameters {
+): AfniBatchRParametersTagged {
     const params = {
-        "@type": "afni.AFNI_Batch_R" as const,
+        "@type": "afni/AFNI_Batch_R" as const,
         "no_restore": no_restore,
         "save_workspace": save_workspace,
         "no_readline": no_readline,
@@ -114,19 +82,19 @@ function afni_batch_r_cargs(
     cargs.push("R");
     cargs.push("CMD");
     cargs.push("BATCH");
-    if ((params["no_restore"] ?? null)) {
+    if ((params["no_restore"] ?? false)) {
         cargs.push("--no-restore");
     }
-    if ((params["save_workspace"] ?? null)) {
+    if ((params["save_workspace"] ?? false)) {
         cargs.push("--save");
     }
-    if ((params["no_readline"] ?? null)) {
+    if ((params["no_readline"] ?? false)) {
         cargs.push("--no-readline");
     }
-    if ((params["vanilla_mode"] ?? null)) {
+    if ((params["vanilla_mode"] ?? false)) {
         cargs.push("--vanilla");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -214,7 +182,6 @@ function afni_batch_r(
 export {
       AFNI_BATCH_R_METADATA,
       AfniBatchROutputs,
-      AfniBatchRParameters,
       afni_batch_r,
       afni_batch_r_execute,
       afni_batch_r_params,

@@ -12,52 +12,20 @@ const ANNOTATION_RESAMPLE_METADATA: Metadata = {
 
 
 interface AnnotationResampleSurfacePairParameters {
-    "@type": "workbench.annotation-resample.surface_pair";
+    "@type"?: "surface_pair";
     "source_surface": InputPathType;
     "target_surface": InputPathType;
 }
+type AnnotationResampleSurfacePairParametersTagged = Required<Pick<AnnotationResampleSurfacePairParameters, '@type'>> & AnnotationResampleSurfacePairParameters;
 
 
 interface AnnotationResampleParameters {
-    "@type": "workbench.annotation-resample";
+    "@type"?: "workbench/annotation-resample";
     "annotation_in": InputPathType;
     "annotation_out": string;
     "surface_pair"?: Array<AnnotationResampleSurfacePairParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.annotation-resample": annotation_resample_cargs,
-        "workbench.annotation-resample.surface_pair": annotation_resample_surface_pair_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type AnnotationResampleParametersTagged = Required<Pick<AnnotationResampleParameters, '@type'>> & AnnotationResampleParameters;
 
 
 /**
@@ -71,9 +39,9 @@ function dynOutputs(
 function annotation_resample_surface_pair_params(
     source_surface: InputPathType,
     target_surface: InputPathType,
-): AnnotationResampleSurfacePairParameters {
+): AnnotationResampleSurfacePairParametersTagged {
     const params = {
-        "@type": "workbench.annotation-resample.surface_pair" as const,
+        "@type": "surface_pair" as const,
         "source_surface": source_surface,
         "target_surface": target_surface,
     };
@@ -102,7 +70,7 @@ function annotation_resample_surface_pair_cargs(
 
 
 /**
- * Output object returned when calling `annotation_resample(...)`.
+ * Output object returned when calling `AnnotationResampleParameters(...)`.
  *
  * @interface
  */
@@ -127,9 +95,9 @@ function annotation_resample_params(
     annotation_in: InputPathType,
     annotation_out: string,
     surface_pair: Array<AnnotationResampleSurfacePairParameters> | null = null,
-): AnnotationResampleParameters {
+): AnnotationResampleParametersTagged {
     const params = {
-        "@type": "workbench.annotation-resample" as const,
+        "@type": "workbench/annotation-resample" as const,
         "annotation_in": annotation_in,
         "annotation_out": annotation_out,
     };
@@ -158,7 +126,7 @@ function annotation_resample_cargs(
     cargs.push(execution.inputFile((params["annotation_in"] ?? null)));
     cargs.push((params["annotation_out"] ?? null));
     if ((params["surface_pair"] ?? null) !== null) {
-        cargs.push(...(params["surface_pair"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["surface_pair"] ?? null).map(s => annotation_resample_surface_pair_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -249,8 +217,6 @@ function annotation_resample(
 export {
       ANNOTATION_RESAMPLE_METADATA,
       AnnotationResampleOutputs,
-      AnnotationResampleParameters,
-      AnnotationResampleSurfacePairParameters,
       annotation_resample,
       annotation_resample_execute,
       annotation_resample_params,

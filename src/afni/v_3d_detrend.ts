@@ -12,48 +12,15 @@ const V_3D_DETREND_METADATA: Metadata = {
 
 
 interface V3dDetrendParameters {
-    "@type": "afni.3dDetrend";
+    "@type"?: "afni/3dDetrend";
     "in_file": InputPathType;
     "outputtype"?: "NIFTI" | "AFNI" | "NIFTI_GZ" | null | undefined;
 }
+type V3dDetrendParametersTagged = Required<Pick<V3dDetrendParameters, '@type'>> & V3dDetrendParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dDetrend": v_3d_detrend_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dDetrend": v_3d_detrend_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_detrend(...)`.
+ * Output object returned when calling `V3dDetrendParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +51,9 @@ interface V3dDetrendOutputs {
 function v_3d_detrend_params(
     in_file: InputPathType,
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
-): V3dDetrendParameters {
+): V3dDetrendParametersTagged {
     const params = {
-        "@type": "afni.3dDetrend" as const,
+        "@type": "afni/3dDetrend" as const,
         "in_file": in_file,
     };
     if (outputtype !== null) {
@@ -194,7 +161,6 @@ function v_3d_detrend(
 
 export {
       V3dDetrendOutputs,
-      V3dDetrendParameters,
       V_3D_DETREND_METADATA,
       v_3d_detrend,
       v_3d_detrend_execute,

@@ -12,7 +12,7 @@ const MRI_CA_REGISTER_METADATA: Metadata = {
 
 
 interface MriCaRegisterParameters {
-    "@type": "freesurfer.mri_ca_register";
+    "@type"?: "freesurfer/mri_ca_register";
     "input_volume": InputPathType;
     "template": InputPathType;
     "output_volume": string;
@@ -53,44 +53,11 @@ interface MriCaRegisterParameters {
     "second_pass_renorm": boolean;
     "threads"?: number | null | undefined;
 }
+type MriCaRegisterParametersTagged = Required<Pick<MriCaRegisterParameters, '@type'>> & MriCaRegisterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_ca_register": mri_ca_register_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_ca_register": mri_ca_register_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_ca_register(...)`.
+ * Output object returned when calling `MriCaRegisterParameters(...)`.
  *
  * @interface
  */
@@ -191,9 +158,9 @@ function mri_ca_register_params(
     uncompress: boolean = false,
     second_pass_renorm: boolean = false,
     threads: number | null = null,
-): MriCaRegisterParameters {
+): MriCaRegisterParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_ca_register" as const,
+        "@type": "freesurfer/mri_ca_register" as const,
         "input_volume": input_volume,
         "template": template,
         "output_volume": output_volume,
@@ -327,10 +294,10 @@ function mri_ca_register_cargs(
             String((params["level"] ?? null))
         );
     }
-    if ((params["read_intensity"] ?? null)) {
+    if ((params["read_intensity"] ?? false)) {
         cargs.push("-ri");
     }
-    if ((params["align"] ?? null)) {
+    if ((params["align"] ?? false)) {
         cargs.push("-align");
     }
     if ((params["invert_save_file"] ?? null) !== null) {
@@ -363,10 +330,10 @@ function mri_ca_register_cargs(
             String((params["scale_smoothness"] ?? null))
         );
     }
-    if ((params["nobright"] ?? null)) {
+    if ((params["nobright"] ?? false)) {
         cargs.push("-nobright");
     }
-    if ((params["renormalize_map"] ?? null)) {
+    if ((params["renormalize_map"] ?? false)) {
         cargs.push("-renormalize_map");
     }
     if ((params["renormalize"] ?? null) !== null) {
@@ -375,7 +342,7 @@ function mri_ca_register_cargs(
             execution.inputFile((params["renormalize"] ?? null))
         );
     }
-    if ((params["read_lta"] ?? null)) {
+    if ((params["read_lta"] ?? false)) {
         cargs.push("-read_lta");
     }
     if ((params["smoothness"] ?? null) !== null) {
@@ -396,16 +363,16 @@ function mri_ca_register_cargs(
             String((params["nsmall"] ?? null))
         );
     }
-    if ((params["fixed"] ?? null)) {
+    if ((params["fixed"] ?? false)) {
         cargs.push("-fixed");
     }
-    if ((params["optimal"] ?? null)) {
+    if ((params["optimal"] ?? false)) {
         cargs.push("-optimal");
     }
-    if ((params["noneg"] ?? null)) {
+    if ((params["noneg"] ?? false)) {
         cargs.push("-noneg");
     }
-    if ((params["wm"] ?? null)) {
+    if ((params["wm"] ?? false)) {
         cargs.push("-wm");
     }
     if ((params["min_avgs"] ?? null) !== null) {
@@ -468,13 +435,13 @@ function mri_ca_register_cargs(
             (params["example"] ?? null)
         );
     }
-    if ((params["bigventricles"] ?? null)) {
+    if ((params["bigventricles"] ?? false)) {
         cargs.push("-<no>bigventricles");
     }
-    if ((params["uncompress"] ?? null)) {
+    if ((params["uncompress"] ?? false)) {
         cargs.push("-uncompress");
     }
-    if ((params["second_pass_renorm"] ?? null)) {
+    if ((params["second_pass_renorm"] ?? false)) {
         cargs.push("-secondpassrenorm");
     }
     if ((params["threads"] ?? null) !== null) {
@@ -637,7 +604,6 @@ function mri_ca_register(
 export {
       MRI_CA_REGISTER_METADATA,
       MriCaRegisterOutputs,
-      MriCaRegisterParameters,
       mri_ca_register,
       mri_ca_register_execute,
       mri_ca_register_params,

@@ -12,7 +12,7 @@ const FEATREGAPPLY_METADATA: Metadata = {
 
 
 interface FeatregapplyParameters {
-    "@type": "fsl.featregapply";
+    "@type"?: "fsl/featregapply";
     "feat_directory": string;
     "force_flag": boolean;
     "cleanup_flag": boolean;
@@ -21,44 +21,11 @@ interface FeatregapplyParameters {
     "standard_space_res"?: number | null | undefined;
     "exclude_filtered_func_flag": boolean;
 }
+type FeatregapplyParametersTagged = Required<Pick<FeatregapplyParameters, '@type'>> & FeatregapplyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.featregapply": featregapply_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.featregapply": featregapply_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `featregapply(...)`.
+ * Output object returned when calling `FeatregapplyParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function featregapply_params(
     upsample_spline: InputPathType | null = null,
     standard_space_res: number | null = null,
     exclude_filtered_func_flag: boolean = false,
-): FeatregapplyParameters {
+): FeatregapplyParametersTagged {
     const params = {
-        "@type": "fsl.featregapply" as const,
+        "@type": "fsl/featregapply" as const,
         "feat_directory": feat_directory,
         "force_flag": force_flag,
         "cleanup_flag": cleanup_flag,
@@ -131,10 +98,10 @@ function featregapply_cargs(
     const cargs: string[] = [];
     cargs.push("featregapply");
     cargs.push((params["feat_directory"] ?? null));
-    if ((params["force_flag"] ?? null)) {
+    if ((params["force_flag"] ?? false)) {
         cargs.push("-f");
     }
-    if ((params["cleanup_flag"] ?? null)) {
+    if ((params["cleanup_flag"] ?? false)) {
         cargs.push("-c");
     }
     if ((params["upsample_trilinear"] ?? null) !== null) {
@@ -155,7 +122,7 @@ function featregapply_cargs(
             String((params["standard_space_res"] ?? null))
         );
     }
-    if ((params["exclude_filtered_func_flag"] ?? null)) {
+    if ((params["exclude_filtered_func_flag"] ?? false)) {
         cargs.push("-e");
     }
     return cargs;
@@ -248,7 +215,6 @@ function featregapply(
 export {
       FEATREGAPPLY_METADATA,
       FeatregapplyOutputs,
-      FeatregapplyParameters,
       featregapply,
       featregapply_execute,
       featregapply_params,

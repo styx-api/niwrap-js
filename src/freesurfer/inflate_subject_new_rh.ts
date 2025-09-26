@@ -12,46 +12,14 @@ const INFLATE_SUBJECT_NEW_RH_METADATA: Metadata = {
 
 
 interface InflateSubjectNewRhParameters {
-    "@type": "freesurfer.inflate_subject_new-rh";
+    "@type"?: "freesurfer/inflate_subject_new-rh";
     "args"?: string | null | undefined;
 }
+type InflateSubjectNewRhParametersTagged = Required<Pick<InflateSubjectNewRhParameters, '@type'>> & InflateSubjectNewRhParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.inflate_subject_new-rh": inflate_subject_new_rh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `inflate_subject_new_rh(...)`.
+ * Output object returned when calling `InflateSubjectNewRhParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface InflateSubjectNewRhOutputs {
  */
 function inflate_subject_new_rh_params(
     args: string | null = null,
-): InflateSubjectNewRhParameters {
+): InflateSubjectNewRhParametersTagged {
     const params = {
-        "@type": "freesurfer.inflate_subject_new-rh" as const,
+        "@type": "freesurfer/inflate_subject_new-rh" as const,
     };
     if (args !== null) {
         params["args"] = args;
@@ -180,7 +148,6 @@ function inflate_subject_new_rh(
 export {
       INFLATE_SUBJECT_NEW_RH_METADATA,
       InflateSubjectNewRhOutputs,
-      InflateSubjectNewRhParameters,
       inflate_subject_new_rh,
       inflate_subject_new_rh_execute,
       inflate_subject_new_rh_params,

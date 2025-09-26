@@ -12,50 +12,17 @@ const FLOAT_SCAN_METADATA: Metadata = {
 
 
 interface FloatScanParameters {
-    "@type": "afni.float_scan";
+    "@type"?: "afni/float_scan";
     "fix_illegal_values": boolean;
     "verbose_mode": boolean;
     "skip_count"?: number | null | undefined;
     "input_file": InputPathType;
 }
+type FloatScanParametersTagged = Required<Pick<FloatScanParameters, '@type'>> & FloatScanParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.float_scan": float_scan_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.float_scan": float_scan_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `float_scan(...)`.
+ * Output object returned when calling `FloatScanParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function float_scan_params(
     fix_illegal_values: boolean = false,
     verbose_mode: boolean = false,
     skip_count: number | null = null,
-): FloatScanParameters {
+): FloatScanParametersTagged {
     const params = {
-        "@type": "afni.float_scan" as const,
+        "@type": "afni/float_scan" as const,
         "fix_illegal_values": fix_illegal_values,
         "verbose_mode": verbose_mode,
         "input_file": input_file,
@@ -114,10 +81,10 @@ function float_scan_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("float_scan");
-    if ((params["fix_illegal_values"] ?? null)) {
+    if ((params["fix_illegal_values"] ?? false)) {
         cargs.push("-fix");
     }
-    if ((params["verbose_mode"] ?? null)) {
+    if ((params["verbose_mode"] ?? false)) {
         cargs.push("-v");
     }
     if ((params["skip_count"] ?? null) !== null) {
@@ -211,7 +178,6 @@ function float_scan(
 export {
       FLOAT_SCAN_METADATA,
       FloatScanOutputs,
-      FloatScanParameters,
       float_scan,
       float_scan_execute,
       float_scan_params,

@@ -12,7 +12,7 @@ const FVCOMPARE_METADATA: Metadata = {
 
 
 interface FvcompareParameters {
-    "@type": "freesurfer.fvcompare";
+    "@type"?: "freesurfer/fvcompare";
     "subject1": string;
     "subject2": string;
     "subject_dir1"?: string | null | undefined;
@@ -39,43 +39,11 @@ interface FvcompareParameters {
     "pointset"?: InputPathType | null | undefined;
     "wot2": boolean;
 }
+type FvcompareParametersTagged = Required<Pick<FvcompareParameters, '@type'>> & FvcompareParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fvcompare": fvcompare_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fvcompare(...)`.
+ * Output object returned when calling `FvcompareParameters(...)`.
  *
  * @interface
  */
@@ -144,9 +112,9 @@ function fvcompare_params(
     surf_name: string | null = null,
     pointset: InputPathType | null = null,
     wot2: boolean = false,
-): FvcompareParameters {
+): FvcompareParametersTagged {
     const params = {
-        "@type": "freesurfer.fvcompare" as const,
+        "@type": "freesurfer/fvcompare" as const,
         "subject1": subject1,
         "subject2": subject2,
         "aseg": aseg,
@@ -267,19 +235,19 @@ function fvcompare_cargs(
             (params["segmentation"] ?? null)
         );
     }
-    if ((params["aseg"] ?? null)) {
+    if ((params["aseg"] ?? false)) {
         cargs.push("--aseg");
     }
-    if ((params["no_seg"] ?? null)) {
+    if ((params["no_seg"] ?? false)) {
         cargs.push("--no-seg");
     }
-    if ((params["left_hemi"] ?? null)) {
+    if ((params["left_hemi"] ?? false)) {
         cargs.push("--lh");
     }
-    if ((params["right_hemi"] ?? null)) {
+    if ((params["right_hemi"] ?? false)) {
         cargs.push("--rh");
     }
-    if ((params["no_surf"] ?? null)) {
+    if ((params["no_surf"] ?? false)) {
         cargs.push("--no-surf");
     }
     if ((params["gray_levels"] ?? null) !== null) {
@@ -306,16 +274,16 @@ function fvcompare_cargs(
             (params["annotation"] ?? null)
         );
     }
-    if ((params["aparc"] ?? null)) {
+    if ((params["aparc"] ?? false)) {
         cargs.push("--aparc");
     }
-    if ((params["inflated"] ?? null)) {
+    if ((params["inflated"] ?? false)) {
         cargs.push("--inflated");
     }
-    if ((params["white"] ?? null)) {
+    if ((params["white"] ?? false)) {
         cargs.push("--white");
     }
-    if ((params["orig"] ?? null)) {
+    if ((params["orig"] ?? false)) {
         cargs.push("--orig");
     }
     if ((params["surf_name"] ?? null) !== null) {
@@ -330,7 +298,7 @@ function fvcompare_cargs(
             execution.inputFile((params["pointset"] ?? null))
         );
     }
-    if ((params["wot2"] ?? null)) {
+    if ((params["wot2"] ?? false)) {
         cargs.push("--wot2");
     }
     return cargs;
@@ -458,7 +426,6 @@ function fvcompare(
 export {
       FVCOMPARE_METADATA,
       FvcompareOutputs,
-      FvcompareParameters,
       fvcompare,
       fvcompare_execute,
       fvcompare_params,

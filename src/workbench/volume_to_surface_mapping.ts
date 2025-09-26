@@ -12,21 +12,23 @@ const VOLUME_TO_SURFACE_MAPPING_METADATA: Metadata = {
 
 
 interface VolumeToSurfaceMappingVolumeRoiParameters {
-    "@type": "workbench.volume-to-surface-mapping.ribbon_constrained.volume_roi";
+    "@type"?: "volume_roi";
     "roi_volume": InputPathType;
     "opt_weighted": boolean;
 }
+type VolumeToSurfaceMappingVolumeRoiParametersTagged = Required<Pick<VolumeToSurfaceMappingVolumeRoiParameters, '@type'>> & VolumeToSurfaceMappingVolumeRoiParameters;
 
 
 interface VolumeToSurfaceMappingOutputWeightsParameters {
-    "@type": "workbench.volume-to-surface-mapping.ribbon_constrained.output_weights";
+    "@type"?: "output_weights";
     "vertex": number;
     "weights_out": string;
 }
+type VolumeToSurfaceMappingOutputWeightsParametersTagged = Required<Pick<VolumeToSurfaceMappingOutputWeightsParameters, '@type'>> & VolumeToSurfaceMappingOutputWeightsParameters;
 
 
 interface VolumeToSurfaceMappingRibbonConstrainedParameters {
-    "@type": "workbench.volume-to-surface-mapping.ribbon_constrained";
+    "@type"?: "ribbon_constrained";
     "inner_surf": InputPathType;
     "outer_surf": InputPathType;
     "volume_roi"?: VolumeToSurfaceMappingVolumeRoiParameters | null | undefined;
@@ -38,19 +40,21 @@ interface VolumeToSurfaceMappingRibbonConstrainedParameters {
     "output_weights"?: VolumeToSurfaceMappingOutputWeightsParameters | null | undefined;
     "opt_output_weights_text_text_out"?: string | null | undefined;
 }
+type VolumeToSurfaceMappingRibbonConstrainedParametersTagged = Required<Pick<VolumeToSurfaceMappingRibbonConstrainedParameters, '@type'>> & VolumeToSurfaceMappingRibbonConstrainedParameters;
 
 
 interface VolumeToSurfaceMappingMyelinStyleParameters {
-    "@type": "workbench.volume-to-surface-mapping.myelin_style";
+    "@type"?: "myelin_style";
     "ribbon_roi": InputPathType;
     "thickness": InputPathType;
     "sigma": number;
     "opt_legacy_bug": boolean;
 }
+type VolumeToSurfaceMappingMyelinStyleParametersTagged = Required<Pick<VolumeToSurfaceMappingMyelinStyleParameters, '@type'>> & VolumeToSurfaceMappingMyelinStyleParameters;
 
 
 interface VolumeToSurfaceMappingParameters {
-    "@type": "workbench.volume-to-surface-mapping";
+    "@type"?: "workbench/volume-to-surface-mapping";
     "volume": InputPathType;
     "surface": InputPathType;
     "metric_out": string;
@@ -61,46 +65,7 @@ interface VolumeToSurfaceMappingParameters {
     "myelin_style"?: VolumeToSurfaceMappingMyelinStyleParameters | null | undefined;
     "opt_subvol_select_subvol"?: string | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-to-surface-mapping": volume_to_surface_mapping_cargs,
-        "workbench.volume-to-surface-mapping.ribbon_constrained": volume_to_surface_mapping_ribbon_constrained_cargs,
-        "workbench.volume-to-surface-mapping.ribbon_constrained.volume_roi": volume_to_surface_mapping_volume_roi_cargs,
-        "workbench.volume-to-surface-mapping.ribbon_constrained.output_weights": volume_to_surface_mapping_output_weights_cargs,
-        "workbench.volume-to-surface-mapping.myelin_style": volume_to_surface_mapping_myelin_style_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-to-surface-mapping": volume_to_surface_mapping_outputs,
-        "workbench.volume-to-surface-mapping.ribbon_constrained": volume_to_surface_mapping_ribbon_constrained_outputs,
-        "workbench.volume-to-surface-mapping.ribbon_constrained.output_weights": volume_to_surface_mapping_output_weights_outputs,
-    };
-    return outputsFuncs[t];
-}
+type VolumeToSurfaceMappingParametersTagged = Required<Pick<VolumeToSurfaceMappingParameters, '@type'>> & VolumeToSurfaceMappingParameters;
 
 
 /**
@@ -114,9 +79,9 @@ function dynOutputs(
 function volume_to_surface_mapping_volume_roi_params(
     roi_volume: InputPathType,
     opt_weighted: boolean = false,
-): VolumeToSurfaceMappingVolumeRoiParameters {
+): VolumeToSurfaceMappingVolumeRoiParametersTagged {
     const params = {
-        "@type": "workbench.volume-to-surface-mapping.ribbon_constrained.volume_roi" as const,
+        "@type": "volume_roi" as const,
         "roi_volume": roi_volume,
         "opt_weighted": opt_weighted,
     };
@@ -139,7 +104,7 @@ function volume_to_surface_mapping_volume_roi_cargs(
     const cargs: string[] = [];
     cargs.push("-volume-roi");
     cargs.push(execution.inputFile((params["roi_volume"] ?? null)));
-    if ((params["opt_weighted"] ?? null)) {
+    if ((params["opt_weighted"] ?? false)) {
         cargs.push("-weighted");
     }
     return cargs;
@@ -174,9 +139,9 @@ interface VolumeToSurfaceMappingOutputWeightsOutputs {
 function volume_to_surface_mapping_output_weights_params(
     vertex: number,
     weights_out: string,
-): VolumeToSurfaceMappingOutputWeightsParameters {
+): VolumeToSurfaceMappingOutputWeightsParametersTagged {
     const params = {
-        "@type": "workbench.volume-to-surface-mapping.ribbon_constrained.output_weights" as const,
+        "@type": "output_weights" as const,
         "vertex": vertex,
         "weights_out": weights_out,
     };
@@ -268,9 +233,9 @@ function volume_to_surface_mapping_ribbon_constrained_params(
     opt_bad_vertices_out_roi_out: string | null = null,
     output_weights: VolumeToSurfaceMappingOutputWeightsParameters | null = null,
     opt_output_weights_text_text_out: string | null = null,
-): VolumeToSurfaceMappingRibbonConstrainedParameters {
+): VolumeToSurfaceMappingRibbonConstrainedParametersTagged {
     const params = {
-        "@type": "workbench.volume-to-surface-mapping.ribbon_constrained" as const,
+        "@type": "ribbon_constrained" as const,
         "inner_surf": inner_surf,
         "outer_surf": outer_surf,
         "opt_thin_columns": opt_thin_columns,
@@ -317,7 +282,7 @@ function volume_to_surface_mapping_ribbon_constrained_cargs(
     cargs.push(execution.inputFile((params["inner_surf"] ?? null)));
     cargs.push(execution.inputFile((params["outer_surf"] ?? null)));
     if ((params["volume_roi"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["volume_roi"] ?? null)["@type"])((params["volume_roi"] ?? null), execution));
+        cargs.push(...volume_to_surface_mapping_volume_roi_cargs((params["volume_roi"] ?? null), execution));
     }
     if ((params["opt_voxel_subdiv_subdiv_num"] ?? null) !== null) {
         cargs.push(
@@ -325,7 +290,7 @@ function volume_to_surface_mapping_ribbon_constrained_cargs(
             String((params["opt_voxel_subdiv_subdiv_num"] ?? null))
         );
     }
-    if ((params["opt_thin_columns"] ?? null)) {
+    if ((params["opt_thin_columns"] ?? false)) {
         cargs.push("-thin-columns");
     }
     if ((params["opt_gaussian_scale"] ?? null) !== null) {
@@ -347,7 +312,7 @@ function volume_to_surface_mapping_ribbon_constrained_cargs(
         );
     }
     if ((params["output_weights"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["output_weights"] ?? null)["@type"])((params["output_weights"] ?? null), execution));
+        cargs.push(...volume_to_surface_mapping_output_weights_cargs((params["output_weights"] ?? null), execution));
     }
     if ((params["opt_output_weights_text_text_out"] ?? null) !== null) {
         cargs.push(
@@ -373,7 +338,7 @@ function volume_to_surface_mapping_ribbon_constrained_outputs(
 ): VolumeToSurfaceMappingRibbonConstrainedOutputs {
     const ret: VolumeToSurfaceMappingRibbonConstrainedOutputs = {
         root: execution.outputFile("."),
-        output_weights: (params["output_weights"] ?? null) ? (dynOutputs((params["output_weights"] ?? null)["@type"])?.((params["output_weights"] ?? null), execution) ?? null) : null,
+        output_weights: (params["output_weights"] ?? null) ? (volume_to_surface_mapping_output_weights_outputs((params["output_weights"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }
@@ -394,9 +359,9 @@ function volume_to_surface_mapping_myelin_style_params(
     thickness: InputPathType,
     sigma: number,
     opt_legacy_bug: boolean = false,
-): VolumeToSurfaceMappingMyelinStyleParameters {
+): VolumeToSurfaceMappingMyelinStyleParametersTagged {
     const params = {
-        "@type": "workbench.volume-to-surface-mapping.myelin_style" as const,
+        "@type": "myelin_style" as const,
         "ribbon_roi": ribbon_roi,
         "thickness": thickness,
         "sigma": sigma,
@@ -423,7 +388,7 @@ function volume_to_surface_mapping_myelin_style_cargs(
     cargs.push(execution.inputFile((params["ribbon_roi"] ?? null)));
     cargs.push(execution.inputFile((params["thickness"] ?? null)));
     cargs.push(String((params["sigma"] ?? null)));
-    if ((params["opt_legacy_bug"] ?? null)) {
+    if ((params["opt_legacy_bug"] ?? false)) {
         cargs.push("-legacy-bug");
     }
     return cargs;
@@ -431,7 +396,7 @@ function volume_to_surface_mapping_myelin_style_cargs(
 
 
 /**
- * Output object returned when calling `volume_to_surface_mapping(...)`.
+ * Output object returned when calling `VolumeToSurfaceMappingParameters(...)`.
  *
  * @interface
  */
@@ -476,9 +441,9 @@ function volume_to_surface_mapping_params(
     ribbon_constrained: VolumeToSurfaceMappingRibbonConstrainedParameters | null = null,
     myelin_style: VolumeToSurfaceMappingMyelinStyleParameters | null = null,
     opt_subvol_select_subvol: string | null = null,
-): VolumeToSurfaceMappingParameters {
+): VolumeToSurfaceMappingParametersTagged {
     const params = {
-        "@type": "workbench.volume-to-surface-mapping" as const,
+        "@type": "workbench/volume-to-surface-mapping" as const,
         "volume": volume,
         "surface": surface,
         "metric_out": metric_out,
@@ -517,20 +482,20 @@ function volume_to_surface_mapping_cargs(
     cargs.push(execution.inputFile((params["volume"] ?? null)));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push((params["metric_out"] ?? null));
-    if ((params["opt_trilinear"] ?? null)) {
+    if ((params["opt_trilinear"] ?? false)) {
         cargs.push("-trilinear");
     }
-    if ((params["opt_enclosing"] ?? null)) {
+    if ((params["opt_enclosing"] ?? false)) {
         cargs.push("-enclosing");
     }
-    if ((params["opt_cubic"] ?? null)) {
+    if ((params["opt_cubic"] ?? false)) {
         cargs.push("-cubic");
     }
     if ((params["ribbon_constrained"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["ribbon_constrained"] ?? null)["@type"])((params["ribbon_constrained"] ?? null), execution));
+        cargs.push(...volume_to_surface_mapping_ribbon_constrained_cargs((params["ribbon_constrained"] ?? null), execution));
     }
     if ((params["myelin_style"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["myelin_style"] ?? null)["@type"])((params["myelin_style"] ?? null), execution));
+        cargs.push(...volume_to_surface_mapping_myelin_style_cargs((params["myelin_style"] ?? null), execution));
     }
     if ((params["opt_subvol_select_subvol"] ?? null) !== null) {
         cargs.push(
@@ -557,7 +522,7 @@ function volume_to_surface_mapping_outputs(
     const ret: VolumeToSurfaceMappingOutputs = {
         root: execution.outputFile("."),
         metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
-        ribbon_constrained: (params["ribbon_constrained"] ?? null) ? (dynOutputs((params["ribbon_constrained"] ?? null)["@type"])?.((params["ribbon_constrained"] ?? null), execution) ?? null) : null,
+        ribbon_constrained: (params["ribbon_constrained"] ?? null) ? (volume_to_surface_mapping_ribbon_constrained_outputs((params["ribbon_constrained"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }
@@ -644,14 +609,9 @@ function volume_to_surface_mapping(
 
 export {
       VOLUME_TO_SURFACE_MAPPING_METADATA,
-      VolumeToSurfaceMappingMyelinStyleParameters,
       VolumeToSurfaceMappingOutputWeightsOutputs,
-      VolumeToSurfaceMappingOutputWeightsParameters,
       VolumeToSurfaceMappingOutputs,
-      VolumeToSurfaceMappingParameters,
       VolumeToSurfaceMappingRibbonConstrainedOutputs,
-      VolumeToSurfaceMappingRibbonConstrainedParameters,
-      VolumeToSurfaceMappingVolumeRoiParameters,
       volume_to_surface_mapping,
       volume_to_surface_mapping_execute,
       volume_to_surface_mapping_myelin_style_params,

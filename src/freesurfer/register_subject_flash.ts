@@ -12,47 +12,14 @@ const REGISTER_SUBJECT_FLASH_METADATA: Metadata = {
 
 
 interface RegisterSubjectFlashParameters {
-    "@type": "freesurfer.register_subject_flash";
+    "@type"?: "freesurfer/register_subject_flash";
     "input_volumes": Array<InputPathType>;
 }
+type RegisterSubjectFlashParametersTagged = Required<Pick<RegisterSubjectFlashParameters, '@type'>> & RegisterSubjectFlashParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.register_subject_flash": register_subject_flash_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.register_subject_flash": register_subject_flash_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `register_subject_flash(...)`.
+ * Output object returned when calling `RegisterSubjectFlashParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface RegisterSubjectFlashOutputs {
  */
 function register_subject_flash_params(
     input_volumes: Array<InputPathType>,
-): RegisterSubjectFlashParameters {
+): RegisterSubjectFlashParametersTagged {
     const params = {
-        "@type": "freesurfer.register_subject_flash" as const,
+        "@type": "freesurfer/register_subject_flash" as const,
         "input_volumes": input_volumes,
     };
     return params;
@@ -179,7 +146,6 @@ function register_subject_flash(
 export {
       REGISTER_SUBJECT_FLASH_METADATA,
       RegisterSubjectFlashOutputs,
-      RegisterSubjectFlashParameters,
       register_subject_flash,
       register_subject_flash_execute,
       register_subject_flash_params,

@@ -12,7 +12,7 @@ const MAKE_COLOR_MAP_METADATA: Metadata = {
 
 
 interface MakeColorMapParameters {
-    "@type": "afni.MakeColorMap";
+    "@type"?: "afni/MakeColorMap";
     "fiducials_ncol"?: InputPathType | null | undefined;
     "fiducials"?: InputPathType | null | undefined;
     "num_colors"?: number | null | undefined;
@@ -34,44 +34,11 @@ interface MakeColorMapParameters {
     "help_full_flag": boolean;
     "flip_map_updside_down": boolean;
 }
+type MakeColorMapParametersTagged = Required<Pick<MakeColorMapParameters, '@type'>> & MakeColorMapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.MakeColorMap": make_color_map_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.MakeColorMap": make_color_map_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `make_color_map(...)`.
+ * Output object returned when calling `MakeColorMapParameters(...)`.
  *
  * @interface
  */
@@ -138,9 +105,9 @@ function make_color_map_params(
     help_flag: boolean = false,
     help_full_flag: boolean = false,
     flip_map_updside_down: boolean = false,
-): MakeColorMapParameters {
+): MakeColorMapParametersTagged {
     const params = {
-        "@type": "afni.MakeColorMap" as const,
+        "@type": "afni/MakeColorMap" as const,
         "flipupdown": flipupdown,
         "skip_last": skip_last,
         "show_fscolut": show_fscolut,
@@ -292,22 +259,22 @@ function make_color_map_cargs(
             (params["sdset_prefix"] ?? null)
         );
     }
-    if ((params["flipupdown"] ?? null)) {
+    if ((params["flipupdown"] ?? false)) {
         cargs.push("-flipud");
     }
-    if ((params["skip_last"] ?? null)) {
+    if ((params["skip_last"] ?? false)) {
         cargs.push("-sl");
     }
-    if ((params["show_fscolut"] ?? null)) {
+    if ((params["show_fscolut"] ?? false)) {
         cargs.push("-show_fscolut");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["help_full_flag"] ?? null)) {
+    if ((params["help_full_flag"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["flip_map_updside_down"] ?? null)) {
+    if ((params["flip_map_updside_down"] ?? false)) {
         cargs.push("-flipud");
     }
     return cargs;
@@ -427,7 +394,6 @@ function make_color_map(
 export {
       MAKE_COLOR_MAP_METADATA,
       MakeColorMapOutputs,
-      MakeColorMapParameters,
       make_color_map,
       make_color_map_execute,
       make_color_map_params,

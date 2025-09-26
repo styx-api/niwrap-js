@@ -12,7 +12,7 @@ const TRAC_ALL_METADATA: Metadata = {
 
 
 interface TracAllParameters {
-    "@type": "freesurfer.trac-all";
+    "@type"?: "freesurfer/trac-all";
     "config_file"?: InputPathType | null | undefined;
     "subject_name"?: string | null | undefined;
     "dicom_file"?: InputPathType | null | undefined;
@@ -48,44 +48,11 @@ interface TracAllParameters {
     "version_info": boolean;
     "help": boolean;
 }
+type TracAllParametersTagged = Required<Pick<TracAllParameters, '@type'>> & TracAllParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.trac-all": trac_all_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.trac-all": trac_all_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `trac_all(...)`.
+ * Output object returned when calling `TracAllParameters(...)`.
  *
  * @interface
  */
@@ -180,9 +147,9 @@ function trac_all_params(
     only_versions: boolean = false,
     version_info: boolean = false,
     help: boolean = false,
-): TracAllParameters {
+): TracAllParametersTagged {
     const params = {
-        "@type": "freesurfer.trac-all" as const,
+        "@type": "freesurfer/trac-all" as const,
         "pre_processing": pre_processing,
         "bedpost": bedpost,
         "pathway_reconstruction": pathway_reconstruction,
@@ -272,55 +239,55 @@ function trac_all_cargs(
             execution.inputFile((params["dicom_file"] ?? null))
         );
     }
-    if ((params["pre_processing"] ?? null)) {
+    if ((params["pre_processing"] ?? false)) {
         cargs.push("-prep");
     }
-    if ((params["bedpost"] ?? null)) {
+    if ((params["bedpost"] ?? false)) {
         cargs.push("-bedp");
     }
-    if ((params["pathway_reconstruction"] ?? null)) {
+    if ((params["pathway_reconstruction"] ?? false)) {
         cargs.push("-path");
     }
-    if ((params["assemble_measures"] ?? null)) {
+    if ((params["assemble_measures"] ?? false)) {
         cargs.push("-stat");
     }
-    if ((params["image_corrections"] ?? null)) {
+    if ((params["image_corrections"] ?? false)) {
         cargs.push("-corr");
     }
-    if ((params["no_image_corrections"] ?? null)) {
+    if ((params["no_image_corrections"] ?? false)) {
         cargs.push("-nocorr");
     }
-    if ((params["image_quality_assessment"] ?? null)) {
+    if ((params["image_quality_assessment"] ?? false)) {
         cargs.push("-qa");
     }
-    if ((params["no_image_quality_assessment"] ?? null)) {
+    if ((params["no_image_quality_assessment"] ?? false)) {
         cargs.push("-noqa");
     }
-    if ((params["intra_registration"] ?? null)) {
+    if ((params["intra_registration"] ?? false)) {
         cargs.push("-intra");
     }
-    if ((params["no_intra_registration"] ?? null)) {
+    if ((params["no_intra_registration"] ?? false)) {
         cargs.push("-nointra");
     }
-    if ((params["tensor_fit"] ?? null)) {
+    if ((params["tensor_fit"] ?? false)) {
         cargs.push("-tensor");
     }
-    if ((params["no_tensor_fit"] ?? null)) {
+    if ((params["no_tensor_fit"] ?? false)) {
         cargs.push("-notensor");
     }
-    if ((params["inter_registration"] ?? null)) {
+    if ((params["inter_registration"] ?? false)) {
         cargs.push("-inter");
     }
-    if ((params["no_inter_registration"] ?? null)) {
+    if ((params["no_inter_registration"] ?? false)) {
         cargs.push("-nointer");
     }
-    if ((params["pathway_priors"] ?? null)) {
+    if ((params["pathway_priors"] ?? false)) {
         cargs.push("-prior");
     }
-    if ((params["no_pathway_priors"] ?? null)) {
+    if ((params["no_pathway_priors"] ?? false)) {
         cargs.push("-noprior");
     }
-    if ((params["infant_options"] ?? null)) {
+    if ((params["infant_options"] ?? false)) {
         cargs.push("-infant");
     }
     if ((params["job_file"] ?? null) !== null) {
@@ -335,7 +302,7 @@ function trac_all_cargs(
             (params["log_file"] ?? null)
         );
     }
-    if ((params["no_append_log"] ?? null)) {
+    if ((params["no_append_log"] ?? false)) {
         cargs.push("-noappendlog");
     }
     if ((params["cmd_file"] ?? null) !== null) {
@@ -344,7 +311,7 @@ function trac_all_cargs(
             (params["cmd_file"] ?? null)
         );
     }
-    if ((params["no_is_running"] ?? null)) {
+    if ((params["no_is_running"] ?? false)) {
         cargs.push("-no-isrunning");
     }
     if ((params["subjects_directory"] ?? null) !== null) {
@@ -365,22 +332,22 @@ function trac_all_cargs(
             (params["group_id"] ?? null)
         );
     }
-    if ((params["allow_core_dump"] ?? null)) {
+    if ((params["allow_core_dump"] ?? false)) {
         cargs.push("-allowcoredump");
     }
-    if ((params["debug_mode"] ?? null)) {
+    if ((params["debug_mode"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["dont_run"] ?? null)) {
+    if ((params["dont_run"] ?? false)) {
         cargs.push("-dontrun");
     }
-    if ((params["only_versions"] ?? null)) {
+    if ((params["only_versions"] ?? false)) {
         cargs.push("-onlyversions");
     }
-    if ((params["version_info"] ?? null)) {
+    if ((params["version_info"] ?? false)) {
         cargs.push("-version");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -528,7 +495,6 @@ function trac_all(
 export {
       TRAC_ALL_METADATA,
       TracAllOutputs,
-      TracAllParameters,
       trac_all,
       trac_all_execute,
       trac_all_params,

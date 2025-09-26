@@ -12,7 +12,7 @@ const MRIS_SMOOTH_METADATA: Metadata = {
 
 
 interface MrisSmoothParameters {
-    "@type": "freesurfer.mris_smooth";
+    "@type"?: "freesurfer/mris_smooth";
     "input_surface": InputPathType;
     "output_surface": string;
     "average_iters"?: number | null | undefined;
@@ -25,44 +25,11 @@ interface MrisSmoothParameters {
     "momentum"?: number | null | undefined;
     "snapshot_interval"?: number | null | undefined;
 }
+type MrisSmoothParametersTagged = Required<Pick<MrisSmoothParameters, '@type'>> & MrisSmoothParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_smooth": mris_smooth_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_smooth": mris_smooth_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_smooth(...)`.
+ * Output object returned when calling `MrisSmoothParameters(...)`.
  *
  * @interface
  */
@@ -115,9 +82,9 @@ function mris_smooth_params(
     normalize_area: boolean = false,
     momentum: number | null = null,
     snapshot_interval: number | null = null,
-): MrisSmoothParameters {
+): MrisSmoothParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_smooth" as const,
+        "@type": "freesurfer/mris_smooth" as const,
         "input_surface": input_surface,
         "output_surface": output_surface,
         "no_write": no_write,
@@ -176,7 +143,7 @@ function mris_smooth_cargs(
             String((params["smoothing_iters"] ?? null))
         );
     }
-    if ((params["no_write"] ?? null)) {
+    if ((params["no_write"] ?? false)) {
         cargs.push("-nw");
     }
     if ((params["curvature_name"] ?? null) !== null) {
@@ -197,7 +164,7 @@ function mris_smooth_cargs(
             ...(params["gaussian_params"] ?? null).map(String)
         );
     }
-    if ((params["normalize_area"] ?? null)) {
+    if ((params["normalize_area"] ?? false)) {
         cargs.push("-area");
     }
     if ((params["momentum"] ?? null) !== null) {
@@ -312,7 +279,6 @@ function mris_smooth(
 export {
       MRIS_SMOOTH_METADATA,
       MrisSmoothOutputs,
-      MrisSmoothParameters,
       mris_smooth,
       mris_smooth_execute,
       mris_smooth_params,

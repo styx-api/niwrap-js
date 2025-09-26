@@ -12,7 +12,7 @@ const PROMPT_POPUP_METADATA: Metadata = {
 
 
 interface PromptPopupParameters {
-    "@type": "afni.prompt_popup";
+    "@type"?: "afni/prompt_popup";
     "message": string;
     "message_pause"?: string | null | undefined;
     "buttons"?: Array<string> | null | undefined;
@@ -20,43 +20,11 @@ interface PromptPopupParameters {
     "timeout"?: number | null | undefined;
     "timeout_to"?: number | null | undefined;
 }
+type PromptPopupParametersTagged = Required<Pick<PromptPopupParameters, '@type'>> & PromptPopupParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.prompt_popup": prompt_popup_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `prompt_popup(...)`.
+ * Output object returned when calling `PromptPopupParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function prompt_popup_params(
     buttons_b: Array<string> | null = null,
     timeout: number | null = null,
     timeout_to: number | null = null,
-): PromptPopupParameters {
+): PromptPopupParametersTagged {
     const params = {
-        "@type": "afni.prompt_popup" as const,
+        "@type": "afni/prompt_popup" as const,
         "message": message,
     };
     if (message_pause !== null) {
@@ -246,7 +214,6 @@ function prompt_popup(
 export {
       PROMPT_POPUP_METADATA,
       PromptPopupOutputs,
-      PromptPopupParameters,
       prompt_popup,
       prompt_popup_execute,
       prompt_popup_params,

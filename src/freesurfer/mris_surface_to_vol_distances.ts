@@ -12,50 +12,17 @@ const MRIS_SURFACE_TO_VOL_DISTANCES_METADATA: Metadata = {
 
 
 interface MrisSurfaceToVolDistancesParameters {
-    "@type": "freesurfer.mris_surface_to_vol_distances";
+    "@type"?: "freesurfer/mris_surface_to_vol_distances";
     "average_subject": string;
     "hemisphere": string;
     "subjects": Array<string>;
     "output_prefix": string;
 }
+type MrisSurfaceToVolDistancesParametersTagged = Required<Pick<MrisSurfaceToVolDistancesParameters, '@type'>> & MrisSurfaceToVolDistancesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_surface_to_vol_distances": mris_surface_to_vol_distances_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_surface_to_vol_distances": mris_surface_to_vol_distances_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_surface_to_vol_distances(...)`.
+ * Output object returned when calling `MrisSurfaceToVolDistancesParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mris_surface_to_vol_distances_params(
     hemisphere: string,
     subjects: Array<string>,
     output_prefix: string,
-): MrisSurfaceToVolDistancesParameters {
+): MrisSurfaceToVolDistancesParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_surface_to_vol_distances" as const,
+        "@type": "freesurfer/mris_surface_to_vol_distances" as const,
         "average_subject": average_subject,
         "hemisphere": hemisphere,
         "subjects": subjects,
@@ -200,7 +167,6 @@ function mris_surface_to_vol_distances(
 export {
       MRIS_SURFACE_TO_VOL_DISTANCES_METADATA,
       MrisSurfaceToVolDistancesOutputs,
-      MrisSurfaceToVolDistancesParameters,
       mris_surface_to_vol_distances,
       mris_surface_to_vol_distances_execute,
       mris_surface_to_vol_distances_params,

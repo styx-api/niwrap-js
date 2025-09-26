@@ -12,7 +12,7 @@ const MRI_EDIT_WM_WITH_ASEG_METADATA: Metadata = {
 
 
 interface MriEditWmWithAsegParameters {
-    "@type": "freesurfer.mri_edit_wm_with_aseg";
+    "@type"?: "freesurfer/mri_edit_wm_with_aseg";
     "input_wm": InputPathType;
     "input_t1_brain": InputPathType;
     "aseg": InputPathType;
@@ -28,44 +28,11 @@ interface MriEditWmWithAsegParameters {
     "sa_fix_ento_wm"?: string | null | undefined;
     "debug_voxel"?: Array<number> | null | undefined;
 }
+type MriEditWmWithAsegParametersTagged = Required<Pick<MriEditWmWithAsegParameters, '@type'>> & MriEditWmWithAsegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_edit_wm_with_aseg": mri_edit_wm_with_aseg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_edit_wm_with_aseg": mri_edit_wm_with_aseg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_edit_wm_with_aseg(...)`.
+ * Output object returned when calling `MriEditWmWithAsegParameters(...)`.
  *
  * @interface
  */
@@ -116,9 +83,9 @@ function mri_edit_wm_with_aseg_params(
     fix_ento_wm: string | null = null,
     sa_fix_ento_wm: string | null = null,
     debug_voxel: Array<number> | null = null,
-): MriEditWmWithAsegParameters {
+): MriEditWmWithAsegParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_edit_wm_with_aseg" as const,
+        "@type": "freesurfer/mri_edit_wm_with_aseg" as const,
         "input_wm": input_wm,
         "input_t1_brain": input_t1_brain,
         "aseg": aseg,
@@ -166,7 +133,7 @@ function mri_edit_wm_with_aseg_cargs(
     cargs.push(execution.inputFile((params["input_t1_brain"] ?? null)));
     cargs.push(execution.inputFile((params["aseg"] ?? null)));
     cargs.push((params["output_wm"] ?? null));
-    if ((params["fillven"] ?? null)) {
+    if ((params["fillven"] ?? false)) {
         cargs.push("-fillven");
     }
     if ((params["fix_scm_ha"] ?? null) !== null) {
@@ -181,16 +148,16 @@ function mri_edit_wm_with_aseg_cargs(
             (params["fix_scm_ha_only"] ?? null)
         );
     }
-    if ((params["keep"] ?? null)) {
+    if ((params["keep"] ?? false)) {
         cargs.push("-keep");
     }
-    if ((params["keep_in"] ?? null)) {
+    if ((params["keep_in"] ?? false)) {
         cargs.push("-keep-in");
     }
-    if ((params["lh"] ?? null)) {
+    if ((params["lh"] ?? false)) {
         cargs.push("-lh");
     }
-    if ((params["rh"] ?? null)) {
+    if ((params["rh"] ?? false)) {
         cargs.push("-rh");
     }
     if ((params["fix_ento_wm"] ?? null) !== null) {
@@ -315,7 +282,6 @@ function mri_edit_wm_with_aseg(
 export {
       MRI_EDIT_WM_WITH_ASEG_METADATA,
       MriEditWmWithAsegOutputs,
-      MriEditWmWithAsegParameters,
       mri_edit_wm_with_aseg,
       mri_edit_wm_with_aseg_execute,
       mri_edit_wm_with_aseg_params,

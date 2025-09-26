@@ -12,14 +12,15 @@ const DIRSPLIT_METADATA: Metadata = {
 
 
 interface DirsplitConfigParameters {
-    "@type": "mrtrix.dirsplit.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type DirsplitConfigParametersTagged = Required<Pick<DirsplitConfigParameters, '@type'>> & DirsplitConfigParameters;
 
 
 interface DirsplitParameters {
-    "@type": "mrtrix.dirsplit";
+    "@type"?: "mrtrix/dirsplit";
     "permutations"?: number | null | undefined;
     "cartesian": boolean;
     "info": boolean;
@@ -33,41 +34,7 @@ interface DirsplitParameters {
     "dirs": InputPathType;
     "out": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.dirsplit": dirsplit_cargs,
-        "mrtrix.dirsplit.config": dirsplit_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.dirsplit": dirsplit_outputs,
-    };
-    return outputsFuncs[t];
-}
+type DirsplitParametersTagged = Required<Pick<DirsplitParameters, '@type'>> & DirsplitParameters;
 
 
 /**
@@ -81,9 +48,9 @@ function dynOutputs(
 function dirsplit_config_params(
     key: string,
     value: string,
-): DirsplitConfigParameters {
+): DirsplitConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.dirsplit.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -112,7 +79,7 @@ function dirsplit_config_cargs(
 
 
 /**
- * Output object returned when calling `dirsplit(...)`.
+ * Output object returned when calling `DirsplitParameters(...)`.
  *
  * @interface
  */
@@ -159,9 +126,9 @@ function dirsplit_params(
     config: Array<DirsplitConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): DirsplitParameters {
+): DirsplitParametersTagged {
     const params = {
-        "@type": "mrtrix.dirsplit" as const,
+        "@type": "mrtrix/dirsplit" as const,
         "cartesian": cartesian,
         "info": info,
         "quiet": quiet,
@@ -205,19 +172,19 @@ function dirsplit_cargs(
             String((params["permutations"] ?? null))
         );
     }
-    if ((params["cartesian"] ?? null)) {
+    if ((params["cartesian"] ?? false)) {
         cargs.push("-cartesian");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -227,12 +194,12 @@ function dirsplit_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dirsplit_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["dirs"] ?? null)));
@@ -348,9 +315,7 @@ function dirsplit(
 
 export {
       DIRSPLIT_METADATA,
-      DirsplitConfigParameters,
       DirsplitOutputs,
-      DirsplitParameters,
       dirsplit,
       dirsplit_config_params,
       dirsplit_execute,

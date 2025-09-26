@@ -12,7 +12,7 @@ const V__ROI_MODAL_GROW_METADATA: Metadata = {
 
 
 interface VRoiModalGrowParameters {
-    "@type": "afni.@ROI_modal_grow";
+    "@type"?: "afni/@ROI_modal_grow";
     "input_dset": InputPathType;
     "niters": number;
     "outdir"?: string | null | undefined;
@@ -20,44 +20,11 @@ interface VRoiModalGrowParameters {
     "prefix"?: string | null | undefined;
     "neighborhood_type"?: number | null | undefined;
 }
+type VRoiModalGrowParametersTagged = Required<Pick<VRoiModalGrowParameters, '@type'>> & VRoiModalGrowParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@ROI_modal_grow": v__roi_modal_grow_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@ROI_modal_grow": v__roi_modal_grow_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__roi_modal_grow(...)`.
+ * Output object returned when calling `VRoiModalGrowParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function v__roi_modal_grow_params(
     mask: InputPathType | null = null,
     prefix: string | null = null,
     neighborhood_type: number | null = null,
-): VRoiModalGrowParameters {
+): VRoiModalGrowParametersTagged {
     const params = {
-        "@type": "afni.@ROI_modal_grow" as const,
+        "@type": "afni/@ROI_modal_grow" as const,
         "input_dset": input_dset,
         "niters": niters,
     };
@@ -247,7 +214,6 @@ function v__roi_modal_grow(
 
 export {
       VRoiModalGrowOutputs,
-      VRoiModalGrowParameters,
       V__ROI_MODAL_GROW_METADATA,
       v__roi_modal_grow,
       v__roi_modal_grow_execute,

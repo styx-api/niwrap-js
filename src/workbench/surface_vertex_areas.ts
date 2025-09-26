@@ -12,48 +12,15 @@ const SURFACE_VERTEX_AREAS_METADATA: Metadata = {
 
 
 interface SurfaceVertexAreasParameters {
-    "@type": "workbench.surface-vertex-areas";
+    "@type"?: "workbench/surface-vertex-areas";
     "surface": InputPathType;
     "metric": string;
 }
+type SurfaceVertexAreasParametersTagged = Required<Pick<SurfaceVertexAreasParameters, '@type'>> & SurfaceVertexAreasParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-vertex-areas": surface_vertex_areas_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-vertex-areas": surface_vertex_areas_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_vertex_areas(...)`.
+ * Output object returned when calling `SurfaceVertexAreasParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface SurfaceVertexAreasOutputs {
 function surface_vertex_areas_params(
     surface: InputPathType,
     metric: string,
-): SurfaceVertexAreasParameters {
+): SurfaceVertexAreasParametersTagged {
     const params = {
-        "@type": "workbench.surface-vertex-areas" as const,
+        "@type": "workbench/surface-vertex-areas" as const,
         "surface": surface,
         "metric": metric,
     };
@@ -191,7 +158,6 @@ function surface_vertex_areas(
 export {
       SURFACE_VERTEX_AREAS_METADATA,
       SurfaceVertexAreasOutputs,
-      SurfaceVertexAreasParameters,
       surface_vertex_areas,
       surface_vertex_areas_execute,
       surface_vertex_areas_params,

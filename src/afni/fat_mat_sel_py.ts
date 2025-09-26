@@ -12,7 +12,7 @@ const FAT_MAT_SEL_PY_METADATA: Metadata = {
 
 
 interface FatMatSelPyParameters {
-    "@type": "afni.fat_mat_sel.py";
+    "@type"?: "afni/fat_mat_sel.py";
     "parameters": string;
     "matr_in"?: string | null | undefined;
     "list_match"?: InputPathType | null | undefined;
@@ -37,44 +37,11 @@ interface FatMatSelPyParameters {
     "specifier"?: string | null | undefined;
     "xtick_lab_off": boolean;
 }
+type FatMatSelPyParametersTagged = Required<Pick<FatMatSelPyParameters, '@type'>> & FatMatSelPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.fat_mat_sel.py": fat_mat_sel_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.fat_mat_sel.py": fat_mat_sel_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fat_mat_sel_py(...)`.
+ * Output object returned when calling `FatMatSelPyParameters(...)`.
  *
  * @interface
  */
@@ -151,9 +118,9 @@ function fat_mat_sel_py_params(
     width_cbar_perc: number | null = null,
     specifier: string | null = null,
     xtick_lab_off: boolean = false,
-): FatMatSelPyParameters {
+): FatMatSelPyParametersTagged {
     const params = {
-        "@type": "afni.fat_mat_sel.py" as const,
+        "@type": "afni/fat_mat_sel.py" as const,
         "parameters": parameters,
         "out_ind_matr": out_ind_matr,
         "out_ind_1ddset": out_ind_1ddset,
@@ -240,16 +207,16 @@ function fat_mat_sel_py_cargs(
             execution.inputFile((params["list_match"] ?? null))
         );
     }
-    if ((params["out_ind_matr"] ?? null)) {
+    if ((params["out_ind_matr"] ?? false)) {
         cargs.push("--out_ind_matr");
     }
-    if ((params["out_ind_1ddset"] ?? null)) {
+    if ((params["out_ind_1ddset"] ?? false)) {
         cargs.push("--Out_ind_1ddset");
     }
-    if ((params["hold_image"] ?? null)) {
+    if ((params["hold_image"] ?? false)) {
         cargs.push("--Hold_image");
     }
-    if ((params["extern_labs_no"] ?? null)) {
+    if ((params["extern_labs_no"] ?? false)) {
         cargs.push("--ExternLabsNo");
     }
     if ((params["type_file"] ?? null) !== null) {
@@ -276,10 +243,10 @@ function fat_mat_sel_py_cargs(
             String((params["ylen_file"] ?? null))
         );
     }
-    if ((params["tight_layout_on"] ?? null)) {
+    if ((params["tight_layout_on"] ?? false)) {
         cargs.push("--Tight_layout_on");
     }
-    if ((params["fig_off"] ?? null)) {
+    if ((params["fig_off"] ?? false)) {
         cargs.push("--Fig_off");
     }
     if ((params["size_font"] ?? null) !== null) {
@@ -306,7 +273,7 @@ function fat_mat_sel_py_cargs(
             String((params["b_plotmax"] ?? null))
         );
     }
-    if ((params["cbar_off"] ?? null)) {
+    if ((params["cbar_off"] ?? false)) {
         cargs.push("--Cbar_off");
     }
     if ((params["map_of_colors"] ?? null) !== null) {
@@ -333,7 +300,7 @@ function fat_mat_sel_py_cargs(
             (params["specifier"] ?? null)
         );
     }
-    if ((params["xtick_lab_off"] ?? null)) {
+    if ((params["xtick_lab_off"] ?? false)) {
         cargs.push("--Xtick_lab_off");
     }
     return cargs;
@@ -460,7 +427,6 @@ function fat_mat_sel_py(
 export {
       FAT_MAT_SEL_PY_METADATA,
       FatMatSelPyOutputs,
-      FatMatSelPyParameters,
       fat_mat_sel_py,
       fat_mat_sel_py_execute,
       fat_mat_sel_py_params,

@@ -12,7 +12,7 @@ const V_3D_TTO1_D_METADATA: Metadata = {
 
 
 interface V3dTto1DParameters {
-    "@type": "afni.3dTto1D";
+    "@type"?: "afni/3dTto1D";
     "input_dataset": InputPathType;
     "method": string;
     "automask": boolean;
@@ -20,44 +20,11 @@ interface V3dTto1DParameters {
     "prefix"?: string | null | undefined;
     "verbose"?: number | null | undefined;
 }
+type V3dTto1DParametersTagged = Required<Pick<V3dTto1DParameters, '@type'>> & V3dTto1DParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dTto1D": v_3d_tto1_d_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dTto1D": v_3d_tto1_d_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_tto1_d(...)`.
+ * Output object returned when calling `V3dTto1DParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function v_3d_tto1_d_params(
     mask: InputPathType | null = null,
     prefix: string | null = null,
     verbose: number | null = null,
-): V3dTto1DParameters {
+): V3dTto1DParametersTagged {
     const params = {
-        "@type": "afni.3dTto1D" as const,
+        "@type": "afni/3dTto1D" as const,
         "input_dataset": input_dataset,
         "method": method,
         "automask": automask,
@@ -134,7 +101,7 @@ function v_3d_tto1_d_cargs(
         "-method",
         (params["method"] ?? null)
     );
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -242,7 +209,6 @@ function v_3d_tto1_d(
 
 export {
       V3dTto1DOutputs,
-      V3dTto1DParameters,
       V_3D_TTO1_D_METADATA,
       v_3d_tto1_d,
       v_3d_tto1_d_execute,

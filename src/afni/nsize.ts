@@ -12,48 +12,15 @@ const NSIZE_METADATA: Metadata = {
 
 
 interface NsizeParameters {
-    "@type": "afni.nsize";
+    "@type"?: "afni/nsize";
     "image_in": InputPathType;
     "image_out": string;
 }
+type NsizeParametersTagged = Required<Pick<NsizeParameters, '@type'>> & NsizeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.nsize": nsize_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.nsize": nsize_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `nsize(...)`.
+ * Output object returned when calling `NsizeParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface NsizeOutputs {
 function nsize_params(
     image_in: InputPathType,
     image_out: string,
-): NsizeParameters {
+): NsizeParametersTagged {
     const params = {
-        "@type": "afni.nsize" as const,
+        "@type": "afni/nsize" as const,
         "image_in": image_in,
         "image_out": image_out,
     };
@@ -186,7 +153,6 @@ function nsize(
 export {
       NSIZE_METADATA,
       NsizeOutputs,
-      NsizeParameters,
       nsize,
       nsize_execute,
       nsize_params,

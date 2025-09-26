@@ -12,7 +12,7 @@ const MRI_GLMFIT_METADATA: Metadata = {
 
 
 interface MriGlmfitParameters {
-    "@type": "freesurfer.mri_glmfit";
+    "@type"?: "freesurfer/mri_glmfit";
     "glmdir"?: string | null | undefined;
     "y_input": InputPathType;
     "table_input"?: InputPathType | null | undefined;
@@ -86,44 +86,11 @@ interface MriGlmfitParameters {
     "sim_done_file"?: InputPathType | null | undefined;
     "no_sig_double_flag": boolean;
 }
+type MriGlmfitParametersTagged = Required<Pick<MriGlmfitParameters, '@type'>> & MriGlmfitParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_glmfit": mri_glmfit_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_glmfit": mri_glmfit_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_glmfit(...)`.
+ * Output object returned when calling `MriGlmfitParameters(...)`.
  *
  * @interface
  */
@@ -326,9 +293,9 @@ function mri_glmfit_params(
     illcond_flag: boolean = false,
     sim_done_file: InputPathType | null = null,
     no_sig_double_flag: boolean = false,
-): MriGlmfitParameters {
+): MriGlmfitParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_glmfit" as const,
+        "@type": "freesurfer/mri_glmfit" as const,
         "y_input": y_input,
         "osgm_flag": osgm_flag,
         "no_contrasts_ok_flag": no_contrasts_ok_flag,
@@ -520,10 +487,10 @@ function mri_glmfit_cargs(
             ...(params["contrast_matrix"] ?? null).map(f => execution.inputFile(f))
         );
     }
-    if ((params["osgm_flag"] ?? null)) {
+    if ((params["osgm_flag"] ?? false)) {
         cargs.push("--osgm");
     }
-    if ((params["no_contrasts_ok_flag"] ?? null)) {
+    if ((params["no_contrasts_ok_flag"] ?? false)) {
         cargs.push("--no-contrasts-ok");
     }
     if ((params["dti_params"] ?? null) !== null) {
@@ -580,10 +547,10 @@ function mri_glmfit_cargs(
             execution.inputFile((params["weight"] ?? null))
         );
     }
-    if ((params["weight_inv_flag"] ?? null)) {
+    if ((params["weight_inv_flag"] ?? false)) {
         cargs.push("--w-inv");
     }
-    if ((params["weight_sqrt_flag"] ?? null)) {
+    if ((params["weight_sqrt_flag"] ?? false)) {
         cargs.push("--w-sqrt");
     }
     if ((params["fwhm"] ?? null) !== null) {
@@ -598,10 +565,10 @@ function mri_glmfit_cargs(
             String((params["var_fwhm"] ?? null))
         );
     }
-    if ((params["no_mask_smooth_flag"] ?? null)) {
+    if ((params["no_mask_smooth_flag"] ?? false)) {
         cargs.push("--no-mask-smooth");
     }
-    if ((params["no_est_fwhm_flag"] ?? null)) {
+    if ((params["no_est_fwhm_flag"] ?? false)) {
         cargs.push("--no-est-fwhm");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -616,40 +583,40 @@ function mri_glmfit_cargs(
             execution.inputFile((params["label"] ?? null))
         );
     }
-    if ((params["no_mask_flag"] ?? null)) {
+    if ((params["no_mask_flag"] ?? false)) {
         cargs.push("--no-mask");
     }
-    if ((params["no_cortex_flag"] ?? null)) {
+    if ((params["no_cortex_flag"] ?? false)) {
         cargs.push("--no-cortex");
     }
-    if ((params["mask_inv_flag"] ?? null)) {
+    if ((params["mask_inv_flag"] ?? false)) {
         cargs.push("--mask-inv");
     }
-    if ((params["prune_flag"] ?? null)) {
+    if ((params["prune_flag"] ?? false)) {
         cargs.push("--prune");
     }
-    if ((params["no_prune_flag"] ?? null)) {
+    if ((params["no_prune_flag"] ?? false)) {
         cargs.push("--no-prune");
     }
-    if ((params["logy_flag"] ?? null)) {
+    if ((params["logy_flag"] ?? false)) {
         cargs.push("--logy");
     }
-    if ((params["no_logy_flag"] ?? null)) {
+    if ((params["no_logy_flag"] ?? false)) {
         cargs.push("--no-logy");
     }
-    if ((params["rm_spatial_mean_flag"] ?? null)) {
+    if ((params["rm_spatial_mean_flag"] ?? false)) {
         cargs.push("--rm-spatial-mean");
     }
-    if ((params["yhat_save_flag"] ?? null)) {
+    if ((params["yhat_save_flag"] ?? false)) {
         cargs.push("--yhat-save");
     }
-    if ((params["eres_save_flag"] ?? null)) {
+    if ((params["eres_save_flag"] ?? false)) {
         cargs.push("--eres-save");
     }
-    if ((params["eres_scm_flag"] ?? null)) {
+    if ((params["eres_scm_flag"] ?? false)) {
         cargs.push("--eres-scm");
     }
-    if ((params["save_fwhm_map_flag"] ?? null)) {
+    if ((params["save_fwhm_map_flag"] ?? false)) {
         cargs.push("--save-fwhm-map");
     }
     if ((params["y_out"] ?? null) !== null) {
@@ -664,10 +631,10 @@ function mri_glmfit_cargs(
             (params["surface"] ?? null)
         );
     }
-    if ((params["skew_flag"] ?? null)) {
+    if ((params["skew_flag"] ?? false)) {
         cargs.push("--skew");
     }
-    if ((params["kurtosis_flag"] ?? null)) {
+    if ((params["kurtosis_flag"] ?? false)) {
         cargs.push("--kurtosis");
     }
     if ((params["sim_params"] ?? null) !== null) {
@@ -688,19 +655,19 @@ function mri_glmfit_cargs(
             ...(params["uniform_params"] ?? null)
         );
     }
-    if ((params["permute_input_flag"] ?? null)) {
+    if ((params["permute_input_flag"] ?? false)) {
         cargs.push("--permute-input");
     }
-    if ((params["pca_flag"] ?? null)) {
+    if ((params["pca_flag"] ?? false)) {
         cargs.push("--pca");
     }
-    if ((params["tar1_flag"] ?? null)) {
+    if ((params["tar1_flag"] ?? false)) {
         cargs.push("--tar1");
     }
-    if ((params["save_yhat_flag"] ?? null)) {
+    if ((params["save_yhat_flag"] ?? false)) {
         cargs.push("--save-yhat");
     }
-    if ((params["save_cond_flag"] ?? null)) {
+    if ((params["save_cond_flag"] ?? false)) {
         cargs.push("--save-cond");
     }
     if ((params["voxdump"] ?? null) !== null) {
@@ -715,7 +682,7 @@ function mri_glmfit_cargs(
             String((params["seed"] ?? null))
         );
     }
-    if ((params["synth_flag"] ?? null)) {
+    if ((params["synth_flag"] ?? false)) {
         cargs.push("--synth");
     }
     if ((params["resynthtest_it"] ?? null) !== null) {
@@ -748,7 +715,7 @@ function mri_glmfit_cargs(
             ...(params["logan_params"] ?? null)
         );
     }
-    if ((params["bp_clip_neg_flag"] ?? null)) {
+    if ((params["bp_clip_neg_flag"] ?? false)) {
         cargs.push("--bp-clip-neg");
     }
     if ((params["bp_clip_max"] ?? null) !== null) {
@@ -757,7 +724,7 @@ function mri_glmfit_cargs(
             String((params["bp_clip_max"] ?? null))
         );
     }
-    if ((params["perm_force_flag"] ?? null)) {
+    if ((params["perm_force_flag"] ?? false)) {
         cargs.push("--perm-force");
     }
     if ((params["diag_level"] ?? null) !== null) {
@@ -766,31 +733,31 @@ function mri_glmfit_cargs(
             String((params["diag_level"] ?? null))
         );
     }
-    if ((params["diag_cluster_flag"] ?? null)) {
+    if ((params["diag_cluster_flag"] ?? false)) {
         cargs.push("--diag-cluster");
     }
-    if ((params["debug_flag"] ?? null)) {
+    if ((params["debug_flag"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["checkopts_flag"] ?? null)) {
+    if ((params["checkopts_flag"] ?? false)) {
         cargs.push("--checkopts");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
-    if ((params["version_flag"] ?? null)) {
+    if ((params["version_flag"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["no_fix_vertex_area_flag"] ?? null)) {
+    if ((params["no_fix_vertex_area_flag"] ?? false)) {
         cargs.push("--no-fix-vertex-area");
     }
-    if ((params["allowsubjrep_flag"] ?? null)) {
+    if ((params["allowsubjrep_flag"] ?? false)) {
         cargs.push("--allowsubjrep");
     }
-    if ((params["allow_zero_dof_flag"] ?? null)) {
+    if ((params["allow_zero_dof_flag"] ?? false)) {
         cargs.push("--allow-zero-dof");
     }
-    if ((params["illcond_flag"] ?? null)) {
+    if ((params["illcond_flag"] ?? false)) {
         cargs.push("--illcond");
     }
     if ((params["sim_done_file"] ?? null) !== null) {
@@ -799,7 +766,7 @@ function mri_glmfit_cargs(
             execution.inputFile((params["sim_done_file"] ?? null))
         );
     }
-    if ((params["no_sig_double_flag"] ?? null)) {
+    if ((params["no_sig_double_flag"] ?? false)) {
         cargs.push("--no-sig-double");
     }
     return cargs;
@@ -1031,7 +998,6 @@ function mri_glmfit(
 export {
       MRI_GLMFIT_METADATA,
       MriGlmfitOutputs,
-      MriGlmfitParameters,
       mri_glmfit,
       mri_glmfit_execute,
       mri_glmfit_params,

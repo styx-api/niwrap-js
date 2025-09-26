@@ -12,51 +12,18 @@ const SURFACE_BASED_SMOOTHING_METADATA: Metadata = {
 
 
 interface SurfaceBasedSmoothingParameters {
-    "@type": "ants.SurfaceBasedSmoothing";
+    "@type"?: "ants/SurfaceBasedSmoothing";
     "image_to_smooth": InputPathType;
     "sigma": number;
     "surface_image": InputPathType;
     "outname": string;
     "num_repeats"?: number | null | undefined;
 }
+type SurfaceBasedSmoothingParametersTagged = Required<Pick<SurfaceBasedSmoothingParameters, '@type'>> & SurfaceBasedSmoothingParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.SurfaceBasedSmoothing": surface_based_smoothing_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.SurfaceBasedSmoothing": surface_based_smoothing_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_based_smoothing(...)`.
+ * Output object returned when calling `SurfaceBasedSmoothingParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function surface_based_smoothing_params(
     surface_image: InputPathType,
     outname: string,
     num_repeats: number | null = null,
-): SurfaceBasedSmoothingParameters {
+): SurfaceBasedSmoothingParametersTagged {
     const params = {
-        "@type": "ants.SurfaceBasedSmoothing" as const,
+        "@type": "ants/SurfaceBasedSmoothing" as const,
         "image_to_smooth": image_to_smooth,
         "sigma": sigma,
         "surface_image": surface_image,
@@ -211,7 +178,6 @@ function surface_based_smoothing(
 export {
       SURFACE_BASED_SMOOTHING_METADATA,
       SurfaceBasedSmoothingOutputs,
-      SurfaceBasedSmoothingParameters,
       surface_based_smoothing,
       surface_based_smoothing_execute,
       surface_based_smoothing_params,

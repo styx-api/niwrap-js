@@ -12,7 +12,7 @@ const MRIS_LABEL_AREA_METADATA: Metadata = {
 
 
 interface MrisLabelAreaParameters {
-    "@type": "freesurfer.mris_label_area";
+    "@type"?: "freesurfer/mris_label_area";
     "pct_flag": boolean;
     "log_file"?: string | null | undefined;
     "brain_vol"?: string | null | undefined;
@@ -22,43 +22,11 @@ interface MrisLabelAreaParameters {
     "annot_name": string;
     "labels": Array<string>;
 }
+type MrisLabelAreaParametersTagged = Required<Pick<MrisLabelAreaParameters, '@type'>> & MrisLabelAreaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_label_area": mris_label_area_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_label_area(...)`.
+ * Output object returned when calling `MrisLabelAreaParameters(...)`.
  *
  * @interface
  */
@@ -93,9 +61,9 @@ function mris_label_area_params(
     pct_flag: boolean = false,
     log_file: string | null = null,
     brain_vol: string | null = null,
-): MrisLabelAreaParameters {
+): MrisLabelAreaParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_label_area" as const,
+        "@type": "freesurfer/mris_label_area" as const,
         "pct_flag": pct_flag,
         "subject_name": subject_name,
         "hemi": hemi,
@@ -127,7 +95,7 @@ function mris_label_area_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("mris_label_area");
-    if ((params["pct_flag"] ?? null)) {
+    if ((params["pct_flag"] ?? false)) {
         cargs.push("-p");
     }
     if ((params["log_file"] ?? null) !== null) {
@@ -238,7 +206,6 @@ function mris_label_area(
 export {
       MRIS_LABEL_AREA_METADATA,
       MrisLabelAreaOutputs,
-      MrisLabelAreaParameters,
       mris_label_area,
       mris_label_area_execute,
       mris_label_area_params,

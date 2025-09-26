@@ -12,20 +12,22 @@ const TCKGLOBAL_METADATA: Metadata = {
 
 
 interface TckglobalRisoParameters {
-    "@type": "mrtrix.tckglobal.riso";
+    "@type"?: "riso";
     "response": InputPathType;
 }
+type TckglobalRisoParametersTagged = Required<Pick<TckglobalRisoParameters, '@type'>> & TckglobalRisoParameters;
 
 
 interface TckglobalConfigParameters {
-    "@type": "mrtrix.tckglobal.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type TckglobalConfigParametersTagged = Required<Pick<TckglobalConfigParameters, '@type'>> & TckglobalConfigParameters;
 
 
 interface TckglobalParameters {
-    "@type": "mrtrix.tckglobal";
+    "@type"?: "mrtrix/tckglobal";
     "grad"?: InputPathType | null | undefined;
     "mask"?: InputPathType | null | undefined;
     "riso"?: Array<TckglobalRisoParameters> | null | undefined;
@@ -59,42 +61,7 @@ interface TckglobalParameters {
     "response": InputPathType;
     "tracks": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.tckglobal": tckglobal_cargs,
-        "mrtrix.tckglobal.riso": tckglobal_riso_cargs,
-        "mrtrix.tckglobal.config": tckglobal_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.tckglobal": tckglobal_outputs,
-    };
-    return outputsFuncs[t];
-}
+type TckglobalParametersTagged = Required<Pick<TckglobalParameters, '@type'>> & TckglobalParameters;
 
 
 /**
@@ -106,9 +73,9 @@ function dynOutputs(
  */
 function tckglobal_riso_params(
     response: InputPathType,
-): TckglobalRisoParameters {
+): TckglobalRisoParametersTagged {
     const params = {
-        "@type": "mrtrix.tckglobal.riso" as const,
+        "@type": "riso" as const,
         "response": response,
     };
     return params;
@@ -145,9 +112,9 @@ function tckglobal_riso_cargs(
 function tckglobal_config_params(
     key: string,
     value: string,
-): TckglobalConfigParameters {
+): TckglobalConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.tckglobal.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -176,7 +143,7 @@ function tckglobal_config_cargs(
 
 
 /**
- * Output object returned when calling `tckglobal(...)`.
+ * Output object returned when calling `TckglobalParameters(...)`.
  *
  * @interface
  */
@@ -284,9 +251,9 @@ function tckglobal_params(
     config: Array<TckglobalConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TckglobalParameters {
+): TckglobalParametersTagged {
     const params = {
-        "@type": "mrtrix.tckglobal" as const,
+        "@type": "mrtrix/tckglobal" as const,
         "noapo": noapo,
         "info": info,
         "quiet": quiet,
@@ -395,7 +362,7 @@ function tckglobal_cargs(
         );
     }
     if ((params["riso"] ?? null) !== null) {
-        cargs.push(...(params["riso"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["riso"] ?? null).map(s => tckglobal_riso_cargs(s, execution)).flat());
     }
     if ((params["lmax"] ?? null) !== null) {
         cargs.push(
@@ -451,7 +418,7 @@ function tckglobal_cargs(
             (params["fod"] ?? null)
         );
     }
-    if ((params["noapo"] ?? null)) {
+    if ((params["noapo"] ?? false)) {
         cargs.push("-noapo");
     }
     if ((params["fiso"] ?? null) !== null) {
@@ -502,16 +469,16 @@ function tckglobal_cargs(
             String((params["lambda"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -521,12 +488,12 @@ function tckglobal_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => tckglobal_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["source"] ?? null)));
@@ -705,10 +672,7 @@ function tckglobal(
 
 export {
       TCKGLOBAL_METADATA,
-      TckglobalConfigParameters,
       TckglobalOutputs,
-      TckglobalParameters,
-      TckglobalRisoParameters,
       tckglobal,
       tckglobal_config_params,
       tckglobal_execute,

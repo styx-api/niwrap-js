@@ -12,7 +12,7 @@ const FSL_MVLM_METADATA: Metadata = {
 
 
 interface FslMvlmParameters {
-    "@type": "fsl.fsl_mvlm";
+    "@type"?: "fsl/fsl_mvlm";
     "input_file": InputPathType;
     "basename_output_files": string;
     "algorithm"?: string | null | undefined;
@@ -27,44 +27,11 @@ interface FslMvlmParameters {
     "out_data"?: string | null | undefined;
     "out_vnscales"?: string | null | undefined;
 }
+type FslMvlmParametersTagged = Required<Pick<FslMvlmParameters, '@type'>> & FslMvlmParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fsl_mvlm": fsl_mvlm_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fsl_mvlm": fsl_mvlm_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsl_mvlm(...)`.
+ * Output object returned when calling `FslMvlmParameters(...)`.
  *
  * @interface
  */
@@ -121,9 +88,9 @@ function fsl_mvlm_params(
     verbose: boolean = false,
     out_data: string | null = null,
     out_vnscales: string | null = null,
-): FslMvlmParameters {
+): FslMvlmParametersTagged {
     const params = {
-        "@type": "fsl.fsl_mvlm" as const,
+        "@type": "fsl/fsl_mvlm" as const,
         "input_file": input_file,
         "basename_output_files": basename_output_files,
         "design_normalization": design_normalization,
@@ -196,13 +163,13 @@ function fsl_mvlm_cargs(
             execution.inputFile((params["mask_image"] ?? null))
         );
     }
-    if ((params["design_normalization"] ?? null)) {
+    if ((params["design_normalization"] ?? false)) {
         cargs.push("--des_norm");
     }
-    if ((params["variance_normalisation"] ?? null)) {
+    if ((params["variance_normalisation"] ?? false)) {
         cargs.push("--vn");
     }
-    if ((params["demean"] ?? null)) {
+    if ((params["demean"] ?? false)) {
         cargs.push("--demean");
     }
     if ((params["nmf_dim"] ?? null) !== null) {
@@ -217,7 +184,7 @@ function fsl_mvlm_cargs(
             String((params["nmf_iterations"] ?? null))
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
     if ((params["out_data"] ?? null) !== null) {
@@ -336,7 +303,6 @@ function fsl_mvlm(
 export {
       FSL_MVLM_METADATA,
       FslMvlmOutputs,
-      FslMvlmParameters,
       fsl_mvlm,
       fsl_mvlm_execute,
       fsl_mvlm_params,

@@ -12,49 +12,17 @@ const V_3D_TSPLIT4_D_METADATA: Metadata = {
 
 
 interface V3dTsplit4DParameters {
-    "@type": "afni.3dTsplit4D";
+    "@type"?: "afni/3dTsplit4D";
     "prefix": string;
     "infile": InputPathType;
     "keep_datum": boolean;
     "digits"?: number | null | undefined;
 }
+type V3dTsplit4DParametersTagged = Required<Pick<V3dTsplit4DParameters, '@type'>> & V3dTsplit4DParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dTsplit4D": v_3d_tsplit4_d_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_tsplit4_d(...)`.
+ * Output object returned when calling `V3dTsplit4DParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function v_3d_tsplit4_d_params(
     infile: InputPathType,
     keep_datum: boolean = false,
     digits: number | null = null,
-): V3dTsplit4DParameters {
+): V3dTsplit4DParametersTagged {
     const params = {
-        "@type": "afni.3dTsplit4D" as const,
+        "@type": "afni/3dTsplit4D" as const,
         "prefix": prefix,
         "infile": infile,
         "keep_datum": keep_datum,
@@ -114,7 +82,7 @@ function v_3d_tsplit4_d_cargs(
         (params["prefix"] ?? null)
     );
     cargs.push(execution.inputFile((params["infile"] ?? null)));
-    if ((params["keep_datum"] ?? null)) {
+    if ((params["keep_datum"] ?? false)) {
         cargs.push("-keep_datum");
     }
     if ((params["digits"] ?? null) !== null) {
@@ -205,7 +173,6 @@ function v_3d_tsplit4_d(
 
 export {
       V3dTsplit4DOutputs,
-      V3dTsplit4DParameters,
       V_3D_TSPLIT4_D_METADATA,
       v_3d_tsplit4_d,
       v_3d_tsplit4_d_execute,

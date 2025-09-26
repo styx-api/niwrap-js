@@ -12,7 +12,7 @@ const MRI_LABEL_VOLUME_METADATA: Metadata = {
 
 
 interface MriLabelVolumeParameters {
-    "@type": "freesurfer.mri_label_volume";
+    "@type"?: "freesurfer/mri_label_volume";
     "volume": InputPathType;
     "labels": Array<string>;
     "partial_volume_effects"?: InputPathType | null | undefined;
@@ -30,44 +30,11 @@ interface MriLabelVolumeParameters {
     "etiv_scalefactor"?: number | null | undefined;
     "etiv_subject"?: string | null | undefined;
 }
+type MriLabelVolumeParametersTagged = Required<Pick<MriLabelVolumeParameters, '@type'>> & MriLabelVolumeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_label_volume": mri_label_volume_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_label_volume": mri_label_volume_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_label_volume(...)`.
+ * Output object returned when calling `MriLabelVolumeParameters(...)`.
  *
  * @interface
  */
@@ -126,9 +93,9 @@ function mri_label_volume_params(
     etiv_transform_file: InputPathType | null = null,
     etiv_scalefactor: number | null = null,
     etiv_subject: string | null = null,
-): MriLabelVolumeParameters {
+): MriLabelVolumeParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_label_volume" as const,
+        "@type": "freesurfer/mri_label_volume" as const,
         "volume": volume,
         "labels": labels,
         "non_zero_voxels": non_zero_voxels,
@@ -208,7 +175,7 @@ function mri_label_volume_cargs(
             (params["spreadsheet_subject"] ?? null)
         );
     }
-    if ((params["non_zero_voxels"] ?? null)) {
+    if ((params["non_zero_voxels"] ?? false)) {
         cargs.push("-a");
     }
     if ((params["replace_label_in"] ?? null) !== null) {
@@ -226,7 +193,7 @@ function mri_label_volume_cargs(
             execution.inputFile((params["brain_volume"] ?? null))
         );
     }
-    if ((params["percentage"] ?? null)) {
+    if ((params["percentage"] ?? false)) {
         cargs.push("-p");
     }
     if ((params["log_results"] ?? null) !== null) {
@@ -368,7 +335,6 @@ function mri_label_volume(
 export {
       MRI_LABEL_VOLUME_METADATA,
       MriLabelVolumeOutputs,
-      MriLabelVolumeParameters,
       mri_label_volume,
       mri_label_volume_execute,
       mri_label_volume_params,

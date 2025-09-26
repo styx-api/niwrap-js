@@ -12,51 +12,18 @@ const MAKE_DYADIC_VECTORS_METADATA: Metadata = {
 
 
 interface MakeDyadicVectorsParameters {
-    "@type": "fsl.make_dyadic_vectors";
+    "@type"?: "fsl/make_dyadic_vectors";
     "theta_vol": InputPathType;
     "phi_vol": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "output": string;
     "perc"?: number | null | undefined;
 }
+type MakeDyadicVectorsParametersTagged = Required<Pick<MakeDyadicVectorsParameters, '@type'>> & MakeDyadicVectorsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.make_dyadic_vectors": make_dyadic_vectors_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.make_dyadic_vectors": make_dyadic_vectors_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `make_dyadic_vectors(...)`.
+ * Output object returned when calling `MakeDyadicVectorsParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function make_dyadic_vectors_params(
     output: string,
     mask: InputPathType | null = null,
     perc: number | null = null,
-): MakeDyadicVectorsParameters {
+): MakeDyadicVectorsParametersTagged {
     const params = {
-        "@type": "fsl.make_dyadic_vectors" as const,
+        "@type": "fsl/make_dyadic_vectors" as const,
         "theta_vol": theta_vol,
         "phi_vol": phi_vol,
         "output": output,
@@ -215,7 +182,6 @@ function make_dyadic_vectors(
 export {
       MAKE_DYADIC_VECTORS_METADATA,
       MakeDyadicVectorsOutputs,
-      MakeDyadicVectorsParameters,
       make_dyadic_vectors,
       make_dyadic_vectors_execute,
       make_dyadic_vectors_params,

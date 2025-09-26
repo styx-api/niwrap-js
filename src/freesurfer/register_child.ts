@@ -12,48 +12,15 @@ const REGISTER_CHILD_METADATA: Metadata = {
 
 
 interface RegisterChildParameters {
-    "@type": "freesurfer.register_child";
+    "@type"?: "freesurfer/register_child";
     "input_volume": InputPathType;
     "output_directory": string;
 }
+type RegisterChildParametersTagged = Required<Pick<RegisterChildParameters, '@type'>> & RegisterChildParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.register_child": register_child_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.register_child": register_child_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `register_child(...)`.
+ * Output object returned when calling `RegisterChildParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +51,9 @@ interface RegisterChildOutputs {
 function register_child_params(
     input_volume: InputPathType,
     output_directory: string,
-): RegisterChildParameters {
+): RegisterChildParametersTagged {
     const params = {
-        "@type": "freesurfer.register_child" as const,
+        "@type": "freesurfer/register_child" as const,
         "input_volume": input_volume,
         "output_directory": output_directory,
     };
@@ -191,7 +158,6 @@ function register_child(
 export {
       REGISTER_CHILD_METADATA,
       RegisterChildOutputs,
-      RegisterChildParameters,
       register_child,
       register_child_execute,
       register_child_params,

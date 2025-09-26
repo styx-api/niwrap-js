@@ -12,49 +12,16 @@ const IMAGE_INTENSITY_STATISTICS_METADATA: Metadata = {
 
 
 interface ImageIntensityStatisticsParameters {
-    "@type": "ants.ImageIntensityStatistics";
+    "@type"?: "ants/ImageIntensityStatistics";
     "image_dimension": number;
     "input_image": InputPathType;
     "label_image"?: InputPathType | null | undefined;
 }
+type ImageIntensityStatisticsParametersTagged = Required<Pick<ImageIntensityStatisticsParameters, '@type'>> & ImageIntensityStatisticsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.ImageIntensityStatistics": image_intensity_statistics_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.ImageIntensityStatistics": image_intensity_statistics_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `image_intensity_statistics(...)`.
+ * Output object returned when calling `ImageIntensityStatisticsParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function image_intensity_statistics_params(
     image_dimension: number,
     input_image: InputPathType,
     label_image: InputPathType | null = null,
-): ImageIntensityStatisticsParameters {
+): ImageIntensityStatisticsParametersTagged {
     const params = {
-        "@type": "ants.ImageIntensityStatistics" as const,
+        "@type": "ants/ImageIntensityStatistics" as const,
         "image_dimension": image_dimension,
         "input_image": input_image,
     };
@@ -197,7 +164,6 @@ function image_intensity_statistics(
 export {
       IMAGE_INTENSITY_STATISTICS_METADATA,
       ImageIntensityStatisticsOutputs,
-      ImageIntensityStatisticsParameters,
       image_intensity_statistics,
       image_intensity_statistics_execute,
       image_intensity_statistics_params,

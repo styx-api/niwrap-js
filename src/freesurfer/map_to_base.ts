@@ -12,51 +12,18 @@ const MAP_TO_BASE_METADATA: Metadata = {
 
 
 interface MapToBaseParameters {
-    "@type": "freesurfer.map_to_base";
+    "@type"?: "freesurfer/map_to_base";
     "baseid": string;
     "tpid": string;
     "input_image": string;
     "resample_type": string;
     "cross"?: string | null | undefined;
 }
+type MapToBaseParametersTagged = Required<Pick<MapToBaseParameters, '@type'>> & MapToBaseParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.map_to_base": map_to_base_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.map_to_base": map_to_base_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `map_to_base(...)`.
+ * Output object returned when calling `MapToBaseParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function map_to_base_params(
     input_image: string,
     resample_type: string,
     cross: string | null = null,
-): MapToBaseParameters {
+): MapToBaseParametersTagged {
     const params = {
-        "@type": "freesurfer.map_to_base" as const,
+        "@type": "freesurfer/map_to_base" as const,
         "baseid": baseid,
         "tpid": tpid,
         "input_image": input_image,
@@ -226,7 +193,6 @@ function map_to_base(
 export {
       MAP_TO_BASE_METADATA,
       MapToBaseOutputs,
-      MapToBaseParameters,
       map_to_base,
       map_to_base_execute,
       map_to_base_params,

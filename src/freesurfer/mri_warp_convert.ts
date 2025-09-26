@@ -12,7 +12,7 @@ const MRI_WARP_CONVERT_METADATA: Metadata = {
 
 
 interface MriWarpConvertParameters {
-    "@type": "freesurfer.mri_warp_convert";
+    "@type"?: "freesurfer/mri_warp_convert";
     "inm3z"?: InputPathType | null | undefined;
     "infsl"?: InputPathType | null | undefined;
     "inlps"?: InputPathType | null | undefined;
@@ -28,44 +28,11 @@ interface MriWarpConvertParameters {
     "insrcgeom"?: InputPathType | null | undefined;
     "downsample": boolean;
 }
+type MriWarpConvertParametersTagged = Required<Pick<MriWarpConvertParameters, '@type'>> & MriWarpConvertParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_warp_convert": mri_warp_convert_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_warp_convert": mri_warp_convert_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_warp_convert(...)`.
+ * Output object returned when calling `MriWarpConvertParameters(...)`.
  *
  * @interface
  */
@@ -116,9 +83,9 @@ function mri_warp_convert_params(
     outvox: string | null = null,
     insrcgeom: InputPathType | null = null,
     downsample: boolean = false,
-): MriWarpConvertParameters {
+): MriWarpConvertParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_warp_convert" as const,
+        "@type": "freesurfer/mri_warp_convert" as const,
         "downsample": downsample,
     };
     if (inm3z !== null) {
@@ -256,7 +223,7 @@ function mri_warp_convert_cargs(
             execution.inputFile((params["insrcgeom"] ?? null))
         );
     }
-    if ((params["downsample"] ?? null)) {
+    if ((params["downsample"] ?? false)) {
         cargs.push("--downsample");
     }
     return cargs;
@@ -363,7 +330,6 @@ function mri_warp_convert(
 export {
       MRI_WARP_CONVERT_METADATA,
       MriWarpConvertOutputs,
-      MriWarpConvertParameters,
       mri_warp_convert,
       mri_warp_convert_execute,
       mri_warp_convert_params,

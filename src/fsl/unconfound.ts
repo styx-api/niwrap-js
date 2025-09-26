@@ -12,49 +12,16 @@ const UNCONFOUND_METADATA: Metadata = {
 
 
 interface UnconfoundParameters {
-    "@type": "fsl.unconfound";
+    "@type"?: "fsl/unconfound";
     "in4d": InputPathType;
     "out4d": string;
     "confound_mat": InputPathType;
 }
+type UnconfoundParametersTagged = Required<Pick<UnconfoundParameters, '@type'>> & UnconfoundParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.unconfound": unconfound_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.unconfound": unconfound_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `unconfound(...)`.
+ * Output object returned when calling `UnconfoundParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function unconfound_params(
     in4d: InputPathType,
     out4d: string,
     confound_mat: InputPathType,
-): UnconfoundParameters {
+): UnconfoundParametersTagged {
     const params = {
-        "@type": "fsl.unconfound" as const,
+        "@type": "fsl/unconfound" as const,
         "in4d": in4d,
         "out4d": out4d,
         "confound_mat": confound_mat,
@@ -193,7 +160,6 @@ function unconfound(
 export {
       UNCONFOUND_METADATA,
       UnconfoundOutputs,
-      UnconfoundParameters,
       unconfound,
       unconfound_execute,
       unconfound_params,

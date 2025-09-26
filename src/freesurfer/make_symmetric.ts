@@ -12,50 +12,17 @@ const MAKE_SYMMETRIC_METADATA: Metadata = {
 
 
 interface MakeSymmetricParameters {
-    "@type": "freesurfer.make_symmetric";
+    "@type"?: "freesurfer/make_symmetric";
     "hemi": string;
     "input_file": InputPathType;
     "output_file": string;
     "transform_map": string;
 }
+type MakeSymmetricParametersTagged = Required<Pick<MakeSymmetricParameters, '@type'>> & MakeSymmetricParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.make_symmetric": make_symmetric_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.make_symmetric": make_symmetric_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `make_symmetric(...)`.
+ * Output object returned when calling `MakeSymmetricParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +57,9 @@ function make_symmetric_params(
     input_file: InputPathType,
     output_file: string,
     transform_map: string,
-): MakeSymmetricParameters {
+): MakeSymmetricParametersTagged {
     const params = {
-        "@type": "freesurfer.make_symmetric" as const,
+        "@type": "freesurfer/make_symmetric" as const,
         "hemi": hemi,
         "input_file": input_file,
         "output_file": output_file,
@@ -205,7 +172,6 @@ function make_symmetric(
 export {
       MAKE_SYMMETRIC_METADATA,
       MakeSymmetricOutputs,
-      MakeSymmetricParameters,
       make_symmetric,
       make_symmetric_execute,
       make_symmetric_params,

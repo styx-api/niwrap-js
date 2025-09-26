@@ -12,7 +12,7 @@ const MKSURFATLAS_METADATA: Metadata = {
 
 
 interface MksurfatlasParameters {
-    "@type": "freesurfer.mksurfatlas";
+    "@type"?: "freesurfer/mksurfatlas";
     "atlas": string;
     "hemi": string;
     "subjects": Array<string>;
@@ -23,44 +23,11 @@ interface MksurfatlasParameters {
     "version": boolean;
     "help": boolean;
 }
+type MksurfatlasParametersTagged = Required<Pick<MksurfatlasParameters, '@type'>> & MksurfatlasParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mksurfatlas": mksurfatlas_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mksurfatlas": mksurfatlas_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mksurfatlas(...)`.
+ * Output object returned when calling `MksurfatlasParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function mksurfatlas_params(
     debug: boolean = false,
     version: boolean = false,
     help: boolean = false,
-): MksurfatlasParameters {
+): MksurfatlasParametersTagged {
     const params = {
-        "@type": "freesurfer.mksurfatlas" as const,
+        "@type": "freesurfer/mksurfatlas" as const,
         "atlas": atlas,
         "hemi": hemi,
         "subjects": subjects,
@@ -164,13 +131,13 @@ function mksurfatlas_cargs(
             (params["regsurf"] ?? null)
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -267,7 +234,6 @@ function mksurfatlas(
 export {
       MKSURFATLAS_METADATA,
       MksurfatlasOutputs,
-      MksurfatlasParameters,
       mksurfatlas,
       mksurfatlas_execute,
       mksurfatlas_params,

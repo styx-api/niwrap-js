@@ -12,14 +12,15 @@ const MRHISTOGRAM_METADATA: Metadata = {
 
 
 interface MrhistogramConfigParameters {
-    "@type": "mrtrix.mrhistogram.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MrhistogramConfigParametersTagged = Required<Pick<MrhistogramConfigParameters, '@type'>> & MrhistogramConfigParameters;
 
 
 interface MrhistogramParameters {
-    "@type": "mrtrix.mrhistogram";
+    "@type"?: "mrtrix/mrhistogram";
     "bins"?: number | null | undefined;
     "template"?: InputPathType | null | undefined;
     "mask"?: InputPathType | null | undefined;
@@ -36,41 +37,7 @@ interface MrhistogramParameters {
     "image": InputPathType;
     "hist": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.mrhistogram": mrhistogram_cargs,
-        "mrtrix.mrhistogram.config": mrhistogram_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.mrhistogram": mrhistogram_outputs,
-    };
-    return outputsFuncs[t];
-}
+type MrhistogramParametersTagged = Required<Pick<MrhistogramParameters, '@type'>> & MrhistogramParameters;
 
 
 /**
@@ -84,9 +51,9 @@ function dynOutputs(
 function mrhistogram_config_params(
     key: string,
     value: string,
-): MrhistogramConfigParameters {
+): MrhistogramConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.mrhistogram.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -115,7 +82,7 @@ function mrhistogram_config_cargs(
 
 
 /**
- * Output object returned when calling `mrhistogram(...)`.
+ * Output object returned when calling `MrhistogramParameters(...)`.
  *
  * @interface
  */
@@ -168,9 +135,9 @@ function mrhistogram_params(
     config: Array<MrhistogramConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrhistogramParameters {
+): MrhistogramParametersTagged {
     const params = {
-        "@type": "mrtrix.mrhistogram" as const,
+        "@type": "mrtrix/mrhistogram" as const,
         "ignorezero": ignorezero,
         "allvolumes": allvolumes,
         "info": info,
@@ -233,22 +200,22 @@ function mrhistogram_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["ignorezero"] ?? null)) {
+    if ((params["ignorezero"] ?? false)) {
         cargs.push("-ignorezero");
     }
-    if ((params["allvolumes"] ?? null)) {
+    if ((params["allvolumes"] ?? false)) {
         cargs.push("-allvolumes");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -258,12 +225,12 @@ function mrhistogram_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => mrhistogram_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["image"] ?? null)));
@@ -385,9 +352,7 @@ function mrhistogram(
 
 export {
       MRHISTOGRAM_METADATA,
-      MrhistogramConfigParameters,
       MrhistogramOutputs,
-      MrhistogramParameters,
       mrhistogram,
       mrhistogram_config_params,
       mrhistogram_execute,

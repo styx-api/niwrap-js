@@ -12,48 +12,15 @@ const MORPH_KERNEL_METADATA: Metadata = {
 
 
 interface MorphKernelParameters {
-    "@type": "fsl.morph_kernel";
+    "@type"?: "fsl/morph_kernel";
     "cube_side_length": number;
     "sphere_radius": number;
 }
+type MorphKernelParametersTagged = Required<Pick<MorphKernelParameters, '@type'>> & MorphKernelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.morph_kernel": morph_kernel_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.morph_kernel": morph_kernel_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `morph_kernel(...)`.
+ * Output object returned when calling `MorphKernelParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface MorphKernelOutputs {
 function morph_kernel_params(
     cube_side_length: number,
     sphere_radius: number,
-): MorphKernelParameters {
+): MorphKernelParametersTagged {
     const params = {
-        "@type": "fsl.morph_kernel" as const,
+        "@type": "fsl/morph_kernel" as const,
         "cube_side_length": cube_side_length,
         "sphere_radius": sphere_radius,
     };
@@ -186,7 +153,6 @@ function morph_kernel(
 export {
       MORPH_KERNEL_METADATA,
       MorphKernelOutputs,
-      MorphKernelParameters,
       morph_kernel,
       morph_kernel_execute,
       morph_kernel_params,

@@ -12,14 +12,15 @@ const DIRGEN_METADATA: Metadata = {
 
 
 interface DirgenConfigParameters {
-    "@type": "mrtrix.dirgen.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type DirgenConfigParametersTagged = Required<Pick<DirgenConfigParameters, '@type'>> & DirgenConfigParameters;
 
 
 interface DirgenParameters {
-    "@type": "mrtrix.dirgen";
+    "@type"?: "mrtrix/dirgen";
     "power"?: number | null | undefined;
     "niter"?: number | null | undefined;
     "restarts"?: number | null | undefined;
@@ -36,41 +37,7 @@ interface DirgenParameters {
     "ndir": number;
     "dirs": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.dirgen": dirgen_cargs,
-        "mrtrix.dirgen.config": dirgen_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.dirgen": dirgen_outputs,
-    };
-    return outputsFuncs[t];
-}
+type DirgenParametersTagged = Required<Pick<DirgenParameters, '@type'>> & DirgenParameters;
 
 
 /**
@@ -84,9 +51,9 @@ function dynOutputs(
 function dirgen_config_params(
     key: string,
     value: string,
-): DirgenConfigParameters {
+): DirgenConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.dirgen.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -115,7 +82,7 @@ function dirgen_config_cargs(
 
 
 /**
- * Output object returned when calling `dirgen(...)`.
+ * Output object returned when calling `DirgenParameters(...)`.
  *
  * @interface
  */
@@ -168,9 +135,9 @@ function dirgen_params(
     config: Array<DirgenConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): DirgenParameters {
+): DirgenParametersTagged {
     const params = {
-        "@type": "mrtrix.dirgen" as const,
+        "@type": "mrtrix/dirgen" as const,
         "unipolar": unipolar,
         "cartesian": cartesian,
         "info": info,
@@ -233,22 +200,22 @@ function dirgen_cargs(
             String((params["restarts"] ?? null))
         );
     }
-    if ((params["unipolar"] ?? null)) {
+    if ((params["unipolar"] ?? false)) {
         cargs.push("-unipolar");
     }
-    if ((params["cartesian"] ?? null)) {
+    if ((params["cartesian"] ?? false)) {
         cargs.push("-cartesian");
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -258,12 +225,12 @@ function dirgen_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => dirgen_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(String((params["ndir"] ?? null)));
@@ -389,9 +356,7 @@ function dirgen(
 
 export {
       DIRGEN_METADATA,
-      DirgenConfigParameters,
       DirgenOutputs,
-      DirgenParameters,
       dirgen,
       dirgen_config_params,
       dirgen_execute,

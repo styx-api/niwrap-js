@@ -12,7 +12,7 @@ const SWAP_VOXELWISE_METADATA: Metadata = {
 
 
 interface SwapVoxelwiseParameters {
-    "@type": "fsl.swap_voxelwise";
+    "@type"?: "fsl/swap_voxelwise";
     "vectors_file_list": InputPathType;
     "scalars_file_list"?: InputPathType | null | undefined;
     "mask": InputPathType;
@@ -22,44 +22,11 @@ interface SwapVoxelwiseParameters {
     "crossing_thresh"?: number | null | undefined;
     "verbose_flag": boolean;
 }
+type SwapVoxelwiseParametersTagged = Required<Pick<SwapVoxelwiseParameters, '@type'>> & SwapVoxelwiseParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.swap_voxelwise": swap_voxelwise_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.swap_voxelwise": swap_voxelwise_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `swap_voxelwise(...)`.
+ * Output object returned when calling `SwapVoxelwiseParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function swap_voxelwise_params(
     init_mask: InputPathType | null = null,
     crossing_thresh: number | null = null,
     verbose_flag: boolean = false,
-): SwapVoxelwiseParameters {
+): SwapVoxelwiseParametersTagged {
     const params = {
-        "@type": "fsl.swap_voxelwise" as const,
+        "@type": "fsl/swap_voxelwise" as const,
         "vectors_file_list": vectors_file_list,
         "mask": mask,
         "verbose_flag": verbose_flag,
@@ -176,7 +143,7 @@ function swap_voxelwise_cargs(
             String((params["crossing_thresh"] ?? null))
         );
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-V");
     }
     return cargs;
@@ -271,7 +238,6 @@ function swap_voxelwise(
 export {
       SWAP_VOXELWISE_METADATA,
       SwapVoxelwiseOutputs,
-      SwapVoxelwiseParameters,
       swap_voxelwise,
       swap_voxelwise_execute,
       swap_voxelwise_params,

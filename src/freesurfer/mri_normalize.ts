@@ -12,7 +12,7 @@ const MRI_NORMALIZE_METADATA: Metadata = {
 
 
 interface MriNormalizeParameters {
-    "@type": "freesurfer.mri_normalize";
+    "@type"?: "freesurfer/mri_normalize";
     "input_vol": InputPathType;
     "output_vol": string;
     "norm_iters"?: number | null | undefined;
@@ -48,44 +48,11 @@ interface MriNormalizeParameters {
     "seed_value"?: number | null | undefined;
     "print_help": boolean;
 }
+type MriNormalizeParametersTagged = Required<Pick<MriNormalizeParameters, '@type'>> & MriNormalizeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_normalize": mri_normalize_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_normalize": mri_normalize_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_normalize(...)`.
+ * Output object returned when calling `MriNormalizeParameters(...)`.
  *
  * @interface
  */
@@ -180,9 +147,9 @@ function mri_normalize_params(
     surface_transform: string | null = null,
     seed_value: number | null = null,
     print_help: boolean = false,
-): MriNormalizeParameters {
+): MriNormalizeParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_normalize" as const,
+        "@type": "freesurfer/mri_normalize" as const,
         "input_vol": input_vol,
         "output_vol": output_vol,
         "disable_1d": disable_1d,
@@ -288,7 +255,7 @@ function mri_normalize_cargs(
             String((params["norm_iters"] ?? null))
         );
     }
-    if ((params["disable_1d"] ?? null)) {
+    if ((params["disable_1d"] ?? false)) {
         cargs.push("-no1d");
     }
     if ((params["nonmax_suppress"] ?? null) !== null) {
@@ -297,13 +264,13 @@ function mri_normalize_cargs(
             String((params["nonmax_suppress"] ?? null))
         );
     }
-    if ((params["conform"] ?? null)) {
+    if ((params["conform"] ?? false)) {
         cargs.push("-conform");
     }
-    if ((params["nonconform"] ?? null)) {
+    if ((params["nonconform"] ?? false)) {
         cargs.push("-noconform");
     }
-    if ((params["gentle"] ?? null)) {
+    if ((params["gentle"] ?? false)) {
         cargs.push("-gentle");
     }
     if ((params["control_points"] ?? null) !== null) {
@@ -354,10 +321,10 @@ function mri_normalize_cargs(
             String((params["intensity_gradient"] ?? null))
         );
     }
-    if ((params["prune"] ?? null)) {
+    if ((params["prune"] ?? false)) {
         cargs.push("-prune");
     }
-    if ((params["no_gentle_cp"] ?? null)) {
+    if ((params["no_gentle_cp"] ?? false)) {
         cargs.push("-no-gentle-cp");
     }
     if ((params["mask_file"] ?? null) !== null) {
@@ -372,13 +339,13 @@ function mri_normalize_cargs(
             (params["atlas_transform"] ?? null)
         );
     }
-    if ((params["noskull"] ?? null)) {
+    if ((params["noskull"] ?? false)) {
         cargs.push("-noskull");
     }
-    if ((params["monkey"] ?? null)) {
+    if ((params["monkey"] ?? false)) {
         cargs.push("-monkey");
     }
-    if ((params["nosnr"] ?? null)) {
+    if ((params["nosnr"] ?? false)) {
         cargs.push("-nosnr");
     }
     if ((params["sigma_smooth"] ?? null) !== null) {
@@ -441,7 +408,7 @@ function mri_normalize_cargs(
             String((params["seed_value"] ?? null))
         );
     }
-    if ((params["print_help"] ?? null)) {
+    if ((params["print_help"] ?? false)) {
         cargs.push("-u");
     }
     return cargs;
@@ -589,7 +556,6 @@ function mri_normalize(
 export {
       MRI_NORMALIZE_METADATA,
       MriNormalizeOutputs,
-      MriNormalizeParameters,
       mri_normalize,
       mri_normalize_execute,
       mri_normalize_params,

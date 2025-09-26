@@ -12,7 +12,7 @@ const V_3D_GEN_FEATURE_DIST_METADATA: Metadata = {
 
 
 interface V3dGenFeatureDistParameters {
-    "@type": "afni.3dGenFeatureDist";
+    "@type"?: "afni/3dGenFeatureDist";
     "features_string": string;
     "class_string": string;
     "prefix"?: string | null | undefined;
@@ -26,44 +26,11 @@ interface V3dGenFeatureDistParameters {
     "labeltable"?: InputPathType | null | undefined;
     "show_histograms"?: string | null | undefined;
 }
+type V3dGenFeatureDistParametersTagged = Required<Pick<V3dGenFeatureDistParameters, '@type'>> & V3dGenFeatureDistParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dGenFeatureDist": v_3d_gen_feature_dist_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dGenFeatureDist": v_3d_gen_feature_dist_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_gen_feature_dist(...)`.
+ * Output object returned when calling `V3dGenFeatureDistParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function v_3d_gen_feature_dist_params(
     hspec: Array<string> | null = null,
     labeltable: InputPathType | null = null,
     show_histograms: string | null = null,
-): V3dGenFeatureDistParameters {
+): V3dGenFeatureDistParametersTagged {
     const params = {
-        "@type": "afni.3dGenFeatureDist" as const,
+        "@type": "afni/3dGenFeatureDist" as const,
         "features_string": features_string,
         "class_string": class_string,
         "overwrite": overwrite,
@@ -172,7 +139,7 @@ function v_3d_gen_feature_dist_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("-overwrite");
     }
     if ((params["debug_level"] ?? null) !== null) {
@@ -181,10 +148,10 @@ function v_3d_gen_feature_dist_cargs(
             String((params["debug_level"] ?? null))
         );
     }
-    if ((params["other"] ?? null)) {
+    if ((params["other"] ?? false)) {
         cargs.push("-OTHER");
     }
-    if ((params["no_other"] ?? null)) {
+    if ((params["no_other"] ?? false)) {
         cargs.push("-no_OTHER");
     }
     if ((params["samp"] ?? null) !== null) {
@@ -316,7 +283,6 @@ function v_3d_gen_feature_dist(
 
 export {
       V3dGenFeatureDistOutputs,
-      V3dGenFeatureDistParameters,
       V_3D_GEN_FEATURE_DIST_METADATA,
       v_3d_gen_feature_dist,
       v_3d_gen_feature_dist_execute,

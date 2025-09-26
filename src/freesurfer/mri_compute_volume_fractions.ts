@@ -12,7 +12,7 @@ const MRI_COMPUTE_VOLUME_FRACTIONS_METADATA: Metadata = {
 
 
 interface MriComputeVolumeFractionsParameters {
-    "@type": "freesurfer.mri_compute_volume_fractions";
+    "@type"?: "freesurfer/mri_compute_volume_fractions";
     "output_stem": string;
     "registration_file"?: InputPathType | null | undefined;
     "regheader"?: string | null | undefined;
@@ -39,44 +39,11 @@ interface MriComputeVolumeFractionsParameters {
     "debug": boolean;
     "checkopts": boolean;
 }
+type MriComputeVolumeFractionsParametersTagged = Required<Pick<MriComputeVolumeFractionsParameters, '@type'>> & MriComputeVolumeFractionsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_compute_volume_fractions": mri_compute_volume_fractions_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_compute_volume_fractions": mri_compute_volume_fractions_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_compute_volume_fractions(...)`.
+ * Output object returned when calling `MriComputeVolumeFractionsParameters(...)`.
  *
  * @interface
  */
@@ -161,9 +128,9 @@ function mri_compute_volume_fractions_params(
     vg_thresh: number | null = null,
     debug: boolean = false,
     checkopts: boolean = false,
-): MriComputeVolumeFractionsParameters {
+): MriComputeVolumeFractionsParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_compute_volume_fractions" as const,
+        "@type": "freesurfer/mri_compute_volume_fractions" as const,
         "output_stem": output_stem,
         "no_aseg": no_aseg,
         "no_fill_csf": no_fill_csf,
@@ -290,7 +257,7 @@ function mri_compute_volume_fractions_cargs(
             (params["psurf"] ?? null)
         );
     }
-    if ((params["no_aseg"] ?? null)) {
+    if ((params["no_aseg"] ?? false)) {
         cargs.push("--no-aseg");
     }
     if ((params["stackfile"] ?? null) !== null) {
@@ -305,7 +272,7 @@ function mri_compute_volume_fractions_cargs(
             (params["gmfile"] ?? null)
         );
     }
-    if ((params["no_fill_csf"] ?? null)) {
+    if ((params["no_fill_csf"] ?? false)) {
         cargs.push("--no-fill-csf");
     }
     if ((params["dilation"] ?? null) !== null) {
@@ -332,19 +299,19 @@ function mri_compute_volume_fractions_cargs(
             (params["ttseg_ctab"] ?? null)
         );
     }
-    if ((params["mgz_format"] ?? null)) {
+    if ((params["mgz_format"] ?? false)) {
         cargs.push("--mgz");
     }
-    if ((params["mgh_format"] ?? null)) {
+    if ((params["mgh_format"] ?? false)) {
         cargs.push("--mgh");
     }
-    if ((params["nii_format"] ?? null)) {
+    if ((params["nii_format"] ?? false)) {
         cargs.push("--nii");
     }
-    if ((params["nii_gz_format"] ?? null)) {
+    if ((params["nii_gz_format"] ?? false)) {
         cargs.push("--nii.gz");
     }
-    if ((params["ttype_head"] ?? null)) {
+    if ((params["ttype_head"] ?? false)) {
         cargs.push("--ttype+head");
     }
     if ((params["vg_thresh"] ?? null) !== null) {
@@ -353,10 +320,10 @@ function mri_compute_volume_fractions_cargs(
             String((params["vg_thresh"] ?? null))
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["checkopts"] ?? null)) {
+    if ((params["checkopts"] ?? false)) {
         cargs.push("--checkopts");
     }
     return cargs;
@@ -488,7 +455,6 @@ function mri_compute_volume_fractions(
 export {
       MRI_COMPUTE_VOLUME_FRACTIONS_METADATA,
       MriComputeVolumeFractionsOutputs,
-      MriComputeVolumeFractionsParameters,
       mri_compute_volume_fractions,
       mri_compute_volume_fractions_execute,
       mri_compute_volume_fractions_params,

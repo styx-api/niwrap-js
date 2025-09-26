@@ -12,48 +12,15 @@ const FSLVAL_METADATA: Metadata = {
 
 
 interface FslvalParameters {
-    "@type": "fsl.fslval";
+    "@type"?: "fsl/fslval";
     "input_file": InputPathType;
     "keyword": string;
 }
+type FslvalParametersTagged = Required<Pick<FslvalParameters, '@type'>> & FslvalParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslval": fslval_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fslval": fslval_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslval(...)`.
+ * Output object returned when calling `FslvalParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface FslvalOutputs {
 function fslval_params(
     input_file: InputPathType,
     keyword: string,
-): FslvalParameters {
+): FslvalParametersTagged {
     const params = {
-        "@type": "fsl.fslval" as const,
+        "@type": "fsl/fslval" as const,
         "input_file": input_file,
         "keyword": keyword,
     };
@@ -186,7 +153,6 @@ function fslval(
 export {
       FSLVAL_METADATA,
       FslvalOutputs,
-      FslvalParameters,
       fslval,
       fslval_execute,
       fslval_params,

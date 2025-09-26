@@ -12,7 +12,7 @@ const V__SUMA_ACKNOWLEDGE_METADATA: Metadata = {
 
 
 interface VSumaAcknowledgeParameters {
-    "@type": "afni.@suma_acknowledge";
+    "@type"?: "afni/@suma_acknowledge";
     "input_file": InputPathType;
     "surface_file": InputPathType;
     "output_prefix": string;
@@ -21,44 +21,11 @@ interface VSumaAcknowledgeParameters {
     "scale_factor"?: number | null | undefined;
     "reduce_factor"?: number | null | undefined;
 }
+type VSumaAcknowledgeParametersTagged = Required<Pick<VSumaAcknowledgeParameters, '@type'>> & VSumaAcknowledgeParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@suma_acknowledge": v__suma_acknowledge_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@suma_acknowledge": v__suma_acknowledge_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__suma_acknowledge(...)`.
+ * Output object returned when calling `VSumaAcknowledgeParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function v__suma_acknowledge_params(
     subsurface_file: string | null = null,
     scale_factor: number | null = null,
     reduce_factor: number | null = null,
-): VSumaAcknowledgeParameters {
+): VSumaAcknowledgeParametersTagged {
     const params = {
-        "@type": "afni.@suma_acknowledge" as const,
+        "@type": "afni/@suma_acknowledge" as const,
         "input_file": input_file,
         "surface_file": surface_file,
         "output_prefix": output_prefix,
@@ -142,7 +109,7 @@ function v__suma_acknowledge_cargs(
         "-prefix",
         (params["output_prefix"] ?? null)
     );
-    if ((params["center_flag"] ?? null)) {
+    if ((params["center_flag"] ?? false)) {
         cargs.push("-center");
     }
     if ((params["subsurface_file"] ?? null) !== null) {
@@ -252,7 +219,6 @@ function v__suma_acknowledge(
 
 export {
       VSumaAcknowledgeOutputs,
-      VSumaAcknowledgeParameters,
       V__SUMA_ACKNOWLEDGE_METADATA,
       v__suma_acknowledge,
       v__suma_acknowledge_execute,

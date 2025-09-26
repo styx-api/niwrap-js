@@ -12,49 +12,16 @@ const ORIENT_LAS_METADATA: Metadata = {
 
 
 interface OrientLasParameters {
-    "@type": "freesurfer.orientLAS";
+    "@type"?: "freesurfer/orientLAS";
     "input_image": InputPathType;
     "output_image": string;
     "check": boolean;
 }
+type OrientLasParametersTagged = Required<Pick<OrientLasParameters, '@type'>> & OrientLasParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.orientLAS": orient_las_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.orientLAS": orient_las_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `orient_las(...)`.
+ * Output object returned when calling `OrientLasParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function orient_las_params(
     input_image: InputPathType,
     output_image: string,
     check: boolean = false,
-): OrientLasParameters {
+): OrientLasParametersTagged {
     const params = {
-        "@type": "freesurfer.orientLAS" as const,
+        "@type": "freesurfer/orientLAS" as const,
         "input_image": input_image,
         "output_image": output_image,
         "check": check,
@@ -110,7 +77,7 @@ function orient_las_cargs(
     cargs.push("orientLAS");
     cargs.push(execution.inputFile((params["input_image"] ?? null)));
     cargs.push((params["output_image"] ?? null));
-    if ((params["check"] ?? null)) {
+    if ((params["check"] ?? false)) {
         cargs.push("--check");
     }
     return cargs;
@@ -195,7 +162,6 @@ function orient_las(
 export {
       ORIENT_LAS_METADATA,
       OrientLasOutputs,
-      OrientLasParameters,
       orient_las,
       orient_las_execute,
       orient_las_params,

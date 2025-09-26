@@ -12,51 +12,18 @@ const LABEL2SURF_METADATA: Metadata = {
 
 
 interface Label2surfParameters {
-    "@type": "fsl.label2surf";
+    "@type"?: "fsl/label2surf";
     "input_surface": InputPathType;
     "output_surface": string;
     "labels": InputPathType;
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
+type Label2surfParametersTagged = Required<Pick<Label2surfParameters, '@type'>> & Label2surfParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.label2surf": label2surf_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.label2surf": label2surf_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `label2surf(...)`.
+ * Output object returned when calling `Label2surfParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function label2surf_params(
     labels: InputPathType,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): Label2surfParameters {
+): Label2surfParametersTagged {
     const params = {
-        "@type": "fsl.label2surf" as const,
+        "@type": "fsl/label2surf" as const,
         "input_surface": input_surface,
         "output_surface": output_surface,
         "labels": labels,
@@ -128,10 +95,10 @@ function label2surf_cargs(
         "--labels",
         execution.inputFile((params["labels"] ?? null))
     );
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("--verbose");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -220,7 +187,6 @@ function label2surf(
 export {
       LABEL2SURF_METADATA,
       Label2surfOutputs,
-      Label2surfParameters,
       label2surf,
       label2surf_execute,
       label2surf_params,

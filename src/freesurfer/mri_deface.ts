@@ -12,50 +12,17 @@ const MRI_DEFACE_METADATA: Metadata = {
 
 
 interface MriDefaceParameters {
-    "@type": "freesurfer.mri_deface";
+    "@type"?: "freesurfer/mri_deface";
     "input_volume": InputPathType;
     "brain_template": InputPathType;
     "face_template": InputPathType;
     "output_volume": string;
 }
+type MriDefaceParametersTagged = Required<Pick<MriDefaceParameters, '@type'>> & MriDefaceParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_deface": mri_deface_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_deface": mri_deface_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_deface(...)`.
+ * Output object returned when calling `MriDefaceParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mri_deface_params(
     brain_template: InputPathType,
     face_template: InputPathType,
     output_volume: string,
-): MriDefaceParameters {
+): MriDefaceParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_deface" as const,
+        "@type": "freesurfer/mri_deface" as const,
         "input_volume": input_volume,
         "brain_template": brain_template,
         "face_template": face_template,
@@ -200,7 +167,6 @@ function mri_deface(
 export {
       MRI_DEFACE_METADATA,
       MriDefaceOutputs,
-      MriDefaceParameters,
       mri_deface,
       mri_deface_execute,
       mri_deface_params,

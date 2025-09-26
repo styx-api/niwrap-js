@@ -12,47 +12,15 @@ const V__CLUST_EXP_RUN_SHINY_METADATA: Metadata = {
 
 
 interface VClustExpRunShinyParameters {
-    "@type": "afni.@ClustExp_run_shiny";
+    "@type"?: "afni/@ClustExp_run_shiny";
     "directory": string;
     "help": boolean;
 }
+type VClustExpRunShinyParametersTagged = Required<Pick<VClustExpRunShinyParameters, '@type'>> & VClustExpRunShinyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@ClustExp_run_shiny": v__clust_exp_run_shiny_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__clust_exp_run_shiny(...)`.
+ * Output object returned when calling `VClustExpRunShinyParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface VClustExpRunShinyOutputs {
 function v__clust_exp_run_shiny_params(
     directory: string,
     help: boolean = false,
-): VClustExpRunShinyParameters {
+): VClustExpRunShinyParametersTagged {
     const params = {
-        "@type": "afni.@ClustExp_run_shiny" as const,
+        "@type": "afni/@ClustExp_run_shiny" as const,
         "directory": directory,
         "help": help,
     };
@@ -100,7 +68,7 @@ function v__clust_exp_run_shiny_cargs(
     const cargs: string[] = [];
     cargs.push("@ClustExp_run_shiny");
     cargs.push((params["directory"] ?? null));
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -181,7 +149,6 @@ function v__clust_exp_run_shiny(
 
 export {
       VClustExpRunShinyOutputs,
-      VClustExpRunShinyParameters,
       V__CLUST_EXP_RUN_SHINY_METADATA,
       v__clust_exp_run_shiny,
       v__clust_exp_run_shiny_execute,

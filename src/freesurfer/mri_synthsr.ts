@@ -12,7 +12,7 @@ const MRI_SYNTHSR_METADATA: Metadata = {
 
 
 interface MriSynthsrParameters {
-    "@type": "freesurfer.mri_synthsr";
+    "@type"?: "freesurfer/mri_synthsr";
     "input": string;
     "output": string;
     "ct": boolean;
@@ -24,43 +24,11 @@ interface MriSynthsrParameters {
     "cpu": boolean;
     "model"?: string | null | undefined;
 }
+type MriSynthsrParametersTagged = Required<Pick<MriSynthsrParameters, '@type'>> & MriSynthsrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_synthsr": mri_synthsr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_synthsr(...)`.
+ * Output object returned when calling `MriSynthsrParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +67,9 @@ function mri_synthsr_params(
     threads: number | null = null,
     cpu: boolean = false,
     model: string | null = null,
-): MriSynthsrParameters {
+): MriSynthsrParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_synthsr" as const,
+        "@type": "freesurfer/mri_synthsr" as const,
         "input": input,
         "output": output,
         "ct": ct,
@@ -137,19 +105,19 @@ function mri_synthsr_cargs(
     cargs.push("mri_synthsr");
     cargs.push((params["input"] ?? null));
     cargs.push((params["output"] ?? null));
-    if ((params["ct"] ?? null)) {
+    if ((params["ct"] ?? false)) {
         cargs.push("--ct");
     }
-    if ((params["disable_sharpening"] ?? null)) {
+    if ((params["disable_sharpening"] ?? false)) {
         cargs.push("--disable_sharpening");
     }
-    if ((params["disable_flipping"] ?? null)) {
+    if ((params["disable_flipping"] ?? false)) {
         cargs.push("--disable_flipping");
     }
-    if ((params["lowfield"] ?? null)) {
+    if ((params["lowfield"] ?? false)) {
         cargs.push("--lowfield");
     }
-    if ((params["v1"] ?? null)) {
+    if ((params["v1"] ?? false)) {
         cargs.push("--v1");
     }
     if ((params["threads"] ?? null) !== null) {
@@ -158,7 +126,7 @@ function mri_synthsr_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["cpu"] ?? null)) {
+    if ((params["cpu"] ?? false)) {
         cargs.push("--cpu");
     }
     if ((params["model"] ?? null) !== null) {
@@ -262,7 +230,6 @@ function mri_synthsr(
 export {
       MRI_SYNTHSR_METADATA,
       MriSynthsrOutputs,
-      MriSynthsrParameters,
       mri_synthsr,
       mri_synthsr_execute,
       mri_synthsr_params,

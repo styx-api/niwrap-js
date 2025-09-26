@@ -12,7 +12,7 @@ const TEDANA_WRAPPER_PY_METADATA: Metadata = {
 
 
 interface TedanaWrapperPyParameters {
-    "@type": "afni.tedana_wrapper.py";
+    "@type"?: "afni/tedana_wrapper.py";
     "input_files": Array<InputPathType>;
     "echo_times": Array<number>;
     "mask": InputPathType;
@@ -27,44 +27,11 @@ interface TedanaWrapperPyParameters {
     "help": boolean;
     "detailed_help": boolean;
 }
+type TedanaWrapperPyParametersTagged = Required<Pick<TedanaWrapperPyParameters, '@type'>> & TedanaWrapperPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.tedana_wrapper.py": tedana_wrapper_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.tedana_wrapper.py": tedana_wrapper_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tedana_wrapper_py(...)`.
+ * Output object returned when calling `TedanaWrapperPyParameters(...)`.
  *
  * @interface
  */
@@ -117,9 +84,9 @@ function tedana_wrapper_py_params(
     tedana_opts: string | null = null,
     help: boolean = false,
     detailed_help: boolean = false,
-): TedanaWrapperPyParameters {
+): TedanaWrapperPyParametersTagged {
     const params = {
-        "@type": "afni.tedana_wrapper.py" as const,
+        "@type": "afni/tedana_wrapper.py" as const,
         "input_files": input_files,
         "echo_times": echo_times,
         "mask": mask,
@@ -186,10 +153,10 @@ function tedana_wrapper_py_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["save_all"] ?? null)) {
+    if ((params["save_all"] ?? false)) {
         cargs.push("-save_all");
     }
-    if ((params["prep_only"] ?? null)) {
+    if ((params["prep_only"] ?? false)) {
         cargs.push("-prep_only");
     }
     if ((params["tedana_prog"] ?? null) !== null) {
@@ -198,7 +165,7 @@ function tedana_wrapper_py_cargs(
             (params["tedana_prog"] ?? null)
         );
     }
-    if ((params["tedana_is_exec"] ?? null)) {
+    if ((params["tedana_is_exec"] ?? false)) {
         cargs.push("-tedana_is_exec");
     }
     if ((params["ted_label"] ?? null) !== null) {
@@ -213,10 +180,10 @@ function tedana_wrapper_py_cargs(
             (params["tedana_opts"] ?? null)
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["detailed_help"] ?? null)) {
+    if ((params["detailed_help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -322,7 +289,6 @@ function tedana_wrapper_py(
 export {
       TEDANA_WRAPPER_PY_METADATA,
       TedanaWrapperPyOutputs,
-      TedanaWrapperPyParameters,
       tedana_wrapper_py,
       tedana_wrapper_py_execute,
       tedana_wrapper_py_params,

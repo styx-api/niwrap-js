@@ -12,7 +12,7 @@ const TSPLOT_METADATA: Metadata = {
 
 
 interface TsplotParameters {
-    "@type": "fsl.tsplot";
+    "@type"?: "fsl/tsplot";
     "input_directory": string;
     "main_filtered_data"?: InputPathType | null | undefined;
     "coordinates"?: Array<number> | null | undefined;
@@ -23,44 +23,11 @@ interface TsplotParameters {
     "prewhiten_flag": boolean;
     "no_raw_flag": boolean;
 }
+type TsplotParametersTagged = Required<Pick<TsplotParameters, '@type'>> & TsplotParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.tsplot": tsplot_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.tsplot": tsplot_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tsplot(...)`.
+ * Output object returned when calling `TsplotParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function tsplot_params(
     no_weight_flag: boolean = false,
     prewhiten_flag: boolean = false,
     no_raw_flag: boolean = false,
-): TsplotParameters {
+): TsplotParametersTagged {
     const params = {
-        "@type": "fsl.tsplot" as const,
+        "@type": "fsl/tsplot" as const,
         "input_directory": input_directory,
         "no_weight_flag": no_weight_flag,
         "prewhiten_flag": prewhiten_flag,
@@ -173,13 +140,13 @@ function tsplot_cargs(
             (params["output_directory"] ?? null)
         );
     }
-    if ((params["no_weight_flag"] ?? null)) {
+    if ((params["no_weight_flag"] ?? false)) {
         cargs.push("-n");
     }
-    if ((params["prewhiten_flag"] ?? null)) {
+    if ((params["prewhiten_flag"] ?? false)) {
         cargs.push("-p");
     }
-    if ((params["no_raw_flag"] ?? null)) {
+    if ((params["no_raw_flag"] ?? false)) {
         cargs.push("-d");
     }
     return cargs;
@@ -276,7 +243,6 @@ function tsplot(
 export {
       TSPLOT_METADATA,
       TsplotOutputs,
-      TsplotParameters,
       tsplot,
       tsplot_execute,
       tsplot_params,

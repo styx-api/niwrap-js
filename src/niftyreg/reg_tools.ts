@@ -12,7 +12,7 @@ const REG_TOOLS_METADATA: Metadata = {
 
 
 interface RegToolsParameters {
-    "@type": "niftyreg.reg_tools";
+    "@type"?: "niftyreg/reg_tools";
     "input_image": InputPathType;
     "output_image"?: string | null | undefined;
     "add_value_or_image"?: string | null | undefined;
@@ -26,44 +26,11 @@ interface RegToolsParameters {
     "threshold_value"?: number | null | undefined;
     "nan_mask_image"?: InputPathType | null | undefined;
 }
+type RegToolsParametersTagged = Required<Pick<RegToolsParameters, '@type'>> & RegToolsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "niftyreg.reg_tools": reg_tools_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "niftyreg.reg_tools": reg_tools_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `reg_tools(...)`.
+ * Output object returned when calling `RegToolsParameters(...)`.
  *
  * @interface
  */
@@ -110,9 +77,9 @@ function reg_tools_params(
     binarize: boolean = false,
     threshold_value: number | null = null,
     nan_mask_image: InputPathType | null = null,
-): RegToolsParameters {
+): RegToolsParametersTagged {
     const params = {
-        "@type": "niftyreg.reg_tools" as const,
+        "@type": "niftyreg/reg_tools" as const,
         "input_image": input_image,
         "binarize": binarize,
     };
@@ -216,7 +183,7 @@ function reg_tools_cargs(
             execution.inputFile((params["rms_image"] ?? null))
         );
     }
-    if ((params["binarize"] ?? null)) {
+    if ((params["binarize"] ?? false)) {
         cargs.push("-bin");
     }
     if ((params["threshold_value"] ?? null) !== null) {
@@ -331,7 +298,6 @@ function reg_tools(
 export {
       REG_TOOLS_METADATA,
       RegToolsOutputs,
-      RegToolsParameters,
       reg_tools,
       reg_tools_execute,
       reg_tools_params,

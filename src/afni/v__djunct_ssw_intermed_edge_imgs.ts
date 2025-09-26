@@ -12,7 +12,7 @@ const V__DJUNCT_SSW_INTERMED_EDGE_IMGS_METADATA: Metadata = {
 
 
 interface VDjunctSswIntermedEdgeImgsParameters {
-    "@type": "afni.@djunct_ssw_intermed_edge_imgs";
+    "@type"?: "afni/@djunct_ssw_intermed_edge_imgs";
     "prefix": string;
     "ulay": InputPathType;
     "olay": InputPathType;
@@ -27,43 +27,11 @@ interface VDjunctSswIntermedEdgeImgsParameters {
     "version": boolean;
     "no_clean": boolean;
 }
+type VDjunctSswIntermedEdgeImgsParametersTagged = Required<Pick<VDjunctSswIntermedEdgeImgsParameters, '@type'>> & VDjunctSswIntermedEdgeImgsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@djunct_ssw_intermed_edge_imgs": v__djunct_ssw_intermed_edge_imgs_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__djunct_ssw_intermed_edge_imgs(...)`.
+ * Output object returned when calling `VDjunctSswIntermedEdgeImgsParameters(...)`.
  *
  * @interface
  */
@@ -108,9 +76,9 @@ function v__djunct_ssw_intermed_edge_imgs_params(
     help: boolean = false,
     version: boolean = false,
     no_clean: boolean = false,
-): VDjunctSswIntermedEdgeImgsParameters {
+): VDjunctSswIntermedEdgeImgsParametersTagged {
     const params = {
-        "@type": "afni.@djunct_ssw_intermed_edge_imgs" as const,
+        "@type": "afni/@djunct_ssw_intermed_edge_imgs" as const,
         "prefix": prefix,
         "ulay": ulay,
         "olay": olay,
@@ -203,16 +171,16 @@ function v__djunct_ssw_intermed_edge_imgs_cargs(
             (params["monty"] ?? null)
         );
     }
-    if ((params["help_view"] ?? null)) {
+    if ((params["help_view"] ?? false)) {
         cargs.push("-hview");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-ver");
     }
-    if ((params["no_clean"] ?? null)) {
+    if ((params["no_clean"] ?? false)) {
         cargs.push("-no_clean");
     }
     return cargs;
@@ -315,7 +283,6 @@ function v__djunct_ssw_intermed_edge_imgs(
 
 export {
       VDjunctSswIntermedEdgeImgsOutputs,
-      VDjunctSswIntermedEdgeImgsParameters,
       V__DJUNCT_SSW_INTERMED_EDGE_IMGS_METADATA,
       v__djunct_ssw_intermed_edge_imgs,
       v__djunct_ssw_intermed_edge_imgs_execute,

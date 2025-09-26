@@ -12,51 +12,18 @@ const MRI_CAL_RENORMALIZE_GCA_METADATA: Metadata = {
 
 
 interface MriCalRenormalizeGcaParameters {
-    "@type": "freesurfer.mri_cal_renormalize_gca";
+    "@type"?: "freesurfer/mri_cal_renormalize_gca";
     "timepoint_file": InputPathType;
     "in_vol": InputPathType;
     "input_atlas": InputPathType;
     "transform_file": InputPathType;
     "output_atlas": string;
 }
+type MriCalRenormalizeGcaParametersTagged = Required<Pick<MriCalRenormalizeGcaParameters, '@type'>> & MriCalRenormalizeGcaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_cal_renormalize_gca": mri_cal_renormalize_gca_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_cal_renormalize_gca": mri_cal_renormalize_gca_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_cal_renormalize_gca(...)`.
+ * Output object returned when calling `MriCalRenormalizeGcaParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function mri_cal_renormalize_gca_params(
     input_atlas: InputPathType,
     transform_file: InputPathType,
     output_atlas: string,
-): MriCalRenormalizeGcaParameters {
+): MriCalRenormalizeGcaParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_cal_renormalize_gca" as const,
+        "@type": "freesurfer/mri_cal_renormalize_gca" as const,
         "timepoint_file": timepoint_file,
         "in_vol": in_vol,
         "input_atlas": input_atlas,
@@ -207,7 +174,6 @@ function mri_cal_renormalize_gca(
 export {
       MRI_CAL_RENORMALIZE_GCA_METADATA,
       MriCalRenormalizeGcaOutputs,
-      MriCalRenormalizeGcaParameters,
       mri_cal_renormalize_gca,
       mri_cal_renormalize_gca_execute,
       mri_cal_renormalize_gca_params,

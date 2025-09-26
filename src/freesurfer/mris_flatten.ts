@@ -12,7 +12,7 @@ const MRIS_FLATTEN_METADATA: Metadata = {
 
 
 interface MrisFlattenParameters {
-    "@type": "freesurfer.mris_flatten";
+    "@type"?: "freesurfer/mris_flatten";
     "input_patch": InputPathType;
     "output_patch": string;
     "iterations"?: number | null | undefined;
@@ -22,44 +22,11 @@ interface MrisFlattenParameters {
     "copy_coords"?: string | null | undefined;
     "norand": boolean;
 }
+type MrisFlattenParametersTagged = Required<Pick<MrisFlattenParameters, '@type'>> & MrisFlattenParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_flatten": mris_flatten_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_flatten": mris_flatten_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_flatten(...)`.
+ * Output object returned when calling `MrisFlattenParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function mris_flatten_params(
     random_seed: number | null = null,
     copy_coords: string | null = null,
     norand: boolean = false,
-): MrisFlattenParameters {
+): MrisFlattenParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_flatten" as const,
+        "@type": "freesurfer/mris_flatten" as const,
         "input_patch": input_patch,
         "output_patch": output_patch,
         "norand": norand,
@@ -170,7 +137,7 @@ function mris_flatten_cargs(
             (params["copy_coords"] ?? null)
         );
     }
-    if ((params["norand"] ?? null)) {
+    if ((params["norand"] ?? false)) {
         cargs.push("-norand");
     }
     return cargs;
@@ -265,7 +232,6 @@ function mris_flatten(
 export {
       MRIS_FLATTEN_METADATA,
       MrisFlattenOutputs,
-      MrisFlattenParameters,
       mris_flatten,
       mris_flatten_execute,
       mris_flatten_params,

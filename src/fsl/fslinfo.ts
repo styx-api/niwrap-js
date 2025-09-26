@@ -12,46 +12,14 @@ const FSLINFO_METADATA: Metadata = {
 
 
 interface FslinfoParameters {
-    "@type": "fsl.fslinfo";
+    "@type"?: "fsl/fslinfo";
     "filename": InputPathType;
 }
+type FslinfoParametersTagged = Required<Pick<FslinfoParameters, '@type'>> & FslinfoParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslinfo": fslinfo_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslinfo(...)`.
+ * Output object returned when calling `FslinfoParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface FslinfoOutputs {
  */
 function fslinfo_params(
     filename: InputPathType,
-): FslinfoParameters {
+): FslinfoParametersTagged {
     const params = {
-        "@type": "fsl.fslinfo" as const,
+        "@type": "fsl/fslinfo" as const,
         "filename": filename,
     };
     return params;
@@ -173,7 +141,6 @@ function fslinfo(
 export {
       FSLINFO_METADATA,
       FslinfoOutputs,
-      FslinfoParameters,
       fslinfo,
       fslinfo_execute,
       fslinfo_params,

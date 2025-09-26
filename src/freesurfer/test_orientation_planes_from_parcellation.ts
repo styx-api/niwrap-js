@@ -12,48 +12,16 @@ const TEST_ORIENTATION_PLANES_FROM_PARCELLATION_METADATA: Metadata = {
 
 
 interface TestOrientationPlanesFromParcellationParameters {
-    "@type": "freesurfer.testOrientationPlanesFromParcellation";
+    "@type"?: "freesurfer/testOrientationPlanesFromParcellation";
     "input_file": InputPathType;
     "output_file": string;
     "bb_flag": boolean;
 }
+type TestOrientationPlanesFromParcellationParametersTagged = Required<Pick<TestOrientationPlanesFromParcellationParameters, '@type'>> & TestOrientationPlanesFromParcellationParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.testOrientationPlanesFromParcellation": test_orientation_planes_from_parcellation_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `test_orientation_planes_from_parcellation(...)`.
+ * Output object returned when calling `TestOrientationPlanesFromParcellationParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function test_orientation_planes_from_parcellation_params(
     input_file: InputPathType,
     output_file: string,
     bb_flag: boolean = false,
-): TestOrientationPlanesFromParcellationParameters {
+): TestOrientationPlanesFromParcellationParametersTagged {
     const params = {
-        "@type": "freesurfer.testOrientationPlanesFromParcellation" as const,
+        "@type": "freesurfer/testOrientationPlanesFromParcellation" as const,
         "input_file": input_file,
         "output_file": output_file,
         "bb_flag": bb_flag,
@@ -111,7 +79,7 @@ function test_orientation_planes_from_parcellation_cargs(
         "-o",
         (params["output_file"] ?? null)
     );
-    if ((params["bb_flag"] ?? null)) {
+    if ((params["bb_flag"] ?? false)) {
         cargs.push("-bb");
     }
     return cargs;
@@ -195,7 +163,6 @@ function test_orientation_planes_from_parcellation(
 export {
       TEST_ORIENTATION_PLANES_FROM_PARCELLATION_METADATA,
       TestOrientationPlanesFromParcellationOutputs,
-      TestOrientationPlanesFromParcellationParameters,
       test_orientation_planes_from_parcellation,
       test_orientation_planes_from_parcellation_execute,
       test_orientation_planes_from_parcellation_params,

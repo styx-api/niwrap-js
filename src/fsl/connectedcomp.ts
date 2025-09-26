@@ -12,49 +12,16 @@ const CONNECTEDCOMP_METADATA: Metadata = {
 
 
 interface ConnectedcompParameters {
-    "@type": "fsl.connectedcomp";
+    "@type"?: "fsl/connectedcomp";
     "in_volume": InputPathType;
     "output_volume"?: string | null | undefined;
     "num_connect"?: number | null | undefined;
 }
+type ConnectedcompParametersTagged = Required<Pick<ConnectedcompParameters, '@type'>> & ConnectedcompParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.connectedcomp": connectedcomp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.connectedcomp": connectedcomp_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `connectedcomp(...)`.
+ * Output object returned when calling `ConnectedcompParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function connectedcomp_params(
     in_volume: InputPathType,
     output_volume: string | null = null,
     num_connect: number | null = null,
-): ConnectedcompParameters {
+): ConnectedcompParametersTagged {
     const params = {
-        "@type": "fsl.connectedcomp" as const,
+        "@type": "fsl/connectedcomp" as const,
         "in_volume": in_volume,
     };
     if (output_volume !== null) {
@@ -201,7 +168,6 @@ function connectedcomp(
 export {
       CONNECTEDCOMP_METADATA,
       ConnectedcompOutputs,
-      ConnectedcompParameters,
       connectedcomp,
       connectedcomp_execute,
       connectedcomp_params,

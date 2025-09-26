@@ -12,47 +12,15 @@ const FSLHD_METADATA: Metadata = {
 
 
 interface FslhdParameters {
-    "@type": "fsl.fslhd";
+    "@type"?: "fsl/fslhd";
     "xml_flag": boolean;
     "input_file": InputPathType;
 }
+type FslhdParametersTagged = Required<Pick<FslhdParameters, '@type'>> & FslhdParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fslhd": fslhd_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fslhd(...)`.
+ * Output object returned when calling `FslhdParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface FslhdOutputs {
 function fslhd_params(
     input_file: InputPathType,
     xml_flag: boolean = false,
-): FslhdParameters {
+): FslhdParametersTagged {
     const params = {
-        "@type": "fsl.fslhd" as const,
+        "@type": "fsl/fslhd" as const,
         "xml_flag": xml_flag,
         "input_file": input_file,
     };
@@ -99,7 +67,7 @@ function fslhd_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("fslhd");
-    if ((params["xml_flag"] ?? null)) {
+    if ((params["xml_flag"] ?? false)) {
         cargs.push("-x");
     }
     cargs.push(execution.inputFile((params["input_file"] ?? null)));
@@ -182,7 +150,6 @@ function fslhd(
 export {
       FSLHD_METADATA,
       FslhdOutputs,
-      FslhdParameters,
       fslhd,
       fslhd_execute,
       fslhd_params,

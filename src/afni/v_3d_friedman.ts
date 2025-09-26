@@ -12,50 +12,18 @@ const V_3D_FRIEDMAN_METADATA: Metadata = {
 
 
 interface V3dFriedmanParameters {
-    "@type": "afni.3dFriedman";
+    "@type"?: "afni/3dFriedman";
     "levels": number;
     "datasets": Array<InputPathType>;
     "workmem"?: number | null | undefined;
     "voxel_num"?: number | null | undefined;
     "output_prefix": string;
 }
+type V3dFriedmanParametersTagged = Required<Pick<V3dFriedmanParameters, '@type'>> & V3dFriedmanParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dFriedman": v_3d_friedman_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_friedman(...)`.
+ * Output object returned when calling `V3dFriedmanParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function v_3d_friedman_params(
     output_prefix: string,
     workmem: number | null = null,
     voxel_num: number | null = null,
-): V3dFriedmanParameters {
+): V3dFriedmanParametersTagged {
     const params = {
-        "@type": "afni.3dFriedman" as const,
+        "@type": "afni/3dFriedman" as const,
         "levels": levels,
         "datasets": datasets,
         "output_prefix": output_prefix,
@@ -220,7 +188,6 @@ function v_3d_friedman(
 
 export {
       V3dFriedmanOutputs,
-      V3dFriedmanParameters,
       V_3D_FRIEDMAN_METADATA,
       v_3d_friedman,
       v_3d_friedman_execute,

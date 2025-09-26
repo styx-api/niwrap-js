@@ -12,49 +12,16 @@ const MRIS_COPY_HEADER_METADATA: Metadata = {
 
 
 interface MrisCopyHeaderParameters {
-    "@type": "freesurfer.mris_copy_header";
+    "@type"?: "freesurfer/mris_copy_header";
     "input_surface": InputPathType;
     "template_surface": InputPathType;
     "output_surface": string;
 }
+type MrisCopyHeaderParametersTagged = Required<Pick<MrisCopyHeaderParameters, '@type'>> & MrisCopyHeaderParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_copy_header": mris_copy_header_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_copy_header": mris_copy_header_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_copy_header(...)`.
+ * Output object returned when calling `MrisCopyHeaderParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mris_copy_header_params(
     input_surface: InputPathType,
     template_surface: InputPathType,
     output_surface: string,
-): MrisCopyHeaderParameters {
+): MrisCopyHeaderParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_copy_header" as const,
+        "@type": "freesurfer/mris_copy_header" as const,
         "input_surface": input_surface,
         "template_surface": template_surface,
         "output_surface": output_surface,
@@ -193,7 +160,6 @@ function mris_copy_header(
 export {
       MRIS_COPY_HEADER_METADATA,
       MrisCopyHeaderOutputs,
-      MrisCopyHeaderParameters,
       mris_copy_header,
       mris_copy_header_execute,
       mris_copy_header_params,

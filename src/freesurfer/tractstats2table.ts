@@ -12,7 +12,7 @@ const TRACTSTATS2TABLE_METADATA: Metadata = {
 
 
 interface Tractstats2tableParameters {
-    "@type": "freesurfer.tractstats2table";
+    "@type"?: "freesurfer/tractstats2table";
     "inputs"?: Array<string> | null | undefined;
     "load_pathstats_from_file"?: InputPathType | null | undefined;
     "overall": boolean;
@@ -23,44 +23,11 @@ interface Tractstats2tableParameters {
     "transpose": boolean;
     "debug": boolean;
 }
+type Tractstats2tableParametersTagged = Required<Pick<Tractstats2tableParameters, '@type'>> & Tractstats2tableParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.tractstats2table": tractstats2table_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.tractstats2table": tractstats2table_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tractstats2table(...)`.
+ * Output object returned when calling `Tractstats2tableParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function tractstats2table_params(
     delimiter: "tab" | "comma" | "space" | "semicolon" | null = null,
     transpose: boolean = false,
     debug: boolean = false,
-): Tractstats2tableParameters {
+): Tractstats2tableParametersTagged {
     const params = {
-        "@type": "freesurfer.tractstats2table" as const,
+        "@type": "freesurfer/tractstats2table" as const,
         "overall": overall,
         "byvoxel": byvoxel,
         "tablefile": tablefile,
@@ -152,10 +119,10 @@ function tractstats2table_cargs(
             execution.inputFile((params["load_pathstats_from_file"] ?? null))
         );
     }
-    if ((params["overall"] ?? null)) {
+    if ((params["overall"] ?? false)) {
         cargs.push("-o");
     }
-    if ((params["byvoxel"] ?? null)) {
+    if ((params["byvoxel"] ?? false)) {
         cargs.push("-b");
     }
     if ((params["byvoxel_measure"] ?? null) !== null) {
@@ -174,10 +141,10 @@ function tractstats2table_cargs(
             (params["delimiter"] ?? null)
         );
     }
-    if ((params["transpose"] ?? null)) {
+    if ((params["transpose"] ?? false)) {
         cargs.push("--transpose");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-v");
     }
     return cargs;
@@ -274,7 +241,6 @@ function tractstats2table(
 export {
       TRACTSTATS2TABLE_METADATA,
       Tractstats2tableOutputs,
-      Tractstats2tableParameters,
       tractstats2table,
       tractstats2table_execute,
       tractstats2table_params,

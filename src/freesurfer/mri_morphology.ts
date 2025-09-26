@@ -12,51 +12,18 @@ const MRI_MORPHOLOGY_METADATA: Metadata = {
 
 
 interface MriMorphologyParameters {
-    "@type": "freesurfer.mri_morphology";
+    "@type"?: "freesurfer/mri_morphology";
     "input_volume": InputPathType;
     "operation": "open" | "close" | "dilate" | "erode" | "mode" | "fill_holes" | "erode_bottom" | "dilate_thresh" | "erode_thresh";
     "number_iter": number;
     "output_volume": string;
     "label_option"?: number | null | undefined;
 }
+type MriMorphologyParametersTagged = Required<Pick<MriMorphologyParameters, '@type'>> & MriMorphologyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_morphology": mri_morphology_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_morphology": mri_morphology_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_morphology(...)`.
+ * Output object returned when calling `MriMorphologyParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function mri_morphology_params(
     number_iter: number,
     output_volume: string,
     label_option: number | null = null,
-): MriMorphologyParameters {
+): MriMorphologyParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_morphology" as const,
+        "@type": "freesurfer/mri_morphology" as const,
         "input_volume": input_volume,
         "operation": operation,
         "number_iter": number_iter,
@@ -214,7 +181,6 @@ function mri_morphology(
 export {
       MRI_MORPHOLOGY_METADATA,
       MriMorphologyOutputs,
-      MriMorphologyParameters,
       mri_morphology,
       mri_morphology_execute,
       mri_morphology_params,

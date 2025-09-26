@@ -12,7 +12,7 @@ const VECREG_METADATA: Metadata = {
 
 
 interface VecregParameters {
-    "@type": "fsl.vecreg";
+    "@type"?: "fsl/vecreg";
     "input_file": InputPathType;
     "output_file": string;
     "reference_volume": InputPathType;
@@ -25,44 +25,11 @@ interface VecregParameters {
     "brain_mask"?: InputPathType | null | undefined;
     "ref_brain_mask"?: InputPathType | null | undefined;
 }
+type VecregParametersTagged = Required<Pick<VecregParameters, '@type'>> & VecregParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.vecreg": vecreg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.vecreg": vecreg_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `vecreg(...)`.
+ * Output object returned when calling `VecregParameters(...)`.
  *
  * @interface
  */
@@ -107,9 +74,9 @@ function vecreg_params(
     interp_method: string | null = null,
     brain_mask: InputPathType | null = null,
     ref_brain_mask: InputPathType | null = null,
-): VecregParameters {
+): VecregParametersTagged {
     const params = {
-        "@type": "fsl.vecreg" as const,
+        "@type": "fsl/vecreg" as const,
         "input_file": input_file,
         "output_file": output_file,
         "reference_volume": reference_volume,
@@ -170,10 +137,10 @@ function vecreg_cargs(
             execution.inputFile((params["transform_file"] ?? null))
         );
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
     if ((params["secondary_affine"] ?? null) !== null) {
@@ -304,7 +271,6 @@ function vecreg(
 export {
       VECREG_METADATA,
       VecregOutputs,
-      VecregParameters,
       vecreg,
       vecreg_execute,
       vecreg_params,

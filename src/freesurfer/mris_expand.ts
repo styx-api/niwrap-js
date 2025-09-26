@@ -12,7 +12,7 @@ const MRIS_EXPAND_METADATA: Metadata = {
 
 
 interface MrisExpandParameters {
-    "@type": "freesurfer.mris_expand";
+    "@type"?: "freesurfer/mris_expand";
     "input_surface": InputPathType;
     "expansion_distance": number;
     "output_surface": string;
@@ -21,44 +21,11 @@ interface MrisExpandParameters {
     "tmap"?: string | null | undefined;
     "tmap_random"?: string | null | undefined;
 }
+type MrisExpandParametersTagged = Required<Pick<MrisExpandParameters, '@type'>> & MrisExpandParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_expand": mris_expand_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_expand": mris_expand_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_expand(...)`.
+ * Output object returned when calling `MrisExpandParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function mris_expand_params(
     label: string | null = null,
     tmap: string | null = null,
     tmap_random: string | null = null,
-): MrisExpandParameters {
+): MrisExpandParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_expand" as const,
+        "@type": "freesurfer/mris_expand" as const,
         "input_surface": input_surface,
         "expansion_distance": expansion_distance,
         "output_surface": output_surface,
@@ -133,7 +100,7 @@ function mris_expand_cargs(
     cargs.push(execution.inputFile((params["input_surface"] ?? null)));
     cargs.push(String((params["expansion_distance"] ?? null)));
     cargs.push((params["output_surface"] ?? null));
-    if ((params["thickness"] ?? null)) {
+    if ((params["thickness"] ?? false)) {
         cargs.push("-thickness");
     }
     if ((params["label"] ?? null) !== null) {
@@ -244,7 +211,6 @@ function mris_expand(
 export {
       MRIS_EXPAND_METADATA,
       MrisExpandOutputs,
-      MrisExpandParameters,
       mris_expand,
       mris_expand_execute,
       mris_expand_params,

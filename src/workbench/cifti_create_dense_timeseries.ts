@@ -12,35 +12,39 @@ const CIFTI_CREATE_DENSE_TIMESERIES_METADATA: Metadata = {
 
 
 interface CiftiCreateDenseTimeseriesVolumeParameters {
-    "@type": "workbench.cifti-create-dense-timeseries.volume";
+    "@type"?: "volume";
     "volume_data": InputPathType;
     "structure_label_volume": InputPathType;
 }
+type CiftiCreateDenseTimeseriesVolumeParametersTagged = Required<Pick<CiftiCreateDenseTimeseriesVolumeParameters, '@type'>> & CiftiCreateDenseTimeseriesVolumeParameters;
 
 
 interface CiftiCreateDenseTimeseriesLeftMetricParameters {
-    "@type": "workbench.cifti-create-dense-timeseries.left_metric";
+    "@type"?: "left_metric";
     "metric": InputPathType;
     "opt_roi_left_roi_metric"?: InputPathType | null | undefined;
 }
+type CiftiCreateDenseTimeseriesLeftMetricParametersTagged = Required<Pick<CiftiCreateDenseTimeseriesLeftMetricParameters, '@type'>> & CiftiCreateDenseTimeseriesLeftMetricParameters;
 
 
 interface CiftiCreateDenseTimeseriesRightMetricParameters {
-    "@type": "workbench.cifti-create-dense-timeseries.right_metric";
+    "@type"?: "right_metric";
     "metric": InputPathType;
     "opt_roi_right_roi_metric"?: InputPathType | null | undefined;
 }
+type CiftiCreateDenseTimeseriesRightMetricParametersTagged = Required<Pick<CiftiCreateDenseTimeseriesRightMetricParameters, '@type'>> & CiftiCreateDenseTimeseriesRightMetricParameters;
 
 
 interface CiftiCreateDenseTimeseriesCerebellumMetricParameters {
-    "@type": "workbench.cifti-create-dense-timeseries.cerebellum_metric";
+    "@type"?: "cerebellum_metric";
     "metric": InputPathType;
     "opt_roi_cerebellum_roi_metric"?: InputPathType | null | undefined;
 }
+type CiftiCreateDenseTimeseriesCerebellumMetricParametersTagged = Required<Pick<CiftiCreateDenseTimeseriesCerebellumMetricParameters, '@type'>> & CiftiCreateDenseTimeseriesCerebellumMetricParameters;
 
 
 interface CiftiCreateDenseTimeseriesParameters {
-    "@type": "workbench.cifti-create-dense-timeseries";
+    "@type"?: "workbench/cifti-create-dense-timeseries";
     "cifti_out": string;
     "volume"?: CiftiCreateDenseTimeseriesVolumeParameters | null | undefined;
     "left_metric"?: CiftiCreateDenseTimeseriesLeftMetricParameters | null | undefined;
@@ -50,44 +54,7 @@ interface CiftiCreateDenseTimeseriesParameters {
     "opt_timestart_start"?: number | null | undefined;
     "opt_unit_unit"?: string | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-create-dense-timeseries": cifti_create_dense_timeseries_cargs,
-        "workbench.cifti-create-dense-timeseries.volume": cifti_create_dense_timeseries_volume_cargs,
-        "workbench.cifti-create-dense-timeseries.left_metric": cifti_create_dense_timeseries_left_metric_cargs,
-        "workbench.cifti-create-dense-timeseries.right_metric": cifti_create_dense_timeseries_right_metric_cargs,
-        "workbench.cifti-create-dense-timeseries.cerebellum_metric": cifti_create_dense_timeseries_cerebellum_metric_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-create-dense-timeseries": cifti_create_dense_timeseries_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiCreateDenseTimeseriesParametersTagged = Required<Pick<CiftiCreateDenseTimeseriesParameters, '@type'>> & CiftiCreateDenseTimeseriesParameters;
 
 
 /**
@@ -101,9 +68,9 @@ function dynOutputs(
 function cifti_create_dense_timeseries_volume_params(
     volume_data: InputPathType,
     structure_label_volume: InputPathType,
-): CiftiCreateDenseTimeseriesVolumeParameters {
+): CiftiCreateDenseTimeseriesVolumeParametersTagged {
     const params = {
-        "@type": "workbench.cifti-create-dense-timeseries.volume" as const,
+        "@type": "volume" as const,
         "volume_data": volume_data,
         "structure_label_volume": structure_label_volume,
     };
@@ -142,9 +109,9 @@ function cifti_create_dense_timeseries_volume_cargs(
 function cifti_create_dense_timeseries_left_metric_params(
     metric: InputPathType,
     opt_roi_left_roi_metric: InputPathType | null = null,
-): CiftiCreateDenseTimeseriesLeftMetricParameters {
+): CiftiCreateDenseTimeseriesLeftMetricParametersTagged {
     const params = {
-        "@type": "workbench.cifti-create-dense-timeseries.left_metric" as const,
+        "@type": "left_metric" as const,
         "metric": metric,
     };
     if (opt_roi_left_roi_metric !== null) {
@@ -190,9 +157,9 @@ function cifti_create_dense_timeseries_left_metric_cargs(
 function cifti_create_dense_timeseries_right_metric_params(
     metric: InputPathType,
     opt_roi_right_roi_metric: InputPathType | null = null,
-): CiftiCreateDenseTimeseriesRightMetricParameters {
+): CiftiCreateDenseTimeseriesRightMetricParametersTagged {
     const params = {
-        "@type": "workbench.cifti-create-dense-timeseries.right_metric" as const,
+        "@type": "right_metric" as const,
         "metric": metric,
     };
     if (opt_roi_right_roi_metric !== null) {
@@ -238,9 +205,9 @@ function cifti_create_dense_timeseries_right_metric_cargs(
 function cifti_create_dense_timeseries_cerebellum_metric_params(
     metric: InputPathType,
     opt_roi_cerebellum_roi_metric: InputPathType | null = null,
-): CiftiCreateDenseTimeseriesCerebellumMetricParameters {
+): CiftiCreateDenseTimeseriesCerebellumMetricParametersTagged {
     const params = {
-        "@type": "workbench.cifti-create-dense-timeseries.cerebellum_metric" as const,
+        "@type": "cerebellum_metric" as const,
         "metric": metric,
     };
     if (opt_roi_cerebellum_roi_metric !== null) {
@@ -276,7 +243,7 @@ function cifti_create_dense_timeseries_cerebellum_metric_cargs(
 
 
 /**
- * Output object returned when calling `cifti_create_dense_timeseries(...)`.
+ * Output object returned when calling `CiftiCreateDenseTimeseriesParameters(...)`.
  *
  * @interface
  */
@@ -315,9 +282,9 @@ function cifti_create_dense_timeseries_params(
     opt_timestep_interval: number | null = null,
     opt_timestart_start: number | null = null,
     opt_unit_unit: string | null = null,
-): CiftiCreateDenseTimeseriesParameters {
+): CiftiCreateDenseTimeseriesParametersTagged {
     const params = {
-        "@type": "workbench.cifti-create-dense-timeseries" as const,
+        "@type": "workbench/cifti-create-dense-timeseries" as const,
         "cifti_out": cifti_out,
     };
     if (volume !== null) {
@@ -362,16 +329,16 @@ function cifti_create_dense_timeseries_cargs(
     cargs.push("-cifti-create-dense-timeseries");
     cargs.push((params["cifti_out"] ?? null));
     if ((params["volume"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["volume"] ?? null)["@type"])((params["volume"] ?? null), execution));
+        cargs.push(...cifti_create_dense_timeseries_volume_cargs((params["volume"] ?? null), execution));
     }
     if ((params["left_metric"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["left_metric"] ?? null)["@type"])((params["left_metric"] ?? null), execution));
+        cargs.push(...cifti_create_dense_timeseries_left_metric_cargs((params["left_metric"] ?? null), execution));
     }
     if ((params["right_metric"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["right_metric"] ?? null)["@type"])((params["right_metric"] ?? null), execution));
+        cargs.push(...cifti_create_dense_timeseries_right_metric_cargs((params["right_metric"] ?? null), execution));
     }
     if ((params["cerebellum_metric"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["cerebellum_metric"] ?? null)["@type"])((params["cerebellum_metric"] ?? null), execution));
+        cargs.push(...cifti_create_dense_timeseries_cerebellum_metric_cargs((params["cerebellum_metric"] ?? null), execution));
     }
     if ((params["opt_timestep_interval"] ?? null) !== null) {
         cargs.push(
@@ -572,12 +539,7 @@ function cifti_create_dense_timeseries(
 
 export {
       CIFTI_CREATE_DENSE_TIMESERIES_METADATA,
-      CiftiCreateDenseTimeseriesCerebellumMetricParameters,
-      CiftiCreateDenseTimeseriesLeftMetricParameters,
       CiftiCreateDenseTimeseriesOutputs,
-      CiftiCreateDenseTimeseriesParameters,
-      CiftiCreateDenseTimeseriesRightMetricParameters,
-      CiftiCreateDenseTimeseriesVolumeParameters,
       cifti_create_dense_timeseries,
       cifti_create_dense_timeseries_cerebellum_metric_params,
       cifti_create_dense_timeseries_execute,

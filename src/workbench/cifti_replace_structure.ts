@@ -12,36 +12,40 @@ const CIFTI_REPLACE_STRUCTURE_METADATA: Metadata = {
 
 
 interface CiftiReplaceStructureVolumeAllParameters {
-    "@type": "workbench.cifti-replace-structure.volume_all";
+    "@type"?: "volume_all";
     "volume": InputPathType;
     "opt_from_cropped": boolean;
 }
+type CiftiReplaceStructureVolumeAllParametersTagged = Required<Pick<CiftiReplaceStructureVolumeAllParameters, '@type'>> & CiftiReplaceStructureVolumeAllParameters;
 
 
 interface CiftiReplaceStructureLabelParameters {
-    "@type": "workbench.cifti-replace-structure.label";
+    "@type"?: "label";
     "structure": string;
     "label": InputPathType;
 }
+type CiftiReplaceStructureLabelParametersTagged = Required<Pick<CiftiReplaceStructureLabelParameters, '@type'>> & CiftiReplaceStructureLabelParameters;
 
 
 interface CiftiReplaceStructureMetricParameters {
-    "@type": "workbench.cifti-replace-structure.metric";
+    "@type"?: "metric";
     "structure": string;
     "metric": InputPathType;
 }
+type CiftiReplaceStructureMetricParametersTagged = Required<Pick<CiftiReplaceStructureMetricParameters, '@type'>> & CiftiReplaceStructureMetricParameters;
 
 
 interface CiftiReplaceStructureVolumeParameters {
-    "@type": "workbench.cifti-replace-structure.volume";
+    "@type"?: "volume";
     "structure": string;
     "volume": InputPathType;
     "opt_from_cropped": boolean;
 }
+type CiftiReplaceStructureVolumeParametersTagged = Required<Pick<CiftiReplaceStructureVolumeParameters, '@type'>> & CiftiReplaceStructureVolumeParameters;
 
 
 interface CiftiReplaceStructureParameters {
-    "@type": "workbench.cifti-replace-structure";
+    "@type"?: "workbench/cifti-replace-structure";
     "cifti": string;
     "direction": string;
     "volume_all"?: CiftiReplaceStructureVolumeAllParameters | null | undefined;
@@ -51,43 +55,7 @@ interface CiftiReplaceStructureParameters {
     "metric"?: Array<CiftiReplaceStructureMetricParameters> | null | undefined;
     "volume"?: Array<CiftiReplaceStructureVolumeParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-replace-structure": cifti_replace_structure_cargs,
-        "workbench.cifti-replace-structure.volume_all": cifti_replace_structure_volume_all_cargs,
-        "workbench.cifti-replace-structure.label": cifti_replace_structure_label_cargs,
-        "workbench.cifti-replace-structure.metric": cifti_replace_structure_metric_cargs,
-        "workbench.cifti-replace-structure.volume": cifti_replace_structure_volume_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
+type CiftiReplaceStructureParametersTagged = Required<Pick<CiftiReplaceStructureParameters, '@type'>> & CiftiReplaceStructureParameters;
 
 
 /**
@@ -101,9 +69,9 @@ function dynOutputs(
 function cifti_replace_structure_volume_all_params(
     volume: InputPathType,
     opt_from_cropped: boolean = false,
-): CiftiReplaceStructureVolumeAllParameters {
+): CiftiReplaceStructureVolumeAllParametersTagged {
     const params = {
-        "@type": "workbench.cifti-replace-structure.volume_all" as const,
+        "@type": "volume_all" as const,
         "volume": volume,
         "opt_from_cropped": opt_from_cropped,
     };
@@ -126,7 +94,7 @@ function cifti_replace_structure_volume_all_cargs(
     const cargs: string[] = [];
     cargs.push("-volume-all");
     cargs.push(execution.inputFile((params["volume"] ?? null)));
-    if ((params["opt_from_cropped"] ?? null)) {
+    if ((params["opt_from_cropped"] ?? false)) {
         cargs.push("-from-cropped");
     }
     return cargs;
@@ -144,9 +112,9 @@ function cifti_replace_structure_volume_all_cargs(
 function cifti_replace_structure_label_params(
     structure: string,
     label: InputPathType,
-): CiftiReplaceStructureLabelParameters {
+): CiftiReplaceStructureLabelParametersTagged {
     const params = {
-        "@type": "workbench.cifti-replace-structure.label" as const,
+        "@type": "label" as const,
         "structure": structure,
         "label": label,
     };
@@ -185,9 +153,9 @@ function cifti_replace_structure_label_cargs(
 function cifti_replace_structure_metric_params(
     structure: string,
     metric: InputPathType,
-): CiftiReplaceStructureMetricParameters {
+): CiftiReplaceStructureMetricParametersTagged {
     const params = {
-        "@type": "workbench.cifti-replace-structure.metric" as const,
+        "@type": "metric" as const,
         "structure": structure,
         "metric": metric,
     };
@@ -228,9 +196,9 @@ function cifti_replace_structure_volume_params(
     structure: string,
     volume: InputPathType,
     opt_from_cropped: boolean = false,
-): CiftiReplaceStructureVolumeParameters {
+): CiftiReplaceStructureVolumeParametersTagged {
     const params = {
-        "@type": "workbench.cifti-replace-structure.volume" as const,
+        "@type": "volume" as const,
         "structure": structure,
         "volume": volume,
         "opt_from_cropped": opt_from_cropped,
@@ -255,7 +223,7 @@ function cifti_replace_structure_volume_cargs(
     cargs.push("-volume");
     cargs.push((params["structure"] ?? null));
     cargs.push(execution.inputFile((params["volume"] ?? null)));
-    if ((params["opt_from_cropped"] ?? null)) {
+    if ((params["opt_from_cropped"] ?? false)) {
         cargs.push("-from-cropped");
     }
     return cargs;
@@ -263,7 +231,7 @@ function cifti_replace_structure_volume_cargs(
 
 
 /**
- * Output object returned when calling `cifti_replace_structure(...)`.
+ * Output object returned when calling `CiftiReplaceStructureParameters(...)`.
  *
  * @interface
  */
@@ -298,9 +266,9 @@ function cifti_replace_structure_params(
     label: Array<CiftiReplaceStructureLabelParameters> | null = null,
     metric: Array<CiftiReplaceStructureMetricParameters> | null = null,
     volume: Array<CiftiReplaceStructureVolumeParameters> | null = null,
-): CiftiReplaceStructureParameters {
+): CiftiReplaceStructureParametersTagged {
     const params = {
-        "@type": "workbench.cifti-replace-structure" as const,
+        "@type": "workbench/cifti-replace-structure" as const,
         "cifti": cifti,
         "direction": direction,
         "opt_discard_unused_labels": opt_discard_unused_labels,
@@ -342,9 +310,9 @@ function cifti_replace_structure_cargs(
     cargs.push((params["cifti"] ?? null));
     cargs.push((params["direction"] ?? null));
     if ((params["volume_all"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["volume_all"] ?? null)["@type"])((params["volume_all"] ?? null), execution));
+        cargs.push(...cifti_replace_structure_volume_all_cargs((params["volume_all"] ?? null), execution));
     }
-    if ((params["opt_discard_unused_labels"] ?? null)) {
+    if ((params["opt_discard_unused_labels"] ?? false)) {
         cargs.push("-discard-unused-labels");
     }
     if ((params["opt_label_collision_action"] ?? null) !== null) {
@@ -354,13 +322,13 @@ function cifti_replace_structure_cargs(
         );
     }
     if ((params["label"] ?? null) !== null) {
-        cargs.push(...(params["label"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["label"] ?? null).map(s => cifti_replace_structure_label_cargs(s, execution)).flat());
     }
     if ((params["metric"] ?? null) !== null) {
-        cargs.push(...(params["metric"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["metric"] ?? null).map(s => cifti_replace_structure_metric_cargs(s, execution)).flat());
     }
     if ((params["volume"] ?? null) !== null) {
-        cargs.push(...(params["volume"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["volume"] ?? null).map(s => cifti_replace_structure_volume_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -528,12 +496,7 @@ function cifti_replace_structure(
 
 export {
       CIFTI_REPLACE_STRUCTURE_METADATA,
-      CiftiReplaceStructureLabelParameters,
-      CiftiReplaceStructureMetricParameters,
       CiftiReplaceStructureOutputs,
-      CiftiReplaceStructureParameters,
-      CiftiReplaceStructureVolumeAllParameters,
-      CiftiReplaceStructureVolumeParameters,
       cifti_replace_structure,
       cifti_replace_structure_execute,
       cifti_replace_structure_label_params,

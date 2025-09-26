@@ -12,50 +12,18 @@ const MRI_CVS_DATA_COPY_METADATA: Metadata = {
 
 
 interface MriCvsDataCopyParameters {
-    "@type": "freesurfer.mri_cvs_data_copy";
+    "@type"?: "freesurfer/mri_cvs_data_copy";
     "subjid": string;
     "olddir": string;
     "newdir": string;
     "version": boolean;
     "help": boolean;
 }
+type MriCvsDataCopyParametersTagged = Required<Pick<MriCvsDataCopyParameters, '@type'>> & MriCvsDataCopyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_cvs_data_copy": mri_cvs_data_copy_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_cvs_data_copy(...)`.
+ * Output object returned when calling `MriCvsDataCopyParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function mri_cvs_data_copy_params(
     newdir: string,
     version: boolean = false,
     help: boolean = false,
-): MriCvsDataCopyParameters {
+): MriCvsDataCopyParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_cvs_data_copy" as const,
+        "@type": "freesurfer/mri_cvs_data_copy" as const,
         "subjid": subjid,
         "olddir": olddir,
         "newdir": newdir,
@@ -123,10 +91,10 @@ function mri_cvs_data_copy_cargs(
         "--newdir",
         (params["newdir"] ?? null)
     );
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -214,7 +182,6 @@ function mri_cvs_data_copy(
 export {
       MRI_CVS_DATA_COPY_METADATA,
       MriCvsDataCopyOutputs,
-      MriCvsDataCopyParameters,
       mri_cvs_data_copy,
       mri_cvs_data_copy_execute,
       mri_cvs_data_copy_params,

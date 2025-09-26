@@ -12,49 +12,16 @@ const V_3D_ZCUTUP_METADATA: Metadata = {
 
 
 interface V3dZcutupParameters {
-    "@type": "afni.3dZcutup";
+    "@type"?: "afni/3dZcutup";
     "keep_slices": string;
     "prefix"?: string | null | undefined;
     "dataset": InputPathType;
 }
+type V3dZcutupParametersTagged = Required<Pick<V3dZcutupParameters, '@type'>> & V3dZcutupParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dZcutup": v_3d_zcutup_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dZcutup": v_3d_zcutup_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_zcutup(...)`.
+ * Output object returned when calling `V3dZcutupParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +54,9 @@ function v_3d_zcutup_params(
     keep_slices: string,
     dataset: InputPathType,
     prefix: string | null = null,
-): V3dZcutupParameters {
+): V3dZcutupParametersTagged {
     const params = {
-        "@type": "afni.3dZcutup" as const,
+        "@type": "afni/3dZcutup" as const,
         "keep_slices": keep_slices,
         "dataset": dataset,
     };
@@ -207,7 +174,6 @@ function v_3d_zcutup(
 
 export {
       V3dZcutupOutputs,
-      V3dZcutupParameters,
       V_3D_ZCUTUP_METADATA,
       v_3d_zcutup,
       v_3d_zcutup_execute,

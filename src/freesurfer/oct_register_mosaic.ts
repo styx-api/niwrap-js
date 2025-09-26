@@ -12,50 +12,17 @@ const OCT_REGISTER_MOSAIC_METADATA: Metadata = {
 
 
 interface OctRegisterMosaicParameters {
-    "@type": "freesurfer.oct_register_mosaic";
+    "@type"?: "freesurfer/oct_register_mosaic";
     "tiles_or_mosaic_list": Array<string>;
     "output_volume": string;
     "downsample"?: number | null | undefined;
     "weight_file"?: InputPathType | null | undefined;
 }
+type OctRegisterMosaicParametersTagged = Required<Pick<OctRegisterMosaicParameters, '@type'>> & OctRegisterMosaicParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.oct_register_mosaic": oct_register_mosaic_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.oct_register_mosaic": oct_register_mosaic_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `oct_register_mosaic(...)`.
+ * Output object returned when calling `OctRegisterMosaicParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function oct_register_mosaic_params(
     output_volume: string,
     downsample: number | null = null,
     weight_file: InputPathType | null = null,
-): OctRegisterMosaicParameters {
+): OctRegisterMosaicParametersTagged {
     const params = {
-        "@type": "freesurfer.oct_register_mosaic" as const,
+        "@type": "freesurfer/oct_register_mosaic" as const,
         "tiles_or_mosaic_list": tiles_or_mosaic_list,
         "output_volume": output_volume,
     };
@@ -214,7 +181,6 @@ function oct_register_mosaic(
 export {
       OCT_REGISTER_MOSAIC_METADATA,
       OctRegisterMosaicOutputs,
-      OctRegisterMosaicParameters,
       oct_register_mosaic,
       oct_register_mosaic_execute,
       oct_register_mosaic_params,

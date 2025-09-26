@@ -12,7 +12,7 @@ const BEDPOSTX_GPU_METADATA: Metadata = {
 
 
 interface BedpostxGpuParameters {
-    "@type": "fsl.bedpostx_gpu";
+    "@type"?: "fsl/bedpostx_gpu";
     "subject_dir": string;
     "gpu_queue"?: string | null | undefined;
     "num_jobs"?: number | null | undefined;
@@ -24,43 +24,11 @@ interface BedpostxGpuParameters {
     "deconv_model"?: number | null | undefined;
     "grad_nonlinear": boolean;
 }
+type BedpostxGpuParametersTagged = Required<Pick<BedpostxGpuParameters, '@type'>> & BedpostxGpuParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.bedpostx_gpu": bedpostx_gpu_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `bedpostx_gpu(...)`.
+ * Output object returned when calling `BedpostxGpuParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +67,9 @@ function bedpostx_gpu_params(
     sample_every: number | null = null,
     deconv_model: number | null = null,
     grad_nonlinear: boolean = false,
-): BedpostxGpuParameters {
+): BedpostxGpuParametersTagged {
     const params = {
-        "@type": "fsl.bedpostx_gpu" as const,
+        "@type": "fsl/bedpostx_gpu" as const,
         "subject_dir": subject_dir,
         "grad_nonlinear": grad_nonlinear,
     };
@@ -196,7 +164,7 @@ function bedpostx_gpu_cargs(
             String((params["deconv_model"] ?? null))
         );
     }
-    if ((params["grad_nonlinear"] ?? null)) {
+    if ((params["grad_nonlinear"] ?? false)) {
         cargs.push("-g");
     }
     return cargs;
@@ -294,7 +262,6 @@ function bedpostx_gpu(
 export {
       BEDPOSTX_GPU_METADATA,
       BedpostxGpuOutputs,
-      BedpostxGpuParameters,
       bedpostx_gpu,
       bedpostx_gpu_execute,
       bedpostx_gpu_params,

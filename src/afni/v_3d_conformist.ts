@@ -12,47 +12,14 @@ const V_3D_CONFORMIST_METADATA: Metadata = {
 
 
 interface V3dConformistParameters {
-    "@type": "afni.3dConformist";
+    "@type"?: "afni/3dConformist";
     "input_files": Array<InputPathType>;
 }
+type V3dConformistParametersTagged = Required<Pick<V3dConformistParameters, '@type'>> & V3dConformistParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dConformist": v_3d_conformist_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dConformist": v_3d_conformist_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_conformist(...)`.
+ * Output object returned when calling `V3dConformistParameters(...)`.
  *
  * @interface
  */
@@ -77,9 +44,9 @@ interface V3dConformistOutputs {
  */
 function v_3d_conformist_params(
     input_files: Array<InputPathType>,
-): V3dConformistParameters {
+): V3dConformistParametersTagged {
     const params = {
-        "@type": "afni.3dConformist" as const,
+        "@type": "afni/3dConformist" as const,
         "input_files": input_files,
     };
     return params;
@@ -178,7 +145,6 @@ function v_3d_conformist(
 
 export {
       V3dConformistOutputs,
-      V3dConformistParameters,
       V_3D_CONFORMIST_METADATA,
       v_3d_conformist,
       v_3d_conformist_execute,

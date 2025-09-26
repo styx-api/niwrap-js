@@ -12,7 +12,7 @@ const MRI_WBC_METADATA: Metadata = {
 
 
 interface MriWbcParameters {
-    "@type": "freesurfer.mri_wbc";
+    "@type"?: "freesurfer/mri_wbc";
     "functional_volume": InputPathType;
     "volume_mask"?: InputPathType | null | undefined;
     "lh_functional_surface": InputPathType;
@@ -31,43 +31,11 @@ interface MriWbcParameters {
     "debug": boolean;
     "checkopts": boolean;
 }
+type MriWbcParametersTagged = Required<Pick<MriWbcParameters, '@type'>> & MriWbcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_wbc": mri_wbc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_wbc(...)`.
+ * Output object returned when calling `MriWbcParameters(...)`.
  *
  * @interface
  */
@@ -120,9 +88,9 @@ function mri_wbc_params(
     threads: number | null = null,
     debug: boolean = false,
     checkopts: boolean = false,
-): MriWbcParameters {
+): MriWbcParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_wbc" as const,
+        "@type": "freesurfer/mri_wbc" as const,
         "functional_volume": functional_volume,
         "lh_functional_surface": lh_functional_surface,
         "lh_surface": lh_surface,
@@ -259,10 +227,10 @@ function mri_wbc_cargs(
             String((params["threads"] ?? null))
         );
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
-    if ((params["checkopts"] ?? null)) {
+    if ((params["checkopts"] ?? false)) {
         cargs.push("--checkopts");
     }
     return cargs;
@@ -374,7 +342,6 @@ function mri_wbc(
 export {
       MRI_WBC_METADATA,
       MriWbcOutputs,
-      MriWbcParameters,
       mri_wbc,
       mri_wbc_execute,
       mri_wbc_params,

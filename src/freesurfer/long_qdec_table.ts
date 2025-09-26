@@ -12,51 +12,18 @@ const LONG_QDEC_TABLE_METADATA: Metadata = {
 
 
 interface LongQdecTableParameters {
-    "@type": "freesurfer.long_qdec_table";
+    "@type"?: "freesurfer/long_qdec_table";
     "qdec_table": InputPathType;
     "split"?: string | null | undefined;
     "cross_flag": boolean;
     "sort"?: string | null | undefined;
     "out"?: string | null | undefined;
 }
+type LongQdecTableParametersTagged = Required<Pick<LongQdecTableParameters, '@type'>> & LongQdecTableParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.long_qdec_table": long_qdec_table_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.long_qdec_table": long_qdec_table_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `long_qdec_table(...)`.
+ * Output object returned when calling `LongQdecTableParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function long_qdec_table_params(
     cross_flag: boolean = false,
     sort: string | null = null,
     out: string | null = null,
-): LongQdecTableParameters {
+): LongQdecTableParametersTagged {
     const params = {
-        "@type": "freesurfer.long_qdec_table" as const,
+        "@type": "freesurfer/long_qdec_table" as const,
         "qdec_table": qdec_table,
         "cross_flag": cross_flag,
     };
@@ -132,7 +99,7 @@ function long_qdec_table_cargs(
             (params["split"] ?? null)
         );
     }
-    if ((params["cross_flag"] ?? null)) {
+    if ((params["cross_flag"] ?? false)) {
         cargs.push("--cross");
     }
     if ((params["sort"] ?? null) !== null) {
@@ -233,7 +200,6 @@ function long_qdec_table(
 export {
       LONG_QDEC_TABLE_METADATA,
       LongQdecTableOutputs,
-      LongQdecTableParameters,
       long_qdec_table,
       long_qdec_table_execute,
       long_qdec_table_params,

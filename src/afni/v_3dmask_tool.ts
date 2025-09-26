@@ -12,7 +12,7 @@ const V_3DMASK_TOOL_METADATA: Metadata = {
 
 
 interface V3dmaskToolParameters {
-    "@type": "afni.3dmask_tool";
+    "@type"?: "afni/3dmask_tool";
     "count": boolean;
     "datum"?: "byte" | "short" | "float" | null | undefined;
     "dilate_inputs"?: string | null | undefined;
@@ -27,44 +27,11 @@ interface V3dmaskToolParameters {
     "union": boolean;
     "verbose"?: number | null | undefined;
 }
+type V3dmaskToolParametersTagged = Required<Pick<V3dmaskToolParameters, '@type'>> & V3dmaskToolParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dmask_tool": v_3dmask_tool_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dmask_tool": v_3dmask_tool_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3dmask_tool(...)`.
+ * Output object returned when calling `V3dmaskToolParameters(...)`.
  *
  * @interface
  */
@@ -117,9 +84,9 @@ function v_3dmask_tool_params(
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     union: boolean = false,
     verbose: number | null = null,
-): V3dmaskToolParameters {
+): V3dmaskToolParametersTagged {
     const params = {
-        "@type": "afni.3dmask_tool" as const,
+        "@type": "afni/3dmask_tool" as const,
         "count": count,
         "fill_holes": fill_holes,
         "in_file": in_file,
@@ -168,7 +135,7 @@ function v_3dmask_tool_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("3dmask_tool");
-    if ((params["count"] ?? null)) {
+    if ((params["count"] ?? false)) {
         cargs.push("-count");
     }
     if ((params["datum"] ?? null) !== null) {
@@ -195,7 +162,7 @@ function v_3dmask_tool_cargs(
             (params["fill_dirs"] ?? null)
         );
     }
-    if ((params["fill_holes"] ?? null)) {
+    if ((params["fill_holes"] ?? false)) {
         cargs.push("-fill_holes");
     }
     if ((params["frac"] ?? null) !== null) {
@@ -208,7 +175,7 @@ function v_3dmask_tool_cargs(
         "-input",
         execution.inputFile((params["in_file"] ?? null))
     );
-    if ((params["inter"] ?? null)) {
+    if ((params["inter"] ?? false)) {
         cargs.push("-inter");
     }
     if ((params["num_threads"] ?? null) !== null) {
@@ -217,7 +184,7 @@ function v_3dmask_tool_cargs(
     if ((params["outputtype"] ?? null) !== null) {
         cargs.push((params["outputtype"] ?? null));
     }
-    if ((params["union"] ?? null)) {
+    if ((params["union"] ?? false)) {
         cargs.push("-union");
     }
     if ((params["verbose"] ?? null) !== null) {
@@ -328,7 +295,6 @@ function v_3dmask_tool(
 
 export {
       V3dmaskToolOutputs,
-      V3dmaskToolParameters,
       V_3DMASK_TOOL_METADATA,
       v_3dmask_tool,
       v_3dmask_tool_execute,

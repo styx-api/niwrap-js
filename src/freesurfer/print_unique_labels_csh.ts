@@ -12,51 +12,18 @@ const PRINT_UNIQUE_LABELS_CSH_METADATA: Metadata = {
 
 
 interface PrintUniqueLabelsCshParameters {
-    "@type": "freesurfer.print_unique_labels.csh";
+    "@type"?: "freesurfer/print_unique_labels.csh";
     "label_volume": InputPathType;
     "output_file"?: string | null | undefined;
     "list_only": boolean;
     "version": boolean;
     "help": boolean;
 }
+type PrintUniqueLabelsCshParametersTagged = Required<Pick<PrintUniqueLabelsCshParameters, '@type'>> & PrintUniqueLabelsCshParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.print_unique_labels.csh": print_unique_labels_csh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.print_unique_labels.csh": print_unique_labels_csh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `print_unique_labels_csh(...)`.
+ * Output object returned when calling `PrintUniqueLabelsCshParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function print_unique_labels_csh_params(
     list_only: boolean = false,
     version: boolean = false,
     help: boolean = false,
-): PrintUniqueLabelsCshParameters {
+): PrintUniqueLabelsCshParametersTagged {
     const params = {
-        "@type": "freesurfer.print_unique_labels.csh" as const,
+        "@type": "freesurfer/print_unique_labels.csh" as const,
         "label_volume": label_volume,
         "list_only": list_only,
         "version": version,
@@ -128,13 +95,13 @@ function print_unique_labels_csh_cargs(
             (params["output_file"] ?? null)
         );
     }
-    if ((params["list_only"] ?? null)) {
+    if ((params["list_only"] ?? false)) {
         cargs.push("--list");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("--help");
     }
     return cargs;
@@ -223,7 +190,6 @@ function print_unique_labels_csh(
 export {
       PRINT_UNIQUE_LABELS_CSH_METADATA,
       PrintUniqueLabelsCshOutputs,
-      PrintUniqueLabelsCshParameters,
       print_unique_labels_csh,
       print_unique_labels_csh_execute,
       print_unique_labels_csh_params,

@@ -12,7 +12,7 @@ const VOLUME_PARCEL_RESAMPLING_GENERIC_METADATA: Metadata = {
 
 
 interface VolumeParcelResamplingGenericParameters {
-    "@type": "workbench.volume-parcel-resampling-generic";
+    "@type"?: "workbench/volume-parcel-resampling-generic";
     "volume_in": InputPathType;
     "cur_parcels": InputPathType;
     "new_parcels": InputPathType;
@@ -22,44 +22,11 @@ interface VolumeParcelResamplingGenericParameters {
     "opt_fix_zeros": boolean;
     "opt_subvolume_subvol"?: string | null | undefined;
 }
+type VolumeParcelResamplingGenericParametersTagged = Required<Pick<VolumeParcelResamplingGenericParameters, '@type'>> & VolumeParcelResamplingGenericParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-parcel-resampling-generic": volume_parcel_resampling_generic_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-parcel-resampling-generic": volume_parcel_resampling_generic_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `volume_parcel_resampling_generic(...)`.
+ * Output object returned when calling `VolumeParcelResamplingGenericParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function volume_parcel_resampling_generic_params(
     opt_fwhm: boolean = false,
     opt_fix_zeros: boolean = false,
     opt_subvolume_subvol: string | null = null,
-): VolumeParcelResamplingGenericParameters {
+): VolumeParcelResamplingGenericParametersTagged {
     const params = {
-        "@type": "workbench.volume-parcel-resampling-generic" as const,
+        "@type": "workbench/volume-parcel-resampling-generic" as const,
         "volume_in": volume_in,
         "cur_parcels": cur_parcels,
         "new_parcels": new_parcels,
@@ -136,10 +103,10 @@ function volume_parcel_resampling_generic_cargs(
     cargs.push(execution.inputFile((params["new_parcels"] ?? null)));
     cargs.push(String((params["kernel"] ?? null)));
     cargs.push((params["volume_out"] ?? null));
-    if ((params["opt_fwhm"] ?? null)) {
+    if ((params["opt_fwhm"] ?? false)) {
         cargs.push("-fwhm");
     }
-    if ((params["opt_fix_zeros"] ?? null)) {
+    if ((params["opt_fix_zeros"] ?? false)) {
         cargs.push("-fix-zeros");
     }
     if ((params["opt_subvolume_subvol"] ?? null) !== null) {
@@ -244,7 +211,6 @@ function volume_parcel_resampling_generic(
 export {
       VOLUME_PARCEL_RESAMPLING_GENERIC_METADATA,
       VolumeParcelResamplingGenericOutputs,
-      VolumeParcelResamplingGenericParameters,
       volume_parcel_resampling_generic,
       volume_parcel_resampling_generic_execute,
       volume_parcel_resampling_generic_params,

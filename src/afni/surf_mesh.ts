@@ -12,7 +12,7 @@ const SURF_MESH_METADATA: Metadata = {
 
 
 interface SurfMeshParameters {
-    "@type": "afni.SurfMesh";
+    "@type"?: "afni/SurfMesh";
     "input_surface": string;
     "output_surface": string;
     "edge_fraction": number;
@@ -22,44 +22,11 @@ interface SurfMeshParameters {
     "no_volume_registration": boolean;
     "set_env"?: string | null | undefined;
 }
+type SurfMeshParametersTagged = Required<Pick<SurfMeshParameters, '@type'>> & SurfMeshParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.SurfMesh": surf_mesh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.SurfMesh": surf_mesh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surf_mesh(...)`.
+ * Output object returned when calling `SurfMeshParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function surf_mesh_params(
     anatomical_label: boolean = false,
     no_volume_registration: boolean = false,
     set_env: string | null = null,
-): SurfMeshParameters {
+): SurfMeshParametersTagged {
     const params = {
-        "@type": "afni.SurfMesh" as const,
+        "@type": "afni/SurfMesh" as const,
         "input_surface": input_surface,
         "output_surface": output_surface,
         "edge_fraction": edge_fraction,
@@ -150,13 +117,13 @@ function surf_mesh_cargs(
             execution.inputFile((params["surface_volume"] ?? null))
         );
     }
-    if ((params["one_state"] ?? null)) {
+    if ((params["one_state"] ?? false)) {
         cargs.push("-onestate");
     }
-    if ((params["anatomical_label"] ?? null)) {
+    if ((params["anatomical_label"] ?? false)) {
         cargs.push("-anatomical");
     }
-    if ((params["no_volume_registration"] ?? null)) {
+    if ((params["no_volume_registration"] ?? false)) {
         cargs.push("-novolreg");
     }
     if ((params["set_env"] ?? null) !== null) {
@@ -257,7 +224,6 @@ function surf_mesh(
 export {
       SURF_MESH_METADATA,
       SurfMeshOutputs,
-      SurfMeshParameters,
       surf_mesh,
       surf_mesh_execute,
       surf_mesh_params,

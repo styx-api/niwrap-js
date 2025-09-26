@@ -12,49 +12,16 @@ const V_3D_TFILTER_METADATA: Metadata = {
 
 
 interface V3dTfilterParameters {
-    "@type": "afni.3dTfilter";
+    "@type"?: "afni/3dTfilter";
     "inputdataset": InputPathType;
     "outputdataset": string;
     "filters": Array<string>;
 }
+type V3dTfilterParametersTagged = Required<Pick<V3dTfilterParameters, '@type'>> & V3dTfilterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dTfilter": v_3d_tfilter_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dTfilter": v_3d_tfilter_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_tfilter(...)`.
+ * Output object returned when calling `V3dTfilterParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function v_3d_tfilter_params(
     inputdataset: InputPathType,
     outputdataset: string,
     filters: Array<string>,
-): V3dTfilterParameters {
+): V3dTfilterParametersTagged {
     const params = {
-        "@type": "afni.3dTfilter" as const,
+        "@type": "afni/3dTfilter" as const,
         "inputdataset": inputdataset,
         "outputdataset": outputdataset,
         "filters": filters,
@@ -201,7 +168,6 @@ function v_3d_tfilter(
 
 export {
       V3dTfilterOutputs,
-      V3dTfilterParameters,
       V_3D_TFILTER_METADATA,
       v_3d_tfilter,
       v_3d_tfilter_execute,

@@ -12,7 +12,7 @@ const RESAMPLE_IMAGE_METADATA: Metadata = {
 
 
 interface ResampleImageParameters {
-    "@type": "ants.ResampleImage";
+    "@type"?: "ants/ResampleImage";
     "image_dimension": number;
     "input_image": InputPathType;
     "output_image": string;
@@ -20,44 +20,11 @@ interface ResampleImageParameters {
     "interpolate_type"?: "0" | "1" | "2" | "3" | "4" | null | undefined;
     "pixeltype"?: "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | null | undefined;
 }
+type ResampleImageParametersTagged = Required<Pick<ResampleImageParameters, '@type'>> & ResampleImageParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.ResampleImage": resample_image_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.ResampleImage": resample_image_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `resample_image(...)`.
+ * Output object returned when calling `ResampleImageParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function resample_image_params(
     size_spacing: string,
     interpolate_type: "0" | "1" | "2" | "3" | "4" | null = null,
     pixeltype: "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | null = null,
-): ResampleImageParameters {
+): ResampleImageParametersTagged {
     const params = {
-        "@type": "ants.ResampleImage" as const,
+        "@type": "ants/ResampleImage" as const,
         "image_dimension": image_dimension,
         "input_image": input_image,
         "output_image": output_image,
@@ -222,7 +189,6 @@ function resample_image(
 export {
       RESAMPLE_IMAGE_METADATA,
       ResampleImageOutputs,
-      ResampleImageParameters,
       resample_image,
       resample_image_execute,
       resample_image_params,

@@ -12,7 +12,7 @@ const METRIC_FALSE_CORRELATION_METADATA: Metadata = {
 
 
 interface MetricFalseCorrelationParameters {
-    "@type": "workbench.metric-false-correlation";
+    "@type"?: "workbench/metric-false-correlation";
     "surface": InputPathType;
     "metric_in": InputPathType;
     "3d_dist": number;
@@ -22,44 +22,11 @@ interface MetricFalseCorrelationParameters {
     "opt_roi_roi_metric"?: InputPathType | null | undefined;
     "opt_dump_text_text_out"?: string | null | undefined;
 }
+type MetricFalseCorrelationParametersTagged = Required<Pick<MetricFalseCorrelationParameters, '@type'>> & MetricFalseCorrelationParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.metric-false-correlation": metric_false_correlation_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.metric-false-correlation": metric_false_correlation_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `metric_false_correlation(...)`.
+ * Output object returned when calling `MetricFalseCorrelationParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function metric_false_correlation_params(
     metric_out: string,
     opt_roi_roi_metric: InputPathType | null = null,
     opt_dump_text_text_out: string | null = null,
-): MetricFalseCorrelationParameters {
+): MetricFalseCorrelationParametersTagged {
     const params = {
-        "@type": "workbench.metric-false-correlation" as const,
+        "@type": "workbench/metric-false-correlation" as const,
         "surface": surface,
         "metric_in": metric_in,
         "3d_dist": v_3d_dist,
@@ -247,7 +214,6 @@ function metric_false_correlation(
 export {
       METRIC_FALSE_CORRELATION_METADATA,
       MetricFalseCorrelationOutputs,
-      MetricFalseCorrelationParameters,
       metric_false_correlation,
       metric_false_correlation_execute,
       metric_false_correlation_params,

@@ -12,47 +12,15 @@ const CCALC_METADATA: Metadata = {
 
 
 interface CcalcParameters {
-    "@type": "afni.ccalc";
+    "@type"?: "afni/ccalc";
     "format"?: string | null | undefined;
     "expr": string;
 }
+type CcalcParametersTagged = Required<Pick<CcalcParameters, '@type'>> & CcalcParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.ccalc": ccalc_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `ccalc(...)`.
+ * Output object returned when calling `CcalcParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface CcalcOutputs {
 function ccalc_params(
     expr: string,
     format: string | null = null,
-): CcalcParameters {
+): CcalcParametersTagged {
     const params = {
-        "@type": "afni.ccalc" as const,
+        "@type": "afni/ccalc" as const,
         "expr": expr,
     };
     if (format !== null) {
@@ -190,7 +158,6 @@ function ccalc(
 export {
       CCALC_METADATA,
       CcalcOutputs,
-      CcalcParameters,
       ccalc,
       ccalc_execute,
       ccalc_params,

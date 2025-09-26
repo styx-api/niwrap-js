@@ -12,7 +12,7 @@ const FAT_MAT_TABLEIZE_PY_METADATA: Metadata = {
 
 
 interface FatMatTableizePyParameters {
-    "@type": "afni.fat_mat_tableize.py";
+    "@type"?: "afni/fat_mat_tableize.py";
     "input_matrices": Array<string>;
     "input_csv"?: InputPathType | null | undefined;
     "input_list"?: InputPathType | null | undefined;
@@ -24,44 +24,11 @@ interface FatMatTableizePyParameters {
     "help_short": boolean;
     "help_view": boolean;
 }
+type FatMatTableizePyParametersTagged = Required<Pick<FatMatTableizePyParameters, '@type'>> & FatMatTableizePyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.fat_mat_tableize.py": fat_mat_tableize_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.fat_mat_tableize.py": fat_mat_tableize_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fat_mat_tableize_py(...)`.
+ * Output object returned when calling `FatMatTableizePyParameters(...)`.
  *
  * @interface
  */
@@ -108,9 +75,9 @@ function fat_mat_tableize_py_params(
     help: boolean = false,
     help_short: boolean = false,
     help_view: boolean = false,
-): FatMatTableizePyParameters {
+): FatMatTableizePyParametersTagged {
     const params = {
-        "@type": "afni.fat_mat_tableize.py" as const,
+        "@type": "afni/fat_mat_tableize.py" as const,
         "input_matrices": input_matrices,
         "output_prefix": output_prefix,
         "version": version,
@@ -172,19 +139,19 @@ function fat_mat_tableize_py_cargs(
             ...(params["parameters"] ?? null)
         );
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-ver");
     }
-    if ((params["date"] ?? null)) {
+    if ((params["date"] ?? false)) {
         cargs.push("-date");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["help_short"] ?? null)) {
+    if ((params["help_short"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["help_view"] ?? null)) {
+    if ((params["help_view"] ?? false)) {
         cargs.push("-hview");
     }
     return cargs;
@@ -284,7 +251,6 @@ function fat_mat_tableize_py(
 export {
       FAT_MAT_TABLEIZE_PY_METADATA,
       FatMatTableizePyOutputs,
-      FatMatTableizePyParameters,
       fat_mat_tableize_py,
       fat_mat_tableize_py_execute,
       fat_mat_tableize_py_params,

@@ -12,7 +12,7 @@ const BET_METADATA: Metadata = {
 
 
 interface BetParameters {
-    "@type": "fsl.bet";
+    "@type"?: "fsl/bet";
     "infile": InputPathType;
     "maskfile": string;
     "fractional_intensity"?: number | null | undefined;
@@ -35,44 +35,11 @@ interface BetParameters {
     "verbose": boolean;
     "debug": boolean;
 }
+type BetParametersTagged = Required<Pick<BetParameters, '@type'>> & BetParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.bet": bet_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.bet": bet_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `bet(...)`.
+ * Output object returned when calling `BetParameters(...)`.
  *
  * @interface
  */
@@ -193,9 +160,9 @@ function bet_params(
     additional_surfaces_t2: InputPathType | null = null,
     verbose: boolean = false,
     debug: boolean = false,
-): BetParameters {
+): BetParametersTagged {
     const params = {
-        "@type": "fsl.bet" as const,
+        "@type": "fsl/bet" as const,
         "infile": infile,
         "maskfile": maskfile,
         "overlay": overlay,
@@ -247,7 +214,7 @@ function bet_cargs(
     const cargs: string[] = [];
     cargs.push("bet");
     cargs.push(execution.inputFile((params["infile"] ?? null)));
-    cargs.push((params["maskfile"] ?? null));
+    cargs.push((params["maskfile"] ?? "img_bet"));
     if ((params["fractional_intensity"] ?? null) !== null) {
         cargs.push(
             "-f",
@@ -266,19 +233,19 @@ function bet_cargs(
             ...(params["center_of_gravity"] ?? null).map(String)
         );
     }
-    if ((params["overlay"] ?? null)) {
+    if ((params["overlay"] ?? false)) {
         cargs.push("-o");
     }
-    if ((params["binary_mask"] ?? null)) {
+    if ((params["binary_mask"] ?? false)) {
         cargs.push("-m");
     }
-    if ((params["approx_skull"] ?? null)) {
+    if ((params["approx_skull"] ?? false)) {
         cargs.push("-s");
     }
-    if ((params["no_seg_output"] ?? null)) {
+    if ((params["no_seg_output"] ?? false)) {
         cargs.push("-n");
     }
-    if ((params["vtk_mesh"] ?? null)) {
+    if ((params["vtk_mesh"] ?? false)) {
         cargs.push("-e");
     }
     if ((params["head_radius"] ?? null) !== null) {
@@ -287,25 +254,25 @@ function bet_cargs(
             String((params["head_radius"] ?? null))
         );
     }
-    if ((params["thresholding"] ?? null)) {
+    if ((params["thresholding"] ?? false)) {
         cargs.push("-t");
     }
-    if ((params["robust_iters"] ?? null)) {
+    if ((params["robust_iters"] ?? false)) {
         cargs.push("-R");
     }
-    if ((params["residual_optic_cleanup"] ?? null)) {
+    if ((params["residual_optic_cleanup"] ?? false)) {
         cargs.push("-S");
     }
-    if ((params["reduce_bias"] ?? null)) {
+    if ((params["reduce_bias"] ?? false)) {
         cargs.push("-B");
     }
-    if ((params["slice_padding"] ?? null)) {
+    if ((params["slice_padding"] ?? false)) {
         cargs.push("-Z");
     }
-    if ((params["whole_set_mask"] ?? null)) {
+    if ((params["whole_set_mask"] ?? false)) {
         cargs.push("-F");
     }
-    if ((params["additional_surfaces"] ?? null)) {
+    if ((params["additional_surfaces"] ?? false)) {
         cargs.push("-A");
     }
     if ((params["additional_surfaces_t2"] ?? null) !== null) {
@@ -314,10 +281,10 @@ function bet_cargs(
             execution.inputFile((params["additional_surfaces_t2"] ?? null))
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-d");
     }
     return cargs;
@@ -338,21 +305,21 @@ function bet_outputs(
 ): BetOutputs {
     const ret: BetOutputs = {
         root: execution.outputFile("."),
-        outfile: execution.outputFile([(params["maskfile"] ?? null), ".nii.gz"].join('')),
-        binary_mask: execution.outputFile([(params["maskfile"] ?? null), "_mask.nii.gz"].join('')),
-        overlay_file: execution.outputFile([(params["maskfile"] ?? null), "_overlay.nii.gz"].join('')),
-        approx_skull_img: execution.outputFile([(params["maskfile"] ?? null), "_skull.nii.gz"].join('')),
-        output_vtk_mesh: execution.outputFile([(params["maskfile"] ?? null), "_mesh.vtk"].join('')),
-        skull_mask: execution.outputFile([(params["maskfile"] ?? null), "_skull_mask.nii.gz"].join('')),
-        out_inskull_mask: execution.outputFile([(params["maskfile"] ?? null), "_inskull_mask.nii.gz"].join('')),
-        out_inskull_mesh: execution.outputFile([(params["maskfile"] ?? null), "_inskull_mesh.nii.gz"].join('')),
-        out_inskull_off: execution.outputFile([(params["maskfile"] ?? null), "_inskull_mesh.off"].join('')),
-        out_outskin_mask: execution.outputFile([(params["maskfile"] ?? null), "_outskin_mask.nii.gz"].join('')),
-        out_outskin_mesh: execution.outputFile([(params["maskfile"] ?? null), "_outskin_mesh.nii.gz"].join('')),
-        out_outskin_off: execution.outputFile([(params["maskfile"] ?? null), "_outskin_mesh.off"].join('')),
-        out_outskull_mask: execution.outputFile([(params["maskfile"] ?? null), "_outskull_mask.nii.gz"].join('')),
-        out_outskull_mesh: execution.outputFile([(params["maskfile"] ?? null), "_outskull_mesh.nii.gz"].join('')),
-        out_outskull_off: execution.outputFile([(params["maskfile"] ?? null), "_outskull_mesh.off"].join('')),
+        outfile: execution.outputFile([(params["maskfile"] ?? "img_bet"), ".nii.gz"].join('')),
+        binary_mask: execution.outputFile([(params["maskfile"] ?? "img_bet"), "_mask.nii.gz"].join('')),
+        overlay_file: execution.outputFile([(params["maskfile"] ?? "img_bet"), "_overlay.nii.gz"].join('')),
+        approx_skull_img: execution.outputFile([(params["maskfile"] ?? "img_bet"), "_skull.nii.gz"].join('')),
+        output_vtk_mesh: execution.outputFile([(params["maskfile"] ?? "img_bet"), "_mesh.vtk"].join('')),
+        skull_mask: execution.outputFile([(params["maskfile"] ?? "img_bet"), "_skull_mask.nii.gz"].join('')),
+        out_inskull_mask: execution.outputFile([(params["maskfile"] ?? "img_bet"), "_inskull_mask.nii.gz"].join('')),
+        out_inskull_mesh: execution.outputFile([(params["maskfile"] ?? "img_bet"), "_inskull_mesh.nii.gz"].join('')),
+        out_inskull_off: execution.outputFile([(params["maskfile"] ?? "img_bet"), "_inskull_mesh.off"].join('')),
+        out_outskin_mask: execution.outputFile([(params["maskfile"] ?? "img_bet"), "_outskin_mask.nii.gz"].join('')),
+        out_outskin_mesh: execution.outputFile([(params["maskfile"] ?? "img_bet"), "_outskin_mesh.nii.gz"].join('')),
+        out_outskin_off: execution.outputFile([(params["maskfile"] ?? "img_bet"), "_outskin_mesh.off"].join('')),
+        out_outskull_mask: execution.outputFile([(params["maskfile"] ?? "img_bet"), "_outskull_mask.nii.gz"].join('')),
+        out_outskull_mesh: execution.outputFile([(params["maskfile"] ?? "img_bet"), "_outskull_mesh.nii.gz"].join('')),
+        out_outskull_off: execution.outputFile([(params["maskfile"] ?? "img_bet"), "_outskull_mesh.off"].join('')),
     };
     return ret;
 }
@@ -452,7 +419,6 @@ function bet(
 export {
       BET_METADATA,
       BetOutputs,
-      BetParameters,
       bet,
       bet_execute,
       bet_params,

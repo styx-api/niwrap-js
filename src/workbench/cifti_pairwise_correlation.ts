@@ -12,51 +12,18 @@ const CIFTI_PAIRWISE_CORRELATION_METADATA: Metadata = {
 
 
 interface CiftiPairwiseCorrelationParameters {
-    "@type": "workbench.cifti-pairwise-correlation";
+    "@type"?: "workbench/cifti-pairwise-correlation";
     "cifti_a": InputPathType;
     "cifti_b": InputPathType;
     "cifti_out": string;
     "opt_fisher_z": boolean;
     "opt_override_mapping_check": boolean;
 }
+type CiftiPairwiseCorrelationParametersTagged = Required<Pick<CiftiPairwiseCorrelationParameters, '@type'>> & CiftiPairwiseCorrelationParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-pairwise-correlation": cifti_pairwise_correlation_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-pairwise-correlation": cifti_pairwise_correlation_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `cifti_pairwise_correlation(...)`.
+ * Output object returned when calling `CiftiPairwiseCorrelationParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function cifti_pairwise_correlation_params(
     cifti_out: string,
     opt_fisher_z: boolean = false,
     opt_override_mapping_check: boolean = false,
-): CiftiPairwiseCorrelationParameters {
+): CiftiPairwiseCorrelationParametersTagged {
     const params = {
-        "@type": "workbench.cifti-pairwise-correlation" as const,
+        "@type": "workbench/cifti-pairwise-correlation" as const,
         "cifti_a": cifti_a,
         "cifti_b": cifti_b,
         "cifti_out": cifti_out,
@@ -120,10 +87,10 @@ function cifti_pairwise_correlation_cargs(
     cargs.push(execution.inputFile((params["cifti_a"] ?? null)));
     cargs.push(execution.inputFile((params["cifti_b"] ?? null)));
     cargs.push((params["cifti_out"] ?? null));
-    if ((params["opt_fisher_z"] ?? null)) {
+    if ((params["opt_fisher_z"] ?? false)) {
         cargs.push("-fisher-z");
     }
-    if ((params["opt_override_mapping_check"] ?? null)) {
+    if ((params["opt_override_mapping_check"] ?? false)) {
         cargs.push("-override-mapping-check");
     }
     return cargs;
@@ -216,7 +183,6 @@ function cifti_pairwise_correlation(
 export {
       CIFTI_PAIRWISE_CORRELATION_METADATA,
       CiftiPairwiseCorrelationOutputs,
-      CiftiPairwiseCorrelationParameters,
       cifti_pairwise_correlation,
       cifti_pairwise_correlation_execute,
       cifti_pairwise_correlation_params,

@@ -12,50 +12,17 @@ const EDDY_CORRECT_METADATA: Metadata = {
 
 
 interface EddyCorrectParameters {
-    "@type": "fsl.eddy_correct";
+    "@type"?: "fsl/eddy_correct";
     "4d_input": InputPathType;
     "4d_output": string;
     "reference_no": number;
     "interp_method"?: "trilinear" | "spline" | null | undefined;
 }
+type EddyCorrectParametersTagged = Required<Pick<EddyCorrectParameters, '@type'>> & EddyCorrectParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.eddy_correct": eddy_correct_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.eddy_correct": eddy_correct_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `eddy_correct(...)`.
+ * Output object returned when calling `EddyCorrectParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function eddy_correct_params(
     v_4d_output: string,
     reference_no: number,
     interp_method: "trilinear" | "spline" | null = null,
-): EddyCorrectParameters {
+): EddyCorrectParametersTagged {
     const params = {
-        "@type": "fsl.eddy_correct" as const,
+        "@type": "fsl/eddy_correct" as const,
         "4d_input": v_4d_input,
         "4d_output": v_4d_output,
         "reference_no": reference_no,
@@ -203,7 +170,6 @@ function eddy_correct(
 export {
       EDDY_CORRECT_METADATA,
       EddyCorrectOutputs,
-      EddyCorrectParameters,
       eddy_correct,
       eddy_correct_execute,
       eddy_correct_params,

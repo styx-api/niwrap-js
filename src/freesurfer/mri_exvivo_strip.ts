@@ -12,7 +12,7 @@ const MRI_EXVIVO_STRIP_METADATA: Metadata = {
 
 
 interface MriExvivoStripParameters {
-    "@type": "freesurfer.mri_exvivo_strip";
+    "@type"?: "freesurfer/mri_exvivo_strip";
     "invol": InputPathType;
     "outvol": string;
     "hemi": string;
@@ -26,44 +26,11 @@ interface MriExvivoStripParameters {
     "wts"?: InputPathType | null | undefined;
     "gpu"?: number | null | undefined;
 }
+type MriExvivoStripParametersTagged = Required<Pick<MriExvivoStripParameters, '@type'>> & MriExvivoStripParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_exvivo_strip": mri_exvivo_strip_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_exvivo_strip": mri_exvivo_strip_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_exvivo_strip(...)`.
+ * Output object returned when calling `MriExvivoStripParameters(...)`.
  *
  * @interface
  */
@@ -118,9 +85,9 @@ function mri_exvivo_strip_params(
     model: InputPathType | null = null,
     wts: InputPathType | null = null,
     gpu: number | null = null,
-): MriExvivoStripParameters {
+): MriExvivoStripParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_exvivo_strip" as const,
+        "@type": "freesurfer/mri_exvivo_strip" as const,
         "invol": invol,
         "outvol": outvol,
         "hemi": hemi,
@@ -190,7 +157,7 @@ function mri_exvivo_strip_cargs(
             execution.inputFile((params["norm"] ?? null))
         );
     }
-    if ((params["fv"] ?? null)) {
+    if ((params["fv"] ?? false)) {
         cargs.push("--fv");
     }
     if ((params["uthresh"] ?? null) !== null) {
@@ -205,7 +172,7 @@ function mri_exvivo_strip_cargs(
             String((params["border"] ?? null))
         );
     }
-    if ((params["multichannel"] ?? null)) {
+    if ((params["multichannel"] ?? false)) {
         cargs.push("--multichannel");
     }
     if ((params["model"] ?? null) !== null) {
@@ -328,7 +295,6 @@ function mri_exvivo_strip(
 export {
       MRI_EXVIVO_STRIP_METADATA,
       MriExvivoStripOutputs,
-      MriExvivoStripParameters,
       mri_exvivo_strip,
       mri_exvivo_strip_execute,
       mri_exvivo_strip_params,

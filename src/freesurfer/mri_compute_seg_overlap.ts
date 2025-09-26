@@ -12,7 +12,7 @@ const MRI_COMPUTE_SEG_OVERLAP_METADATA: Metadata = {
 
 
 interface MriComputeSegOverlapParameters {
-    "@type": "freesurfer.mri_compute_seg_overlap";
+    "@type"?: "freesurfer/mri_compute_seg_overlap";
     "segvol1": InputPathType;
     "segvol2": InputPathType;
     "log_file"?: string | null | undefined;
@@ -24,43 +24,11 @@ interface MriComputeSegOverlapParameters {
     "all_labels_flag": boolean;
     "dice_params"?: string | null | undefined;
 }
+type MriComputeSegOverlapParametersTagged = Required<Pick<MriComputeSegOverlapParameters, '@type'>> & MriComputeSegOverlapParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_compute_seg_overlap": mri_compute_seg_overlap_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_compute_seg_overlap(...)`.
+ * Output object returned when calling `MriComputeSegOverlapParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +67,9 @@ function mri_compute_seg_overlap_params(
     exclude_wm_flag: boolean = false,
     all_labels_flag: boolean = false,
     dice_params: string | null = null,
-): MriComputeSegOverlapParameters {
+): MriComputeSegOverlapParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_compute_seg_overlap" as const,
+        "@type": "freesurfer/mri_compute_seg_overlap" as const,
         "segvol1": segvol1,
         "segvol2": segvol2,
         "overall_log_flag": overall_log_flag,
@@ -159,16 +127,16 @@ function mri_compute_seg_overlap_cargs(
             (params["std_log_file"] ?? null)
         );
     }
-    if ((params["overall_log_flag"] ?? null)) {
+    if ((params["overall_log_flag"] ?? false)) {
         cargs.push("-olog");
     }
-    if ((params["exclude_cortex_flag"] ?? null)) {
+    if ((params["exclude_cortex_flag"] ?? false)) {
         cargs.push("-cortex");
     }
-    if ((params["exclude_wm_flag"] ?? null)) {
+    if ((params["exclude_wm_flag"] ?? false)) {
         cargs.push("-wm");
     }
-    if ((params["all_labels_flag"] ?? null)) {
+    if ((params["all_labels_flag"] ?? false)) {
         cargs.push("-all_labels");
     }
     if ((params["dice_params"] ?? null) !== null) {
@@ -272,7 +240,6 @@ function mri_compute_seg_overlap(
 export {
       MRI_COMPUTE_SEG_OVERLAP_METADATA,
       MriComputeSegOverlapOutputs,
-      MriComputeSegOverlapParameters,
       mri_compute_seg_overlap,
       mri_compute_seg_overlap_execute,
       mri_compute_seg_overlap_params,

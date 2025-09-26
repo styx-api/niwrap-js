@@ -12,21 +12,23 @@ const VOLUME_TFCE_METADATA: Metadata = {
 
 
 interface VolumeTfcePresmoothParameters {
-    "@type": "workbench.volume-tfce.presmooth";
+    "@type"?: "presmooth";
     "kernel": number;
     "opt_fwhm": boolean;
 }
+type VolumeTfcePresmoothParametersTagged = Required<Pick<VolumeTfcePresmoothParameters, '@type'>> & VolumeTfcePresmoothParameters;
 
 
 interface VolumeTfceParametersParameters {
-    "@type": "workbench.volume-tfce.parameters";
+    "@type"?: "parameters";
     "e": number;
     "h": number;
 }
+type VolumeTfceParametersParametersTagged = Required<Pick<VolumeTfceParametersParameters, '@type'>> & VolumeTfceParametersParameters;
 
 
 interface VolumeTfceParameters {
-    "@type": "workbench.volume-tfce";
+    "@type"?: "workbench/volume-tfce";
     "volume_in": InputPathType;
     "volume_out": string;
     "presmooth"?: VolumeTfcePresmoothParameters | null | undefined;
@@ -34,42 +36,7 @@ interface VolumeTfceParameters {
     "parameters"?: VolumeTfceParametersParameters | null | undefined;
     "opt_subvolume_subvolume"?: string | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.volume-tfce": volume_tfce_cargs,
-        "workbench.volume-tfce.presmooth": volume_tfce_presmooth_cargs,
-        "workbench.volume-tfce.parameters": volume_tfce_parameters_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.volume-tfce": volume_tfce_outputs,
-    };
-    return outputsFuncs[t];
-}
+type VolumeTfceParametersTagged = Required<Pick<VolumeTfceParameters, '@type'>> & VolumeTfceParameters;
 
 
 /**
@@ -83,9 +50,9 @@ function dynOutputs(
 function volume_tfce_presmooth_params(
     kernel: number,
     opt_fwhm: boolean = false,
-): VolumeTfcePresmoothParameters {
+): VolumeTfcePresmoothParametersTagged {
     const params = {
-        "@type": "workbench.volume-tfce.presmooth" as const,
+        "@type": "presmooth" as const,
         "kernel": kernel,
         "opt_fwhm": opt_fwhm,
     };
@@ -108,7 +75,7 @@ function volume_tfce_presmooth_cargs(
     const cargs: string[] = [];
     cargs.push("-presmooth");
     cargs.push(String((params["kernel"] ?? null)));
-    if ((params["opt_fwhm"] ?? null)) {
+    if ((params["opt_fwhm"] ?? false)) {
         cargs.push("-fwhm");
     }
     return cargs;
@@ -126,9 +93,9 @@ function volume_tfce_presmooth_cargs(
 function volume_tfce_parameters_params(
     e: number,
     h: number,
-): VolumeTfceParametersParameters {
+): VolumeTfceParametersParametersTagged {
     const params = {
-        "@type": "workbench.volume-tfce.parameters" as const,
+        "@type": "parameters" as const,
         "e": e,
         "h": h,
     };
@@ -157,7 +124,7 @@ function volume_tfce_parameters_cargs(
 
 
 /**
- * Output object returned when calling `volume_tfce(...)`.
+ * Output object returned when calling `VolumeTfceParameters(...)`.
  *
  * @interface
  */
@@ -192,9 +159,9 @@ function volume_tfce_params(
     opt_roi_roi_volume: InputPathType | null = null,
     parameters: VolumeTfceParametersParameters | null = null,
     opt_subvolume_subvolume: string | null = null,
-): VolumeTfceParameters {
+): VolumeTfceParametersTagged {
     const params = {
-        "@type": "workbench.volume-tfce" as const,
+        "@type": "workbench/volume-tfce" as const,
         "volume_in": volume_in,
         "volume_out": volume_out,
     };
@@ -232,7 +199,7 @@ function volume_tfce_cargs(
     cargs.push(execution.inputFile((params["volume_in"] ?? null)));
     cargs.push((params["volume_out"] ?? null));
     if ((params["presmooth"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["presmooth"] ?? null)["@type"])((params["presmooth"] ?? null), execution));
+        cargs.push(...volume_tfce_presmooth_cargs((params["presmooth"] ?? null), execution));
     }
     if ((params["opt_roi_roi_volume"] ?? null) !== null) {
         cargs.push(
@@ -241,7 +208,7 @@ function volume_tfce_cargs(
         );
     }
     if ((params["parameters"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["parameters"] ?? null)["@type"])((params["parameters"] ?? null), execution));
+        cargs.push(...volume_tfce_parameters_cargs((params["parameters"] ?? null), execution));
     }
     if ((params["opt_subvolume_subvolume"] ?? null) !== null) {
         cargs.push(
@@ -357,9 +324,6 @@ function volume_tfce(
 export {
       VOLUME_TFCE_METADATA,
       VolumeTfceOutputs,
-      VolumeTfceParameters,
-      VolumeTfceParametersParameters,
-      VolumeTfcePresmoothParameters,
       volume_tfce,
       volume_tfce_execute,
       volume_tfce_parameters_params,

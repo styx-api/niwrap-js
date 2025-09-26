@@ -12,7 +12,7 @@ const CONVERT_CDIFLIST_TO_GRADS_PY_METADATA: Metadata = {
 
 
 interface ConvertCdiflistToGradsPyParameters {
-    "@type": "afni.convert_cdiflist_to_grads.py";
+    "@type"?: "afni/convert_cdiflist_to_grads.py";
     "cdiflist": InputPathType;
     "bval_max": number;
     "prefix": string;
@@ -21,44 +21,11 @@ interface ConvertCdiflistToGradsPyParameters {
     "help": boolean;
     "hview": boolean;
 }
+type ConvertCdiflistToGradsPyParametersTagged = Required<Pick<ConvertCdiflistToGradsPyParameters, '@type'>> & ConvertCdiflistToGradsPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.convert_cdiflist_to_grads.py": convert_cdiflist_to_grads_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.convert_cdiflist_to_grads.py": convert_cdiflist_to_grads_py_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `convert_cdiflist_to_grads_py(...)`.
+ * Output object returned when calling `ConvertCdiflistToGradsPyParameters(...)`.
  *
  * @interface
  */
@@ -103,9 +70,9 @@ function convert_cdiflist_to_grads_py_params(
     date: boolean = false,
     help: boolean = false,
     hview: boolean = false,
-): ConvertCdiflistToGradsPyParameters {
+): ConvertCdiflistToGradsPyParametersTagged {
     const params = {
-        "@type": "afni.convert_cdiflist_to_grads.py" as const,
+        "@type": "afni/convert_cdiflist_to_grads.py" as const,
         "cdiflist": cdiflist,
         "bval_max": bval_max,
         "prefix": prefix,
@@ -144,16 +111,16 @@ function convert_cdiflist_to_grads_py_cargs(
         "-prefix",
         (params["prefix"] ?? null)
     );
-    if ((params["ver"] ?? null)) {
+    if ((params["ver"] ?? false)) {
         cargs.push("-ver");
     }
-    if ((params["date"] ?? null)) {
+    if ((params["date"] ?? false)) {
         cargs.push("-date");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["hview"] ?? null)) {
+    if ((params["hview"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -248,7 +215,6 @@ function convert_cdiflist_to_grads_py(
 export {
       CONVERT_CDIFLIST_TO_GRADS_PY_METADATA,
       ConvertCdiflistToGradsPyOutputs,
-      ConvertCdiflistToGradsPyParameters,
       convert_cdiflist_to_grads_py,
       convert_cdiflist_to_grads_py_execute,
       convert_cdiflist_to_grads_py_params,

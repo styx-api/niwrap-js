@@ -12,47 +12,15 @@ const MRI_ADD_NEW_TP_METADATA: Metadata = {
 
 
 interface MriAddNewTpParameters {
-    "@type": "freesurfer.mri_add_new_tp";
+    "@type"?: "freesurfer/mri_add_new_tp";
     "base_id": string;
     "newtp_id": string;
 }
+type MriAddNewTpParametersTagged = Required<Pick<MriAddNewTpParameters, '@type'>> & MriAddNewTpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_add_new_tp": mri_add_new_tp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_add_new_tp(...)`.
+ * Output object returned when calling `MriAddNewTpParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface MriAddNewTpOutputs {
 function mri_add_new_tp_params(
     base_id: string,
     newtp_id: string,
-): MriAddNewTpParameters {
+): MriAddNewTpParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_add_new_tp" as const,
+        "@type": "freesurfer/mri_add_new_tp" as const,
         "base_id": base_id,
         "newtp_id": newtp_id,
     };
@@ -180,7 +148,6 @@ function mri_add_new_tp(
 export {
       MRI_ADD_NEW_TP_METADATA,
       MriAddNewTpOutputs,
-      MriAddNewTpParameters,
       mri_add_new_tp,
       mri_add_new_tp_execute,
       mri_add_new_tp_params,

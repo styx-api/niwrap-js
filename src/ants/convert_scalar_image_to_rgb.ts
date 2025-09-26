@@ -12,7 +12,7 @@ const CONVERT_SCALAR_IMAGE_TO_RGB_METADATA: Metadata = {
 
 
 interface ConvertScalarImageToRgbParameters {
-    "@type": "ants.ConvertScalarImageToRGB";
+    "@type"?: "ants/ConvertScalarImageToRGB";
     "image_dimension": number;
     "input_image": InputPathType;
     "output_image": string;
@@ -25,44 +25,11 @@ interface ConvertScalarImageToRgbParameters {
     "maximum_rgb_output"?: number | null | undefined;
     "vtk_lookup_table"?: string | null | undefined;
 }
+type ConvertScalarImageToRgbParametersTagged = Required<Pick<ConvertScalarImageToRgbParameters, '@type'>> & ConvertScalarImageToRgbParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.ConvertScalarImageToRGB": convert_scalar_image_to_rgb_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.ConvertScalarImageToRGB": convert_scalar_image_to_rgb_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `convert_scalar_image_to_rgb(...)`.
+ * Output object returned when calling `ConvertScalarImageToRgbParameters(...)`.
  *
  * @interface
  */
@@ -107,9 +74,9 @@ function convert_scalar_image_to_rgb_params(
     minimum_rgb_output: number | null = null,
     maximum_rgb_output: number | null = null,
     vtk_lookup_table: string | null = null,
-): ConvertScalarImageToRgbParameters {
+): ConvertScalarImageToRgbParametersTagged {
     const params = {
-        "@type": "ants.ConvertScalarImageToRGB" as const,
+        "@type": "ants/ConvertScalarImageToRGB" as const,
         "image_dimension": image_dimension,
         "input_image": input_image,
         "output_image": output_image,
@@ -273,7 +240,6 @@ function convert_scalar_image_to_rgb(
 export {
       CONVERT_SCALAR_IMAGE_TO_RGB_METADATA,
       ConvertScalarImageToRgbOutputs,
-      ConvertScalarImageToRgbParameters,
       convert_scalar_image_to_rgb,
       convert_scalar_image_to_rgb_execute,
       convert_scalar_image_to_rgb_params,

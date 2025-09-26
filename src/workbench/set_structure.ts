@@ -12,49 +12,17 @@ const SET_STRUCTURE_METADATA: Metadata = {
 
 
 interface SetStructureParameters {
-    "@type": "workbench.set-structure";
+    "@type"?: "workbench/set-structure";
     "data_file": string;
     "structure": string;
     "opt_surface_type_type"?: string | null | undefined;
     "opt_surface_secondary_type_secondary_type"?: string | null | undefined;
 }
+type SetStructureParametersTagged = Required<Pick<SetStructureParameters, '@type'>> & SetStructureParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.set-structure": set_structure_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `set_structure(...)`.
+ * Output object returned when calling `SetStructureParameters(...)`.
  *
  * @interface
  */
@@ -81,9 +49,9 @@ function set_structure_params(
     structure: string,
     opt_surface_type_type: string | null = null,
     opt_surface_secondary_type_secondary_type: string | null = null,
-): SetStructureParameters {
+): SetStructureParametersTagged {
     const params = {
-        "@type": "workbench.set-structure" as const,
+        "@type": "workbench/set-structure" as const,
         "data_file": data_file,
         "structure": structure,
     };
@@ -323,7 +291,6 @@ function set_structure(
 export {
       SET_STRUCTURE_METADATA,
       SetStructureOutputs,
-      SetStructureParameters,
       set_structure,
       set_structure_execute,
       set_structure_params,

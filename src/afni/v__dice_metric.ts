@@ -12,7 +12,7 @@ const V__DICE_METRIC_METADATA: Metadata = {
 
 
 interface VDiceMetricParameters {
-    "@type": "afni.@DiceMetric";
+    "@type"?: "afni/@DiceMetric";
     "base": InputPathType;
     "dsets": Array<InputPathType>;
     "max_roi"?: number | null | undefined;
@@ -27,43 +27,11 @@ interface VDiceMetricParameters {
     "ignore_bad": boolean;
     "keep_tmp": boolean;
 }
+type VDiceMetricParametersTagged = Required<Pick<VDiceMetricParameters, '@type'>> & VDiceMetricParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@DiceMetric": v__dice_metric_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__dice_metric(...)`.
+ * Output object returned when calling `VDiceMetricParameters(...)`.
  *
  * @interface
  */
@@ -108,9 +76,9 @@ function v__dice_metric_params(
     prefix: string | null = null,
     ignore_bad: boolean = false,
     keep_tmp: boolean = false,
-): VDiceMetricParameters {
+): VDiceMetricParametersTagged {
     const params = {
-        "@type": "afni.@DiceMetric" as const,
+        "@type": "afni/@DiceMetric" as const,
         "base": base,
         "dsets": dsets,
         "echo": echo,
@@ -177,19 +145,19 @@ function v__dice_metric_cargs(
             execution.inputFile((params["forceoutput"] ?? null))
         );
     }
-    if ((params["echo"] ?? null)) {
+    if ((params["echo"] ?? false)) {
         cargs.push("-echo");
     }
-    if ((params["save_match"] ?? null)) {
+    if ((params["save_match"] ?? false)) {
         cargs.push("-save_match");
     }
-    if ((params["save_diff"] ?? null)) {
+    if ((params["save_diff"] ?? false)) {
         cargs.push("-save_diff");
     }
-    if ((params["do_not_mask_by_base"] ?? null)) {
+    if ((params["do_not_mask_by_base"] ?? false)) {
         cargs.push("-do_not_mask_by_base");
     }
-    if ((params["mask_by_base"] ?? null)) {
+    if ((params["mask_by_base"] ?? false)) {
         cargs.push("-mask_by_base");
     }
     if ((params["prefix"] ?? null) !== null) {
@@ -198,10 +166,10 @@ function v__dice_metric_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["ignore_bad"] ?? null)) {
+    if ((params["ignore_bad"] ?? false)) {
         cargs.push("-ignore_bad");
     }
-    if ((params["keep_tmp"] ?? null)) {
+    if ((params["keep_tmp"] ?? false)) {
         cargs.push("-keep_tmp");
     }
     return cargs;
@@ -304,7 +272,6 @@ function v__dice_metric(
 
 export {
       VDiceMetricOutputs,
-      VDiceMetricParameters,
       V__DICE_METRIC_METADATA,
       v__dice_metric,
       v__dice_metric_execute,

@@ -12,7 +12,7 @@ const MRIS_THICKNESS_METADATA: Metadata = {
 
 
 interface MrisThicknessParameters {
-    "@type": "freesurfer.mris_thickness";
+    "@type"?: "freesurfer/mris_thickness";
     "subject_name": string;
     "hemi": string;
     "thickness_file": string;
@@ -21,44 +21,11 @@ interface MrisThicknessParameters {
     "thickness_from_seg"?: Array<string> | null | undefined;
     "vector": boolean;
 }
+type MrisThicknessParametersTagged = Required<Pick<MrisThicknessParameters, '@type'>> & MrisThicknessParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_thickness": mris_thickness_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_thickness": mris_thickness_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_thickness(...)`.
+ * Output object returned when calling `MrisThicknessParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function mris_thickness_params(
     fill_holes: Array<string> | null = null,
     thickness_from_seg: Array<string> | null = null,
     vector: boolean = false,
-): MrisThicknessParameters {
+): MrisThicknessParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_thickness" as const,
+        "@type": "freesurfer/mris_thickness" as const,
         "subject_name": subject_name,
         "hemi": hemi,
         "thickness_file": thickness_file,
@@ -151,7 +118,7 @@ function mris_thickness_cargs(
             ...(params["thickness_from_seg"] ?? null)
         );
     }
-    if ((params["vector"] ?? null)) {
+    if ((params["vector"] ?? false)) {
         cargs.push("-vector");
     }
     return cargs;
@@ -244,7 +211,6 @@ function mris_thickness(
 export {
       MRIS_THICKNESS_METADATA,
       MrisThicknessOutputs,
-      MrisThicknessParameters,
       mris_thickness,
       mris_thickness_execute,
       mris_thickness_params,

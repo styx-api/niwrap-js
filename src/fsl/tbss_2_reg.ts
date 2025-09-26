@@ -12,48 +12,16 @@ const TBSS_2_REG_METADATA: Metadata = {
 
 
 interface Tbss2RegParameters {
-    "@type": "fsl.tbss_2_reg";
+    "@type"?: "fsl/tbss_2_reg";
     "use_fmrib58_fa_1mm": boolean;
     "target_image"?: InputPathType | null | undefined;
     "find_best_target": boolean;
 }
+type Tbss2RegParametersTagged = Required<Pick<Tbss2RegParameters, '@type'>> & Tbss2RegParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.tbss_2_reg": tbss_2_reg_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `tbss_2_reg(...)`.
+ * Output object returned when calling `Tbss2RegParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function tbss_2_reg_params(
     use_fmrib58_fa_1mm: boolean = false,
     target_image: InputPathType | null = null,
     find_best_target: boolean = false,
-): Tbss2RegParameters {
+): Tbss2RegParametersTagged {
     const params = {
-        "@type": "fsl.tbss_2_reg" as const,
+        "@type": "fsl/tbss_2_reg" as const,
         "use_fmrib58_fa_1mm": use_fmrib58_fa_1mm,
         "find_best_target": find_best_target,
     };
@@ -105,7 +73,7 @@ function tbss_2_reg_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("tbss_2_reg");
-    if ((params["use_fmrib58_fa_1mm"] ?? null)) {
+    if ((params["use_fmrib58_fa_1mm"] ?? false)) {
         cargs.push("-T");
     }
     if ((params["target_image"] ?? null) !== null) {
@@ -114,7 +82,7 @@ function tbss_2_reg_cargs(
             execution.inputFile((params["target_image"] ?? null))
         );
     }
-    if ((params["find_best_target"] ?? null)) {
+    if ((params["find_best_target"] ?? false)) {
         cargs.push("-n");
     }
     return cargs;
@@ -198,7 +166,6 @@ function tbss_2_reg(
 export {
       TBSS_2_REG_METADATA,
       Tbss2RegOutputs,
-      Tbss2RegParameters,
       tbss_2_reg,
       tbss_2_reg_execute,
       tbss_2_reg_params,

@@ -12,7 +12,7 @@ const MAKE_RANDOM_TIMING_PY_METADATA: Metadata = {
 
 
 interface MakeRandomTimingPyParameters {
-    "@type": "afni.make_random_timing.py";
+    "@type"?: "afni/make_random_timing.py";
     "num_runs": number;
     "run_time": Array<number>;
     "num_stim": number;
@@ -39,43 +39,11 @@ interface MakeRandomTimingPyParameters {
     "verb"?: number | null | undefined;
     "show_timing_stats": boolean;
 }
+type MakeRandomTimingPyParametersTagged = Required<Pick<MakeRandomTimingPyParameters, '@type'>> & MakeRandomTimingPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.make_random_timing.py": make_random_timing_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `make_random_timing_py(...)`.
+ * Output object returned when calling `MakeRandomTimingPyParameters(...)`.
  *
  * @interface
  */
@@ -144,9 +112,9 @@ function make_random_timing_py_params(
     tr_locked: boolean = false,
     verb: number | null = null,
     show_timing_stats: boolean = false,
-): MakeRandomTimingPyParameters {
+): MakeRandomTimingPyParametersTagged {
     const params = {
-        "@type": "afni.make_random_timing.py" as const,
+        "@type": "afni/make_random_timing.py" as const,
         "num_runs": num_runs,
         "run_time": run_time,
         "num_stim": num_stim,
@@ -251,7 +219,7 @@ function make_random_timing_py_cargs(
             ...(params["stim_dur"] ?? null).map(String)
         );
     }
-    if ((params["across_runs"] ?? null)) {
+    if ((params["across_runs"] ?? false)) {
         cargs.push("-across_runs");
     }
     if ((params["max_consec"] ?? null) !== null) {
@@ -344,7 +312,7 @@ function make_random_timing_py_cargs(
             String((params["tr"] ?? null))
         );
     }
-    if ((params["tr_locked"] ?? null)) {
+    if ((params["tr_locked"] ?? false)) {
         cargs.push("-tr_locked");
     }
     if ((params["verb"] ?? null) !== null) {
@@ -353,7 +321,7 @@ function make_random_timing_py_cargs(
             String((params["verb"] ?? null))
         );
     }
-    if ((params["show_timing_stats"] ?? null)) {
+    if ((params["show_timing_stats"] ?? false)) {
         cargs.push("-show_timing_stats");
     }
     return cargs;
@@ -481,7 +449,6 @@ function make_random_timing_py(
 export {
       MAKE_RANDOM_TIMING_PY_METADATA,
       MakeRandomTimingPyOutputs,
-      MakeRandomTimingPyParameters,
       make_random_timing_py,
       make_random_timing_py_execute,
       make_random_timing_py_params,

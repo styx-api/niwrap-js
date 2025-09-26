@@ -12,7 +12,7 @@ const MRI_INFO_METADATA: Metadata = {
 
 
 interface MriInfoParameters {
-    "@type": "freesurfer.mri_info";
+    "@type"?: "freesurfer/mri_info";
     "input1": InputPathType;
     "input2"?: InputPathType | null | undefined;
     "conformed": boolean;
@@ -66,43 +66,11 @@ interface MriInfoParameters {
     "orig_ras2vox": boolean;
     "in_type"?: string | null | undefined;
 }
+type MriInfoParametersTagged = Required<Pick<MriInfoParameters, '@type'>> & MriInfoParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_info": mri_info_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_info(...)`.
+ * Output object returned when calling `MriInfoParameters(...)`.
  *
  * @interface
  */
@@ -225,9 +193,9 @@ function mri_info_params(
     output_file: InputPathType | null = null,
     orig_ras2vox: boolean = false,
     in_type: string | null = null,
-): MriInfoParameters {
+): MriInfoParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_info" as const,
+        "@type": "freesurfer/mri_info" as const,
         "input1": input1,
         "conformed": conformed,
         "conformed_to_min": conformed_to_min,
@@ -311,139 +279,139 @@ function mri_info_cargs(
     if ((params["input2"] ?? null) !== null) {
         cargs.push(execution.inputFile((params["input2"] ?? null)));
     }
-    if ((params["conformed"] ?? null)) {
+    if ((params["conformed"] ?? false)) {
         cargs.push("--conformed");
     }
-    if ((params["conformed_to_min"] ?? null)) {
+    if ((params["conformed_to_min"] ?? false)) {
         cargs.push("--conformed-to-min");
     }
-    if ((params["is_1mm_iso"] ?? null)) {
+    if ((params["is_1mm_iso"] ?? false)) {
         cargs.push("--is-1mm-iso");
     }
-    if ((params["type"] ?? null)) {
+    if ((params["type"] ?? false)) {
         cargs.push("--type");
     }
-    if ((params["tr"] ?? null)) {
+    if ((params["tr"] ?? false)) {
         cargs.push("--tr");
     }
-    if ((params["te"] ?? null)) {
+    if ((params["te"] ?? false)) {
         cargs.push("--te");
     }
-    if ((params["ti"] ?? null)) {
+    if ((params["ti"] ?? false)) {
         cargs.push("--ti");
     }
-    if ((params["fa"] ?? null)) {
+    if ((params["fa"] ?? false)) {
         cargs.push("--fa");
     }
-    if ((params["pedir"] ?? null)) {
+    if ((params["pedir"] ?? false)) {
         cargs.push("--pedir");
     }
-    if ((params["res"] ?? null)) {
+    if ((params["res"] ?? false)) {
         cargs.push("--res");
     }
-    if ((params["cres"] ?? null)) {
+    if ((params["cres"] ?? false)) {
         cargs.push("--cres");
     }
-    if ((params["rres"] ?? null)) {
+    if ((params["rres"] ?? false)) {
         cargs.push("--rres");
     }
-    if ((params["sres"] ?? null)) {
+    if ((params["sres"] ?? false)) {
         cargs.push("--sres");
     }
-    if ((params["voxvol"] ?? null)) {
+    if ((params["voxvol"] ?? false)) {
         cargs.push("--voxvol");
     }
-    if ((params["voxvolsum"] ?? null)) {
+    if ((params["voxvolsum"] ?? false)) {
         cargs.push("--voxvolsum");
     }
-    if ((params["ncols"] ?? null)) {
+    if ((params["ncols"] ?? false)) {
         cargs.push("--ncols");
     }
-    if ((params["nrows"] ?? null)) {
+    if ((params["nrows"] ?? false)) {
         cargs.push("--nrows");
     }
-    if ((params["nslices"] ?? null)) {
+    if ((params["nslices"] ?? false)) {
         cargs.push("--nslices");
     }
-    if ((params["dim"] ?? null)) {
+    if ((params["dim"] ?? false)) {
         cargs.push("--dim");
     }
-    if ((params["cdc"] ?? null)) {
+    if ((params["cdc"] ?? false)) {
         cargs.push("--cdc");
     }
-    if ((params["rdc"] ?? null)) {
+    if ((params["rdc"] ?? false)) {
         cargs.push("--rdc");
     }
-    if ((params["sdc"] ?? null)) {
+    if ((params["sdc"] ?? false)) {
         cargs.push("--sdc");
     }
-    if ((params["vox2ras"] ?? null)) {
+    if ((params["vox2ras"] ?? false)) {
         cargs.push("--vox2ras");
     }
-    if ((params["ras2vox"] ?? null)) {
+    if ((params["ras2vox"] ?? false)) {
         cargs.push("--ras2vox");
     }
-    if ((params["vox2ras_tkr"] ?? null)) {
+    if ((params["vox2ras_tkr"] ?? false)) {
         cargs.push("--vox2ras-tkr");
     }
-    if ((params["ras2vox_tkr"] ?? null)) {
+    if ((params["ras2vox_tkr"] ?? false)) {
         cargs.push("--ras2vox-tkr");
     }
-    if ((params["vox2ras_fsl"] ?? null)) {
+    if ((params["vox2ras_fsl"] ?? false)) {
         cargs.push("--vox2ras-fsl");
     }
-    if ((params["tkr2scanner"] ?? null)) {
+    if ((params["tkr2scanner"] ?? false)) {
         cargs.push("--tkr2scanner");
     }
-    if ((params["scanner2tkr"] ?? null)) {
+    if ((params["scanner2tkr"] ?? false)) {
         cargs.push("--scanner2tkr");
     }
-    if ((params["ras_good"] ?? null)) {
+    if ((params["ras_good"] ?? false)) {
         cargs.push("--ras_good");
     }
-    if ((params["cras"] ?? null)) {
+    if ((params["cras"] ?? false)) {
         cargs.push("--cras");
     }
-    if ((params["center"] ?? null)) {
+    if ((params["center"] ?? false)) {
         cargs.push("--center");
     }
-    if ((params["zero_cras"] ?? null)) {
+    if ((params["zero_cras"] ?? false)) {
         cargs.push("--zero-cras");
     }
-    if ((params["p0"] ?? null)) {
+    if ((params["p0"] ?? false)) {
         cargs.push("--p0");
     }
-    if ((params["det"] ?? null)) {
+    if ((params["det"] ?? false)) {
         cargs.push("--det");
     }
-    if ((params["dof"] ?? null)) {
+    if ((params["dof"] ?? false)) {
         cargs.push("--dof");
     }
-    if ((params["nframes"] ?? null)) {
+    if ((params["nframes"] ?? false)) {
         cargs.push("--nframes");
     }
-    if ((params["mid_frame"] ?? null)) {
+    if ((params["mid_frame"] ?? false)) {
         cargs.push("--mid-frame");
     }
-    if ((params["format"] ?? null)) {
+    if ((params["format"] ?? false)) {
         cargs.push("--format");
     }
-    if ((params["orientation"] ?? null)) {
+    if ((params["orientation"] ?? false)) {
         cargs.push("--orientation");
     }
-    if ((params["slicedirection"] ?? null)) {
+    if ((params["slicedirection"] ?? false)) {
         cargs.push("--slicedirection");
     }
-    if ((params["autoalign"] ?? null)) {
+    if ((params["autoalign"] ?? false)) {
         cargs.push("--autoalign");
     }
-    if ((params["ctab"] ?? null)) {
+    if ((params["ctab"] ?? false)) {
         cargs.push("--ctab");
     }
-    if ((params["cmds"] ?? null)) {
+    if ((params["cmds"] ?? false)) {
         cargs.push("--cmds");
     }
-    if ((params["dump"] ?? null)) {
+    if ((params["dump"] ?? false)) {
         cargs.push("--dump");
     }
     if ((params["voxel_crs"] ?? null) !== null) {
@@ -452,7 +420,7 @@ function mri_info_cargs(
             ...(params["voxel_crs"] ?? null)
         );
     }
-    if ((params["entropy"] ?? null)) {
+    if ((params["entropy"] ?? false)) {
         cargs.push("--entropy");
     }
     if ((params["output_file"] ?? null) !== null) {
@@ -461,7 +429,7 @@ function mri_info_cargs(
             execution.inputFile((params["output_file"] ?? null))
         );
     }
-    if ((params["orig_ras2vox"] ?? null)) {
+    if ((params["orig_ras2vox"] ?? false)) {
         cargs.push("--orig_ras2vox");
     }
     if ((params["in_type"] ?? null) !== null) {
@@ -649,7 +617,6 @@ function mri_info(
 export {
       MRI_INFO_METADATA,
       MriInfoOutputs,
-      MriInfoParameters,
       mri_info,
       mri_info_execute,
       mri_info_params,

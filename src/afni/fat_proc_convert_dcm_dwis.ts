@@ -12,7 +12,7 @@ const FAT_PROC_CONVERT_DCM_DWIS_METADATA: Metadata = {
 
 
 interface FatProcConvertDcmDwisParameters {
-    "@type": "afni.fat_proc_convert_dcm_dwis";
+    "@type"?: "afni/fat_proc_convert_dcm_dwis";
     "dicom_dir": string;
     "output_prefix": string;
     "nifti_files"?: Array<InputPathType> | null | undefined;
@@ -32,44 +32,11 @@ interface FatProcConvertDcmDwisParameters {
     "no_qc_view": boolean;
     "do_movie"?: string | null | undefined;
 }
+type FatProcConvertDcmDwisParametersTagged = Required<Pick<FatProcConvertDcmDwisParameters, '@type'>> & FatProcConvertDcmDwisParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.fat_proc_convert_dcm_dwis": fat_proc_convert_dcm_dwis_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.fat_proc_convert_dcm_dwis": fat_proc_convert_dcm_dwis_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fat_proc_convert_dcm_dwis(...)`.
+ * Output object returned when calling `FatProcConvertDcmDwisParameters(...)`.
  *
  * @interface
  */
@@ -148,9 +115,9 @@ function fat_proc_convert_dcm_dwis_params(
     no_cmd_out: boolean = false,
     no_qc_view: boolean = false,
     do_movie: string | null = null,
-): FatProcConvertDcmDwisParameters {
+): FatProcConvertDcmDwisParametersTagged {
     const params = {
-        "@type": "afni.fat_proc_convert_dcm_dwis" as const,
+        "@type": "afni/fat_proc_convert_dcm_dwis" as const,
         "dicom_dir": dicom_dir,
         "output_prefix": output_prefix,
         "flip_x": flip_x,
@@ -224,31 +191,31 @@ function fat_proc_convert_dcm_dwis_cargs(
     if ((params["origin_xyz"] ?? null) !== null) {
         cargs.push(...(params["origin_xyz"] ?? null).map(String));
     }
-    if ((params["flip_x"] ?? null)) {
+    if ((params["flip_x"] ?? false)) {
         cargs.push("-flip_x");
     }
-    if ((params["flip_y"] ?? null)) {
+    if ((params["flip_y"] ?? false)) {
         cargs.push("-flip_y");
     }
-    if ((params["flip_z"] ?? null)) {
+    if ((params["flip_z"] ?? false)) {
         cargs.push("-flip_z");
     }
-    if ((params["no_flip"] ?? null)) {
+    if ((params["no_flip"] ?? false)) {
         cargs.push("-no_flip");
     }
     if ((params["qc_prefix"] ?? null) !== null) {
         cargs.push((params["qc_prefix"] ?? null));
     }
-    if ((params["reorient_off"] ?? null)) {
+    if ((params["reorient_off"] ?? false)) {
         cargs.push("-reorig_reorient_off");
     }
-    if ((params["no_clean"] ?? null)) {
+    if ((params["no_clean"] ?? false)) {
         cargs.push("-no_clean");
     }
-    if ((params["no_cmd_out"] ?? null)) {
+    if ((params["no_cmd_out"] ?? false)) {
         cargs.push("-no_cmd_out");
     }
-    if ((params["no_qc_view"] ?? null)) {
+    if ((params["no_qc_view"] ?? false)) {
         cargs.push("-no_qc_view");
     }
     if ((params["do_movie"] ?? null) !== null) {
@@ -374,7 +341,6 @@ function fat_proc_convert_dcm_dwis(
 export {
       FAT_PROC_CONVERT_DCM_DWIS_METADATA,
       FatProcConvertDcmDwisOutputs,
-      FatProcConvertDcmDwisParameters,
       fat_proc_convert_dcm_dwis,
       fat_proc_convert_dcm_dwis_execute,
       fat_proc_convert_dcm_dwis_params,

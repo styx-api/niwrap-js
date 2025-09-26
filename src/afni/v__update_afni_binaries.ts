@@ -12,7 +12,7 @@ const V__UPDATE_AFNI_BINARIES_METADATA: Metadata = {
 
 
 interface VUpdateAfniBinariesParameters {
-    "@type": "afni.@update.afni.binaries";
+    "@type"?: "afni/@update.afni.binaries";
     "defaults_flag": boolean;
     "help_flag": boolean;
     "help_sys_progs_flag": boolean;
@@ -38,43 +38,11 @@ interface VUpdateAfniBinariesParameters {
     "prog_list"?: Array<string> | null | undefined;
     "package"?: string | null | undefined;
 }
+type VUpdateAfniBinariesParametersTagged = Required<Pick<VUpdateAfniBinariesParameters, '@type'>> & VUpdateAfniBinariesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@update.afni.binaries": v__update_afni_binaries_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__update_afni_binaries(...)`.
+ * Output object returned when calling `VUpdateAfniBinariesParameters(...)`.
  *
  * @interface
  */
@@ -141,9 +109,9 @@ function v__update_afni_binaries_params(
     local_package: string | null = null,
     prog_list: Array<string> | null = null,
     package_: string | null = null,
-): VUpdateAfniBinariesParameters {
+): VUpdateAfniBinariesParametersTagged {
     const params = {
-        "@type": "afni.@update.afni.binaries" as const,
+        "@type": "afni/@update.afni.binaries" as const,
         "defaults_flag": defaults_flag,
         "help_flag": help_flag,
         "help_sys_progs_flag": help_sys_progs_flag,
@@ -201,13 +169,13 @@ function v__update_afni_binaries_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("@update.afni.binaries");
-    if ((params["defaults_flag"] ?? null)) {
+    if ((params["defaults_flag"] ?? false)) {
         cargs.push("-defaults");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["help_sys_progs_flag"] ?? null)) {
+    if ((params["help_sys_progs_flag"] ?? false)) {
         cargs.push("-help_sys_progs");
     }
     if ((params["apsearch"] ?? null) !== null) {
@@ -222,16 +190,16 @@ function v__update_afni_binaries_cargs(
             (params["bindir"] ?? null)
         );
     }
-    if ((params["curl_flag"] ?? null)) {
+    if ((params["curl_flag"] ?? false)) {
         cargs.push("-curl");
     }
-    if ((params["do_dotfiles_flag"] ?? null)) {
+    if ((params["do_dotfiles_flag"] ?? false)) {
         cargs.push("-do_dotfiles");
     }
-    if ((params["do_extras_flag"] ?? null)) {
+    if ((params["do_extras_flag"] ?? false)) {
         cargs.push("-do_extras");
     }
-    if ((params["echo_flag"] ?? null)) {
+    if ((params["echo_flag"] ?? false)) {
         cargs.push("-echo");
     }
     if ((params["make_backup"] ?? null) !== null) {
@@ -240,10 +208,10 @@ function v__update_afni_binaries_cargs(
             (params["make_backup"] ?? null)
         );
     }
-    if ((params["no_cert_verify_flag"] ?? null)) {
+    if ((params["no_cert_verify_flag"] ?? false)) {
         cargs.push("-no_cert_verify");
     }
-    if ((params["no_recur_flag"] ?? null)) {
+    if ((params["no_recur_flag"] ?? false)) {
         cargs.push("-no_recur");
     }
     if ((params["proto"] ?? null) !== null) {
@@ -252,28 +220,28 @@ function v__update_afni_binaries_cargs(
             (params["proto"] ?? null)
         );
     }
-    if ((params["quick_flag"] ?? null)) {
+    if ((params["quick_flag"] ?? false)) {
         cargs.push("-quick");
     }
-    if ((params["show_obsoletes_flag"] ?? null)) {
+    if ((params["show_obsoletes_flag"] ?? false)) {
         cargs.push("-show_obsoletes");
     }
-    if ((params["show_obsoletes_grep_flag"] ?? null)) {
+    if ((params["show_obsoletes_grep_flag"] ?? false)) {
         cargs.push("-show_obsoletes_grep");
     }
-    if ((params["show_system_progs_flag"] ?? null)) {
+    if ((params["show_system_progs_flag"] ?? false)) {
         cargs.push("-show_system_progs");
     }
-    if ((params["sys_ok_flag"] ?? null)) {
+    if ((params["sys_ok_flag"] ?? false)) {
         cargs.push("-sys_ok");
     }
-    if ((params["test_flag"] ?? null)) {
+    if ((params["test_flag"] ?? false)) {
         cargs.push("-test");
     }
-    if ((params["test_protos_flag"] ?? null)) {
+    if ((params["test_protos_flag"] ?? false)) {
         cargs.push("-test_protos");
     }
-    if ((params["revert_flag"] ?? null)) {
+    if ((params["revert_flag"] ?? false)) {
         cargs.push("-revert");
     }
     if ((params["local_package"] ?? null) !== null) {
@@ -416,7 +384,6 @@ function v__update_afni_binaries(
 
 export {
       VUpdateAfniBinariesOutputs,
-      VUpdateAfniBinariesParameters,
       V__UPDATE_AFNI_BINARIES_METADATA,
       v__update_afni_binaries,
       v__update_afni_binaries_execute,

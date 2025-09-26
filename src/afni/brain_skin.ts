@@ -12,7 +12,7 @@ const BRAIN_SKIN_METADATA: Metadata = {
 
 
 interface BrainSkinParameters {
-    "@type": "afni.BrainSkin";
+    "@type"?: "afni/BrainSkin";
     "surface": string;
     "skingrid_volume": InputPathType;
     "prefix": string;
@@ -27,44 +27,11 @@ interface BrainSkinParameters {
     "no_zero_attraction": boolean;
     "node_dbg"?: number | null | undefined;
 }
+type BrainSkinParametersTagged = Required<Pick<BrainSkinParameters, '@type'>> & BrainSkinParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.BrainSkin": brain_skin_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.BrainSkin": brain_skin_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `brain_skin(...)`.
+ * Output object returned when calling `BrainSkinParameters(...)`.
  *
  * @interface
  */
@@ -153,9 +120,9 @@ function brain_skin_params(
     vol_hull: InputPathType | null = null,
     no_zero_attraction: boolean = false,
     node_dbg: number | null = null,
-): BrainSkinParameters {
+): BrainSkinParametersTagged {
     const params = {
-        "@type": "afni.BrainSkin" as const,
+        "@type": "afni/BrainSkin" as const,
         "surface": surface,
         "skingrid_volume": skingrid_volume,
         "prefix": prefix,
@@ -263,7 +230,7 @@ function brain_skin_cargs(
             execution.inputFile((params["vol_hull"] ?? null))
         );
     }
-    if ((params["no_zero_attraction"] ?? null)) {
+    if ((params["no_zero_attraction"] ?? false)) {
         cargs.push("-no_zero_attraction");
     }
     if ((params["node_dbg"] ?? null) !== null) {
@@ -384,7 +351,6 @@ function brain_skin(
 export {
       BRAIN_SKIN_METADATA,
       BrainSkinOutputs,
-      BrainSkinParameters,
       brain_skin,
       brain_skin_execute,
       brain_skin_params,

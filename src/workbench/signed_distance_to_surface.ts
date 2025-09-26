@@ -12,50 +12,17 @@ const SIGNED_DISTANCE_TO_SURFACE_METADATA: Metadata = {
 
 
 interface SignedDistanceToSurfaceParameters {
-    "@type": "workbench.signed-distance-to-surface";
+    "@type"?: "workbench/signed-distance-to-surface";
     "surface_comp": InputPathType;
     "surface_ref": InputPathType;
     "metric": string;
     "opt_winding_method"?: string | null | undefined;
 }
+type SignedDistanceToSurfaceParametersTagged = Required<Pick<SignedDistanceToSurfaceParameters, '@type'>> & SignedDistanceToSurfaceParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.signed-distance-to-surface": signed_distance_to_surface_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.signed-distance-to-surface": signed_distance_to_surface_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `signed_distance_to_surface(...)`.
+ * Output object returned when calling `SignedDistanceToSurfaceParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function signed_distance_to_surface_params(
     surface_ref: InputPathType,
     metric: string,
     opt_winding_method: string | null = null,
-): SignedDistanceToSurfaceParameters {
+): SignedDistanceToSurfaceParametersTagged {
     const params = {
-        "@type": "workbench.signed-distance-to-surface" as const,
+        "@type": "workbench/signed-distance-to-surface" as const,
         "surface_comp": surface_comp,
         "surface_ref": surface_ref,
         "metric": metric,
@@ -226,7 +193,6 @@ function signed_distance_to_surface(
 export {
       SIGNED_DISTANCE_TO_SURFACE_METADATA,
       SignedDistanceToSurfaceOutputs,
-      SignedDistanceToSurfaceParameters,
       signed_distance_to_surface,
       signed_distance_to_surface_execute,
       signed_distance_to_surface_params,

@@ -12,48 +12,15 @@ const SURFACE_FLIP_NORMALS_METADATA: Metadata = {
 
 
 interface SurfaceFlipNormalsParameters {
-    "@type": "workbench.surface-flip-normals";
+    "@type"?: "workbench/surface-flip-normals";
     "surface": InputPathType;
     "surface_out": string;
 }
+type SurfaceFlipNormalsParametersTagged = Required<Pick<SurfaceFlipNormalsParameters, '@type'>> & SurfaceFlipNormalsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.surface-flip-normals": surface_flip_normals_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.surface-flip-normals": surface_flip_normals_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_flip_normals(...)`.
+ * Output object returned when calling `SurfaceFlipNormalsParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface SurfaceFlipNormalsOutputs {
 function surface_flip_normals_params(
     surface: InputPathType,
     surface_out: string,
-): SurfaceFlipNormalsParameters {
+): SurfaceFlipNormalsParametersTagged {
     const params = {
-        "@type": "workbench.surface-flip-normals" as const,
+        "@type": "workbench/surface-flip-normals" as const,
         "surface": surface,
         "surface_out": surface_out,
     };
@@ -191,7 +158,6 @@ function surface_flip_normals(
 export {
       SURFACE_FLIP_NORMALS_METADATA,
       SurfaceFlipNormalsOutputs,
-      SurfaceFlipNormalsParameters,
       surface_flip_normals,
       surface_flip_normals_execute,
       surface_flip_normals_params,

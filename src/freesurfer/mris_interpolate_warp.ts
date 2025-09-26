@@ -12,48 +12,16 @@ const MRIS_INTERPOLATE_WARP_METADATA: Metadata = {
 
 
 interface MrisInterpolateWarpParameters {
-    "@type": "freesurfer.mris_interpolate_warp";
+    "@type"?: "freesurfer/mris_interpolate_warp";
     "start_surface": InputPathType;
     "end_surface": InputPathType;
     "warp_field": InputPathType;
 }
+type MrisInterpolateWarpParametersTagged = Required<Pick<MrisInterpolateWarpParameters, '@type'>> & MrisInterpolateWarpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_interpolate_warp": mris_interpolate_warp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_interpolate_warp(...)`.
+ * Output object returned when calling `MrisInterpolateWarpParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function mris_interpolate_warp_params(
     start_surface: InputPathType,
     end_surface: InputPathType,
     warp_field: InputPathType,
-): MrisInterpolateWarpParameters {
+): MrisInterpolateWarpParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_interpolate_warp" as const,
+        "@type": "freesurfer/mris_interpolate_warp" as const,
         "start_surface": start_surface,
         "end_surface": end_surface,
         "warp_field": warp_field,
@@ -187,7 +155,6 @@ function mris_interpolate_warp(
 export {
       MRIS_INTERPOLATE_WARP_METADATA,
       MrisInterpolateWarpOutputs,
-      MrisInterpolateWarpParameters,
       mris_interpolate_warp,
       mris_interpolate_warp_execute,
       mris_interpolate_warp_params,

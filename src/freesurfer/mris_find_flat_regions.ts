@@ -12,49 +12,16 @@ const MRIS_FIND_FLAT_REGIONS_METADATA: Metadata = {
 
 
 interface MrisFindFlatRegionsParameters {
-    "@type": "freesurfer.mris_find_flat_regions";
+    "@type"?: "freesurfer/mris_find_flat_regions";
     "surface": InputPathType;
     "wfile": string;
     "threshold"?: number | null | undefined;
 }
+type MrisFindFlatRegionsParametersTagged = Required<Pick<MrisFindFlatRegionsParameters, '@type'>> & MrisFindFlatRegionsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_find_flat_regions": mris_find_flat_regions_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_find_flat_regions": mris_find_flat_regions_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_find_flat_regions(...)`.
+ * Output object returned when calling `MrisFindFlatRegionsParameters(...)`.
  *
  * @interface
  */
@@ -83,9 +50,9 @@ function mris_find_flat_regions_params(
     surface: InputPathType,
     wfile: string,
     threshold: number | null = null,
-): MrisFindFlatRegionsParameters {
+): MrisFindFlatRegionsParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_find_flat_regions" as const,
+        "@type": "freesurfer/mris_find_flat_regions" as const,
         "surface": surface,
         "wfile": wfile,
     };
@@ -200,7 +167,6 @@ function mris_find_flat_regions(
 export {
       MRIS_FIND_FLAT_REGIONS_METADATA,
       MrisFindFlatRegionsOutputs,
-      MrisFindFlatRegionsParameters,
       mris_find_flat_regions,
       mris_find_flat_regions_execute,
       mris_find_flat_regions_params,

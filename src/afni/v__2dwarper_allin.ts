@@ -12,49 +12,16 @@ const V__2DWARPER_ALLIN_METADATA: Metadata = {
 
 
 interface V2dwarperAllinParameters {
-    "@type": "afni.@2dwarper.Allin";
+    "@type"?: "afni/@2dwarper.Allin";
     "input_prefix": string;
     "mask_prefix"?: string | null | undefined;
     "output_prefix"?: string | null | undefined;
 }
+type V2dwarperAllinParametersTagged = Required<Pick<V2dwarperAllinParameters, '@type'>> & V2dwarperAllinParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@2dwarper.Allin": v__2dwarper_allin_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@2dwarper.Allin": v__2dwarper_allin_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__2dwarper_allin(...)`.
+ * Output object returned when calling `V2dwarperAllinParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +54,9 @@ function v__2dwarper_allin_params(
     input_prefix: string,
     mask_prefix: string | null = null,
     output_prefix: string | null = null,
-): V2dwarperAllinParameters {
+): V2dwarperAllinParametersTagged {
     const params = {
-        "@type": "afni.@2dwarper.Allin" as const,
+        "@type": "afni/@2dwarper.Allin" as const,
         "input_prefix": input_prefix,
     };
     if (mask_prefix !== null) {
@@ -211,7 +178,6 @@ function v__2dwarper_allin(
 
 export {
       V2dwarperAllinOutputs,
-      V2dwarperAllinParameters,
       V__2DWARPER_ALLIN_METADATA,
       v__2dwarper_allin,
       v__2dwarper_allin_execute,

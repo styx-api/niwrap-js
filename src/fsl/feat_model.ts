@@ -12,47 +12,15 @@ const FEAT_MODEL_METADATA: Metadata = {
 
 
 interface FeatModelParameters {
-    "@type": "fsl.feat_model";
+    "@type"?: "fsl/feat_model";
     "design_name_root": string;
     "confound_matrix"?: InputPathType | null | undefined;
 }
+type FeatModelParametersTagged = Required<Pick<FeatModelParameters, '@type'>> & FeatModelParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.feat_model": feat_model_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `feat_model(...)`.
+ * Output object returned when calling `FeatModelParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface FeatModelOutputs {
 function feat_model_params(
     design_name_root: string,
     confound_matrix: InputPathType | null = null,
-): FeatModelParameters {
+): FeatModelParametersTagged {
     const params = {
-        "@type": "fsl.feat_model" as const,
+        "@type": "fsl/feat_model" as const,
         "design_name_root": design_name_root,
     };
     if (confound_matrix !== null) {
@@ -184,7 +152,6 @@ function feat_model(
 export {
       FEAT_MODEL_METADATA,
       FeatModelOutputs,
-      FeatModelParameters,
       feat_model,
       feat_model_execute,
       feat_model_params,

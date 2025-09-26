@@ -12,49 +12,16 @@ const REREGISTER_SUBJECT_MIXED_METADATA: Metadata = {
 
 
 interface ReregisterSubjectMixedParameters {
-    "@type": "freesurfer.reregister_subject_mixed";
+    "@type"?: "freesurfer/reregister_subject_mixed";
     "input_volume": InputPathType;
     "output_directory": string;
     "threads"?: number | null | undefined;
 }
+type ReregisterSubjectMixedParametersTagged = Required<Pick<ReregisterSubjectMixedParameters, '@type'>> & ReregisterSubjectMixedParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.reregister_subject_mixed": reregister_subject_mixed_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.reregister_subject_mixed": reregister_subject_mixed_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `reregister_subject_mixed(...)`.
+ * Output object returned when calling `ReregisterSubjectMixedParameters(...)`.
  *
  * @interface
  */
@@ -91,9 +58,9 @@ function reregister_subject_mixed_params(
     input_volume: InputPathType,
     output_directory: string,
     threads: number | null = null,
-): ReregisterSubjectMixedParameters {
+): ReregisterSubjectMixedParametersTagged {
     const params = {
-        "@type": "freesurfer.reregister_subject_mixed" as const,
+        "@type": "freesurfer/reregister_subject_mixed" as const,
         "input_volume": input_volume,
         "output_directory": output_directory,
     };
@@ -207,7 +174,6 @@ function reregister_subject_mixed(
 export {
       REREGISTER_SUBJECT_MIXED_METADATA,
       ReregisterSubjectMixedOutputs,
-      ReregisterSubjectMixedParameters,
       reregister_subject_mixed,
       reregister_subject_mixed_execute,
       reregister_subject_mixed_params,

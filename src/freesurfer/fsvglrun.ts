@@ -12,50 +12,18 @@ const FSVGLRUN_METADATA: Metadata = {
 
 
 interface FsvglrunParameters {
-    "@type": "freesurfer.fsvglrun";
+    "@type"?: "freesurfer/fsvglrun";
     "zeroth_arg_name"?: string | null | undefined;
     "empty_env": boolean;
     "dashed_arg": boolean;
     "command": string;
     "command_args"?: Array<string> | null | undefined;
 }
+type FsvglrunParametersTagged = Required<Pick<FsvglrunParameters, '@type'>> & FsvglrunParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fsvglrun": fsvglrun_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsvglrun(...)`.
+ * Output object returned when calling `FsvglrunParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function fsvglrun_params(
     empty_env: boolean = false,
     dashed_arg: boolean = false,
     command_args: Array<string> | null = null,
-): FsvglrunParameters {
+): FsvglrunParametersTagged {
     const params = {
-        "@type": "freesurfer.fsvglrun" as const,
+        "@type": "freesurfer/fsvglrun" as const,
         "empty_env": empty_env,
         "dashed_arg": dashed_arg,
         "command": command,
@@ -121,10 +89,10 @@ function fsvglrun_cargs(
             (params["zeroth_arg_name"] ?? null)
         );
     }
-    if ((params["empty_env"] ?? null)) {
+    if ((params["empty_env"] ?? false)) {
         cargs.push("-c");
     }
-    if ((params["dashed_arg"] ?? null)) {
+    if ((params["dashed_arg"] ?? false)) {
         cargs.push("-l");
     }
     cargs.push((params["command"] ?? null));
@@ -216,7 +184,6 @@ function fsvglrun(
 export {
       FSVGLRUN_METADATA,
       FsvglrunOutputs,
-      FsvglrunParameters,
       fsvglrun,
       fsvglrun_execute,
       fsvglrun_params,

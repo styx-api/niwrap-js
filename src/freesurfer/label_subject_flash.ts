@@ -12,51 +12,18 @@ const LABEL_SUBJECT_FLASH_METADATA: Metadata = {
 
 
 interface LabelSubjectFlashParameters {
-    "@type": "freesurfer.label_subject_flash";
+    "@type"?: "freesurfer/label_subject_flash";
     "tissue_params": InputPathType;
     "norm_volume": InputPathType;
     "transform_file": InputPathType;
     "classifier_array": InputPathType;
     "aseg_output": string;
 }
+type LabelSubjectFlashParametersTagged = Required<Pick<LabelSubjectFlashParameters, '@type'>> & LabelSubjectFlashParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.label_subject_flash": label_subject_flash_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.label_subject_flash": label_subject_flash_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `label_subject_flash(...)`.
+ * Output object returned when calling `LabelSubjectFlashParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function label_subject_flash_params(
     transform_file: InputPathType,
     classifier_array: InputPathType,
     aseg_output: string,
-): LabelSubjectFlashParameters {
+): LabelSubjectFlashParametersTagged {
     const params = {
-        "@type": "freesurfer.label_subject_flash" as const,
+        "@type": "freesurfer/label_subject_flash" as const,
         "tissue_params": tissue_params,
         "norm_volume": norm_volume,
         "transform_file": transform_file,
@@ -210,7 +177,6 @@ function label_subject_flash(
 export {
       LABEL_SUBJECT_FLASH_METADATA,
       LabelSubjectFlashOutputs,
-      LabelSubjectFlashParameters,
       label_subject_flash,
       label_subject_flash_execute,
       label_subject_flash_params,

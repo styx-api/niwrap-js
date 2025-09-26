@@ -12,7 +12,7 @@ const V__AFNI_REFACER_RUN_METADATA: Metadata = {
 
 
 interface VAfniRefacerRunParameters {
-    "@type": "afni.@afni_refacer_run";
+    "@type"?: "afni/@afni_refacer_run";
     "input_file": InputPathType;
     "mode_deface": boolean;
     "mode_reface": boolean;
@@ -27,44 +27,11 @@ interface VAfniRefacerRunParameters {
     "overwrite": boolean;
     "verbose": boolean;
 }
+type VAfniRefacerRunParametersTagged = Required<Pick<VAfniRefacerRunParameters, '@type'>> & VAfniRefacerRunParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@afni_refacer_run": v__afni_refacer_run_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@afni_refacer_run": v__afni_refacer_run_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__afni_refacer_run(...)`.
+ * Output object returned when calling `VAfniRefacerRunParameters(...)`.
  *
  * @interface
  */
@@ -129,9 +96,9 @@ function v__afni_refacer_run_params(
     no_images: boolean = false,
     overwrite: boolean = false,
     verbose: boolean = false,
-): VAfniRefacerRunParameters {
+): VAfniRefacerRunParametersTagged {
     const params = {
-        "@type": "afni.@afni_refacer_run" as const,
+        "@type": "afni/@afni_refacer_run" as const,
         "input_file": input_file,
         "mode_deface": mode_deface,
         "mode_reface": mode_reface,
@@ -172,23 +139,23 @@ function v__afni_refacer_run_cargs(
         "-input",
         execution.inputFile((params["input_file"] ?? null))
     );
-    if ((params["mode_deface"] ?? null)) {
+    if ((params["mode_deface"] ?? false)) {
         cargs.push("-mode_deface");
     }
-    if ((params["mode_reface"] ?? null)) {
+    if ((params["mode_reface"] ?? false)) {
         cargs.push("-mode_reface");
     }
-    if ((params["mode_reface_plus"] ?? null)) {
+    if ((params["mode_reface_plus"] ?? false)) {
         cargs.push("-mode_reface_plus");
     }
-    if ((params["mode_all"] ?? null)) {
+    if ((params["mode_all"] ?? false)) {
         cargs.push("-mode_all");
     }
     cargs.push(
         "-prefix",
         (params["prefix"] ?? null)
     );
-    if ((params["anonymize_output"] ?? null)) {
+    if ((params["anonymize_output"] ?? false)) {
         cargs.push("-anonymize_output");
     }
     if ((params["cost_function"] ?? null) !== null) {
@@ -203,16 +170,16 @@ function v__afni_refacer_run_cargs(
             (params["shell_option"] ?? null)
         );
     }
-    if ((params["no_clean"] ?? null)) {
+    if ((params["no_clean"] ?? false)) {
         cargs.push("-no_clean");
     }
-    if ((params["no_images"] ?? null)) {
+    if ((params["no_images"] ?? false)) {
         cargs.push("-no_images");
     }
-    if ((params["overwrite"] ?? null)) {
+    if ((params["overwrite"] ?? false)) {
         cargs.push("-overwrite");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb_allin");
     }
     return cargs;
@@ -320,7 +287,6 @@ function v__afni_refacer_run(
 
 export {
       VAfniRefacerRunOutputs,
-      VAfniRefacerRunParameters,
       V__AFNI_REFACER_RUN_METADATA,
       v__afni_refacer_run,
       v__afni_refacer_run_execute,

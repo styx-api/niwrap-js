@@ -12,51 +12,18 @@ const LABEL_SUBJECT_MIXED_METADATA: Metadata = {
 
 
 interface LabelSubjectMixedParameters {
-    "@type": "freesurfer.label_subject_mixed";
+    "@type"?: "freesurfer/label_subject_mixed";
     "brain_mask": InputPathType;
     "norm_volume": InputPathType;
     "transform": InputPathType;
     "gca_file": InputPathType;
     "aseg_output": string;
 }
+type LabelSubjectMixedParametersTagged = Required<Pick<LabelSubjectMixedParameters, '@type'>> & LabelSubjectMixedParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.label_subject_mixed": label_subject_mixed_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.label_subject_mixed": label_subject_mixed_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `label_subject_mixed(...)`.
+ * Output object returned when calling `LabelSubjectMixedParameters(...)`.
  *
  * @interface
  */
@@ -89,9 +56,9 @@ function label_subject_mixed_params(
     transform: InputPathType,
     gca_file: InputPathType,
     aseg_output: string,
-): LabelSubjectMixedParameters {
+): LabelSubjectMixedParametersTagged {
     const params = {
-        "@type": "freesurfer.label_subject_mixed" as const,
+        "@type": "freesurfer/label_subject_mixed" as const,
         "brain_mask": brain_mask,
         "norm_volume": norm_volume,
         "transform": transform,
@@ -210,7 +177,6 @@ function label_subject_mixed(
 export {
       LABEL_SUBJECT_MIXED_METADATA,
       LabelSubjectMixedOutputs,
-      LabelSubjectMixedParameters,
       label_subject_mixed,
       label_subject_mixed_execute,
       label_subject_mixed_params,

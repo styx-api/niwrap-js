@@ -12,33 +12,36 @@ const MASKFILTER_METADATA: Metadata = {
 
 
 interface MaskfilterVariousStringParameters {
-    "@type": "mrtrix.maskfilter.VariousString";
+    "@type"?: "VariousString";
     "obj": string;
 }
+type MaskfilterVariousStringParametersTagged = Required<Pick<MaskfilterVariousStringParameters, '@type'>> & MaskfilterVariousStringParameters;
 
 
 interface MaskfilterVariousFileParameters {
-    "@type": "mrtrix.maskfilter.VariousFile";
+    "@type"?: "VariousFile";
     "obj": InputPathType;
 }
+type MaskfilterVariousFileParametersTagged = Required<Pick<MaskfilterVariousFileParameters, '@type'>> & MaskfilterVariousFileParameters;
 
 
 interface MaskfilterConfigParameters {
-    "@type": "mrtrix.maskfilter.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type MaskfilterConfigParametersTagged = Required<Pick<MaskfilterConfigParameters, '@type'>> & MaskfilterConfigParameters;
 
 
 interface MaskfilterParameters {
-    "@type": "mrtrix.maskfilter";
+    "@type"?: "mrtrix/maskfilter";
     "scale"?: number | null | undefined;
     "axes"?: Array<number> | null | undefined;
     "largest": boolean;
     "connectivity": boolean;
     "npass"?: number | null | undefined;
     "extent"?: Array<number> | null | undefined;
-    "strides"?: MaskfilterVariousStringParameters | MaskfilterVariousFileParameters | null | undefined;
+    "strides"?: MaskfilterVariousStringParametersTagged | MaskfilterVariousFileParametersTagged | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -51,6 +54,7 @@ interface MaskfilterParameters {
     "filter": string;
     "output": string;
 }
+type MaskfilterParametersTagged = Required<Pick<MaskfilterParameters, '@type'>> & MaskfilterParameters;
 
 
 /**
@@ -60,14 +64,12 @@ interface MaskfilterParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function maskfilter_strides_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "mrtrix.maskfilter": maskfilter_cargs,
-        "mrtrix.maskfilter.VariousString": maskfilter_various_string_cargs,
-        "mrtrix.maskfilter.VariousFile": maskfilter_various_file_cargs,
-        "mrtrix.maskfilter.config": maskfilter_config_cargs,
+        "VariousString": maskfilter_various_string_cargs,
+        "VariousFile": maskfilter_various_file_cargs,
     };
     return cargsFuncs[t];
 }
@@ -80,11 +82,10 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function maskfilter_strides_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
-        "mrtrix.maskfilter": maskfilter_outputs,
     };
     return outputsFuncs[t];
 }
@@ -99,9 +100,9 @@ function dynOutputs(
  */
 function maskfilter_various_string_params(
     obj: string,
-): MaskfilterVariousStringParameters {
+): MaskfilterVariousStringParametersTagged {
     const params = {
-        "@type": "mrtrix.maskfilter.VariousString" as const,
+        "@type": "VariousString" as const,
         "obj": obj,
     };
     return params;
@@ -135,9 +136,9 @@ function maskfilter_various_string_cargs(
  */
 function maskfilter_various_file_params(
     obj: InputPathType,
-): MaskfilterVariousFileParameters {
+): MaskfilterVariousFileParametersTagged {
     const params = {
-        "@type": "mrtrix.maskfilter.VariousFile" as const,
+        "@type": "VariousFile" as const,
         "obj": obj,
     };
     return params;
@@ -173,9 +174,9 @@ function maskfilter_various_file_cargs(
 function maskfilter_config_params(
     key: string,
     value: string,
-): MaskfilterConfigParameters {
+): MaskfilterConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.maskfilter.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -204,7 +205,7 @@ function maskfilter_config_cargs(
 
 
 /**
- * Output object returned when calling `maskfilter(...)`.
+ * Output object returned when calling `MaskfilterParameters(...)`.
  *
  * @interface
  */
@@ -254,7 +255,7 @@ function maskfilter_params(
     connectivity: boolean = false,
     npass: number | null = null,
     extent: Array<number> | null = null,
-    strides: MaskfilterVariousStringParameters | MaskfilterVariousFileParameters | null = null,
+    strides: MaskfilterVariousStringParametersTagged | MaskfilterVariousFileParametersTagged | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
@@ -263,9 +264,9 @@ function maskfilter_params(
     config: Array<MaskfilterConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MaskfilterParameters {
+): MaskfilterParametersTagged {
     const params = {
-        "@type": "mrtrix.maskfilter" as const,
+        "@type": "mrtrix/maskfilter" as const,
         "largest": largest,
         "connectivity": connectivity,
         "info": info,
@@ -329,10 +330,10 @@ function maskfilter_cargs(
             (params["axes"] ?? null).map(String).join(",")
         );
     }
-    if ((params["largest"] ?? null)) {
+    if ((params["largest"] ?? false)) {
         cargs.push("-largest");
     }
-    if ((params["connectivity"] ?? null)) {
+    if ((params["connectivity"] ?? false)) {
         cargs.push("-connectivity");
     }
     if ((params["npass"] ?? null) !== null) {
@@ -350,19 +351,19 @@ function maskfilter_cargs(
     if ((params["strides"] ?? null) !== null) {
         cargs.push(
             "-strides",
-            ...dynCargs((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
+            ...maskfilter_strides_cargs_dyn_fn((params["strides"] ?? null)["@type"])((params["strides"] ?? null), execution)
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -372,12 +373,12 @@ function maskfilter_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => maskfilter_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -492,7 +493,7 @@ function maskfilter(
     connectivity: boolean = false,
     npass: number | null = null,
     extent: Array<number> | null = null,
-    strides: MaskfilterVariousStringParameters | MaskfilterVariousFileParameters | null = null,
+    strides: MaskfilterVariousStringParametersTagged | MaskfilterVariousFileParametersTagged | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
@@ -510,11 +511,7 @@ function maskfilter(
 
 export {
       MASKFILTER_METADATA,
-      MaskfilterConfigParameters,
       MaskfilterOutputs,
-      MaskfilterParameters,
-      MaskfilterVariousFileParameters,
-      MaskfilterVariousStringParameters,
       maskfilter,
       maskfilter_config_params,
       maskfilter_execute,

@@ -12,7 +12,7 @@ const V_3D_NOTES_METADATA: Metadata = {
 
 
 interface V3dNotesParameters {
-    "@type": "afni.3dNotes";
+    "@type"?: "afni/3dNotes";
     "add_note"?: string | null | undefined;
     "append_history"?: string | null | undefined;
     "replace_history"?: string | null | undefined;
@@ -21,43 +21,11 @@ interface V3dNotesParameters {
     "help": boolean;
     "dataset": InputPathType;
 }
+type V3dNotesParametersTagged = Required<Pick<V3dNotesParameters, '@type'>> & V3dNotesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dNotes": v_3d_notes_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_notes(...)`.
+ * Output object returned when calling `V3dNotesParameters(...)`.
  *
  * @interface
  */
@@ -90,9 +58,9 @@ function v_3d_notes_params(
     delete_note: number | null = null,
     print_notes: boolean = false,
     help: boolean = false,
-): V3dNotesParameters {
+): V3dNotesParametersTagged {
     const params = {
-        "@type": "afni.3dNotes" as const,
+        "@type": "afni/3dNotes" as const,
         "print_notes": print_notes,
         "help": help,
         "dataset": dataset,
@@ -151,10 +119,10 @@ function v_3d_notes_cargs(
             String((params["delete_note"] ?? null))
         );
     }
-    if ((params["print_notes"] ?? null)) {
+    if ((params["print_notes"] ?? false)) {
         cargs.push("-ses");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     cargs.push(execution.inputFile((params["dataset"] ?? null)));
@@ -246,7 +214,6 @@ function v_3d_notes(
 
 export {
       V3dNotesOutputs,
-      V3dNotesParameters,
       V_3D_NOTES_METADATA,
       v_3d_notes,
       v_3d_notes_execute,

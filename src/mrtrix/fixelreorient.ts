@@ -12,14 +12,15 @@ const FIXELREORIENT_METADATA: Metadata = {
 
 
 interface FixelreorientConfigParameters {
-    "@type": "mrtrix.fixelreorient.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type FixelreorientConfigParametersTagged = Required<Pick<FixelreorientConfigParameters, '@type'>> & FixelreorientConfigParameters;
 
 
 interface FixelreorientParameters {
-    "@type": "mrtrix.fixelreorient";
+    "@type"?: "mrtrix/fixelreorient";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
@@ -32,41 +33,7 @@ interface FixelreorientParameters {
     "warp": InputPathType;
     "fixel_out": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.fixelreorient": fixelreorient_cargs,
-        "mrtrix.fixelreorient.config": fixelreorient_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.fixelreorient": fixelreorient_outputs,
-    };
-    return outputsFuncs[t];
-}
+type FixelreorientParametersTagged = Required<Pick<FixelreorientParameters, '@type'>> & FixelreorientParameters;
 
 
 /**
@@ -80,9 +47,9 @@ function dynOutputs(
 function fixelreorient_config_params(
     key: string,
     value: string,
-): FixelreorientConfigParameters {
+): FixelreorientConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.fixelreorient.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -111,7 +78,7 @@ function fixelreorient_config_cargs(
 
 
 /**
- * Output object returned when calling `fixelreorient(...)`.
+ * Output object returned when calling `FixelreorientParameters(...)`.
  *
  * @interface
  */
@@ -156,9 +123,9 @@ function fixelreorient_params(
     config: Array<FixelreorientConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): FixelreorientParameters {
+): FixelreorientParametersTagged {
     const params = {
-        "@type": "mrtrix.fixelreorient" as const,
+        "@type": "mrtrix/fixelreorient" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -193,16 +160,16 @@ function fixelreorient_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("fixelreorient");
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -212,12 +179,12 @@ function fixelreorient_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => fixelreorient_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["fixel_in"] ?? null)));
@@ -332,9 +299,7 @@ function fixelreorient(
 
 export {
       FIXELREORIENT_METADATA,
-      FixelreorientConfigParameters,
       FixelreorientOutputs,
-      FixelreorientParameters,
       fixelreorient,
       fixelreorient_config_params,
       fixelreorient_execute,

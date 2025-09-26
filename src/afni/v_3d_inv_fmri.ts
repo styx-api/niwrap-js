@@ -12,7 +12,7 @@ const V_3D_INV_FMRI_METADATA: Metadata = {
 
 
 interface V3dInvFmriParameters {
-    "@type": "afni.3dInvFMRI";
+    "@type"?: "afni/3dInvFMRI";
     "input_file": InputPathType;
     "activation_map": InputPathType;
     "map_weight"?: InputPathType | null | undefined;
@@ -25,44 +25,11 @@ interface V3dInvFmriParameters {
     "smooth_fir": boolean;
     "smooth_median": boolean;
 }
+type V3dInvFmriParametersTagged = Required<Pick<V3dInvFmriParameters, '@type'>> & V3dInvFmriParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dInvFMRI": v_3d_inv_fmri_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dInvFMRI": v_3d_inv_fmri_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_inv_fmri(...)`.
+ * Output object returned when calling `V3dInvFmriParameters(...)`.
  *
  * @interface
  */
@@ -107,9 +74,9 @@ function v_3d_inv_fmri_params(
     alpha: number | null = null,
     smooth_fir: boolean = false,
     smooth_median: boolean = false,
-): V3dInvFmriParameters {
+): V3dInvFmriParametersTagged {
     const params = {
-        "@type": "afni.3dInvFMRI" as const,
+        "@type": "afni/3dInvFMRI" as const,
         "input_file": input_file,
         "activation_map": activation_map,
         "smooth_fir": smooth_fir,
@@ -204,10 +171,10 @@ function v_3d_inv_fmri_cargs(
             String((params["alpha"] ?? null))
         );
     }
-    if ((params["smooth_fir"] ?? null)) {
+    if ((params["smooth_fir"] ?? false)) {
         cargs.push("-fir5");
     }
-    if ((params["smooth_median"] ?? null)) {
+    if ((params["smooth_median"] ?? false)) {
         cargs.push("-median5");
     }
     return cargs;
@@ -307,7 +274,6 @@ function v_3d_inv_fmri(
 
 export {
       V3dInvFmriOutputs,
-      V3dInvFmriParameters,
       V_3D_INV_FMRI_METADATA,
       v_3d_inv_fmri,
       v_3d_inv_fmri_execute,

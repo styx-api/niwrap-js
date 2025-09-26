@@ -12,7 +12,7 @@ const BBREGISTER_METADATA: Metadata = {
 
 
 interface BbregisterParameters {
-    "@type": "freesurfer.bbregister";
+    "@type"?: "freesurfer/bbregister";
     "subject": string;
     "moveable_volume": InputPathType;
     "reg_file": string;
@@ -30,44 +30,11 @@ interface BbregisterParameters {
     "o_outvol"?: string | null | undefined;
     "s_from_reg": boolean;
 }
+type BbregisterParametersTagged = Required<Pick<BbregisterParameters, '@type'>> & BbregisterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.bbregister": bbregister_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.bbregister": bbregister_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `bbregister(...)`.
+ * Output object returned when calling `BbregisterParameters(...)`.
  *
  * @interface
  */
@@ -126,9 +93,9 @@ function bbregister_params(
     template_out: string | null = null,
     o_outvol: string | null = null,
     s_from_reg: boolean = false,
-): BbregisterParameters {
+): BbregisterParametersTagged {
     const params = {
-        "@type": "freesurfer.bbregister" as const,
+        "@type": "freesurfer/bbregister" as const,
         "subject": subject,
         "moveable_volume": moveable_volume,
         "reg_file": reg_file,
@@ -188,10 +155,10 @@ function bbregister_cargs(
         "--reg",
         (params["reg_file"] ?? null)
     );
-    if ((params["contrast_type_t1"] ?? null)) {
+    if ((params["contrast_type_t1"] ?? false)) {
         cargs.push("--t1");
     }
-    if ((params["contrast_type_t2"] ?? null)) {
+    if ((params["contrast_type_t2"] ?? false)) {
         cargs.push("--t2");
     }
     if ((params["vsm"] ?? null) !== null) {
@@ -200,13 +167,13 @@ function bbregister_cargs(
             execution.inputFile((params["vsm"] ?? null))
         );
     }
-    if ((params["init_coreg"] ?? null)) {
+    if ((params["init_coreg"] ?? false)) {
         cargs.push("--init-coreg");
     }
-    if ((params["no_coreg_ref_mask"] ?? null)) {
+    if ((params["no_coreg_ref_mask"] ?? false)) {
         cargs.push("--no-coreg-ref-mask");
     }
-    if ((params["init_header"] ?? null)) {
+    if ((params["init_header"] ?? false)) {
         cargs.push("--init-header");
     }
     if ((params["init_reg"] ?? null) !== null) {
@@ -221,7 +188,7 @@ function bbregister_cargs(
             execution.inputFile((params["intvol"] ?? null))
         );
     }
-    if ((params["mid_frame"] ?? null)) {
+    if ((params["mid_frame"] ?? false)) {
         cargs.push("--mid-frame");
     }
     if ((params["frame_no"] ?? null) !== null) {
@@ -242,7 +209,7 @@ function bbregister_cargs(
             (params["o_outvol"] ?? null)
         );
     }
-    if ((params["s_from_reg"] ?? null)) {
+    if ((params["s_from_reg"] ?? false)) {
         cargs.push("--s-from-reg");
     }
     return cargs;
@@ -354,7 +321,6 @@ function bbregister(
 export {
       BBREGISTER_METADATA,
       BbregisterOutputs,
-      BbregisterParameters,
       bbregister,
       bbregister_execute,
       bbregister_params,

@@ -12,38 +12,43 @@ const FIXELCONVERT_METADATA: Metadata = {
 
 
 interface FixelconvertConfigParameters {
-    "@type": "mrtrix.fixelconvert.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type FixelconvertConfigParametersTagged = Required<Pick<FixelconvertConfigParameters, '@type'>> & FixelconvertConfigParameters;
 
 
 interface FixelconvertVariousStringParameters {
-    "@type": "mrtrix.fixelconvert.VariousString";
+    "@type"?: "VariousString";
     "obj": string;
 }
+type FixelconvertVariousStringParametersTagged = Required<Pick<FixelconvertVariousStringParameters, '@type'>> & FixelconvertVariousStringParameters;
 
 
 interface FixelconvertVariousFileParameters {
-    "@type": "mrtrix.fixelconvert.VariousFile";
+    "@type"?: "VariousFile";
     "obj": InputPathType;
 }
+type FixelconvertVariousFileParametersTagged = Required<Pick<FixelconvertVariousFileParameters, '@type'>> & FixelconvertVariousFileParameters;
 
 
 interface FixelconvertVariousString1Parameters {
-    "@type": "mrtrix.fixelconvert.VariousString";
+    "@type"?: "VariousString_1";
     "obj": string;
 }
+type FixelconvertVariousString1ParametersTagged = Required<Pick<FixelconvertVariousString1Parameters, '@type'>> & FixelconvertVariousString1Parameters;
 
 
 interface FixelconvertVariousFile1Parameters {
-    "@type": "mrtrix.fixelconvert.VariousFile";
+    "@type"?: "VariousFile_1";
     "obj": InputPathType;
 }
+type FixelconvertVariousFile1ParametersTagged = Required<Pick<FixelconvertVariousFile1Parameters, '@type'>> & FixelconvertVariousFile1Parameters;
 
 
 interface FixelconvertParameters {
-    "@type": "mrtrix.fixelconvert";
+    "@type"?: "mrtrix/fixelconvert";
     "name"?: string | null | undefined;
     "nii": boolean;
     "out_size": boolean;
@@ -58,9 +63,10 @@ interface FixelconvertParameters {
     "config"?: Array<FixelconvertConfigParameters> | null | undefined;
     "help": boolean;
     "version": boolean;
-    "fixel_in": FixelconvertVariousStringParameters | FixelconvertVariousFileParameters;
-    "fixel_out": FixelconvertVariousString1Parameters | FixelconvertVariousFile1Parameters;
+    "fixel_in": FixelconvertVariousStringParametersTagged | FixelconvertVariousFileParametersTagged;
+    "fixel_out": FixelconvertVariousString1ParametersTagged | FixelconvertVariousFile1ParametersTagged;
 }
+type FixelconvertParametersTagged = Required<Pick<FixelconvertParameters, '@type'>> & FixelconvertParameters;
 
 
 /**
@@ -70,16 +76,12 @@ interface FixelconvertParameters {
  *
  * @returns Build cargs function.
  */
-function dynCargs(
+function fixelconvert_fixel_in_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
     const cargsFuncs = {
-        "mrtrix.fixelconvert": fixelconvert_cargs,
-        "mrtrix.fixelconvert.config": fixelconvert_config_cargs,
-        "mrtrix.fixelconvert.VariousString": fixelconvert_various_string_cargs,
-        "mrtrix.fixelconvert.VariousFile": fixelconvert_various_file_cargs,
-        "mrtrix.fixelconvert.VariousString": fixelconvert_various_string_1_cargs,
-        "mrtrix.fixelconvert.VariousFile": fixelconvert_various_file_1_cargs,
+        "VariousString": fixelconvert_various_string_cargs,
+        "VariousFile": fixelconvert_various_file_cargs,
     };
     return cargsFuncs[t];
 }
@@ -92,7 +94,41 @@ function dynCargs(
  *
  * @returns Build outputs function.
  */
-function dynOutputs(
+function fixelconvert_fixel_in_outputs_dyn_fn(
+    t: string,
+): Function | undefined {
+    const outputsFuncs = {
+    };
+    return outputsFuncs[t];
+}
+
+
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
+function fixelconvert_fixel_out_cargs_dyn_fn(
+    t: string,
+): Function | undefined {
+    const cargsFuncs = {
+        "VariousString_1": fixelconvert_various_string_1_cargs,
+        "VariousFile_1": fixelconvert_various_file_1_cargs,
+    };
+    return cargsFuncs[t];
+}
+
+
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
+function fixelconvert_fixel_out_outputs_dyn_fn(
     t: string,
 ): Function | undefined {
     const outputsFuncs = {
@@ -112,9 +148,9 @@ function dynOutputs(
 function fixelconvert_config_params(
     key: string,
     value: string,
-): FixelconvertConfigParameters {
+): FixelconvertConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.fixelconvert.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -151,9 +187,9 @@ function fixelconvert_config_cargs(
  */
 function fixelconvert_various_string_params(
     obj: string,
-): FixelconvertVariousStringParameters {
+): FixelconvertVariousStringParametersTagged {
     const params = {
-        "@type": "mrtrix.fixelconvert.VariousString" as const,
+        "@type": "VariousString" as const,
         "obj": obj,
     };
     return params;
@@ -187,9 +223,9 @@ function fixelconvert_various_string_cargs(
  */
 function fixelconvert_various_file_params(
     obj: InputPathType,
-): FixelconvertVariousFileParameters {
+): FixelconvertVariousFileParametersTagged {
     const params = {
-        "@type": "mrtrix.fixelconvert.VariousFile" as const,
+        "@type": "VariousFile" as const,
         "obj": obj,
     };
     return params;
@@ -223,9 +259,9 @@ function fixelconvert_various_file_cargs(
  */
 function fixelconvert_various_string_1_params(
     obj: string,
-): FixelconvertVariousString1Parameters {
+): FixelconvertVariousString1ParametersTagged {
     const params = {
-        "@type": "mrtrix.fixelconvert.VariousString" as const,
+        "@type": "VariousString_1" as const,
         "obj": obj,
     };
     return params;
@@ -259,9 +295,9 @@ function fixelconvert_various_string_1_cargs(
  */
 function fixelconvert_various_file_1_params(
     obj: InputPathType,
-): FixelconvertVariousFile1Parameters {
+): FixelconvertVariousFile1ParametersTagged {
     const params = {
-        "@type": "mrtrix.fixelconvert.VariousFile" as const,
+        "@type": "VariousFile_1" as const,
         "obj": obj,
     };
     return params;
@@ -287,7 +323,7 @@ function fixelconvert_various_file_1_cargs(
 
 
 /**
- * Output object returned when calling `fixelconvert(...)`.
+ * Output object returned when calling `FixelconvertParameters(...)`.
  *
  * @interface
  */
@@ -322,8 +358,8 @@ interface FixelconvertOutputs {
  * @returns Parameter dictionary
  */
 function fixelconvert_params(
-    fixel_in: FixelconvertVariousStringParameters | FixelconvertVariousFileParameters,
-    fixel_out: FixelconvertVariousString1Parameters | FixelconvertVariousFile1Parameters,
+    fixel_in: FixelconvertVariousStringParametersTagged | FixelconvertVariousFileParametersTagged,
+    fixel_out: FixelconvertVariousString1ParametersTagged | FixelconvertVariousFile1ParametersTagged,
     name: string | null = null,
     nii: boolean = false,
     out_size: boolean = false,
@@ -338,9 +374,9 @@ function fixelconvert_params(
     config: Array<FixelconvertConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): FixelconvertParameters {
+): FixelconvertParametersTagged {
     const params = {
-        "@type": "mrtrix.fixelconvert" as const,
+        "@type": "mrtrix/fixelconvert" as const,
         "nii": nii,
         "out_size": out_size,
         "info": info,
@@ -394,10 +430,10 @@ function fixelconvert_cargs(
             (params["name"] ?? null)
         );
     }
-    if ((params["nii"] ?? null)) {
+    if ((params["nii"] ?? false)) {
         cargs.push("-nii");
     }
-    if ((params["out_size"] ?? null)) {
+    if ((params["out_size"] ?? false)) {
         cargs.push("-out_size");
     }
     if ((params["template"] ?? null) !== null) {
@@ -418,16 +454,16 @@ function fixelconvert_cargs(
             execution.inputFile((params["in_size"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -437,16 +473,16 @@ function fixelconvert_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => fixelconvert_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
-    cargs.push(...dynCargs((params["fixel_in"] ?? null)["@type"])((params["fixel_in"] ?? null), execution));
-    cargs.push(...dynCargs((params["fixel_out"] ?? null)["@type"])((params["fixel_out"] ?? null), execution));
+    cargs.push(...fixelconvert_fixel_in_cargs_dyn_fn((params["fixel_in"] ?? null)["@type"])((params["fixel_in"] ?? null), execution));
+    cargs.push(...fixelconvert_fixel_out_cargs_dyn_fn((params["fixel_out"] ?? null)["@type"])((params["fixel_out"] ?? null), execution));
     return cargs;
 }
 
@@ -540,8 +576,8 @@ function fixelconvert_execute(
  * @returns NamedTuple of outputs (described in `FixelconvertOutputs`).
  */
 function fixelconvert(
-    fixel_in: FixelconvertVariousStringParameters | FixelconvertVariousFileParameters,
-    fixel_out: FixelconvertVariousString1Parameters | FixelconvertVariousFile1Parameters,
+    fixel_in: FixelconvertVariousStringParametersTagged | FixelconvertVariousFileParametersTagged,
+    fixel_out: FixelconvertVariousString1ParametersTagged | FixelconvertVariousFile1ParametersTagged,
     name: string | null = null,
     nii: boolean = false,
     out_size: boolean = false,
@@ -565,13 +601,7 @@ function fixelconvert(
 
 export {
       FIXELCONVERT_METADATA,
-      FixelconvertConfigParameters,
       FixelconvertOutputs,
-      FixelconvertParameters,
-      FixelconvertVariousFile1Parameters,
-      FixelconvertVariousFileParameters,
-      FixelconvertVariousString1Parameters,
-      FixelconvertVariousStringParameters,
       fixelconvert,
       fixelconvert_config_params,
       fixelconvert_execute,

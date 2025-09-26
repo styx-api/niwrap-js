@@ -12,7 +12,7 @@ const GROUPSTATSDIFF_METADATA: Metadata = {
 
 
 interface GroupstatsdiffParameters {
-    "@type": "freesurfer.groupstatsdiff";
+    "@type"?: "freesurfer/groupstatsdiff";
     "group1_dir": string;
     "group2_dir": string;
     "output_dir": string;
@@ -34,43 +34,11 @@ interface GroupstatsdiffParameters {
     "no_dice": boolean;
     "dice_ctab"?: string | null | undefined;
 }
+type GroupstatsdiffParametersTagged = Required<Pick<GroupstatsdiffParameters, '@type'>> & GroupstatsdiffParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.groupstatsdiff": groupstatsdiff_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `groupstatsdiff(...)`.
+ * Output object returned when calling `GroupstatsdiffParameters(...)`.
  *
  * @interface
  */
@@ -129,9 +97,9 @@ function groupstatsdiff_params(
     subjects_dir2: string | null = null,
     no_dice: boolean = false,
     dice_ctab: string | null = null,
-): GroupstatsdiffParameters {
+): GroupstatsdiffParametersTagged {
     const params = {
-        "@type": "freesurfer.groupstatsdiff" as const,
+        "@type": "freesurfer/groupstatsdiff" as const,
         "group1_dir": group1_dir,
         "group2_dir": group2_dir,
         "output_dir": output_dir,
@@ -191,40 +159,40 @@ function groupstatsdiff_cargs(
         "-o",
         (params["output_dir"] ?? null)
     );
-    if ((params["no_maps"] ?? null)) {
+    if ((params["no_maps"] ?? false)) {
         cargs.push("--no-maps");
     }
-    if ((params["osgm"] ?? null)) {
+    if ((params["osgm"] ?? false)) {
         cargs.push("--osgm");
     }
-    if ((params["no_common"] ?? null)) {
+    if ((params["no_common"] ?? false)) {
         cargs.push("--no-common");
     }
-    if ((params["allow_subj_diff"] ?? null)) {
+    if ((params["allow_subj_diff"] ?? false)) {
         cargs.push("--allow-subj-diff");
     }
-    if ((params["no_area"] ?? null)) {
+    if ((params["no_area"] ?? false)) {
         cargs.push("--no-area");
     }
-    if ((params["no_volume"] ?? null)) {
+    if ((params["no_volume"] ?? false)) {
         cargs.push("--no-volume");
     }
-    if ((params["no_ba"] ?? null)) {
+    if ((params["no_ba"] ?? false)) {
         cargs.push("--no-ba");
     }
-    if ((params["no_aparcstats"] ?? null)) {
+    if ((params["no_aparcstats"] ?? false)) {
         cargs.push("--no-aparcstats");
     }
-    if ((params["no_asegstats"] ?? null)) {
+    if ((params["no_asegstats"] ?? false)) {
         cargs.push("--no-asegstats");
     }
-    if ((params["no_wparcstats"] ?? null)) {
+    if ((params["no_wparcstats"] ?? false)) {
         cargs.push("--no-wparcstats");
     }
-    if ((params["no_stats"] ?? null)) {
+    if ((params["no_stats"] ?? false)) {
         cargs.push("--no-stats");
     }
-    if ((params["no_prune"] ?? null)) {
+    if ((params["no_prune"] ?? false)) {
         cargs.push("--no-prune");
     }
     if ((params["fwhm_value"] ?? null) !== null) {
@@ -245,7 +213,7 @@ function groupstatsdiff_cargs(
             (params["subjects_dir2"] ?? null)
         );
     }
-    if ((params["no_dice"] ?? null)) {
+    if ((params["no_dice"] ?? false)) {
         cargs.push("--no-dice");
     }
     if ((params["dice_ctab"] ?? null) !== null) {
@@ -369,7 +337,6 @@ function groupstatsdiff(
 export {
       GROUPSTATSDIFF_METADATA,
       GroupstatsdiffOutputs,
-      GroupstatsdiffParameters,
       groupstatsdiff,
       groupstatsdiff_execute,
       groupstatsdiff_params,

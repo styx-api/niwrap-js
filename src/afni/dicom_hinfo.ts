@@ -12,7 +12,7 @@ const DICOM_HINFO_METADATA: Metadata = {
 
 
 interface DicomHinfoParameters {
-    "@type": "afni.dicom_hinfo";
+    "@type"?: "afni/dicom_hinfo";
     "tag": Array<string>;
     "sepstr"?: string | null | undefined;
     "full_entry": boolean;
@@ -20,43 +20,11 @@ interface DicomHinfoParameters {
     "namelast": boolean;
     "files": Array<InputPathType>;
 }
+type DicomHinfoParametersTagged = Required<Pick<DicomHinfoParameters, '@type'>> & DicomHinfoParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.dicom_hinfo": dicom_hinfo_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dicom_hinfo(...)`.
+ * Output object returned when calling `DicomHinfoParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function dicom_hinfo_params(
     full_entry: boolean = false,
     no_name: boolean = false,
     namelast: boolean = false,
-): DicomHinfoParameters {
+): DicomHinfoParametersTagged {
     const params = {
-        "@type": "afni.dicom_hinfo" as const,
+        "@type": "afni/dicom_hinfo" as const,
         "tag": tag,
         "full_entry": full_entry,
         "no_name": no_name,
@@ -127,13 +95,13 @@ function dicom_hinfo_cargs(
             (params["sepstr"] ?? null)
         );
     }
-    if ((params["full_entry"] ?? null)) {
+    if ((params["full_entry"] ?? false)) {
         cargs.push("-full_entry");
     }
-    if ((params["no_name"] ?? null)) {
+    if ((params["no_name"] ?? false)) {
         cargs.push("-no_name");
     }
-    if ((params["namelast"] ?? null)) {
+    if ((params["namelast"] ?? false)) {
         cargs.push("-namelast");
     }
     cargs.push(...(params["files"] ?? null).map(f => execution.inputFile(f)));
@@ -224,7 +192,6 @@ function dicom_hinfo(
 export {
       DICOM_HINFO_METADATA,
       DicomHinfoOutputs,
-      DicomHinfoParameters,
       dicom_hinfo,
       dicom_hinfo_execute,
       dicom_hinfo_params,

@@ -12,68 +12,35 @@ const LABEL_MERGE_METADATA: Metadata = {
 
 
 interface LabelMergeUpToParameters {
-    "@type": "workbench.label-merge.label.column.up_to";
+    "@type"?: "up_to";
     "last_column": string;
     "opt_reverse": boolean;
 }
+type LabelMergeUpToParametersTagged = Required<Pick<LabelMergeUpToParameters, '@type'>> & LabelMergeUpToParameters;
 
 
 interface LabelMergeColumnParameters {
-    "@type": "workbench.label-merge.label.column";
+    "@type"?: "column";
     "column": string;
     "up_to"?: LabelMergeUpToParameters | null | undefined;
 }
+type LabelMergeColumnParametersTagged = Required<Pick<LabelMergeColumnParameters, '@type'>> & LabelMergeColumnParameters;
 
 
 interface LabelMergeLabelParameters {
-    "@type": "workbench.label-merge.label";
+    "@type"?: "label";
     "label_in": InputPathType;
     "column"?: Array<LabelMergeColumnParameters> | null | undefined;
 }
+type LabelMergeLabelParametersTagged = Required<Pick<LabelMergeLabelParameters, '@type'>> & LabelMergeLabelParameters;
 
 
 interface LabelMergeParameters {
-    "@type": "workbench.label-merge";
+    "@type"?: "workbench/label-merge";
     "label_out": string;
     "label"?: Array<LabelMergeLabelParameters> | null | undefined;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.label-merge": label_merge_cargs,
-        "workbench.label-merge.label": label_merge_label_cargs,
-        "workbench.label-merge.label.column": label_merge_column_cargs,
-        "workbench.label-merge.label.column.up_to": label_merge_up_to_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.label-merge": label_merge_outputs,
-    };
-    return outputsFuncs[t];
-}
+type LabelMergeParametersTagged = Required<Pick<LabelMergeParameters, '@type'>> & LabelMergeParameters;
 
 
 /**
@@ -87,9 +54,9 @@ function dynOutputs(
 function label_merge_up_to_params(
     last_column: string,
     opt_reverse: boolean = false,
-): LabelMergeUpToParameters {
+): LabelMergeUpToParametersTagged {
     const params = {
-        "@type": "workbench.label-merge.label.column.up_to" as const,
+        "@type": "up_to" as const,
         "last_column": last_column,
         "opt_reverse": opt_reverse,
     };
@@ -112,7 +79,7 @@ function label_merge_up_to_cargs(
     const cargs: string[] = [];
     cargs.push("-up-to");
     cargs.push((params["last_column"] ?? null));
-    if ((params["opt_reverse"] ?? null)) {
+    if ((params["opt_reverse"] ?? false)) {
         cargs.push("-reverse");
     }
     return cargs;
@@ -130,9 +97,9 @@ function label_merge_up_to_cargs(
 function label_merge_column_params(
     column: string,
     up_to: LabelMergeUpToParameters | null = null,
-): LabelMergeColumnParameters {
+): LabelMergeColumnParametersTagged {
     const params = {
-        "@type": "workbench.label-merge.label.column" as const,
+        "@type": "column" as const,
         "column": column,
     };
     if (up_to !== null) {
@@ -158,7 +125,7 @@ function label_merge_column_cargs(
     cargs.push("-column");
     cargs.push((params["column"] ?? null));
     if ((params["up_to"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["up_to"] ?? null)["@type"])((params["up_to"] ?? null), execution));
+        cargs.push(...label_merge_up_to_cargs((params["up_to"] ?? null), execution));
     }
     return cargs;
 }
@@ -175,9 +142,9 @@ function label_merge_column_cargs(
 function label_merge_label_params(
     label_in: InputPathType,
     column: Array<LabelMergeColumnParameters> | null = null,
-): LabelMergeLabelParameters {
+): LabelMergeLabelParametersTagged {
     const params = {
-        "@type": "workbench.label-merge.label" as const,
+        "@type": "label" as const,
         "label_in": label_in,
     };
     if (column !== null) {
@@ -203,14 +170,14 @@ function label_merge_label_cargs(
     cargs.push("-label");
     cargs.push(execution.inputFile((params["label_in"] ?? null)));
     if ((params["column"] ?? null) !== null) {
-        cargs.push(...(params["column"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["column"] ?? null).map(s => label_merge_column_cargs(s, execution)).flat());
     }
     return cargs;
 }
 
 
 /**
- * Output object returned when calling `label_merge(...)`.
+ * Output object returned when calling `LabelMergeParameters(...)`.
  *
  * @interface
  */
@@ -237,9 +204,9 @@ interface LabelMergeOutputs {
 function label_merge_params(
     label_out: string,
     label: Array<LabelMergeLabelParameters> | null = null,
-): LabelMergeParameters {
+): LabelMergeParametersTagged {
     const params = {
-        "@type": "workbench.label-merge" as const,
+        "@type": "workbench/label-merge" as const,
         "label_out": label_out,
     };
     if (label !== null) {
@@ -266,7 +233,7 @@ function label_merge_cargs(
     cargs.push("-label-merge");
     cargs.push((params["label_out"] ?? null));
     if ((params["label"] ?? null) !== null) {
-        cargs.push(...(params["label"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["label"] ?? null).map(s => label_merge_label_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -359,11 +326,7 @@ function label_merge(
 
 export {
       LABEL_MERGE_METADATA,
-      LabelMergeColumnParameters,
-      LabelMergeLabelParameters,
       LabelMergeOutputs,
-      LabelMergeParameters,
-      LabelMergeUpToParameters,
       label_merge,
       label_merge_column_params,
       label_merge_execute,

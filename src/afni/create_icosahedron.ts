@@ -12,7 +12,7 @@ const CREATE_ICOSAHEDRON_METADATA: Metadata = {
 
 
 interface CreateIcosahedronParameters {
-    "@type": "afni.CreateIcosahedron";
+    "@type"?: "afni/CreateIcosahedron";
     "rad"?: number | null | undefined;
     "rec_depth"?: number | null | undefined;
     "lin_depth"?: number | null | undefined;
@@ -24,43 +24,11 @@ interface CreateIcosahedronParameters {
     "output_prefix"?: string | null | undefined;
     "help": boolean;
 }
+type CreateIcosahedronParametersTagged = Required<Pick<CreateIcosahedronParameters, '@type'>> & CreateIcosahedronParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.CreateIcosahedron": create_icosahedron_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `create_icosahedron(...)`.
+ * Output object returned when calling `CreateIcosahedronParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +67,9 @@ function create_icosahedron_params(
     to_sphere: boolean = false,
     output_prefix: string | null = null,
     help: boolean = false,
-): CreateIcosahedronParameters {
+): CreateIcosahedronParametersTagged {
     const params = {
-        "@type": "afni.CreateIcosahedron" as const,
+        "@type": "afni/CreateIcosahedron" as const,
         "nums": nums,
         "nums_quiet": nums_quiet,
         "to_sphere": to_sphere,
@@ -167,10 +135,10 @@ function create_icosahedron_cargs(
             String((params["min_nodes"] ?? null))
         );
     }
-    if ((params["nums"] ?? null)) {
+    if ((params["nums"] ?? false)) {
         cargs.push("-nums");
     }
-    if ((params["nums_quiet"] ?? null)) {
+    if ((params["nums_quiet"] ?? false)) {
         cargs.push("-nums_quiet");
     }
     if ((params["center_coordinates"] ?? null) !== null) {
@@ -179,7 +147,7 @@ function create_icosahedron_cargs(
             ...(params["center_coordinates"] ?? null).map(String)
         );
     }
-    if ((params["to_sphere"] ?? null)) {
+    if ((params["to_sphere"] ?? false)) {
         cargs.push("-tosphere");
     }
     if ((params["output_prefix"] ?? null) !== null) {
@@ -188,7 +156,7 @@ function create_icosahedron_cargs(
             (params["output_prefix"] ?? null)
         );
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
     return cargs;
@@ -286,7 +254,6 @@ function create_icosahedron(
 export {
       CREATE_ICOSAHEDRON_METADATA,
       CreateIcosahedronOutputs,
-      CreateIcosahedronParameters,
       create_icosahedron,
       create_icosahedron_execute,
       create_icosahedron_params,

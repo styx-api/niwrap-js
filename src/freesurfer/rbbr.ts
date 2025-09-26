@@ -12,7 +12,7 @@ const RBBR_METADATA: Metadata = {
 
 
 interface RbbrParameters {
-    "@type": "freesurfer.rbbr";
+    "@type"?: "freesurfer/rbbr";
     "subject"?: string | null | undefined;
     "moving_image": string;
     "t1_contrast": boolean;
@@ -36,44 +36,11 @@ interface RbbrParameters {
     "output_template"?: string | null | undefined;
     "no_merge": boolean;
 }
+type RbbrParametersTagged = Required<Pick<RbbrParameters, '@type'>> & RbbrParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.rbbr": rbbr_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.rbbr": rbbr_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `rbbr(...)`.
+ * Output object returned when calling `RbbrParameters(...)`.
  *
  * @interface
  */
@@ -148,9 +115,9 @@ function rbbr_params(
     frame_no: number | null = null,
     output_template: string | null = null,
     no_merge: boolean = false,
-): RbbrParameters {
+): RbbrParametersTagged {
     const params = {
-        "@type": "freesurfer.rbbr" as const,
+        "@type": "freesurfer/rbbr" as const,
         "moving_image": moving_image,
         "t1_contrast": t1_contrast,
         "t2_contrast": t2_contrast,
@@ -224,22 +191,22 @@ function rbbr_cargs(
         "--mov",
         (params["moving_image"] ?? null)
     );
-    if ((params["t1_contrast"] ?? null)) {
+    if ((params["t1_contrast"] ?? false)) {
         cargs.push("--t1");
     }
-    if ((params["t2_contrast"] ?? null)) {
+    if ((params["t2_contrast"] ?? false)) {
         cargs.push("--t2");
     }
-    if ((params["init_reg"] ?? null)) {
+    if ((params["init_reg"] ?? false)) {
         cargs.push("--init-reg");
     }
-    if ((params["init_spm"] ?? null)) {
+    if ((params["init_spm"] ?? false)) {
         cargs.push("--init-spm");
     }
-    if ((params["init_fsl"] ?? null)) {
+    if ((params["init_fsl"] ?? false)) {
         cargs.push("--init-fsl");
     }
-    if ((params["init_header"] ?? null)) {
+    if ((params["init_header"] ?? false)) {
         cargs.push("--init-header");
     }
     if ((params["cost_threshold"] ?? null) !== null) {
@@ -254,7 +221,7 @@ function rbbr_cargs(
             (params["gtm_synthesize"] ?? null)
         );
     }
-    if ((params["tt_reduce"] ?? null)) {
+    if ((params["tt_reduce"] ?? false)) {
         cargs.push("--tt-reduce");
     }
     if ((params["iterations"] ?? null) !== null) {
@@ -275,10 +242,10 @@ function rbbr_cargs(
             (params["output_lta"] ?? null)
         );
     }
-    if ((params["left_hemi"] ?? null)) {
+    if ((params["left_hemi"] ?? false)) {
         cargs.push("--lh-only");
     }
-    if ((params["right_hemi"] ?? null)) {
+    if ((params["right_hemi"] ?? false)) {
         cargs.push("--rh-only");
     }
     if ((params["gm_proj_frac"] ?? null) !== null) {
@@ -311,7 +278,7 @@ function rbbr_cargs(
             (params["output_template"] ?? null)
         );
     }
-    if ((params["no_merge"] ?? null)) {
+    if ((params["no_merge"] ?? false)) {
         cargs.push("--no-merge");
     }
     return cargs;
@@ -436,7 +403,6 @@ function rbbr(
 export {
       RBBR_METADATA,
       RbbrOutputs,
-      RbbrParameters,
       rbbr,
       rbbr_execute,
       rbbr_params,

@@ -12,7 +12,7 @@ const GET_AFNI_MODEL_PRF_6_BAD_METADATA: Metadata = {
 
 
 interface GetAfniModelPrf6BadParameters {
-    "@type": "afni.get_afni_model_PRF_6_BAD";
+    "@type"?: "afni/get_afni_model_PRF_6_BAD";
     "amplitude": number;
     "x_coord": number;
     "y_coord": number;
@@ -20,43 +20,11 @@ interface GetAfniModelPrf6BadParameters {
     "sigrat": number;
     "theta": number;
 }
+type GetAfniModelPrf6BadParametersTagged = Required<Pick<GetAfniModelPrf6BadParameters, '@type'>> & GetAfniModelPrf6BadParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.get_afni_model_PRF_6_BAD": get_afni_model_prf_6_bad_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `get_afni_model_prf_6_bad(...)`.
+ * Output object returned when calling `GetAfniModelPrf6BadParameters(...)`.
  *
  * @interface
  */
@@ -87,9 +55,9 @@ function get_afni_model_prf_6_bad_params(
     sigma: number,
     sigrat: number,
     theta: number,
-): GetAfniModelPrf6BadParameters {
+): GetAfniModelPrf6BadParametersTagged {
     const params = {
-        "@type": "afni.get_afni_model_PRF_6_BAD" as const,
+        "@type": "afni/get_afni_model_PRF_6_BAD" as const,
         "amplitude": amplitude,
         "x_coord": x_coord,
         "y_coord": y_coord,
@@ -208,7 +176,6 @@ function get_afni_model_prf_6_bad(
 export {
       GET_AFNI_MODEL_PRF_6_BAD_METADATA,
       GetAfniModelPrf6BadOutputs,
-      GetAfniModelPrf6BadParameters,
       get_afni_model_prf_6_bad,
       get_afni_model_prf_6_bad_execute,
       get_afni_model_prf_6_bad_params,

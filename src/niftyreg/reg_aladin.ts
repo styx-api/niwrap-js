@@ -12,7 +12,7 @@ const REG_ALADIN_METADATA: Metadata = {
 
 
 interface RegAladinParameters {
-    "@type": "niftyreg.reg_aladin";
+    "@type"?: "niftyreg/reg_aladin";
     "reference_image": InputPathType;
     "floating_image": InputPathType;
     "symmetric": boolean;
@@ -27,44 +27,11 @@ interface RegAladinParameters {
     "percent_block"?: number | null | undefined;
     "percent_inlier"?: number | null | undefined;
 }
+type RegAladinParametersTagged = Required<Pick<RegAladinParameters, '@type'>> & RegAladinParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "niftyreg.reg_aladin": reg_aladin_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "niftyreg.reg_aladin": reg_aladin_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `reg_aladin(...)`.
+ * Output object returned when calling `RegAladinParameters(...)`.
  *
  * @interface
  */
@@ -113,9 +80,9 @@ function reg_aladin_params(
     use_nifti_origin: boolean = false,
     percent_block: number | null = null,
     percent_inlier: number | null = null,
-): RegAladinParameters {
+): RegAladinParametersTagged {
     const params = {
-        "@type": "niftyreg.reg_aladin" as const,
+        "@type": "niftyreg/reg_aladin" as const,
         "reference_image": reference_image,
         "floating_image": floating_image,
         "symmetric": symmetric,
@@ -170,7 +137,7 @@ function reg_aladin_cargs(
         "-flo",
         execution.inputFile((params["floating_image"] ?? null))
     );
-    if ((params["symmetric"] ?? null)) {
+    if ((params["symmetric"] ?? false)) {
         cargs.push("-sym");
     }
     if ((params["output_affine"] ?? null) !== null) {
@@ -179,10 +146,10 @@ function reg_aladin_cargs(
             (params["output_affine"] ?? null)
         );
     }
-    if ((params["rigid_only"] ?? null)) {
+    if ((params["rigid_only"] ?? false)) {
         cargs.push("-rigOnly");
     }
-    if ((params["direct_affine"] ?? null)) {
+    if ((params["direct_affine"] ?? false)) {
         cargs.push("-affDirect");
     }
     if ((params["smooth_ref"] ?? null) !== null) {
@@ -209,7 +176,7 @@ function reg_aladin_cargs(
             String((params["first_levels"] ?? null))
         );
     }
-    if ((params["use_nifti_origin"] ?? null)) {
+    if ((params["use_nifti_origin"] ?? false)) {
         cargs.push("-nac");
     }
     if ((params["percent_block"] ?? null) !== null) {
@@ -326,7 +293,6 @@ function reg_aladin(
 export {
       REG_ALADIN_METADATA,
       RegAladinOutputs,
-      RegAladinParameters,
       reg_aladin,
       reg_aladin_execute,
       reg_aladin_params,

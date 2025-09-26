@@ -12,7 +12,7 @@ const GAUSS_4DFP_METADATA: Metadata = {
 
 
 interface Gauss4dfpParameters {
-    "@type": "freesurfer.gauss_4dfp";
+    "@type"?: "freesurfer/gauss_4dfp";
     "input_file": string;
     "f_half": number;
     "output_root"?: string | null | undefined;
@@ -20,44 +20,11 @@ interface Gauss4dfpParameters {
     "wrap_flag": boolean;
     "differentiate_flag": boolean;
 }
+type Gauss4dfpParametersTagged = Required<Pick<Gauss4dfpParameters, '@type'>> & Gauss4dfpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.gauss_4dfp": gauss_4dfp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.gauss_4dfp": gauss_4dfp_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `gauss_4dfp(...)`.
+ * Output object returned when calling `Gauss4dfpParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function gauss_4dfp_params(
     endian_flag: string | null = null,
     wrap_flag: boolean = false,
     differentiate_flag: boolean = false,
-): Gauss4dfpParameters {
+): Gauss4dfpParametersTagged {
     const params = {
-        "@type": "freesurfer.gauss_4dfp" as const,
+        "@type": "freesurfer/gauss_4dfp" as const,
         "input_file": input_file,
         "f_half": f_half,
         "wrap_flag": wrap_flag,
@@ -135,10 +102,10 @@ function gauss_4dfp_cargs(
             (params["endian_flag"] ?? null)
         );
     }
-    if ((params["wrap_flag"] ?? null)) {
+    if ((params["wrap_flag"] ?? false)) {
         cargs.push("-w");
     }
-    if ((params["differentiate_flag"] ?? null)) {
+    if ((params["differentiate_flag"] ?? false)) {
         cargs.push("-d");
     }
     return cargs;
@@ -229,7 +196,6 @@ function gauss_4dfp(
 export {
       GAUSS_4DFP_METADATA,
       Gauss4dfpOutputs,
-      Gauss4dfpParameters,
       gauss_4dfp,
       gauss_4dfp_execute,
       gauss_4dfp_params,

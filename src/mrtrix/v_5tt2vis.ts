@@ -12,14 +12,15 @@ const V_5TT2VIS_METADATA: Metadata = {
 
 
 interface V5tt2visConfigParameters {
-    "@type": "mrtrix.5tt2vis.config";
+    "@type"?: "config";
     "key": string;
     "value": string;
 }
+type V5tt2visConfigParametersTagged = Required<Pick<V5tt2visConfigParameters, '@type'>> & V5tt2visConfigParameters;
 
 
 interface V5tt2visParameters {
-    "@type": "mrtrix.5tt2vis";
+    "@type"?: "mrtrix/5tt2vis";
     "bg"?: number | null | undefined;
     "cgm"?: number | null | undefined;
     "sgm"?: number | null | undefined;
@@ -37,41 +38,7 @@ interface V5tt2visParameters {
     "input": InputPathType;
     "output": string;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "mrtrix.5tt2vis": v_5tt2vis_cargs,
-        "mrtrix.5tt2vis.config": v_5tt2vis_config_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "mrtrix.5tt2vis": v_5tt2vis_outputs,
-    };
-    return outputsFuncs[t];
-}
+type V5tt2visParametersTagged = Required<Pick<V5tt2visParameters, '@type'>> & V5tt2visParameters;
 
 
 /**
@@ -85,9 +52,9 @@ function dynOutputs(
 function v_5tt2vis_config_params(
     key: string,
     value: string,
-): V5tt2visConfigParameters {
+): V5tt2visConfigParametersTagged {
     const params = {
-        "@type": "mrtrix.5tt2vis.config" as const,
+        "@type": "config" as const,
         "key": key,
         "value": value,
     };
@@ -116,7 +83,7 @@ function v_5tt2vis_config_cargs(
 
 
 /**
- * Output object returned when calling `v_5tt2vis(...)`.
+ * Output object returned when calling `V5tt2visParameters(...)`.
  *
  * @interface
  */
@@ -171,9 +138,9 @@ function v_5tt2vis_params(
     config: Array<V5tt2visConfigParameters> | null = null,
     help: boolean = false,
     version: boolean = false,
-): V5tt2visParameters {
+): V5tt2visParametersTagged {
     const params = {
-        "@type": "mrtrix.5tt2vis" as const,
+        "@type": "mrtrix/5tt2vis" as const,
         "info": info,
         "quiet": quiet,
         "debug": debug,
@@ -261,16 +228,16 @@ function v_5tt2vis_cargs(
             String((params["path"] ?? null))
         );
     }
-    if ((params["info"] ?? null)) {
+    if ((params["info"] ?? false)) {
         cargs.push("-info");
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["nthreads"] ?? null) !== null) {
@@ -280,12 +247,12 @@ function v_5tt2vis_cargs(
         );
     }
     if ((params["config"] ?? null) !== null) {
-        cargs.push(...(params["config"] ?? null).map(s => dynCargs(s["@type"])(s, execution)).flat());
+        cargs.push(...(params["config"] ?? null).map(s => v_5tt2vis_config_cargs(s, execution)).flat());
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("-version");
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));
@@ -408,9 +375,7 @@ function v_5tt2vis(
 
 
 export {
-      V5tt2visConfigParameters,
       V5tt2visOutputs,
-      V5tt2visParameters,
       V_5TT2VIS_METADATA,
       v_5tt2vis,
       v_5tt2vis_config_params,

@@ -12,7 +12,7 @@ const FIBER_DOT_PRODUCTS_METADATA: Metadata = {
 
 
 interface FiberDotProductsParameters {
-    "@type": "workbench.fiber-dot-products";
+    "@type"?: "workbench/fiber-dot-products";
     "white_surf": InputPathType;
     "fiber_file": InputPathType;
     "max_dist": number;
@@ -20,44 +20,11 @@ interface FiberDotProductsParameters {
     "dot_metric": string;
     "f_metric": string;
 }
+type FiberDotProductsParametersTagged = Required<Pick<FiberDotProductsParameters, '@type'>> & FiberDotProductsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.fiber-dot-products": fiber_dot_products_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.fiber-dot-products": fiber_dot_products_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fiber_dot_products(...)`.
+ * Output object returned when calling `FiberDotProductsParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +63,9 @@ function fiber_dot_products_params(
     direction: string,
     dot_metric: string,
     f_metric: string,
-): FiberDotProductsParameters {
+): FiberDotProductsParametersTagged {
     const params = {
-        "@type": "workbench.fiber-dot-products" as const,
+        "@type": "workbench/fiber-dot-products" as const,
         "white_surf": white_surf,
         "fiber_file": fiber_file,
         "max_dist": max_dist,
@@ -224,7 +191,6 @@ function fiber_dot_products(
 export {
       FIBER_DOT_PRODUCTS_METADATA,
       FiberDotProductsOutputs,
-      FiberDotProductsParameters,
       fiber_dot_products,
       fiber_dot_products_execute,
       fiber_dot_products_params,

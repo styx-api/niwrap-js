@@ -12,7 +12,7 @@ const SURF_SMOOTH_METADATA: Metadata = {
 
 
 interface SurfSmoothParameters {
-    "@type": "afni.SurfSmooth";
+    "@type"?: "afni/SurfSmooth";
     "surface": string;
     "method": string;
     "input_data"?: InputPathType | null | undefined;
@@ -30,44 +30,11 @@ interface SurfSmoothParameters {
     "talk_suma": boolean;
     "refresh_rate"?: number | null | undefined;
 }
+type SurfSmoothParametersTagged = Required<Pick<SurfSmoothParameters, '@type'>> & SurfSmoothParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.SurfSmooth": surf_smooth_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.SurfSmooth": surf_smooth_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surf_smooth(...)`.
+ * Output object returned when calling `SurfSmoothParameters(...)`.
  *
  * @interface
  */
@@ -122,9 +89,9 @@ function surf_smooth_params(
     use_neighbors_outside_mask: boolean = false,
     talk_suma: boolean = false,
     refresh_rate: number | null = null,
-): SurfSmoothParameters {
+): SurfSmoothParametersTagged {
     const params = {
-        "@type": "afni.SurfSmooth" as const,
+        "@type": "afni/SurfSmooth" as const,
         "surface": surface,
         "method": method,
         "use_neighbors_outside_mask": use_neighbors_outside_mask,
@@ -258,10 +225,10 @@ function surf_smooth_cargs(
             String((params["dbg_node"] ?? null))
         );
     }
-    if ((params["use_neighbors_outside_mask"] ?? null)) {
+    if ((params["use_neighbors_outside_mask"] ?? false)) {
         cargs.push("-use_neighbors_outside_mask");
     }
-    if ((params["talk_suma"] ?? null)) {
+    if ((params["talk_suma"] ?? false)) {
         cargs.push("-talk_suma");
     }
     if ((params["refresh_rate"] ?? null) !== null) {
@@ -378,7 +345,6 @@ function surf_smooth(
 export {
       SURF_SMOOTH_METADATA,
       SurfSmoothOutputs,
-      SurfSmoothParameters,
       surf_smooth,
       surf_smooth_execute,
       surf_smooth_params,

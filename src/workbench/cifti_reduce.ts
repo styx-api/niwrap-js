@@ -12,14 +12,15 @@ const CIFTI_REDUCE_METADATA: Metadata = {
 
 
 interface CiftiReduceExcludeOutliersParameters {
-    "@type": "workbench.cifti-reduce.exclude_outliers";
+    "@type"?: "exclude_outliers";
     "sigma_below": number;
     "sigma_above": number;
 }
+type CiftiReduceExcludeOutliersParametersTagged = Required<Pick<CiftiReduceExcludeOutliersParameters, '@type'>> & CiftiReduceExcludeOutliersParameters;
 
 
 interface CiftiReduceParameters {
-    "@type": "workbench.cifti-reduce";
+    "@type"?: "workbench/cifti-reduce";
     "cifti_in": InputPathType;
     "operation": string;
     "cifti_out": string;
@@ -27,41 +28,7 @@ interface CiftiReduceParameters {
     "exclude_outliers"?: CiftiReduceExcludeOutliersParameters | null | undefined;
     "opt_only_numeric": boolean;
 }
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.cifti-reduce": cifti_reduce_cargs,
-        "workbench.cifti-reduce.exclude_outliers": cifti_reduce_exclude_outliers_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "workbench.cifti-reduce": cifti_reduce_outputs,
-    };
-    return outputsFuncs[t];
-}
+type CiftiReduceParametersTagged = Required<Pick<CiftiReduceParameters, '@type'>> & CiftiReduceParameters;
 
 
 /**
@@ -75,9 +42,9 @@ function dynOutputs(
 function cifti_reduce_exclude_outliers_params(
     sigma_below: number,
     sigma_above: number,
-): CiftiReduceExcludeOutliersParameters {
+): CiftiReduceExcludeOutliersParametersTagged {
     const params = {
-        "@type": "workbench.cifti-reduce.exclude_outliers" as const,
+        "@type": "exclude_outliers" as const,
         "sigma_below": sigma_below,
         "sigma_above": sigma_above,
     };
@@ -106,7 +73,7 @@ function cifti_reduce_exclude_outliers_cargs(
 
 
 /**
- * Output object returned when calling `cifti_reduce(...)`.
+ * Output object returned when calling `CiftiReduceParameters(...)`.
  *
  * @interface
  */
@@ -141,9 +108,9 @@ function cifti_reduce_params(
     opt_direction_direction: string | null = null,
     exclude_outliers: CiftiReduceExcludeOutliersParameters | null = null,
     opt_only_numeric: boolean = false,
-): CiftiReduceParameters {
+): CiftiReduceParametersTagged {
     const params = {
-        "@type": "workbench.cifti-reduce" as const,
+        "@type": "workbench/cifti-reduce" as const,
         "cifti_in": cifti_in,
         "operation": operation,
         "cifti_out": cifti_out,
@@ -184,9 +151,9 @@ function cifti_reduce_cargs(
         );
     }
     if ((params["exclude_outliers"] ?? null) !== null) {
-        cargs.push(...dynCargs((params["exclude_outliers"] ?? null)["@type"])((params["exclude_outliers"] ?? null), execution));
+        cargs.push(...cifti_reduce_exclude_outliers_cargs((params["exclude_outliers"] ?? null), execution));
     }
-    if ((params["opt_only_numeric"] ?? null)) {
+    if ((params["opt_only_numeric"] ?? false)) {
         cargs.push("-only-numeric");
     }
     return cargs;
@@ -316,9 +283,7 @@ function cifti_reduce(
 
 export {
       CIFTI_REDUCE_METADATA,
-      CiftiReduceExcludeOutliersParameters,
       CiftiReduceOutputs,
-      CiftiReduceParameters,
       cifti_reduce,
       cifti_reduce_exclude_outliers_params,
       cifti_reduce_execute,

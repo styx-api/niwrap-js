@@ -12,48 +12,15 @@ const MRI_MOTION_CORRECT_METADATA: Metadata = {
 
 
 interface MriMotionCorrectParameters {
-    "@type": "freesurfer.mri_motion_correct";
+    "@type"?: "freesurfer/mri_motion_correct";
     "outfile": string;
     "infiles": Array<InputPathType>;
 }
+type MriMotionCorrectParametersTagged = Required<Pick<MriMotionCorrectParameters, '@type'>> & MriMotionCorrectParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_motion_correct": mri_motion_correct_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_motion_correct": mri_motion_correct_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_motion_correct(...)`.
+ * Output object returned when calling `MriMotionCorrectParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface MriMotionCorrectOutputs {
 function mri_motion_correct_params(
     outfile: string,
     infiles: Array<InputPathType>,
-): MriMotionCorrectParameters {
+): MriMotionCorrectParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_motion_correct" as const,
+        "@type": "freesurfer/mri_motion_correct" as const,
         "outfile": outfile,
         "infiles": infiles,
     };
@@ -186,7 +153,6 @@ function mri_motion_correct(
 export {
       MRI_MOTION_CORRECT_METADATA,
       MriMotionCorrectOutputs,
-      MriMotionCorrectParameters,
       mri_motion_correct,
       mri_motion_correct_execute,
       mri_motion_correct_params,

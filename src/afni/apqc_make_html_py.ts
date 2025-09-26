@@ -12,46 +12,14 @@ const APQC_MAKE_HTML_PY_METADATA: Metadata = {
 
 
 interface ApqcMakeHtmlPyParameters {
-    "@type": "afni.apqc_make_html.py";
+    "@type"?: "afni/apqc_make_html.py";
     "qc_dir": string;
 }
+type ApqcMakeHtmlPyParametersTagged = Required<Pick<ApqcMakeHtmlPyParameters, '@type'>> & ApqcMakeHtmlPyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.apqc_make_html.py": apqc_make_html_py_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `apqc_make_html_py(...)`.
+ * Output object returned when calling `ApqcMakeHtmlPyParameters(...)`.
  *
  * @interface
  */
@@ -72,9 +40,9 @@ interface ApqcMakeHtmlPyOutputs {
  */
 function apqc_make_html_py_params(
     qc_dir: string,
-): ApqcMakeHtmlPyParameters {
+): ApqcMakeHtmlPyParametersTagged {
     const params = {
-        "@type": "afni.apqc_make_html.py" as const,
+        "@type": "afni/apqc_make_html.py" as const,
         "qc_dir": qc_dir,
     };
     return params;
@@ -176,7 +144,6 @@ function apqc_make_html_py(
 export {
       APQC_MAKE_HTML_PY_METADATA,
       ApqcMakeHtmlPyOutputs,
-      ApqcMakeHtmlPyParameters,
       apqc_make_html_py,
       apqc_make_html_py_execute,
       apqc_make_html_py_params,

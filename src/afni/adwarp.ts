@@ -12,7 +12,7 @@ const ADWARP_METADATA: Metadata = {
 
 
 interface AdwarpParameters {
-    "@type": "afni.adwarp";
+    "@type"?: "afni/adwarp";
     "apar": InputPathType;
     "dpar": string;
     "prefix"?: string | null | undefined;
@@ -23,44 +23,11 @@ interface AdwarpParameters {
     "thr"?: string | null | undefined;
     "func"?: string | null | undefined;
 }
+type AdwarpParametersTagged = Required<Pick<AdwarpParameters, '@type'>> & AdwarpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.adwarp": adwarp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.adwarp": adwarp_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `adwarp(...)`.
+ * Output object returned when calling `AdwarpParameters(...)`.
  *
  * @interface
  */
@@ -105,9 +72,9 @@ function adwarp_params(
     resam: string | null = null,
     thr: string | null = null,
     func: string | null = null,
-): AdwarpParameters {
+): AdwarpParametersTagged {
     const params = {
-        "@type": "afni.adwarp" as const,
+        "@type": "afni/adwarp" as const,
         "apar": apar,
         "dpar": dpar,
         "verbose": verbose,
@@ -166,10 +133,10 @@ function adwarp_cargs(
             String((params["dxyz"] ?? null))
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verbose");
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     if ((params["resam"] ?? null) !== null) {
@@ -285,7 +252,6 @@ function adwarp(
 export {
       ADWARP_METADATA,
       AdwarpOutputs,
-      AdwarpParameters,
       adwarp,
       adwarp_execute,
       adwarp_params,

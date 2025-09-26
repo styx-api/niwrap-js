@@ -12,7 +12,7 @@ const FSL_SBCA_METADATA: Metadata = {
 
 
 interface FslSbcaParameters {
-    "@type": "fsl.fsl_sbca";
+    "@type"?: "fsl/fsl_sbca";
     "infile": InputPathType;
     "seed": InputPathType;
     "target": InputPathType;
@@ -31,44 +31,11 @@ interface FslSbcaParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
+type FslSbcaParametersTagged = Required<Pick<FslSbcaParameters, '@type'>> & FslSbcaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fsl_sbca": fsl_sbca_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fsl_sbca": fsl_sbca_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsl_sbca(...)`.
+ * Output object returned when calling `FslSbcaParameters(...)`.
  *
  * @interface
  */
@@ -133,9 +100,9 @@ function fsl_sbca_params(
     out_conf_flag: boolean = false,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): FslSbcaParameters {
+): FslSbcaParametersTagged {
     const params = {
-        "@type": "fsl.fsl_sbca" as const,
+        "@type": "fsl/fsl_sbca" as const,
         "infile": infile,
         "seed": seed,
         "target": target,
@@ -194,7 +161,7 @@ function fsl_sbca_cargs(
         "--out",
         (params["out"] ?? null)
     );
-    if ((params["reg_flag"] ?? null)) {
+    if ((params["reg_flag"] ?? false)) {
         cargs.push("--reg");
     }
     if ((params["conf_files"] ?? null) !== null) {
@@ -209,13 +176,13 @@ function fsl_sbca_cargs(
             execution.inputFile((params["seed_data"] ?? null))
         );
     }
-    if ((params["binarise_flag"] ?? null)) {
+    if ((params["binarise_flag"] ?? false)) {
         cargs.push("--bin");
     }
-    if ((params["mean_flag"] ?? null)) {
+    if ((params["mean_flag"] ?? false)) {
         cargs.push("--mean");
     }
-    if ((params["abs_cc_flag"] ?? null)) {
+    if ((params["abs_cc_flag"] ?? false)) {
         cargs.push("--abscc");
     }
     if ((params["order"] ?? null) !== null) {
@@ -224,22 +191,22 @@ function fsl_sbca_cargs(
             String((params["order"] ?? null))
         );
     }
-    if ((params["out_seeds_flag"] ?? null)) {
+    if ((params["out_seeds_flag"] ?? false)) {
         cargs.push("--out_seeds");
     }
-    if ((params["out_seedmask_flag"] ?? null)) {
+    if ((params["out_seedmask_flag"] ?? false)) {
         cargs.push("--out_seedmask");
     }
-    if ((params["out_ttcs_flag"] ?? null)) {
+    if ((params["out_ttcs_flag"] ?? false)) {
         cargs.push("--out_ttcs");
     }
-    if ((params["out_conf_flag"] ?? null)) {
+    if ((params["out_conf_flag"] ?? false)) {
         cargs.push("--out_conf");
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
-    if ((params["help_flag"] ?? null)) {
+    if ((params["help_flag"] ?? false)) {
         cargs.push("-h");
     }
     return cargs;
@@ -354,7 +321,6 @@ function fsl_sbca(
 export {
       FSL_SBCA_METADATA,
       FslSbcaOutputs,
-      FslSbcaParameters,
       fsl_sbca,
       fsl_sbca_execute,
       fsl_sbca_params,

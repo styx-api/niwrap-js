@@ -12,7 +12,7 @@ const FSL_MOTION_OUTLIERS_METADATA: Metadata = {
 
 
 interface FslMotionOutliersParameters {
-    "@type": "fsl.fsl_motion_outliers";
+    "@type"?: "fsl/fsl_motion_outliers";
     "input_4d_image": InputPathType;
     "output_confound_file": string;
     "mask_image"?: InputPathType | null | undefined;
@@ -29,44 +29,11 @@ interface FslMotionOutliersParameters {
     "dummy_scans"?: number | null | undefined;
     "verbose_flag": boolean;
 }
+type FslMotionOutliersParametersTagged = Required<Pick<FslMotionOutliersParameters, '@type'>> & FslMotionOutliersParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.fsl_motion_outliers": fsl_motion_outliers_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "fsl.fsl_motion_outliers": fsl_motion_outliers_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fsl_motion_outliers(...)`.
+ * Output object returned when calling `FslMotionOutliersParameters(...)`.
  *
  * @interface
  */
@@ -127,9 +94,9 @@ function fsl_motion_outliers_params(
     no_moco_flag: boolean = false,
     dummy_scans: number | null = null,
     verbose_flag: boolean = false,
-): FslMotionOutliersParameters {
+): FslMotionOutliersParametersTagged {
     const params = {
-        "@type": "fsl.fsl_motion_outliers" as const,
+        "@type": "fsl/fsl_motion_outliers" as const,
         "input_4d_image": input_4d_image,
         "output_confound_file": output_confound_file,
         "refrms_flag": refrms_flag,
@@ -208,19 +175,19 @@ function fsl_motion_outliers_cargs(
             (params["temp_path"] ?? null)
         );
     }
-    if ((params["refrms_flag"] ?? null)) {
+    if ((params["refrms_flag"] ?? false)) {
         cargs.push("--refrms");
     }
-    if ((params["dvars_flag"] ?? null)) {
+    if ((params["dvars_flag"] ?? false)) {
         cargs.push("--dvars");
     }
-    if ((params["refmse_flag"] ?? null)) {
+    if ((params["refmse_flag"] ?? false)) {
         cargs.push("--refmse");
     }
-    if ((params["fd_flag"] ?? null)) {
+    if ((params["fd_flag"] ?? false)) {
         cargs.push("--fd");
     }
-    if ((params["fdrms_flag"] ?? null)) {
+    if ((params["fdrms_flag"] ?? false)) {
         cargs.push("--fdrms");
     }
     if ((params["abs_thresh"] ?? null) !== null) {
@@ -229,7 +196,7 @@ function fsl_motion_outliers_cargs(
             String((params["abs_thresh"] ?? null))
         );
     }
-    if ((params["no_moco_flag"] ?? null)) {
+    if ((params["no_moco_flag"] ?? false)) {
         cargs.push("--nomoco");
     }
     if ((params["dummy_scans"] ?? null) !== null) {
@@ -238,7 +205,7 @@ function fsl_motion_outliers_cargs(
             String((params["dummy_scans"] ?? null))
         );
     }
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-v");
     }
     return cargs;
@@ -349,7 +316,6 @@ function fsl_motion_outliers(
 export {
       FSL_MOTION_OUTLIERS_METADATA,
       FslMotionOutliersOutputs,
-      FslMotionOutliersParameters,
       fsl_motion_outliers,
       fsl_motion_outliers_execute,
       fsl_motion_outliers_params,

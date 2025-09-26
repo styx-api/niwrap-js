@@ -12,7 +12,7 @@ const SWI_PREPROCESS_METADATA: Metadata = {
 
 
 interface SwiPreprocessParameters {
-    "@type": "freesurfer.swi_preprocess";
+    "@type"?: "freesurfer/swi_preprocess";
     "scanner": "ge" | "siemens" | "philips";
     "ge_file"?: InputPathType | null | undefined;
     "philips_file"?: InputPathType | null | undefined;
@@ -21,44 +21,11 @@ interface SwiPreprocessParameters {
     "out_magnitude": string;
     "out_phase": string;
 }
+type SwiPreprocessParametersTagged = Required<Pick<SwiPreprocessParameters, '@type'>> & SwiPreprocessParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.swi_preprocess": swi_preprocess_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.swi_preprocess": swi_preprocess_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `swi_preprocess(...)`.
+ * Output object returned when calling `SwiPreprocessParameters(...)`.
  *
  * @interface
  */
@@ -99,9 +66,9 @@ function swi_preprocess_params(
     philips_file: InputPathType | null = null,
     siemens_magnitude: InputPathType | null = null,
     siemens_phase: InputPathType | null = null,
-): SwiPreprocessParameters {
+): SwiPreprocessParametersTagged {
     const params = {
-        "@type": "freesurfer.swi_preprocess" as const,
+        "@type": "freesurfer/swi_preprocess" as const,
         "scanner": scanner,
         "out_magnitude": out_magnitude,
         "out_phase": out_phase,
@@ -263,7 +230,6 @@ function swi_preprocess(
 export {
       SWI_PREPROCESS_METADATA,
       SwiPreprocessOutputs,
-      SwiPreprocessParameters,
       swi_preprocess,
       swi_preprocess_execute,
       swi_preprocess_params,

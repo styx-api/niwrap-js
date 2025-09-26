@@ -12,50 +12,17 @@ const MRIS_MORPH_STATS_METADATA: Metadata = {
 
 
 interface MrisMorphStatsParameters {
-    "@type": "freesurfer.mris_morph_stats";
+    "@type"?: "freesurfer/mris_morph_stats";
     "subject_name": string;
     "hemisphere": "lh" | "rh";
     "morphed_surface": InputPathType;
     "output_name": string;
 }
+type MrisMorphStatsParametersTagged = Required<Pick<MrisMorphStatsParameters, '@type'>> & MrisMorphStatsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_morph_stats": mris_morph_stats_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mris_morph_stats": mris_morph_stats_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_morph_stats(...)`.
+ * Output object returned when calling `MrisMorphStatsParameters(...)`.
  *
  * @interface
  */
@@ -86,9 +53,9 @@ function mris_morph_stats_params(
     hemisphere: "lh" | "rh",
     morphed_surface: InputPathType,
     output_name: string,
-): MrisMorphStatsParameters {
+): MrisMorphStatsParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_morph_stats" as const,
+        "@type": "freesurfer/mris_morph_stats" as const,
         "subject_name": subject_name,
         "hemisphere": hemisphere,
         "morphed_surface": morphed_surface,
@@ -200,7 +167,6 @@ function mris_morph_stats(
 export {
       MRIS_MORPH_STATS_METADATA,
       MrisMorphStatsOutputs,
-      MrisMorphStatsParameters,
       mris_morph_stats,
       mris_morph_stats_execute,
       mris_morph_stats_params,

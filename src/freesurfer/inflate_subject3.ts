@@ -12,47 +12,15 @@ const INFLATE_SUBJECT3_METADATA: Metadata = {
 
 
 interface InflateSubject3Parameters {
-    "@type": "freesurfer.inflate_subject3";
+    "@type"?: "freesurfer/inflate_subject3";
     "subjects_dir": string;
     "script_name": string;
 }
+type InflateSubject3ParametersTagged = Required<Pick<InflateSubject3Parameters, '@type'>> & InflateSubject3Parameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.inflate_subject3": inflate_subject3_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `inflate_subject3(...)`.
+ * Output object returned when calling `InflateSubject3Parameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface InflateSubject3Outputs {
 function inflate_subject3_params(
     subjects_dir: string,
     script_name: string,
-): InflateSubject3Parameters {
+): InflateSubject3ParametersTagged {
     const params = {
-        "@type": "freesurfer.inflate_subject3" as const,
+        "@type": "freesurfer/inflate_subject3" as const,
         "subjects_dir": subjects_dir,
         "script_name": script_name,
     };
@@ -180,7 +148,6 @@ function inflate_subject3(
 export {
       INFLATE_SUBJECT3_METADATA,
       InflateSubject3Outputs,
-      InflateSubject3Parameters,
       inflate_subject3,
       inflate_subject3_execute,
       inflate_subject3_params,

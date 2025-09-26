@@ -12,7 +12,7 @@ const FAT_PROC_SELECT_VOLS_METADATA: Metadata = {
 
 
 interface FatProcSelectVolsParameters {
-    "@type": "afni.fat_proc_select_vols";
+    "@type"?: "afni/fat_proc_select_vols";
     "dwi_input": InputPathType;
     "img_input": InputPathType;
     "prefix": string;
@@ -22,44 +22,11 @@ interface FatProcSelectVolsParameters {
     "workdir"?: string | null | undefined;
     "no_cmd_out": boolean;
 }
+type FatProcSelectVolsParametersTagged = Required<Pick<FatProcSelectVolsParameters, '@type'>> & FatProcSelectVolsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.fat_proc_select_vols": fat_proc_select_vols_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.fat_proc_select_vols": fat_proc_select_vols_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fat_proc_select_vols(...)`.
+ * Output object returned when calling `FatProcSelectVolsParameters(...)`.
  *
  * @interface
  */
@@ -98,9 +65,9 @@ function fat_proc_select_vols_params(
     do_movie: string | null = null,
     workdir: string | null = null,
     no_cmd_out: boolean = false,
-): FatProcSelectVolsParameters {
+): FatProcSelectVolsParametersTagged {
     const params = {
-        "@type": "afni.fat_proc_select_vols" as const,
+        "@type": "afni/fat_proc_select_vols" as const,
         "dwi_input": dwi_input,
         "img_input": img_input,
         "prefix": prefix,
@@ -152,7 +119,7 @@ function fat_proc_select_vols_cargs(
             execution.inputFile((params["in_bads"] ?? null))
         );
     }
-    if ((params["apply_to_vols"] ?? null)) {
+    if ((params["apply_to_vols"] ?? false)) {
         cargs.push("-apply_to_vols");
     }
     if ((params["do_movie"] ?? null) !== null) {
@@ -167,7 +134,7 @@ function fat_proc_select_vols_cargs(
             (params["workdir"] ?? null)
         );
     }
-    if ((params["no_cmd_out"] ?? null)) {
+    if ((params["no_cmd_out"] ?? false)) {
         cargs.push("-no_cmd_out");
     }
     return cargs;
@@ -262,7 +229,6 @@ function fat_proc_select_vols(
 export {
       FAT_PROC_SELECT_VOLS_METADATA,
       FatProcSelectVolsOutputs,
-      FatProcSelectVolsParameters,
       fat_proc_select_vols,
       fat_proc_select_vols_execute,
       fat_proc_select_vols_params,

@@ -12,48 +12,15 @@ const V__GET_AFNI_ORIENT_METADATA: Metadata = {
 
 
 interface VGetAfniOrientParameters {
-    "@type": "afni.@GetAfniOrient";
+    "@type"?: "afni/@GetAfniOrient";
     "exploratory": boolean;
     "infile": InputPathType;
 }
+type VGetAfniOrientParametersTagged = Required<Pick<VGetAfniOrientParameters, '@type'>> & VGetAfniOrientParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.@GetAfniOrient": v__get_afni_orient_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.@GetAfniOrient": v__get_afni_orient_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v__get_afni_orient(...)`.
+ * Output object returned when calling `VGetAfniOrientParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface VGetAfniOrientOutputs {
 function v__get_afni_orient_params(
     infile: InputPathType,
     exploratory: boolean = false,
-): VGetAfniOrientParameters {
+): VGetAfniOrientParametersTagged {
     const params = {
-        "@type": "afni.@GetAfniOrient" as const,
+        "@type": "afni/@GetAfniOrient" as const,
         "exploratory": exploratory,
         "infile": infile,
     };
@@ -104,7 +71,7 @@ function v__get_afni_orient_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("@GetAfniOrient");
-    if ((params["exploratory"] ?? null)) {
+    if ((params["exploratory"] ?? false)) {
         cargs.push("-exp");
     }
     cargs.push(execution.inputFile((params["infile"] ?? null)));
@@ -187,7 +154,6 @@ function v__get_afni_orient(
 
 export {
       VGetAfniOrientOutputs,
-      VGetAfniOrientParameters,
       V__GET_AFNI_ORIENT_METADATA,
       v__get_afni_orient,
       v__get_afni_orient_execute,

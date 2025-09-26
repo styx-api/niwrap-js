@@ -12,50 +12,18 @@ const SMOOTHEST_METADATA: Metadata = {
 
 
 interface SmoothestParameters {
-    "@type": "fsl.smoothest";
+    "@type"?: "fsl/smoothest";
     "dof"?: number | null | undefined;
     "residual_fit_image"?: InputPathType | null | undefined;
     "zstat_image"?: InputPathType | null | undefined;
     "mask": InputPathType;
     "verbose_flag": boolean;
 }
+type SmoothestParametersTagged = Required<Pick<SmoothestParameters, '@type'>> & SmoothestParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "fsl.smoothest": smoothest_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `smoothest(...)`.
+ * Output object returned when calling `SmoothestParameters(...)`.
  *
  * @interface
  */
@@ -84,9 +52,9 @@ function smoothest_params(
     residual_fit_image: InputPathType | null = null,
     zstat_image: InputPathType | null = null,
     verbose_flag: boolean = false,
-): SmoothestParameters {
+): SmoothestParametersTagged {
     const params = {
-        "@type": "fsl.smoothest" as const,
+        "@type": "fsl/smoothest" as const,
         "mask": mask,
         "verbose_flag": verbose_flag,
     };
@@ -139,7 +107,7 @@ function smoothest_cargs(
         "-m",
         execution.inputFile((params["mask"] ?? null))
     );
-    if ((params["verbose_flag"] ?? null)) {
+    if ((params["verbose_flag"] ?? false)) {
         cargs.push("-V");
     }
     return cargs;
@@ -227,7 +195,6 @@ function smoothest(
 export {
       SMOOTHEST_METADATA,
       SmoothestOutputs,
-      SmoothestParameters,
       smoothest,
       smoothest_execute,
       smoothest_params,

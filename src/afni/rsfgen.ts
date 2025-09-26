@@ -12,7 +12,7 @@ const RSFGEN_METADATA: Metadata = {
 
 
 interface RsfgenParameters {
-    "@type": "afni.RSFgen";
+    "@type"?: "afni/RSFgen";
     "length": number;
     "num_experimental_conditions": number;
     "block_length"?: string | null | undefined;
@@ -27,44 +27,11 @@ interface RsfgenParameters {
     "prob_zero"?: number | null | undefined;
     "input_table"?: InputPathType | null | undefined;
 }
+type RsfgenParametersTagged = Required<Pick<RsfgenParameters, '@type'>> & RsfgenParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.RSFgen": rsfgen_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.RSFgen": rsfgen_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `rsfgen(...)`.
+ * Output object returned when calling `RsfgenParameters(...)`.
  *
  * @interface
  */
@@ -113,9 +80,9 @@ function rsfgen_params(
     markov_file: InputPathType | null = null,
     prob_zero: number | null = null,
     input_table: InputPathType | null = null,
-): RsfgenParameters {
+): RsfgenParametersTagged {
     const params = {
-        "@type": "afni.RSFgen" as const,
+        "@type": "afni/RSFgen" as const,
         "length": length,
         "num_experimental_conditions": num_experimental_conditions,
         "suppress_output_flag": suppress_output_flag,
@@ -184,13 +151,13 @@ function rsfgen_cargs(
             String((params["random_seed"] ?? null))
         );
     }
-    if ((params["suppress_output_flag"] ?? null)) {
+    if ((params["suppress_output_flag"] ?? false)) {
         cargs.push("-quiet");
     }
-    if ((params["single_file_flag"] ?? null)) {
+    if ((params["single_file_flag"] ?? false)) {
         cargs.push("-one_file");
     }
-    if ((params["single_column_flag"] ?? null)) {
+    if ((params["single_column_flag"] ?? false)) {
         cargs.push("-one_col");
     }
     if ((params["output_prefix"] ?? null) !== null) {
@@ -331,7 +298,6 @@ function rsfgen(
 export {
       RSFGEN_METADATA,
       RsfgenOutputs,
-      RsfgenParameters,
       rsfgen,
       rsfgen_execute,
       rsfgen_params,

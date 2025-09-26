@@ -12,7 +12,7 @@ const DMRI_MATCH_METADATA: Metadata = {
 
 
 interface DmriMatchParameters {
-    "@type": "freesurfer.dmri_match";
+    "@type"?: "freesurfer/dmri_match";
     "parcellation1": InputPathType;
     "parcellation2": InputPathType;
     "num_clusters": number;
@@ -25,44 +25,11 @@ interface DmriMatchParameters {
     "inter_hemi_ratio_removal"?: string | null | undefined;
     "output": string;
 }
+type DmriMatchParametersTagged = Required<Pick<DmriMatchParameters, '@type'>> & DmriMatchParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dmri_match": dmri_match_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.dmri_match": dmri_match_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dmri_match(...)`.
+ * Output object returned when calling `DmriMatchParameters(...)`.
  *
  * @interface
  */
@@ -107,9 +74,9 @@ function dmri_match_params(
     bounding_box: boolean = false,
     symmetry: boolean = false,
     inter_hemi_ratio_removal: string | null = null,
-): DmriMatchParameters {
+): DmriMatchParametersTagged {
     const params = {
-        "@type": "freesurfer.dmri_match" as const,
+        "@type": "freesurfer/dmri_match" as const,
         "parcellation1": parcellation1,
         "parcellation2": parcellation2,
         "num_clusters": num_clusters,
@@ -162,16 +129,16 @@ function dmri_match_cargs(
         "-h2",
         execution.inputFile((params["clustering_path2"] ?? null))
     );
-    if ((params["labels"] ?? null)) {
+    if ((params["labels"] ?? false)) {
         cargs.push("-labels");
     }
-    if ((params["euclidean"] ?? null)) {
+    if ((params["euclidean"] ?? false)) {
         cargs.push("-euclid");
     }
-    if ((params["bounding_box"] ?? null)) {
+    if ((params["bounding_box"] ?? false)) {
         cargs.push("-bb");
     }
-    if ((params["symmetry"] ?? null)) {
+    if ((params["symmetry"] ?? false)) {
         cargs.push("-sym");
     }
     if ((params["inter_hemi_ratio_removal"] ?? null) !== null) {
@@ -279,7 +246,6 @@ function dmri_match(
 export {
       DMRI_MATCH_METADATA,
       DmriMatchOutputs,
-      DmriMatchParameters,
       dmri_match,
       dmri_match_execute,
       dmri_match_params,

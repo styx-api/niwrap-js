@@ -12,47 +12,15 @@ const SPEC_FILE_RELOCATE_METADATA: Metadata = {
 
 
 interface SpecFileRelocateParameters {
-    "@type": "workbench.spec-file-relocate";
+    "@type"?: "workbench/spec-file-relocate";
     "input_spec": string;
     "output_spec": string;
 }
+type SpecFileRelocateParametersTagged = Required<Pick<SpecFileRelocateParameters, '@type'>> & SpecFileRelocateParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.spec-file-relocate": spec_file_relocate_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `spec_file_relocate(...)`.
+ * Output object returned when calling `SpecFileRelocateParameters(...)`.
  *
  * @interface
  */
@@ -75,9 +43,9 @@ interface SpecFileRelocateOutputs {
 function spec_file_relocate_params(
     input_spec: string,
     output_spec: string,
-): SpecFileRelocateParameters {
+): SpecFileRelocateParametersTagged {
     const params = {
-        "@type": "workbench.spec-file-relocate" as const,
+        "@type": "workbench/spec-file-relocate" as const,
         "input_spec": input_spec,
         "output_spec": output_spec,
     };
@@ -185,7 +153,6 @@ function spec_file_relocate(
 export {
       SPEC_FILE_RELOCATE_METADATA,
       SpecFileRelocateOutputs,
-      SpecFileRelocateParameters,
       spec_file_relocate,
       spec_file_relocate_execute,
       spec_file_relocate_params,

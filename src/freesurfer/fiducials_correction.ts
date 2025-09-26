@@ -12,48 +12,15 @@ const FIDUCIALS_CORRECTION_METADATA: Metadata = {
 
 
 interface FiducialsCorrectionParameters {
-    "@type": "freesurfer.fiducials_correction";
+    "@type"?: "freesurfer/fiducials_correction";
     "input_file": InputPathType;
     "output_file": string;
 }
+type FiducialsCorrectionParametersTagged = Required<Pick<FiducialsCorrectionParameters, '@type'>> & FiducialsCorrectionParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.fiducials_correction": fiducials_correction_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.fiducials_correction": fiducials_correction_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `fiducials_correction(...)`.
+ * Output object returned when calling `FiducialsCorrectionParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface FiducialsCorrectionOutputs {
 function fiducials_correction_params(
     input_file: InputPathType,
     output_file: string,
-): FiducialsCorrectionParameters {
+): FiducialsCorrectionParametersTagged {
     const params = {
-        "@type": "freesurfer.fiducials_correction" as const,
+        "@type": "freesurfer/fiducials_correction" as const,
         "input_file": input_file,
         "output_file": output_file,
     };
@@ -186,7 +153,6 @@ function fiducials_correction(
 export {
       FIDUCIALS_CORRECTION_METADATA,
       FiducialsCorrectionOutputs,
-      FiducialsCorrectionParameters,
       fiducials_correction,
       fiducials_correction_execute,
       fiducials_correction_params,

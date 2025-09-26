@@ -12,7 +12,7 @@ const SURFACE_METRICS_METADATA: Metadata = {
 
 
 interface SurfaceMetricsParameters {
-    "@type": "afni.SurfaceMetrics";
+    "@type"?: "afni/SurfaceMetrics";
     "volume": boolean;
     "convexity": boolean;
     "closest_node"?: InputPathType | null | undefined;
@@ -37,43 +37,11 @@ interface SurfaceMetricsParameters {
     "tlrc": boolean;
     "prefix"?: string | null | undefined;
 }
+type SurfaceMetricsParametersTagged = Required<Pick<SurfaceMetricsParameters, '@type'>> & SurfaceMetricsParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.SurfaceMetrics": surface_metrics_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `surface_metrics(...)`.
+ * Output object returned when calling `SurfaceMetricsParameters(...)`.
  *
  * @interface
  */
@@ -138,9 +106,9 @@ function surface_metrics_params(
     internal_nodes: boolean = false,
     tlrc: boolean = false,
     prefix: string | null = null,
-): SurfaceMetricsParameters {
+): SurfaceMetricsParametersTagged {
     const params = {
-        "@type": "afni.SurfaceMetrics" as const,
+        "@type": "afni/SurfaceMetrics" as const,
         "volume": volume,
         "convexity": convexity,
         "area": area,
@@ -191,10 +159,10 @@ function surface_metrics_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("SurfaceMetrics");
-    if ((params["volume"] ?? null)) {
+    if ((params["volume"] ?? false)) {
         cargs.push("-vol");
     }
-    if ((params["convexity"] ?? null)) {
+    if ((params["convexity"] ?? false)) {
         cargs.push("-conv");
     }
     if ((params["closest_node"] ?? null) !== null) {
@@ -203,34 +171,34 @@ function surface_metrics_cargs(
             execution.inputFile((params["closest_node"] ?? null))
         );
     }
-    if ((params["area"] ?? null)) {
+    if ((params["area"] ?? false)) {
         cargs.push("-area");
     }
-    if ((params["tri_sines"] ?? null)) {
+    if ((params["tri_sines"] ?? false)) {
         cargs.push("-tri_sines");
     }
-    if ((params["tri_cosines"] ?? null)) {
+    if ((params["tri_cosines"] ?? false)) {
         cargs.push("-tri_cosines");
     }
-    if ((params["tri_CoSines"] ?? null)) {
+    if ((params["tri_CoSines"] ?? false)) {
         cargs.push("-tri_CoSines");
     }
-    if ((params["tri_angles"] ?? null)) {
+    if ((params["tri_angles"] ?? false)) {
         cargs.push("-tri_angles");
     }
-    if ((params["node_angles"] ?? null)) {
+    if ((params["node_angles"] ?? false)) {
         cargs.push("-node_angles");
     }
-    if ((params["curvature"] ?? null)) {
+    if ((params["curvature"] ?? false)) {
         cargs.push("-curv");
     }
-    if ((params["edges"] ?? null)) {
+    if ((params["edges"] ?? false)) {
         cargs.push("-edges");
     }
-    if ((params["node_normals"] ?? null)) {
+    if ((params["node_normals"] ?? false)) {
         cargs.push("-node_normals");
     }
-    if ((params["face_normals"] ?? null)) {
+    if ((params["face_normals"] ?? false)) {
         cargs.push("-face_normals");
     }
     if ((params["normals_scale"] ?? null) !== null) {
@@ -239,10 +207,10 @@ function surface_metrics_cargs(
             String((params["normals_scale"] ?? null))
         );
     }
-    if ((params["coords"] ?? null)) {
+    if ((params["coords"] ?? false)) {
         cargs.push("-coords");
     }
-    if ((params["sph_coords"] ?? null)) {
+    if ((params["sph_coords"] ?? false)) {
         cargs.push("-sph_coords");
     }
     if ((params["sph_coords_center"] ?? null) !== null) {
@@ -251,20 +219,20 @@ function surface_metrics_cargs(
             ...(params["sph_coords_center"] ?? null).map(String)
         );
     }
-    if ((params["boundary_nodes"] ?? null)) {
+    if ((params["boundary_nodes"] ?? false)) {
         cargs.push("-boundary_nodes");
     }
-    if ((params["boundary_triangles"] ?? null)) {
+    if ((params["boundary_triangles"] ?? false)) {
         cargs.push("-boundary_triangles");
     }
-    if ((params["internal_nodes"] ?? null)) {
+    if ((params["internal_nodes"] ?? false)) {
         cargs.push("-internal_nodes");
     }
     cargs.push(
         "-SURF_1",
         (params["surf1"] ?? null)
     );
-    if ((params["tlrc"] ?? null)) {
+    if ((params["tlrc"] ?? false)) {
         cargs.push("-tlrc");
     }
     if ((params["prefix"] ?? null) !== null) {
@@ -394,7 +362,6 @@ function surface_metrics(
 export {
       SURFACE_METRICS_METADATA,
       SurfaceMetricsOutputs,
-      SurfaceMetricsParameters,
       surface_metrics,
       surface_metrics_execute,
       surface_metrics_params,

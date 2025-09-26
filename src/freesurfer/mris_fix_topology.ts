@@ -12,7 +12,7 @@ const MRIS_FIX_TOPOLOGY_METADATA: Metadata = {
 
 
 interface MrisFixTopologyParameters {
-    "@type": "freesurfer.mris_fix_topology";
+    "@type"?: "freesurfer/mris_fix_topology";
     "subject_name": string;
     "hemisphere": string;
     "orig_name"?: string | null | undefined;
@@ -40,43 +40,11 @@ interface MrisFixTopologyParameters {
     "diagnostic_level"?: number | null | undefined;
     "threads"?: number | null | undefined;
 }
+type MrisFixTopologyParametersTagged = Required<Pick<MrisFixTopologyParameters, '@type'>> & MrisFixTopologyParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mris_fix_topology": mris_fix_topology_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mris_fix_topology(...)`.
+ * Output object returned when calling `MrisFixTopologyParameters(...)`.
  *
  * @interface
  */
@@ -147,9 +115,9 @@ function mris_fix_topology_params(
     smooth: number | null = null,
     diagnostic_level: number | null = null,
     threads: number | null = null,
-): MrisFixTopologyParameters {
+): MrisFixTopologyParametersTagged {
     const params = {
-        "@type": "freesurfer.mris_fix_topology" as const,
+        "@type": "freesurfer/mris_fix_topology" as const,
         "subject_name": subject_name,
         "hemisphere": hemisphere,
         "write_fixed_inflated": write_fixed_inflated,
@@ -251,28 +219,28 @@ function mris_fix_topology_cargs(
             (params["defect_base_name"] ?? null)
         );
     }
-    if ((params["write_fixed_inflated"] ?? null)) {
+    if ((params["write_fixed_inflated"] ?? false)) {
         cargs.push("-wi");
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verbose");
     }
-    if ((params["verbose_low"] ?? null)) {
+    if ((params["verbose_low"] ?? false)) {
         cargs.push("-verbose_low");
     }
-    if ((params["warnings"] ?? null)) {
+    if ((params["warnings"] ?? false)) {
         cargs.push("-warnings");
     }
-    if ((params["errors"] ?? null)) {
+    if ((params["errors"] ?? false)) {
         cargs.push("-errors");
     }
-    if ((params["movies"] ?? null)) {
+    if ((params["movies"] ?? false)) {
         cargs.push("-movies");
     }
-    if ((params["intersect"] ?? null)) {
+    if ((params["intersect"] ?? false)) {
         cargs.push("-intersect");
     }
-    if ((params["mappings"] ?? null)) {
+    if ((params["mappings"] ?? false)) {
         cargs.push("-mappings");
     }
     if ((params["correct_defect"] ?? null) !== null) {
@@ -287,10 +255,10 @@ function mris_fix_topology_cargs(
             String((params["niters"] ?? null))
         );
     }
-    if ((params["genetic"] ?? null)) {
+    if ((params["genetic"] ?? false)) {
         cargs.push("-genetic");
     }
-    if ((params["optimize"] ?? null)) {
+    if ((params["optimize"] ?? false)) {
         cargs.push("-optimize");
     }
     if ((params["random"] ?? null) !== null) {
@@ -305,10 +273,10 @@ function mris_fix_topology_cargs(
             String((params["seed"] ?? null))
         );
     }
-    if ((params["diag"] ?? null)) {
+    if ((params["diag"] ?? false)) {
         cargs.push("-diag");
     }
-    if ((params["mgz"] ?? null)) {
+    if ((params["mgz"] ?? false)) {
         cargs.push("-mgz");
     }
     if ((params["smooth"] ?? null) !== null) {
@@ -456,7 +424,6 @@ function mris_fix_topology(
 export {
       MRIS_FIX_TOPOLOGY_METADATA,
       MrisFixTopologyOutputs,
-      MrisFixTopologyParameters,
       mris_fix_topology,
       mris_fix_topology_execute,
       mris_fix_topology_params,

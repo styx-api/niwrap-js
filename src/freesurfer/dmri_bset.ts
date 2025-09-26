@@ -12,7 +12,7 @@ const DMRI_BSET_METADATA: Metadata = {
 
 
 interface DmriBsetParameters {
-    "@type": "freesurfer.dmri_bset";
+    "@type"?: "freesurfer/dmri_bset";
     "input_dwi": InputPathType;
     "output_dwi": string;
     "b_values"?: Array<number> | null | undefined;
@@ -24,44 +24,11 @@ interface DmriBsetParameters {
     "output_b_table"?: string | null | undefined;
     "output_g_table"?: string | null | undefined;
 }
+type DmriBsetParametersTagged = Required<Pick<DmriBsetParameters, '@type'>> & DmriBsetParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.dmri_bset": dmri_bset_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.dmri_bset": dmri_bset_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dmri_bset(...)`.
+ * Output object returned when calling `DmriBsetParameters(...)`.
  *
  * @interface
  */
@@ -112,9 +79,9 @@ function dmri_bset_params(
     input_g_table: InputPathType | null = null,
     output_b_table: string | null = null,
     output_g_table: string | null = null,
-): DmriBsetParameters {
+): DmriBsetParametersTagged {
     const params = {
-        "@type": "freesurfer.dmri_bset" as const,
+        "@type": "freesurfer/dmri_bset" as const,
         "input_dwi": input_dwi,
         "output_dwi": output_dwi,
         "bsort": bsort,
@@ -172,7 +139,7 @@ function dmri_bset_cargs(
             String((params["btol"] ?? null))
         );
     }
-    if ((params["bsort"] ?? null)) {
+    if ((params["bsort"] ?? false)) {
         cargs.push("--bsort");
     }
     if ((params["bmax"] ?? null) !== null) {
@@ -303,7 +270,6 @@ function dmri_bset(
 export {
       DMRI_BSET_METADATA,
       DmriBsetOutputs,
-      DmriBsetParameters,
       dmri_bset,
       dmri_bset_execute,
       dmri_bset_params,

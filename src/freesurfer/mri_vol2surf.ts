@@ -12,7 +12,7 @@ const MRI_VOL2SURF_METADATA: Metadata = {
 
 
 interface MriVol2surfParameters {
-    "@type": "freesurfer.mri_vol2surf";
+    "@type"?: "freesurfer/mri_vol2surf";
     "input_volume": InputPathType;
     "registration_file": InputPathType;
     "output_path": string;
@@ -23,44 +23,11 @@ interface MriVol2surfParameters {
     "hemisphere"?: "lh" | "rh" | null | undefined;
     "surface"?: string | null | undefined;
 }
+type MriVol2surfParametersTagged = Required<Pick<MriVol2surfParameters, '@type'>> & MriVol2surfParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_vol2surf": mri_vol2surf_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_vol2surf": mri_vol2surf_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_vol2surf(...)`.
+ * Output object returned when calling `MriVol2surfParameters(...)`.
  *
  * @interface
  */
@@ -101,9 +68,9 @@ function mri_vol2surf_params(
     target_subject: string | null = null,
     hemisphere: "lh" | "rh" | null = null,
     surface: string | null = null,
-): MriVol2surfParameters {
+): MriVol2surfParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_vol2surf" as const,
+        "@type": "freesurfer/mri_vol2surf" as const,
         "input_volume": input_volume,
         "registration_file": registration_file,
         "output_path": output_path,
@@ -166,7 +133,7 @@ function mri_vol2surf_cargs(
             (params["regheader_subject"] ?? null)
         );
     }
-    if ((params["mni152reg_flag"] ?? null)) {
+    if ((params["mni152reg_flag"] ?? false)) {
         cargs.push("--mni152reg");
     }
     if ((params["target_subject"] ?? null) !== null) {
@@ -281,7 +248,6 @@ function mri_vol2surf(
 export {
       MRI_VOL2SURF_METADATA,
       MriVol2surfOutputs,
-      MriVol2surfParameters,
       mri_vol2surf,
       mri_vol2surf_execute,
       mri_vol2surf_params,

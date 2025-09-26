@@ -12,7 +12,7 @@ const V_3D_MEDIAN_FILTER_METADATA: Metadata = {
 
 
 interface V3dMedianFilterParameters {
-    "@type": "afni.3dMedianFilter";
+    "@type"?: "afni/3dMedianFilter";
     "irad"?: number | null | undefined;
     "iter"?: number | null | undefined;
     "verbose": boolean;
@@ -20,44 +20,11 @@ interface V3dMedianFilterParameters {
     "automask": boolean;
     "dataset": InputPathType;
 }
+type V3dMedianFilterParametersTagged = Required<Pick<V3dMedianFilterParameters, '@type'>> & V3dMedianFilterParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dMedianFilter": v_3d_median_filter_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dMedianFilter": v_3d_median_filter_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_median_filter(...)`.
+ * Output object returned when calling `V3dMedianFilterParameters(...)`.
  *
  * @interface
  */
@@ -96,9 +63,9 @@ function v_3d_median_filter_params(
     verbose: boolean = false,
     prefix: string | null = null,
     automask: boolean = false,
-): V3dMedianFilterParameters {
+): V3dMedianFilterParametersTagged {
     const params = {
-        "@type": "afni.3dMedianFilter" as const,
+        "@type": "afni/3dMedianFilter" as const,
         "verbose": verbose,
         "automask": automask,
         "dataset": dataset,
@@ -142,7 +109,7 @@ function v_3d_median_filter_cargs(
             String((params["iter"] ?? null))
         );
     }
-    if ((params["verbose"] ?? null)) {
+    if ((params["verbose"] ?? false)) {
         cargs.push("-verb");
     }
     if ((params["prefix"] ?? null) !== null) {
@@ -151,7 +118,7 @@ function v_3d_median_filter_cargs(
             (params["prefix"] ?? null)
         );
     }
-    if ((params["automask"] ?? null)) {
+    if ((params["automask"] ?? false)) {
         cargs.push("-automask");
     }
     cargs.push(execution.inputFile((params["dataset"] ?? null)));
@@ -243,7 +210,6 @@ function v_3d_median_filter(
 
 export {
       V3dMedianFilterOutputs,
-      V3dMedianFilterParameters,
       V_3D_MEDIAN_FILTER_METADATA,
       v_3d_median_filter,
       v_3d_median_filter_execute,

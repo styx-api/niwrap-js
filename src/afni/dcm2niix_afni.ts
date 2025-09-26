@@ -12,7 +12,7 @@ const DCM2NIIX_AFNI_METADATA: Metadata = {
 
 
 interface Dcm2niixAfniParameters {
-    "@type": "afni.dcm2niix_afni";
+    "@type"?: "afni/dcm2niix_afni";
     "input_folder": string;
     "compression_level"?: number | null | undefined;
     "adjacent_dicoms"?: string | null | undefined;
@@ -43,44 +43,11 @@ interface Dcm2niixAfniParameters {
     "version": boolean;
     "xml": boolean;
 }
+type Dcm2niixAfniParametersTagged = Required<Pick<Dcm2niixAfniParameters, '@type'>> & Dcm2niixAfniParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.dcm2niix_afni": dcm2niix_afni_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.dcm2niix_afni": dcm2niix_afni_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `dcm2niix_afni(...)`.
+ * Output object returned when calling `Dcm2niixAfniParameters(...)`.
  *
  * @interface
  */
@@ -161,9 +128,9 @@ function dcm2niix_afni_params(
     terse: boolean = false,
     version: boolean = false,
     xml: boolean = false,
-): Dcm2niixAfniParameters {
+): Dcm2niixAfniParametersTagged {
     const params = {
-        "@type": "afni.dcm2niix_afni" as const,
+        "@type": "afni/dcm2niix_afni" as const,
         "input_folder": input_folder,
         "up_to_date": up_to_date,
         "ignore_trigger_times": ignore_trigger_times,
@@ -361,7 +328,7 @@ function dcm2niix_afni_cargs(
             (params["single_file_mode"] ?? null)
         );
     }
-    if ((params["up_to_date"] ?? null)) {
+    if ((params["up_to_date"] ?? false)) {
         cargs.push("-u");
     }
     if ((params["verbose"] ?? null) !== null) {
@@ -400,16 +367,16 @@ function dcm2niix_afni_cargs(
             (params["progress"] ?? null)
         );
     }
-    if ((params["ignore_trigger_times"] ?? null)) {
+    if ((params["ignore_trigger_times"] ?? false)) {
         cargs.push("--ignore_trigger_times");
     }
-    if ((params["terse"] ?? null)) {
+    if ((params["terse"] ?? false)) {
         cargs.push("--terse");
     }
-    if ((params["version"] ?? null)) {
+    if ((params["version"] ?? false)) {
         cargs.push("--version");
     }
-    if ((params["xml"] ?? null)) {
+    if ((params["xml"] ?? false)) {
         cargs.push("--xml");
     }
     return cargs;
@@ -546,7 +513,6 @@ function dcm2niix_afni(
 export {
       DCM2NIIX_AFNI_METADATA,
       Dcm2niixAfniOutputs,
-      Dcm2niixAfniParameters,
       dcm2niix_afni,
       dcm2niix_afni_execute,
       dcm2niix_afni_params,

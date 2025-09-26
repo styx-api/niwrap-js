@@ -12,7 +12,7 @@ const MRI_THRESHOLD_METADATA: Metadata = {
 
 
 interface MriThresholdParameters {
-    "@type": "freesurfer.mri_threshold";
+    "@type"?: "freesurfer/mri_threshold";
     "input_vol": InputPathType;
     "threshold": number;
     "output_vol": string;
@@ -20,44 +20,11 @@ interface MriThresholdParameters {
     "upper_threshold": boolean;
     "frame_number"?: number | null | undefined;
 }
+type MriThresholdParametersTagged = Required<Pick<MriThresholdParameters, '@type'>> & MriThresholdParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.mri_threshold": mri_threshold_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.mri_threshold": mri_threshold_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `mri_threshold(...)`.
+ * Output object returned when calling `MriThresholdParameters(...)`.
  *
  * @interface
  */
@@ -92,9 +59,9 @@ function mri_threshold_params(
     binarize: number | null = null,
     upper_threshold: boolean = false,
     frame_number: number | null = null,
-): MriThresholdParameters {
+): MriThresholdParametersTagged {
     const params = {
-        "@type": "freesurfer.mri_threshold" as const,
+        "@type": "freesurfer/mri_threshold" as const,
         "input_vol": input_vol,
         "threshold": threshold,
         "output_vol": output_vol,
@@ -133,7 +100,7 @@ function mri_threshold_cargs(
             String((params["binarize"] ?? null))
         );
     }
-    if ((params["upper_threshold"] ?? null)) {
+    if ((params["upper_threshold"] ?? false)) {
         cargs.push("-U");
     }
     if ((params["frame_number"] ?? null) !== null) {
@@ -230,7 +197,6 @@ function mri_threshold(
 export {
       MRI_THRESHOLD_METADATA,
       MriThresholdOutputs,
-      MriThresholdParameters,
       mri_threshold,
       mri_threshold_execute,
       mri_threshold_params,

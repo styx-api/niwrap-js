@@ -12,48 +12,16 @@ const GIFTI_CONVERT_METADATA: Metadata = {
 
 
 interface GiftiConvertParameters {
-    "@type": "workbench.gifti-convert";
+    "@type"?: "workbench/gifti-convert";
     "gifti_encoding": string;
     "input_gifti_file": string;
     "output_gifti_file": string;
 }
+type GiftiConvertParametersTagged = Required<Pick<GiftiConvertParameters, '@type'>> & GiftiConvertParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "workbench.gifti-convert": gifti_convert_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `gifti_convert(...)`.
+ * Output object returned when calling `GiftiConvertParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function gifti_convert_params(
     gifti_encoding: string,
     input_gifti_file: string,
     output_gifti_file: string,
-): GiftiConvertParameters {
+): GiftiConvertParametersTagged {
     const params = {
-        "@type": "workbench.gifti-convert" as const,
+        "@type": "workbench/gifti-convert" as const,
         "gifti_encoding": gifti_encoding,
         "input_gifti_file": input_gifti_file,
         "output_gifti_file": output_gifti_file,
@@ -202,7 +170,6 @@ function gifti_convert(
 export {
       GIFTI_CONVERT_METADATA,
       GiftiConvertOutputs,
-      GiftiConvertParameters,
       gifti_convert,
       gifti_convert_execute,
       gifti_convert_params,

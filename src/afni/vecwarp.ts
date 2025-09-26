@@ -12,7 +12,7 @@ const VECWARP_METADATA: Metadata = {
 
 
 interface VecwarpParameters {
-    "@type": "afni.Vecwarp";
+    "@type"?: "afni/Vecwarp";
     "apar"?: InputPathType | null | undefined;
     "matvec"?: InputPathType | null | undefined;
     "forward": boolean;
@@ -21,44 +21,11 @@ interface VecwarpParameters {
     "output"?: string | null | undefined;
     "force": boolean;
 }
+type VecwarpParametersTagged = Required<Pick<VecwarpParameters, '@type'>> & VecwarpParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.Vecwarp": vecwarp_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.Vecwarp": vecwarp_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `vecwarp(...)`.
+ * Output object returned when calling `VecwarpParameters(...)`.
  *
  * @interface
  */
@@ -95,9 +62,9 @@ function vecwarp_params(
     input: InputPathType | null = null,
     output: string | null = null,
     force: boolean = false,
-): VecwarpParameters {
+): VecwarpParametersTagged {
     const params = {
-        "@type": "afni.Vecwarp" as const,
+        "@type": "afni/Vecwarp" as const,
         "forward": forward,
         "backward": backward,
         "force": force,
@@ -144,10 +111,10 @@ function vecwarp_cargs(
             execution.inputFile((params["matvec"] ?? null))
         );
     }
-    if ((params["forward"] ?? null)) {
+    if ((params["forward"] ?? false)) {
         cargs.push("-forward");
     }
-    if ((params["backward"] ?? null)) {
+    if ((params["backward"] ?? false)) {
         cargs.push("-backward");
     }
     if ((params["input"] ?? null) !== null) {
@@ -162,7 +129,7 @@ function vecwarp_cargs(
             (params["output"] ?? null)
         );
     }
-    if ((params["force"] ?? null)) {
+    if ((params["force"] ?? false)) {
         cargs.push("-force");
     }
     return cargs;
@@ -255,7 +222,6 @@ function vecwarp(
 export {
       VECWARP_METADATA,
       VecwarpOutputs,
-      VecwarpParameters,
       vecwarp,
       vecwarp_execute,
       vecwarp_params,

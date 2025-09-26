@@ -12,51 +12,18 @@ const TEXTURE_RUN_LENGTH_FEATURES_METADATA: Metadata = {
 
 
 interface TextureRunLengthFeaturesParameters {
-    "@type": "ants.TextureRunLengthFeatures";
+    "@type"?: "ants/TextureRunLengthFeatures";
     "image_dimension": number;
     "input_image": InputPathType;
     "number_of_bins_per_axis"?: number | null | undefined;
     "mask_image"?: InputPathType | null | undefined;
     "mask_label"?: number | null | undefined;
 }
+type TextureRunLengthFeaturesParametersTagged = Required<Pick<TextureRunLengthFeaturesParameters, '@type'>> & TextureRunLengthFeaturesParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "ants.TextureRunLengthFeatures": texture_run_length_features_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "ants.TextureRunLengthFeatures": texture_run_length_features_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `texture_run_length_features(...)`.
+ * Output object returned when calling `TextureRunLengthFeaturesParameters(...)`.
  *
  * @interface
  */
@@ -125,9 +92,9 @@ function texture_run_length_features_params(
     number_of_bins_per_axis: number | null = null,
     mask_image: InputPathType | null = null,
     mask_label: number | null = null,
-): TextureRunLengthFeaturesParameters {
+): TextureRunLengthFeaturesParametersTagged {
     const params = {
-        "@type": "ants.TextureRunLengthFeatures" as const,
+        "@type": "ants/TextureRunLengthFeatures" as const,
         "image_dimension": image_dimension,
         "input_image": input_image,
     };
@@ -264,7 +231,6 @@ function texture_run_length_features(
 export {
       TEXTURE_RUN_LENGTH_FEATURES_METADATA,
       TextureRunLengthFeaturesOutputs,
-      TextureRunLengthFeaturesParameters,
       texture_run_length_features,
       texture_run_length_features_execute,
       texture_run_length_features_params,

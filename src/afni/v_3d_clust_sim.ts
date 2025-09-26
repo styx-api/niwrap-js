@@ -12,7 +12,7 @@ const V_3D_CLUST_SIM_METADATA: Metadata = {
 
 
 interface V3dClustSimParameters {
-    "@type": "afni.3dClustSim";
+    "@type"?: "afni/3dClustSim";
     "nxyz"?: string | null | undefined;
     "dxyz"?: string | null | undefined;
     "ball": boolean;
@@ -36,44 +36,11 @@ interface V3dClustSimParameters {
     "quiet": boolean;
     "ssave"?: string | null | undefined;
 }
+type V3dClustSimParametersTagged = Required<Pick<V3dClustSimParameters, '@type'>> & V3dClustSimParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.3dClustSim": v_3d_clust_sim_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "afni.3dClustSim": v_3d_clust_sim_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `v_3d_clust_sim(...)`.
+ * Output object returned when calling `V3dClustSimParameters(...)`.
  *
  * @interface
  */
@@ -176,9 +143,9 @@ function v_3d_clust_sim_params(
     cmd: string | null = null,
     quiet: boolean = false,
     ssave: string | null = null,
-): V3dClustSimParameters {
+): V3dClustSimParametersTagged {
     const params = {
-        "@type": "afni.3dClustSim" as const,
+        "@type": "afni/3dClustSim" as const,
         "ball": ball,
         "oksmallmask": oksmallmask,
         "nopad": nopad,
@@ -258,7 +225,7 @@ function v_3d_clust_sim_cargs(
             (params["dxyz"] ?? null)
         );
     }
-    if ((params["ball"] ?? null)) {
+    if ((params["ball"] ?? false)) {
         cargs.push("-BALL");
     }
     if ((params["mask"] ?? null) !== null) {
@@ -267,7 +234,7 @@ function v_3d_clust_sim_cargs(
             execution.inputFile((params["mask"] ?? null))
         );
     }
-    if ((params["oksmallmask"] ?? null)) {
+    if ((params["oksmallmask"] ?? false)) {
         cargs.push("-OKsmallmask");
     }
     if ((params["inset"] ?? null) !== null) {
@@ -288,7 +255,7 @@ function v_3d_clust_sim_cargs(
             (params["acf"] ?? null)
         );
     }
-    if ((params["nopad"] ?? null)) {
+    if ((params["nopad"] ?? false)) {
         cargs.push("-nopad");
     }
     if ((params["pthr"] ?? null) !== null) {
@@ -303,10 +270,10 @@ function v_3d_clust_sim_cargs(
             (params["athr"] ?? null)
         );
     }
-    if ((params["lots"] ?? null)) {
+    if ((params["lots"] ?? false)) {
         cargs.push("-LOTS");
     }
-    if ((params["mega"] ?? null)) {
+    if ((params["mega"] ?? false)) {
         cargs.push("-MEGA");
     }
     if ((params["iter"] ?? null) !== null) {
@@ -315,7 +282,7 @@ function v_3d_clust_sim_cargs(
             String((params["iter"] ?? null))
         );
     }
-    if ((params["nodec"] ?? null)) {
+    if ((params["nodec"] ?? false)) {
         cargs.push("-nodec");
     }
     if ((params["seed"] ?? null) !== null) {
@@ -324,10 +291,10 @@ function v_3d_clust_sim_cargs(
             String((params["seed"] ?? null))
         );
     }
-    if ((params["niml"] ?? null)) {
+    if ((params["niml"] ?? false)) {
         cargs.push("-niml");
     }
-    if ((params["both"] ?? null)) {
+    if ((params["both"] ?? false)) {
         cargs.push("-both");
     }
     if ((params["prefix"] ?? null) !== null) {
@@ -342,7 +309,7 @@ function v_3d_clust_sim_cargs(
             (params["cmd"] ?? null)
         );
     }
-    if ((params["quiet"] ?? null)) {
+    if ((params["quiet"] ?? false)) {
         cargs.push("-quiet");
     }
     if ((params["ssave"] ?? null) !== null) {
@@ -479,7 +446,6 @@ function v_3d_clust_sim(
 
 export {
       V3dClustSimOutputs,
-      V3dClustSimParameters,
       V_3D_CLUST_SIM_METADATA,
       v_3d_clust_sim,
       v_3d_clust_sim_execute,

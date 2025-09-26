@@ -12,48 +12,15 @@ const SEGMENT_HA_T1_LONG_SH_METADATA: Metadata = {
 
 
 interface SegmentHaT1LongShParameters {
-    "@type": "freesurfer.segmentHA_T1_long.sh";
+    "@type"?: "freesurfer/segmentHA_T1_long.sh";
     "subject_dir": string;
     "subject_id": string;
 }
+type SegmentHaT1LongShParametersTagged = Required<Pick<SegmentHaT1LongShParameters, '@type'>> & SegmentHaT1LongShParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.segmentHA_T1_long.sh": segment_ha_t1_long_sh_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-        "freesurfer.segmentHA_T1_long.sh": segment_ha_t1_long_sh_outputs,
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `segment_ha_t1_long_sh(...)`.
+ * Output object returned when calling `SegmentHaT1LongShParameters(...)`.
  *
  * @interface
  */
@@ -80,9 +47,9 @@ interface SegmentHaT1LongShOutputs {
 function segment_ha_t1_long_sh_params(
     subject_dir: string,
     subject_id: string,
-): SegmentHaT1LongShParameters {
+): SegmentHaT1LongShParametersTagged {
     const params = {
-        "@type": "freesurfer.segmentHA_T1_long.sh" as const,
+        "@type": "freesurfer/segmentHA_T1_long.sh" as const,
         "subject_dir": subject_dir,
         "subject_id": subject_id,
     };
@@ -186,7 +153,6 @@ function segment_ha_t1_long_sh(
 export {
       SEGMENT_HA_T1_LONG_SH_METADATA,
       SegmentHaT1LongShOutputs,
-      SegmentHaT1LongShParameters,
       segment_ha_t1_long_sh,
       segment_ha_t1_long_sh_execute,
       segment_ha_t1_long_sh_params,

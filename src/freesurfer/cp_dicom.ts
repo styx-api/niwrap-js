@@ -12,48 +12,16 @@ const CP_DICOM_METADATA: Metadata = {
 
 
 interface CpDicomParameters {
-    "@type": "freesurfer.cp-dicom";
+    "@type"?: "freesurfer/cp-dicom";
     "dicom_dir": string;
     "output_dir": string;
     "debug": boolean;
 }
+type CpDicomParametersTagged = Required<Pick<CpDicomParameters, '@type'>> & CpDicomParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "freesurfer.cp-dicom": cp_dicom_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `cp_dicom(...)`.
+ * Output object returned when calling `CpDicomParameters(...)`.
  *
  * @interface
  */
@@ -78,9 +46,9 @@ function cp_dicom_params(
     dicom_dir: string,
     output_dir: string,
     debug: boolean = false,
-): CpDicomParameters {
+): CpDicomParametersTagged {
     const params = {
-        "@type": "freesurfer.cp-dicom" as const,
+        "@type": "freesurfer/cp-dicom" as const,
         "dicom_dir": dicom_dir,
         "output_dir": output_dir,
         "debug": debug,
@@ -111,7 +79,7 @@ function cp_dicom_cargs(
         "-o",
         (params["output_dir"] ?? null)
     );
-    if ((params["debug"] ?? null)) {
+    if ((params["debug"] ?? false)) {
         cargs.push("-debug");
     }
     return cargs;
@@ -195,7 +163,6 @@ function cp_dicom(
 export {
       CP_DICOM_METADATA,
       CpDicomOutputs,
-      CpDicomParameters,
       cp_dicom,
       cp_dicom_execute,
       cp_dicom_params,

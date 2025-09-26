@@ -12,7 +12,7 @@ const DRIVE_SUMA_METADATA: Metadata = {
 
 
 interface DriveSumaParameters {
-    "@type": "afni.DriveSuma";
+    "@type"?: "afni/DriveSuma";
     "command": string;
     "surf_label"?: string | null | undefined;
     "surface_file"?: InputPathType | null | undefined;
@@ -45,43 +45,11 @@ interface DriveSumaParameters {
     "c_demo": boolean;
     "viewer_cont": boolean;
 }
+type DriveSumaParametersTagged = Required<Pick<DriveSumaParameters, '@type'>> & DriveSumaParameters;
 
 
 /**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function dynCargs(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "afni.DriveSuma": drive_suma_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function dynOutputs(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
-
-
-/**
- * Output object returned when calling `drive_suma(...)`.
+ * Output object returned when calling `DriveSumaParameters(...)`.
  *
  * @interface
  */
@@ -162,9 +130,9 @@ function drive_suma_params(
     help_nido: boolean = false,
     c_demo: boolean = false,
     viewer_cont: boolean = false,
-): DriveSumaParameters {
+): DriveSumaParametersTagged {
     const params = {
-        "@type": "afni.DriveSuma" as const,
+        "@type": "afni/DriveSuma" as const,
         "command": command,
         "save_last": save_last,
         "save_all": save_all,
@@ -362,7 +330,7 @@ function drive_suma_cargs(
             (params["save_range"] ?? null)
         );
     }
-    if ((params["save_last"] ?? null)) {
+    if ((params["save_last"] ?? false)) {
         cargs.push("-save_last");
     }
     if ((params["save_last_n"] ?? null) !== null) {
@@ -371,34 +339,34 @@ function drive_suma_cargs(
             String((params["save_last_n"] ?? null))
         );
     }
-    if ((params["save_all"] ?? null)) {
+    if ((params["save_all"] ?? false)) {
         cargs.push("-save_all");
     }
-    if ((params["echo_edu"] ?? null)) {
+    if ((params["echo_edu"] ?? false)) {
         cargs.push("-echo_edu");
     }
-    if ((params["echo_nel_stdout"] ?? null)) {
+    if ((params["echo_nel_stdout"] ?? false)) {
         cargs.push("-echo_nel_stdout");
     }
-    if ((params["echo_nel_stderr"] ?? null)) {
+    if ((params["echo_nel_stderr"] ?? false)) {
         cargs.push("-echo_nel_stderr");
     }
-    if ((params["examples"] ?? null)) {
+    if ((params["examples"] ?? false)) {
         cargs.push("-examples");
     }
-    if ((params["help"] ?? null)) {
+    if ((params["help"] ?? false)) {
         cargs.push("-help");
     }
-    if ((params["h"] ?? null)) {
+    if ((params["h"] ?? false)) {
         cargs.push("-h");
     }
-    if ((params["help_nido"] ?? null)) {
+    if ((params["help_nido"] ?? false)) {
         cargs.push("-help_nido");
     }
-    if ((params["c_demo"] ?? null)) {
+    if ((params["c_demo"] ?? false)) {
         cargs.push("-C_demo");
     }
-    if ((params["viewer_cont"] ?? null)) {
+    if ((params["viewer_cont"] ?? false)) {
         cargs.push("-com viewer_cont");
     }
     return cargs;
@@ -538,7 +506,6 @@ function drive_suma(
 export {
       DRIVE_SUMA_METADATA,
       DriveSumaOutputs,
-      DriveSumaParameters,
       drive_suma,
       drive_suma_execute,
       drive_suma_params,
