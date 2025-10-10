@@ -23,7 +23,7 @@ import * as fsl from './fsl'
 import * as greedy from './greedy'
 import * as niftyreg from './niftyreg'
 import {Runner} from 'styxdefs'
-export const version = '0.6.3';
+export const version = '0.7.0';
 export function execute(params: any, runner: Runner | null = null) {;
   const stype = params["@type"];
   if (stype.startsWith("freesurfer/")) return freesurfer.execute(params, runner);
