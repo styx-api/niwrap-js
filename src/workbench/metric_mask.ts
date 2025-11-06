@@ -4,19 +4,18 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_MASK_METADATA: Metadata = {
-    id: "63170647bafcd7131594caf978d3951bd09b8dc0.boutiques",
+    id: "681850b8635d1fb30c276619483f247b1d36e566.workbench",
     name: "metric-mask",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface MetricMaskParameters {
     "@type"?: "workbench/metric-mask";
+    "metric-out": string;
+    "column"?: string | null | undefined;
     "metric": InputPathType;
     "mask": InputPathType;
-    "metric_out": string;
-    "opt_column_column"?: string | null | undefined;
 }
 type MetricMaskParametersTagged = Required<Pick<MetricMaskParameters, '@type'>> & MetricMaskParameters;
 
@@ -41,27 +40,29 @@ interface MetricMaskOutputs {
 /**
  * Build parameters.
  *
+ * @param metric_out the output metric
+ * @param column select a single column
+
+the column number or name
  * @param metric the input metric
  * @param mask the mask metric
- * @param metric_out the output metric
- * @param opt_column_column select a single column: the column number or name
  *
  * @returns Parameter dictionary
  */
 function metric_mask_params(
+    metric_out: string,
+    column: string | null,
     metric: InputPathType,
     mask: InputPathType,
-    metric_out: string,
-    opt_column_column: string | null = null,
 ): MetricMaskParametersTagged {
     const params = {
         "@type": "workbench/metric-mask" as const,
+        "metric-out": metric_out,
         "metric": metric,
         "mask": mask,
-        "metric_out": metric_out,
     };
-    if (opt_column_column !== null) {
-        params["opt_column_column"] = opt_column_column;
+    if (column !== null) {
+        params["column"] = column;
     }
     return params;
 }
@@ -80,17 +81,17 @@ function metric_mask_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-metric-mask");
-    cargs.push(execution.inputFile((params["metric"] ?? null)));
-    cargs.push(execution.inputFile((params["mask"] ?? null)));
-    cargs.push((params["metric_out"] ?? null));
-    if ((params["opt_column_column"] ?? null) !== null) {
+    if ((params["column"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-metric-mask",
+            (params["metric-out"] ?? null),
             "-column",
-            (params["opt_column_column"] ?? null)
+            (params["column"] ?? null)
         );
     }
+    cargs.push(execution.inputFile((params["metric"] ?? null)));
+    cargs.push(execution.inputFile((params["mask"] ?? null)));
     return cargs;
 }
 
@@ -109,22 +110,16 @@ function metric_mask_outputs(
 ): MetricMaskOutputs {
     const ret: MetricMaskOutputs = {
         root: execution.outputFile("."),
-        metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
+        metric_out: execution.outputFile([(params["metric-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * metric-mask
- *
- * Mask a metric file.
+ * MASK A METRIC FILE.
  *
  * By default, the output metric is a copy of the input metric, but with zeros wherever the mask metric is zero or negative.  if -column is specified, the output contains only one column, the masked version of the specified input column.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -146,32 +141,28 @@ function metric_mask_execute(
 
 
 /**
- * metric-mask
- *
- * Mask a metric file.
+ * MASK A METRIC FILE.
  *
  * By default, the output metric is a copy of the input metric, but with zeros wherever the mask metric is zero or negative.  if -column is specified, the output contains only one column, the masked version of the specified input column.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param metric_out the output metric
+ * @param column select a single column
+
+the column number or name
  * @param metric the input metric
  * @param mask the mask metric
- * @param metric_out the output metric
- * @param opt_column_column select a single column: the column number or name
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricMaskOutputs`).
  */
 function metric_mask(
+    metric_out: string,
+    column: string | null,
     metric: InputPathType,
     mask: InputPathType,
-    metric_out: string,
-    opt_column_column: string | null = null,
     runner: Runner | null = null,
 ): MetricMaskOutputs {
-    const params = metric_mask_params(metric, mask, metric_out, opt_column_column)
+    const params = metric_mask_params(metric_out, column, metric, mask)
     return metric_mask_execute(params, runner);
 }
 

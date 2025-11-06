@@ -4,23 +4,22 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_GEODESIC_ROIS_METADATA: Metadata = {
-    id: "72311c67a08117facc775f0d49b6e99ecfb7beb1.boutiques",
+    id: "ec6694baabf8b66b3eafbe5048653b2c790dbe3c.workbench",
     name: "surface-geodesic-rois",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface SurfaceGeodesicRoisParameters {
     "@type"?: "workbench/surface-geodesic-rois";
+    "metric-out": string;
+    "sigma"?: number | null | undefined;
+    "method"?: string | null | undefined;
+    "name-list-file"?: string | null | undefined;
+    "area-metric"?: InputPathType | null | undefined;
     "surface": InputPathType;
     "limit": number;
-    "vertex_list_file": string;
-    "metric_out": string;
-    "opt_gaussian_sigma"?: number | null | undefined;
-    "opt_overlap_logic_method"?: string | null | undefined;
-    "opt_names_name_list_file"?: string | null | undefined;
-    "opt_corrected_areas_area_metric"?: InputPathType | null | undefined;
+    "vertex-list-file": string;
 }
 type SurfaceGeodesicRoisParametersTagged = Required<Pick<SurfaceGeodesicRoisParameters, '@type'>> & SurfaceGeodesicRoisParameters;
 
@@ -45,45 +44,53 @@ interface SurfaceGeodesicRoisOutputs {
 /**
  * Build parameters.
  *
+ * @param metric_out the output metric
+ * @param sigma generate a gaussian kernel instead of a flat ROI
+
+the sigma for the gaussian kernel, in mm
+ * @param method how to handle overlapping ROIs, default ALLOW
+
+the method of resolving overlaps
+ * @param name_list_file name the columns from text file
+
+a text file containing column names, one per line
+ * @param area_metric vertex areas to use instead of computing them from the surface
+
+the corrected vertex areas, as a metric
  * @param surface the surface to draw on
  * @param limit geodesic distance limit from vertex, in mm
  * @param vertex_list_file a text file containing the vertices to draw ROIs around
- * @param metric_out the output metric
- * @param opt_gaussian_sigma generate a gaussian kernel instead of a flat ROI: the sigma for the gaussian kernel, in mm
- * @param opt_overlap_logic_method how to handle overlapping ROIs, default ALLOW: the method of resolving overlaps
- * @param opt_names_name_list_file name the columns from text file: a text file containing column names, one per line
- * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
 function surface_geodesic_rois_params(
+    metric_out: string,
+    sigma: number | null,
+    method: string | null,
+    name_list_file: string | null,
+    area_metric: InputPathType | null,
     surface: InputPathType,
     limit: number,
     vertex_list_file: string,
-    metric_out: string,
-    opt_gaussian_sigma: number | null = null,
-    opt_overlap_logic_method: string | null = null,
-    opt_names_name_list_file: string | null = null,
-    opt_corrected_areas_area_metric: InputPathType | null = null,
 ): SurfaceGeodesicRoisParametersTagged {
     const params = {
         "@type": "workbench/surface-geodesic-rois" as const,
+        "metric-out": metric_out,
         "surface": surface,
         "limit": limit,
-        "vertex_list_file": vertex_list_file,
-        "metric_out": metric_out,
+        "vertex-list-file": vertex_list_file,
     };
-    if (opt_gaussian_sigma !== null) {
-        params["opt_gaussian_sigma"] = opt_gaussian_sigma;
+    if (sigma !== null) {
+        params["sigma"] = sigma;
     }
-    if (opt_overlap_logic_method !== null) {
-        params["opt_overlap_logic_method"] = opt_overlap_logic_method;
+    if (method !== null) {
+        params["method"] = method;
     }
-    if (opt_names_name_list_file !== null) {
-        params["opt_names_name_list_file"] = opt_names_name_list_file;
+    if (name_list_file !== null) {
+        params["name-list-file"] = name_list_file;
     }
-    if (opt_corrected_areas_area_metric !== null) {
-        params["opt_corrected_areas_area_metric"] = opt_corrected_areas_area_metric;
+    if (area_metric !== null) {
+        params["area-metric"] = area_metric;
     }
     return params;
 }
@@ -102,36 +109,24 @@ function surface_geodesic_rois_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-surface-geodesic-rois");
+    if ((params["sigma"] ?? null) !== null || (params["method"] ?? null) !== null || (params["name-list-file"] ?? null) !== null || (params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "wb_command",
+            "-surface-geodesic-rois",
+            (params["metric-out"] ?? null),
+            "-gaussian",
+            (((params["sigma"] ?? null) !== null) ? String((params["sigma"] ?? null)) : ""),
+            "-overlap-logic",
+            (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : ""),
+            "-names",
+            (((params["name-list-file"] ?? null) !== null) ? (params["name-list-file"] ?? null) : ""),
+            "-corrected-areas",
+            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
+        );
+    }
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(String((params["limit"] ?? null)));
-    cargs.push((params["vertex_list_file"] ?? null));
-    cargs.push((params["metric_out"] ?? null));
-    if ((params["opt_gaussian_sigma"] ?? null) !== null) {
-        cargs.push(
-            "-gaussian",
-            String((params["opt_gaussian_sigma"] ?? null))
-        );
-    }
-    if ((params["opt_overlap_logic_method"] ?? null) !== null) {
-        cargs.push(
-            "-overlap-logic",
-            (params["opt_overlap_logic_method"] ?? null)
-        );
-    }
-    if ((params["opt_names_name_list_file"] ?? null) !== null) {
-        cargs.push(
-            "-names",
-            (params["opt_names_name_list_file"] ?? null)
-        );
-    }
-    if ((params["opt_corrected_areas_area_metric"] ?? null) !== null) {
-        cargs.push(
-            "-corrected-areas",
-            execution.inputFile((params["opt_corrected_areas_area_metric"] ?? null))
-        );
-    }
+    cargs.push((params["vertex-list-file"] ?? null));
     return cargs;
 }
 
@@ -150,22 +145,16 @@ function surface_geodesic_rois_outputs(
 ): SurfaceGeodesicRoisOutputs {
     const ret: SurfaceGeodesicRoisOutputs = {
         root: execution.outputFile("."),
-        metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
+        metric_out: execution.outputFile([(params["metric-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * surface-geodesic-rois
- *
- * Draw geodesic limited rois at vertices.
+ * DRAW GEODESIC LIMITED ROIS AT VERTICES.
  *
  * For each vertex in the list file, a column in the output metric is created, and an ROI around that vertex is drawn in that column.  Each metric column will have zeros outside the geodesic distance spacified by <limit>, and by default will have a value of 1.0 inside it.  If the -gaussian option is specified, the values inside the ROI will instead form a gaussian with the specified value of sigma, normalized so that the sum of the nonzero values in the metric column is 1.0.  The <method> argument to -overlap-logic must be one of ALLOW, CLOSEST, or EXCLUDE.  ALLOW is the default, and means that ROIs are treated independently and may overlap.  CLOSEST means that ROIs may not overlap, and that no ROI contains vertices that are closer to a different seed vertex.  EXCLUDE means that ROIs may not overlap, and that any vertex within range of more than one ROI does not belong to any ROI.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -187,40 +176,42 @@ function surface_geodesic_rois_execute(
 
 
 /**
- * surface-geodesic-rois
- *
- * Draw geodesic limited rois at vertices.
+ * DRAW GEODESIC LIMITED ROIS AT VERTICES.
  *
  * For each vertex in the list file, a column in the output metric is created, and an ROI around that vertex is drawn in that column.  Each metric column will have zeros outside the geodesic distance spacified by <limit>, and by default will have a value of 1.0 inside it.  If the -gaussian option is specified, the values inside the ROI will instead form a gaussian with the specified value of sigma, normalized so that the sum of the nonzero values in the metric column is 1.0.  The <method> argument to -overlap-logic must be one of ALLOW, CLOSEST, or EXCLUDE.  ALLOW is the default, and means that ROIs are treated independently and may overlap.  CLOSEST means that ROIs may not overlap, and that no ROI contains vertices that are closer to a different seed vertex.  EXCLUDE means that ROIs may not overlap, and that any vertex within range of more than one ROI does not belong to any ROI.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param metric_out the output metric
+ * @param sigma generate a gaussian kernel instead of a flat ROI
+
+the sigma for the gaussian kernel, in mm
+ * @param method how to handle overlapping ROIs, default ALLOW
+
+the method of resolving overlaps
+ * @param name_list_file name the columns from text file
+
+a text file containing column names, one per line
+ * @param area_metric vertex areas to use instead of computing them from the surface
+
+the corrected vertex areas, as a metric
  * @param surface the surface to draw on
  * @param limit geodesic distance limit from vertex, in mm
  * @param vertex_list_file a text file containing the vertices to draw ROIs around
- * @param metric_out the output metric
- * @param opt_gaussian_sigma generate a gaussian kernel instead of a flat ROI: the sigma for the gaussian kernel, in mm
- * @param opt_overlap_logic_method how to handle overlapping ROIs, default ALLOW: the method of resolving overlaps
- * @param opt_names_name_list_file name the columns from text file: a text file containing column names, one per line
- * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceGeodesicRoisOutputs`).
  */
 function surface_geodesic_rois(
+    metric_out: string,
+    sigma: number | null,
+    method: string | null,
+    name_list_file: string | null,
+    area_metric: InputPathType | null,
     surface: InputPathType,
     limit: number,
     vertex_list_file: string,
-    metric_out: string,
-    opt_gaussian_sigma: number | null = null,
-    opt_overlap_logic_method: string | null = null,
-    opt_names_name_list_file: string | null = null,
-    opt_corrected_areas_area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): SurfaceGeodesicRoisOutputs {
-    const params = surface_geodesic_rois_params(surface, limit, vertex_list_file, metric_out, opt_gaussian_sigma, opt_overlap_logic_method, opt_names_name_list_file, opt_corrected_areas_area_metric)
+    const params = surface_geodesic_rois_params(metric_out, sigma, method, name_list_file, area_metric, surface, limit, vertex_list_file)
     return surface_geodesic_rois_execute(params, runner);
 }
 

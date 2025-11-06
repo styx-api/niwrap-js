@@ -4,17 +4,16 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_FLIP_LR_METADATA: Metadata = {
-    id: "40cffc47a1b0a452d60871c5a8697c2aec5d0f41.boutiques",
+    id: "bdd0276d22f7add2db023bdd235def55dde8330f.workbench",
     name: "surface-flip-lr",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface SurfaceFlipLrParameters {
     "@type"?: "workbench/surface-flip-lr";
+    "surface-out": string;
     "surface": InputPathType;
-    "surface_out": string;
 }
 type SurfaceFlipLrParametersTagged = Required<Pick<SurfaceFlipLrParameters, '@type'>> & SurfaceFlipLrParameters;
 
@@ -39,19 +38,19 @@ interface SurfaceFlipLrOutputs {
 /**
  * Build parameters.
  *
- * @param surface the surface to flip
  * @param surface_out the output flipped surface
+ * @param surface the surface to flip
  *
  * @returns Parameter dictionary
  */
 function surface_flip_lr_params(
-    surface: InputPathType,
     surface_out: string,
+    surface: InputPathType,
 ): SurfaceFlipLrParametersTagged {
     const params = {
         "@type": "workbench/surface-flip-lr" as const,
+        "surface-out": surface_out,
         "surface": surface,
-        "surface_out": surface_out,
     };
     return params;
 }
@@ -70,10 +69,12 @@ function surface_flip_lr_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-surface-flip-lr");
+    cargs.push(
+        "wb_command",
+        "-surface-flip-lr",
+        (params["surface-out"] ?? null)
+    );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push((params["surface_out"] ?? null));
     return cargs;
 }
 
@@ -92,22 +93,16 @@ function surface_flip_lr_outputs(
 ): SurfaceFlipLrOutputs {
     const ret: SurfaceFlipLrOutputs = {
         root: execution.outputFile("."),
-        surface_out: execution.outputFile([(params["surface_out"] ?? null)].join('')),
+        surface_out: execution.outputFile([(params["surface-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * surface-flip-lr
- *
- * Mirror a surface through the yz plane.
+ * MIRROR A SURFACE THROUGH THE YZ PLANE.
  *
  * This command negates the x coordinate of each vertex, and flips the surface normals, so that you have a surface of opposite handedness with the same features and vertex correspondence, with normals consistent with the original surface.  That is, if the input surface has normals facing outward, the output surface will also have normals facing outward.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -129,28 +124,22 @@ function surface_flip_lr_execute(
 
 
 /**
- * surface-flip-lr
- *
- * Mirror a surface through the yz plane.
+ * MIRROR A SURFACE THROUGH THE YZ PLANE.
  *
  * This command negates the x coordinate of each vertex, and flips the surface normals, so that you have a surface of opposite handedness with the same features and vertex correspondence, with normals consistent with the original surface.  That is, if the input surface has normals facing outward, the output surface will also have normals facing outward.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
- * @param surface the surface to flip
  * @param surface_out the output flipped surface
+ * @param surface the surface to flip
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceFlipLrOutputs`).
  */
 function surface_flip_lr(
-    surface: InputPathType,
     surface_out: string,
+    surface: InputPathType,
     runner: Runner | null = null,
 ): SurfaceFlipLrOutputs {
-    const params = surface_flip_lr_params(surface, surface_out)
+    const params = surface_flip_lr_params(surface_out, surface)
     return surface_flip_lr_execute(params, runner);
 }
 

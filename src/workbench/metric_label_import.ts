@@ -4,22 +4,22 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_LABEL_IMPORT_METADATA: Metadata = {
-    id: "7c39f4e7fc1dc81ca9158ee78e41ec061254d27e.boutiques",
+    id: "0a29a376e9ba8790e9b6a9f0024efa2495527eaa.workbench",
     name: "metric-label-import",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface MetricLabelImportParameters {
     "@type"?: "workbench/metric-label-import";
-    "input": InputPathType;
-    "label_list_file": string;
     "output": string;
-    "opt_discard_others": boolean;
-    "opt_unlabeled_value_value"?: number | null | undefined;
-    "opt_column_column"?: string | null | undefined;
-    "opt_drop_unused_labels": boolean;
+    "discard-others": boolean;
+    "value"?: number | null | undefined;
+    "column"?: string | null | undefined;
+    "drop-unused-labels": boolean;
+    "file"?: string | null | undefined;
+    "input": InputPathType;
+    "label-list-file": string;
 }
 type MetricLabelImportParametersTagged = Required<Pick<MetricLabelImportParameters, '@type'>> & MetricLabelImportParameters;
 
@@ -44,38 +44,49 @@ interface MetricLabelImportOutputs {
 /**
  * Build parameters.
  *
+ * @param output the output gifti label file
+ * @param value set the value that will be interpreted as unlabeled
+
+the numeric value for unlabeled (default 0)
+ * @param column select a single column to import
+
+the column number or name
+ * @param file read label name hierarchy from a json file
+
+the input json file
  * @param input the input metric file
  * @param label_list_file text file containing the values and names for labels
- * @param output the output gifti label file
- * @param opt_discard_others set any values not mentioned in the label list to the ??? label
- * @param opt_unlabeled_value_value set the value that will be interpreted as unlabeled: the numeric value for unlabeled (default 0)
- * @param opt_column_column select a single column to import: the column number or name
- * @param opt_drop_unused_labels remove any unused label values from the label table
+ * @param discard_others set any values not mentioned in the label list to the ??? label
+ * @param drop_unused_labels remove any unused label values from the label table
  *
  * @returns Parameter dictionary
  */
 function metric_label_import_params(
+    output: string,
+    value: number | null,
+    column: string | null,
+    file: string | null,
     input: InputPathType,
     label_list_file: string,
-    output: string,
-    opt_discard_others: boolean = false,
-    opt_unlabeled_value_value: number | null = null,
-    opt_column_column: string | null = null,
-    opt_drop_unused_labels: boolean = false,
+    discard_others: boolean = false,
+    drop_unused_labels: boolean = false,
 ): MetricLabelImportParametersTagged {
     const params = {
         "@type": "workbench/metric-label-import" as const,
-        "input": input,
-        "label_list_file": label_list_file,
         "output": output,
-        "opt_discard_others": opt_discard_others,
-        "opt_drop_unused_labels": opt_drop_unused_labels,
+        "discard-others": discard_others,
+        "drop-unused-labels": drop_unused_labels,
+        "input": input,
+        "label-list-file": label_list_file,
     };
-    if (opt_unlabeled_value_value !== null) {
-        params["opt_unlabeled_value_value"] = opt_unlabeled_value_value;
+    if (value !== null) {
+        params["value"] = value;
     }
-    if (opt_column_column !== null) {
-        params["opt_column_column"] = opt_column_column;
+    if (column !== null) {
+        params["column"] = column;
+    }
+    if (file !== null) {
+        params["file"] = file;
     }
     return params;
 }
@@ -94,29 +105,23 @@ function metric_label_import_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-metric-label-import");
-    cargs.push(execution.inputFile((params["input"] ?? null)));
-    cargs.push((params["label_list_file"] ?? null));
-    cargs.push((params["output"] ?? null));
-    if ((params["opt_discard_others"] ?? false)) {
-        cargs.push("-discard-others");
-    }
-    if ((params["opt_unlabeled_value_value"] ?? null) !== null) {
+    if ((params["discard-others"] ?? false) || (params["value"] ?? null) !== null || (params["column"] ?? null) !== null || (params["drop-unused-labels"] ?? false) || (params["file"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-metric-label-import",
+            (params["output"] ?? null),
+            (((params["discard-others"] ?? false)) ? "-discard-others" : ""),
             "-unlabeled-value",
-            String((params["opt_unlabeled_value_value"] ?? null))
-        );
-    }
-    if ((params["opt_column_column"] ?? null) !== null) {
-        cargs.push(
+            (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
             "-column",
-            (params["opt_column_column"] ?? null)
+            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
+            (((params["drop-unused-labels"] ?? false)) ? "-drop-unused-labels" : ""),
+            "-hierarchy",
+            (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : "")
         );
     }
-    if ((params["opt_drop_unused_labels"] ?? false)) {
-        cargs.push("-drop-unused-labels");
-    }
+    cargs.push(execution.inputFile((params["input"] ?? null)));
+    cargs.push((params["label-list-file"] ?? null));
     return cargs;
 }
 
@@ -142,9 +147,7 @@ function metric_label_import_outputs(
 
 
 /**
- * metric-label-import
- *
- * Import a gifti label file from a metric file.
+ * IMPORT A GIFTI LABEL FILE FROM A METRIC FILE.
  *
  * Creates a gifti label file from a metric file with label-like values.  You may specify the empty string (use "") for <label-list-file>, which will be treated as if it is an empty file.  The label list file must have the following format (2 lines per label):
  *
@@ -155,10 +158,6 @@ function metric_label_import_outputs(
  * Label names are specified on a separate line from their value and color, in order to let label names contain spaces.  Whitespace is trimmed from both ends of the label name, but is kept if it is in the middle of a label.  Do not specify the "unlabeled" key in the file, it is assumed that 0 means not labeled unless -unlabeled-value is specified.  The value of <key> specifies what value in the imported file should be used as this label (these same key values are also used in the output file).  The values of <red>, <green>, <blue> and <alpha> must be integers from 0 to 255, and will specify the color the label is drawn as (alpha of 255 means fully opaque, which is probably what you want).
  *
  * By default, it will create new label names with names like LABEL_5 for any values encountered that are not mentioned in the list file, specify -discard-others to instead set these values to the "unlabeled" key.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -180,9 +179,7 @@ function metric_label_import_execute(
 
 
 /**
- * metric-label-import
- *
- * Import a gifti label file from a metric file.
+ * IMPORT A GIFTI LABEL FILE FROM A METRIC FILE.
  *
  * Creates a gifti label file from a metric file with label-like values.  You may specify the empty string (use "") for <label-list-file>, which will be treated as if it is an empty file.  The label list file must have the following format (2 lines per label):
  *
@@ -194,32 +191,36 @@ function metric_label_import_execute(
  *
  * By default, it will create new label names with names like LABEL_5 for any values encountered that are not mentioned in the list file, specify -discard-others to instead set these values to the "unlabeled" key.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param output the output gifti label file
+ * @param value set the value that will be interpreted as unlabeled
+
+the numeric value for unlabeled (default 0)
+ * @param column select a single column to import
+
+the column number or name
+ * @param file read label name hierarchy from a json file
+
+the input json file
  * @param input the input metric file
  * @param label_list_file text file containing the values and names for labels
- * @param output the output gifti label file
- * @param opt_discard_others set any values not mentioned in the label list to the ??? label
- * @param opt_unlabeled_value_value set the value that will be interpreted as unlabeled: the numeric value for unlabeled (default 0)
- * @param opt_column_column select a single column to import: the column number or name
- * @param opt_drop_unused_labels remove any unused label values from the label table
+ * @param discard_others set any values not mentioned in the label list to the ??? label
+ * @param drop_unused_labels remove any unused label values from the label table
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricLabelImportOutputs`).
  */
 function metric_label_import(
+    output: string,
+    value: number | null,
+    column: string | null,
+    file: string | null,
     input: InputPathType,
     label_list_file: string,
-    output: string,
-    opt_discard_others: boolean = false,
-    opt_unlabeled_value_value: number | null = null,
-    opt_column_column: string | null = null,
-    opt_drop_unused_labels: boolean = false,
+    discard_others: boolean = false,
+    drop_unused_labels: boolean = false,
     runner: Runner | null = null,
 ): MetricLabelImportOutputs {
-    const params = metric_label_import_params(input, label_list_file, output, opt_discard_others, opt_unlabeled_value_value, opt_column_column, opt_drop_unused_labels)
+    const params = metric_label_import_params(output, value, column, file, input, label_list_file, discard_others, drop_unused_labels)
     return metric_label_import_execute(params, runner);
 }
 

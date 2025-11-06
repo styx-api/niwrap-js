@@ -4,18 +4,17 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_TRANSPOSE_METADATA: Metadata = {
-    id: "2184f40f0f6a338d14117c56093429c24502286f.boutiques",
+    id: "a38fc279857d9723961ff9db61fed1fba00e53c2.workbench",
     name: "cifti-transpose",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiTransposeParameters {
     "@type"?: "workbench/cifti-transpose";
-    "cifti_in": InputPathType;
-    "cifti_out": string;
-    "opt_mem_limit_limit_gb"?: number | null | undefined;
+    "cifti-out": string;
+    "limit-GB"?: number | null | undefined;
+    "cifti-in": InputPathType;
 }
 type CiftiTransposeParametersTagged = Required<Pick<CiftiTransposeParameters, '@type'>> & CiftiTransposeParameters;
 
@@ -40,24 +39,26 @@ interface CiftiTransposeOutputs {
 /**
  * Build parameters.
  *
- * @param cifti_in the input cifti file
  * @param cifti_out the output cifti file
- * @param opt_mem_limit_limit_gb restrict memory usage: memory limit in gigabytes
+ * @param limit_gb restrict memory usage
+
+memory limit in gigabytes
+ * @param cifti_in the input cifti file
  *
  * @returns Parameter dictionary
  */
 function cifti_transpose_params(
-    cifti_in: InputPathType,
     cifti_out: string,
-    opt_mem_limit_limit_gb: number | null = null,
+    limit_gb: number | null,
+    cifti_in: InputPathType,
 ): CiftiTransposeParametersTagged {
     const params = {
         "@type": "workbench/cifti-transpose" as const,
-        "cifti_in": cifti_in,
-        "cifti_out": cifti_out,
+        "cifti-out": cifti_out,
+        "cifti-in": cifti_in,
     };
-    if (opt_mem_limit_limit_gb !== null) {
-        params["opt_mem_limit_limit_gb"] = opt_mem_limit_limit_gb;
+    if (limit_gb !== null) {
+        params["limit-GB"] = limit_gb;
     }
     return params;
 }
@@ -76,16 +77,16 @@ function cifti_transpose_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-transpose");
-    cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
-    cargs.push((params["cifti_out"] ?? null));
-    if ((params["opt_mem_limit_limit_gb"] ?? null) !== null) {
+    if ((params["limit-GB"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-cifti-transpose",
+            (params["cifti-out"] ?? null),
             "-mem-limit",
-            String((params["opt_mem_limit_limit_gb"] ?? null))
+            String((params["limit-GB"] ?? null))
         );
     }
+    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     return cargs;
 }
 
@@ -104,22 +105,16 @@ function cifti_transpose_outputs(
 ): CiftiTransposeOutputs {
     const ret: CiftiTransposeOutputs = {
         root: execution.outputFile("."),
-        cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
+        cifti_out: execution.outputFile([(params["cifti-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * cifti-transpose
- *
- * Transpose a cifti file.
+ * TRANSPOSE A CIFTI FILE.
  *
  * The input must be a 2-dimensional cifti file.  The output is a cifti file where every row in the input is a column in the output.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -141,30 +136,26 @@ function cifti_transpose_execute(
 
 
 /**
- * cifti-transpose
- *
- * Transpose a cifti file.
+ * TRANSPOSE A CIFTI FILE.
  *
  * The input must be a 2-dimensional cifti file.  The output is a cifti file where every row in the input is a column in the output.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
- * @param cifti_in the input cifti file
  * @param cifti_out the output cifti file
- * @param opt_mem_limit_limit_gb restrict memory usage: memory limit in gigabytes
+ * @param limit_gb restrict memory usage
+
+memory limit in gigabytes
+ * @param cifti_in the input cifti file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiTransposeOutputs`).
  */
 function cifti_transpose(
-    cifti_in: InputPathType,
     cifti_out: string,
-    opt_mem_limit_limit_gb: number | null = null,
+    limit_gb: number | null,
+    cifti_in: InputPathType,
     runner: Runner | null = null,
 ): CiftiTransposeOutputs {
-    const params = cifti_transpose_params(cifti_in, cifti_out, opt_mem_limit_limit_gb)
+    const params = cifti_transpose_params(cifti_out, limit_gb, cifti_in)
     return cifti_transpose_execute(params, runner);
 }
 

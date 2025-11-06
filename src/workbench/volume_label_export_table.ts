@@ -4,18 +4,18 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_LABEL_EXPORT_TABLE_METADATA: Metadata = {
-    id: "8b2a5ebf37ad42d3896a841a48969f292d5ee628.boutiques",
+    id: "5f455a5d649ff8b24bbab6cef88ad095666c466f.workbench",
     name: "volume-label-export-table",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface VolumeLabelExportTableParameters {
     "@type"?: "workbench/volume-label-export-table";
-    "label_in": InputPathType;
+    "json-out"?: string | null | undefined;
+    "label-in": InputPathType;
     "map": string;
-    "table_out": string;
+    "table-out": string;
 }
 type VolumeLabelExportTableParametersTagged = Required<Pick<VolumeLabelExportTableParameters, '@type'>> & VolumeLabelExportTableParameters;
 
@@ -36,6 +36,9 @@ interface VolumeLabelExportTableOutputs {
 /**
  * Build parameters.
  *
+ * @param json_out export the hierarchy as json
+
+output - filename to write hierarchy to
  * @param label_in the input volume label file
  * @param map the number or name of the label map to use
  * @param table_out output - the output text file
@@ -43,16 +46,20 @@ interface VolumeLabelExportTableOutputs {
  * @returns Parameter dictionary
  */
 function volume_label_export_table_params(
+    json_out: string | null,
     label_in: InputPathType,
     map: string,
     table_out: string,
 ): VolumeLabelExportTableParametersTagged {
     const params = {
         "@type": "workbench/volume-label-export-table" as const,
-        "label_in": label_in,
+        "label-in": label_in,
         "map": map,
-        "table_out": table_out,
+        "table-out": table_out,
     };
+    if (json_out !== null) {
+        params["json-out"] = json_out;
+    }
     return params;
 }
 
@@ -70,11 +77,17 @@ function volume_label_export_table_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-label-export-table");
-    cargs.push(execution.inputFile((params["label_in"] ?? null)));
+    if ((params["json-out"] ?? null) !== null) {
+        cargs.push(
+            "wb_command",
+            "-volume-label-export-table",
+            "-hierarchy",
+            (params["json-out"] ?? null)
+        );
+    }
+    cargs.push(execution.inputFile((params["label-in"] ?? null)));
     cargs.push((params["map"] ?? null));
-    cargs.push((params["table_out"] ?? null));
+    cargs.push((params["table-out"] ?? null));
     return cargs;
 }
 
@@ -99,15 +112,9 @@ function volume_label_export_table_outputs(
 
 
 /**
- * volume-label-export-table
- *
- * Export label table from volume as text.
+ * EXPORT LABEL TABLE FROM VOLUME AS TEXT.
  *
  * Takes the label table from the volume label map, and writes it to a text format matching what is expected by -volume-label-import.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -129,16 +136,13 @@ function volume_label_export_table_execute(
 
 
 /**
- * volume-label-export-table
- *
- * Export label table from volume as text.
+ * EXPORT LABEL TABLE FROM VOLUME AS TEXT.
  *
  * Takes the label table from the volume label map, and writes it to a text format matching what is expected by -volume-label-import.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param json_out export the hierarchy as json
+
+output - filename to write hierarchy to
  * @param label_in the input volume label file
  * @param map the number or name of the label map to use
  * @param table_out output - the output text file
@@ -147,12 +151,13 @@ function volume_label_export_table_execute(
  * @returns NamedTuple of outputs (described in `VolumeLabelExportTableOutputs`).
  */
 function volume_label_export_table(
+    json_out: string | null,
     label_in: InputPathType,
     map: string,
     table_out: string,
     runner: Runner | null = null,
 ): VolumeLabelExportTableOutputs {
-    const params = volume_label_export_table_params(label_in, map, table_out)
+    const params = volume_label_export_table_params(json_out, label_in, map, table_out)
     return volume_label_export_table_execute(params, runner);
 }
 

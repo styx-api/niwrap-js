@@ -4,19 +4,18 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FOCI_GET_PROJECTION_VERTEX_METADATA: Metadata = {
-    id: "fa9f290a6c602982e012db429ea537b40f61be20.boutiques",
+    id: "9698c37ae8d619d4e10d7f0fad13430ab0600e96.workbench",
     name: "foci-get-projection-vertex",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface FociGetProjectionVertexParameters {
     "@type"?: "workbench/foci-get-projection-vertex";
+    "metric-out": string;
+    "name"?: string | null | undefined;
     "foci": InputPathType;
     "surface": InputPathType;
-    "metric_out": string;
-    "opt_name_name"?: string | null | undefined;
 }
 type FociGetProjectionVertexParametersTagged = Required<Pick<FociGetProjectionVertexParameters, '@type'>> & FociGetProjectionVertexParameters;
 
@@ -41,27 +40,29 @@ interface FociGetProjectionVertexOutputs {
 /**
  * Build parameters.
  *
+ * @param metric_out the output metric file
+ * @param name select a focus by name
+
+the name of the focus
  * @param foci the foci file
  * @param surface the surface related to the foci file
- * @param metric_out the output metric file
- * @param opt_name_name select a focus by name: the name of the focus
  *
  * @returns Parameter dictionary
  */
 function foci_get_projection_vertex_params(
+    metric_out: string,
+    name: string | null,
     foci: InputPathType,
     surface: InputPathType,
-    metric_out: string,
-    opt_name_name: string | null = null,
 ): FociGetProjectionVertexParametersTagged {
     const params = {
         "@type": "workbench/foci-get-projection-vertex" as const,
+        "metric-out": metric_out,
         "foci": foci,
         "surface": surface,
-        "metric_out": metric_out,
     };
-    if (opt_name_name !== null) {
-        params["opt_name_name"] = opt_name_name;
+    if (name !== null) {
+        params["name"] = name;
     }
     return params;
 }
@@ -80,17 +81,17 @@ function foci_get_projection_vertex_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-foci-get-projection-vertex");
-    cargs.push(execution.inputFile((params["foci"] ?? null)));
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push((params["metric_out"] ?? null));
-    if ((params["opt_name_name"] ?? null) !== null) {
+    if ((params["name"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-foci-get-projection-vertex",
+            (params["metric-out"] ?? null),
             "-name",
-            (params["opt_name_name"] ?? null)
+            (params["name"] ?? null)
         );
     }
+    cargs.push(execution.inputFile((params["foci"] ?? null)));
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
     return cargs;
 }
 
@@ -109,22 +110,16 @@ function foci_get_projection_vertex_outputs(
 ): FociGetProjectionVertexOutputs {
     const ret: FociGetProjectionVertexOutputs = {
         root: execution.outputFile("."),
-        metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
+        metric_out: execution.outputFile([(params["metric-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * foci-get-projection-vertex
- *
- * Get projection vertex for foci.
+ * GET PROJECTION VERTEX FOR FOCI.
  *
  * For each focus, a column is created in <metric-out>, and the vertex with the most influence on its projection is assigned a value of 1 in that column, with all other vertices 0.  If -name is used, only one focus will be used.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -146,32 +141,28 @@ function foci_get_projection_vertex_execute(
 
 
 /**
- * foci-get-projection-vertex
- *
- * Get projection vertex for foci.
+ * GET PROJECTION VERTEX FOR FOCI.
  *
  * For each focus, a column is created in <metric-out>, and the vertex with the most influence on its projection is assigned a value of 1 in that column, with all other vertices 0.  If -name is used, only one focus will be used.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param metric_out the output metric file
+ * @param name select a focus by name
+
+the name of the focus
  * @param foci the foci file
  * @param surface the surface related to the foci file
- * @param metric_out the output metric file
- * @param opt_name_name select a focus by name: the name of the focus
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FociGetProjectionVertexOutputs`).
  */
 function foci_get_projection_vertex(
+    metric_out: string,
+    name: string | null,
     foci: InputPathType,
     surface: InputPathType,
-    metric_out: string,
-    opt_name_name: string | null = null,
     runner: Runner | null = null,
 ): FociGetProjectionVertexOutputs {
-    const params = foci_get_projection_vertex_params(foci, surface, metric_out, opt_name_name)
+    const params = foci_get_projection_vertex_params(metric_out, name, foci, surface)
     return foci_get_projection_vertex_execute(params, runner);
 }
 

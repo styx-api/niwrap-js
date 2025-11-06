@@ -19,14 +19,14 @@ interface AntsJointFusionParameters {
     "atlas_segmentation": InputPathType;
     "alpha"?: number | null | undefined;
     "beta"?: number | null | undefined;
-    "constrain_nonnegative"?: 0 | 1 | null | undefined;
+    "constrain_nonnegative"?: boolean | null | undefined;
     "patch_radius"?: string | null | undefined;
     "patch_metric"?: "PC" | "MSQ" | null | undefined;
     "search_radius"?: string | null | undefined;
     "exclusion_image"?: InputPathType | null | undefined;
     "mask_image"?: InputPathType | null | undefined;
     "output": string;
-    "verbose"?: 0 | 1 | null | undefined;
+    "verbose"?: boolean | null | undefined;
 }
 type AntsJointFusionParametersTagged = Required<Pick<AntsJointFusionParameters, '@type'>> & AntsJointFusionParameters;
 
@@ -88,13 +88,13 @@ function ants_joint_fusion_params(
     image_dimensionality: 2 | 3 | 4 | null = null,
     alpha: number | null = null,
     beta: number | null = null,
-    constrain_nonnegative: 0 | 1 | null = null,
+    constrain_nonnegative: boolean | null = null,
     patch_radius: string | null = null,
     patch_metric: "PC" | "MSQ" | null = null,
     search_radius: string | null = null,
     exclusion_image: InputPathType | null = null,
     mask_image: InputPathType | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
 ): AntsJointFusionParametersTagged {
     const params = {
         "@type": "ants/antsJointFusion" as const,
@@ -184,7 +184,7 @@ function ants_joint_fusion_cargs(
     if ((params["constrain_nonnegative"] ?? null) !== null) {
         cargs.push(
             "--constrain-nonnegative",
-            String((params["constrain_nonnegative"] ?? null))
+            ((params["constrain_nonnegative"] ?? null) ? "1" : "0")
         );
     }
     if ((params["patch_radius"] ?? null) !== null) {
@@ -224,7 +224,7 @@ function ants_joint_fusion_cargs(
     if ((params["verbose"] ?? null) !== null) {
         cargs.push(
             "--verbose",
-            String((params["verbose"] ?? null))
+            ((params["verbose"] ?? null) ? "1" : "0")
         );
     }
     return cargs;
@@ -317,13 +317,13 @@ function ants_joint_fusion(
     image_dimensionality: 2 | 3 | 4 | null = null,
     alpha: number | null = null,
     beta: number | null = null,
-    constrain_nonnegative: 0 | 1 | null = null,
+    constrain_nonnegative: boolean | null = null,
     patch_radius: string | null = null,
     patch_metric: "PC" | "MSQ" | null = null,
     search_radius: string | null = null,
     exclusion_image: InputPathType | null = null,
     mask_image: InputPathType | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
     runner: Runner | null = null,
 ): AntsJointFusionOutputs {
     const params = ants_joint_fusion_params(target_image, atlas_image, atlas_segmentation, output, image_dimensionality, alpha, beta, constrain_nonnegative, patch_radius, patch_metric, search_radius, exclusion_image, mask_image, verbose)

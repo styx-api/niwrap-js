@@ -4,23 +4,22 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_VECTOR_OPERATION_METADATA: Metadata = {
-    id: "b8b4b874885f0add6a529815e987670c96ebd34a.boutiques",
+    id: "2ed0edf6d0f6355b8d747c848ce1f1d204659400.workbench",
     name: "metric-vector-operation",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface MetricVectorOperationParameters {
     "@type"?: "workbench/metric-vector-operation";
-    "vectors_a": InputPathType;
-    "vectors_b": InputPathType;
+    "metric-out": string;
+    "normalize-a": boolean;
+    "normalize-b": boolean;
+    "normalize-output": boolean;
+    "magnitude": boolean;
+    "vectors-a": InputPathType;
+    "vectors-b": InputPathType;
     "operation": string;
-    "metric_out": string;
-    "opt_normalize_a": boolean;
-    "opt_normalize_b": boolean;
-    "opt_normalize_output": boolean;
-    "opt_magnitude": boolean;
 }
 type MetricVectorOperationParametersTagged = Required<Pick<MetricVectorOperationParameters, '@type'>> & MetricVectorOperationParameters;
 
@@ -45,37 +44,37 @@ interface MetricVectorOperationOutputs {
 /**
  * Build parameters.
  *
+ * @param metric_out the output file
  * @param vectors_a first vector input file
  * @param vectors_b second vector input file
  * @param operation what vector operation to do
- * @param metric_out the output file
- * @param opt_normalize_a normalize vectors of first input
- * @param opt_normalize_b normalize vectors of second input
- * @param opt_normalize_output normalize output vectors (not valid for dot product)
- * @param opt_magnitude output the magnitude of the result (not valid for dot product)
+ * @param normalize_a normalize vectors of first input
+ * @param normalize_b normalize vectors of second input
+ * @param normalize_output normalize output vectors (not valid for dot product)
+ * @param magnitude output the magnitude of the result (not valid for dot product)
  *
  * @returns Parameter dictionary
  */
 function metric_vector_operation_params(
+    metric_out: string,
     vectors_a: InputPathType,
     vectors_b: InputPathType,
     operation: string,
-    metric_out: string,
-    opt_normalize_a: boolean = false,
-    opt_normalize_b: boolean = false,
-    opt_normalize_output: boolean = false,
-    opt_magnitude: boolean = false,
+    normalize_a: boolean = false,
+    normalize_b: boolean = false,
+    normalize_output: boolean = false,
+    magnitude: boolean = false,
 ): MetricVectorOperationParametersTagged {
     const params = {
         "@type": "workbench/metric-vector-operation" as const,
-        "vectors_a": vectors_a,
-        "vectors_b": vectors_b,
+        "metric-out": metric_out,
+        "normalize-a": normalize_a,
+        "normalize-b": normalize_b,
+        "normalize-output": normalize_output,
+        "magnitude": magnitude,
+        "vectors-a": vectors_a,
+        "vectors-b": vectors_b,
         "operation": operation,
-        "metric_out": metric_out,
-        "opt_normalize_a": opt_normalize_a,
-        "opt_normalize_b": opt_normalize_b,
-        "opt_normalize_output": opt_normalize_output,
-        "opt_magnitude": opt_magnitude,
     };
     return params;
 }
@@ -94,24 +93,20 @@ function metric_vector_operation_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-metric-vector-operation");
-    cargs.push(execution.inputFile((params["vectors_a"] ?? null)));
-    cargs.push(execution.inputFile((params["vectors_b"] ?? null)));
+    if ((params["normalize-a"] ?? false) || (params["normalize-b"] ?? false) || (params["normalize-output"] ?? false) || (params["magnitude"] ?? false)) {
+        cargs.push(
+            "wb_command",
+            "-metric-vector-operation",
+            (params["metric-out"] ?? null),
+            (((params["normalize-a"] ?? false)) ? "-normalize-a" : ""),
+            (((params["normalize-b"] ?? false)) ? "-normalize-b" : ""),
+            (((params["normalize-output"] ?? false)) ? "-normalize-output" : ""),
+            (((params["magnitude"] ?? false)) ? "-magnitude" : "")
+        );
+    }
+    cargs.push(execution.inputFile((params["vectors-a"] ?? null)));
+    cargs.push(execution.inputFile((params["vectors-b"] ?? null)));
     cargs.push((params["operation"] ?? null));
-    cargs.push((params["metric_out"] ?? null));
-    if ((params["opt_normalize_a"] ?? false)) {
-        cargs.push("-normalize-a");
-    }
-    if ((params["opt_normalize_b"] ?? false)) {
-        cargs.push("-normalize-b");
-    }
-    if ((params["opt_normalize_output"] ?? false)) {
-        cargs.push("-normalize-output");
-    }
-    if ((params["opt_magnitude"] ?? false)) {
-        cargs.push("-magnitude");
-    }
     return cargs;
 }
 
@@ -130,16 +125,14 @@ function metric_vector_operation_outputs(
 ): MetricVectorOperationOutputs {
     const ret: MetricVectorOperationOutputs = {
         root: execution.outputFile("."),
-        metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
+        metric_out: execution.outputFile([(params["metric-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * metric-vector-operation
- *
- * Do a vector operation on metric files.
+ * DO A VECTOR OPERATION ON METRIC FILES.
  *
  * Does a vector operation on two metric files (that must have a multiple of 3 columns).  Either of the inputs may have multiple vectors (more than 3 columns), but not both (at least one must have exactly 3 columns).  The -magnitude and -normalize-output options may not be specified together, or with an operation that returns a scalar (dot product).  The <operation> parameter must be one of the following:
  *
@@ -147,10 +140,6 @@ function metric_vector_operation_outputs(
  * CROSS
  * ADD
  * SUBTRACT.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -172,9 +161,7 @@ function metric_vector_operation_execute(
 
 
 /**
- * metric-vector-operation
- *
- * Do a vector operation on metric files.
+ * DO A VECTOR OPERATION ON METRIC FILES.
  *
  * Does a vector operation on two metric files (that must have a multiple of 3 columns).  Either of the inputs may have multiple vectors (more than 3 columns), but not both (at least one must have exactly 3 columns).  The -magnitude and -normalize-output options may not be specified together, or with an operation that returns a scalar (dot product).  The <operation> parameter must be one of the following:
  *
@@ -183,34 +170,30 @@ function metric_vector_operation_execute(
  * ADD
  * SUBTRACT.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param metric_out the output file
  * @param vectors_a first vector input file
  * @param vectors_b second vector input file
  * @param operation what vector operation to do
- * @param metric_out the output file
- * @param opt_normalize_a normalize vectors of first input
- * @param opt_normalize_b normalize vectors of second input
- * @param opt_normalize_output normalize output vectors (not valid for dot product)
- * @param opt_magnitude output the magnitude of the result (not valid for dot product)
+ * @param normalize_a normalize vectors of first input
+ * @param normalize_b normalize vectors of second input
+ * @param normalize_output normalize output vectors (not valid for dot product)
+ * @param magnitude output the magnitude of the result (not valid for dot product)
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricVectorOperationOutputs`).
  */
 function metric_vector_operation(
+    metric_out: string,
     vectors_a: InputPathType,
     vectors_b: InputPathType,
     operation: string,
-    metric_out: string,
-    opt_normalize_a: boolean = false,
-    opt_normalize_b: boolean = false,
-    opt_normalize_output: boolean = false,
-    opt_magnitude: boolean = false,
+    normalize_a: boolean = false,
+    normalize_b: boolean = false,
+    normalize_output: boolean = false,
+    magnitude: boolean = false,
     runner: Runner | null = null,
 ): MetricVectorOperationOutputs {
-    const params = metric_vector_operation_params(vectors_a, vectors_b, operation, metric_out, opt_normalize_a, opt_normalize_b, opt_normalize_output, opt_magnitude)
+    const params = metric_vector_operation_params(metric_out, vectors_a, vectors_b, operation, normalize_a, normalize_b, normalize_output, magnitude)
     return metric_vector_operation_execute(params, runner);
 }
 

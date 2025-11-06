@@ -4,20 +4,19 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METADATA_STRING_REPLACE_METADATA: Metadata = {
-    id: "64839919f0abce1435877772c78bd57e1db01436.boutiques",
+    id: "28580214d2e8a263c11d2757b02229cfd3b15b21.workbench",
     name: "metadata-string-replace",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface MetadataStringReplaceParameters {
     "@type"?: "workbench/metadata-string-replace";
-    "input_file": string;
-    "find_string": string;
-    "replace_string": string;
-    "output_file": string;
-    "opt_case_insensitive": boolean;
+    "case-insensitive": boolean;
+    "input-file": string;
+    "find-string": string;
+    "replace-string": string;
+    "output-file": string;
 }
 type MetadataStringReplaceParametersTagged = Required<Pick<MetadataStringReplaceParameters, '@type'>> & MetadataStringReplaceParameters;
 
@@ -42,7 +41,7 @@ interface MetadataStringReplaceOutputs {
  * @param find_string the string to find
  * @param replace_string the string to replace <find-string> with
  * @param output_file output - the name to save the modified file as
- * @param opt_case_insensitive match with case variation also
+ * @param case_insensitive match with case variation also
  *
  * @returns Parameter dictionary
  */
@@ -51,15 +50,15 @@ function metadata_string_replace_params(
     find_string: string,
     replace_string: string,
     output_file: string,
-    opt_case_insensitive: boolean = false,
+    case_insensitive: boolean = false,
 ): MetadataStringReplaceParametersTagged {
     const params = {
         "@type": "workbench/metadata-string-replace" as const,
-        "input_file": input_file,
-        "find_string": find_string,
-        "replace_string": replace_string,
-        "output_file": output_file,
-        "opt_case_insensitive": opt_case_insensitive,
+        "case-insensitive": case_insensitive,
+        "input-file": input_file,
+        "find-string": find_string,
+        "replace-string": replace_string,
+        "output-file": output_file,
     };
     return params;
 }
@@ -78,15 +77,17 @@ function metadata_string_replace_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-metadata-string-replace");
-    cargs.push((params["input_file"] ?? null));
-    cargs.push((params["find_string"] ?? null));
-    cargs.push((params["replace_string"] ?? null));
-    cargs.push((params["output_file"] ?? null));
-    if ((params["opt_case_insensitive"] ?? false)) {
-        cargs.push("-case-insensitive");
+    if ((params["case-insensitive"] ?? false)) {
+        cargs.push(
+            "wb_command",
+            "-metadata-string-replace",
+            "-case-insensitive"
+        );
     }
+    cargs.push((params["input-file"] ?? null));
+    cargs.push((params["find-string"] ?? null));
+    cargs.push((params["replace-string"] ?? null));
+    cargs.push((params["output-file"] ?? null));
     return cargs;
 }
 
@@ -111,15 +112,9 @@ function metadata_string_replace_outputs(
 
 
 /**
- * metadata-string-replace
- *
- * Replace a string in all metadata of a file.
+ * REPLACE A STRING IN ALL METADATA OF A FILE.
  *
  * Replaces all occurrences of <find-string> in the metadata and map names of <input-file> with <replace-string>.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -141,21 +136,15 @@ function metadata_string_replace_execute(
 
 
 /**
- * metadata-string-replace
- *
- * Replace a string in all metadata of a file.
+ * REPLACE A STRING IN ALL METADATA OF A FILE.
  *
  * Replaces all occurrences of <find-string> in the metadata and map names of <input-file> with <replace-string>.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param input_file the file to replace metadata in
  * @param find_string the string to find
  * @param replace_string the string to replace <find-string> with
  * @param output_file output - the name to save the modified file as
- * @param opt_case_insensitive match with case variation also
+ * @param case_insensitive match with case variation also
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetadataStringReplaceOutputs`).
@@ -165,10 +154,10 @@ function metadata_string_replace(
     find_string: string,
     replace_string: string,
     output_file: string,
-    opt_case_insensitive: boolean = false,
+    case_insensitive: boolean = false,
     runner: Runner | null = null,
 ): MetadataStringReplaceOutputs {
-    const params = metadata_string_replace_params(input_file, find_string, replace_string, output_file, opt_case_insensitive)
+    const params = metadata_string_replace_params(input_file, find_string, replace_string, output_file, case_insensitive)
     return metadata_string_replace_execute(params, runner);
 }
 

@@ -4,41 +4,40 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_PALETTE_METADATA: Metadata = {
-    id: "51322e5e16dc2c02c6c1638c920f8a785d0e8b7e.boutiques",
+    id: "e4d48e09652e2a3420ac6c01dde2735f59b8d4ba.workbench",
     name: "volume-palette",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface VolumePalettePosPercentParameters {
-    "@type"?: "pos_percent";
-    "pos_min__": number;
-    "pos_max__": number;
+    "@type"?: "pos-percent";
+    "pos-min-%": number;
+    "pos-max-%": number;
 }
 type VolumePalettePosPercentParametersTagged = Required<Pick<VolumePalettePosPercentParameters, '@type'>> & VolumePalettePosPercentParameters;
 
 
 interface VolumePaletteNegPercentParameters {
-    "@type"?: "neg_percent";
-    "neg_min__": number;
-    "neg_max__": number;
+    "@type"?: "neg-percent";
+    "neg-min-%": number;
+    "neg-max-%": number;
 }
 type VolumePaletteNegPercentParametersTagged = Required<Pick<VolumePaletteNegPercentParameters, '@type'>> & VolumePaletteNegPercentParameters;
 
 
 interface VolumePalettePosUserParameters {
-    "@type"?: "pos_user";
-    "pos_min_user": number;
-    "pos_max_user": number;
+    "@type"?: "pos-user";
+    "pos-min-user": number;
+    "pos-max-user": number;
 }
 type VolumePalettePosUserParametersTagged = Required<Pick<VolumePalettePosUserParameters, '@type'>> & VolumePalettePosUserParameters;
 
 
 interface VolumePaletteNegUserParameters {
-    "@type"?: "neg_user";
-    "neg_min_user": number;
-    "neg_max_user": number;
+    "@type"?: "neg-user";
+    "neg-min-user": number;
+    "neg-max-user": number;
 }
 type VolumePaletteNegUserParametersTagged = Required<Pick<VolumePaletteNegUserParameters, '@type'>> & VolumePaletteNegUserParameters;
 
@@ -55,20 +54,21 @@ type VolumePaletteThresholdingParametersTagged = Required<Pick<VolumePaletteThre
 
 interface VolumePaletteParameters {
     "@type"?: "workbench/volume-palette";
+    "subvolume"?: string | null | undefined;
+    "pos-percent"?: VolumePalettePosPercentParameters | null | undefined;
+    "neg-percent"?: VolumePaletteNegPercentParameters | null | undefined;
+    "pos-user"?: VolumePalettePosUserParameters | null | undefined;
+    "neg-user"?: VolumePaletteNegUserParameters | null | undefined;
+    "interpolate"?: boolean | null | undefined;
+    "display"?: boolean | null | undefined;
+    "display"?: boolean | null | undefined;
+    "display"?: boolean | null | undefined;
+    "name"?: string | null | undefined;
+    "thresholding"?: VolumePaletteThresholdingParameters | null | undefined;
+    "type"?: string | null | undefined;
+    "type"?: string | null | undefined;
     "volume": string;
     "mode": string;
-    "opt_subvolume_subvolume"?: string | null | undefined;
-    "pos_percent"?: VolumePalettePosPercentParameters | null | undefined;
-    "neg_percent"?: VolumePaletteNegPercentParameters | null | undefined;
-    "pos_user"?: VolumePalettePosUserParameters | null | undefined;
-    "neg_user"?: VolumePaletteNegUserParameters | null | undefined;
-    "opt_interpolate_interpolate"?: "true" | "false" | null | undefined;
-    "opt_disp_pos_display"?: "true" | "false" | null | undefined;
-    "opt_disp_neg_display"?: "true" | "false" | null | undefined;
-    "opt_disp_zero_display"?: "true" | "false" | null | undefined;
-    "opt_palette_name_name"?: string | null | undefined;
-    "thresholding"?: VolumePaletteThresholdingParameters | null | undefined;
-    "opt_inversion_type"?: string | null | undefined;
 }
 type VolumePaletteParametersTagged = Required<Pick<VolumePaletteParameters, '@type'>> & VolumePaletteParameters;
 
@@ -86,9 +86,9 @@ function volume_palette_pos_percent_params(
     pos_max__: number,
 ): VolumePalettePosPercentParametersTagged {
     const params = {
-        "@type": "pos_percent" as const,
-        "pos_min__": pos_min__,
-        "pos_max__": pos_max__,
+        "@type": "pos-percent" as const,
+        "pos-min-%": pos_min__,
+        "pos-max-%": pos_max__,
     };
     return params;
 }
@@ -107,9 +107,11 @@ function volume_palette_pos_percent_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-pos-percent");
-    cargs.push(String((params["pos_min__"] ?? null)));
-    cargs.push(String((params["pos_max__"] ?? null)));
+    cargs.push(
+        "-pos-percent",
+        String((params["pos-min-%"] ?? null)),
+        String((params["pos-max-%"] ?? null))
+    );
     return cargs;
 }
 
@@ -127,9 +129,9 @@ function volume_palette_neg_percent_params(
     neg_max__: number,
 ): VolumePaletteNegPercentParametersTagged {
     const params = {
-        "@type": "neg_percent" as const,
-        "neg_min__": neg_min__,
-        "neg_max__": neg_max__,
+        "@type": "neg-percent" as const,
+        "neg-min-%": neg_min__,
+        "neg-max-%": neg_max__,
     };
     return params;
 }
@@ -148,9 +150,11 @@ function volume_palette_neg_percent_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-neg-percent");
-    cargs.push(String((params["neg_min__"] ?? null)));
-    cargs.push(String((params["neg_max__"] ?? null)));
+    cargs.push(
+        "-neg-percent",
+        String((params["neg-min-%"] ?? null)),
+        String((params["neg-max-%"] ?? null))
+    );
     return cargs;
 }
 
@@ -168,9 +172,9 @@ function volume_palette_pos_user_params(
     pos_max_user: number,
 ): VolumePalettePosUserParametersTagged {
     const params = {
-        "@type": "pos_user" as const,
-        "pos_min_user": pos_min_user,
-        "pos_max_user": pos_max_user,
+        "@type": "pos-user" as const,
+        "pos-min-user": pos_min_user,
+        "pos-max-user": pos_max_user,
     };
     return params;
 }
@@ -189,9 +193,11 @@ function volume_palette_pos_user_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-pos-user");
-    cargs.push(String((params["pos_min_user"] ?? null)));
-    cargs.push(String((params["pos_max_user"] ?? null)));
+    cargs.push(
+        "-pos-user",
+        String((params["pos-min-user"] ?? null)),
+        String((params["pos-max-user"] ?? null))
+    );
     return cargs;
 }
 
@@ -209,9 +215,9 @@ function volume_palette_neg_user_params(
     neg_max_user: number,
 ): VolumePaletteNegUserParametersTagged {
     const params = {
-        "@type": "neg_user" as const,
-        "neg_min_user": neg_min_user,
-        "neg_max_user": neg_max_user,
+        "@type": "neg-user" as const,
+        "neg-min-user": neg_min_user,
+        "neg-max-user": neg_max_user,
     };
     return params;
 }
@@ -230,9 +236,11 @@ function volume_palette_neg_user_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-neg-user");
-    cargs.push(String((params["neg_min_user"] ?? null)));
-    cargs.push(String((params["neg_max_user"] ?? null)));
+    cargs.push(
+        "-neg-user",
+        String((params["neg-min-user"] ?? null)),
+        String((params["neg-max-user"] ?? null))
+    );
     return cargs;
 }
 
@@ -277,11 +285,13 @@ function volume_palette_thresholding_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-thresholding");
-    cargs.push((params["type"] ?? null));
-    cargs.push((params["test"] ?? null));
-    cargs.push(String((params["min"] ?? null)));
-    cargs.push(String((params["max"] ?? null)));
+    cargs.push(
+        "-thresholding",
+        (params["type"] ?? null),
+        (params["test"] ?? null),
+        String((params["min"] ?? null)),
+        String((params["max"] ?? null))
+    );
     return cargs;
 }
 
@@ -302,79 +312,100 @@ interface VolumePaletteOutputs {
 /**
  * Build parameters.
  *
+ * @param subvolume select a single subvolume
+
+the subvolume number or name
+ * @param interpolate interpolate colors
+
+boolean, whether to interpolate
+ * @param display display positive data
+
+boolean, whether to display
+ * @param display_ display positive data
+
+boolean, whether to display
+ * @param display_2 display data closer to zero than the min cutoff
+
+boolean, whether to display
+ * @param name set the palette used
+
+the name of the palette
+ * @param type_ specify palette inversion
+
+the type of inversion
+ * @param type_2 specify normalization mode (NOTE: this is always a file-wide setting, NOT per-map)
+
+the normalization mode
  * @param volume the volume file to modify
  * @param mode the mapping mode
- * @param opt_subvolume_subvolume select a single subvolume: the subvolume number or name
  * @param pos_percent percentage min/max for positive data coloring
  * @param neg_percent percentage min/max for negative data coloring
  * @param pos_user user min/max values for positive data coloring
  * @param neg_user user min/max values for negative data coloring
- * @param opt_interpolate_interpolate interpolate colors: boolean, whether to interpolate
- * @param opt_disp_pos_display display positive data: boolean, whether to display
- * @param opt_disp_neg_display display positive data: boolean, whether to display
- * @param opt_disp_zero_display display data closer to zero than the min cutoff: boolean, whether to display
- * @param opt_palette_name_name set the palette used: the name of the palette
  * @param thresholding set the thresholding
- * @param opt_inversion_type specify palette inversion: the type of inversion
  *
  * @returns Parameter dictionary
  */
 function volume_palette_params(
+    subvolume: string | null,
+    interpolate: boolean | null,
+    display: boolean | null,
+    display_: boolean | null,
+    display_2: boolean | null,
+    name: string | null,
+    type_: string | null,
+    type_2: string | null,
     volume: string,
     mode: string,
-    opt_subvolume_subvolume: string | null = null,
     pos_percent: VolumePalettePosPercentParameters | null = null,
     neg_percent: VolumePaletteNegPercentParameters | null = null,
     pos_user: VolumePalettePosUserParameters | null = null,
     neg_user: VolumePaletteNegUserParameters | null = null,
-    opt_interpolate_interpolate: "true" | "false" | null = null,
-    opt_disp_pos_display: "true" | "false" | null = null,
-    opt_disp_neg_display: "true" | "false" | null = null,
-    opt_disp_zero_display: "true" | "false" | null = null,
-    opt_palette_name_name: string | null = null,
     thresholding: VolumePaletteThresholdingParameters | null = null,
-    opt_inversion_type: string | null = null,
 ): VolumePaletteParametersTagged {
     const params = {
         "@type": "workbench/volume-palette" as const,
         "volume": volume,
         "mode": mode,
     };
-    if (opt_subvolume_subvolume !== null) {
-        params["opt_subvolume_subvolume"] = opt_subvolume_subvolume;
+    if (subvolume !== null) {
+        params["subvolume"] = subvolume;
     }
     if (pos_percent !== null) {
-        params["pos_percent"] = pos_percent;
+        params["pos-percent"] = pos_percent;
     }
     if (neg_percent !== null) {
-        params["neg_percent"] = neg_percent;
+        params["neg-percent"] = neg_percent;
     }
     if (pos_user !== null) {
-        params["pos_user"] = pos_user;
+        params["pos-user"] = pos_user;
     }
     if (neg_user !== null) {
-        params["neg_user"] = neg_user;
+        params["neg-user"] = neg_user;
     }
-    if (opt_interpolate_interpolate !== null) {
-        params["opt_interpolate_interpolate"] = opt_interpolate_interpolate;
+    if (interpolate !== null) {
+        params["interpolate"] = interpolate;
     }
-    if (opt_disp_pos_display !== null) {
-        params["opt_disp_pos_display"] = opt_disp_pos_display;
+    if (display !== null) {
+        params["display"] = display;
     }
-    if (opt_disp_neg_display !== null) {
-        params["opt_disp_neg_display"] = opt_disp_neg_display;
+    if (display_ !== null) {
+        params["display"] = display_;
     }
-    if (opt_disp_zero_display !== null) {
-        params["opt_disp_zero_display"] = opt_disp_zero_display;
+    if (display_2 !== null) {
+        params["display"] = display_2;
     }
-    if (opt_palette_name_name !== null) {
-        params["opt_palette_name_name"] = opt_palette_name_name;
+    if (name !== null) {
+        params["name"] = name;
     }
     if (thresholding !== null) {
         params["thresholding"] = thresholding;
     }
-    if (opt_inversion_type !== null) {
-        params["opt_inversion_type"] = opt_inversion_type;
+    if (type_ !== null) {
+        params["type"] = type_;
+    }
+    if (type_2 !== null) {
+        params["type"] = type_2;
     }
     return params;
 }
@@ -393,67 +424,35 @@ function volume_palette_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-palette");
+    if ((params["subvolume"] ?? null) !== null || (params["pos-percent"] ?? null) !== null || (params["neg-percent"] ?? null) !== null || (params["pos-user"] ?? null) !== null || (params["neg-user"] ?? null) !== null || (params["interpolate"] ?? null) !== null || (params["display"] ?? null) !== null || (params["display"] ?? null) !== null || (params["display"] ?? null) !== null || (params["name"] ?? null) !== null || (params["thresholding"] ?? null) !== null || (params["type"] ?? null) !== null || (params["type"] ?? null) !== null) {
+        cargs.push(
+            "wb_command",
+            "-volume-palette",
+            "-subvolume",
+            (((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null) : ""),
+            ...(((params["pos-percent"] ?? null) !== null) ? volume_palette_pos_percent_cargs((params["pos-percent"] ?? null), execution) : []),
+            ...(((params["neg-percent"] ?? null) !== null) ? volume_palette_neg_percent_cargs((params["neg-percent"] ?? null), execution) : []),
+            ...(((params["pos-user"] ?? null) !== null) ? volume_palette_pos_user_cargs((params["pos-user"] ?? null), execution) : []),
+            ...(((params["neg-user"] ?? null) !== null) ? volume_palette_neg_user_cargs((params["neg-user"] ?? null), execution) : []),
+            "-interpolate",
+            (((params["interpolate"] ?? null) !== null) ? ((params["interpolate"] ?? null) ? "true" : "false") : ""),
+            "-disp-pos",
+            (((params["display"] ?? null) !== null) ? ((params["display"] ?? null) ? "true" : "false") : ""),
+            "-disp-neg",
+            (((params["display"] ?? null) !== null) ? ((params["display"] ?? null) ? "true" : "false") : ""),
+            "-disp-zero",
+            (((params["display"] ?? null) !== null) ? ((params["display"] ?? null) ? "true" : "false") : ""),
+            "-palette-name",
+            (((params["name"] ?? null) !== null) ? (params["name"] ?? null) : ""),
+            ...(((params["thresholding"] ?? null) !== null) ? volume_palette_thresholding_cargs((params["thresholding"] ?? null), execution) : []),
+            "-inversion",
+            (((params["type"] ?? null) !== null) ? (params["type"] ?? null) : ""),
+            "-normalization",
+            (((params["type"] ?? null) !== null) ? (params["type"] ?? null) : "")
+        );
+    }
     cargs.push((params["volume"] ?? null));
     cargs.push((params["mode"] ?? null));
-    if ((params["opt_subvolume_subvolume"] ?? null) !== null) {
-        cargs.push(
-            "-subvolume",
-            (params["opt_subvolume_subvolume"] ?? null)
-        );
-    }
-    if ((params["pos_percent"] ?? null) !== null) {
-        cargs.push(...volume_palette_pos_percent_cargs((params["pos_percent"] ?? null), execution));
-    }
-    if ((params["neg_percent"] ?? null) !== null) {
-        cargs.push(...volume_palette_neg_percent_cargs((params["neg_percent"] ?? null), execution));
-    }
-    if ((params["pos_user"] ?? null) !== null) {
-        cargs.push(...volume_palette_pos_user_cargs((params["pos_user"] ?? null), execution));
-    }
-    if ((params["neg_user"] ?? null) !== null) {
-        cargs.push(...volume_palette_neg_user_cargs((params["neg_user"] ?? null), execution));
-    }
-    if ((params["opt_interpolate_interpolate"] ?? null) !== null) {
-        cargs.push(
-            "-interpolate",
-            (params["opt_interpolate_interpolate"] ?? null)
-        );
-    }
-    if ((params["opt_disp_pos_display"] ?? null) !== null) {
-        cargs.push(
-            "-disp-pos",
-            (params["opt_disp_pos_display"] ?? null)
-        );
-    }
-    if ((params["opt_disp_neg_display"] ?? null) !== null) {
-        cargs.push(
-            "-disp-neg",
-            (params["opt_disp_neg_display"] ?? null)
-        );
-    }
-    if ((params["opt_disp_zero_display"] ?? null) !== null) {
-        cargs.push(
-            "-disp-zero",
-            (params["opt_disp_zero_display"] ?? null)
-        );
-    }
-    if ((params["opt_palette_name_name"] ?? null) !== null) {
-        cargs.push(
-            "-palette-name",
-            (params["opt_palette_name_name"] ?? null)
-        );
-    }
-    if ((params["thresholding"] ?? null) !== null) {
-        cargs.push(...volume_palette_thresholding_cargs((params["thresholding"] ?? null), execution));
-    }
-    if ((params["opt_inversion_type"] ?? null) !== null) {
-        cargs.push(
-            "-inversion",
-            (params["opt_inversion_type"] ?? null)
-        );
-    }
     return cargs;
 }
 
@@ -478,9 +477,7 @@ function volume_palette_outputs(
 
 
 /**
- * volume-palette
- *
- * Set the palette of a volume file.
+ * SET THE PALETTE OF A VOLUME FILE.
  *
  * The original volume file is overwritten with the modified version.  By default, all columns of the volume file are adjusted to the new settings, use the -subvolume option to change only one subvolume.  Mapping settings not specified in options will be taken from the first subvolume.  The <mode> argument must be one of the following:
  *
@@ -552,11 +549,12 @@ function volume_palette_outputs(
  * OFF
  * POSITIVE_WITH_NEGATIVE
  * POSITIVE_NEGATIVE_SEPARATE
+ *
+ * The <type> argument to -normalization must be one of the following:
+ *
+ * NORMALIZATION_ALL_MAP_DATA
+ * NORMALIZATION_SELECTED_MAP_DATA
  * .
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -578,9 +576,7 @@ function volume_palette_execute(
 
 
 /**
- * volume-palette
- *
- * Set the palette of a volume file.
+ * SET THE PALETTE OF A VOLUME FILE.
  *
  * The original volume file is overwritten with the modified version.  By default, all columns of the volume file are adjusted to the new settings, use the -subvolume option to change only one subvolume.  Mapping settings not specified in options will be taken from the first subvolume.  The <mode> argument must be one of the following:
  *
@@ -652,48 +648,67 @@ function volume_palette_execute(
  * OFF
  * POSITIVE_WITH_NEGATIVE
  * POSITIVE_NEGATIVE_SEPARATE
+ *
+ * The <type> argument to -normalization must be one of the following:
+ *
+ * NORMALIZATION_ALL_MAP_DATA
+ * NORMALIZATION_SELECTED_MAP_DATA
  * .
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param subvolume select a single subvolume
+
+the subvolume number or name
+ * @param interpolate interpolate colors
+
+boolean, whether to interpolate
+ * @param display display positive data
+
+boolean, whether to display
+ * @param display_ display positive data
+
+boolean, whether to display
+ * @param display_2 display data closer to zero than the min cutoff
+
+boolean, whether to display
+ * @param name set the palette used
+
+the name of the palette
+ * @param type_ specify palette inversion
+
+the type of inversion
+ * @param type_2 specify normalization mode (NOTE: this is always a file-wide setting, NOT per-map)
+
+the normalization mode
  * @param volume the volume file to modify
  * @param mode the mapping mode
- * @param opt_subvolume_subvolume select a single subvolume: the subvolume number or name
  * @param pos_percent percentage min/max for positive data coloring
  * @param neg_percent percentage min/max for negative data coloring
  * @param pos_user user min/max values for positive data coloring
  * @param neg_user user min/max values for negative data coloring
- * @param opt_interpolate_interpolate interpolate colors: boolean, whether to interpolate
- * @param opt_disp_pos_display display positive data: boolean, whether to display
- * @param opt_disp_neg_display display positive data: boolean, whether to display
- * @param opt_disp_zero_display display data closer to zero than the min cutoff: boolean, whether to display
- * @param opt_palette_name_name set the palette used: the name of the palette
  * @param thresholding set the thresholding
- * @param opt_inversion_type specify palette inversion: the type of inversion
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumePaletteOutputs`).
  */
 function volume_palette(
+    subvolume: string | null,
+    interpolate: boolean | null,
+    display: boolean | null,
+    display_: boolean | null,
+    display_2: boolean | null,
+    name: string | null,
+    type_: string | null,
+    type_2: string | null,
     volume: string,
     mode: string,
-    opt_subvolume_subvolume: string | null = null,
     pos_percent: VolumePalettePosPercentParameters | null = null,
     neg_percent: VolumePaletteNegPercentParameters | null = null,
     pos_user: VolumePalettePosUserParameters | null = null,
     neg_user: VolumePaletteNegUserParameters | null = null,
-    opt_interpolate_interpolate: "true" | "false" | null = null,
-    opt_disp_pos_display: "true" | "false" | null = null,
-    opt_disp_neg_display: "true" | "false" | null = null,
-    opt_disp_zero_display: "true" | "false" | null = null,
-    opt_palette_name_name: string | null = null,
     thresholding: VolumePaletteThresholdingParameters | null = null,
-    opt_inversion_type: string | null = null,
     runner: Runner | null = null,
 ): VolumePaletteOutputs {
-    const params = volume_palette_params(volume, mode, opt_subvolume_subvolume, pos_percent, neg_percent, pos_user, neg_user, opt_interpolate_interpolate, opt_disp_pos_display, opt_disp_neg_display, opt_disp_zero_display, opt_palette_name_name, thresholding, opt_inversion_type)
+    const params = volume_palette_params(subvolume, interpolate, display, display_, display_2, name, type_, type_2, volume, mode, pos_percent, neg_percent, pos_user, neg_user, thresholding)
     return volume_palette_execute(params, runner);
 }
 

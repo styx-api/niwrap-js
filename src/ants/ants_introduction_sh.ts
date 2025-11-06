@@ -16,12 +16,12 @@ interface AntsIntroductionShParameters {
     "image_dimension": 2 | 3;
     "reference_image": InputPathType;
     "input_image": InputPathType;
-    "force"?: 0 | 1 | null | undefined;
+    "force"?: boolean | null | undefined;
     "labels_in_fixed_image_space"?: string | null | undefined;
     "max_iterations"?: number | null | undefined;
-    "n4_bias_field_correction"?: 0 | 1 | null | undefined;
+    "n4_bias_field_correction"?: boolean | null | undefined;
     "outprefix"?: string | null | undefined;
-    "quality_check"?: 0 | 1 | null | undefined;
+    "quality_check"?: boolean | null | undefined;
     "similarity_metric"?: string | null | undefined;
     "transformation_model"?: string | null | undefined;
 }
@@ -62,12 +62,12 @@ function ants_introduction_sh_params(
     image_dimension: 2 | 3,
     reference_image: InputPathType,
     input_image: InputPathType,
-    force: 0 | 1 | null = null,
+    force: boolean | null = null,
     labels_in_fixed_image_space: string | null = null,
     max_iterations: number | null = null,
-    n4_bias_field_correction: 0 | 1 | null = null,
+    n4_bias_field_correction: boolean | null = null,
     outprefix: string | null = null,
-    quality_check: 0 | 1 | null = null,
+    quality_check: boolean | null = null,
     similarity_metric: string | null = null,
     transformation_model: string | null = null,
 ): AntsIntroductionShParametersTagged {
@@ -134,7 +134,7 @@ function ants_introduction_sh_cargs(
     if ((params["force"] ?? null) !== null) {
         cargs.push(
             "-f",
-            String((params["force"] ?? null))
+            ((params["force"] ?? null) ? "1" : "0")
         );
     }
     if ((params["labels_in_fixed_image_space"] ?? null) !== null) {
@@ -152,7 +152,7 @@ function ants_introduction_sh_cargs(
     if ((params["n4_bias_field_correction"] ?? null) !== null) {
         cargs.push(
             "-n",
-            String((params["n4_bias_field_correction"] ?? null))
+            ((params["n4_bias_field_correction"] ?? null) ? "1" : "0")
         );
     }
     if ((params["outprefix"] ?? null) !== null) {
@@ -164,7 +164,7 @@ function ants_introduction_sh_cargs(
     if ((params["quality_check"] ?? null) !== null) {
         cargs.push(
             "-q",
-            String((params["quality_check"] ?? null))
+            ((params["quality_check"] ?? null) ? "1" : "0")
         );
     }
     if ((params["similarity_metric"] ?? null) !== null) {
@@ -258,12 +258,12 @@ function ants_introduction_sh(
     image_dimension: 2 | 3,
     reference_image: InputPathType,
     input_image: InputPathType,
-    force: 0 | 1 | null = null,
+    force: boolean | null = null,
     labels_in_fixed_image_space: string | null = null,
     max_iterations: number | null = null,
-    n4_bias_field_correction: 0 | 1 | null = null,
+    n4_bias_field_correction: boolean | null = null,
     outprefix: string | null = null,
-    quality_check: 0 | 1 | null = null,
+    quality_check: boolean | null = null,
     similarity_metric: string | null = null,
     transformation_model: string | null = null,
     runner: Runner | null = null,

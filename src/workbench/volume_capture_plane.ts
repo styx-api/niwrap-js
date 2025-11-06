@@ -4,10 +4,9 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_CAPTURE_PLANE_METADATA: Metadata = {
-    id: "fce982f3ac61b3a6dc85a30dbe38533edd029421.boutiques",
+    id: "fcda0671173456c7a0dc9ad4eeb91facd1507c4f.workbench",
     name: "volume-capture-plane",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
@@ -16,19 +15,19 @@ interface VolumeCapturePlaneParameters {
     "volume": InputPathType;
     "subvolume": string;
     "interp": string;
-    "h_dim": number;
-    "v_dim": number;
-    "scale_min": number;
-    "scale_max": number;
-    "bottom_left_x": number;
-    "bottom_left_y": number;
-    "bottom_left_z": number;
-    "bottom_right_x": number;
-    "bottom_right_y": number;
-    "bottom_right_z": number;
-    "top_left_x": number;
-    "top_left_y": number;
-    "top_left_z": number;
+    "h-dim": number;
+    "v-dim": number;
+    "scale-min": number;
+    "scale-max": number;
+    "bottom-left-x": number;
+    "bottom-left-y": number;
+    "bottom-left-z": number;
+    "bottom-right-x": number;
+    "bottom-right-y": number;
+    "bottom-right-z": number;
+    "top-left-x": number;
+    "top-left-y": number;
+    "top-left-z": number;
     "image": string;
 }
 type VolumeCapturePlaneParametersTagged = Required<Pick<VolumeCapturePlaneParameters, '@type'>> & VolumeCapturePlaneParameters;
@@ -94,19 +93,19 @@ function volume_capture_plane_params(
         "volume": volume,
         "subvolume": subvolume,
         "interp": interp,
-        "h_dim": h_dim,
-        "v_dim": v_dim,
-        "scale_min": scale_min,
-        "scale_max": scale_max,
-        "bottom_left_x": bottom_left_x,
-        "bottom_left_y": bottom_left_y,
-        "bottom_left_z": bottom_left_z,
-        "bottom_right_x": bottom_right_x,
-        "bottom_right_y": bottom_right_y,
-        "bottom_right_z": bottom_right_z,
-        "top_left_x": top_left_x,
-        "top_left_y": top_left_y,
-        "top_left_z": top_left_z,
+        "h-dim": h_dim,
+        "v-dim": v_dim,
+        "scale-min": scale_min,
+        "scale-max": scale_max,
+        "bottom-left-x": bottom_left_x,
+        "bottom-left-y": bottom_left_y,
+        "bottom-left-z": bottom_left_z,
+        "bottom-right-x": bottom_right_x,
+        "bottom-right-y": bottom_right_y,
+        "bottom-right-z": bottom_right_z,
+        "top-left-x": top_left_x,
+        "top-left-y": top_left_y,
+        "top-left-z": top_left_z,
         "image": image,
     };
     return params;
@@ -126,24 +125,26 @@ function volume_capture_plane_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-capture-plane");
+    cargs.push(
+        "wb_command",
+        "-volume-capture-plane"
+    );
     cargs.push(execution.inputFile((params["volume"] ?? null)));
     cargs.push((params["subvolume"] ?? null));
     cargs.push((params["interp"] ?? null));
-    cargs.push(String((params["h_dim"] ?? null)));
-    cargs.push(String((params["v_dim"] ?? null)));
-    cargs.push(String((params["scale_min"] ?? null)));
-    cargs.push(String((params["scale_max"] ?? null)));
-    cargs.push(String((params["bottom_left_x"] ?? null)));
-    cargs.push(String((params["bottom_left_y"] ?? null)));
-    cargs.push(String((params["bottom_left_z"] ?? null)));
-    cargs.push(String((params["bottom_right_x"] ?? null)));
-    cargs.push(String((params["bottom_right_y"] ?? null)));
-    cargs.push(String((params["bottom_right_z"] ?? null)));
-    cargs.push(String((params["top_left_x"] ?? null)));
-    cargs.push(String((params["top_left_y"] ?? null)));
-    cargs.push(String((params["top_left_z"] ?? null)));
+    cargs.push(String((params["h-dim"] ?? null)));
+    cargs.push(String((params["v-dim"] ?? null)));
+    cargs.push(String((params["scale-min"] ?? null)));
+    cargs.push(String((params["scale-max"] ?? null)));
+    cargs.push(String((params["bottom-left-x"] ?? null)));
+    cargs.push(String((params["bottom-left-y"] ?? null)));
+    cargs.push(String((params["bottom-left-z"] ?? null)));
+    cargs.push(String((params["bottom-right-x"] ?? null)));
+    cargs.push(String((params["bottom-right-y"] ?? null)));
+    cargs.push(String((params["bottom-right-z"] ?? null)));
+    cargs.push(String((params["top-left-x"] ?? null)));
+    cargs.push(String((params["top-left-y"] ?? null)));
+    cargs.push(String((params["top-left-z"] ?? null)));
     cargs.push((params["image"] ?? null));
     return cargs;
 }
@@ -169,9 +170,7 @@ function volume_capture_plane_outputs(
 
 
 /**
- * volume-capture-plane
- *
- * Interpolate image from plane through volume.
+ * INTERPOLATE IMAGE FROM PLANE THROUGH VOLUME.
  *
  * NOTE: If you want to generate an image with all of the capabilities of the GUI rendering, see -show-scene.
  *
@@ -180,10 +179,6 @@ function volume_capture_plane_outputs(
  * CUBIC
  * ENCLOSING_VOXEL
  * TRILINEAR.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -205,9 +200,7 @@ function volume_capture_plane_execute(
 
 
 /**
- * volume-capture-plane
- *
- * Interpolate image from plane through volume.
+ * INTERPOLATE IMAGE FROM PLANE THROUGH VOLUME.
  *
  * NOTE: If you want to generate an image with all of the capabilities of the GUI rendering, see -show-scene.
  *
@@ -216,10 +209,6 @@ function volume_capture_plane_execute(
  * CUBIC
  * ENCLOSING_VOXEL
  * TRILINEAR.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param volume the volume file to interpolate from
  * @param subvolume the name or number of the subvolume to use

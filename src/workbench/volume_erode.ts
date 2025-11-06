@@ -4,20 +4,19 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_ERODE_METADATA: Metadata = {
-    id: "e745724b943117f1bea44203e23d97dc9e188367.boutiques",
+    id: "de54c7f54c6368999f264ce5975a56da07dfce18.workbench",
     name: "volume-erode",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface VolumeErodeParameters {
     "@type"?: "workbench/volume-erode";
+    "volume-out": string;
+    "roi-volume"?: InputPathType | null | undefined;
+    "subvol"?: string | null | undefined;
     "volume": InputPathType;
     "distance": number;
-    "volume_out": string;
-    "opt_roi_roi_volume"?: InputPathType | null | undefined;
-    "opt_subvolume_subvol"?: string | null | undefined;
 }
 type VolumeErodeParametersTagged = Required<Pick<VolumeErodeParameters, '@type'>> & VolumeErodeParameters;
 
@@ -42,32 +41,36 @@ interface VolumeErodeOutputs {
 /**
  * Build parameters.
  *
+ * @param volume_out the output volume
+ * @param roi_volume assume voxels outside this roi are nonzero
+
+volume file, positive values denote voxels that have data
+ * @param subvol select a single subvolume to dilate
+
+the subvolume number or name
  * @param volume the volume to erode
  * @param distance distance in mm to erode
- * @param volume_out the output volume
- * @param opt_roi_roi_volume assume voxels outside this roi are nonzero: volume file, positive values denote voxels that have data
- * @param opt_subvolume_subvol select a single subvolume to dilate: the subvolume number or name
  *
  * @returns Parameter dictionary
  */
 function volume_erode_params(
+    volume_out: string,
+    roi_volume: InputPathType | null,
+    subvol: string | null,
     volume: InputPathType,
     distance: number,
-    volume_out: string,
-    opt_roi_roi_volume: InputPathType | null = null,
-    opt_subvolume_subvol: string | null = null,
 ): VolumeErodeParametersTagged {
     const params = {
         "@type": "workbench/volume-erode" as const,
+        "volume-out": volume_out,
         "volume": volume,
         "distance": distance,
-        "volume_out": volume_out,
     };
-    if (opt_roi_roi_volume !== null) {
-        params["opt_roi_roi_volume"] = opt_roi_roi_volume;
+    if (roi_volume !== null) {
+        params["roi-volume"] = roi_volume;
     }
-    if (opt_subvolume_subvol !== null) {
-        params["opt_subvolume_subvol"] = opt_subvolume_subvol;
+    if (subvol !== null) {
+        params["subvol"] = subvol;
     }
     return params;
 }
@@ -86,23 +89,19 @@ function volume_erode_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-erode");
+    if ((params["roi-volume"] ?? null) !== null || (params["subvol"] ?? null) !== null) {
+        cargs.push(
+            "wb_command",
+            "-volume-erode",
+            (params["volume-out"] ?? null),
+            "-roi",
+            (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
+            "-subvolume",
+            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
+        );
+    }
     cargs.push(execution.inputFile((params["volume"] ?? null)));
     cargs.push(String((params["distance"] ?? null)));
-    cargs.push((params["volume_out"] ?? null));
-    if ((params["opt_roi_roi_volume"] ?? null) !== null) {
-        cargs.push(
-            "-roi",
-            execution.inputFile((params["opt_roi_roi_volume"] ?? null))
-        );
-    }
-    if ((params["opt_subvolume_subvol"] ?? null) !== null) {
-        cargs.push(
-            "-subvolume",
-            (params["opt_subvolume_subvol"] ?? null)
-        );
-    }
     return cargs;
 }
 
@@ -121,22 +120,16 @@ function volume_erode_outputs(
 ): VolumeErodeOutputs {
     const ret: VolumeErodeOutputs = {
         root: execution.outputFile("."),
-        volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
+        volume_out: execution.outputFile([(params["volume-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * volume-erode
- *
- * Erode a volume file.
+ * ERODE A VOLUME FILE.
  *
  * Around each voxel with a value of zero, set surrounding voxels to zero.  The surrounding voxels are all face neighbors and all voxels within the specified distance (center to center).
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -158,34 +151,32 @@ function volume_erode_execute(
 
 
 /**
- * volume-erode
- *
- * Erode a volume file.
+ * ERODE A VOLUME FILE.
  *
  * Around each voxel with a value of zero, set surrounding voxels to zero.  The surrounding voxels are all face neighbors and all voxels within the specified distance (center to center).
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param volume_out the output volume
+ * @param roi_volume assume voxels outside this roi are nonzero
+
+volume file, positive values denote voxels that have data
+ * @param subvol select a single subvolume to dilate
+
+the subvolume number or name
  * @param volume the volume to erode
  * @param distance distance in mm to erode
- * @param volume_out the output volume
- * @param opt_roi_roi_volume assume voxels outside this roi are nonzero: volume file, positive values denote voxels that have data
- * @param opt_subvolume_subvol select a single subvolume to dilate: the subvolume number or name
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeErodeOutputs`).
  */
 function volume_erode(
+    volume_out: string,
+    roi_volume: InputPathType | null,
+    subvol: string | null,
     volume: InputPathType,
     distance: number,
-    volume_out: string,
-    opt_roi_roi_volume: InputPathType | null = null,
-    opt_subvolume_subvol: string | null = null,
     runner: Runner | null = null,
 ): VolumeErodeOutputs {
-    const params = volume_erode_params(volume, distance, volume_out, opt_roi_roi_volume, opt_subvolume_subvol)
+    const params = volume_erode_params(volume_out, roi_volume, subvol, volume, distance)
     return volume_erode_execute(params, runner);
 }
 

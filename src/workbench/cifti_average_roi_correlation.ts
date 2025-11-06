@@ -4,39 +4,38 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_AVERAGE_ROI_CORRELATION_METADATA: Metadata = {
-    id: "539e96c2fb64bff82d21688d1bec36d954413c34.boutiques",
+    id: "8675ac82eeff102d67fcb3c8cd17fa1826495162.workbench",
     name: "cifti-average-roi-correlation",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiAverageRoiCorrelationCiftiRoiParameters {
-    "@type"?: "cifti_roi";
-    "roi_cifti": InputPathType;
-    "opt_in_memory": boolean;
+    "@type"?: "cifti-roi";
+    "roi-cifti": InputPathType;
+    "in-memory": boolean;
 }
 type CiftiAverageRoiCorrelationCiftiRoiParametersTagged = Required<Pick<CiftiAverageRoiCorrelationCiftiRoiParameters, '@type'>> & CiftiAverageRoiCorrelationCiftiRoiParameters;
 
 
 interface CiftiAverageRoiCorrelationCiftiParameters {
     "@type"?: "cifti";
-    "cifti_in": InputPathType;
+    "cifti-in": InputPathType;
 }
 type CiftiAverageRoiCorrelationCiftiParametersTagged = Required<Pick<CiftiAverageRoiCorrelationCiftiParameters, '@type'>> & CiftiAverageRoiCorrelationCiftiParameters;
 
 
 interface CiftiAverageRoiCorrelationParameters {
     "@type"?: "workbench/cifti-average-roi-correlation";
-    "cifti_out": string;
-    "cifti_roi"?: CiftiAverageRoiCorrelationCiftiRoiParameters | null | undefined;
-    "opt_left_roi_roi_metric"?: InputPathType | null | undefined;
-    "opt_right_roi_roi_metric"?: InputPathType | null | undefined;
-    "opt_cerebellum_roi_roi_metric"?: InputPathType | null | undefined;
-    "opt_vol_roi_roi_vol"?: InputPathType | null | undefined;
-    "opt_left_area_surf_left_surf"?: InputPathType | null | undefined;
-    "opt_right_area_surf_right_surf"?: InputPathType | null | undefined;
-    "opt_cerebellum_area_surf_cerebellum_surf"?: InputPathType | null | undefined;
+    "cifti-out": string;
+    "cifti-roi"?: CiftiAverageRoiCorrelationCiftiRoiParameters | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
+    "roi-vol"?: InputPathType | null | undefined;
+    "left-surf"?: InputPathType | null | undefined;
+    "right-surf"?: InputPathType | null | undefined;
+    "cerebellum-surf"?: InputPathType | null | undefined;
     "cifti"?: Array<CiftiAverageRoiCorrelationCiftiParameters> | null | undefined;
 }
 type CiftiAverageRoiCorrelationParametersTagged = Required<Pick<CiftiAverageRoiCorrelationParameters, '@type'>> & CiftiAverageRoiCorrelationParameters;
@@ -46,18 +45,18 @@ type CiftiAverageRoiCorrelationParametersTagged = Required<Pick<CiftiAverageRoiC
  * Build parameters.
  *
  * @param roi_cifti the roi cifti file
- * @param opt_in_memory cache the roi in memory so that it isn't re-read for each input cifti
+ * @param in_memory cache the roi in memory so that it isn't re-read for each input cifti
  *
  * @returns Parameter dictionary
  */
 function cifti_average_roi_correlation_cifti_roi_params(
     roi_cifti: InputPathType,
-    opt_in_memory: boolean = false,
+    in_memory: boolean = false,
 ): CiftiAverageRoiCorrelationCiftiRoiParametersTagged {
     const params = {
-        "@type": "cifti_roi" as const,
-        "roi_cifti": roi_cifti,
-        "opt_in_memory": opt_in_memory,
+        "@type": "cifti-roi" as const,
+        "roi-cifti": roi_cifti,
+        "in-memory": in_memory,
     };
     return params;
 }
@@ -76,10 +75,12 @@ function cifti_average_roi_correlation_cifti_roi_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-cifti-roi");
-    cargs.push(execution.inputFile((params["roi_cifti"] ?? null)));
-    if ((params["opt_in_memory"] ?? false)) {
-        cargs.push("-in-memory");
+    if ((params["in-memory"] ?? false)) {
+        cargs.push(
+            "-cifti-roi",
+            execution.inputFile((params["roi-cifti"] ?? null)),
+            "-in-memory"
+        );
     }
     return cargs;
 }
@@ -97,7 +98,7 @@ function cifti_average_roi_correlation_cifti_params(
 ): CiftiAverageRoiCorrelationCiftiParametersTagged {
     const params = {
         "@type": "cifti" as const,
-        "cifti_in": cifti_in,
+        "cifti-in": cifti_in,
     };
     return params;
 }
@@ -116,8 +117,10 @@ function cifti_average_roi_correlation_cifti_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-cifti");
-    cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
+    cargs.push(
+        "-cifti",
+        execution.inputFile((params["cifti-in"] ?? null))
+    );
     return cargs;
 }
 
@@ -143,57 +146,71 @@ interface CiftiAverageRoiCorrelationOutputs {
  * Build parameters.
  *
  * @param cifti_out output cifti file
+ * @param roi_metric weights to use for left hempsphere
+
+the left roi as a metric file
+ * @param roi_metric_ weights to use for right hempsphere
+
+the right roi as a metric file
+ * @param roi_metric_2 weights to use for cerebellum surface
+
+the cerebellum roi as a metric file
+ * @param roi_vol voxel weights to use
+
+the roi volume file
+ * @param left_surf specify the left surface for vertex area correction
+
+the left surface file
+ * @param right_surf specify the right surface for vertex area correction
+
+the right surface file
+ * @param cerebellum_surf specify the cerebellum surface for vertex area correction
+
+the cerebellum surface file
  * @param cifti_roi cifti file containing combined weights
- * @param opt_left_roi_roi_metric weights to use for left hempsphere: the left roi as a metric file
- * @param opt_right_roi_roi_metric weights to use for right hempsphere: the right roi as a metric file
- * @param opt_cerebellum_roi_roi_metric weights to use for cerebellum surface: the cerebellum roi as a metric file
- * @param opt_vol_roi_roi_vol voxel weights to use: the roi volume file
- * @param opt_left_area_surf_left_surf specify the left surface for vertex area correction: the left surface file
- * @param opt_right_area_surf_right_surf specify the right surface for vertex area correction: the right surface file
- * @param opt_cerebellum_area_surf_cerebellum_surf specify the cerebellum surface for vertex area correction: the cerebellum surface file
  * @param cifti specify an input cifti file
  *
  * @returns Parameter dictionary
  */
 function cifti_average_roi_correlation_params(
     cifti_out: string,
+    roi_metric: InputPathType | null,
+    roi_metric_: InputPathType | null,
+    roi_metric_2: InputPathType | null,
+    roi_vol: InputPathType | null,
+    left_surf: InputPathType | null,
+    right_surf: InputPathType | null,
+    cerebellum_surf: InputPathType | null,
     cifti_roi: CiftiAverageRoiCorrelationCiftiRoiParameters | null = null,
-    opt_left_roi_roi_metric: InputPathType | null = null,
-    opt_right_roi_roi_metric: InputPathType | null = null,
-    opt_cerebellum_roi_roi_metric: InputPathType | null = null,
-    opt_vol_roi_roi_vol: InputPathType | null = null,
-    opt_left_area_surf_left_surf: InputPathType | null = null,
-    opt_right_area_surf_right_surf: InputPathType | null = null,
-    opt_cerebellum_area_surf_cerebellum_surf: InputPathType | null = null,
     cifti: Array<CiftiAverageRoiCorrelationCiftiParameters> | null = null,
 ): CiftiAverageRoiCorrelationParametersTagged {
     const params = {
         "@type": "workbench/cifti-average-roi-correlation" as const,
-        "cifti_out": cifti_out,
+        "cifti-out": cifti_out,
     };
     if (cifti_roi !== null) {
-        params["cifti_roi"] = cifti_roi;
+        params["cifti-roi"] = cifti_roi;
     }
-    if (opt_left_roi_roi_metric !== null) {
-        params["opt_left_roi_roi_metric"] = opt_left_roi_roi_metric;
+    if (roi_metric !== null) {
+        params["roi-metric"] = roi_metric;
     }
-    if (opt_right_roi_roi_metric !== null) {
-        params["opt_right_roi_roi_metric"] = opt_right_roi_roi_metric;
+    if (roi_metric_ !== null) {
+        params["roi-metric"] = roi_metric_;
     }
-    if (opt_cerebellum_roi_roi_metric !== null) {
-        params["opt_cerebellum_roi_roi_metric"] = opt_cerebellum_roi_roi_metric;
+    if (roi_metric_2 !== null) {
+        params["roi-metric"] = roi_metric_2;
     }
-    if (opt_vol_roi_roi_vol !== null) {
-        params["opt_vol_roi_roi_vol"] = opt_vol_roi_roi_vol;
+    if (roi_vol !== null) {
+        params["roi-vol"] = roi_vol;
     }
-    if (opt_left_area_surf_left_surf !== null) {
-        params["opt_left_area_surf_left_surf"] = opt_left_area_surf_left_surf;
+    if (left_surf !== null) {
+        params["left-surf"] = left_surf;
     }
-    if (opt_right_area_surf_right_surf !== null) {
-        params["opt_right_area_surf_right_surf"] = opt_right_area_surf_right_surf;
+    if (right_surf !== null) {
+        params["right-surf"] = right_surf;
     }
-    if (opt_cerebellum_area_surf_cerebellum_surf !== null) {
-        params["opt_cerebellum_area_surf_cerebellum_surf"] = opt_cerebellum_area_surf_cerebellum_surf;
+    if (cerebellum_surf !== null) {
+        params["cerebellum-surf"] = cerebellum_surf;
     }
     if (cifti !== null) {
         params["cifti"] = cifti;
@@ -215,56 +232,28 @@ function cifti_average_roi_correlation_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-average-roi-correlation");
-    cargs.push((params["cifti_out"] ?? null));
-    if ((params["cifti_roi"] ?? null) !== null) {
-        cargs.push(...cifti_average_roi_correlation_cifti_roi_cargs((params["cifti_roi"] ?? null), execution));
-    }
-    if ((params["opt_left_roi_roi_metric"] ?? null) !== null) {
+    if ((params["cifti-roi"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["roi-vol"] ?? null) !== null || (params["left-surf"] ?? null) !== null || (params["right-surf"] ?? null) !== null || (params["cerebellum-surf"] ?? null) !== null || (params["cifti"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-cifti-average-roi-correlation",
+            (params["cifti-out"] ?? null),
+            ...(((params["cifti-roi"] ?? null) !== null) ? cifti_average_roi_correlation_cifti_roi_cargs((params["cifti-roi"] ?? null), execution) : []),
             "-left-roi",
-            execution.inputFile((params["opt_left_roi_roi_metric"] ?? null))
-        );
-    }
-    if ((params["opt_right_roi_roi_metric"] ?? null) !== null) {
-        cargs.push(
+            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
             "-right-roi",
-            execution.inputFile((params["opt_right_roi_roi_metric"] ?? null))
-        );
-    }
-    if ((params["opt_cerebellum_roi_roi_metric"] ?? null) !== null) {
-        cargs.push(
+            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
             "-cerebellum-roi",
-            execution.inputFile((params["opt_cerebellum_roi_roi_metric"] ?? null))
-        );
-    }
-    if ((params["opt_vol_roi_roi_vol"] ?? null) !== null) {
-        cargs.push(
+            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
             "-vol-roi",
-            execution.inputFile((params["opt_vol_roi_roi_vol"] ?? null))
-        );
-    }
-    if ((params["opt_left_area_surf_left_surf"] ?? null) !== null) {
-        cargs.push(
+            (((params["roi-vol"] ?? null) !== null) ? execution.inputFile((params["roi-vol"] ?? null)) : ""),
             "-left-area-surf",
-            execution.inputFile((params["opt_left_area_surf_left_surf"] ?? null))
-        );
-    }
-    if ((params["opt_right_area_surf_right_surf"] ?? null) !== null) {
-        cargs.push(
+            (((params["left-surf"] ?? null) !== null) ? execution.inputFile((params["left-surf"] ?? null)) : ""),
             "-right-area-surf",
-            execution.inputFile((params["opt_right_area_surf_right_surf"] ?? null))
-        );
-    }
-    if ((params["opt_cerebellum_area_surf_cerebellum_surf"] ?? null) !== null) {
-        cargs.push(
+            (((params["right-surf"] ?? null) !== null) ? execution.inputFile((params["right-surf"] ?? null)) : ""),
             "-cerebellum-area-surf",
-            execution.inputFile((params["opt_cerebellum_area_surf_cerebellum_surf"] ?? null))
+            (((params["cerebellum-surf"] ?? null) !== null) ? execution.inputFile((params["cerebellum-surf"] ?? null)) : ""),
+            ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_average_roi_correlation_cifti_cargs(s, execution)).flat() : [])
         );
-    }
-    if ((params["cifti"] ?? null) !== null) {
-        cargs.push(...(params["cifti"] ?? null).map(s => cifti_average_roi_correlation_cifti_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -284,22 +273,16 @@ function cifti_average_roi_correlation_outputs(
 ): CiftiAverageRoiCorrelationOutputs {
     const ret: CiftiAverageRoiCorrelationOutputs = {
         root: execution.outputFile("."),
-        cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
+        cifti_out: execution.outputFile([(params["cifti-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * cifti-average-roi-correlation
- *
- * Correlate roi average with all rows then average across subjects.
+ * CORRELATE ROI AVERAGE WITH ALL ROWS THEN AVERAGE ACROSS SUBJECTS.
  *
  * Averages rows for each map of the ROI(s), takes the correlation of each ROI average to the rest of the rows in the same file, applies the fisher small z transform, then averages the results across all files.  ROIs are always treated as weighting functions, including negative values.  For efficiency, ensure that everything that is not intended to be used is zero in the ROI map.  If -cifti-roi is specified, -left-roi, -right-roi, -cerebellum-roi, and -vol-roi must not be specified.  If multiple non-cifti ROI files are specified, they must have the same number of columns.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -321,25 +304,33 @@ function cifti_average_roi_correlation_execute(
 
 
 /**
- * cifti-average-roi-correlation
- *
- * Correlate roi average with all rows then average across subjects.
+ * CORRELATE ROI AVERAGE WITH ALL ROWS THEN AVERAGE ACROSS SUBJECTS.
  *
  * Averages rows for each map of the ROI(s), takes the correlation of each ROI average to the rest of the rows in the same file, applies the fisher small z transform, then averages the results across all files.  ROIs are always treated as weighting functions, including negative values.  For efficiency, ensure that everything that is not intended to be used is zero in the ROI map.  If -cifti-roi is specified, -left-roi, -right-roi, -cerebellum-roi, and -vol-roi must not be specified.  If multiple non-cifti ROI files are specified, they must have the same number of columns.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
  * @param cifti_out output cifti file
+ * @param roi_metric weights to use for left hempsphere
+
+the left roi as a metric file
+ * @param roi_metric_ weights to use for right hempsphere
+
+the right roi as a metric file
+ * @param roi_metric_2 weights to use for cerebellum surface
+
+the cerebellum roi as a metric file
+ * @param roi_vol voxel weights to use
+
+the roi volume file
+ * @param left_surf specify the left surface for vertex area correction
+
+the left surface file
+ * @param right_surf specify the right surface for vertex area correction
+
+the right surface file
+ * @param cerebellum_surf specify the cerebellum surface for vertex area correction
+
+the cerebellum surface file
  * @param cifti_roi cifti file containing combined weights
- * @param opt_left_roi_roi_metric weights to use for left hempsphere: the left roi as a metric file
- * @param opt_right_roi_roi_metric weights to use for right hempsphere: the right roi as a metric file
- * @param opt_cerebellum_roi_roi_metric weights to use for cerebellum surface: the cerebellum roi as a metric file
- * @param opt_vol_roi_roi_vol voxel weights to use: the roi volume file
- * @param opt_left_area_surf_left_surf specify the left surface for vertex area correction: the left surface file
- * @param opt_right_area_surf_right_surf specify the right surface for vertex area correction: the right surface file
- * @param opt_cerebellum_area_surf_cerebellum_surf specify the cerebellum surface for vertex area correction: the cerebellum surface file
  * @param cifti specify an input cifti file
  * @param runner Command runner
  *
@@ -347,18 +338,18 @@ function cifti_average_roi_correlation_execute(
  */
 function cifti_average_roi_correlation(
     cifti_out: string,
+    roi_metric: InputPathType | null,
+    roi_metric_: InputPathType | null,
+    roi_metric_2: InputPathType | null,
+    roi_vol: InputPathType | null,
+    left_surf: InputPathType | null,
+    right_surf: InputPathType | null,
+    cerebellum_surf: InputPathType | null,
     cifti_roi: CiftiAverageRoiCorrelationCiftiRoiParameters | null = null,
-    opt_left_roi_roi_metric: InputPathType | null = null,
-    opt_right_roi_roi_metric: InputPathType | null = null,
-    opt_cerebellum_roi_roi_metric: InputPathType | null = null,
-    opt_vol_roi_roi_vol: InputPathType | null = null,
-    opt_left_area_surf_left_surf: InputPathType | null = null,
-    opt_right_area_surf_right_surf: InputPathType | null = null,
-    opt_cerebellum_area_surf_cerebellum_surf: InputPathType | null = null,
     cifti: Array<CiftiAverageRoiCorrelationCiftiParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiAverageRoiCorrelationOutputs {
-    const params = cifti_average_roi_correlation_params(cifti_out, cifti_roi, opt_left_roi_roi_metric, opt_right_roi_roi_metric, opt_cerebellum_roi_roi_metric, opt_vol_roi_roi_vol, opt_left_area_surf_left_surf, opt_right_area_surf_right_surf, opt_cerebellum_area_surf_cerebellum_surf, cifti)
+    const params = cifti_average_roi_correlation_params(cifti_out, roi_metric, roi_metric_, roi_metric_2, roi_vol, left_surf, right_surf, cerebellum_surf, cifti_roi, cifti)
     return cifti_average_roi_correlation_execute(params, runner);
 }
 

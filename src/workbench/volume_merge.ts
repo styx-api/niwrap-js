@@ -4,17 +4,16 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_MERGE_METADATA: Metadata = {
-    id: "0484245a1d35b7ed32a01a9b8363c20b753b6141.boutiques",
+    id: "fff7d7c8a2075faa5da5ccad34db6f9ba87459dd.workbench",
     name: "volume-merge",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface VolumeMergeUpToParameters {
-    "@type"?: "up_to";
-    "last_subvol": string;
-    "opt_reverse": boolean;
+    "@type"?: "up-to";
+    "last-subvol": string;
+    "reverse": boolean;
 }
 type VolumeMergeUpToParametersTagged = Required<Pick<VolumeMergeUpToParameters, '@type'>> & VolumeMergeUpToParameters;
 
@@ -22,14 +21,14 @@ type VolumeMergeUpToParametersTagged = Required<Pick<VolumeMergeUpToParameters, 
 interface VolumeMergeSubvolumeParameters {
     "@type"?: "subvolume";
     "subvol": string;
-    "up_to"?: VolumeMergeUpToParameters | null | undefined;
+    "up-to"?: VolumeMergeUpToParameters | null | undefined;
 }
 type VolumeMergeSubvolumeParametersTagged = Required<Pick<VolumeMergeSubvolumeParameters, '@type'>> & VolumeMergeSubvolumeParameters;
 
 
 interface VolumeMergeVolumeParameters {
     "@type"?: "volume";
-    "volume_in": InputPathType;
+    "volume-in": InputPathType;
     "subvolume"?: Array<VolumeMergeSubvolumeParameters> | null | undefined;
 }
 type VolumeMergeVolumeParametersTagged = Required<Pick<VolumeMergeVolumeParameters, '@type'>> & VolumeMergeVolumeParameters;
@@ -37,7 +36,7 @@ type VolumeMergeVolumeParametersTagged = Required<Pick<VolumeMergeVolumeParamete
 
 interface VolumeMergeParameters {
     "@type"?: "workbench/volume-merge";
-    "volume_out": string;
+    "volume-out": string;
     "volume"?: Array<VolumeMergeVolumeParameters> | null | undefined;
 }
 type VolumeMergeParametersTagged = Required<Pick<VolumeMergeParameters, '@type'>> & VolumeMergeParameters;
@@ -47,18 +46,18 @@ type VolumeMergeParametersTagged = Required<Pick<VolumeMergeParameters, '@type'>
  * Build parameters.
  *
  * @param last_subvol the number or name of the last subvolume to include
- * @param opt_reverse use the range in reverse order
+ * @param reverse use the range in reverse order
  *
  * @returns Parameter dictionary
  */
 function volume_merge_up_to_params(
     last_subvol: string,
-    opt_reverse: boolean = false,
+    reverse: boolean = false,
 ): VolumeMergeUpToParametersTagged {
     const params = {
-        "@type": "up_to" as const,
-        "last_subvol": last_subvol,
-        "opt_reverse": opt_reverse,
+        "@type": "up-to" as const,
+        "last-subvol": last_subvol,
+        "reverse": reverse,
     };
     return params;
 }
@@ -77,10 +76,12 @@ function volume_merge_up_to_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-up-to");
-    cargs.push((params["last_subvol"] ?? null));
-    if ((params["opt_reverse"] ?? false)) {
-        cargs.push("-reverse");
+    if ((params["reverse"] ?? false)) {
+        cargs.push(
+            "-up-to",
+            (params["last-subvol"] ?? null),
+            "-reverse"
+        );
     }
     return cargs;
 }
@@ -103,7 +104,7 @@ function volume_merge_subvolume_params(
         "subvol": subvol,
     };
     if (up_to !== null) {
-        params["up_to"] = up_to;
+        params["up-to"] = up_to;
     }
     return params;
 }
@@ -122,10 +123,12 @@ function volume_merge_subvolume_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-subvolume");
-    cargs.push((params["subvol"] ?? null));
-    if ((params["up_to"] ?? null) !== null) {
-        cargs.push(...volume_merge_up_to_cargs((params["up_to"] ?? null), execution));
+    if ((params["up-to"] ?? null) !== null) {
+        cargs.push(
+            "-subvolume",
+            (params["subvol"] ?? null),
+            ...volume_merge_up_to_cargs((params["up-to"] ?? null), execution)
+        );
     }
     return cargs;
 }
@@ -145,7 +148,7 @@ function volume_merge_volume_params(
 ): VolumeMergeVolumeParametersTagged {
     const params = {
         "@type": "volume" as const,
-        "volume_in": volume_in,
+        "volume-in": volume_in,
     };
     if (subvolume !== null) {
         params["subvolume"] = subvolume;
@@ -167,10 +170,12 @@ function volume_merge_volume_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-volume");
-    cargs.push(execution.inputFile((params["volume_in"] ?? null)));
     if ((params["subvolume"] ?? null) !== null) {
-        cargs.push(...(params["subvolume"] ?? null).map(s => volume_merge_subvolume_cargs(s, execution)).flat());
+        cargs.push(
+            "-volume",
+            execution.inputFile((params["volume-in"] ?? null)),
+            ...(params["subvolume"] ?? null).map(s => volume_merge_subvolume_cargs(s, execution)).flat()
+        );
     }
     return cargs;
 }
@@ -207,7 +212,7 @@ function volume_merge_params(
 ): VolumeMergeParametersTagged {
     const params = {
         "@type": "workbench/volume-merge" as const,
-        "volume_out": volume_out,
+        "volume-out": volume_out,
     };
     if (volume !== null) {
         params["volume"] = volume;
@@ -229,11 +234,13 @@ function volume_merge_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-merge");
-    cargs.push((params["volume_out"] ?? null));
     if ((params["volume"] ?? null) !== null) {
-        cargs.push(...(params["volume"] ?? null).map(s => volume_merge_volume_cargs(s, execution)).flat());
+        cargs.push(
+            "wb_command",
+            "-volume-merge",
+            (params["volume-out"] ?? null),
+            ...(params["volume"] ?? null).map(s => volume_merge_volume_cargs(s, execution)).flat()
+        );
     }
     return cargs;
 }
@@ -253,26 +260,20 @@ function volume_merge_outputs(
 ): VolumeMergeOutputs {
     const ret: VolumeMergeOutputs = {
         root: execution.outputFile("."),
-        volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
+        volume_out: execution.outputFile([(params["volume-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * volume-merge
- *
- * Merge volume files into a new file.
+ * MERGE VOLUME FILES INTO A NEW FILE.
  *
  * Takes one or more volume files and constructs a new volume file by concatenating subvolumes from them.  The input volume files must have the same volume space.
  *
  * Example: wb_command -volume-merge out.nii -volume first.nii -subvolume 1 -volume second.nii
  *
  * This example would take the first subvolume from first.nii, followed by all subvolumes from second.nii, and write these to out.nii.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -294,19 +295,13 @@ function volume_merge_execute(
 
 
 /**
- * volume-merge
- *
- * Merge volume files into a new file.
+ * MERGE VOLUME FILES INTO A NEW FILE.
  *
  * Takes one or more volume files and constructs a new volume file by concatenating subvolumes from them.  The input volume files must have the same volume space.
  *
  * Example: wb_command -volume-merge out.nii -volume first.nii -subvolume 1 -volume second.nii
  *
  * This example would take the first subvolume from first.nii, followed by all subvolumes from second.nii, and write these to out.nii.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param volume_out the output volume file
  * @param volume specify an input volume file

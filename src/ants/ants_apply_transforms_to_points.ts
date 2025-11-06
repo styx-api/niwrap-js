@@ -27,8 +27,8 @@ type AntsApplyTransformsToPointsInverseTransformParametersTagged = Required<Pick
 interface AntsApplyTransformsToPointsParameters {
     "@type"?: "ants/antsApplyTransformsToPoints";
     "dimensionality"?: 2 | 3 | null | undefined;
-    "precision"?: 0 | 1 | null | undefined;
-    "forantsr"?: 0 | 1 | null | undefined;
+    "precision"?: boolean | null | undefined;
+    "forantsr"?: boolean | null | undefined;
     "input": InputPathType;
     "output": string;
     "transform"?: AntsApplyTransformsToPointsSingleTransformParametersTagged | AntsApplyTransformsToPointsInverseTransformParametersTagged | null | undefined;
@@ -170,8 +170,8 @@ function ants_apply_transforms_to_points_params(
     input: InputPathType,
     output: string,
     dimensionality: 2 | 3 | null = null,
-    precision: 0 | 1 | null = null,
-    forantsr: 0 | 1 | null = null,
+    precision: boolean | null = null,
+    forantsr: boolean | null = null,
     transform: AntsApplyTransformsToPointsSingleTransformParametersTagged | AntsApplyTransformsToPointsInverseTransformParametersTagged | null = null,
 ): AntsApplyTransformsToPointsParametersTagged {
     const params = {
@@ -218,13 +218,13 @@ function ants_apply_transforms_to_points_cargs(
     if ((params["precision"] ?? null) !== null) {
         cargs.push(
             "--precision",
-            String((params["precision"] ?? null))
+            ((params["precision"] ?? null) ? "1" : "0")
         );
     }
     if ((params["forantsr"] ?? null) !== null) {
         cargs.push(
             "--forantsr",
-            String((params["forantsr"] ?? null))
+            ((params["forantsr"] ?? null) ? "1" : "0")
         );
     }
     cargs.push(
@@ -316,8 +316,8 @@ function ants_apply_transforms_to_points(
     input: InputPathType,
     output: string,
     dimensionality: 2 | 3 | null = null,
-    precision: 0 | 1 | null = null,
-    forantsr: 0 | 1 | null = null,
+    precision: boolean | null = null,
+    forantsr: boolean | null = null,
     transform: AntsApplyTransformsToPointsSingleTransformParametersTagged | AntsApplyTransformsToPointsInverseTransformParametersTagged | null = null,
     runner: Runner | null = null,
 ): AntsApplyTransformsToPointsOutputs {

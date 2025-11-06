@@ -4,20 +4,19 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const GIFTI_LABEL_TO_ROI_METADATA: Metadata = {
-    id: "5c48bae6e2e86735376fa584af53363f5564f875.boutiques",
+    id: "82549fa4f4d713245781e307c4dd75baad9fe47c.workbench",
     name: "gifti-label-to-roi",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface GiftiLabelToRoiParameters {
     "@type"?: "workbench/gifti-label-to-roi";
-    "label_in": InputPathType;
-    "metric_out": string;
-    "opt_name_label_name"?: string | null | undefined;
-    "opt_key_label_key"?: number | null | undefined;
-    "opt_map_map"?: string | null | undefined;
+    "metric-out": string;
+    "label-name"?: string | null | undefined;
+    "label-key"?: number | null | undefined;
+    "map"?: string | null | undefined;
+    "label-in": InputPathType;
 }
 type GiftiLabelToRoiParametersTagged = Required<Pick<GiftiLabelToRoiParameters, '@type'>> & GiftiLabelToRoiParameters;
 
@@ -42,34 +41,40 @@ interface GiftiLabelToRoiOutputs {
 /**
  * Build parameters.
  *
- * @param label_in the input gifti label file
  * @param metric_out the output metric file
- * @param opt_name_label_name select label by name: the label name that you want an roi of
- * @param opt_key_label_key select label by key: the label key that you want an roi of
- * @param opt_map_map select a single label map to use: the map number or name
+ * @param label_name select label by name
+
+the label name that you want an roi of
+ * @param label_key select label by key
+
+the label key that you want an roi of
+ * @param map select a single label map to use
+
+the map number or name
+ * @param label_in the input gifti label file
  *
  * @returns Parameter dictionary
  */
 function gifti_label_to_roi_params(
-    label_in: InputPathType,
     metric_out: string,
-    opt_name_label_name: string | null = null,
-    opt_key_label_key: number | null = null,
-    opt_map_map: string | null = null,
+    label_name: string | null,
+    label_key: number | null,
+    map: string | null,
+    label_in: InputPathType,
 ): GiftiLabelToRoiParametersTagged {
     const params = {
         "@type": "workbench/gifti-label-to-roi" as const,
-        "label_in": label_in,
-        "metric_out": metric_out,
+        "metric-out": metric_out,
+        "label-in": label_in,
     };
-    if (opt_name_label_name !== null) {
-        params["opt_name_label_name"] = opt_name_label_name;
+    if (label_name !== null) {
+        params["label-name"] = label_name;
     }
-    if (opt_key_label_key !== null) {
-        params["opt_key_label_key"] = opt_key_label_key;
+    if (label_key !== null) {
+        params["label-key"] = label_key;
     }
-    if (opt_map_map !== null) {
-        params["opt_map_map"] = opt_map_map;
+    if (map !== null) {
+        params["map"] = map;
     }
     return params;
 }
@@ -88,28 +93,20 @@ function gifti_label_to_roi_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-gifti-label-to-roi");
-    cargs.push(execution.inputFile((params["label_in"] ?? null)));
-    cargs.push((params["metric_out"] ?? null));
-    if ((params["opt_name_label_name"] ?? null) !== null) {
+    if ((params["label-name"] ?? null) !== null || (params["label-key"] ?? null) !== null || (params["map"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-gifti-label-to-roi",
+            (params["metric-out"] ?? null),
             "-name",
-            (params["opt_name_label_name"] ?? null)
-        );
-    }
-    if ((params["opt_key_label_key"] ?? null) !== null) {
-        cargs.push(
+            (((params["label-name"] ?? null) !== null) ? (params["label-name"] ?? null) : ""),
             "-key",
-            String((params["opt_key_label_key"] ?? null))
-        );
-    }
-    if ((params["opt_map_map"] ?? null) !== null) {
-        cargs.push(
+            (((params["label-key"] ?? null) !== null) ? String((params["label-key"] ?? null)) : ""),
             "-map",
-            (params["opt_map_map"] ?? null)
+            (((params["map"] ?? null) !== null) ? (params["map"] ?? null) : "")
         );
     }
+    cargs.push(execution.inputFile((params["label-in"] ?? null)));
     return cargs;
 }
 
@@ -128,22 +125,16 @@ function gifti_label_to_roi_outputs(
 ): GiftiLabelToRoiOutputs {
     const ret: GiftiLabelToRoiOutputs = {
         root: execution.outputFile("."),
-        metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
+        metric_out: execution.outputFile([(params["metric-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * gifti-label-to-roi
- *
- * Make a gifti label into an roi metric.
+ * MAKE A GIFTI LABEL INTO AN ROI METRIC.
  *
  * For each map in <label-in>, a map is created in <metric-out> where all locations labeled with <label-name> or with a key of <label-key> are given a value of 1, and all other locations are given 0.  Exactly one of -name and -key must be specified.  Specify -map to use only one map from <label-in>.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -165,34 +156,34 @@ function gifti_label_to_roi_execute(
 
 
 /**
- * gifti-label-to-roi
- *
- * Make a gifti label into an roi metric.
+ * MAKE A GIFTI LABEL INTO AN ROI METRIC.
  *
  * For each map in <label-in>, a map is created in <metric-out> where all locations labeled with <label-name> or with a key of <label-key> are given a value of 1, and all other locations are given 0.  Exactly one of -name and -key must be specified.  Specify -map to use only one map from <label-in>.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
- * @param label_in the input gifti label file
  * @param metric_out the output metric file
- * @param opt_name_label_name select label by name: the label name that you want an roi of
- * @param opt_key_label_key select label by key: the label key that you want an roi of
- * @param opt_map_map select a single label map to use: the map number or name
+ * @param label_name select label by name
+
+the label name that you want an roi of
+ * @param label_key select label by key
+
+the label key that you want an roi of
+ * @param map select a single label map to use
+
+the map number or name
+ * @param label_in the input gifti label file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `GiftiLabelToRoiOutputs`).
  */
 function gifti_label_to_roi(
-    label_in: InputPathType,
     metric_out: string,
-    opt_name_label_name: string | null = null,
-    opt_key_label_key: number | null = null,
-    opt_map_map: string | null = null,
+    label_name: string | null,
+    label_key: number | null,
+    map: string | null,
+    label_in: InputPathType,
     runner: Runner | null = null,
 ): GiftiLabelToRoiOutputs {
-    const params = gifti_label_to_roi_params(label_in, metric_out, opt_name_label_name, opt_key_label_key, opt_map_map)
+    const params = gifti_label_to_roi_params(metric_out, label_name, label_key, map, label_in)
     return gifti_label_to_roi_execute(params, runner);
 }
 

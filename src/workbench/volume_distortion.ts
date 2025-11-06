@@ -4,20 +4,19 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_DISTORTION_METADATA: Metadata = {
-    id: "84c6e150f3059b96bf719ca37696b114cc3add00.boutiques",
+    id: "71b5b8e30a3f86c052e4af8965fbf9041a247504.workbench",
     name: "volume-distortion",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface VolumeDistortionParameters {
     "@type"?: "workbench/volume-distortion";
+    "volume-out": string;
+    "source-volume"?: string | null | undefined;
+    "circular": boolean;
+    "log2": boolean;
     "warpfield": string;
-    "volume_out": string;
-    "opt_fnirt_source_volume"?: string | null | undefined;
-    "opt_circular": boolean;
-    "opt_log2": boolean;
 }
 type VolumeDistortionParametersTagged = Required<Pick<VolumeDistortionParameters, '@type'>> & VolumeDistortionParameters;
 
@@ -42,30 +41,32 @@ interface VolumeDistortionOutputs {
 /**
  * Build parameters.
  *
- * @param warpfield the warpfield to compute the distortion of
  * @param volume_out the output distortion measures
- * @param opt_fnirt_source_volume MUST be used if using a fnirt warpfield: the source volume used when generating the warpfield
- * @param opt_circular use the circle-based formula for the anisotropic measure
- * @param opt_log2 apply base-2 log transform
+ * @param source_volume MUST be used if using a fnirt warpfield
+
+the source volume used when generating the warpfield
+ * @param warpfield the warpfield to compute the distortion of
+ * @param circular use the circle-based formula for the anisotropic measure
+ * @param log2 apply base-2 log transform
  *
  * @returns Parameter dictionary
  */
 function volume_distortion_params(
-    warpfield: string,
     volume_out: string,
-    opt_fnirt_source_volume: string | null = null,
-    opt_circular: boolean = false,
-    opt_log2: boolean = false,
+    source_volume: string | null,
+    warpfield: string,
+    circular: boolean = false,
+    log2: boolean = false,
 ): VolumeDistortionParametersTagged {
     const params = {
         "@type": "workbench/volume-distortion" as const,
+        "volume-out": volume_out,
+        "circular": circular,
+        "log2": log2,
         "warpfield": warpfield,
-        "volume_out": volume_out,
-        "opt_circular": opt_circular,
-        "opt_log2": opt_log2,
     };
-    if (opt_fnirt_source_volume !== null) {
-        params["opt_fnirt_source_volume"] = opt_fnirt_source_volume;
+    if (source_volume !== null) {
+        params["source-volume"] = source_volume;
     }
     return params;
 }
@@ -84,22 +85,18 @@ function volume_distortion_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-distortion");
-    cargs.push((params["warpfield"] ?? null));
-    cargs.push((params["volume_out"] ?? null));
-    if ((params["opt_fnirt_source_volume"] ?? null) !== null) {
+    if ((params["source-volume"] ?? null) !== null || (params["circular"] ?? false) || (params["log2"] ?? false)) {
         cargs.push(
+            "wb_command",
+            "-volume-distortion",
+            (params["volume-out"] ?? null),
             "-fnirt",
-            (params["opt_fnirt_source_volume"] ?? null)
+            (((params["source-volume"] ?? null) !== null) ? (params["source-volume"] ?? null) : ""),
+            (((params["circular"] ?? false)) ? "-circular" : ""),
+            (((params["log2"] ?? false)) ? "-log2" : "")
         );
     }
-    if ((params["opt_circular"] ?? false)) {
-        cargs.push("-circular");
-    }
-    if ((params["opt_log2"] ?? false)) {
-        cargs.push("-log2");
-    }
+    cargs.push((params["warpfield"] ?? null));
     return cargs;
 }
 
@@ -118,24 +115,18 @@ function volume_distortion_outputs(
 ): VolumeDistortionOutputs {
     const ret: VolumeDistortionOutputs = {
         root: execution.outputFile("."),
-        volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
+        volume_out: execution.outputFile([(params["volume-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * volume-distortion
- *
- * Calculate volume warpfield distortion.
+ * CALCULATE VOLUME WARPFIELD DISTORTION.
  *
  * Calculates isotropic and anisotropic distortions in the volume warpfield.  At each voxel, the gradient of the absolute warpfield is computed to obtain the local affine transforms for each voxel (jacobian matrices), and strain tensors are derived from them.  The isotropic component (volumetric expansion ratio) is the product of the three principal strains.  The default measure ('elongation') for the anisotropic component is the largest principal strain divided by the smallest.
  *
  * The -circular option instead calculates the anisotropic component by transforming the principal strains into log space, considering them as x-values of points on a circle 120 degrees apart, finds the circle's diameter, and transforms that back to a ratio.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -157,36 +148,32 @@ function volume_distortion_execute(
 
 
 /**
- * volume-distortion
- *
- * Calculate volume warpfield distortion.
+ * CALCULATE VOLUME WARPFIELD DISTORTION.
  *
  * Calculates isotropic and anisotropic distortions in the volume warpfield.  At each voxel, the gradient of the absolute warpfield is computed to obtain the local affine transforms for each voxel (jacobian matrices), and strain tensors are derived from them.  The isotropic component (volumetric expansion ratio) is the product of the three principal strains.  The default measure ('elongation') for the anisotropic component is the largest principal strain divided by the smallest.
  *
  * The -circular option instead calculates the anisotropic component by transforming the principal strains into log space, considering them as x-values of points on a circle 120 degrees apart, finds the circle's diameter, and transforms that back to a ratio.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
- * @param warpfield the warpfield to compute the distortion of
  * @param volume_out the output distortion measures
- * @param opt_fnirt_source_volume MUST be used if using a fnirt warpfield: the source volume used when generating the warpfield
- * @param opt_circular use the circle-based formula for the anisotropic measure
- * @param opt_log2 apply base-2 log transform
+ * @param source_volume MUST be used if using a fnirt warpfield
+
+the source volume used when generating the warpfield
+ * @param warpfield the warpfield to compute the distortion of
+ * @param circular use the circle-based formula for the anisotropic measure
+ * @param log2 apply base-2 log transform
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeDistortionOutputs`).
  */
 function volume_distortion(
-    warpfield: string,
     volume_out: string,
-    opt_fnirt_source_volume: string | null = null,
-    opt_circular: boolean = false,
-    opt_log2: boolean = false,
+    source_volume: string | null,
+    warpfield: string,
+    circular: boolean = false,
+    log2: boolean = false,
     runner: Runner | null = null,
 ): VolumeDistortionOutputs {
-    const params = volume_distortion_params(warpfield, volume_out, opt_fnirt_source_volume, opt_circular, opt_log2)
+    const params = volume_distortion_params(volume_out, source_volume, warpfield, circular, log2)
     return volume_distortion_execute(params, runner);
 }
 

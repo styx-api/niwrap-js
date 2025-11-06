@@ -4,16 +4,15 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_INFORMATION_METADATA: Metadata = {
-    id: "237f94d9fda300e4c808bf66e35bc7a6bf87f07a.boutiques",
+    id: "87b1b891daeb7b0feeaa4cf02501f4785ccf44ce.workbench",
     name: "surface-information",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface SurfaceInformationParameters {
     "@type"?: "workbench/surface-information";
-    "surface_file": InputPathType;
+    "Surface File": InputPathType;
 }
 type SurfaceInformationParametersTagged = Required<Pick<SurfaceInformationParameters, '@type'>> & SurfaceInformationParameters;
 
@@ -43,7 +42,7 @@ function surface_information_params(
 ): SurfaceInformationParametersTagged {
     const params = {
         "@type": "workbench/surface-information" as const,
-        "surface_file": surface_file,
+        "Surface File": surface_file,
     };
     return params;
 }
@@ -62,9 +61,11 @@ function surface_information_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-surface-information");
-    cargs.push(execution.inputFile((params["surface_file"] ?? null)));
+    cargs.push(
+        "wb_command",
+        "-surface-information"
+    );
+    cargs.push(execution.inputFile((params["Surface File"] ?? null)));
     return cargs;
 }
 
@@ -89,16 +90,10 @@ function surface_information_outputs(
 
 
 /**
- * surface-information
- *
- * Display information about a surface.
+ * DISPLAY INFORMATION ABOUT A SURFACE.
  *
  * Information about surface is displayed including vertices, 
  * triangles, bounding box, and spacing.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -120,16 +115,10 @@ function surface_information_execute(
 
 
 /**
- * surface-information
- *
- * Display information about a surface.
+ * DISPLAY INFORMATION ABOUT A SURFACE.
  *
  * Information about surface is displayed including vertices, 
  * triangles, bounding box, and spacing.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param surface_file Surface for which information is displayed
  * @param runner Command runner

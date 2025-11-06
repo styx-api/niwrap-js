@@ -4,52 +4,61 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_CREATE_LABEL_METADATA: Metadata = {
-    id: "3a1aca58ce90234c63b19e3c0451b3cb7f90d16b.boutiques",
+    id: "1efacf6ed3cd2541d0611a121451c354eaf2d727.workbench",
     name: "cifti-create-label",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiCreateLabelVolumeParameters {
     "@type"?: "volume";
-    "label_volume": InputPathType;
-    "structure_label_volume": InputPathType;
+    "label-volume": InputPathType;
+    "structure-label-volume": InputPathType;
 }
 type CiftiCreateLabelVolumeParametersTagged = Required<Pick<CiftiCreateLabelVolumeParameters, '@type'>> & CiftiCreateLabelVolumeParameters;
 
 
 interface CiftiCreateLabelLeftLabelParameters {
-    "@type"?: "left_label";
+    "@type"?: "left-label";
     "label": InputPathType;
-    "opt_roi_left_roi_metric"?: InputPathType | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
 }
 type CiftiCreateLabelLeftLabelParametersTagged = Required<Pick<CiftiCreateLabelLeftLabelParameters, '@type'>> & CiftiCreateLabelLeftLabelParameters;
 
 
 interface CiftiCreateLabelRightLabelParameters {
-    "@type"?: "right_label";
+    "@type"?: "right-label";
     "label": InputPathType;
-    "opt_roi_right_roi_metric"?: InputPathType | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
 }
 type CiftiCreateLabelRightLabelParametersTagged = Required<Pick<CiftiCreateLabelRightLabelParameters, '@type'>> & CiftiCreateLabelRightLabelParameters;
 
 
 interface CiftiCreateLabelCerebellumLabelParameters {
-    "@type"?: "cerebellum_label";
+    "@type"?: "cerebellum-label";
     "label": InputPathType;
-    "opt_roi_cerebellum_roi_metric"?: InputPathType | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
 }
 type CiftiCreateLabelCerebellumLabelParametersTagged = Required<Pick<CiftiCreateLabelCerebellumLabelParameters, '@type'>> & CiftiCreateLabelCerebellumLabelParameters;
 
 
+interface CiftiCreateLabelLabelParameters {
+    "@type"?: "label";
+    "structure": string;
+    "label": InputPathType;
+    "roi-metric"?: InputPathType | null | undefined;
+}
+type CiftiCreateLabelLabelParametersTagged = Required<Pick<CiftiCreateLabelLabelParameters, '@type'>> & CiftiCreateLabelLabelParameters;
+
+
 interface CiftiCreateLabelParameters {
     "@type"?: "workbench/cifti-create-label";
-    "cifti_out": string;
+    "cifti-out": string;
     "volume"?: CiftiCreateLabelVolumeParameters | null | undefined;
-    "left_label"?: CiftiCreateLabelLeftLabelParameters | null | undefined;
-    "right_label"?: CiftiCreateLabelRightLabelParameters | null | undefined;
-    "cerebellum_label"?: CiftiCreateLabelCerebellumLabelParameters | null | undefined;
+    "left-label"?: CiftiCreateLabelLeftLabelParameters | null | undefined;
+    "right-label"?: CiftiCreateLabelRightLabelParameters | null | undefined;
+    "cerebellum-label"?: CiftiCreateLabelCerebellumLabelParameters | null | undefined;
+    "label"?: Array<CiftiCreateLabelLabelParameters> | null | undefined;
 }
 type CiftiCreateLabelParametersTagged = Required<Pick<CiftiCreateLabelParameters, '@type'>> & CiftiCreateLabelParameters;
 
@@ -68,8 +77,8 @@ function cifti_create_label_volume_params(
 ): CiftiCreateLabelVolumeParametersTagged {
     const params = {
         "@type": "volume" as const,
-        "label_volume": label_volume,
-        "structure_label_volume": structure_label_volume,
+        "label-volume": label_volume,
+        "structure-label-volume": structure_label_volume,
     };
     return params;
 }
@@ -88,9 +97,11 @@ function cifti_create_label_volume_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-volume");
-    cargs.push(execution.inputFile((params["label_volume"] ?? null)));
-    cargs.push(execution.inputFile((params["structure_label_volume"] ?? null)));
+    cargs.push(
+        "-volume",
+        execution.inputFile((params["label-volume"] ?? null)),
+        execution.inputFile((params["structure-label-volume"] ?? null))
+    );
     return cargs;
 }
 
@@ -99,20 +110,22 @@ function cifti_create_label_volume_cargs(
  * Build parameters.
  *
  * @param label the label file
- * @param opt_roi_left_roi_metric roi of vertices to use from left surface: the ROI as a metric file
+ * @param roi_metric roi of vertices to use from left surface
+
+the ROI as a metric file
  *
  * @returns Parameter dictionary
  */
 function cifti_create_label_left_label_params(
     label: InputPathType,
-    opt_roi_left_roi_metric: InputPathType | null = null,
+    roi_metric: InputPathType | null,
 ): CiftiCreateLabelLeftLabelParametersTagged {
     const params = {
-        "@type": "left_label" as const,
+        "@type": "left-label" as const,
         "label": label,
     };
-    if (opt_roi_left_roi_metric !== null) {
-        params["opt_roi_left_roi_metric"] = opt_roi_left_roi_metric;
+    if (roi_metric !== null) {
+        params["roi-metric"] = roi_metric;
     }
     return params;
 }
@@ -131,12 +144,12 @@ function cifti_create_label_left_label_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-left-label");
-    cargs.push(execution.inputFile((params["label"] ?? null)));
-    if ((params["opt_roi_left_roi_metric"] ?? null) !== null) {
+    if ((params["roi-metric"] ?? null) !== null) {
         cargs.push(
+            "-left-label",
+            execution.inputFile((params["label"] ?? null)),
             "-roi-left",
-            execution.inputFile((params["opt_roi_left_roi_metric"] ?? null))
+            execution.inputFile((params["roi-metric"] ?? null))
         );
     }
     return cargs;
@@ -147,20 +160,22 @@ function cifti_create_label_left_label_cargs(
  * Build parameters.
  *
  * @param label the label file
- * @param opt_roi_right_roi_metric roi of vertices to use from right surface: the ROI as a metric file
+ * @param roi_metric roi of vertices to use from right surface
+
+the ROI as a metric file
  *
  * @returns Parameter dictionary
  */
 function cifti_create_label_right_label_params(
     label: InputPathType,
-    opt_roi_right_roi_metric: InputPathType | null = null,
+    roi_metric: InputPathType | null,
 ): CiftiCreateLabelRightLabelParametersTagged {
     const params = {
-        "@type": "right_label" as const,
+        "@type": "right-label" as const,
         "label": label,
     };
-    if (opt_roi_right_roi_metric !== null) {
-        params["opt_roi_right_roi_metric"] = opt_roi_right_roi_metric;
+    if (roi_metric !== null) {
+        params["roi-metric"] = roi_metric;
     }
     return params;
 }
@@ -179,12 +194,12 @@ function cifti_create_label_right_label_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-right-label");
-    cargs.push(execution.inputFile((params["label"] ?? null)));
-    if ((params["opt_roi_right_roi_metric"] ?? null) !== null) {
+    if ((params["roi-metric"] ?? null) !== null) {
         cargs.push(
+            "-right-label",
+            execution.inputFile((params["label"] ?? null)),
             "-roi-right",
-            execution.inputFile((params["opt_roi_right_roi_metric"] ?? null))
+            execution.inputFile((params["roi-metric"] ?? null))
         );
     }
     return cargs;
@@ -195,20 +210,22 @@ function cifti_create_label_right_label_cargs(
  * Build parameters.
  *
  * @param label the label file
- * @param opt_roi_cerebellum_roi_metric roi of vertices to use from right surface: the ROI as a metric file
+ * @param roi_metric roi of vertices to use from right surface
+
+the ROI as a metric file
  *
  * @returns Parameter dictionary
  */
 function cifti_create_label_cerebellum_label_params(
     label: InputPathType,
-    opt_roi_cerebellum_roi_metric: InputPathType | null = null,
+    roi_metric: InputPathType | null,
 ): CiftiCreateLabelCerebellumLabelParametersTagged {
     const params = {
-        "@type": "cerebellum_label" as const,
+        "@type": "cerebellum-label" as const,
         "label": label,
     };
-    if (opt_roi_cerebellum_roi_metric !== null) {
-        params["opt_roi_cerebellum_roi_metric"] = opt_roi_cerebellum_roi_metric;
+    if (roi_metric !== null) {
+        params["roi-metric"] = roi_metric;
     }
     return params;
 }
@@ -227,12 +244,66 @@ function cifti_create_label_cerebellum_label_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-cerebellum-label");
-    cargs.push(execution.inputFile((params["label"] ?? null)));
-    if ((params["opt_roi_cerebellum_roi_metric"] ?? null) !== null) {
+    if ((params["roi-metric"] ?? null) !== null) {
         cargs.push(
+            "-cerebellum-label",
+            execution.inputFile((params["label"] ?? null)),
             "-roi-cerebellum",
-            execution.inputFile((params["opt_roi_cerebellum_roi_metric"] ?? null))
+            execution.inputFile((params["roi-metric"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param structure the structure name
+ * @param label the label file
+ * @param roi_metric roi of vertices to use from this structure
+
+the ROI as a metric file
+ *
+ * @returns Parameter dictionary
+ */
+function cifti_create_label_label_params(
+    structure: string,
+    label: InputPathType,
+    roi_metric: InputPathType | null,
+): CiftiCreateLabelLabelParametersTagged {
+    const params = {
+        "@type": "label" as const,
+        "structure": structure,
+        "label": label,
+    };
+    if (roi_metric !== null) {
+        params["roi-metric"] = roi_metric;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function cifti_create_label_label_cargs(
+    params: CiftiCreateLabelLabelParameters,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["roi-metric"] ?? null) !== null) {
+        cargs.push(
+            "-label",
+            (params["structure"] ?? null),
+            execution.inputFile((params["label"] ?? null)),
+            "-roi",
+            execution.inputFile((params["roi-metric"] ?? null))
         );
     }
     return cargs;
@@ -261,9 +332,10 @@ interface CiftiCreateLabelOutputs {
  *
  * @param cifti_out the output cifti file
  * @param volume volume component
- * @param left_label label file for left surface
- * @param right_label label for left surface
- * @param cerebellum_label label for the cerebellum
+ * @param left_label label file for the left cortical surface
+ * @param right_label label file for the right cortical surface
+ * @param cerebellum_label label file for the cerebellum
+ * @param label label for a specified surface structure
  *
  * @returns Parameter dictionary
  */
@@ -273,22 +345,26 @@ function cifti_create_label_params(
     left_label: CiftiCreateLabelLeftLabelParameters | null = null,
     right_label: CiftiCreateLabelRightLabelParameters | null = null,
     cerebellum_label: CiftiCreateLabelCerebellumLabelParameters | null = null,
+    label: Array<CiftiCreateLabelLabelParameters> | null = null,
 ): CiftiCreateLabelParametersTagged {
     const params = {
         "@type": "workbench/cifti-create-label" as const,
-        "cifti_out": cifti_out,
+        "cifti-out": cifti_out,
     };
     if (volume !== null) {
         params["volume"] = volume;
     }
     if (left_label !== null) {
-        params["left_label"] = left_label;
+        params["left-label"] = left_label;
     }
     if (right_label !== null) {
-        params["right_label"] = right_label;
+        params["right-label"] = right_label;
     }
     if (cerebellum_label !== null) {
-        params["cerebellum_label"] = cerebellum_label;
+        params["cerebellum-label"] = cerebellum_label;
+    }
+    if (label !== null) {
+        params["label"] = label;
     }
     return params;
 }
@@ -307,20 +383,17 @@ function cifti_create_label_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-create-label");
-    cargs.push((params["cifti_out"] ?? null));
-    if ((params["volume"] ?? null) !== null) {
-        cargs.push(...cifti_create_label_volume_cargs((params["volume"] ?? null), execution));
-    }
-    if ((params["left_label"] ?? null) !== null) {
-        cargs.push(...cifti_create_label_left_label_cargs((params["left_label"] ?? null), execution));
-    }
-    if ((params["right_label"] ?? null) !== null) {
-        cargs.push(...cifti_create_label_right_label_cargs((params["right_label"] ?? null), execution));
-    }
-    if ((params["cerebellum_label"] ?? null) !== null) {
-        cargs.push(...cifti_create_label_cerebellum_label_cargs((params["cerebellum_label"] ?? null), execution));
+    if ((params["volume"] ?? null) !== null || (params["left-label"] ?? null) !== null || (params["right-label"] ?? null) !== null || (params["cerebellum-label"] ?? null) !== null || (params["label"] ?? null) !== null) {
+        cargs.push(
+            "wb_command",
+            "-cifti-create-label",
+            (params["cifti-out"] ?? null),
+            ...(((params["volume"] ?? null) !== null) ? cifti_create_label_volume_cargs((params["volume"] ?? null), execution) : []),
+            ...(((params["left-label"] ?? null) !== null) ? cifti_create_label_left_label_cargs((params["left-label"] ?? null), execution) : []),
+            ...(((params["right-label"] ?? null) !== null) ? cifti_create_label_right_label_cargs((params["right-label"] ?? null), execution) : []),
+            ...(((params["cerebellum-label"] ?? null) !== null) ? cifti_create_label_cerebellum_label_cargs((params["cerebellum-label"] ?? null), execution) : []),
+            ...(((params["label"] ?? null) !== null) ? (params["label"] ?? null).map(s => cifti_create_label_label_cargs(s, execution)).flat() : [])
+        );
     }
     return cargs;
 }
@@ -340,16 +413,14 @@ function cifti_create_label_outputs(
 ): CiftiCreateLabelOutputs {
     const ret: CiftiCreateLabelOutputs = {
         root: execution.outputFile("."),
-        cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
+        cifti_out: execution.outputFile([(params["cifti-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * cifti-create-label
- *
- * Create a cifti label file.
+ * CREATE A CIFTI LABEL FILE.
  *
  * All input files must have the same number of columns/subvolumes.  Only the specified components will be in the output cifti.  At least one component must be specified.
  *
@@ -378,6 +449,8 @@ function cifti_create_label_outputs(
  * DIENCEPHALON_VENTRAL_RIGHT
  * HIPPOCAMPUS_LEFT
  * HIPPOCAMPUS_RIGHT
+ * HIPPOCAMPUS_DENTATE_LEFT
+ * HIPPOCAMPUS_DENTATE_RIGHT
  * INVALID
  * OTHER
  * OTHER_GREY_MATTER
@@ -388,10 +461,6 @@ function cifti_create_label_outputs(
  * PUTAMEN_RIGHT
  * THALAMUS_LEFT
  * THALAMUS_RIGHT.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -413,9 +482,7 @@ function cifti_create_label_execute(
 
 
 /**
- * cifti-create-label
- *
- * Create a cifti label file.
+ * CREATE A CIFTI LABEL FILE.
  *
  * All input files must have the same number of columns/subvolumes.  Only the specified components will be in the output cifti.  At least one component must be specified.
  *
@@ -444,6 +511,8 @@ function cifti_create_label_execute(
  * DIENCEPHALON_VENTRAL_RIGHT
  * HIPPOCAMPUS_LEFT
  * HIPPOCAMPUS_RIGHT
+ * HIPPOCAMPUS_DENTATE_LEFT
+ * HIPPOCAMPUS_DENTATE_RIGHT
  * INVALID
  * OTHER
  * OTHER_GREY_MATTER
@@ -455,15 +524,12 @@ function cifti_create_label_execute(
  * THALAMUS_LEFT
  * THALAMUS_RIGHT.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
  * @param cifti_out the output cifti file
  * @param volume volume component
- * @param left_label label file for left surface
- * @param right_label label for left surface
- * @param cerebellum_label label for the cerebellum
+ * @param left_label label file for the left cortical surface
+ * @param right_label label file for the right cortical surface
+ * @param cerebellum_label label file for the cerebellum
+ * @param label label for a specified surface structure
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiCreateLabelOutputs`).
@@ -474,9 +540,10 @@ function cifti_create_label(
     left_label: CiftiCreateLabelLeftLabelParameters | null = null,
     right_label: CiftiCreateLabelRightLabelParameters | null = null,
     cerebellum_label: CiftiCreateLabelCerebellumLabelParameters | null = null,
+    label: Array<CiftiCreateLabelLabelParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiCreateLabelOutputs {
-    const params = cifti_create_label_params(cifti_out, volume, left_label, right_label, cerebellum_label)
+    const params = cifti_create_label_params(cifti_out, volume, left_label, right_label, cerebellum_label, label)
     return cifti_create_label_execute(params, runner);
 }
 
@@ -487,6 +554,7 @@ export {
       cifti_create_label,
       cifti_create_label_cerebellum_label_params,
       cifti_create_label_execute,
+      cifti_create_label_label_params,
       cifti_create_label_left_label_params,
       cifti_create_label_params,
       cifti_create_label_right_label_params,

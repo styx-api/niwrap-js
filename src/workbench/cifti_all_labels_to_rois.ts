@@ -4,18 +4,17 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_ALL_LABELS_TO_ROIS_METADATA: Metadata = {
-    id: "6faa7bc1774fe5d690eab193fadb4498d97e0945.boutiques",
+    id: "b5d932e91b5ad5cb5d4e5be33f986a8e0158cb63.workbench",
     name: "cifti-all-labels-to-rois",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiAllLabelsToRoisParameters {
     "@type"?: "workbench/cifti-all-labels-to-rois";
-    "label_in": InputPathType;
+    "cifti-out": string;
+    "label-in": InputPathType;
     "map": string;
-    "cifti_out": string;
 }
 type CiftiAllLabelsToRoisParametersTagged = Required<Pick<CiftiAllLabelsToRoisParameters, '@type'>> & CiftiAllLabelsToRoisParameters;
 
@@ -40,22 +39,22 @@ interface CiftiAllLabelsToRoisOutputs {
 /**
  * Build parameters.
  *
+ * @param cifti_out the output cifti file
  * @param label_in the input cifti label file
  * @param map the number or name of the label map to use
- * @param cifti_out the output cifti file
  *
  * @returns Parameter dictionary
  */
 function cifti_all_labels_to_rois_params(
+    cifti_out: string,
     label_in: InputPathType,
     map: string,
-    cifti_out: string,
 ): CiftiAllLabelsToRoisParametersTagged {
     const params = {
         "@type": "workbench/cifti-all-labels-to-rois" as const,
-        "label_in": label_in,
+        "cifti-out": cifti_out,
+        "label-in": label_in,
         "map": map,
-        "cifti_out": cifti_out,
     };
     return params;
 }
@@ -74,11 +73,13 @@ function cifti_all_labels_to_rois_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-all-labels-to-rois");
-    cargs.push(execution.inputFile((params["label_in"] ?? null)));
+    cargs.push(
+        "wb_command",
+        "-cifti-all-labels-to-rois",
+        (params["cifti-out"] ?? null)
+    );
+    cargs.push(execution.inputFile((params["label-in"] ?? null)));
     cargs.push((params["map"] ?? null));
-    cargs.push((params["cifti_out"] ?? null));
     return cargs;
 }
 
@@ -97,24 +98,18 @@ function cifti_all_labels_to_rois_outputs(
 ): CiftiAllLabelsToRoisOutputs {
     const ret: CiftiAllLabelsToRoisOutputs = {
         root: execution.outputFile("."),
-        cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
+        cifti_out: execution.outputFile([(params["cifti-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * cifti-all-labels-to-rois
- *
- * Make rois from all labels in a cifti label map.
+ * MAKE ROIS FROM ALL LABELS IN A CIFTI LABEL MAP.
  *
  * The output cifti file is a dscalar file with a column (map) for each label in the specified input map, other than the ??? label, each of which contains a binary ROI of all brainordinates that are set to the corresponding label.
  *
  * Most of the time, specifying '1' for the <map> argument will do what is desired.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -136,32 +131,26 @@ function cifti_all_labels_to_rois_execute(
 
 
 /**
- * cifti-all-labels-to-rois
- *
- * Make rois from all labels in a cifti label map.
+ * MAKE ROIS FROM ALL LABELS IN A CIFTI LABEL MAP.
  *
  * The output cifti file is a dscalar file with a column (map) for each label in the specified input map, other than the ??? label, each of which contains a binary ROI of all brainordinates that are set to the corresponding label.
  *
  * Most of the time, specifying '1' for the <map> argument will do what is desired.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param cifti_out the output cifti file
  * @param label_in the input cifti label file
  * @param map the number or name of the label map to use
- * @param cifti_out the output cifti file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiAllLabelsToRoisOutputs`).
  */
 function cifti_all_labels_to_rois(
+    cifti_out: string,
     label_in: InputPathType,
     map: string,
-    cifti_out: string,
     runner: Runner | null = null,
 ): CiftiAllLabelsToRoisOutputs {
-    const params = cifti_all_labels_to_rois_params(label_in, map, cifti_out)
+    const params = cifti_all_labels_to_rois_params(cifti_out, label_in, map)
     return cifti_all_labels_to_rois_execute(params, runner);
 }
 

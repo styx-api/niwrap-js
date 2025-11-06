@@ -13,13 +13,13 @@ const REALTIME_RECEIVER_PY_METADATA: Metadata = {
 
 interface RealtimeReceiverPyParameters {
     "@type"?: "afni/realtime_receiver.py";
-    "show_data"?: "yes" | "no" | null | undefined;
+    "show_data"?: boolean | null | undefined;
     "write_text_data"?: string | null | undefined;
     "data_choice"?: "motion" | "motion_norm" | "all_extras" | "diff_ratio" | null | undefined;
     "serial_port"?: string | null | undefined;
-    "show_demo_gui"?: "yes" | "no" | null | undefined;
+    "show_demo_gui"?: boolean | null | undefined;
     "dc_params"?: Array<number> | null | undefined;
-    "extras_on_one_line"?: "yes" | "no" | null | undefined;
+    "extras_on_one_line"?: boolean | null | undefined;
     "show_comm_times": boolean;
     "show_demo_data": boolean;
     "swap": boolean;
@@ -61,13 +61,13 @@ interface RealtimeReceiverPyOutputs {
  * @returns Parameter dictionary
  */
 function realtime_receiver_py_params(
-    show_data: "yes" | "no" | null = null,
+    show_data: boolean | null = null,
     write_text_data: string | null = null,
     data_choice: "motion" | "motion_norm" | "all_extras" | "diff_ratio" | null = null,
     serial_port: string | null = null,
-    show_demo_gui: "yes" | "no" | null = null,
+    show_demo_gui: boolean | null = null,
     dc_params: Array<number> | null = null,
-    extras_on_one_line: "yes" | "no" | null = null,
+    extras_on_one_line: boolean | null = null,
     show_comm_times: boolean = false,
     show_demo_data: boolean = false,
     swap: boolean = false,
@@ -128,7 +128,7 @@ function realtime_receiver_py_cargs(
     if ((params["show_data"] ?? null) !== null) {
         cargs.push(
             "-show_data",
-            (params["show_data"] ?? null)
+            ((params["show_data"] ?? null) ? "yes" : "no")
         );
     }
     if ((params["write_text_data"] ?? null) !== null) {
@@ -152,7 +152,7 @@ function realtime_receiver_py_cargs(
     if ((params["show_demo_gui"] ?? null) !== null) {
         cargs.push(
             "-show_demo_gui",
-            (params["show_demo_gui"] ?? null)
+            ((params["show_demo_gui"] ?? null) ? "yes" : "no")
         );
     }
     if ((params["dc_params"] ?? null) !== null) {
@@ -164,7 +164,7 @@ function realtime_receiver_py_cargs(
     if ((params["extras_on_one_line"] ?? null) !== null) {
         cargs.push(
             "-extras_on_one_line",
-            (params["extras_on_one_line"] ?? null)
+            ((params["extras_on_one_line"] ?? null) ? "yes" : "no")
         );
     }
     if ((params["show_comm_times"] ?? false)) {
@@ -265,13 +265,13 @@ function realtime_receiver_py_execute(
  * @returns NamedTuple of outputs (described in `RealtimeReceiverPyOutputs`).
  */
 function realtime_receiver_py(
-    show_data: "yes" | "no" | null = null,
+    show_data: boolean | null = null,
     write_text_data: string | null = null,
     data_choice: "motion" | "motion_norm" | "all_extras" | "diff_ratio" | null = null,
     serial_port: string | null = null,
-    show_demo_gui: "yes" | "no" | null = null,
+    show_demo_gui: boolean | null = null,
     dc_params: Array<number> | null = null,
-    extras_on_one_line: "yes" | "no" | null = null,
+    extras_on_one_line: boolean | null = null,
     show_comm_times: boolean = false,
     show_demo_data: boolean = false,
     swap: boolean = false,

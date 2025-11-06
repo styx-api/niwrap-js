@@ -4,52 +4,44 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_WEIGHTED_STATS_METADATA: Metadata = {
-    id: "c29a27c55897b9b33cfccfdd394f55a82bf8f22f.boutiques",
+    id: "014a1bf95b4718c304bf3aa95e26fa00e131122c.workbench",
     name: "cifti-weighted-stats",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiWeightedStatsSpatialWeightsParameters {
-    "@type"?: "spatial_weights";
-    "opt_left_area_surf_left_surf"?: InputPathType | null | undefined;
-    "opt_right_area_surf_right_surf"?: InputPathType | null | undefined;
-    "opt_cerebellum_area_surf_cerebellum_surf"?: InputPathType | null | undefined;
-    "opt_left_area_metric_left_metric"?: InputPathType | null | undefined;
-    "opt_right_area_metric_right_metric"?: InputPathType | null | undefined;
-    "opt_cerebellum_area_metric_cerebellum_metric"?: InputPathType | null | undefined;
+    "@type"?: "spatial-weights";
+    "left-surf"?: InputPathType | null | undefined;
+    "right-surf"?: InputPathType | null | undefined;
+    "cerebellum-surf"?: InputPathType | null | undefined;
+    "left-metric"?: InputPathType | null | undefined;
+    "right-metric"?: InputPathType | null | undefined;
+    "cerebellum-metric"?: InputPathType | null | undefined;
 }
 type CiftiWeightedStatsSpatialWeightsParametersTagged = Required<Pick<CiftiWeightedStatsSpatialWeightsParameters, '@type'>> & CiftiWeightedStatsSpatialWeightsParameters;
 
 
 interface CiftiWeightedStatsRoiParameters {
     "@type"?: "roi";
-    "roi_cifti": InputPathType;
-    "opt_match_maps": boolean;
+    "roi-cifti": InputPathType;
+    "match-maps": boolean;
 }
 type CiftiWeightedStatsRoiParametersTagged = Required<Pick<CiftiWeightedStatsRoiParameters, '@type'>> & CiftiWeightedStatsRoiParameters;
 
 
-interface CiftiWeightedStatsStdevParameters {
-    "@type"?: "stdev";
-    "opt_sample": boolean;
-}
-type CiftiWeightedStatsStdevParametersTagged = Required<Pick<CiftiWeightedStatsStdevParameters, '@type'>> & CiftiWeightedStatsStdevParameters;
-
-
 interface CiftiWeightedStatsParameters {
     "@type"?: "workbench/cifti-weighted-stats";
-    "cifti_in": InputPathType;
-    "spatial_weights"?: CiftiWeightedStatsSpatialWeightsParameters | null | undefined;
-    "opt_cifti_weights_weight_cifti"?: InputPathType | null | undefined;
-    "opt_column_column"?: number | null | undefined;
+    "spatial-weights"?: CiftiWeightedStatsSpatialWeightsParameters | null | undefined;
+    "weight-cifti"?: InputPathType | null | undefined;
+    "column"?: number | null | undefined;
     "roi"?: CiftiWeightedStatsRoiParameters | null | undefined;
-    "opt_mean": boolean;
-    "stdev"?: CiftiWeightedStatsStdevParameters | null | undefined;
-    "opt_percentile_percent"?: number | null | undefined;
-    "opt_sum": boolean;
-    "opt_show_map_name": boolean;
+    "mean": boolean;
+    "sample"?: boolean | null | undefined;
+    "percent"?: number | null | undefined;
+    "sum": boolean;
+    "show-map-name": boolean;
+    "cifti-in": InputPathType;
 }
 type CiftiWeightedStatsParametersTagged = Required<Pick<CiftiWeightedStatsParameters, '@type'>> & CiftiWeightedStatsParameters;
 
@@ -57,43 +49,55 @@ type CiftiWeightedStatsParametersTagged = Required<Pick<CiftiWeightedStatsParame
 /**
  * Build parameters.
  *
- * @param opt_left_area_surf_left_surf use a surface for left vertex areas: the left surface to use, areas are in mm^2
- * @param opt_right_area_surf_right_surf use a surface for right vertex areas: the right surface to use, areas are in mm^2
- * @param opt_cerebellum_area_surf_cerebellum_surf use a surface for cerebellum vertex areas: the cerebellum surface to use, areas are in mm^2
- * @param opt_left_area_metric_left_metric use a metric file for left vertex areas: metric file containing left vertex areas
- * @param opt_right_area_metric_right_metric use a metric file for right vertex areas: metric file containing right vertex areas
- * @param opt_cerebellum_area_metric_cerebellum_metric use a metric file for cerebellum vertex areas: metric file containing cerebellum vertex areas
+ * @param left_surf use a surface for left vertex areas
+
+the left surface to use, areas are in mm^2
+ * @param right_surf use a surface for right vertex areas
+
+the right surface to use, areas are in mm^2
+ * @param cerebellum_surf use a surface for cerebellum vertex areas
+
+the cerebellum surface to use, areas are in mm^2
+ * @param left_metric use a metric file for left vertex areas
+
+metric file containing left vertex areas
+ * @param right_metric use a metric file for right vertex areas
+
+metric file containing right vertex areas
+ * @param cerebellum_metric use a metric file for cerebellum vertex areas
+
+metric file containing cerebellum vertex areas
  *
  * @returns Parameter dictionary
  */
 function cifti_weighted_stats_spatial_weights_params(
-    opt_left_area_surf_left_surf: InputPathType | null = null,
-    opt_right_area_surf_right_surf: InputPathType | null = null,
-    opt_cerebellum_area_surf_cerebellum_surf: InputPathType | null = null,
-    opt_left_area_metric_left_metric: InputPathType | null = null,
-    opt_right_area_metric_right_metric: InputPathType | null = null,
-    opt_cerebellum_area_metric_cerebellum_metric: InputPathType | null = null,
+    left_surf: InputPathType | null,
+    right_surf: InputPathType | null,
+    cerebellum_surf: InputPathType | null,
+    left_metric: InputPathType | null,
+    right_metric: InputPathType | null,
+    cerebellum_metric: InputPathType | null,
 ): CiftiWeightedStatsSpatialWeightsParametersTagged {
     const params = {
-        "@type": "spatial_weights" as const,
+        "@type": "spatial-weights" as const,
     };
-    if (opt_left_area_surf_left_surf !== null) {
-        params["opt_left_area_surf_left_surf"] = opt_left_area_surf_left_surf;
+    if (left_surf !== null) {
+        params["left-surf"] = left_surf;
     }
-    if (opt_right_area_surf_right_surf !== null) {
-        params["opt_right_area_surf_right_surf"] = opt_right_area_surf_right_surf;
+    if (right_surf !== null) {
+        params["right-surf"] = right_surf;
     }
-    if (opt_cerebellum_area_surf_cerebellum_surf !== null) {
-        params["opt_cerebellum_area_surf_cerebellum_surf"] = opt_cerebellum_area_surf_cerebellum_surf;
+    if (cerebellum_surf !== null) {
+        params["cerebellum-surf"] = cerebellum_surf;
     }
-    if (opt_left_area_metric_left_metric !== null) {
-        params["opt_left_area_metric_left_metric"] = opt_left_area_metric_left_metric;
+    if (left_metric !== null) {
+        params["left-metric"] = left_metric;
     }
-    if (opt_right_area_metric_right_metric !== null) {
-        params["opt_right_area_metric_right_metric"] = opt_right_area_metric_right_metric;
+    if (right_metric !== null) {
+        params["right-metric"] = right_metric;
     }
-    if (opt_cerebellum_area_metric_cerebellum_metric !== null) {
-        params["opt_cerebellum_area_metric_cerebellum_metric"] = opt_cerebellum_area_metric_cerebellum_metric;
+    if (cerebellum_metric !== null) {
+        params["cerebellum-metric"] = cerebellum_metric;
     }
     return params;
 }
@@ -112,41 +116,21 @@ function cifti_weighted_stats_spatial_weights_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-spatial-weights");
-    if ((params["opt_left_area_surf_left_surf"] ?? null) !== null) {
+    if ((params["left-surf"] ?? null) !== null || (params["right-surf"] ?? null) !== null || (params["cerebellum-surf"] ?? null) !== null || (params["left-metric"] ?? null) !== null || (params["right-metric"] ?? null) !== null || (params["cerebellum-metric"] ?? null) !== null) {
         cargs.push(
+            "-spatial-weights",
             "-left-area-surf",
-            execution.inputFile((params["opt_left_area_surf_left_surf"] ?? null))
-        );
-    }
-    if ((params["opt_right_area_surf_right_surf"] ?? null) !== null) {
-        cargs.push(
+            (((params["left-surf"] ?? null) !== null) ? execution.inputFile((params["left-surf"] ?? null)) : ""),
             "-right-area-surf",
-            execution.inputFile((params["opt_right_area_surf_right_surf"] ?? null))
-        );
-    }
-    if ((params["opt_cerebellum_area_surf_cerebellum_surf"] ?? null) !== null) {
-        cargs.push(
+            (((params["right-surf"] ?? null) !== null) ? execution.inputFile((params["right-surf"] ?? null)) : ""),
             "-cerebellum-area-surf",
-            execution.inputFile((params["opt_cerebellum_area_surf_cerebellum_surf"] ?? null))
-        );
-    }
-    if ((params["opt_left_area_metric_left_metric"] ?? null) !== null) {
-        cargs.push(
+            (((params["cerebellum-surf"] ?? null) !== null) ? execution.inputFile((params["cerebellum-surf"] ?? null)) : ""),
             "-left-area-metric",
-            execution.inputFile((params["opt_left_area_metric_left_metric"] ?? null))
-        );
-    }
-    if ((params["opt_right_area_metric_right_metric"] ?? null) !== null) {
-        cargs.push(
+            (((params["left-metric"] ?? null) !== null) ? execution.inputFile((params["left-metric"] ?? null)) : ""),
             "-right-area-metric",
-            execution.inputFile((params["opt_right_area_metric_right_metric"] ?? null))
-        );
-    }
-    if ((params["opt_cerebellum_area_metric_cerebellum_metric"] ?? null) !== null) {
-        cargs.push(
+            (((params["right-metric"] ?? null) !== null) ? execution.inputFile((params["right-metric"] ?? null)) : ""),
             "-cerebellum-area-metric",
-            execution.inputFile((params["opt_cerebellum_area_metric_cerebellum_metric"] ?? null))
+            (((params["cerebellum-metric"] ?? null) !== null) ? execution.inputFile((params["cerebellum-metric"] ?? null)) : "")
         );
     }
     return cargs;
@@ -157,18 +141,18 @@ function cifti_weighted_stats_spatial_weights_cargs(
  * Build parameters.
  *
  * @param roi_cifti the roi, as a cifti file
- * @param opt_match_maps each column of input uses the corresponding column from the roi file
+ * @param match_maps each column of input uses the corresponding column from the roi file
  *
  * @returns Parameter dictionary
  */
 function cifti_weighted_stats_roi_params(
     roi_cifti: InputPathType,
-    opt_match_maps: boolean = false,
+    match_maps: boolean = false,
 ): CiftiWeightedStatsRoiParametersTagged {
     const params = {
         "@type": "roi" as const,
-        "roi_cifti": roi_cifti,
-        "opt_match_maps": opt_match_maps,
+        "roi-cifti": roi_cifti,
+        "match-maps": match_maps,
     };
     return params;
 }
@@ -187,49 +171,12 @@ function cifti_weighted_stats_roi_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-roi");
-    cargs.push(execution.inputFile((params["roi_cifti"] ?? null)));
-    if ((params["opt_match_maps"] ?? false)) {
-        cargs.push("-match-maps");
-    }
-    return cargs;
-}
-
-
-/**
- * Build parameters.
- *
- * @param opt_sample estimate population stdev from the sample
- *
- * @returns Parameter dictionary
- */
-function cifti_weighted_stats_stdev_params(
-    opt_sample: boolean = false,
-): CiftiWeightedStatsStdevParametersTagged {
-    const params = {
-        "@type": "stdev" as const,
-        "opt_sample": opt_sample,
-    };
-    return params;
-}
-
-
-/**
- * Build command-line arguments from parameters.
- *
- * @param params The parameters.
- * @param execution The execution object for resolving input paths.
- *
- * @returns Command-line arguments.
- */
-function cifti_weighted_stats_stdev_cargs(
-    params: CiftiWeightedStatsStdevParameters,
-    execution: Execution,
-): string[] {
-    const cargs: string[] = [];
-    cargs.push("-stdev");
-    if ((params["opt_sample"] ?? false)) {
-        cargs.push("-sample");
+    if ((params["match-maps"] ?? false)) {
+        cargs.push(
+            "-roi",
+            execution.inputFile((params["roi-cifti"] ?? null)),
+            "-match-maps"
+        );
     }
     return cargs;
 }
@@ -251,55 +198,63 @@ interface CiftiWeightedStatsOutputs {
 /**
  * Build parameters.
  *
+ * @param weight_cifti use a cifti file containing weights
+
+the weights to use, as a cifti file
+ * @param column only display output for one column
+
+the column to use (1-based)
+ * @param percent compute weighted percentile
+
+the percentile to find, must be between 0 and 100
  * @param cifti_in the input cifti
  * @param spatial_weights use vertex area and voxel volume as weights
- * @param opt_cifti_weights_weight_cifti use a cifti file containing weights: the weights to use, as a cifti file
- * @param opt_column_column only display output for one column: the column to use (1-based)
  * @param roi only consider data inside an roi
- * @param opt_mean compute weighted mean
- * @param stdev compute weighted standard deviation
- * @param opt_percentile_percent compute weighted percentile: the percentile to find, must be between 0 and 100
- * @param opt_sum compute weighted sum
- * @param opt_show_map_name print map index and name before each output
+ * @param mean compute weighted mean
+ * @param sample compute weighted standard deviation
+
+estimate population stdev from the sample
+ * @param sum compute weighted sum
+ * @param show_map_name print map index and name before each output
  *
  * @returns Parameter dictionary
  */
 function cifti_weighted_stats_params(
+    weight_cifti: InputPathType | null,
+    column: number | null,
+    percent: number | null,
     cifti_in: InputPathType,
     spatial_weights: CiftiWeightedStatsSpatialWeightsParameters | null = null,
-    opt_cifti_weights_weight_cifti: InputPathType | null = null,
-    opt_column_column: number | null = null,
     roi: CiftiWeightedStatsRoiParameters | null = null,
-    opt_mean: boolean = false,
-    stdev: CiftiWeightedStatsStdevParameters | null = null,
-    opt_percentile_percent: number | null = null,
-    opt_sum: boolean = false,
-    opt_show_map_name: boolean = false,
+    mean: boolean = false,
+    sample: boolean | null = false,
+    sum: boolean = false,
+    show_map_name: boolean = false,
 ): CiftiWeightedStatsParametersTagged {
     const params = {
         "@type": "workbench/cifti-weighted-stats" as const,
-        "cifti_in": cifti_in,
-        "opt_mean": opt_mean,
-        "opt_sum": opt_sum,
-        "opt_show_map_name": opt_show_map_name,
+        "mean": mean,
+        "sum": sum,
+        "show-map-name": show_map_name,
+        "cifti-in": cifti_in,
     };
     if (spatial_weights !== null) {
-        params["spatial_weights"] = spatial_weights;
+        params["spatial-weights"] = spatial_weights;
     }
-    if (opt_cifti_weights_weight_cifti !== null) {
-        params["opt_cifti_weights_weight_cifti"] = opt_cifti_weights_weight_cifti;
+    if (weight_cifti !== null) {
+        params["weight-cifti"] = weight_cifti;
     }
-    if (opt_column_column !== null) {
-        params["opt_column_column"] = opt_column_column;
+    if (column !== null) {
+        params["column"] = column;
     }
     if (roi !== null) {
         params["roi"] = roi;
     }
-    if (stdev !== null) {
-        params["stdev"] = stdev;
+    if (sample !== null) {
+        params["sample"] = sample;
     }
-    if (opt_percentile_percent !== null) {
-        params["opt_percentile_percent"] = opt_percentile_percent;
+    if (percent !== null) {
+        params["percent"] = percent;
     }
     return params;
 }
@@ -318,45 +273,26 @@ function cifti_weighted_stats_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-weighted-stats");
-    cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
-    if ((params["spatial_weights"] ?? null) !== null) {
-        cargs.push(...cifti_weighted_stats_spatial_weights_cargs((params["spatial_weights"] ?? null), execution));
-    }
-    if ((params["opt_cifti_weights_weight_cifti"] ?? null) !== null) {
+    if ((params["spatial-weights"] ?? null) !== null || (params["weight-cifti"] ?? null) !== null || (params["column"] ?? null) !== null || (params["roi"] ?? null) !== null || (params["mean"] ?? false) || (params["sample"] ?? false) !== null || (params["percent"] ?? null) !== null || (params["sum"] ?? false) || (params["show-map-name"] ?? false)) {
         cargs.push(
+            "wb_command",
+            "-cifti-weighted-stats",
+            ...(((params["spatial-weights"] ?? null) !== null) ? cifti_weighted_stats_spatial_weights_cargs((params["spatial-weights"] ?? null), execution) : []),
             "-cifti-weights",
-            execution.inputFile((params["opt_cifti_weights_weight_cifti"] ?? null))
-        );
-    }
-    if ((params["opt_column_column"] ?? null) !== null) {
-        cargs.push(
+            (((params["weight-cifti"] ?? null) !== null) ? execution.inputFile((params["weight-cifti"] ?? null)) : ""),
             "-column",
-            String((params["opt_column_column"] ?? null))
-        );
-    }
-    if ((params["roi"] ?? null) !== null) {
-        cargs.push(...cifti_weighted_stats_roi_cargs((params["roi"] ?? null), execution));
-    }
-    if ((params["opt_mean"] ?? false)) {
-        cargs.push("-mean");
-    }
-    if ((params["stdev"] ?? null) !== null) {
-        cargs.push(...cifti_weighted_stats_stdev_cargs((params["stdev"] ?? null), execution));
-    }
-    if ((params["opt_percentile_percent"] ?? null) !== null) {
-        cargs.push(
+            (((params["column"] ?? null) !== null) ? String((params["column"] ?? null)) : ""),
+            ...(((params["roi"] ?? null) !== null) ? cifti_weighted_stats_roi_cargs((params["roi"] ?? null), execution) : []),
+            (((params["mean"] ?? false)) ? "-mean" : ""),
+            "-stdev",
+            (((params["sample"] ?? false) !== null) ? "-sample" : ""),
             "-percentile",
-            String((params["opt_percentile_percent"] ?? null))
+            (((params["percent"] ?? null) !== null) ? String((params["percent"] ?? null)) : ""),
+            (((params["sum"] ?? false)) ? "-sum" : ""),
+            (((params["show-map-name"] ?? false)) ? "-show-map-name" : "")
         );
     }
-    if ((params["opt_sum"] ?? false)) {
-        cargs.push("-sum");
-    }
-    if ((params["opt_show_map_name"] ?? false)) {
-        cargs.push("-show-map-name");
-    }
+    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     return cargs;
 }
 
@@ -381,17 +317,11 @@ function cifti_weighted_stats_outputs(
 
 
 /**
- * cifti-weighted-stats
- *
- * Weighted statistics along cifti columns.
+ * WEIGHTED STATISTICS ALONG CIFTI COLUMNS.
  *
  * If the mapping along column is brain models, for each column of the input, the specified operation is done on each surface and across all voxels, and the results are printed on separate lines.  For other mapping types, the operation is done on each column, and one line per map is printed.  Exactly one of -spatial-weights or -cifti-weights must be specified.  Use -column to only give output for a single column.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -mean, -stdev, -percentile or -sum must be specified.
  *
  * Using -sum with -spatial-weights (or with -cifti-weights and a cifti containing weights of similar meaning) is equivalent to integrating with respect to area and volume.  When the input is binary ROIs, this will therefore output the area or volume of each ROI.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -413,46 +343,48 @@ function cifti_weighted_stats_execute(
 
 
 /**
- * cifti-weighted-stats
- *
- * Weighted statistics along cifti columns.
+ * WEIGHTED STATISTICS ALONG CIFTI COLUMNS.
  *
  * If the mapping along column is brain models, for each column of the input, the specified operation is done on each surface and across all voxels, and the results are printed on separate lines.  For other mapping types, the operation is done on each column, and one line per map is printed.  Exactly one of -spatial-weights or -cifti-weights must be specified.  Use -column to only give output for a single column.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -mean, -stdev, -percentile or -sum must be specified.
  *
  * Using -sum with -spatial-weights (or with -cifti-weights and a cifti containing weights of similar meaning) is equivalent to integrating with respect to area and volume.  When the input is binary ROIs, this will therefore output the area or volume of each ROI.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param weight_cifti use a cifti file containing weights
+
+the weights to use, as a cifti file
+ * @param column only display output for one column
+
+the column to use (1-based)
+ * @param percent compute weighted percentile
+
+the percentile to find, must be between 0 and 100
  * @param cifti_in the input cifti
  * @param spatial_weights use vertex area and voxel volume as weights
- * @param opt_cifti_weights_weight_cifti use a cifti file containing weights: the weights to use, as a cifti file
- * @param opt_column_column only display output for one column: the column to use (1-based)
  * @param roi only consider data inside an roi
- * @param opt_mean compute weighted mean
- * @param stdev compute weighted standard deviation
- * @param opt_percentile_percent compute weighted percentile: the percentile to find, must be between 0 and 100
- * @param opt_sum compute weighted sum
- * @param opt_show_map_name print map index and name before each output
+ * @param mean compute weighted mean
+ * @param sample compute weighted standard deviation
+
+estimate population stdev from the sample
+ * @param sum compute weighted sum
+ * @param show_map_name print map index and name before each output
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiWeightedStatsOutputs`).
  */
 function cifti_weighted_stats(
+    weight_cifti: InputPathType | null,
+    column: number | null,
+    percent: number | null,
     cifti_in: InputPathType,
     spatial_weights: CiftiWeightedStatsSpatialWeightsParameters | null = null,
-    opt_cifti_weights_weight_cifti: InputPathType | null = null,
-    opt_column_column: number | null = null,
     roi: CiftiWeightedStatsRoiParameters | null = null,
-    opt_mean: boolean = false,
-    stdev: CiftiWeightedStatsStdevParameters | null = null,
-    opt_percentile_percent: number | null = null,
-    opt_sum: boolean = false,
-    opt_show_map_name: boolean = false,
+    mean: boolean = false,
+    sample: boolean | null = false,
+    sum: boolean = false,
+    show_map_name: boolean = false,
     runner: Runner | null = null,
 ): CiftiWeightedStatsOutputs {
-    const params = cifti_weighted_stats_params(cifti_in, spatial_weights, opt_cifti_weights_weight_cifti, opt_column_column, roi, opt_mean, stdev, opt_percentile_percent, opt_sum, opt_show_map_name)
+    const params = cifti_weighted_stats_params(weight_cifti, column, percent, cifti_in, spatial_weights, roi, mean, sample, sum, show_map_name)
     return cifti_weighted_stats_execute(params, runner);
 }
 
@@ -465,5 +397,4 @@ export {
       cifti_weighted_stats_params,
       cifti_weighted_stats_roi_params,
       cifti_weighted_stats_spatial_weights_params,
-      cifti_weighted_stats_stdev_params,
 };

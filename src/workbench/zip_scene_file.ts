@@ -4,21 +4,20 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ZIP_SCENE_FILE_METADATA: Metadata = {
-    id: "85d5fb1af707c34c6db735360187816616cc1dda.boutiques",
+    id: "b259c5172b5ae3668ffcdba00a5b5a9f3c90cbb1.workbench",
     name: "zip-scene-file",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface ZipSceneFileParameters {
     "@type"?: "workbench/zip-scene-file";
-    "scene_file": string;
-    "extract_folder": string;
-    "zip_file": string;
-    "opt_base_dir_directory"?: string | null | undefined;
-    "opt_skip_missing": boolean;
-    "opt_write_scene_file": boolean;
+    "directory"?: string | null | undefined;
+    "skip-missing": boolean;
+    "write-scene-file": boolean;
+    "scene-file": string;
+    "extract-folder": string;
+    "zip-file": string;
 }
 type ZipSceneFileParametersTagged = Required<Pick<ZipSceneFileParameters, '@type'>> & ZipSceneFileParameters;
 
@@ -39,33 +38,35 @@ interface ZipSceneFileOutputs {
 /**
  * Build parameters.
  *
+ * @param directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure
+
+the directory
  * @param scene_file the scene file to make the zip file from
  * @param extract_folder the name of the folder created when the zip file is unzipped
  * @param zip_file out - the zip file that will be created
- * @param opt_base_dir_directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure: the directory
- * @param opt_skip_missing any missing files will generate only warnings, and the zip file will be created anyway
- * @param opt_write_scene_file rewrite the scene file before zipping, to store a new base path or fix extra '..'s in paths that might break
+ * @param skip_missing any missing files will generate only warnings, and the zip file will be created anyway
+ * @param write_scene_file rewrite the scene file before zipping, to store a new base path or fix extra '..'s in paths that might break
  *
  * @returns Parameter dictionary
  */
 function zip_scene_file_params(
+    directory: string | null,
     scene_file: string,
     extract_folder: string,
     zip_file: string,
-    opt_base_dir_directory: string | null = null,
-    opt_skip_missing: boolean = false,
-    opt_write_scene_file: boolean = false,
+    skip_missing: boolean = false,
+    write_scene_file: boolean = false,
 ): ZipSceneFileParametersTagged {
     const params = {
         "@type": "workbench/zip-scene-file" as const,
-        "scene_file": scene_file,
-        "extract_folder": extract_folder,
-        "zip_file": zip_file,
-        "opt_skip_missing": opt_skip_missing,
-        "opt_write_scene_file": opt_write_scene_file,
+        "skip-missing": skip_missing,
+        "write-scene-file": write_scene_file,
+        "scene-file": scene_file,
+        "extract-folder": extract_folder,
+        "zip-file": zip_file,
     };
-    if (opt_base_dir_directory !== null) {
-        params["opt_base_dir_directory"] = opt_base_dir_directory;
+    if (directory !== null) {
+        params["directory"] = directory;
     }
     return params;
 }
@@ -84,23 +85,19 @@ function zip_scene_file_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-zip-scene-file");
-    cargs.push((params["scene_file"] ?? null));
-    cargs.push((params["extract_folder"] ?? null));
-    cargs.push((params["zip_file"] ?? null));
-    if ((params["opt_base_dir_directory"] ?? null) !== null) {
+    if ((params["directory"] ?? null) !== null || (params["skip-missing"] ?? false) || (params["write-scene-file"] ?? false)) {
         cargs.push(
+            "wb_command",
+            "-zip-scene-file",
             "-base-dir",
-            (params["opt_base_dir_directory"] ?? null)
+            (((params["directory"] ?? null) !== null) ? (params["directory"] ?? null) : ""),
+            (((params["skip-missing"] ?? false)) ? "-skip-missing" : ""),
+            (((params["write-scene-file"] ?? false)) ? "-write-scene-file" : "")
         );
     }
-    if ((params["opt_skip_missing"] ?? false)) {
-        cargs.push("-skip-missing");
-    }
-    if ((params["opt_write_scene_file"] ?? false)) {
-        cargs.push("-write-scene-file");
-    }
+    cargs.push((params["scene-file"] ?? null));
+    cargs.push((params["extract-folder"] ?? null));
+    cargs.push((params["zip-file"] ?? null));
     return cargs;
 }
 
@@ -125,15 +122,9 @@ function zip_scene_file_outputs(
 
 
 /**
- * zip-scene-file
- *
- * Zip a scene file and its data files.
+ * ZIP A SCENE FILE AND ITS DATA FILES.
  *
  * If zip-file already exists, it will be overwritten.  If -base-dir is not specified, the base directory will be automatically set to the lowest level directory containing all files.  The scene file must contain only relative paths, and no data files may be outside the base directory.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -155,36 +146,32 @@ function zip_scene_file_execute(
 
 
 /**
- * zip-scene-file
- *
- * Zip a scene file and its data files.
+ * ZIP A SCENE FILE AND ITS DATA FILES.
  *
  * If zip-file already exists, it will be overwritten.  If -base-dir is not specified, the base directory will be automatically set to the lowest level directory containing all files.  The scene file must contain only relative paths, and no data files may be outside the base directory.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure
+
+the directory
  * @param scene_file the scene file to make the zip file from
  * @param extract_folder the name of the folder created when the zip file is unzipped
  * @param zip_file out - the zip file that will be created
- * @param opt_base_dir_directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure: the directory
- * @param opt_skip_missing any missing files will generate only warnings, and the zip file will be created anyway
- * @param opt_write_scene_file rewrite the scene file before zipping, to store a new base path or fix extra '..'s in paths that might break
+ * @param skip_missing any missing files will generate only warnings, and the zip file will be created anyway
+ * @param write_scene_file rewrite the scene file before zipping, to store a new base path or fix extra '..'s in paths that might break
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ZipSceneFileOutputs`).
  */
 function zip_scene_file(
+    directory: string | null,
     scene_file: string,
     extract_folder: string,
     zip_file: string,
-    opt_base_dir_directory: string | null = null,
-    opt_skip_missing: boolean = false,
-    opt_write_scene_file: boolean = false,
+    skip_missing: boolean = false,
+    write_scene_file: boolean = false,
     runner: Runner | null = null,
 ): ZipSceneFileOutputs {
-    const params = zip_scene_file_params(scene_file, extract_folder, zip_file, opt_base_dir_directory, opt_skip_missing, opt_write_scene_file)
+    const params = zip_scene_file_params(directory, scene_file, extract_folder, zip_file, skip_missing, write_scene_file)
     return zip_scene_file_execute(params, runner);
 }
 

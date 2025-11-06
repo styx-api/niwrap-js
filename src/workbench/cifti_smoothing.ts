@@ -4,52 +4,61 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_SMOOTHING_METADATA: Metadata = {
-    id: "0b87cc9cdd0f0460a8ebb1583ddeff5398d57bd4.boutiques",
+    id: "13acc3e6ded7de43dd47b9ee49249c55bebbc762.workbench",
     name: "cifti-smoothing",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiSmoothingLeftSurfaceParameters {
-    "@type"?: "left_surface";
+    "@type"?: "left-surface";
     "surface": InputPathType;
-    "opt_left_corrected_areas_area_metric"?: InputPathType | null | undefined;
+    "area-metric"?: InputPathType | null | undefined;
 }
 type CiftiSmoothingLeftSurfaceParametersTagged = Required<Pick<CiftiSmoothingLeftSurfaceParameters, '@type'>> & CiftiSmoothingLeftSurfaceParameters;
 
 
 interface CiftiSmoothingRightSurfaceParameters {
-    "@type"?: "right_surface";
+    "@type"?: "right-surface";
     "surface": InputPathType;
-    "opt_right_corrected_areas_area_metric"?: InputPathType | null | undefined;
+    "area-metric"?: InputPathType | null | undefined;
 }
 type CiftiSmoothingRightSurfaceParametersTagged = Required<Pick<CiftiSmoothingRightSurfaceParameters, '@type'>> & CiftiSmoothingRightSurfaceParameters;
 
 
 interface CiftiSmoothingCerebellumSurfaceParameters {
-    "@type"?: "cerebellum_surface";
+    "@type"?: "cerebellum-surface";
     "surface": InputPathType;
-    "opt_cerebellum_corrected_areas_area_metric"?: InputPathType | null | undefined;
+    "area-metric"?: InputPathType | null | undefined;
 }
 type CiftiSmoothingCerebellumSurfaceParametersTagged = Required<Pick<CiftiSmoothingCerebellumSurfaceParameters, '@type'>> & CiftiSmoothingCerebellumSurfaceParameters;
 
 
+interface CiftiSmoothingSurfaceParameters {
+    "@type"?: "surface";
+    "structure": string;
+    "surface": InputPathType;
+    "area-metric"?: InputPathType | null | undefined;
+}
+type CiftiSmoothingSurfaceParametersTagged = Required<Pick<CiftiSmoothingSurfaceParameters, '@type'>> & CiftiSmoothingSurfaceParameters;
+
+
 interface CiftiSmoothingParameters {
     "@type"?: "workbench/cifti-smoothing";
+    "cifti-out": string;
+    "fwhm": boolean;
+    "left-surface"?: CiftiSmoothingLeftSurfaceParameters | null | undefined;
+    "right-surface"?: CiftiSmoothingRightSurfaceParameters | null | undefined;
+    "cerebellum-surface"?: CiftiSmoothingCerebellumSurfaceParameters | null | undefined;
+    "roi-cifti"?: InputPathType | null | undefined;
+    "fix-zeros-volume": boolean;
+    "fix-zeros-surface": boolean;
+    "merged-volume": boolean;
+    "surface"?: Array<CiftiSmoothingSurfaceParameters> | null | undefined;
     "cifti": InputPathType;
-    "surface_kernel": number;
-    "volume_kernel": number;
+    "surface-kernel": number;
+    "volume-kernel": number;
     "direction": string;
-    "cifti_out": string;
-    "opt_fwhm": boolean;
-    "left_surface"?: CiftiSmoothingLeftSurfaceParameters | null | undefined;
-    "right_surface"?: CiftiSmoothingRightSurfaceParameters | null | undefined;
-    "cerebellum_surface"?: CiftiSmoothingCerebellumSurfaceParameters | null | undefined;
-    "opt_cifti_roi_roi_cifti"?: InputPathType | null | undefined;
-    "opt_fix_zeros_volume": boolean;
-    "opt_fix_zeros_surface": boolean;
-    "opt_merged_volume": boolean;
 }
 type CiftiSmoothingParametersTagged = Required<Pick<CiftiSmoothingParameters, '@type'>> & CiftiSmoothingParameters;
 
@@ -58,20 +67,22 @@ type CiftiSmoothingParametersTagged = Required<Pick<CiftiSmoothingParameters, '@
  * Build parameters.
  *
  * @param surface the left surface file
- * @param opt_left_corrected_areas_area_metric vertex areas to use instead of computing them from the left surface: the corrected vertex areas, as a metric
+ * @param area_metric vertex areas to use instead of computing them from the left surface
+
+the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
 function cifti_smoothing_left_surface_params(
     surface: InputPathType,
-    opt_left_corrected_areas_area_metric: InputPathType | null = null,
+    area_metric: InputPathType | null,
 ): CiftiSmoothingLeftSurfaceParametersTagged {
     const params = {
-        "@type": "left_surface" as const,
+        "@type": "left-surface" as const,
         "surface": surface,
     };
-    if (opt_left_corrected_areas_area_metric !== null) {
-        params["opt_left_corrected_areas_area_metric"] = opt_left_corrected_areas_area_metric;
+    if (area_metric !== null) {
+        params["area-metric"] = area_metric;
     }
     return params;
 }
@@ -90,12 +101,12 @@ function cifti_smoothing_left_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-left-surface");
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    if ((params["opt_left_corrected_areas_area_metric"] ?? null) !== null) {
+    if ((params["area-metric"] ?? null) !== null) {
         cargs.push(
+            "-left-surface",
+            execution.inputFile((params["surface"] ?? null)),
             "-left-corrected-areas",
-            execution.inputFile((params["opt_left_corrected_areas_area_metric"] ?? null))
+            execution.inputFile((params["area-metric"] ?? null))
         );
     }
     return cargs;
@@ -106,20 +117,22 @@ function cifti_smoothing_left_surface_cargs(
  * Build parameters.
  *
  * @param surface the right surface file
- * @param opt_right_corrected_areas_area_metric vertex areas to use instead of computing them from the right surface: the corrected vertex areas, as a metric
+ * @param area_metric vertex areas to use instead of computing them from the right surface
+
+the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
 function cifti_smoothing_right_surface_params(
     surface: InputPathType,
-    opt_right_corrected_areas_area_metric: InputPathType | null = null,
+    area_metric: InputPathType | null,
 ): CiftiSmoothingRightSurfaceParametersTagged {
     const params = {
-        "@type": "right_surface" as const,
+        "@type": "right-surface" as const,
         "surface": surface,
     };
-    if (opt_right_corrected_areas_area_metric !== null) {
-        params["opt_right_corrected_areas_area_metric"] = opt_right_corrected_areas_area_metric;
+    if (area_metric !== null) {
+        params["area-metric"] = area_metric;
     }
     return params;
 }
@@ -138,12 +151,12 @@ function cifti_smoothing_right_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-right-surface");
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    if ((params["opt_right_corrected_areas_area_metric"] ?? null) !== null) {
+    if ((params["area-metric"] ?? null) !== null) {
         cargs.push(
+            "-right-surface",
+            execution.inputFile((params["surface"] ?? null)),
             "-right-corrected-areas",
-            execution.inputFile((params["opt_right_corrected_areas_area_metric"] ?? null))
+            execution.inputFile((params["area-metric"] ?? null))
         );
     }
     return cargs;
@@ -154,20 +167,22 @@ function cifti_smoothing_right_surface_cargs(
  * Build parameters.
  *
  * @param surface the cerebellum surface file
- * @param opt_cerebellum_corrected_areas_area_metric vertex areas to use instead of computing them from the cerebellum surface: the corrected vertex areas, as a metric
+ * @param area_metric vertex areas to use instead of computing them from the cerebellum surface
+
+the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
 function cifti_smoothing_cerebellum_surface_params(
     surface: InputPathType,
-    opt_cerebellum_corrected_areas_area_metric: InputPathType | null = null,
+    area_metric: InputPathType | null,
 ): CiftiSmoothingCerebellumSurfaceParametersTagged {
     const params = {
-        "@type": "cerebellum_surface" as const,
+        "@type": "cerebellum-surface" as const,
         "surface": surface,
     };
-    if (opt_cerebellum_corrected_areas_area_metric !== null) {
-        params["opt_cerebellum_corrected_areas_area_metric"] = opt_cerebellum_corrected_areas_area_metric;
+    if (area_metric !== null) {
+        params["area-metric"] = area_metric;
     }
     return params;
 }
@@ -186,12 +201,66 @@ function cifti_smoothing_cerebellum_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-cerebellum-surface");
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    if ((params["opt_cerebellum_corrected_areas_area_metric"] ?? null) !== null) {
+    if ((params["area-metric"] ?? null) !== null) {
         cargs.push(
+            "-cerebellum-surface",
+            execution.inputFile((params["surface"] ?? null)),
             "-cerebellum-corrected-areas",
-            execution.inputFile((params["opt_cerebellum_corrected_areas_area_metric"] ?? null))
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param structure the surface structure name
+ * @param surface the surface file
+ * @param area_metric vertex areas to use instead of computing them from the surface
+
+the corrected vertex areas, as a metric
+ *
+ * @returns Parameter dictionary
+ */
+function cifti_smoothing_surface_params(
+    structure: string,
+    surface: InputPathType,
+    area_metric: InputPathType | null,
+): CiftiSmoothingSurfaceParametersTagged {
+    const params = {
+        "@type": "surface" as const,
+        "structure": structure,
+        "surface": surface,
+    };
+    if (area_metric !== null) {
+        params["area-metric"] = area_metric;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function cifti_smoothing_surface_cargs(
+    params: CiftiSmoothingSurfaceParameters,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-surface",
+            (params["structure"] ?? null),
+            execution.inputFile((params["surface"] ?? null)),
+            "-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
         );
     }
     return cargs;
@@ -218,60 +287,67 @@ interface CiftiSmoothingOutputs {
 /**
  * Build parameters.
  *
+ * @param cifti_out the output cifti
+ * @param roi_cifti smooth only within regions of interest
+
+the regions to smooth within, as a cifti file
  * @param cifti the input cifti
  * @param surface_kernel the size of the gaussian surface smoothing kernel in mm, as sigma by default
  * @param volume_kernel the size of the gaussian volume smoothing kernel in mm, as sigma by default
  * @param direction which dimension to smooth along, ROW or COLUMN
- * @param cifti_out the output cifti
- * @param opt_fwhm kernel sizes are FWHM, not sigma
- * @param left_surface specify the left surface to use
- * @param right_surface specify the right surface to use
+ * @param fwhm kernel sizes are FWHM, not sigma
+ * @param left_surface specify the left cortical surface to use
+ * @param right_surface specify the right cortical surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
- * @param opt_cifti_roi_roi_cifti smooth only within regions of interest: the regions to smooth within, as a cifti file
- * @param opt_fix_zeros_volume treat values of zero in the volume as missing data
- * @param opt_fix_zeros_surface treat values of zero on the surface as missing data
- * @param opt_merged_volume smooth across subcortical structure boundaries
+ * @param fix_zeros_volume treat values of zero in the volume as missing data
+ * @param fix_zeros_surface treat values of zero on the surface as missing data
+ * @param merged_volume smooth across subcortical structure boundaries
+ * @param surface specify a surface by structure name
  *
  * @returns Parameter dictionary
  */
 function cifti_smoothing_params(
+    cifti_out: string,
+    roi_cifti: InputPathType | null,
     cifti: InputPathType,
     surface_kernel: number,
     volume_kernel: number,
     direction: string,
-    cifti_out: string,
-    opt_fwhm: boolean = false,
+    fwhm: boolean = false,
     left_surface: CiftiSmoothingLeftSurfaceParameters | null = null,
     right_surface: CiftiSmoothingRightSurfaceParameters | null = null,
     cerebellum_surface: CiftiSmoothingCerebellumSurfaceParameters | null = null,
-    opt_cifti_roi_roi_cifti: InputPathType | null = null,
-    opt_fix_zeros_volume: boolean = false,
-    opt_fix_zeros_surface: boolean = false,
-    opt_merged_volume: boolean = false,
+    fix_zeros_volume: boolean = false,
+    fix_zeros_surface: boolean = false,
+    merged_volume: boolean = false,
+    surface: Array<CiftiSmoothingSurfaceParameters> | null = null,
 ): CiftiSmoothingParametersTagged {
     const params = {
         "@type": "workbench/cifti-smoothing" as const,
+        "cifti-out": cifti_out,
+        "fwhm": fwhm,
+        "fix-zeros-volume": fix_zeros_volume,
+        "fix-zeros-surface": fix_zeros_surface,
+        "merged-volume": merged_volume,
         "cifti": cifti,
-        "surface_kernel": surface_kernel,
-        "volume_kernel": volume_kernel,
+        "surface-kernel": surface_kernel,
+        "volume-kernel": volume_kernel,
         "direction": direction,
-        "cifti_out": cifti_out,
-        "opt_fwhm": opt_fwhm,
-        "opt_fix_zeros_volume": opt_fix_zeros_volume,
-        "opt_fix_zeros_surface": opt_fix_zeros_surface,
-        "opt_merged_volume": opt_merged_volume,
     };
     if (left_surface !== null) {
-        params["left_surface"] = left_surface;
+        params["left-surface"] = left_surface;
     }
     if (right_surface !== null) {
-        params["right_surface"] = right_surface;
+        params["right-surface"] = right_surface;
     }
     if (cerebellum_surface !== null) {
-        params["cerebellum_surface"] = cerebellum_surface;
+        params["cerebellum-surface"] = cerebellum_surface;
     }
-    if (opt_cifti_roi_roi_cifti !== null) {
-        params["opt_cifti_roi_roi_cifti"] = opt_cifti_roi_roi_cifti;
+    if (roi_cifti !== null) {
+        params["roi-cifti"] = roi_cifti;
+    }
+    if (surface !== null) {
+        params["surface"] = surface;
     }
     return params;
 }
@@ -290,40 +366,27 @@ function cifti_smoothing_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-smoothing");
-    cargs.push(execution.inputFile((params["cifti"] ?? null)));
-    cargs.push(String((params["surface_kernel"] ?? null)));
-    cargs.push(String((params["volume_kernel"] ?? null)));
-    cargs.push((params["direction"] ?? null));
-    cargs.push((params["cifti_out"] ?? null));
-    if ((params["opt_fwhm"] ?? false)) {
-        cargs.push("-fwhm");
-    }
-    if ((params["left_surface"] ?? null) !== null) {
-        cargs.push(...cifti_smoothing_left_surface_cargs((params["left_surface"] ?? null), execution));
-    }
-    if ((params["right_surface"] ?? null) !== null) {
-        cargs.push(...cifti_smoothing_right_surface_cargs((params["right_surface"] ?? null), execution));
-    }
-    if ((params["cerebellum_surface"] ?? null) !== null) {
-        cargs.push(...cifti_smoothing_cerebellum_surface_cargs((params["cerebellum_surface"] ?? null), execution));
-    }
-    if ((params["opt_cifti_roi_roi_cifti"] ?? null) !== null) {
+    if ((params["fwhm"] ?? false) || (params["left-surface"] ?? null) !== null || (params["right-surface"] ?? null) !== null || (params["cerebellum-surface"] ?? null) !== null || (params["roi-cifti"] ?? null) !== null || (params["fix-zeros-volume"] ?? false) || (params["fix-zeros-surface"] ?? false) || (params["merged-volume"] ?? false) || (params["surface"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-cifti-smoothing",
+            (params["cifti-out"] ?? null),
+            (((params["fwhm"] ?? false)) ? "-fwhm" : ""),
+            ...(((params["left-surface"] ?? null) !== null) ? cifti_smoothing_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
+            ...(((params["right-surface"] ?? null) !== null) ? cifti_smoothing_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
+            ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_smoothing_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : []),
             "-cifti-roi",
-            execution.inputFile((params["opt_cifti_roi_roi_cifti"] ?? null))
+            (((params["roi-cifti"] ?? null) !== null) ? execution.inputFile((params["roi-cifti"] ?? null)) : ""),
+            (((params["fix-zeros-volume"] ?? false)) ? "-fix-zeros-volume" : ""),
+            (((params["fix-zeros-surface"] ?? false)) ? "-fix-zeros-surface" : ""),
+            (((params["merged-volume"] ?? false)) ? "-merged-volume" : ""),
+            ...(((params["surface"] ?? null) !== null) ? (params["surface"] ?? null).map(s => cifti_smoothing_surface_cargs(s, execution)).flat() : [])
         );
     }
-    if ((params["opt_fix_zeros_volume"] ?? false)) {
-        cargs.push("-fix-zeros-volume");
-    }
-    if ((params["opt_fix_zeros_surface"] ?? false)) {
-        cargs.push("-fix-zeros-surface");
-    }
-    if ((params["opt_merged_volume"] ?? false)) {
-        cargs.push("-merged-volume");
-    }
+    cargs.push(execution.inputFile((params["cifti"] ?? null)));
+    cargs.push(String((params["surface-kernel"] ?? null)));
+    cargs.push(String((params["volume-kernel"] ?? null)));
+    cargs.push((params["direction"] ?? null));
     return cargs;
 }
 
@@ -342,16 +405,14 @@ function cifti_smoothing_outputs(
 ): CiftiSmoothingOutputs {
     const ret: CiftiSmoothingOutputs = {
         root: execution.outputFile("."),
-        cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
+        cifti_out: execution.outputFile([(params["cifti-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * cifti-smoothing
- *
- * Smooth a cifti file.
+ * SMOOTH A CIFTI FILE.
  *
  * The input cifti file must have a brain models mapping on the chosen dimension, columns for .dtseries, and either for .dconn.  By default, data in different structures is smoothed independently (i.e., "parcel constrained" smoothing), so volume structures that touch do not smooth across this boundary.  Specify -merged-volume to ignore these boundaries.  Surface smoothing uses the GEO_GAUSS_AREA smoothing method.
  *
@@ -359,9 +420,43 @@ function cifti_smoothing_outputs(
  *
  * The -fix-zeros-* options will treat values of zero as lack of data, and not use that value when generating the smoothed values, but will fill zeros with extrapolated values.  The ROI should have a brain models mapping along columns, exactly matching the mapping of the chosen direction in the input file.  Data outside the ROI is ignored.
  *
- * Author: Connectome Workbench Developers
+ * The <structure> argument of -surface must be one of the following strings:
  *
- * URL: https://github.com/Washington-University/workbench
+ * CORTEX_LEFT
+ * CORTEX_RIGHT
+ * CEREBELLUM
+ * ACCUMBENS_LEFT
+ * ACCUMBENS_RIGHT
+ * ALL_GREY_MATTER
+ * ALL_WHITE_MATTER
+ * AMYGDALA_LEFT
+ * AMYGDALA_RIGHT
+ * BRAIN_STEM
+ * CAUDATE_LEFT
+ * CAUDATE_RIGHT
+ * CEREBELLAR_WHITE_MATTER_LEFT
+ * CEREBELLAR_WHITE_MATTER_RIGHT
+ * CEREBELLUM_LEFT
+ * CEREBELLUM_RIGHT
+ * CEREBRAL_WHITE_MATTER_LEFT
+ * CEREBRAL_WHITE_MATTER_RIGHT
+ * CORTEX
+ * DIENCEPHALON_VENTRAL_LEFT
+ * DIENCEPHALON_VENTRAL_RIGHT
+ * HIPPOCAMPUS_LEFT
+ * HIPPOCAMPUS_RIGHT
+ * HIPPOCAMPUS_DENTATE_LEFT
+ * HIPPOCAMPUS_DENTATE_RIGHT
+ * INVALID
+ * OTHER
+ * OTHER_GREY_MATTER
+ * OTHER_WHITE_MATTER
+ * PALLIDUM_LEFT
+ * PALLIDUM_RIGHT
+ * PUTAMEN_LEFT
+ * PUTAMEN_RIGHT
+ * THALAMUS_LEFT
+ * THALAMUS_RIGHT.
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -383,9 +478,7 @@ function cifti_smoothing_execute(
 
 
 /**
- * cifti-smoothing
- *
- * Smooth a cifti file.
+ * SMOOTH A CIFTI FILE.
  *
  * The input cifti file must have a brain models mapping on the chosen dimension, columns for .dtseries, and either for .dconn.  By default, data in different structures is smoothed independently (i.e., "parcel constrained" smoothing), so volume structures that touch do not smooth across this boundary.  Specify -merged-volume to ignore these boundaries.  Surface smoothing uses the GEO_GAUSS_AREA smoothing method.
  *
@@ -393,44 +486,82 @@ function cifti_smoothing_execute(
  *
  * The -fix-zeros-* options will treat values of zero as lack of data, and not use that value when generating the smoothed values, but will fill zeros with extrapolated values.  The ROI should have a brain models mapping along columns, exactly matching the mapping of the chosen direction in the input file.  Data outside the ROI is ignored.
  *
- * Author: Connectome Workbench Developers
+ * The <structure> argument of -surface must be one of the following strings:
  *
- * URL: https://github.com/Washington-University/workbench
+ * CORTEX_LEFT
+ * CORTEX_RIGHT
+ * CEREBELLUM
+ * ACCUMBENS_LEFT
+ * ACCUMBENS_RIGHT
+ * ALL_GREY_MATTER
+ * ALL_WHITE_MATTER
+ * AMYGDALA_LEFT
+ * AMYGDALA_RIGHT
+ * BRAIN_STEM
+ * CAUDATE_LEFT
+ * CAUDATE_RIGHT
+ * CEREBELLAR_WHITE_MATTER_LEFT
+ * CEREBELLAR_WHITE_MATTER_RIGHT
+ * CEREBELLUM_LEFT
+ * CEREBELLUM_RIGHT
+ * CEREBRAL_WHITE_MATTER_LEFT
+ * CEREBRAL_WHITE_MATTER_RIGHT
+ * CORTEX
+ * DIENCEPHALON_VENTRAL_LEFT
+ * DIENCEPHALON_VENTRAL_RIGHT
+ * HIPPOCAMPUS_LEFT
+ * HIPPOCAMPUS_RIGHT
+ * HIPPOCAMPUS_DENTATE_LEFT
+ * HIPPOCAMPUS_DENTATE_RIGHT
+ * INVALID
+ * OTHER
+ * OTHER_GREY_MATTER
+ * OTHER_WHITE_MATTER
+ * PALLIDUM_LEFT
+ * PALLIDUM_RIGHT
+ * PUTAMEN_LEFT
+ * PUTAMEN_RIGHT
+ * THALAMUS_LEFT
+ * THALAMUS_RIGHT.
  *
+ * @param cifti_out the output cifti
+ * @param roi_cifti smooth only within regions of interest
+
+the regions to smooth within, as a cifti file
  * @param cifti the input cifti
  * @param surface_kernel the size of the gaussian surface smoothing kernel in mm, as sigma by default
  * @param volume_kernel the size of the gaussian volume smoothing kernel in mm, as sigma by default
  * @param direction which dimension to smooth along, ROW or COLUMN
- * @param cifti_out the output cifti
- * @param opt_fwhm kernel sizes are FWHM, not sigma
- * @param left_surface specify the left surface to use
- * @param right_surface specify the right surface to use
+ * @param fwhm kernel sizes are FWHM, not sigma
+ * @param left_surface specify the left cortical surface to use
+ * @param right_surface specify the right cortical surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
- * @param opt_cifti_roi_roi_cifti smooth only within regions of interest: the regions to smooth within, as a cifti file
- * @param opt_fix_zeros_volume treat values of zero in the volume as missing data
- * @param opt_fix_zeros_surface treat values of zero on the surface as missing data
- * @param opt_merged_volume smooth across subcortical structure boundaries
+ * @param fix_zeros_volume treat values of zero in the volume as missing data
+ * @param fix_zeros_surface treat values of zero on the surface as missing data
+ * @param merged_volume smooth across subcortical structure boundaries
+ * @param surface specify a surface by structure name
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiSmoothingOutputs`).
  */
 function cifti_smoothing(
+    cifti_out: string,
+    roi_cifti: InputPathType | null,
     cifti: InputPathType,
     surface_kernel: number,
     volume_kernel: number,
     direction: string,
-    cifti_out: string,
-    opt_fwhm: boolean = false,
+    fwhm: boolean = false,
     left_surface: CiftiSmoothingLeftSurfaceParameters | null = null,
     right_surface: CiftiSmoothingRightSurfaceParameters | null = null,
     cerebellum_surface: CiftiSmoothingCerebellumSurfaceParameters | null = null,
-    opt_cifti_roi_roi_cifti: InputPathType | null = null,
-    opt_fix_zeros_volume: boolean = false,
-    opt_fix_zeros_surface: boolean = false,
-    opt_merged_volume: boolean = false,
+    fix_zeros_volume: boolean = false,
+    fix_zeros_surface: boolean = false,
+    merged_volume: boolean = false,
+    surface: Array<CiftiSmoothingSurfaceParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiSmoothingOutputs {
-    const params = cifti_smoothing_params(cifti, surface_kernel, volume_kernel, direction, cifti_out, opt_fwhm, left_surface, right_surface, cerebellum_surface, opt_cifti_roi_roi_cifti, opt_fix_zeros_volume, opt_fix_zeros_surface, opt_merged_volume)
+    const params = cifti_smoothing_params(cifti_out, roi_cifti, cifti, surface_kernel, volume_kernel, direction, fwhm, left_surface, right_surface, cerebellum_surface, fix_zeros_volume, fix_zeros_surface, merged_volume, surface)
     return cifti_smoothing_execute(params, runner);
 }
 
@@ -444,4 +575,5 @@ export {
       cifti_smoothing_left_surface_params,
       cifti_smoothing_params,
       cifti_smoothing_right_surface_params,
+      cifti_smoothing_surface_params,
 };

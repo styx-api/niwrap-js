@@ -4,22 +4,21 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_ROI_AVERAGE_METADATA: Metadata = {
-    id: "d3bb8cff36344df781b7dd9dbdd7df47c80190d5.boutiques",
+    id: "1c54604ccdd07eb726448c23d9769ff3ee506272.workbench",
     name: "cifti-roi-average",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiRoiAverageParameters {
     "@type"?: "workbench/cifti-roi-average";
-    "cifti_in": InputPathType;
-    "text_out": string;
-    "opt_cifti_roi_roi_cifti"?: InputPathType | null | undefined;
-    "opt_left_roi_roi_metric"?: InputPathType | null | undefined;
-    "opt_right_roi_roi_metric"?: InputPathType | null | undefined;
-    "opt_cerebellum_roi_roi_metric"?: InputPathType | null | undefined;
-    "opt_vol_roi_roi_vol"?: InputPathType | null | undefined;
+    "roi-cifti"?: InputPathType | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
+    "roi-vol"?: InputPathType | null | undefined;
+    "cifti-in": InputPathType;
+    "text-out": string;
 }
 type CiftiRoiAverageParametersTagged = Required<Pick<CiftiRoiAverageParameters, '@type'>> & CiftiRoiAverageParameters;
 
@@ -40,44 +39,54 @@ interface CiftiRoiAverageOutputs {
 /**
  * Build parameters.
  *
+ * @param roi_cifti cifti file containing combined rois
+
+the rois as a cifti file
+ * @param roi_metric vertices to use from left hemisphere
+
+the left roi as a metric file
+ * @param roi_metric_ vertices to use from right hemisphere
+
+the right roi as a metric file
+ * @param roi_metric_2 vertices to use from cerebellum
+
+the cerebellum roi as a metric file
+ * @param roi_vol voxels to use
+
+the roi volume file
  * @param cifti_in the cifti file to average rows from
  * @param text_out output text file of the average values
- * @param opt_cifti_roi_roi_cifti cifti file containing combined rois: the rois as a cifti file
- * @param opt_left_roi_roi_metric vertices to use from left hemisphere: the left roi as a metric file
- * @param opt_right_roi_roi_metric vertices to use from right hemisphere: the right roi as a metric file
- * @param opt_cerebellum_roi_roi_metric vertices to use from cerebellum: the cerebellum roi as a metric file
- * @param opt_vol_roi_roi_vol voxels to use: the roi volume file
  *
  * @returns Parameter dictionary
  */
 function cifti_roi_average_params(
+    roi_cifti: InputPathType | null,
+    roi_metric: InputPathType | null,
+    roi_metric_: InputPathType | null,
+    roi_metric_2: InputPathType | null,
+    roi_vol: InputPathType | null,
     cifti_in: InputPathType,
     text_out: string,
-    opt_cifti_roi_roi_cifti: InputPathType | null = null,
-    opt_left_roi_roi_metric: InputPathType | null = null,
-    opt_right_roi_roi_metric: InputPathType | null = null,
-    opt_cerebellum_roi_roi_metric: InputPathType | null = null,
-    opt_vol_roi_roi_vol: InputPathType | null = null,
 ): CiftiRoiAverageParametersTagged {
     const params = {
         "@type": "workbench/cifti-roi-average" as const,
-        "cifti_in": cifti_in,
-        "text_out": text_out,
+        "cifti-in": cifti_in,
+        "text-out": text_out,
     };
-    if (opt_cifti_roi_roi_cifti !== null) {
-        params["opt_cifti_roi_roi_cifti"] = opt_cifti_roi_roi_cifti;
+    if (roi_cifti !== null) {
+        params["roi-cifti"] = roi_cifti;
     }
-    if (opt_left_roi_roi_metric !== null) {
-        params["opt_left_roi_roi_metric"] = opt_left_roi_roi_metric;
+    if (roi_metric !== null) {
+        params["roi-metric"] = roi_metric;
     }
-    if (opt_right_roi_roi_metric !== null) {
-        params["opt_right_roi_roi_metric"] = opt_right_roi_roi_metric;
+    if (roi_metric_ !== null) {
+        params["roi-metric"] = roi_metric_;
     }
-    if (opt_cerebellum_roi_roi_metric !== null) {
-        params["opt_cerebellum_roi_roi_metric"] = opt_cerebellum_roi_roi_metric;
+    if (roi_metric_2 !== null) {
+        params["roi-metric"] = roi_metric_2;
     }
-    if (opt_vol_roi_roi_vol !== null) {
-        params["opt_vol_roi_roi_vol"] = opt_vol_roi_roi_vol;
+    if (roi_vol !== null) {
+        params["roi-vol"] = roi_vol;
     }
     return params;
 }
@@ -96,40 +105,24 @@ function cifti_roi_average_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-roi-average");
-    cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
-    cargs.push((params["text_out"] ?? null));
-    if ((params["opt_cifti_roi_roi_cifti"] ?? null) !== null) {
+    if ((params["roi-cifti"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["roi-vol"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-cifti-roi-average",
             "-cifti-roi",
-            execution.inputFile((params["opt_cifti_roi_roi_cifti"] ?? null))
-        );
-    }
-    if ((params["opt_left_roi_roi_metric"] ?? null) !== null) {
-        cargs.push(
+            (((params["roi-cifti"] ?? null) !== null) ? execution.inputFile((params["roi-cifti"] ?? null)) : ""),
             "-left-roi",
-            execution.inputFile((params["opt_left_roi_roi_metric"] ?? null))
-        );
-    }
-    if ((params["opt_right_roi_roi_metric"] ?? null) !== null) {
-        cargs.push(
+            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
             "-right-roi",
-            execution.inputFile((params["opt_right_roi_roi_metric"] ?? null))
-        );
-    }
-    if ((params["opt_cerebellum_roi_roi_metric"] ?? null) !== null) {
-        cargs.push(
+            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
             "-cerebellum-roi",
-            execution.inputFile((params["opt_cerebellum_roi_roi_metric"] ?? null))
-        );
-    }
-    if ((params["opt_vol_roi_roi_vol"] ?? null) !== null) {
-        cargs.push(
+            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
             "-vol-roi",
-            execution.inputFile((params["opt_vol_roi_roi_vol"] ?? null))
+            (((params["roi-vol"] ?? null) !== null) ? execution.inputFile((params["roi-vol"] ?? null)) : "")
         );
     }
+    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
+    cargs.push((params["text-out"] ?? null));
     return cargs;
 }
 
@@ -154,15 +147,9 @@ function cifti_roi_average_outputs(
 
 
 /**
- * cifti-roi-average
- *
- * Average rows in a single cifti file.
+ * AVERAGE ROWS IN A SINGLE CIFTI FILE.
  *
  * Average the rows that are within the specified ROIs, and write the resulting average row to a text file, separated by newlines.  If -cifti-roi is specified, -left-roi, -right-roi, -cerebellum-roi, and -vol-roi must not be specified.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -184,38 +171,42 @@ function cifti_roi_average_execute(
 
 
 /**
- * cifti-roi-average
- *
- * Average rows in a single cifti file.
+ * AVERAGE ROWS IN A SINGLE CIFTI FILE.
  *
  * Average the rows that are within the specified ROIs, and write the resulting average row to a text file, separated by newlines.  If -cifti-roi is specified, -left-roi, -right-roi, -cerebellum-roi, and -vol-roi must not be specified.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param roi_cifti cifti file containing combined rois
+
+the rois as a cifti file
+ * @param roi_metric vertices to use from left hemisphere
+
+the left roi as a metric file
+ * @param roi_metric_ vertices to use from right hemisphere
+
+the right roi as a metric file
+ * @param roi_metric_2 vertices to use from cerebellum
+
+the cerebellum roi as a metric file
+ * @param roi_vol voxels to use
+
+the roi volume file
  * @param cifti_in the cifti file to average rows from
  * @param text_out output text file of the average values
- * @param opt_cifti_roi_roi_cifti cifti file containing combined rois: the rois as a cifti file
- * @param opt_left_roi_roi_metric vertices to use from left hemisphere: the left roi as a metric file
- * @param opt_right_roi_roi_metric vertices to use from right hemisphere: the right roi as a metric file
- * @param opt_cerebellum_roi_roi_metric vertices to use from cerebellum: the cerebellum roi as a metric file
- * @param opt_vol_roi_roi_vol voxels to use: the roi volume file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiRoiAverageOutputs`).
  */
 function cifti_roi_average(
+    roi_cifti: InputPathType | null,
+    roi_metric: InputPathType | null,
+    roi_metric_: InputPathType | null,
+    roi_metric_2: InputPathType | null,
+    roi_vol: InputPathType | null,
     cifti_in: InputPathType,
     text_out: string,
-    opt_cifti_roi_roi_cifti: InputPathType | null = null,
-    opt_left_roi_roi_metric: InputPathType | null = null,
-    opt_right_roi_roi_metric: InputPathType | null = null,
-    opt_cerebellum_roi_roi_metric: InputPathType | null = null,
-    opt_vol_roi_roi_vol: InputPathType | null = null,
     runner: Runner | null = null,
 ): CiftiRoiAverageOutputs {
-    const params = cifti_roi_average_params(cifti_in, text_out, opt_cifti_roi_roi_cifti, opt_left_roi_roi_metric, opt_right_roi_roi_metric, opt_cerebellum_roi_roi_metric, opt_vol_roi_roi_vol)
+    const params = cifti_roi_average_params(roi_cifti, roi_metric, roi_metric_, roi_metric_2, roi_vol, cifti_in, text_out)
     return cifti_roi_average_execute(params, runner);
 }
 

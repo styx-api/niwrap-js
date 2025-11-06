@@ -30,19 +30,19 @@ interface AntsAtroposN4ShParameters {
     "max_atropos_iterations"?: number | null | undefined;
     "segmentation_priors": AntsAtroposN4ShSegmentationPriorsParameters;
     "mrf"?: string | null | undefined;
-    "denoise_anatomical_images"?: 0 | 1 | null | undefined;
+    "denoise_anatomical_images"?: boolean | null | undefined;
     "posterior_formulation"?: "Socrates[ 1 ]" | "Aristotle[ 1 ]" | null | undefined;
     "label_propagation"?: string | null | undefined;
     "posterior_label_for_n4_weight_mask"?: string | null | undefined;
     "image_file_suffix"?: string | null | undefined;
-    "keep_temporary_files"?: 0 | 1 | null | undefined;
-    "use_random_seeding"?: 0 | 1 | null | undefined;
+    "keep_temporary_files"?: boolean | null | undefined;
+    "use_random_seeding"?: boolean | null | undefined;
     "atropos_segmentation_prior_weight"?: number | null | undefined;
     "n4_convergence"?: string | null | undefined;
     "n4_shrink_factor"?: number | null | undefined;
     "n4_bspline_params"?: string | null | undefined;
     "atropos_segmentation_icm"?: string | null | undefined;
-    "atropos_segmentation_use_euclidean_distance"?: 0 | 1 | null | undefined;
+    "atropos_segmentation_use_euclidean_distance"?: boolean | null | undefined;
     "test_debug_mode"?: number | null | undefined;
 }
 type AntsAtroposN4ShParametersTagged = Required<Pick<AntsAtroposN4ShParameters, '@type'>> & AntsAtroposN4ShParameters;
@@ -161,19 +161,19 @@ function ants_atropos_n4_sh_params(
     max_n4_atropos_iterations: number | null = null,
     max_atropos_iterations: number | null = null,
     mrf: string | null = null,
-    denoise_anatomical_images: 0 | 1 | null = null,
+    denoise_anatomical_images: boolean | null = null,
     posterior_formulation: "Socrates[ 1 ]" | "Aristotle[ 1 ]" | null = null,
     label_propagation: string | null = null,
     posterior_label_for_n4_weight_mask: string | null = null,
     image_file_suffix: string | null = null,
-    keep_temporary_files: 0 | 1 | null = null,
-    use_random_seeding: 0 | 1 | null = null,
+    keep_temporary_files: boolean | null = null,
+    use_random_seeding: boolean | null = null,
     atropos_segmentation_prior_weight: number | null = null,
     n4_convergence: string | null = null,
     n4_shrink_factor: number | null = null,
     n4_bspline_params: string | null = null,
     atropos_segmentation_icm: string | null = null,
-    atropos_segmentation_use_euclidean_distance: 0 | 1 | null = null,
+    atropos_segmentation_use_euclidean_distance: boolean | null = null,
     test_debug_mode: number | null = null,
 ): AntsAtroposN4ShParametersTagged {
     const params = {
@@ -299,7 +299,7 @@ function ants_atropos_n4_sh_cargs(
     if ((params["denoise_anatomical_images"] ?? null) !== null) {
         cargs.push(
             "-g",
-            String((params["denoise_anatomical_images"] ?? null))
+            ((params["denoise_anatomical_images"] ?? null) ? "1" : "0")
         );
     }
     if ((params["posterior_formulation"] ?? null) !== null) {
@@ -329,13 +329,13 @@ function ants_atropos_n4_sh_cargs(
     if ((params["keep_temporary_files"] ?? null) !== null) {
         cargs.push(
             "-k",
-            String((params["keep_temporary_files"] ?? null))
+            ((params["keep_temporary_files"] ?? null) ? "1" : "0")
         );
     }
     if ((params["use_random_seeding"] ?? null) !== null) {
         cargs.push(
             "-u",
-            String((params["use_random_seeding"] ?? null))
+            ((params["use_random_seeding"] ?? null) ? "1" : "0")
         );
     }
     if ((params["atropos_segmentation_prior_weight"] ?? null) !== null) {
@@ -371,7 +371,7 @@ function ants_atropos_n4_sh_cargs(
     if ((params["atropos_segmentation_use_euclidean_distance"] ?? null) !== null) {
         cargs.push(
             "-j",
-            String((params["atropos_segmentation_use_euclidean_distance"] ?? null))
+            ((params["atropos_segmentation_use_euclidean_distance"] ?? null) ? "1" : "0")
         );
     }
     if ((params["test_debug_mode"] ?? null) !== null) {
@@ -484,19 +484,19 @@ function ants_atropos_n4_sh(
     max_n4_atropos_iterations: number | null = null,
     max_atropos_iterations: number | null = null,
     mrf: string | null = null,
-    denoise_anatomical_images: 0 | 1 | null = null,
+    denoise_anatomical_images: boolean | null = null,
     posterior_formulation: "Socrates[ 1 ]" | "Aristotle[ 1 ]" | null = null,
     label_propagation: string | null = null,
     posterior_label_for_n4_weight_mask: string | null = null,
     image_file_suffix: string | null = null,
-    keep_temporary_files: 0 | 1 | null = null,
-    use_random_seeding: 0 | 1 | null = null,
+    keep_temporary_files: boolean | null = null,
+    use_random_seeding: boolean | null = null,
     atropos_segmentation_prior_weight: number | null = null,
     n4_convergence: string | null = null,
     n4_shrink_factor: number | null = null,
     n4_bspline_params: string | null = null,
     atropos_segmentation_icm: string | null = null,
-    atropos_segmentation_use_euclidean_distance: 0 | 1 | null = null,
+    atropos_segmentation_use_euclidean_distance: boolean | null = null,
     test_debug_mode: number | null = null,
     runner: Runner | null = null,
 ): AntsAtroposN4ShOutputs {

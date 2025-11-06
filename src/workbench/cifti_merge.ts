@@ -4,17 +4,16 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_MERGE_METADATA: Metadata = {
-    id: "a4ffb5e806ff58cf992a8408091b306432b7db9b.boutiques",
+    id: "7fb02481d87d8cd2e3909083db81c14bb985ba00.workbench",
     name: "cifti-merge",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiMergeUpToParameters {
-    "@type"?: "up_to";
-    "last_index": string;
-    "opt_reverse": boolean;
+    "@type"?: "up-to";
+    "last-index": string;
+    "reverse": boolean;
 }
 type CiftiMergeUpToParametersTagged = Required<Pick<CiftiMergeUpToParameters, '@type'>> & CiftiMergeUpToParameters;
 
@@ -22,14 +21,14 @@ type CiftiMergeUpToParametersTagged = Required<Pick<CiftiMergeUpToParameters, '@
 interface CiftiMergeIndexParameters {
     "@type"?: "index";
     "index": string;
-    "up_to"?: CiftiMergeUpToParameters | null | undefined;
+    "up-to"?: CiftiMergeUpToParameters | null | undefined;
 }
 type CiftiMergeIndexParametersTagged = Required<Pick<CiftiMergeIndexParameters, '@type'>> & CiftiMergeIndexParameters;
 
 
 interface CiftiMergeCiftiParameters {
     "@type"?: "cifti";
-    "cifti_in": InputPathType;
+    "cifti-in": InputPathType;
     "index"?: Array<CiftiMergeIndexParameters> | null | undefined;
 }
 type CiftiMergeCiftiParametersTagged = Required<Pick<CiftiMergeCiftiParameters, '@type'>> & CiftiMergeCiftiParameters;
@@ -37,9 +36,9 @@ type CiftiMergeCiftiParametersTagged = Required<Pick<CiftiMergeCiftiParameters, 
 
 interface CiftiMergeParameters {
     "@type"?: "workbench/cifti-merge";
-    "cifti_out": string;
-    "opt_direction_direction"?: string | null | undefined;
-    "opt_mem_limit_limit_gb"?: number | null | undefined;
+    "cifti-out": string;
+    "direction"?: string | null | undefined;
+    "limit-GB"?: number | null | undefined;
     "cifti"?: Array<CiftiMergeCiftiParameters> | null | undefined;
 }
 type CiftiMergeParametersTagged = Required<Pick<CiftiMergeParameters, '@type'>> & CiftiMergeParameters;
@@ -49,18 +48,18 @@ type CiftiMergeParametersTagged = Required<Pick<CiftiMergeParameters, '@type'>> 
  * Build parameters.
  *
  * @param last_index the number or name of the last index to include
- * @param opt_reverse use the range in reverse order
+ * @param reverse use the range in reverse order
  *
  * @returns Parameter dictionary
  */
 function cifti_merge_up_to_params(
     last_index: string,
-    opt_reverse: boolean = false,
+    reverse: boolean = false,
 ): CiftiMergeUpToParametersTagged {
     const params = {
-        "@type": "up_to" as const,
-        "last_index": last_index,
-        "opt_reverse": opt_reverse,
+        "@type": "up-to" as const,
+        "last-index": last_index,
+        "reverse": reverse,
     };
     return params;
 }
@@ -79,10 +78,12 @@ function cifti_merge_up_to_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-up-to");
-    cargs.push((params["last_index"] ?? null));
-    if ((params["opt_reverse"] ?? false)) {
-        cargs.push("-reverse");
+    if ((params["reverse"] ?? false)) {
+        cargs.push(
+            "-up-to",
+            (params["last-index"] ?? null),
+            "-reverse"
+        );
     }
     return cargs;
 }
@@ -105,7 +106,7 @@ function cifti_merge_index_params(
         "index": index,
     };
     if (up_to !== null) {
-        params["up_to"] = up_to;
+        params["up-to"] = up_to;
     }
     return params;
 }
@@ -124,10 +125,12 @@ function cifti_merge_index_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-index");
-    cargs.push((params["index"] ?? null));
-    if ((params["up_to"] ?? null) !== null) {
-        cargs.push(...cifti_merge_up_to_cargs((params["up_to"] ?? null), execution));
+    if ((params["up-to"] ?? null) !== null) {
+        cargs.push(
+            "-index",
+            (params["index"] ?? null),
+            ...cifti_merge_up_to_cargs((params["up-to"] ?? null), execution)
+        );
     }
     return cargs;
 }
@@ -147,7 +150,7 @@ function cifti_merge_cifti_params(
 ): CiftiMergeCiftiParametersTagged {
     const params = {
         "@type": "cifti" as const,
-        "cifti_in": cifti_in,
+        "cifti-in": cifti_in,
     };
     if (index !== null) {
         params["index"] = index;
@@ -169,10 +172,12 @@ function cifti_merge_cifti_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-cifti");
-    cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
     if ((params["index"] ?? null) !== null) {
-        cargs.push(...(params["index"] ?? null).map(s => cifti_merge_index_cargs(s, execution)).flat());
+        cargs.push(
+            "-cifti",
+            execution.inputFile((params["cifti-in"] ?? null)),
+            ...(params["index"] ?? null).map(s => cifti_merge_index_cargs(s, execution)).flat()
+        );
     }
     return cargs;
 }
@@ -199,27 +204,31 @@ interface CiftiMergeOutputs {
  * Build parameters.
  *
  * @param cifti_out output cifti file
- * @param opt_direction_direction merge in a direction other than along rows: the dimension to split/concatenate along, default ROW
- * @param opt_mem_limit_limit_gb restrict memory used for file reading efficiency: memory limit in gigabytes
+ * @param direction merge in a direction other than along rows
+
+the dimension to split/concatenate along, default ROW
+ * @param limit_gb restrict memory used for file reading efficiency
+
+memory limit in gigabytes
  * @param cifti specify an input cifti file
  *
  * @returns Parameter dictionary
  */
 function cifti_merge_params(
     cifti_out: string,
-    opt_direction_direction: string | null = null,
-    opt_mem_limit_limit_gb: number | null = null,
+    direction: string | null,
+    limit_gb: number | null,
     cifti: Array<CiftiMergeCiftiParameters> | null = null,
 ): CiftiMergeParametersTagged {
     const params = {
         "@type": "workbench/cifti-merge" as const,
-        "cifti_out": cifti_out,
+        "cifti-out": cifti_out,
     };
-    if (opt_direction_direction !== null) {
-        params["opt_direction_direction"] = opt_direction_direction;
+    if (direction !== null) {
+        params["direction"] = direction;
     }
-    if (opt_mem_limit_limit_gb !== null) {
-        params["opt_mem_limit_limit_gb"] = opt_mem_limit_limit_gb;
+    if (limit_gb !== null) {
+        params["limit-GB"] = limit_gb;
     }
     if (cifti !== null) {
         params["cifti"] = cifti;
@@ -241,23 +250,17 @@ function cifti_merge_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-merge");
-    cargs.push((params["cifti_out"] ?? null));
-    if ((params["opt_direction_direction"] ?? null) !== null) {
+    if ((params["direction"] ?? null) !== null || (params["limit-GB"] ?? null) !== null || (params["cifti"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-cifti-merge",
+            (params["cifti-out"] ?? null),
             "-direction",
-            (params["opt_direction_direction"] ?? null)
-        );
-    }
-    if ((params["opt_mem_limit_limit_gb"] ?? null) !== null) {
-        cargs.push(
+            (((params["direction"] ?? null) !== null) ? (params["direction"] ?? null) : ""),
             "-mem-limit",
-            String((params["opt_mem_limit_limit_gb"] ?? null))
+            (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : ""),
+            ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_merge_cifti_cargs(s, execution)).flat() : [])
         );
-    }
-    if ((params["cifti"] ?? null) !== null) {
-        cargs.push(...(params["cifti"] ?? null).map(s => cifti_merge_cifti_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -277,26 +280,20 @@ function cifti_merge_outputs(
 ): CiftiMergeOutputs {
     const ret: CiftiMergeOutputs = {
         root: execution.outputFile("."),
-        cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
+        cifti_out: execution.outputFile([(params["cifti-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * cifti-merge
- *
- * Merge or split on series, scalar, or label dimensions.
+ * MERGE OR SPLIT ON SERIES, SCALAR, OR LABEL DIMENSIONS.
  *
  * Given input CIFTI files for which mappings along the selected direction are the same type, all either series, scalars, or labels, and the other dimensions are index-compatible, this command concatenates the data in the specified indices/ranges along the selected direction (by default, on typical 2D cifti, concatenate horizontally, so rows become longer).  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.
  *
  * Example: wb_command -cifti-merge out.dtseries.nii -cifti first.dtseries.nii -index 1 -cifti second.dtseries.nii
  *
  * This example would take the first column from first.dtseries.nii, followed by all columns from second.dtseries.nii, and write these columns to out.dtseries.nii.  .
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -318,9 +315,7 @@ function cifti_merge_execute(
 
 
 /**
- * cifti-merge
- *
- * Merge or split on series, scalar, or label dimensions.
+ * MERGE OR SPLIT ON SERIES, SCALAR, OR LABEL DIMENSIONS.
  *
  * Given input CIFTI files for which mappings along the selected direction are the same type, all either series, scalars, or labels, and the other dimensions are index-compatible, this command concatenates the data in the specified indices/ranges along the selected direction (by default, on typical 2D cifti, concatenate horizontally, so rows become longer).  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.
  *
@@ -328,13 +323,13 @@ function cifti_merge_execute(
  *
  * This example would take the first column from first.dtseries.nii, followed by all columns from second.dtseries.nii, and write these columns to out.dtseries.nii.  .
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
  * @param cifti_out output cifti file
- * @param opt_direction_direction merge in a direction other than along rows: the dimension to split/concatenate along, default ROW
- * @param opt_mem_limit_limit_gb restrict memory used for file reading efficiency: memory limit in gigabytes
+ * @param direction merge in a direction other than along rows
+
+the dimension to split/concatenate along, default ROW
+ * @param limit_gb restrict memory used for file reading efficiency
+
+memory limit in gigabytes
  * @param cifti specify an input cifti file
  * @param runner Command runner
  *
@@ -342,12 +337,12 @@ function cifti_merge_execute(
  */
 function cifti_merge(
     cifti_out: string,
-    opt_direction_direction: string | null = null,
-    opt_mem_limit_limit_gb: number | null = null,
+    direction: string | null,
+    limit_gb: number | null,
     cifti: Array<CiftiMergeCiftiParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiMergeOutputs {
-    const params = cifti_merge_params(cifti_out, opt_direction_direction, opt_mem_limit_limit_gb, cifti)
+    const params = cifti_merge_params(cifti_out, direction, limit_gb, cifti)
     return cifti_merge_execute(params, runner);
 }
 

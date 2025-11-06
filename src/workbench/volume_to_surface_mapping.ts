@@ -4,66 +4,74 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_TO_SURFACE_MAPPING_METADATA: Metadata = {
-    id: "677cb03d3aef10ca7afb17c714f6c3c6f70b3a93.boutiques",
+    id: "8506ce44812c4aebe401b46dcdf27231e04f47d0.workbench",
     name: "volume-to-surface-mapping",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface VolumeToSurfaceMappingVolumeRoiParameters {
-    "@type"?: "volume_roi";
-    "roi_volume": InputPathType;
-    "opt_weighted": boolean;
+    "@type"?: "volume-roi";
+    "roi-volume": InputPathType;
+    "weighted": boolean;
 }
 type VolumeToSurfaceMappingVolumeRoiParametersTagged = Required<Pick<VolumeToSurfaceMappingVolumeRoiParameters, '@type'>> & VolumeToSurfaceMappingVolumeRoiParameters;
 
 
+interface VolumeToSurfaceMappingDilateMissingParameters {
+    "@type"?: "dilate-missing";
+    "dist": number;
+    "nearest": boolean;
+}
+type VolumeToSurfaceMappingDilateMissingParametersTagged = Required<Pick<VolumeToSurfaceMappingDilateMissingParameters, '@type'>> & VolumeToSurfaceMappingDilateMissingParameters;
+
+
 interface VolumeToSurfaceMappingOutputWeightsParameters {
-    "@type"?: "output_weights";
+    "@type"?: "output-weights";
     "vertex": number;
-    "weights_out": string;
+    "weights-out": string;
 }
 type VolumeToSurfaceMappingOutputWeightsParametersTagged = Required<Pick<VolumeToSurfaceMappingOutputWeightsParameters, '@type'>> & VolumeToSurfaceMappingOutputWeightsParameters;
 
 
 interface VolumeToSurfaceMappingRibbonConstrainedParameters {
-    "@type"?: "ribbon_constrained";
-    "inner_surf": InputPathType;
-    "outer_surf": InputPathType;
-    "volume_roi"?: VolumeToSurfaceMappingVolumeRoiParameters | null | undefined;
-    "opt_voxel_subdiv_subdiv_num"?: number | null | undefined;
-    "opt_thin_columns": boolean;
-    "opt_gaussian_scale"?: number | null | undefined;
-    "opt_interpolate_method"?: string | null | undefined;
-    "opt_bad_vertices_out_roi_out"?: string | null | undefined;
-    "output_weights"?: VolumeToSurfaceMappingOutputWeightsParameters | null | undefined;
-    "opt_output_weights_text_text_out"?: string | null | undefined;
+    "@type"?: "ribbon-constrained";
+    "inner-surf": InputPathType;
+    "outer-surf": InputPathType;
+    "volume-roi"?: VolumeToSurfaceMappingVolumeRoiParameters | null | undefined;
+    "dilate-missing"?: VolumeToSurfaceMappingDilateMissingParameters | null | undefined;
+    "subdiv-num"?: number | null | undefined;
+    "thin-columns": boolean;
+    "scale"?: number | null | undefined;
+    "method"?: string | null | undefined;
+    "roi-out"?: string | null | undefined;
+    "output-weights"?: VolumeToSurfaceMappingOutputWeightsParameters | null | undefined;
+    "text-out"?: string | null | undefined;
 }
 type VolumeToSurfaceMappingRibbonConstrainedParametersTagged = Required<Pick<VolumeToSurfaceMappingRibbonConstrainedParameters, '@type'>> & VolumeToSurfaceMappingRibbonConstrainedParameters;
 
 
 interface VolumeToSurfaceMappingMyelinStyleParameters {
-    "@type"?: "myelin_style";
-    "ribbon_roi": InputPathType;
+    "@type"?: "myelin-style";
+    "ribbon-roi": InputPathType;
     "thickness": InputPathType;
     "sigma": number;
-    "opt_legacy_bug": boolean;
+    "legacy-bug": boolean;
 }
 type VolumeToSurfaceMappingMyelinStyleParametersTagged = Required<Pick<VolumeToSurfaceMappingMyelinStyleParameters, '@type'>> & VolumeToSurfaceMappingMyelinStyleParameters;
 
 
 interface VolumeToSurfaceMappingParameters {
     "@type"?: "workbench/volume-to-surface-mapping";
+    "metric-out": string;
+    "trilinear": boolean;
+    "enclosing": boolean;
+    "cubic": boolean;
+    "ribbon-constrained"?: VolumeToSurfaceMappingRibbonConstrainedParameters | null | undefined;
+    "myelin-style"?: VolumeToSurfaceMappingMyelinStyleParameters | null | undefined;
+    "subvol"?: string | null | undefined;
     "volume": InputPathType;
     "surface": InputPathType;
-    "metric_out": string;
-    "opt_trilinear": boolean;
-    "opt_enclosing": boolean;
-    "opt_cubic": boolean;
-    "ribbon_constrained"?: VolumeToSurfaceMappingRibbonConstrainedParameters | null | undefined;
-    "myelin_style"?: VolumeToSurfaceMappingMyelinStyleParameters | null | undefined;
-    "opt_subvol_select_subvol"?: string | null | undefined;
 }
 type VolumeToSurfaceMappingParametersTagged = Required<Pick<VolumeToSurfaceMappingParameters, '@type'>> & VolumeToSurfaceMappingParameters;
 
@@ -72,18 +80,18 @@ type VolumeToSurfaceMappingParametersTagged = Required<Pick<VolumeToSurfaceMappi
  * Build parameters.
  *
  * @param roi_volume the roi volume file
- * @param opt_weighted treat the roi values as weightings rather than binary
+ * @param weighted treat the roi values as weightings rather than binary
  *
  * @returns Parameter dictionary
  */
 function volume_to_surface_mapping_volume_roi_params(
     roi_volume: InputPathType,
-    opt_weighted: boolean = false,
+    weighted: boolean = false,
 ): VolumeToSurfaceMappingVolumeRoiParametersTagged {
     const params = {
-        "@type": "volume_roi" as const,
-        "roi_volume": roi_volume,
-        "opt_weighted": opt_weighted,
+        "@type": "volume-roi" as const,
+        "roi-volume": roi_volume,
+        "weighted": weighted,
     };
     return params;
 }
@@ -102,10 +110,57 @@ function volume_to_surface_mapping_volume_roi_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-volume-roi");
-    cargs.push(execution.inputFile((params["roi_volume"] ?? null)));
-    if ((params["opt_weighted"] ?? false)) {
-        cargs.push("-weighted");
+    if ((params["weighted"] ?? false)) {
+        cargs.push(
+            "-volume-roi",
+            execution.inputFile((params["roi-volume"] ?? null)),
+            "-weighted"
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param dist distance in mm for dilation (can be small, like 1mm)
+ * @param nearest use nearest neighbor dilation (mainly useful for integer data)
+ *
+ * @returns Parameter dictionary
+ */
+function volume_to_surface_mapping_dilate_missing_params(
+    dist: number,
+    nearest: boolean = false,
+): VolumeToSurfaceMappingDilateMissingParametersTagged {
+    const params = {
+        "@type": "dilate-missing" as const,
+        "dist": dist,
+        "nearest": nearest,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function volume_to_surface_mapping_dilate_missing_cargs(
+    params: VolumeToSurfaceMappingDilateMissingParameters,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["nearest"] ?? false)) {
+        cargs.push(
+            "-dilate-missing",
+            String((params["dist"] ?? null)),
+            "-nearest"
+        );
     }
     return cargs;
 }
@@ -141,9 +196,9 @@ function volume_to_surface_mapping_output_weights_params(
     weights_out: string,
 ): VolumeToSurfaceMappingOutputWeightsParametersTagged {
     const params = {
-        "@type": "output_weights" as const,
+        "@type": "output-weights" as const,
         "vertex": vertex,
-        "weights_out": weights_out,
+        "weights-out": weights_out,
     };
     return params;
 }
@@ -162,9 +217,11 @@ function volume_to_surface_mapping_output_weights_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-output-weights");
-    cargs.push(String((params["vertex"] ?? null)));
-    cargs.push((params["weights_out"] ?? null));
+    cargs.push(
+        "-output-weights",
+        String((params["vertex"] ?? null)),
+        (params["weights-out"] ?? null)
+    );
     return cargs;
 }
 
@@ -183,7 +240,7 @@ function volume_to_surface_mapping_output_weights_outputs(
 ): VolumeToSurfaceMappingOutputWeightsOutputs {
     const ret: VolumeToSurfaceMappingOutputWeightsOutputs = {
         root: execution.outputFile("."),
-        weights_out: execution.outputFile([(params["weights_out"] ?? null)].join('')),
+        weights_out: execution.outputFile([(params["weights-out"] ?? null)].join('')),
     };
     return ret;
 }
@@ -211,55 +268,70 @@ interface VolumeToSurfaceMappingRibbonConstrainedOutputs {
  *
  * @param inner_surf the inner surface of the ribbon
  * @param outer_surf the outer surface of the ribbon
+ * @param subdiv_num voxel divisions while estimating voxel weights
+
+number of subdivisions, default 3
+ * @param scale reduce weight to voxels that aren't near <surface>
+
+value to multiply the local thickness by, to get the gaussian sigma
+ * @param method instead of a weighted average of voxels, interpolate at subpoints inside the ribbon
+
+interpolation method, must be CUBIC, ENCLOSING_VOXEL, or TRILINEAR
+ * @param roi_out output an ROI of which vertices didn't intersect any valid voxels
+
+the output metric file of vertices that have no data
+ * @param text_out write the voxel weights for all vertices to a text file
+
+output - the output text filename
  * @param volume_roi use a volume roi
- * @param opt_voxel_subdiv_subdiv_num voxel divisions while estimating voxel weights: number of subdivisions, default 3
- * @param opt_thin_columns use non-overlapping polyhedra
- * @param opt_gaussian_scale reduce weight to voxels that aren't near <surface>: value to multiply the local thickness by, to get the gaussian sigma
- * @param opt_interpolate_method instead of a weighted average of voxels, interpolate at subpoints inside the ribbon: interpolation method, must be CUBIC, ENCLOSING_VOXEL, or TRILINEAR
- * @param opt_bad_vertices_out_roi_out output an ROI of which vertices didn't intersect any valid voxels: the output metric file of vertices that have no data
+ * @param dilate_missing use dilation for small vertices that 'missed' the geometry tests
+ * @param thin_columns use non-overlapping polyhedra
  * @param output_weights write the voxel weights for a vertex to a volume file
- * @param opt_output_weights_text_text_out write the voxel weights for all vertices to a text file: output - the output text filename
  *
  * @returns Parameter dictionary
  */
 function volume_to_surface_mapping_ribbon_constrained_params(
     inner_surf: InputPathType,
     outer_surf: InputPathType,
+    subdiv_num: number | null,
+    scale: number | null,
+    method: string | null,
+    roi_out: string | null,
+    text_out: string | null,
     volume_roi: VolumeToSurfaceMappingVolumeRoiParameters | null = null,
-    opt_voxel_subdiv_subdiv_num: number | null = null,
-    opt_thin_columns: boolean = false,
-    opt_gaussian_scale: number | null = null,
-    opt_interpolate_method: string | null = null,
-    opt_bad_vertices_out_roi_out: string | null = null,
+    dilate_missing: VolumeToSurfaceMappingDilateMissingParameters | null = null,
+    thin_columns: boolean = false,
     output_weights: VolumeToSurfaceMappingOutputWeightsParameters | null = null,
-    opt_output_weights_text_text_out: string | null = null,
 ): VolumeToSurfaceMappingRibbonConstrainedParametersTagged {
     const params = {
-        "@type": "ribbon_constrained" as const,
-        "inner_surf": inner_surf,
-        "outer_surf": outer_surf,
-        "opt_thin_columns": opt_thin_columns,
+        "@type": "ribbon-constrained" as const,
+        "inner-surf": inner_surf,
+        "outer-surf": outer_surf,
+        "thin-columns": thin_columns,
     };
     if (volume_roi !== null) {
-        params["volume_roi"] = volume_roi;
+        params["volume-roi"] = volume_roi;
     }
-    if (opt_voxel_subdiv_subdiv_num !== null) {
-        params["opt_voxel_subdiv_subdiv_num"] = opt_voxel_subdiv_subdiv_num;
+    if (dilate_missing !== null) {
+        params["dilate-missing"] = dilate_missing;
     }
-    if (opt_gaussian_scale !== null) {
-        params["opt_gaussian_scale"] = opt_gaussian_scale;
+    if (subdiv_num !== null) {
+        params["subdiv-num"] = subdiv_num;
     }
-    if (opt_interpolate_method !== null) {
-        params["opt_interpolate_method"] = opt_interpolate_method;
+    if (scale !== null) {
+        params["scale"] = scale;
     }
-    if (opt_bad_vertices_out_roi_out !== null) {
-        params["opt_bad_vertices_out_roi_out"] = opt_bad_vertices_out_roi_out;
+    if (method !== null) {
+        params["method"] = method;
+    }
+    if (roi_out !== null) {
+        params["roi-out"] = roi_out;
     }
     if (output_weights !== null) {
-        params["output_weights"] = output_weights;
+        params["output-weights"] = output_weights;
     }
-    if (opt_output_weights_text_text_out !== null) {
-        params["opt_output_weights_text_text_out"] = opt_output_weights_text_text_out;
+    if (text_out !== null) {
+        params["text-out"] = text_out;
     }
     return params;
 }
@@ -278,46 +350,25 @@ function volume_to_surface_mapping_ribbon_constrained_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-ribbon-constrained");
-    cargs.push(execution.inputFile((params["inner_surf"] ?? null)));
-    cargs.push(execution.inputFile((params["outer_surf"] ?? null)));
-    if ((params["volume_roi"] ?? null) !== null) {
-        cargs.push(...volume_to_surface_mapping_volume_roi_cargs((params["volume_roi"] ?? null), execution));
-    }
-    if ((params["opt_voxel_subdiv_subdiv_num"] ?? null) !== null) {
+    if ((params["volume-roi"] ?? null) !== null || (params["dilate-missing"] ?? null) !== null || (params["subdiv-num"] ?? null) !== null || (params["thin-columns"] ?? false) || (params["scale"] ?? null) !== null || (params["method"] ?? null) !== null || (params["roi-out"] ?? null) !== null || (params["output-weights"] ?? null) !== null || (params["text-out"] ?? null) !== null) {
         cargs.push(
+            "-ribbon-constrained",
+            execution.inputFile((params["inner-surf"] ?? null)),
+            execution.inputFile((params["outer-surf"] ?? null)),
+            ...(((params["volume-roi"] ?? null) !== null) ? volume_to_surface_mapping_volume_roi_cargs((params["volume-roi"] ?? null), execution) : []),
+            ...(((params["dilate-missing"] ?? null) !== null) ? volume_to_surface_mapping_dilate_missing_cargs((params["dilate-missing"] ?? null), execution) : []),
             "-voxel-subdiv",
-            String((params["opt_voxel_subdiv_subdiv_num"] ?? null))
-        );
-    }
-    if ((params["opt_thin_columns"] ?? false)) {
-        cargs.push("-thin-columns");
-    }
-    if ((params["opt_gaussian_scale"] ?? null) !== null) {
-        cargs.push(
+            (((params["subdiv-num"] ?? null) !== null) ? String((params["subdiv-num"] ?? null)) : ""),
+            (((params["thin-columns"] ?? false)) ? "-thin-columns" : ""),
             "-gaussian",
-            String((params["opt_gaussian_scale"] ?? null))
-        );
-    }
-    if ((params["opt_interpolate_method"] ?? null) !== null) {
-        cargs.push(
+            (((params["scale"] ?? null) !== null) ? String((params["scale"] ?? null)) : ""),
             "-interpolate",
-            (params["opt_interpolate_method"] ?? null)
-        );
-    }
-    if ((params["opt_bad_vertices_out_roi_out"] ?? null) !== null) {
-        cargs.push(
+            (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : ""),
             "-bad-vertices-out",
-            (params["opt_bad_vertices_out_roi_out"] ?? null)
-        );
-    }
-    if ((params["output_weights"] ?? null) !== null) {
-        cargs.push(...volume_to_surface_mapping_output_weights_cargs((params["output_weights"] ?? null), execution));
-    }
-    if ((params["opt_output_weights_text_text_out"] ?? null) !== null) {
-        cargs.push(
+            (((params["roi-out"] ?? null) !== null) ? (params["roi-out"] ?? null) : ""),
+            ...(((params["output-weights"] ?? null) !== null) ? volume_to_surface_mapping_output_weights_cargs((params["output-weights"] ?? null), execution) : []),
             "-output-weights-text",
-            (params["opt_output_weights_text_text_out"] ?? null)
+            (((params["text-out"] ?? null) !== null) ? (params["text-out"] ?? null) : "")
         );
     }
     return cargs;
@@ -338,7 +389,7 @@ function volume_to_surface_mapping_ribbon_constrained_outputs(
 ): VolumeToSurfaceMappingRibbonConstrainedOutputs {
     const ret: VolumeToSurfaceMappingRibbonConstrainedOutputs = {
         root: execution.outputFile("."),
-        output_weights: (params["output_weights"] ?? null) ? (volume_to_surface_mapping_output_weights_outputs((params["output_weights"] ?? null), execution) ?? null) : null,
+        output_weights: (params["output-weights"] ?? null) ? (volume_to_surface_mapping_output_weights_outputs((params["output-weights"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }
@@ -350,7 +401,7 @@ function volume_to_surface_mapping_ribbon_constrained_outputs(
  * @param ribbon_roi an roi volume of the cortical ribbon for this hemisphere
  * @param thickness a metric file of cortical thickness
  * @param sigma gaussian kernel in mm for weighting voxels within range
- * @param opt_legacy_bug emulate old v1.2.3 and earlier code that didn't follow a cylinder cutoff
+ * @param legacy_bug emulate old v1.2.3 and earlier code that didn't follow a cylinder cutoff
  *
  * @returns Parameter dictionary
  */
@@ -358,14 +409,14 @@ function volume_to_surface_mapping_myelin_style_params(
     ribbon_roi: InputPathType,
     thickness: InputPathType,
     sigma: number,
-    opt_legacy_bug: boolean = false,
+    legacy_bug: boolean = false,
 ): VolumeToSurfaceMappingMyelinStyleParametersTagged {
     const params = {
-        "@type": "myelin_style" as const,
-        "ribbon_roi": ribbon_roi,
+        "@type": "myelin-style" as const,
+        "ribbon-roi": ribbon_roi,
         "thickness": thickness,
         "sigma": sigma,
-        "opt_legacy_bug": opt_legacy_bug,
+        "legacy-bug": legacy_bug,
     };
     return params;
 }
@@ -384,12 +435,14 @@ function volume_to_surface_mapping_myelin_style_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-myelin-style");
-    cargs.push(execution.inputFile((params["ribbon_roi"] ?? null)));
-    cargs.push(execution.inputFile((params["thickness"] ?? null)));
-    cargs.push(String((params["sigma"] ?? null)));
-    if ((params["opt_legacy_bug"] ?? false)) {
-        cargs.push("-legacy-bug");
+    if ((params["legacy-bug"] ?? false)) {
+        cargs.push(
+            "-myelin-style",
+            execution.inputFile((params["ribbon-roi"] ?? null)),
+            execution.inputFile((params["thickness"] ?? null)),
+            String((params["sigma"] ?? null)),
+            "-legacy-bug"
+        );
     }
     return cargs;
 }
@@ -419,46 +472,48 @@ interface VolumeToSurfaceMappingOutputs {
 /**
  * Build parameters.
  *
+ * @param metric_out the output metric file
+ * @param subvol select a single subvolume to map
+
+the subvolume number or name
  * @param volume the volume to map data from
  * @param surface the surface to map the data onto
- * @param metric_out the output metric file
- * @param opt_trilinear use trilinear volume interpolation
- * @param opt_enclosing use value of the enclosing voxel
- * @param opt_cubic use cubic splines
+ * @param trilinear use trilinear volume interpolation
+ * @param enclosing use value of the enclosing voxel
+ * @param cubic use cubic splines
  * @param ribbon_constrained use ribbon constrained mapping algorithm
  * @param myelin_style use the method from myelin mapping
- * @param opt_subvol_select_subvol select a single subvolume to map: the subvolume number or name
  *
  * @returns Parameter dictionary
  */
 function volume_to_surface_mapping_params(
+    metric_out: string,
+    subvol: string | null,
     volume: InputPathType,
     surface: InputPathType,
-    metric_out: string,
-    opt_trilinear: boolean = false,
-    opt_enclosing: boolean = false,
-    opt_cubic: boolean = false,
+    trilinear: boolean = false,
+    enclosing: boolean = false,
+    cubic: boolean = false,
     ribbon_constrained: VolumeToSurfaceMappingRibbonConstrainedParameters | null = null,
     myelin_style: VolumeToSurfaceMappingMyelinStyleParameters | null = null,
-    opt_subvol_select_subvol: string | null = null,
 ): VolumeToSurfaceMappingParametersTagged {
     const params = {
         "@type": "workbench/volume-to-surface-mapping" as const,
+        "metric-out": metric_out,
+        "trilinear": trilinear,
+        "enclosing": enclosing,
+        "cubic": cubic,
         "volume": volume,
         "surface": surface,
-        "metric_out": metric_out,
-        "opt_trilinear": opt_trilinear,
-        "opt_enclosing": opt_enclosing,
-        "opt_cubic": opt_cubic,
     };
     if (ribbon_constrained !== null) {
-        params["ribbon_constrained"] = ribbon_constrained;
+        params["ribbon-constrained"] = ribbon_constrained;
     }
     if (myelin_style !== null) {
-        params["myelin_style"] = myelin_style;
+        params["myelin-style"] = myelin_style;
     }
-    if (opt_subvol_select_subvol !== null) {
-        params["opt_subvol_select_subvol"] = opt_subvol_select_subvol;
+    if (subvol !== null) {
+        params["subvol"] = subvol;
     }
     return params;
 }
@@ -477,32 +532,22 @@ function volume_to_surface_mapping_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-to-surface-mapping");
-    cargs.push(execution.inputFile((params["volume"] ?? null)));
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push((params["metric_out"] ?? null));
-    if ((params["opt_trilinear"] ?? false)) {
-        cargs.push("-trilinear");
-    }
-    if ((params["opt_enclosing"] ?? false)) {
-        cargs.push("-enclosing");
-    }
-    if ((params["opt_cubic"] ?? false)) {
-        cargs.push("-cubic");
-    }
-    if ((params["ribbon_constrained"] ?? null) !== null) {
-        cargs.push(...volume_to_surface_mapping_ribbon_constrained_cargs((params["ribbon_constrained"] ?? null), execution));
-    }
-    if ((params["myelin_style"] ?? null) !== null) {
-        cargs.push(...volume_to_surface_mapping_myelin_style_cargs((params["myelin_style"] ?? null), execution));
-    }
-    if ((params["opt_subvol_select_subvol"] ?? null) !== null) {
+    if ((params["trilinear"] ?? false) || (params["enclosing"] ?? false) || (params["cubic"] ?? false) || (params["ribbon-constrained"] ?? null) !== null || (params["myelin-style"] ?? null) !== null || (params["subvol"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-volume-to-surface-mapping",
+            (params["metric-out"] ?? null),
+            (((params["trilinear"] ?? false)) ? "-trilinear" : ""),
+            (((params["enclosing"] ?? false)) ? "-enclosing" : ""),
+            (((params["cubic"] ?? false)) ? "-cubic" : ""),
+            ...(((params["ribbon-constrained"] ?? null) !== null) ? volume_to_surface_mapping_ribbon_constrained_cargs((params["ribbon-constrained"] ?? null), execution) : []),
+            ...(((params["myelin-style"] ?? null) !== null) ? volume_to_surface_mapping_myelin_style_cargs((params["myelin-style"] ?? null), execution) : []),
             "-subvol-select",
-            (params["opt_subvol_select_subvol"] ?? null)
+            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
         );
     }
+    cargs.push(execution.inputFile((params["volume"] ?? null)));
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
     return cargs;
 }
 
@@ -521,27 +566,21 @@ function volume_to_surface_mapping_outputs(
 ): VolumeToSurfaceMappingOutputs {
     const ret: VolumeToSurfaceMappingOutputs = {
         root: execution.outputFile("."),
-        metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
-        ribbon_constrained: (params["ribbon_constrained"] ?? null) ? (volume_to_surface_mapping_ribbon_constrained_outputs((params["ribbon_constrained"] ?? null), execution) ?? null) : null,
+        metric_out: execution.outputFile([(params["metric-out"] ?? null)].join('')),
+        ribbon_constrained: (params["ribbon-constrained"] ?? null) ? (volume_to_surface_mapping_ribbon_constrained_outputs((params["ribbon-constrained"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }
 
 
 /**
- * volume-to-surface-mapping
- *
- * Map volume to surface.
+ * MAP VOLUME TO SURFACE.
  *
  * You must specify exactly one mapping method.  Enclosing voxel uses the value from the voxel the vertex lies inside, while trilinear does a 3D linear interpolation based on the voxels immediately on each side of the vertex's position.
  *
  * The ribbon mapping method constructs a polyhedron from the vertex's neighbors on each surface, and estimates the amount of this polyhedron's volume that falls inside any nearby voxels, to use as the weights for sampling.  If -thin-columns is specified, the polyhedron uses the edge midpoints and triangle centroids, so that neighboring vertices do not have overlapping polyhedra.  This may require increasing -voxel-subdiv to get enough samples in each voxel to reliably land inside these smaller polyhedra.  The volume ROI is useful to exclude partial volume effects of voxels the surfaces pass through, and will cause the mapping to ignore voxels that don't have a positive value in the mask.  The subdivision number specifies how it approximates the amount of the volume the polyhedron intersects, by splitting each voxel into NxNxN pieces, and checking whether the center of each piece is inside the polyhedron.  If you have very large voxels, consider increasing this if you get zeros in your output.  The -gaussian option makes it act more like the myelin method, where the distance of a voxel from <surface> is used to downweight the voxel.  The -interpolate suboption, instead of doing a weighted average of voxels, interpolates from the volume at the subdivided points inside the ribbon.  If using both -interpolate and the -weighted suboption to -volume-roi, the roi volume weights are linearly interpolated, unless the -interpolate method is ENCLOSING_VOXEL, in which case ENCLOSING_VOXEL is also used for sampling the roi volume weights.
  *
  * The myelin style method uses part of the caret5 myelin mapping command to do the mapping: for each surface vertex, take all voxels that are in a cylinder with radius and height equal to cortical thickness, centered on the vertex and aligned with the surface normal, and that are also within the ribbon ROI, and apply a gaussian kernel with the specified sigma to them to get the weights to use.  The -legacy-bug flag reverts to the unintended behavior present from the initial implementation up to and including v1.2.3, which had only the tangential cutoff and a bounding box intended to be larger than where the cylinder cutoff should have been.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -563,9 +602,7 @@ function volume_to_surface_mapping_execute(
 
 
 /**
- * volume-to-surface-mapping
- *
- * Map volume to surface.
+ * MAP VOLUME TO SURFACE.
  *
  * You must specify exactly one mapping method.  Enclosing voxel uses the value from the voxel the vertex lies inside, while trilinear does a 3D linear interpolation based on the voxels immediately on each side of the vertex's position.
  *
@@ -573,36 +610,34 @@ function volume_to_surface_mapping_execute(
  *
  * The myelin style method uses part of the caret5 myelin mapping command to do the mapping: for each surface vertex, take all voxels that are in a cylinder with radius and height equal to cortical thickness, centered on the vertex and aligned with the surface normal, and that are also within the ribbon ROI, and apply a gaussian kernel with the specified sigma to them to get the weights to use.  The -legacy-bug flag reverts to the unintended behavior present from the initial implementation up to and including v1.2.3, which had only the tangential cutoff and a bounding box intended to be larger than where the cylinder cutoff should have been.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param metric_out the output metric file
+ * @param subvol select a single subvolume to map
+
+the subvolume number or name
  * @param volume the volume to map data from
  * @param surface the surface to map the data onto
- * @param metric_out the output metric file
- * @param opt_trilinear use trilinear volume interpolation
- * @param opt_enclosing use value of the enclosing voxel
- * @param opt_cubic use cubic splines
+ * @param trilinear use trilinear volume interpolation
+ * @param enclosing use value of the enclosing voxel
+ * @param cubic use cubic splines
  * @param ribbon_constrained use ribbon constrained mapping algorithm
  * @param myelin_style use the method from myelin mapping
- * @param opt_subvol_select_subvol select a single subvolume to map: the subvolume number or name
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeToSurfaceMappingOutputs`).
  */
 function volume_to_surface_mapping(
+    metric_out: string,
+    subvol: string | null,
     volume: InputPathType,
     surface: InputPathType,
-    metric_out: string,
-    opt_trilinear: boolean = false,
-    opt_enclosing: boolean = false,
-    opt_cubic: boolean = false,
+    trilinear: boolean = false,
+    enclosing: boolean = false,
+    cubic: boolean = false,
     ribbon_constrained: VolumeToSurfaceMappingRibbonConstrainedParameters | null = null,
     myelin_style: VolumeToSurfaceMappingMyelinStyleParameters | null = null,
-    opt_subvol_select_subvol: string | null = null,
     runner: Runner | null = null,
 ): VolumeToSurfaceMappingOutputs {
-    const params = volume_to_surface_mapping_params(volume, surface, metric_out, opt_trilinear, opt_enclosing, opt_cubic, ribbon_constrained, myelin_style, opt_subvol_select_subvol)
+    const params = volume_to_surface_mapping_params(metric_out, subvol, volume, surface, trilinear, enclosing, cubic, ribbon_constrained, myelin_style)
     return volume_to_surface_mapping_execute(params, runner);
 }
 
@@ -613,6 +648,7 @@ export {
       VolumeToSurfaceMappingOutputs,
       VolumeToSurfaceMappingRibbonConstrainedOutputs,
       volume_to_surface_mapping,
+      volume_to_surface_mapping_dilate_missing_params,
       volume_to_surface_mapping_execute,
       volume_to_surface_mapping_myelin_style_params,
       volume_to_surface_mapping_output_weights_params,

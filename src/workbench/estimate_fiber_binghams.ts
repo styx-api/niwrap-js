@@ -4,15 +4,15 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ESTIMATE_FIBER_BINGHAMS_METADATA: Metadata = {
-    id: "2c33f5d971543b2fe7a2401a0a23b45df09ab673.boutiques",
+    id: "6ce86eb45c0ecdba0ec54fdba3ac609b406e8dcc.workbench",
     name: "estimate-fiber-binghams",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface EstimateFiberBinghamsParameters {
     "@type"?: "workbench/estimate-fiber-binghams";
+    "cifti-out": string;
     "merged_f1samples": InputPathType;
     "merged_th1samples": InputPathType;
     "merged_ph1samples": InputPathType;
@@ -22,8 +22,7 @@ interface EstimateFiberBinghamsParameters {
     "merged_f3samples": InputPathType;
     "merged_th3samples": InputPathType;
     "merged_ph3samples": InputPathType;
-    "label_volume": InputPathType;
-    "cifti_out": string;
+    "label-volume": InputPathType;
 }
 type EstimateFiberBinghamsParametersTagged = Required<Pick<EstimateFiberBinghamsParameters, '@type'>> & EstimateFiberBinghamsParameters;
 
@@ -48,6 +47,7 @@ interface EstimateFiberBinghamsOutputs {
 /**
  * Build parameters.
  *
+ * @param cifti_out output cifti fiber distributons file
  * @param merged_f1samples fiber 1 strength samples
  * @param merged_th1samples fiber 1 theta samples
  * @param merged_ph1samples fiber 1 phi samples
@@ -58,11 +58,11 @@ interface EstimateFiberBinghamsOutputs {
  * @param merged_th3samples fiber 3 theta samples
  * @param merged_ph3samples fiber 3 phi samples
  * @param label_volume volume of cifti structure labels
- * @param cifti_out output cifti fiber distributons file
  *
  * @returns Parameter dictionary
  */
 function estimate_fiber_binghams_params(
+    cifti_out: string,
     merged_f1samples: InputPathType,
     merged_th1samples: InputPathType,
     merged_ph1samples: InputPathType,
@@ -73,10 +73,10 @@ function estimate_fiber_binghams_params(
     merged_th3samples: InputPathType,
     merged_ph3samples: InputPathType,
     label_volume: InputPathType,
-    cifti_out: string,
 ): EstimateFiberBinghamsParametersTagged {
     const params = {
         "@type": "workbench/estimate-fiber-binghams" as const,
+        "cifti-out": cifti_out,
         "merged_f1samples": merged_f1samples,
         "merged_th1samples": merged_th1samples,
         "merged_ph1samples": merged_ph1samples,
@@ -86,8 +86,7 @@ function estimate_fiber_binghams_params(
         "merged_f3samples": merged_f3samples,
         "merged_th3samples": merged_th3samples,
         "merged_ph3samples": merged_ph3samples,
-        "label_volume": label_volume,
-        "cifti_out": cifti_out,
+        "label-volume": label_volume,
     };
     return params;
 }
@@ -106,8 +105,11 @@ function estimate_fiber_binghams_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-estimate-fiber-binghams");
+    cargs.push(
+        "wb_command",
+        "-estimate-fiber-binghams",
+        (params["cifti-out"] ?? null)
+    );
     cargs.push(execution.inputFile((params["merged_f1samples"] ?? null)));
     cargs.push(execution.inputFile((params["merged_th1samples"] ?? null)));
     cargs.push(execution.inputFile((params["merged_ph1samples"] ?? null)));
@@ -117,8 +119,7 @@ function estimate_fiber_binghams_cargs(
     cargs.push(execution.inputFile((params["merged_f3samples"] ?? null)));
     cargs.push(execution.inputFile((params["merged_th3samples"] ?? null)));
     cargs.push(execution.inputFile((params["merged_ph3samples"] ?? null)));
-    cargs.push(execution.inputFile((params["label_volume"] ?? null)));
-    cargs.push((params["cifti_out"] ?? null));
+    cargs.push(execution.inputFile((params["label-volume"] ?? null)));
     return cargs;
 }
 
@@ -137,16 +138,14 @@ function estimate_fiber_binghams_outputs(
 ): EstimateFiberBinghamsOutputs {
     const ret: EstimateFiberBinghamsOutputs = {
         root: execution.outputFile("."),
-        cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
+        cifti_out: execution.outputFile([(params["cifti-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * estimate-fiber-binghams
- *
- * Estimate fiber orientation distributions from bedpostx samples.
+ * ESTIMATE FIBER ORIENTATION DISTRIBUTIONS FROM BEDPOSTX SAMPLES.
  *
  * This command does an estimation of a bingham distribution for each fiber orientation in each voxel which is labeled a structure identifier.  These labelings come from the <label-volume> argument, which must have labels that match the following strings:
  *
@@ -173,6 +172,8 @@ function estimate_fiber_binghams_outputs(
  * DIENCEPHALON_VENTRAL_RIGHT
  * HIPPOCAMPUS_LEFT
  * HIPPOCAMPUS_RIGHT
+ * HIPPOCAMPUS_DENTATE_LEFT
+ * HIPPOCAMPUS_DENTATE_RIGHT
  * INVALID
  * OTHER
  * OTHER_GREY_MATTER
@@ -183,10 +184,6 @@ function estimate_fiber_binghams_outputs(
  * PUTAMEN_RIGHT
  * THALAMUS_LEFT
  * THALAMUS_RIGHT.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -208,9 +205,7 @@ function estimate_fiber_binghams_execute(
 
 
 /**
- * estimate-fiber-binghams
- *
- * Estimate fiber orientation distributions from bedpostx samples.
+ * ESTIMATE FIBER ORIENTATION DISTRIBUTIONS FROM BEDPOSTX SAMPLES.
  *
  * This command does an estimation of a bingham distribution for each fiber orientation in each voxel which is labeled a structure identifier.  These labelings come from the <label-volume> argument, which must have labels that match the following strings:
  *
@@ -237,6 +232,8 @@ function estimate_fiber_binghams_execute(
  * DIENCEPHALON_VENTRAL_RIGHT
  * HIPPOCAMPUS_LEFT
  * HIPPOCAMPUS_RIGHT
+ * HIPPOCAMPUS_DENTATE_LEFT
+ * HIPPOCAMPUS_DENTATE_RIGHT
  * INVALID
  * OTHER
  * OTHER_GREY_MATTER
@@ -248,10 +245,7 @@ function estimate_fiber_binghams_execute(
  * THALAMUS_LEFT
  * THALAMUS_RIGHT.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param cifti_out output cifti fiber distributons file
  * @param merged_f1samples fiber 1 strength samples
  * @param merged_th1samples fiber 1 theta samples
  * @param merged_ph1samples fiber 1 phi samples
@@ -262,12 +256,12 @@ function estimate_fiber_binghams_execute(
  * @param merged_th3samples fiber 3 theta samples
  * @param merged_ph3samples fiber 3 phi samples
  * @param label_volume volume of cifti structure labels
- * @param cifti_out output cifti fiber distributons file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `EstimateFiberBinghamsOutputs`).
  */
 function estimate_fiber_binghams(
+    cifti_out: string,
     merged_f1samples: InputPathType,
     merged_th1samples: InputPathType,
     merged_ph1samples: InputPathType,
@@ -278,10 +272,9 @@ function estimate_fiber_binghams(
     merged_th3samples: InputPathType,
     merged_ph3samples: InputPathType,
     label_volume: InputPathType,
-    cifti_out: string,
     runner: Runner | null = null,
 ): EstimateFiberBinghamsOutputs {
-    const params = estimate_fiber_binghams_params(merged_f1samples, merged_th1samples, merged_ph1samples, merged_f2samples, merged_th2samples, merged_ph2samples, merged_f3samples, merged_th3samples, merged_ph3samples, label_volume, cifti_out)
+    const params = estimate_fiber_binghams_params(cifti_out, merged_f1samples, merged_th1samples, merged_ph1samples, merged_f2samples, merged_th2samples, merged_ph2samples, merged_f3samples, merged_th3samples, merged_ph3samples, label_volume)
     return estimate_fiber_binghams_execute(params, runner);
 }
 

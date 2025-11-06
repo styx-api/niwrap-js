@@ -4,10 +4,9 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_MATH_METADATA: Metadata = {
-    id: "81bd93d4c092b2d74f3bfcdeff9f5badd48945c1.boutiques",
+    id: "c3f61d2cfe1af355592b15dccd2cddda61e44ce6.workbench",
     name: "metric-math",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
@@ -15,18 +14,18 @@ interface MetricMathVarParameters {
     "@type"?: "var";
     "name": string;
     "metric": InputPathType;
-    "opt_column_column"?: string | null | undefined;
-    "opt_repeat": boolean;
+    "column"?: string | null | undefined;
+    "repeat": boolean;
 }
 type MetricMathVarParametersTagged = Required<Pick<MetricMathVarParameters, '@type'>> & MetricMathVarParameters;
 
 
 interface MetricMathParameters {
     "@type"?: "workbench/metric-math";
-    "expression": string;
-    "metric_out": string;
-    "opt_fixnan_replace"?: number | null | undefined;
+    "metric-out": string;
+    "replace"?: number | null | undefined;
     "var"?: Array<MetricMathVarParameters> | null | undefined;
+    "expression": string;
 }
 type MetricMathParametersTagged = Required<Pick<MetricMathParameters, '@type'>> & MetricMathParameters;
 
@@ -36,25 +35,27 @@ type MetricMathParametersTagged = Required<Pick<MetricMathParameters, '@type'>> 
  *
  * @param name the name of the variable, as used in the expression
  * @param metric the metric file to use as this variable
- * @param opt_column_column select a single column: the column number or name
- * @param opt_repeat reuse a single column for each column of calculation
+ * @param column select a single column
+
+the column number or name
+ * @param repeat reuse a single column for each column of calculation
  *
  * @returns Parameter dictionary
  */
 function metric_math_var_params(
     name: string,
     metric: InputPathType,
-    opt_column_column: string | null = null,
-    opt_repeat: boolean = false,
+    column: string | null,
+    repeat: boolean = false,
 ): MetricMathVarParametersTagged {
     const params = {
         "@type": "var" as const,
         "name": name,
         "metric": metric,
-        "opt_repeat": opt_repeat,
+        "repeat": repeat,
     };
-    if (opt_column_column !== null) {
-        params["opt_column_column"] = opt_column_column;
+    if (column !== null) {
+        params["column"] = column;
     }
     return params;
 }
@@ -73,17 +74,15 @@ function metric_math_var_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-var");
-    cargs.push((params["name"] ?? null));
-    cargs.push(execution.inputFile((params["metric"] ?? null)));
-    if ((params["opt_column_column"] ?? null) !== null) {
+    if ((params["column"] ?? null) !== null || (params["repeat"] ?? false)) {
         cargs.push(
+            "-var",
+            (params["name"] ?? null),
+            execution.inputFile((params["metric"] ?? null)),
             "-column",
-            (params["opt_column_column"] ?? null)
+            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
+            (((params["repeat"] ?? false)) ? "-repeat" : "")
         );
-    }
-    if ((params["opt_repeat"] ?? false)) {
-        cargs.push("-repeat");
     }
     return cargs;
 }
@@ -109,26 +108,28 @@ interface MetricMathOutputs {
 /**
  * Build parameters.
  *
- * @param expression the expression to evaluate, in quotes
  * @param metric_out the output metric
- * @param opt_fixnan_replace replace NaN results with a value: value to replace NaN with
+ * @param replace replace NaN results with a value
+
+value to replace NaN with
+ * @param expression the expression to evaluate, in quotes
  * @param var_ a metric to use as a variable
  *
  * @returns Parameter dictionary
  */
 function metric_math_params(
-    expression: string,
     metric_out: string,
-    opt_fixnan_replace: number | null = null,
+    replace: number | null,
+    expression: string,
     var_: Array<MetricMathVarParameters> | null = null,
 ): MetricMathParametersTagged {
     const params = {
         "@type": "workbench/metric-math" as const,
+        "metric-out": metric_out,
         "expression": expression,
-        "metric_out": metric_out,
     };
-    if (opt_fixnan_replace !== null) {
-        params["opt_fixnan_replace"] = opt_fixnan_replace;
+    if (replace !== null) {
+        params["replace"] = replace;
     }
     if (var_ !== null) {
         params["var"] = var_;
@@ -150,19 +151,17 @@ function metric_math_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-metric-math");
-    cargs.push((params["expression"] ?? null));
-    cargs.push((params["metric_out"] ?? null));
-    if ((params["opt_fixnan_replace"] ?? null) !== null) {
+    if ((params["replace"] ?? null) !== null || (params["var"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-metric-math",
+            (params["metric-out"] ?? null),
             "-fixnan",
-            String((params["opt_fixnan_replace"] ?? null))
+            (((params["replace"] ?? null) !== null) ? String((params["replace"] ?? null)) : ""),
+            ...(((params["var"] ?? null) !== null) ? (params["var"] ?? null).map(s => metric_math_var_cargs(s, execution)).flat() : [])
         );
     }
-    if ((params["var"] ?? null) !== null) {
-        cargs.push(...(params["var"] ?? null).map(s => metric_math_var_cargs(s, execution)).flat());
-    }
+    cargs.push((params["expression"] ?? null));
     return cargs;
 }
 
@@ -181,16 +180,14 @@ function metric_math_outputs(
 ): MetricMathOutputs {
     const ret: MetricMathOutputs = {
         root: execution.outputFile("."),
-        metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
+        metric_out: execution.outputFile([(params["metric-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * metric-math
- *
- * Evaluate expression on metric files.
+ * EVALUATE EXPRESSION ON METRIC FILES.
  *
  * This command evaluates <expression> at each surface vertex independently.  There must be at least one -var option (to get the structure, number of vertices, and number of columns from), even if the <name> specified in it isn't used in <expression>.  All metrics must have the same number of vertices.  Filenames are not valid in <expression>, use a variable name and a -var option with matching <name> to specify an input file.  If the -column option is given to any -var option, only one column is used from that file.  If -repeat is specified, the file must either have only one column, or have the -column option specified.  All files that don't use -repeat must have the same number of columns requested to be used.  The format of <expression> is as follows:
  *
@@ -230,10 +227,6 @@ function metric_math_outputs(
  *    mod: 2 arguments, mod(x, y) = x - y * floor(x / y), or 0 if y == 0
  *    clamp: 3 arguments, clamp(x, low, high) = min(max(x, low), high)
  * .
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -255,9 +248,7 @@ function metric_math_execute(
 
 
 /**
- * metric-math
- *
- * Evaluate expression on metric files.
+ * EVALUATE EXPRESSION ON METRIC FILES.
  *
  * This command evaluates <expression> at each surface vertex independently.  There must be at least one -var option (to get the structure, number of vertices, and number of columns from), even if the <name> specified in it isn't used in <expression>.  All metrics must have the same number of vertices.  Filenames are not valid in <expression>, use a variable name and a -var option with matching <name> to specify an input file.  If the -column option is given to any -var option, only one column is used from that file.  If -repeat is specified, the file must either have only one column, or have the -column option specified.  All files that don't use -repeat must have the same number of columns requested to be used.  The format of <expression> is as follows:
  *
@@ -298,26 +289,24 @@ function metric_math_execute(
  *    clamp: 3 arguments, clamp(x, low, high) = min(max(x, low), high)
  * .
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
- * @param expression the expression to evaluate, in quotes
  * @param metric_out the output metric
- * @param opt_fixnan_replace replace NaN results with a value: value to replace NaN with
+ * @param replace replace NaN results with a value
+
+value to replace NaN with
+ * @param expression the expression to evaluate, in quotes
  * @param var_ a metric to use as a variable
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricMathOutputs`).
  */
 function metric_math(
-    expression: string,
     metric_out: string,
-    opt_fixnan_replace: number | null = null,
+    replace: number | null,
+    expression: string,
     var_: Array<MetricMathVarParameters> | null = null,
     runner: Runner | null = null,
 ): MetricMathOutputs {
-    const params = metric_math_params(expression, metric_out, opt_fixnan_replace, var_)
+    const params = metric_math_params(metric_out, replace, expression, var_)
     return metric_math_execute(params, runner);
 }
 

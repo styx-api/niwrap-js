@@ -4,29 +4,28 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_REDUCE_METADATA: Metadata = {
-    id: "78310c60423f027c427d018c3550497fd5ab40cd.boutiques",
+    id: "ac3127da84c910f2776662995c42ebd49423218d.workbench",
     name: "cifti-reduce",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiReduceExcludeOutliersParameters {
-    "@type"?: "exclude_outliers";
-    "sigma_below": number;
-    "sigma_above": number;
+    "@type"?: "exclude-outliers";
+    "sigma-below": number;
+    "sigma-above": number;
 }
 type CiftiReduceExcludeOutliersParametersTagged = Required<Pick<CiftiReduceExcludeOutliersParameters, '@type'>> & CiftiReduceExcludeOutliersParameters;
 
 
 interface CiftiReduceParameters {
     "@type"?: "workbench/cifti-reduce";
-    "cifti_in": InputPathType;
+    "cifti-out": string;
+    "direction"?: string | null | undefined;
+    "exclude-outliers"?: CiftiReduceExcludeOutliersParameters | null | undefined;
+    "only-numeric": boolean;
+    "cifti-in": InputPathType;
     "operation": string;
-    "cifti_out": string;
-    "opt_direction_direction"?: string | null | undefined;
-    "exclude_outliers"?: CiftiReduceExcludeOutliersParameters | null | undefined;
-    "opt_only_numeric": boolean;
 }
 type CiftiReduceParametersTagged = Required<Pick<CiftiReduceParameters, '@type'>> & CiftiReduceParameters;
 
@@ -44,9 +43,9 @@ function cifti_reduce_exclude_outliers_params(
     sigma_above: number,
 ): CiftiReduceExcludeOutliersParametersTagged {
     const params = {
-        "@type": "exclude_outliers" as const,
-        "sigma_below": sigma_below,
-        "sigma_above": sigma_above,
+        "@type": "exclude-outliers" as const,
+        "sigma-below": sigma_below,
+        "sigma-above": sigma_above,
     };
     return params;
 }
@@ -65,9 +64,11 @@ function cifti_reduce_exclude_outliers_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-exclude-outliers");
-    cargs.push(String((params["sigma_below"] ?? null)));
-    cargs.push(String((params["sigma_above"] ?? null)));
+    cargs.push(
+        "-exclude-outliers",
+        String((params["sigma-below"] ?? null)),
+        String((params["sigma-above"] ?? null))
+    );
     return cargs;
 }
 
@@ -92,35 +93,37 @@ interface CiftiReduceOutputs {
 /**
  * Build parameters.
  *
+ * @param cifti_out the output cifti file
+ * @param direction specify what direction to reduce along
+
+the direction (default ROW)
  * @param cifti_in the cifti file to reduce
  * @param operation the reduction operator to use
- * @param cifti_out the output cifti file
- * @param opt_direction_direction specify what direction to reduce along: the direction (default ROW)
  * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
- * @param opt_only_numeric exclude non-numeric values
+ * @param only_numeric exclude non-numeric values
  *
  * @returns Parameter dictionary
  */
 function cifti_reduce_params(
+    cifti_out: string,
+    direction: string | null,
     cifti_in: InputPathType,
     operation: string,
-    cifti_out: string,
-    opt_direction_direction: string | null = null,
     exclude_outliers: CiftiReduceExcludeOutliersParameters | null = null,
-    opt_only_numeric: boolean = false,
+    only_numeric: boolean = false,
 ): CiftiReduceParametersTagged {
     const params = {
         "@type": "workbench/cifti-reduce" as const,
-        "cifti_in": cifti_in,
+        "cifti-out": cifti_out,
+        "only-numeric": only_numeric,
+        "cifti-in": cifti_in,
         "operation": operation,
-        "cifti_out": cifti_out,
-        "opt_only_numeric": opt_only_numeric,
     };
-    if (opt_direction_direction !== null) {
-        params["opt_direction_direction"] = opt_direction_direction;
+    if (direction !== null) {
+        params["direction"] = direction;
     }
     if (exclude_outliers !== null) {
-        params["exclude_outliers"] = exclude_outliers;
+        params["exclude-outliers"] = exclude_outliers;
     }
     return params;
 }
@@ -139,23 +142,19 @@ function cifti_reduce_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-reduce");
-    cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
-    cargs.push((params["operation"] ?? null));
-    cargs.push((params["cifti_out"] ?? null));
-    if ((params["opt_direction_direction"] ?? null) !== null) {
+    if ((params["direction"] ?? null) !== null || (params["exclude-outliers"] ?? null) !== null || (params["only-numeric"] ?? false)) {
         cargs.push(
+            "wb_command",
+            "-cifti-reduce",
+            (params["cifti-out"] ?? null),
             "-direction",
-            (params["opt_direction_direction"] ?? null)
+            (((params["direction"] ?? null) !== null) ? (params["direction"] ?? null) : ""),
+            ...(((params["exclude-outliers"] ?? null) !== null) ? cifti_reduce_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : []),
+            (((params["only-numeric"] ?? false)) ? "-only-numeric" : "")
         );
     }
-    if ((params["exclude_outliers"] ?? null) !== null) {
-        cargs.push(...cifti_reduce_exclude_outliers_cargs((params["exclude_outliers"] ?? null), execution));
-    }
-    if ((params["opt_only_numeric"] ?? false)) {
-        cargs.push("-only-numeric");
-    }
+    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
+    cargs.push((params["operation"] ?? null));
     return cargs;
 }
 
@@ -174,16 +173,14 @@ function cifti_reduce_outputs(
 ): CiftiReduceOutputs {
     const ret: CiftiReduceOutputs = {
         root: execution.outputFile("."),
-        cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
+        cifti_out: execution.outputFile([(params["cifti-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * cifti-reduce
- *
- * Perform reduction operation on a cifti file.
+ * PERFORM REDUCTION OPERATION ON A CIFTI FILE.
  *
  * For the specified direction (default ROW), perform a reduction operation along that direction.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.  The reduction operators are as follows:
  *
@@ -204,10 +201,6 @@ function cifti_reduce_outputs(
  * MODE: the mode of the data
  * COUNT_NONZERO: the number of nonzero elements in the data
  * .
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -229,9 +222,7 @@ function cifti_reduce_execute(
 
 
 /**
- * cifti-reduce
- *
- * Perform reduction operation on a cifti file.
+ * PERFORM REDUCTION OPERATION ON A CIFTI FILE.
  *
  * For the specified direction (default ROW), perform a reduction operation along that direction.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.  The reduction operators are as follows:
  *
@@ -253,30 +244,28 @@ function cifti_reduce_execute(
  * COUNT_NONZERO: the number of nonzero elements in the data
  * .
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param cifti_out the output cifti file
+ * @param direction specify what direction to reduce along
+
+the direction (default ROW)
  * @param cifti_in the cifti file to reduce
  * @param operation the reduction operator to use
- * @param cifti_out the output cifti file
- * @param opt_direction_direction specify what direction to reduce along: the direction (default ROW)
  * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
- * @param opt_only_numeric exclude non-numeric values
+ * @param only_numeric exclude non-numeric values
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiReduceOutputs`).
  */
 function cifti_reduce(
+    cifti_out: string,
+    direction: string | null,
     cifti_in: InputPathType,
     operation: string,
-    cifti_out: string,
-    opt_direction_direction: string | null = null,
     exclude_outliers: CiftiReduceExcludeOutliersParameters | null = null,
-    opt_only_numeric: boolean = false,
+    only_numeric: boolean = false,
     runner: Runner | null = null,
 ): CiftiReduceOutputs {
-    const params = cifti_reduce_params(cifti_in, operation, cifti_out, opt_direction_direction, exclude_outliers, opt_only_numeric)
+    const params = cifti_reduce_params(cifti_out, direction, cifti_in, operation, exclude_outliers, only_numeric)
     return cifti_reduce_execute(params, runner);
 }
 

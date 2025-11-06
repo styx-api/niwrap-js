@@ -4,18 +4,17 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_ALL_LABELS_TO_ROIS_METADATA: Metadata = {
-    id: "45b0925825f075ee450b823e7cff63e57a4a9ef5.boutiques",
+    id: "25c70d1f4cda55f2df56316907bd5e6bb29642d1.workbench",
     name: "volume-all-labels-to-rois",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface VolumeAllLabelsToRoisParameters {
     "@type"?: "workbench/volume-all-labels-to-rois";
-    "label_in": InputPathType;
+    "volume-out": string;
+    "label-in": InputPathType;
     "map": string;
-    "volume_out": string;
 }
 type VolumeAllLabelsToRoisParametersTagged = Required<Pick<VolumeAllLabelsToRoisParameters, '@type'>> & VolumeAllLabelsToRoisParameters;
 
@@ -40,22 +39,22 @@ interface VolumeAllLabelsToRoisOutputs {
 /**
  * Build parameters.
  *
+ * @param volume_out the output volume file
  * @param label_in the input volume label file
  * @param map the number or name of the label map to use
- * @param volume_out the output volume file
  *
  * @returns Parameter dictionary
  */
 function volume_all_labels_to_rois_params(
+    volume_out: string,
     label_in: InputPathType,
     map: string,
-    volume_out: string,
 ): VolumeAllLabelsToRoisParametersTagged {
     const params = {
         "@type": "workbench/volume-all-labels-to-rois" as const,
-        "label_in": label_in,
+        "volume-out": volume_out,
+        "label-in": label_in,
         "map": map,
-        "volume_out": volume_out,
     };
     return params;
 }
@@ -74,11 +73,13 @@ function volume_all_labels_to_rois_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-all-labels-to-rois");
-    cargs.push(execution.inputFile((params["label_in"] ?? null)));
+    cargs.push(
+        "wb_command",
+        "-volume-all-labels-to-rois",
+        (params["volume-out"] ?? null)
+    );
+    cargs.push(execution.inputFile((params["label-in"] ?? null)));
     cargs.push((params["map"] ?? null));
-    cargs.push((params["volume_out"] ?? null));
     return cargs;
 }
 
@@ -97,22 +98,16 @@ function volume_all_labels_to_rois_outputs(
 ): VolumeAllLabelsToRoisOutputs {
     const ret: VolumeAllLabelsToRoisOutputs = {
         root: execution.outputFile("."),
-        volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
+        volume_out: execution.outputFile([(params["volume-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * volume-all-labels-to-rois
- *
- * Make rois from all labels in a volume frame.
+ * MAKE ROIS FROM ALL LABELS IN A VOLUME FRAME.
  *
  * The output volume has a frame for each label in the specified input frame, other than the ??? label, each of which contains an ROI of all voxels that are set to the corresponding label.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -134,30 +129,24 @@ function volume_all_labels_to_rois_execute(
 
 
 /**
- * volume-all-labels-to-rois
- *
- * Make rois from all labels in a volume frame.
+ * MAKE ROIS FROM ALL LABELS IN A VOLUME FRAME.
  *
  * The output volume has a frame for each label in the specified input frame, other than the ??? label, each of which contains an ROI of all voxels that are set to the corresponding label.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param volume_out the output volume file
  * @param label_in the input volume label file
  * @param map the number or name of the label map to use
- * @param volume_out the output volume file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeAllLabelsToRoisOutputs`).
  */
 function volume_all_labels_to_rois(
+    volume_out: string,
     label_in: InputPathType,
     map: string,
-    volume_out: string,
     runner: Runner | null = null,
 ): VolumeAllLabelsToRoisOutputs {
-    const params = volume_all_labels_to_rois_params(label_in, map, volume_out)
+    const params = volume_all_labels_to_rois_params(volume_out, label_in, map)
     return volume_all_labels_to_rois_execute(params, runner);
 }
 

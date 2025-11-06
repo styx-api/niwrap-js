@@ -16,14 +16,14 @@ interface N3BiasFieldCorrectionParameters {
     "image_dimensionality"?: 2 | 3 | 4 | null | undefined;
     "input_image": InputPathType;
     "mask_image"?: InputPathType | null | undefined;
-    "rescale_intensities"?: 0 | 1 | null | undefined;
+    "rescale_intensities"?: boolean | null | undefined;
     "weight_image"?: InputPathType | null | undefined;
     "shrink_factor"?: number | null | undefined;
     "convergence"?: string | null | undefined;
     "bspline_fitting"?: string | null | undefined;
     "histogram_sharpening"?: string | null | undefined;
     "output": string;
-    "verbose"?: 0 | 1 | null | undefined;
+    "verbose"?: boolean | null | undefined;
 }
 type N3BiasFieldCorrectionParametersTagged = Required<Pick<N3BiasFieldCorrectionParameters, '@type'>> & N3BiasFieldCorrectionParameters;
 
@@ -71,13 +71,13 @@ function n3_bias_field_correction_params(
     output: string,
     image_dimensionality: 2 | 3 | 4 | null = null,
     mask_image: InputPathType | null = null,
-    rescale_intensities: 0 | 1 | null = null,
+    rescale_intensities: boolean | null = null,
     weight_image: InputPathType | null = null,
     shrink_factor: number | null = null,
     convergence: string | null = null,
     bspline_fitting: string | null = null,
     histogram_sharpening: string | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
 ): N3BiasFieldCorrectionParametersTagged {
     const params = {
         "@type": "ants/N3BiasFieldCorrection" as const,
@@ -148,7 +148,7 @@ function n3_bias_field_correction_cargs(
     if ((params["rescale_intensities"] ?? null) !== null) {
         cargs.push(
             "--rescale-intensities",
-            String((params["rescale_intensities"] ?? null))
+            ((params["rescale_intensities"] ?? null) ? "1" : "0")
         );
     }
     if ((params["weight_image"] ?? null) !== null) {
@@ -188,7 +188,7 @@ function n3_bias_field_correction_cargs(
     if ((params["verbose"] ?? null) !== null) {
         cargs.push(
             "--verbose",
-            String((params["verbose"] ?? null))
+            ((params["verbose"] ?? null) ? "1" : "0")
         );
     }
     return cargs;
@@ -273,13 +273,13 @@ function n3_bias_field_correction(
     output: string,
     image_dimensionality: 2 | 3 | 4 | null = null,
     mask_image: InputPathType | null = null,
-    rescale_intensities: 0 | 1 | null = null,
+    rescale_intensities: boolean | null = null,
     weight_image: InputPathType | null = null,
     shrink_factor: number | null = null,
     convergence: string | null = null,
     bspline_fitting: string | null = null,
     histogram_sharpening: string | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
     runner: Runner | null = null,
 ): N3BiasFieldCorrectionOutputs {
     const params = n3_bias_field_correction_params(input_image, output, image_dimensionality, mask_image, rescale_intensities, weight_image, shrink_factor, convergence, bspline_fitting, histogram_sharpening, verbose)

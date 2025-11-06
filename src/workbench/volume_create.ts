@@ -4,52 +4,51 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_CREATE_METADATA: Metadata = {
-    id: "4f88aa095b5dfcbd90372ec9ac43f92934dd4cba.boutiques",
+    id: "0ea13854b7a75326c4a105c15f5a5b8318a5d533.workbench",
     name: "volume-create",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface VolumeCreatePlumbParameters {
     "@type"?: "plumb";
-    "axis_order": string;
-    "x_spacing": number;
-    "y_spacing": number;
-    "z_spacing": number;
-    "x_offset": number;
-    "y_offset": number;
-    "z_offset": number;
+    "axis-order": string;
+    "x-spacing": number;
+    "y-spacing": number;
+    "z-spacing": number;
+    "x-offset": number;
+    "y-offset": number;
+    "z-offset": number;
 }
 type VolumeCreatePlumbParametersTagged = Required<Pick<VolumeCreatePlumbParameters, '@type'>> & VolumeCreatePlumbParameters;
 
 
 interface VolumeCreateSformParameters {
     "@type"?: "sform";
-    "xi_spacing": number;
-    "xj_spacing": number;
-    "xk_spacing": number;
-    "x_offset": number;
-    "yi_spacing": number;
-    "yj_spacing": number;
-    "yk_spacing": number;
-    "y_offset": number;
-    "zi_spacing": number;
-    "zj_spacing": number;
-    "zk_spacing": number;
-    "z_offset": number;
+    "xi-spacing": number;
+    "xj-spacing": number;
+    "xk-spacing": number;
+    "x-offset": number;
+    "yi-spacing": number;
+    "yj-spacing": number;
+    "yk-spacing": number;
+    "y-offset": number;
+    "zi-spacing": number;
+    "zj-spacing": number;
+    "zk-spacing": number;
+    "z-offset": number;
 }
 type VolumeCreateSformParametersTagged = Required<Pick<VolumeCreateSformParameters, '@type'>> & VolumeCreateSformParameters;
 
 
 interface VolumeCreateParameters {
     "@type"?: "workbench/volume-create";
-    "i_dim": number;
-    "j_dim": number;
-    "k_dim": number;
-    "volume_out": string;
+    "volume-out": string;
     "plumb"?: VolumeCreatePlumbParameters | null | undefined;
     "sform"?: VolumeCreateSformParameters | null | undefined;
+    "i-dim": number;
+    "j-dim": number;
+    "k-dim": number;
 }
 type VolumeCreateParametersTagged = Required<Pick<VolumeCreateParameters, '@type'>> & VolumeCreateParameters;
 
@@ -78,13 +77,13 @@ function volume_create_plumb_params(
 ): VolumeCreatePlumbParametersTagged {
     const params = {
         "@type": "plumb" as const,
-        "axis_order": axis_order,
-        "x_spacing": x_spacing,
-        "y_spacing": y_spacing,
-        "z_spacing": z_spacing,
-        "x_offset": x_offset,
-        "y_offset": y_offset,
-        "z_offset": z_offset,
+        "axis-order": axis_order,
+        "x-spacing": x_spacing,
+        "y-spacing": y_spacing,
+        "z-spacing": z_spacing,
+        "x-offset": x_offset,
+        "y-offset": y_offset,
+        "z-offset": z_offset,
     };
     return params;
 }
@@ -103,14 +102,16 @@ function volume_create_plumb_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-plumb");
-    cargs.push((params["axis_order"] ?? null));
-    cargs.push(String((params["x_spacing"] ?? null)));
-    cargs.push(String((params["y_spacing"] ?? null)));
-    cargs.push(String((params["z_spacing"] ?? null)));
-    cargs.push(String((params["x_offset"] ?? null)));
-    cargs.push(String((params["y_offset"] ?? null)));
-    cargs.push(String((params["z_offset"] ?? null)));
+    cargs.push(
+        "-plumb",
+        (params["axis-order"] ?? null),
+        String((params["x-spacing"] ?? null)),
+        String((params["y-spacing"] ?? null)),
+        String((params["z-spacing"] ?? null)),
+        String((params["x-offset"] ?? null)),
+        String((params["y-offset"] ?? null)),
+        String((params["z-offset"] ?? null))
+    );
     return cargs;
 }
 
@@ -149,18 +150,18 @@ function volume_create_sform_params(
 ): VolumeCreateSformParametersTagged {
     const params = {
         "@type": "sform" as const,
-        "xi_spacing": xi_spacing,
-        "xj_spacing": xj_spacing,
-        "xk_spacing": xk_spacing,
-        "x_offset": x_offset,
-        "yi_spacing": yi_spacing,
-        "yj_spacing": yj_spacing,
-        "yk_spacing": yk_spacing,
-        "y_offset": y_offset,
-        "zi_spacing": zi_spacing,
-        "zj_spacing": zj_spacing,
-        "zk_spacing": zk_spacing,
-        "z_offset": z_offset,
+        "xi-spacing": xi_spacing,
+        "xj-spacing": xj_spacing,
+        "xk-spacing": xk_spacing,
+        "x-offset": x_offset,
+        "yi-spacing": yi_spacing,
+        "yj-spacing": yj_spacing,
+        "yk-spacing": yk_spacing,
+        "y-offset": y_offset,
+        "zi-spacing": zi_spacing,
+        "zj-spacing": zj_spacing,
+        "zk-spacing": zk_spacing,
+        "z-offset": z_offset,
     };
     return params;
 }
@@ -179,19 +180,21 @@ function volume_create_sform_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-sform");
-    cargs.push(String((params["xi_spacing"] ?? null)));
-    cargs.push(String((params["xj_spacing"] ?? null)));
-    cargs.push(String((params["xk_spacing"] ?? null)));
-    cargs.push(String((params["x_offset"] ?? null)));
-    cargs.push(String((params["yi_spacing"] ?? null)));
-    cargs.push(String((params["yj_spacing"] ?? null)));
-    cargs.push(String((params["yk_spacing"] ?? null)));
-    cargs.push(String((params["y_offset"] ?? null)));
-    cargs.push(String((params["zi_spacing"] ?? null)));
-    cargs.push(String((params["zj_spacing"] ?? null)));
-    cargs.push(String((params["zk_spacing"] ?? null)));
-    cargs.push(String((params["z_offset"] ?? null)));
+    cargs.push(
+        "-sform",
+        String((params["xi-spacing"] ?? null)),
+        String((params["xj-spacing"] ?? null)),
+        String((params["xk-spacing"] ?? null)),
+        String((params["x-offset"] ?? null)),
+        String((params["yi-spacing"] ?? null)),
+        String((params["yj-spacing"] ?? null)),
+        String((params["yk-spacing"] ?? null)),
+        String((params["y-offset"] ?? null)),
+        String((params["zi-spacing"] ?? null)),
+        String((params["zj-spacing"] ?? null)),
+        String((params["zk-spacing"] ?? null)),
+        String((params["z-offset"] ?? null))
+    );
     return cargs;
 }
 
@@ -216,29 +219,29 @@ interface VolumeCreateOutputs {
 /**
  * Build parameters.
  *
+ * @param volume_out the output volume
  * @param i_dim length of first dimension
  * @param j_dim length of second dimension
  * @param k_dim length of third dimension
- * @param volume_out the output volume
  * @param plumb set via axis order and spacing/offset
  * @param sform set via a nifti sform
  *
  * @returns Parameter dictionary
  */
 function volume_create_params(
+    volume_out: string,
     i_dim: number,
     j_dim: number,
     k_dim: number,
-    volume_out: string,
     plumb: VolumeCreatePlumbParameters | null = null,
     sform: VolumeCreateSformParameters | null = null,
 ): VolumeCreateParametersTagged {
     const params = {
         "@type": "workbench/volume-create" as const,
-        "i_dim": i_dim,
-        "j_dim": j_dim,
-        "k_dim": k_dim,
-        "volume_out": volume_out,
+        "volume-out": volume_out,
+        "i-dim": i_dim,
+        "j-dim": j_dim,
+        "k-dim": k_dim,
     };
     if (plumb !== null) {
         params["plumb"] = plumb;
@@ -263,18 +266,18 @@ function volume_create_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-create");
-    cargs.push(String((params["i_dim"] ?? null)));
-    cargs.push(String((params["j_dim"] ?? null)));
-    cargs.push(String((params["k_dim"] ?? null)));
-    cargs.push((params["volume_out"] ?? null));
-    if ((params["plumb"] ?? null) !== null) {
-        cargs.push(...volume_create_plumb_cargs((params["plumb"] ?? null), execution));
+    if ((params["plumb"] ?? null) !== null || (params["sform"] ?? null) !== null) {
+        cargs.push(
+            "wb_command",
+            "-volume-create",
+            (params["volume-out"] ?? null),
+            ...(((params["plumb"] ?? null) !== null) ? volume_create_plumb_cargs((params["plumb"] ?? null), execution) : []),
+            ...(((params["sform"] ?? null) !== null) ? volume_create_sform_cargs((params["sform"] ?? null), execution) : [])
+        );
     }
-    if ((params["sform"] ?? null) !== null) {
-        cargs.push(...volume_create_sform_cargs((params["sform"] ?? null), execution));
-    }
+    cargs.push(String((params["i-dim"] ?? null)));
+    cargs.push(String((params["j-dim"] ?? null)));
+    cargs.push(String((params["k-dim"] ?? null)));
     return cargs;
 }
 
@@ -293,22 +296,16 @@ function volume_create_outputs(
 ): VolumeCreateOutputs {
     const ret: VolumeCreateOutputs = {
         root: execution.outputFile("."),
-        volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
+        volume_out: execution.outputFile([(params["volume-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * volume-create
- *
- * Create a blank volume file.
+ * CREATE A BLANK VOLUME FILE.
  *
  * Creates a volume file full of zeros.  Exactly one of -plumb or -sform must be specified.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -330,20 +327,14 @@ function volume_create_execute(
 
 
 /**
- * volume-create
- *
- * Create a blank volume file.
+ * CREATE A BLANK VOLUME FILE.
  *
  * Creates a volume file full of zeros.  Exactly one of -plumb or -sform must be specified.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param volume_out the output volume
  * @param i_dim length of first dimension
  * @param j_dim length of second dimension
  * @param k_dim length of third dimension
- * @param volume_out the output volume
  * @param plumb set via axis order and spacing/offset
  * @param sform set via a nifti sform
  * @param runner Command runner
@@ -351,15 +342,15 @@ function volume_create_execute(
  * @returns NamedTuple of outputs (described in `VolumeCreateOutputs`).
  */
 function volume_create(
+    volume_out: string,
     i_dim: number,
     j_dim: number,
     k_dim: number,
-    volume_out: string,
     plumb: VolumeCreatePlumbParameters | null = null,
     sform: VolumeCreateSformParameters | null = null,
     runner: Runner | null = null,
 ): VolumeCreateOutputs {
-    const params = volume_create_params(i_dim, j_dim, k_dim, volume_out, plumb, sform)
+    const params = volume_create_params(volume_out, i_dim, j_dim, k_dim, plumb, sform)
     return volume_create_execute(params, runner);
 }
 

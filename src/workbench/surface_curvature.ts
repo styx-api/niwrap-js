@@ -4,18 +4,17 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_CURVATURE_METADATA: Metadata = {
-    id: "959b1a4fb2add4507cd3f4cc23eb187ef2dc3681.boutiques",
+    id: "d5eee7e4c555970158a785c68fecd07f7b6649cb.workbench",
     name: "surface-curvature",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface SurfaceCurvatureParameters {
     "@type"?: "workbench/surface-curvature";
+    "mean-out"?: string | null | undefined;
+    "gauss-out"?: string | null | undefined;
     "surface": InputPathType;
-    "opt_mean_mean_out"?: string | null | undefined;
-    "opt_gauss_gauss_out"?: string | null | undefined;
 }
 type SurfaceCurvatureParametersTagged = Required<Pick<SurfaceCurvatureParameters, '@type'>> & SurfaceCurvatureParameters;
 
@@ -30,40 +29,36 @@ interface SurfaceCurvatureOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
-    /**
-     * output mean curvature: mean curvature metric
-     */
-    opt_mean_mean_out: OutputPathType | null;
-    /**
-     * output gaussian curvature: gaussian curvature metric
-     */
-    opt_gauss_gauss_out: OutputPathType | null;
 }
 
 
 /**
  * Build parameters.
  *
+ * @param mean_out output mean curvature
+
+mean curvature metric
+ * @param gauss_out output gaussian curvature
+
+gaussian curvature metric
  * @param surface the surface to compute the curvature of
- * @param opt_mean_mean_out output mean curvature: mean curvature metric
- * @param opt_gauss_gauss_out output gaussian curvature: gaussian curvature metric
  *
  * @returns Parameter dictionary
  */
 function surface_curvature_params(
+    mean_out: string | null,
+    gauss_out: string | null,
     surface: InputPathType,
-    opt_mean_mean_out: string | null = null,
-    opt_gauss_gauss_out: string | null = null,
 ): SurfaceCurvatureParametersTagged {
     const params = {
         "@type": "workbench/surface-curvature" as const,
         "surface": surface,
     };
-    if (opt_mean_mean_out !== null) {
-        params["opt_mean_mean_out"] = opt_mean_mean_out;
+    if (mean_out !== null) {
+        params["mean-out"] = mean_out;
     }
-    if (opt_gauss_gauss_out !== null) {
-        params["opt_gauss_gauss_out"] = opt_gauss_gauss_out;
+    if (gauss_out !== null) {
+        params["gauss-out"] = gauss_out;
     }
     return params;
 }
@@ -82,21 +77,17 @@ function surface_curvature_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-surface-curvature");
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    if ((params["opt_mean_mean_out"] ?? null) !== null) {
+    if ((params["mean-out"] ?? null) !== null || (params["gauss-out"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-surface-curvature",
             "-mean",
-            (params["opt_mean_mean_out"] ?? null)
-        );
-    }
-    if ((params["opt_gauss_gauss_out"] ?? null) !== null) {
-        cargs.push(
+            (((params["mean-out"] ?? null) !== null) ? (params["mean-out"] ?? null) : ""),
             "-gauss",
-            (params["opt_gauss_gauss_out"] ?? null)
+            (((params["gauss-out"] ?? null) !== null) ? (params["gauss-out"] ?? null) : "")
         );
     }
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
     return cargs;
 }
 
@@ -115,25 +106,17 @@ function surface_curvature_outputs(
 ): SurfaceCurvatureOutputs {
     const ret: SurfaceCurvatureOutputs = {
         root: execution.outputFile("."),
-        opt_mean_mean_out: ((params["opt_mean_mean_out"] ?? null) !== null) ? execution.outputFile([(params["opt_mean_mean_out"] ?? null)].join('')) : null,
-        opt_gauss_gauss_out: ((params["opt_gauss_gauss_out"] ?? null) !== null) ? execution.outputFile([(params["opt_gauss_gauss_out"] ?? null)].join('')) : null,
     };
     return ret;
 }
 
 
 /**
- * surface-curvature
- *
- * Calculate curvature of surface.
+ * CALCULATE CURVATURE OF SURFACE.
  *
  * Compute the curvature of the surface, using the method from:
  * Interactive Texture Mapping by J. Maillot, Yahia, and Verroust, 1993.
  * ACM-0-98791-601-8/93/008.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -155,32 +138,30 @@ function surface_curvature_execute(
 
 
 /**
- * surface-curvature
- *
- * Calculate curvature of surface.
+ * CALCULATE CURVATURE OF SURFACE.
  *
  * Compute the curvature of the surface, using the method from:
  * Interactive Texture Mapping by J. Maillot, Yahia, and Verroust, 1993.
  * ACM-0-98791-601-8/93/008.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param mean_out output mean curvature
+
+mean curvature metric
+ * @param gauss_out output gaussian curvature
+
+gaussian curvature metric
  * @param surface the surface to compute the curvature of
- * @param opt_mean_mean_out output mean curvature: mean curvature metric
- * @param opt_gauss_gauss_out output gaussian curvature: gaussian curvature metric
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceCurvatureOutputs`).
  */
 function surface_curvature(
+    mean_out: string | null,
+    gauss_out: string | null,
     surface: InputPathType,
-    opt_mean_mean_out: string | null = null,
-    opt_gauss_gauss_out: string | null = null,
     runner: Runner | null = null,
 ): SurfaceCurvatureOutputs {
-    const params = surface_curvature_params(surface, opt_mean_mean_out, opt_gauss_gauss_out)
+    const params = surface_curvature_params(mean_out, gauss_out, surface)
     return surface_curvature_execute(params, runner);
 }
 

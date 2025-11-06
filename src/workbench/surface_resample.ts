@@ -4,39 +4,38 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_RESAMPLE_METADATA: Metadata = {
-    id: "41e7032c2642e2cae7204e42a36f44dcbf767095.boutiques",
+    id: "7444b5037afcb50035450f5b834be135d744ef02.workbench",
     name: "surface-resample",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface SurfaceResampleAreaSurfsParameters {
-    "@type"?: "area_surfs";
-    "current_area": InputPathType;
-    "new_area": InputPathType;
+    "@type"?: "area-surfs";
+    "current-area": InputPathType;
+    "new-area": InputPathType;
 }
 type SurfaceResampleAreaSurfsParametersTagged = Required<Pick<SurfaceResampleAreaSurfsParameters, '@type'>> & SurfaceResampleAreaSurfsParameters;
 
 
 interface SurfaceResampleAreaMetricsParameters {
-    "@type"?: "area_metrics";
-    "current_area": InputPathType;
-    "new_area": InputPathType;
+    "@type"?: "area-metrics";
+    "current-area": InputPathType;
+    "new-area": InputPathType;
 }
 type SurfaceResampleAreaMetricsParametersTagged = Required<Pick<SurfaceResampleAreaMetricsParameters, '@type'>> & SurfaceResampleAreaMetricsParameters;
 
 
 interface SurfaceResampleParameters {
     "@type"?: "workbench/surface-resample";
-    "surface_in": InputPathType;
-    "current_sphere": InputPathType;
-    "new_sphere": InputPathType;
+    "surface-out": string;
+    "area-surfs"?: SurfaceResampleAreaSurfsParameters | null | undefined;
+    "area-metrics"?: SurfaceResampleAreaMetricsParameters | null | undefined;
+    "bypass-sphere-check": boolean;
+    "surface-in": InputPathType;
+    "current-sphere": InputPathType;
+    "new-sphere": InputPathType;
     "method": string;
-    "surface_out": string;
-    "area_surfs"?: SurfaceResampleAreaSurfsParameters | null | undefined;
-    "area_metrics"?: SurfaceResampleAreaMetricsParameters | null | undefined;
-    "opt_bypass_sphere_check": boolean;
 }
 type SurfaceResampleParametersTagged = Required<Pick<SurfaceResampleParameters, '@type'>> & SurfaceResampleParameters;
 
@@ -54,9 +53,9 @@ function surface_resample_area_surfs_params(
     new_area: InputPathType,
 ): SurfaceResampleAreaSurfsParametersTagged {
     const params = {
-        "@type": "area_surfs" as const,
-        "current_area": current_area,
-        "new_area": new_area,
+        "@type": "area-surfs" as const,
+        "current-area": current_area,
+        "new-area": new_area,
     };
     return params;
 }
@@ -75,9 +74,11 @@ function surface_resample_area_surfs_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-area-surfs");
-    cargs.push(execution.inputFile((params["current_area"] ?? null)));
-    cargs.push(execution.inputFile((params["new_area"] ?? null)));
+    cargs.push(
+        "-area-surfs",
+        execution.inputFile((params["current-area"] ?? null)),
+        execution.inputFile((params["new-area"] ?? null))
+    );
     return cargs;
 }
 
@@ -95,9 +96,9 @@ function surface_resample_area_metrics_params(
     new_area: InputPathType,
 ): SurfaceResampleAreaMetricsParametersTagged {
     const params = {
-        "@type": "area_metrics" as const,
-        "current_area": current_area,
-        "new_area": new_area,
+        "@type": "area-metrics" as const,
+        "current-area": current_area,
+        "new-area": new_area,
     };
     return params;
 }
@@ -116,9 +117,11 @@ function surface_resample_area_metrics_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-area-metrics");
-    cargs.push(execution.inputFile((params["current_area"] ?? null)));
-    cargs.push(execution.inputFile((params["new_area"] ?? null)));
+    cargs.push(
+        "-area-metrics",
+        execution.inputFile((params["current-area"] ?? null)),
+        execution.inputFile((params["new-area"] ?? null))
+    );
     return cargs;
 }
 
@@ -143,41 +146,41 @@ interface SurfaceResampleOutputs {
 /**
  * Build parameters.
  *
+ * @param surface_out the output surface file
  * @param surface_in the surface file to resample
  * @param current_sphere a sphere surface with the mesh that the input surface is currently on
  * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
  * @param method the method name
- * @param surface_out the output surface file
  * @param area_surfs specify surfaces to do vertex area correction based on
  * @param area_metrics specify vertex area metrics to do area correction based on
- * @param opt_bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
+ * @param bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
  *
  * @returns Parameter dictionary
  */
 function surface_resample_params(
+    surface_out: string,
     surface_in: InputPathType,
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     method: string,
-    surface_out: string,
     area_surfs: SurfaceResampleAreaSurfsParameters | null = null,
     area_metrics: SurfaceResampleAreaMetricsParameters | null = null,
-    opt_bypass_sphere_check: boolean = false,
+    bypass_sphere_check: boolean = false,
 ): SurfaceResampleParametersTagged {
     const params = {
         "@type": "workbench/surface-resample" as const,
-        "surface_in": surface_in,
-        "current_sphere": current_sphere,
-        "new_sphere": new_sphere,
+        "surface-out": surface_out,
+        "bypass-sphere-check": bypass_sphere_check,
+        "surface-in": surface_in,
+        "current-sphere": current_sphere,
+        "new-sphere": new_sphere,
         "method": method,
-        "surface_out": surface_out,
-        "opt_bypass_sphere_check": opt_bypass_sphere_check,
     };
     if (area_surfs !== null) {
-        params["area_surfs"] = area_surfs;
+        params["area-surfs"] = area_surfs;
     }
     if (area_metrics !== null) {
-        params["area_metrics"] = area_metrics;
+        params["area-metrics"] = area_metrics;
     }
     return params;
 }
@@ -196,22 +199,20 @@ function surface_resample_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-surface-resample");
-    cargs.push(execution.inputFile((params["surface_in"] ?? null)));
-    cargs.push(execution.inputFile((params["current_sphere"] ?? null)));
-    cargs.push(execution.inputFile((params["new_sphere"] ?? null)));
+    if ((params["area-surfs"] ?? null) !== null || (params["area-metrics"] ?? null) !== null || (params["bypass-sphere-check"] ?? false)) {
+        cargs.push(
+            "wb_command",
+            "-surface-resample",
+            (params["surface-out"] ?? null),
+            ...(((params["area-surfs"] ?? null) !== null) ? surface_resample_area_surfs_cargs((params["area-surfs"] ?? null), execution) : []),
+            ...(((params["area-metrics"] ?? null) !== null) ? surface_resample_area_metrics_cargs((params["area-metrics"] ?? null), execution) : []),
+            (((params["bypass-sphere-check"] ?? false)) ? "-bypass-sphere-check" : "")
+        );
+    }
+    cargs.push(execution.inputFile((params["surface-in"] ?? null)));
+    cargs.push(execution.inputFile((params["current-sphere"] ?? null)));
+    cargs.push(execution.inputFile((params["new-sphere"] ?? null)));
     cargs.push((params["method"] ?? null));
-    cargs.push((params["surface_out"] ?? null));
-    if ((params["area_surfs"] ?? null) !== null) {
-        cargs.push(...surface_resample_area_surfs_cargs((params["area_surfs"] ?? null), execution));
-    }
-    if ((params["area_metrics"] ?? null) !== null) {
-        cargs.push(...surface_resample_area_metrics_cargs((params["area_metrics"] ?? null), execution));
-    }
-    if ((params["opt_bypass_sphere_check"] ?? false)) {
-        cargs.push("-bypass-sphere-check");
-    }
     return cargs;
 }
 
@@ -230,16 +231,14 @@ function surface_resample_outputs(
 ): SurfaceResampleOutputs {
     const ret: SurfaceResampleOutputs = {
         root: execution.outputFile("."),
-        surface_out: execution.outputFile([(params["surface_out"] ?? null)].join('')),
+        surface_out: execution.outputFile([(params["surface-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * surface-resample
- *
- * Resample a surface to a different mesh.
+ * RESAMPLE A SURFACE TO A DIFFERENT MESH.
  *
  * Resamples a surface file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.  This method is not generally recommended for surface resampling, but is provided for completeness.
  *
@@ -254,10 +253,6 @@ function surface_resample_outputs(
  * ADAP_BARY_AREA
  * BARYCENTRIC
  * .
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -279,9 +274,7 @@ function surface_resample_execute(
 
 
 /**
- * surface-resample
- *
- * Resample a surface to a different mesh.
+ * RESAMPLE A SURFACE TO A DIFFERENT MESH.
  *
  * Resamples a surface file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.  This method is not generally recommended for surface resampling, but is provided for completeness.
  *
@@ -297,34 +290,30 @@ function surface_resample_execute(
  * BARYCENTRIC
  * .
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param surface_out the output surface file
  * @param surface_in the surface file to resample
  * @param current_sphere a sphere surface with the mesh that the input surface is currently on
  * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
  * @param method the method name
- * @param surface_out the output surface file
  * @param area_surfs specify surfaces to do vertex area correction based on
  * @param area_metrics specify vertex area metrics to do area correction based on
- * @param opt_bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
+ * @param bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceResampleOutputs`).
  */
 function surface_resample(
+    surface_out: string,
     surface_in: InputPathType,
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     method: string,
-    surface_out: string,
     area_surfs: SurfaceResampleAreaSurfsParameters | null = null,
     area_metrics: SurfaceResampleAreaMetricsParameters | null = null,
-    opt_bypass_sphere_check: boolean = false,
+    bypass_sphere_check: boolean = false,
     runner: Runner | null = null,
 ): SurfaceResampleOutputs {
-    const params = surface_resample_params(surface_in, current_sphere, new_sphere, method, surface_out, area_surfs, area_metrics, opt_bypass_sphere_check)
+    const params = surface_resample_params(surface_out, surface_in, current_sphere, new_sphere, method, area_surfs, area_metrics, bypass_sphere_check)
     return surface_resample_execute(params, runner);
 }
 

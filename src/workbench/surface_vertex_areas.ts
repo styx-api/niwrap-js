@@ -4,17 +4,16 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_VERTEX_AREAS_METADATA: Metadata = {
-    id: "2ce95b755322be2b857b320aad4cfef1152d88c0.boutiques",
+    id: "38c1eece6b324d7db2ee50b9cf77f58d586aed39.workbench",
     name: "surface-vertex-areas",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface SurfaceVertexAreasParameters {
     "@type"?: "workbench/surface-vertex-areas";
-    "surface": InputPathType;
     "metric": string;
+    "surface": InputPathType;
 }
 type SurfaceVertexAreasParametersTagged = Required<Pick<SurfaceVertexAreasParameters, '@type'>> & SurfaceVertexAreasParameters;
 
@@ -39,19 +38,19 @@ interface SurfaceVertexAreasOutputs {
 /**
  * Build parameters.
  *
- * @param surface the surface to measure
  * @param metric the output metric
+ * @param surface the surface to measure
  *
  * @returns Parameter dictionary
  */
 function surface_vertex_areas_params(
-    surface: InputPathType,
     metric: string,
+    surface: InputPathType,
 ): SurfaceVertexAreasParametersTagged {
     const params = {
         "@type": "workbench/surface-vertex-areas" as const,
-        "surface": surface,
         "metric": metric,
+        "surface": surface,
     };
     return params;
 }
@@ -70,10 +69,12 @@ function surface_vertex_areas_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-surface-vertex-areas");
+    cargs.push(
+        "wb_command",
+        "-surface-vertex-areas",
+        (params["metric"] ?? null)
+    );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push((params["metric"] ?? null));
     return cargs;
 }
 
@@ -99,15 +100,9 @@ function surface_vertex_areas_outputs(
 
 
 /**
- * surface-vertex-areas
- *
- * Measure surface area each vertex is responsible for.
+ * MEASURE SURFACE AREA EACH VERTEX IS RESPONSIBLE FOR.
  *
  * Each vertex gets one third of the area of each triangle it is a part of.  Units are mm^2.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -129,28 +124,22 @@ function surface_vertex_areas_execute(
 
 
 /**
- * surface-vertex-areas
- *
- * Measure surface area each vertex is responsible for.
+ * MEASURE SURFACE AREA EACH VERTEX IS RESPONSIBLE FOR.
  *
  * Each vertex gets one third of the area of each triangle it is a part of.  Units are mm^2.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
- * @param surface the surface to measure
  * @param metric the output metric
+ * @param surface the surface to measure
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceVertexAreasOutputs`).
  */
 function surface_vertex_areas(
-    surface: InputPathType,
     metric: string,
+    surface: InputPathType,
     runner: Runner | null = null,
 ): SurfaceVertexAreasOutputs {
-    const params = surface_vertex_areas_params(surface, metric)
+    const params = surface_vertex_areas_params(metric, surface)
     return surface_vertex_areas_execute(params, runner);
 }
 

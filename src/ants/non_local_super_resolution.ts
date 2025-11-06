@@ -24,7 +24,7 @@ interface NonLocalSuperResolutionParameters {
     "scale_levels"?: string | null | undefined;
     "interpolation"?: "Linear" | "NearestNeighbor" | "Gaussian" | "BSpline" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | null | undefined;
     "output": string;
-    "verbose"?: 0 | 1 | null | undefined;
+    "verbose"?: boolean | null | undefined;
 }
 type NonLocalSuperResolutionParametersTagged = Required<Pick<NonLocalSuperResolutionParameters, '@type'>> & NonLocalSuperResolutionParameters;
 
@@ -76,7 +76,7 @@ function non_local_super_resolution_params(
     patch_similarity_sigma: number | null = null,
     scale_levels: string | null = null,
     interpolation: "Linear" | "NearestNeighbor" | "Gaussian" | "BSpline" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
 ): NonLocalSuperResolutionParametersTagged {
     const params = {
         "@type": "ants/NonLocalSuperResolution" as const,
@@ -196,7 +196,7 @@ function non_local_super_resolution_cargs(
     if ((params["verbose"] ?? null) !== null) {
         cargs.push(
             "-v",
-            String((params["verbose"] ?? null))
+            ((params["verbose"] ?? null) ? "1" : "0")
         );
     }
     return cargs;
@@ -288,7 +288,7 @@ function non_local_super_resolution(
     patch_similarity_sigma: number | null = null,
     scale_levels: string | null = null,
     interpolation: "Linear" | "NearestNeighbor" | "Gaussian" | "BSpline" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
     runner: Runner | null = null,
 ): NonLocalSuperResolutionOutputs {
     const params = non_local_super_resolution_params(input_image, output, image_dimensionality, interpolated_image, reference_image, patch_radius, search_radius, intensity_difference_sigma, patch_similarity_sigma, scale_levels, interpolation, verbose)

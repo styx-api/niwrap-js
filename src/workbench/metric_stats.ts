@@ -4,29 +4,28 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_STATS_METADATA: Metadata = {
-    id: "537d50b53c1ebc80f222429b42e08e62ddc3f0e8.boutiques",
+    id: "0e12ce38a883534ee44f0de43d440a9587a5a4b6.workbench",
     name: "metric-stats",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface MetricStatsRoiParameters {
     "@type"?: "roi";
-    "roi_metric": InputPathType;
-    "opt_match_maps": boolean;
+    "roi-metric": InputPathType;
+    "match-maps": boolean;
 }
 type MetricStatsRoiParametersTagged = Required<Pick<MetricStatsRoiParameters, '@type'>> & MetricStatsRoiParameters;
 
 
 interface MetricStatsParameters {
     "@type"?: "workbench/metric-stats";
-    "metric_in": InputPathType;
-    "opt_reduce_operation"?: string | null | undefined;
-    "opt_percentile_percent"?: number | null | undefined;
-    "opt_column_column"?: string | null | undefined;
+    "operation"?: string | null | undefined;
+    "percent"?: number | null | undefined;
+    "column"?: string | null | undefined;
     "roi"?: MetricStatsRoiParameters | null | undefined;
-    "opt_show_map_name": boolean;
+    "show-map-name": boolean;
+    "metric-in": InputPathType;
 }
 type MetricStatsParametersTagged = Required<Pick<MetricStatsParameters, '@type'>> & MetricStatsParameters;
 
@@ -35,18 +34,18 @@ type MetricStatsParametersTagged = Required<Pick<MetricStatsParameters, '@type'>
  * Build parameters.
  *
  * @param roi_metric the roi, as a metric file
- * @param opt_match_maps each column of input uses the corresponding column from the roi file
+ * @param match_maps each column of input uses the corresponding column from the roi file
  *
  * @returns Parameter dictionary
  */
 function metric_stats_roi_params(
     roi_metric: InputPathType,
-    opt_match_maps: boolean = false,
+    match_maps: boolean = false,
 ): MetricStatsRoiParametersTagged {
     const params = {
         "@type": "roi" as const,
-        "roi_metric": roi_metric,
-        "opt_match_maps": opt_match_maps,
+        "roi-metric": roi_metric,
+        "match-maps": match_maps,
     };
     return params;
 }
@@ -65,10 +64,12 @@ function metric_stats_roi_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-roi");
-    cargs.push(execution.inputFile((params["roi_metric"] ?? null)));
-    if ((params["opt_match_maps"] ?? false)) {
-        cargs.push("-match-maps");
+    if ((params["match-maps"] ?? false)) {
+        cargs.push(
+            "-roi",
+            execution.inputFile((params["roi-metric"] ?? null)),
+            "-match-maps"
+        );
     }
     return cargs;
 }
@@ -90,36 +91,42 @@ interface MetricStatsOutputs {
 /**
  * Build parameters.
  *
+ * @param operation use a reduction operation
+
+the reduction operation
+ * @param percent give the value at a percentile
+
+the percentile to find, must be between 0 and 100
+ * @param column only display output for one column
+
+the column number or name
  * @param metric_in the input metric
- * @param opt_reduce_operation use a reduction operation: the reduction operation
- * @param opt_percentile_percent give the value at a percentile: the percentile to find, must be between 0 and 100
- * @param opt_column_column only display output for one column: the column number or name
  * @param roi only consider data inside an roi
- * @param opt_show_map_name print map index and name before each output
+ * @param show_map_name print map index and name before each output
  *
  * @returns Parameter dictionary
  */
 function metric_stats_params(
+    operation: string | null,
+    percent: number | null,
+    column: string | null,
     metric_in: InputPathType,
-    opt_reduce_operation: string | null = null,
-    opt_percentile_percent: number | null = null,
-    opt_column_column: string | null = null,
     roi: MetricStatsRoiParameters | null = null,
-    opt_show_map_name: boolean = false,
+    show_map_name: boolean = false,
 ): MetricStatsParametersTagged {
     const params = {
         "@type": "workbench/metric-stats" as const,
-        "metric_in": metric_in,
-        "opt_show_map_name": opt_show_map_name,
+        "show-map-name": show_map_name,
+        "metric-in": metric_in,
     };
-    if (opt_reduce_operation !== null) {
-        params["opt_reduce_operation"] = opt_reduce_operation;
+    if (operation !== null) {
+        params["operation"] = operation;
     }
-    if (opt_percentile_percent !== null) {
-        params["opt_percentile_percent"] = opt_percentile_percent;
+    if (percent !== null) {
+        params["percent"] = percent;
     }
-    if (opt_column_column !== null) {
-        params["opt_column_column"] = opt_column_column;
+    if (column !== null) {
+        params["column"] = column;
     }
     if (roi !== null) {
         params["roi"] = roi;
@@ -141,33 +148,21 @@ function metric_stats_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-metric-stats");
-    cargs.push(execution.inputFile((params["metric_in"] ?? null)));
-    if ((params["opt_reduce_operation"] ?? null) !== null) {
+    if ((params["operation"] ?? null) !== null || (params["percent"] ?? null) !== null || (params["column"] ?? null) !== null || (params["roi"] ?? null) !== null || (params["show-map-name"] ?? false)) {
         cargs.push(
+            "wb_command",
+            "-metric-stats",
             "-reduce",
-            (params["opt_reduce_operation"] ?? null)
-        );
-    }
-    if ((params["opt_percentile_percent"] ?? null) !== null) {
-        cargs.push(
+            (((params["operation"] ?? null) !== null) ? (params["operation"] ?? null) : ""),
             "-percentile",
-            String((params["opt_percentile_percent"] ?? null))
-        );
-    }
-    if ((params["opt_column_column"] ?? null) !== null) {
-        cargs.push(
+            (((params["percent"] ?? null) !== null) ? String((params["percent"] ?? null)) : ""),
             "-column",
-            (params["opt_column_column"] ?? null)
+            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
+            ...(((params["roi"] ?? null) !== null) ? metric_stats_roi_cargs((params["roi"] ?? null), execution) : []),
+            (((params["show-map-name"] ?? false)) ? "-show-map-name" : "")
         );
     }
-    if ((params["roi"] ?? null) !== null) {
-        cargs.push(...metric_stats_roi_cargs((params["roi"] ?? null), execution));
-    }
-    if ((params["opt_show_map_name"] ?? false)) {
-        cargs.push("-show-map-name");
-    }
+    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     return cargs;
 }
 
@@ -192,9 +187,7 @@ function metric_stats_outputs(
 
 
 /**
- * metric-stats
- *
- * Spatial statistics on a metric file.
+ * SPATIAL STATISTICS ON A METRIC FILE.
  *
  * For each column of the input, a line of text is printed, resulting from the specified reduction or percentile operation.  Use -column to only give output for a single column.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -reduce or -percentile must be specified.
  *
@@ -217,10 +210,6 @@ function metric_stats_outputs(
  * MODE: the mode of the data
  * COUNT_NONZERO: the number of nonzero elements in the data
  * .
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -242,9 +231,7 @@ function metric_stats_execute(
 
 
 /**
- * metric-stats
- *
- * Spatial statistics on a metric file.
+ * SPATIAL STATISTICS ON A METRIC FILE.
  *
  * For each column of the input, a line of text is printed, resulting from the specified reduction or percentile operation.  Use -column to only give output for a single column.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -reduce or -percentile must be specified.
  *
@@ -268,30 +255,32 @@ function metric_stats_execute(
  * COUNT_NONZERO: the number of nonzero elements in the data
  * .
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param operation use a reduction operation
+
+the reduction operation
+ * @param percent give the value at a percentile
+
+the percentile to find, must be between 0 and 100
+ * @param column only display output for one column
+
+the column number or name
  * @param metric_in the input metric
- * @param opt_reduce_operation use a reduction operation: the reduction operation
- * @param opt_percentile_percent give the value at a percentile: the percentile to find, must be between 0 and 100
- * @param opt_column_column only display output for one column: the column number or name
  * @param roi only consider data inside an roi
- * @param opt_show_map_name print map index and name before each output
+ * @param show_map_name print map index and name before each output
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricStatsOutputs`).
  */
 function metric_stats(
+    operation: string | null,
+    percent: number | null,
+    column: string | null,
     metric_in: InputPathType,
-    opt_reduce_operation: string | null = null,
-    opt_percentile_percent: number | null = null,
-    opt_column_column: string | null = null,
     roi: MetricStatsRoiParameters | null = null,
-    opt_show_map_name: boolean = false,
+    show_map_name: boolean = false,
     runner: Runner | null = null,
 ): MetricStatsOutputs {
-    const params = metric_stats_params(metric_in, opt_reduce_operation, opt_percentile_percent, opt_column_column, roi, opt_show_map_name)
+    const params = metric_stats_params(operation, percent, column, metric_in, roi, show_map_name)
     return metric_stats_execute(params, runner);
 }
 

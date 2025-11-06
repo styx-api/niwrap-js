@@ -4,20 +4,19 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ZIP_SPEC_FILE_METADATA: Metadata = {
-    id: "5bc4445351c0f8efed67b439599fb8b5b4042e41.boutiques",
+    id: "06edf7f38703ef83935a1b2ad9fc02acb523add6.workbench",
     name: "zip-spec-file",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface ZipSpecFileParameters {
     "@type"?: "workbench/zip-spec-file";
-    "spec_file": string;
-    "extract_folder": string;
-    "zip_file": string;
-    "opt_base_dir_directory"?: string | null | undefined;
-    "opt_skip_missing": boolean;
+    "directory"?: string | null | undefined;
+    "skip-missing": boolean;
+    "spec-file": string;
+    "extract-folder": string;
+    "zip-file": string;
 }
 type ZipSpecFileParametersTagged = Required<Pick<ZipSpecFileParameters, '@type'>> & ZipSpecFileParameters;
 
@@ -38,30 +37,32 @@ interface ZipSpecFileOutputs {
 /**
  * Build parameters.
  *
+ * @param directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure
+
+the directory
  * @param spec_file the specification file to add to zip file
  * @param extract_folder the name of the folder created when the zip file is unzipped
  * @param zip_file out - the zip file that will be created
- * @param opt_base_dir_directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure: the directory
- * @param opt_skip_missing any missing files will generate only warnings, and the zip file will be created anyway
+ * @param skip_missing any missing files will generate only warnings, and the zip file will be created anyway
  *
  * @returns Parameter dictionary
  */
 function zip_spec_file_params(
+    directory: string | null,
     spec_file: string,
     extract_folder: string,
     zip_file: string,
-    opt_base_dir_directory: string | null = null,
-    opt_skip_missing: boolean = false,
+    skip_missing: boolean = false,
 ): ZipSpecFileParametersTagged {
     const params = {
         "@type": "workbench/zip-spec-file" as const,
-        "spec_file": spec_file,
-        "extract_folder": extract_folder,
-        "zip_file": zip_file,
-        "opt_skip_missing": opt_skip_missing,
+        "skip-missing": skip_missing,
+        "spec-file": spec_file,
+        "extract-folder": extract_folder,
+        "zip-file": zip_file,
     };
-    if (opt_base_dir_directory !== null) {
-        params["opt_base_dir_directory"] = opt_base_dir_directory;
+    if (directory !== null) {
+        params["directory"] = directory;
     }
     return params;
 }
@@ -80,20 +81,18 @@ function zip_spec_file_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-zip-spec-file");
-    cargs.push((params["spec_file"] ?? null));
-    cargs.push((params["extract_folder"] ?? null));
-    cargs.push((params["zip_file"] ?? null));
-    if ((params["opt_base_dir_directory"] ?? null) !== null) {
+    if ((params["directory"] ?? null) !== null || (params["skip-missing"] ?? false)) {
         cargs.push(
+            "wb_command",
+            "-zip-spec-file",
             "-base-dir",
-            (params["opt_base_dir_directory"] ?? null)
+            (((params["directory"] ?? null) !== null) ? (params["directory"] ?? null) : ""),
+            (((params["skip-missing"] ?? false)) ? "-skip-missing" : "")
         );
     }
-    if ((params["opt_skip_missing"] ?? false)) {
-        cargs.push("-skip-missing");
-    }
+    cargs.push((params["spec-file"] ?? null));
+    cargs.push((params["extract-folder"] ?? null));
+    cargs.push((params["zip-file"] ?? null));
     return cargs;
 }
 
@@ -118,15 +117,9 @@ function zip_spec_file_outputs(
 
 
 /**
- * zip-spec-file
- *
- * Zip a spec file and its data files.
+ * ZIP A SPEC FILE AND ITS DATA FILES.
  *
  * If zip-file already exists, it will be overwritten.  If -base-dir is not specified, the directory containing the spec file is used for the base directory.  The spec file must contain only relative paths, and no data files may be outside the base directory.  Scene files inside spec files are not checked for what files they reference, ensure that all data files referenced by the scene files are also referenced by the spec file.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -148,34 +141,30 @@ function zip_spec_file_execute(
 
 
 /**
- * zip-spec-file
- *
- * Zip a spec file and its data files.
+ * ZIP A SPEC FILE AND ITS DATA FILES.
  *
  * If zip-file already exists, it will be overwritten.  If -base-dir is not specified, the directory containing the spec file is used for the base directory.  The spec file must contain only relative paths, and no data files may be outside the base directory.  Scene files inside spec files are not checked for what files they reference, ensure that all data files referenced by the scene files are also referenced by the spec file.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure
+
+the directory
  * @param spec_file the specification file to add to zip file
  * @param extract_folder the name of the folder created when the zip file is unzipped
  * @param zip_file out - the zip file that will be created
- * @param opt_base_dir_directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure: the directory
- * @param opt_skip_missing any missing files will generate only warnings, and the zip file will be created anyway
+ * @param skip_missing any missing files will generate only warnings, and the zip file will be created anyway
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ZipSpecFileOutputs`).
  */
 function zip_spec_file(
+    directory: string | null,
     spec_file: string,
     extract_folder: string,
     zip_file: string,
-    opt_base_dir_directory: string | null = null,
-    opt_skip_missing: boolean = false,
+    skip_missing: boolean = false,
     runner: Runner | null = null,
 ): ZipSpecFileOutputs {
-    const params = zip_spec_file_params(spec_file, extract_folder, zip_file, opt_base_dir_directory, opt_skip_missing)
+    const params = zip_spec_file_params(directory, spec_file, extract_folder, zip_file, skip_missing)
     return zip_spec_file_execute(params, runner);
 }
 

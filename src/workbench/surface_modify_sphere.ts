@@ -4,19 +4,18 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_MODIFY_SPHERE_METADATA: Metadata = {
-    id: "69965c5b4cd0399d7501f269ec55b50c372e008b.boutiques",
+    id: "bd702111cb8b1766b63c379235de453d7fec39d5.workbench",
     name: "surface-modify-sphere",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface SurfaceModifySphereParameters {
     "@type"?: "workbench/surface-modify-sphere";
-    "sphere_in": InputPathType;
+    "sphere-out": string;
+    "recenter": boolean;
+    "sphere-in": InputPathType;
     "radius": number;
-    "sphere_out": string;
-    "opt_recenter": boolean;
 }
 type SurfaceModifySphereParametersTagged = Required<Pick<SurfaceModifySphereParameters, '@type'>> & SurfaceModifySphereParameters;
 
@@ -41,25 +40,25 @@ interface SurfaceModifySphereOutputs {
 /**
  * Build parameters.
  *
+ * @param sphere_out the output sphere
  * @param sphere_in the sphere to modify
  * @param radius the radius the output sphere should have
- * @param sphere_out the output sphere
- * @param opt_recenter recenter the sphere by means of the bounding box
+ * @param recenter recenter the sphere by means of the bounding box
  *
  * @returns Parameter dictionary
  */
 function surface_modify_sphere_params(
+    sphere_out: string,
     sphere_in: InputPathType,
     radius: number,
-    sphere_out: string,
-    opt_recenter: boolean = false,
+    recenter: boolean = false,
 ): SurfaceModifySphereParametersTagged {
     const params = {
         "@type": "workbench/surface-modify-sphere" as const,
-        "sphere_in": sphere_in,
+        "sphere-out": sphere_out,
+        "recenter": recenter,
+        "sphere-in": sphere_in,
         "radius": radius,
-        "sphere_out": sphere_out,
-        "opt_recenter": opt_recenter,
     };
     return params;
 }
@@ -78,14 +77,16 @@ function surface_modify_sphere_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-surface-modify-sphere");
-    cargs.push(execution.inputFile((params["sphere_in"] ?? null)));
-    cargs.push(String((params["radius"] ?? null)));
-    cargs.push((params["sphere_out"] ?? null));
-    if ((params["opt_recenter"] ?? false)) {
-        cargs.push("-recenter");
+    if ((params["recenter"] ?? false)) {
+        cargs.push(
+            "wb_command",
+            "-surface-modify-sphere",
+            (params["sphere-out"] ?? null),
+            "-recenter"
+        );
     }
+    cargs.push(execution.inputFile((params["sphere-in"] ?? null)));
+    cargs.push(String((params["radius"] ?? null)));
     return cargs;
 }
 
@@ -104,24 +105,18 @@ function surface_modify_sphere_outputs(
 ): SurfaceModifySphereOutputs {
     const ret: SurfaceModifySphereOutputs = {
         root: execution.outputFile("."),
-        sphere_out: execution.outputFile([(params["sphere_out"] ?? null)].join('')),
+        sphere_out: execution.outputFile([(params["sphere-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * surface-modify-sphere
- *
- * Change radius and optionally recenter a sphere.
+ * CHANGE RADIUS AND OPTIONALLY RECENTER A SPHERE.
  *
  * This command may be useful if you have used -surface-resample to resample a sphere, which can suffer from problems generally not present in -surface-sphere-project-unproject.  If the sphere should already be centered around the origin, using -recenter may still shift it slightly before changing the radius, which is likely to be undesireable.
  *
  * If <sphere-in> is not close to spherical, or not centered around the origin and -recenter is not used, a warning is printed.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -143,34 +138,28 @@ function surface_modify_sphere_execute(
 
 
 /**
- * surface-modify-sphere
- *
- * Change radius and optionally recenter a sphere.
+ * CHANGE RADIUS AND OPTIONALLY RECENTER A SPHERE.
  *
  * This command may be useful if you have used -surface-resample to resample a sphere, which can suffer from problems generally not present in -surface-sphere-project-unproject.  If the sphere should already be centered around the origin, using -recenter may still shift it slightly before changing the radius, which is likely to be undesireable.
  *
  * If <sphere-in> is not close to spherical, or not centered around the origin and -recenter is not used, a warning is printed.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param sphere_out the output sphere
  * @param sphere_in the sphere to modify
  * @param radius the radius the output sphere should have
- * @param sphere_out the output sphere
- * @param opt_recenter recenter the sphere by means of the bounding box
+ * @param recenter recenter the sphere by means of the bounding box
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceModifySphereOutputs`).
  */
 function surface_modify_sphere(
+    sphere_out: string,
     sphere_in: InputPathType,
     radius: number,
-    sphere_out: string,
-    opt_recenter: boolean = false,
+    recenter: boolean = false,
     runner: Runner | null = null,
 ): SurfaceModifySphereOutputs {
-    const params = surface_modify_sphere_params(sphere_in, radius, sphere_out, opt_recenter)
+    const params = surface_modify_sphere_params(sphere_out, sphere_in, radius, recenter)
     return surface_modify_sphere_execute(params, runner);
 }
 

@@ -4,10 +4,9 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_SPHERE_TRIANGULAR_PATCHES_METADATA: Metadata = {
-    id: "cb66e6f1207807e8529312a550ed72acdff594ee.boutiques",
+    id: "eaeddcfbdd465eca8821f3fb34094dfb589855c3.workbench",
     name: "surface-sphere-triangular-patches",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
@@ -15,7 +14,7 @@ interface SurfaceSphereTriangularPatchesParameters {
     "@type"?: "workbench/surface-sphere-triangular-patches";
     "sphere": InputPathType;
     "divisions": number;
-    "text_out": string;
+    "text-out": string;
 }
 type SurfaceSphereTriangularPatchesParametersTagged = Required<Pick<SurfaceSphereTriangularPatchesParameters, '@type'>> & SurfaceSphereTriangularPatchesParameters;
 
@@ -51,7 +50,7 @@ function surface_sphere_triangular_patches_params(
         "@type": "workbench/surface-sphere-triangular-patches" as const,
         "sphere": sphere,
         "divisions": divisions,
-        "text_out": text_out,
+        "text-out": text_out,
     };
     return params;
 }
@@ -70,11 +69,13 @@ function surface_sphere_triangular_patches_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-surface-sphere-triangular-patches");
+    cargs.push(
+        "wb_command",
+        "-surface-sphere-triangular-patches"
+    );
     cargs.push(execution.inputFile((params["sphere"] ?? null)));
     cargs.push(String((params["divisions"] ?? null)));
-    cargs.push((params["text_out"] ?? null));
+    cargs.push((params["text-out"] ?? null));
     return cargs;
 }
 
@@ -99,15 +100,9 @@ function surface_sphere_triangular_patches_outputs(
 
 
 /**
- * surface-sphere-triangular-patches
- *
- * Divide standard sphere into patches.
+ * DIVIDE STANDARD SPHERE INTO PATCHES.
  *
  * Divide the given undistorted sphere into equally-sized triangular patches.  Patches overlap by a border of 1 vertex.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -129,15 +124,9 @@ function surface_sphere_triangular_patches_execute(
 
 
 /**
- * surface-sphere-triangular-patches
- *
- * Divide standard sphere into patches.
+ * DIVIDE STANDARD SPHERE INTO PATCHES.
  *
  * Divide the given undistorted sphere into equally-sized triangular patches.  Patches overlap by a border of 1 vertex.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param sphere an undistorted, regularly divided icosahedral sphere
  * @param divisions how many pieces to divide each icosahedral edge into, must divide perfectly into the given sphere

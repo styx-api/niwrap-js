@@ -4,21 +4,20 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BORDER_TO_ROIS_METADATA: Metadata = {
-    id: "d27e55d16af9c127031efb25bfee0f3793658e98.boutiques",
+    id: "3bfc45e6cda7bb869f41f04607d7a710d2fab5dd.workbench",
     name: "border-to-rois",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface BorderToRoisParameters {
     "@type"?: "workbench/border-to-rois";
+    "metric-out": string;
+    "name"?: string | null | undefined;
+    "inverse": boolean;
+    "include-border": boolean;
     "surface": InputPathType;
-    "border_file": InputPathType;
-    "metric_out": string;
-    "opt_border_name"?: string | null | undefined;
-    "opt_inverse": boolean;
-    "opt_include_border": boolean;
+    "border-file": InputPathType;
 }
 type BorderToRoisParametersTagged = Required<Pick<BorderToRoisParameters, '@type'>> & BorderToRoisParameters;
 
@@ -43,33 +42,35 @@ interface BorderToRoisOutputs {
 /**
  * Build parameters.
  *
+ * @param metric_out the output metric file
+ * @param name create ROI for only one border
+
+the name of the border
  * @param surface the surface the borders are drawn on
  * @param border_file the border file
- * @param metric_out the output metric file
- * @param opt_border_name create ROI for only one border: the name of the border
- * @param opt_inverse use inverse selection (outside border)
- * @param opt_include_border include vertices the border is closest to
+ * @param inverse use inverse selection (outside border)
+ * @param include_border include vertices the border is closest to
  *
  * @returns Parameter dictionary
  */
 function border_to_rois_params(
+    metric_out: string,
+    name: string | null,
     surface: InputPathType,
     border_file: InputPathType,
-    metric_out: string,
-    opt_border_name: string | null = null,
-    opt_inverse: boolean = false,
-    opt_include_border: boolean = false,
+    inverse: boolean = false,
+    include_border: boolean = false,
 ): BorderToRoisParametersTagged {
     const params = {
         "@type": "workbench/border-to-rois" as const,
+        "metric-out": metric_out,
+        "inverse": inverse,
+        "include-border": include_border,
         "surface": surface,
-        "border_file": border_file,
-        "metric_out": metric_out,
-        "opt_inverse": opt_inverse,
-        "opt_include_border": opt_include_border,
+        "border-file": border_file,
     };
-    if (opt_border_name !== null) {
-        params["opt_border_name"] = opt_border_name;
+    if (name !== null) {
+        params["name"] = name;
     }
     return params;
 }
@@ -88,23 +89,19 @@ function border_to_rois_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-border-to-rois");
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(execution.inputFile((params["border_file"] ?? null)));
-    cargs.push((params["metric_out"] ?? null));
-    if ((params["opt_border_name"] ?? null) !== null) {
+    if ((params["name"] ?? null) !== null || (params["inverse"] ?? false) || (params["include-border"] ?? false)) {
         cargs.push(
+            "wb_command",
+            "-border-to-rois",
+            (params["metric-out"] ?? null),
             "-border",
-            (params["opt_border_name"] ?? null)
+            (((params["name"] ?? null) !== null) ? (params["name"] ?? null) : ""),
+            (((params["inverse"] ?? false)) ? "-inverse" : ""),
+            (((params["include-border"] ?? false)) ? "-include-border" : "")
         );
     }
-    if ((params["opt_inverse"] ?? false)) {
-        cargs.push("-inverse");
-    }
-    if ((params["opt_include_border"] ?? false)) {
-        cargs.push("-include-border");
-    }
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(execution.inputFile((params["border-file"] ?? null)));
     return cargs;
 }
 
@@ -123,22 +120,16 @@ function border_to_rois_outputs(
 ): BorderToRoisOutputs {
     const ret: BorderToRoisOutputs = {
         root: execution.outputFile("."),
-        metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
+        metric_out: execution.outputFile([(params["metric-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * border-to-rois
- *
- * Make metric rois from borders.
+ * MAKE METRIC ROIS FROM BORDERS.
  *
  * By default, draws ROIs inside all borders in the border file, as separate metric columns.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -160,36 +151,32 @@ function border_to_rois_execute(
 
 
 /**
- * border-to-rois
- *
- * Make metric rois from borders.
+ * MAKE METRIC ROIS FROM BORDERS.
  *
  * By default, draws ROIs inside all borders in the border file, as separate metric columns.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param metric_out the output metric file
+ * @param name create ROI for only one border
+
+the name of the border
  * @param surface the surface the borders are drawn on
  * @param border_file the border file
- * @param metric_out the output metric file
- * @param opt_border_name create ROI for only one border: the name of the border
- * @param opt_inverse use inverse selection (outside border)
- * @param opt_include_border include vertices the border is closest to
+ * @param inverse use inverse selection (outside border)
+ * @param include_border include vertices the border is closest to
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BorderToRoisOutputs`).
  */
 function border_to_rois(
+    metric_out: string,
+    name: string | null,
     surface: InputPathType,
     border_file: InputPathType,
-    metric_out: string,
-    opt_border_name: string | null = null,
-    opt_inverse: boolean = false,
-    opt_include_border: boolean = false,
+    inverse: boolean = false,
+    include_border: boolean = false,
     runner: Runner | null = null,
 ): BorderToRoisOutputs {
-    const params = border_to_rois_params(surface, border_file, metric_out, opt_border_name, opt_inverse, opt_include_border)
+    const params = border_to_rois_params(metric_out, name, surface, border_file, inverse, include_border)
     return border_to_rois_execute(params, runner);
 }
 

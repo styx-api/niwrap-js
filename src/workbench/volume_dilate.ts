@@ -4,23 +4,22 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_DILATE_METADATA: Metadata = {
-    id: "c7cf27ddf3bd9107f4ebe78ae6eb1975ae7f12ba.boutiques",
+    id: "63f0ca3ad59f9e1f8239c3ea5c2e72dfdc878c7e.workbench",
     name: "volume-dilate",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface VolumeDilatePresmoothParameters {
     "@type"?: "presmooth";
     "kernel": number;
-    "opt_fwhm": boolean;
+    "fwhm": boolean;
 }
 type VolumeDilatePresmoothParametersTagged = Required<Pick<VolumeDilatePresmoothParameters, '@type'>> & VolumeDilatePresmoothParameters;
 
 
 interface VolumeDilateGradExtrapolateParameters {
-    "@type"?: "grad_extrapolate";
+    "@type"?: "grad-extrapolate";
     "presmooth"?: VolumeDilatePresmoothParameters | null | undefined;
 }
 type VolumeDilateGradExtrapolateParametersTagged = Required<Pick<VolumeDilateGradExtrapolateParameters, '@type'>> & VolumeDilateGradExtrapolateParameters;
@@ -28,16 +27,16 @@ type VolumeDilateGradExtrapolateParametersTagged = Required<Pick<VolumeDilateGra
 
 interface VolumeDilateParameters {
     "@type"?: "workbench/volume-dilate";
+    "volume-out": string;
+    "exponent"?: number | null | undefined;
+    "roi-volume"?: InputPathType | null | undefined;
+    "roi-volume"?: InputPathType | null | undefined;
+    "subvol"?: string | null | undefined;
+    "legacy-cutoff": boolean;
+    "grad-extrapolate"?: VolumeDilateGradExtrapolateParameters | null | undefined;
     "volume": InputPathType;
     "distance": number;
     "method": string;
-    "volume_out": string;
-    "opt_exponent_exponent"?: number | null | undefined;
-    "opt_bad_voxel_roi_roi_volume"?: InputPathType | null | undefined;
-    "opt_data_roi_roi_volume"?: InputPathType | null | undefined;
-    "opt_subvolume_subvol"?: string | null | undefined;
-    "opt_legacy_cutoff": boolean;
-    "grad_extrapolate"?: VolumeDilateGradExtrapolateParameters | null | undefined;
 }
 type VolumeDilateParametersTagged = Required<Pick<VolumeDilateParameters, '@type'>> & VolumeDilateParameters;
 
@@ -46,18 +45,18 @@ type VolumeDilateParametersTagged = Required<Pick<VolumeDilateParameters, '@type
  * Build parameters.
  *
  * @param kernel the size of gaussian smoothing kernel in mm, as sigma by default
- * @param opt_fwhm kernel size is FWHM, not sigma
+ * @param fwhm kernel size is FWHM, not sigma
  *
  * @returns Parameter dictionary
  */
 function volume_dilate_presmooth_params(
     kernel: number,
-    opt_fwhm: boolean = false,
+    fwhm: boolean = false,
 ): VolumeDilatePresmoothParametersTagged {
     const params = {
         "@type": "presmooth" as const,
         "kernel": kernel,
-        "opt_fwhm": opt_fwhm,
+        "fwhm": fwhm,
     };
     return params;
 }
@@ -76,10 +75,12 @@ function volume_dilate_presmooth_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-presmooth");
-    cargs.push(String((params["kernel"] ?? null)));
-    if ((params["opt_fwhm"] ?? false)) {
-        cargs.push("-fwhm");
+    if ((params["fwhm"] ?? false)) {
+        cargs.push(
+            "-presmooth",
+            String((params["kernel"] ?? null)),
+            "-fwhm"
+        );
     }
     return cargs;
 }
@@ -96,7 +97,7 @@ function volume_dilate_grad_extrapolate_params(
     presmooth: VolumeDilatePresmoothParameters | null = null,
 ): VolumeDilateGradExtrapolateParametersTagged {
     const params = {
-        "@type": "grad_extrapolate" as const,
+        "@type": "grad-extrapolate" as const,
     };
     if (presmooth !== null) {
         params["presmooth"] = presmooth;
@@ -118,9 +119,11 @@ function volume_dilate_grad_extrapolate_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-grad-extrapolate");
     if ((params["presmooth"] ?? null) !== null) {
-        cargs.push(...volume_dilate_presmooth_cargs((params["presmooth"] ?? null), execution));
+        cargs.push(
+            "-grad-extrapolate",
+            ...volume_dilate_presmooth_cargs((params["presmooth"] ?? null), execution)
+        );
     }
     return cargs;
 }
@@ -146,53 +149,61 @@ interface VolumeDilateOutputs {
 /**
  * Build parameters.
  *
+ * @param volume_out the output volume
+ * @param exponent use a different exponent in the weighting function
+
+exponent 'n' to use in (1 / (distance ^ n)) as the weighting function (default 7)
+ * @param roi_volume specify an roi of voxels to overwrite, rather than voxels with value zero
+
+volume file, positive values denote voxels to have their values replaced
+ * @param roi_volume_ specify an roi of where there is data
+
+volume file, positive values denote voxels that have data
+ * @param subvol select a single subvolume to dilate
+
+the subvolume number or name
  * @param volume the volume to dilate
  * @param distance distance in mm to dilate
  * @param method dilation method to use
- * @param volume_out the output volume
- * @param opt_exponent_exponent use a different exponent in the weighting function: exponent 'n' to use in (1 / (distance ^ n)) as the weighting function (default 7)
- * @param opt_bad_voxel_roi_roi_volume specify an roi of voxels to overwrite, rather than voxels with value zero: volume file, positive values denote voxels to have their values replaced
- * @param opt_data_roi_roi_volume specify an roi of where there is data: volume file, positive values denote voxels that have data
- * @param opt_subvolume_subvol select a single subvolume to dilate: the subvolume number or name
- * @param opt_legacy_cutoff use the v1.3.2 method of excluding voxels further than the dilation distance when calculating the dilated value
+ * @param legacy_cutoff use the v1.3.2 method of excluding voxels further than the dilation distance when calculating the dilated value
  * @param grad_extrapolate additionally use the gradient to extrapolate, intended to be used with WEIGHTED
  *
  * @returns Parameter dictionary
  */
 function volume_dilate_params(
+    volume_out: string,
+    exponent: number | null,
+    roi_volume: InputPathType | null,
+    roi_volume_: InputPathType | null,
+    subvol: string | null,
     volume: InputPathType,
     distance: number,
     method: string,
-    volume_out: string,
-    opt_exponent_exponent: number | null = null,
-    opt_bad_voxel_roi_roi_volume: InputPathType | null = null,
-    opt_data_roi_roi_volume: InputPathType | null = null,
-    opt_subvolume_subvol: string | null = null,
-    opt_legacy_cutoff: boolean = false,
+    legacy_cutoff: boolean = false,
     grad_extrapolate: VolumeDilateGradExtrapolateParameters | null = null,
 ): VolumeDilateParametersTagged {
     const params = {
         "@type": "workbench/volume-dilate" as const,
+        "volume-out": volume_out,
+        "legacy-cutoff": legacy_cutoff,
         "volume": volume,
         "distance": distance,
         "method": method,
-        "volume_out": volume_out,
-        "opt_legacy_cutoff": opt_legacy_cutoff,
     };
-    if (opt_exponent_exponent !== null) {
-        params["opt_exponent_exponent"] = opt_exponent_exponent;
+    if (exponent !== null) {
+        params["exponent"] = exponent;
     }
-    if (opt_bad_voxel_roi_roi_volume !== null) {
-        params["opt_bad_voxel_roi_roi_volume"] = opt_bad_voxel_roi_roi_volume;
+    if (roi_volume !== null) {
+        params["roi-volume"] = roi_volume;
     }
-    if (opt_data_roi_roi_volume !== null) {
-        params["opt_data_roi_roi_volume"] = opt_data_roi_roi_volume;
+    if (roi_volume_ !== null) {
+        params["roi-volume"] = roi_volume_;
     }
-    if (opt_subvolume_subvol !== null) {
-        params["opt_subvolume_subvol"] = opt_subvolume_subvol;
+    if (subvol !== null) {
+        params["subvol"] = subvol;
     }
     if (grad_extrapolate !== null) {
-        params["grad_extrapolate"] = grad_extrapolate;
+        params["grad-extrapolate"] = grad_extrapolate;
     }
     return params;
 }
@@ -211,42 +222,26 @@ function volume_dilate_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-dilate");
+    if ((params["exponent"] ?? null) !== null || (params["roi-volume"] ?? null) !== null || (params["roi-volume"] ?? null) !== null || (params["subvol"] ?? null) !== null || (params["legacy-cutoff"] ?? false) || (params["grad-extrapolate"] ?? null) !== null) {
+        cargs.push(
+            "wb_command",
+            "-volume-dilate",
+            (params["volume-out"] ?? null),
+            "-exponent",
+            (((params["exponent"] ?? null) !== null) ? String((params["exponent"] ?? null)) : ""),
+            "-bad-voxel-roi",
+            (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
+            "-data-roi",
+            (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
+            "-subvolume",
+            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : ""),
+            (((params["legacy-cutoff"] ?? false)) ? "-legacy-cutoff" : ""),
+            ...(((params["grad-extrapolate"] ?? null) !== null) ? volume_dilate_grad_extrapolate_cargs((params["grad-extrapolate"] ?? null), execution) : [])
+        );
+    }
     cargs.push(execution.inputFile((params["volume"] ?? null)));
     cargs.push(String((params["distance"] ?? null)));
     cargs.push((params["method"] ?? null));
-    cargs.push((params["volume_out"] ?? null));
-    if ((params["opt_exponent_exponent"] ?? null) !== null) {
-        cargs.push(
-            "-exponent",
-            String((params["opt_exponent_exponent"] ?? null))
-        );
-    }
-    if ((params["opt_bad_voxel_roi_roi_volume"] ?? null) !== null) {
-        cargs.push(
-            "-bad-voxel-roi",
-            execution.inputFile((params["opt_bad_voxel_roi_roi_volume"] ?? null))
-        );
-    }
-    if ((params["opt_data_roi_roi_volume"] ?? null) !== null) {
-        cargs.push(
-            "-data-roi",
-            execution.inputFile((params["opt_data_roi_roi_volume"] ?? null))
-        );
-    }
-    if ((params["opt_subvolume_subvol"] ?? null) !== null) {
-        cargs.push(
-            "-subvolume",
-            (params["opt_subvolume_subvol"] ?? null)
-        );
-    }
-    if ((params["opt_legacy_cutoff"] ?? false)) {
-        cargs.push("-legacy-cutoff");
-    }
-    if ((params["grad_extrapolate"] ?? null) !== null) {
-        cargs.push(...volume_dilate_grad_extrapolate_cargs((params["grad_extrapolate"] ?? null), execution));
-    }
     return cargs;
 }
 
@@ -265,16 +260,14 @@ function volume_dilate_outputs(
 ): VolumeDilateOutputs {
     const ret: VolumeDilateOutputs = {
         root: execution.outputFile("."),
-        volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
+        volume_out: execution.outputFile([(params["volume-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * volume-dilate
- *
- * Dilate a volume file.
+ * DILATE A VOLUME FILE.
  *
  * For all voxels that are designated as bad, if they neighbor a non-bad voxel with data or are within the specified distance of such a voxel, replace the value in the bad voxel with a value calculated from nearby non-bad voxels that have data, otherwise set the value to zero.  No matter how small <distance> is, dilation will always use at least the face neighbor voxels.
  *
@@ -286,10 +279,6 @@ function volume_dilate_outputs(
  *
  * NEAREST - use the value from the nearest good voxel
  * WEIGHTED - use a weighted average based on distance.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -311,9 +300,7 @@ function volume_dilate_execute(
 
 
 /**
- * volume-dilate
- *
- * Dilate a volume file.
+ * DILATE A VOLUME FILE.
  *
  * For all voxels that are designated as bad, if they neighbor a non-bad voxel with data or are within the specified distance of such a voxel, replace the value in the bad voxel with a value calculated from nearby non-bad voxels that have data, otherwise set the value to zero.  No matter how small <distance> is, dilation will always use at least the face neighbor voxels.
  *
@@ -326,38 +313,42 @@ function volume_dilate_execute(
  * NEAREST - use the value from the nearest good voxel
  * WEIGHTED - use a weighted average based on distance.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param volume_out the output volume
+ * @param exponent use a different exponent in the weighting function
+
+exponent 'n' to use in (1 / (distance ^ n)) as the weighting function (default 7)
+ * @param roi_volume specify an roi of voxels to overwrite, rather than voxels with value zero
+
+volume file, positive values denote voxels to have their values replaced
+ * @param roi_volume_ specify an roi of where there is data
+
+volume file, positive values denote voxels that have data
+ * @param subvol select a single subvolume to dilate
+
+the subvolume number or name
  * @param volume the volume to dilate
  * @param distance distance in mm to dilate
  * @param method dilation method to use
- * @param volume_out the output volume
- * @param opt_exponent_exponent use a different exponent in the weighting function: exponent 'n' to use in (1 / (distance ^ n)) as the weighting function (default 7)
- * @param opt_bad_voxel_roi_roi_volume specify an roi of voxels to overwrite, rather than voxels with value zero: volume file, positive values denote voxels to have their values replaced
- * @param opt_data_roi_roi_volume specify an roi of where there is data: volume file, positive values denote voxels that have data
- * @param opt_subvolume_subvol select a single subvolume to dilate: the subvolume number or name
- * @param opt_legacy_cutoff use the v1.3.2 method of excluding voxels further than the dilation distance when calculating the dilated value
+ * @param legacy_cutoff use the v1.3.2 method of excluding voxels further than the dilation distance when calculating the dilated value
  * @param grad_extrapolate additionally use the gradient to extrapolate, intended to be used with WEIGHTED
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeDilateOutputs`).
  */
 function volume_dilate(
+    volume_out: string,
+    exponent: number | null,
+    roi_volume: InputPathType | null,
+    roi_volume_: InputPathType | null,
+    subvol: string | null,
     volume: InputPathType,
     distance: number,
     method: string,
-    volume_out: string,
-    opt_exponent_exponent: number | null = null,
-    opt_bad_voxel_roi_roi_volume: InputPathType | null = null,
-    opt_data_roi_roi_volume: InputPathType | null = null,
-    opt_subvolume_subvol: string | null = null,
-    opt_legacy_cutoff: boolean = false,
+    legacy_cutoff: boolean = false,
     grad_extrapolate: VolumeDilateGradExtrapolateParameters | null = null,
     runner: Runner | null = null,
 ): VolumeDilateOutputs {
-    const params = volume_dilate_params(volume, distance, method, volume_out, opt_exponent_exponent, opt_bad_voxel_roi_roi_volume, opt_data_roi_roi_volume, opt_subvolume_subvol, opt_legacy_cutoff, grad_extrapolate)
+    const params = volume_dilate_params(volume_out, exponent, roi_volume, roi_volume_, subvol, volume, distance, method, legacy_cutoff, grad_extrapolate)
     return volume_dilate_execute(params, runner);
 }
 

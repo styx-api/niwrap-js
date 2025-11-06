@@ -4,19 +4,18 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LABEL_MODIFY_KEYS_METADATA: Metadata = {
-    id: "d6011104900b541ac706e3e2a8d7222e98ae764f.boutiques",
+    id: "e84f8183032da13712cc4d51e831efb848fef7f4.workbench",
     name: "label-modify-keys",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface LabelModifyKeysParameters {
     "@type"?: "workbench/label-modify-keys";
-    "label_in": InputPathType;
-    "remap_file": string;
-    "label_out": string;
-    "opt_column_column"?: string | null | undefined;
+    "label-out": string;
+    "column"?: string | null | undefined;
+    "label-in": InputPathType;
+    "remap-file": string;
 }
 type LabelModifyKeysParametersTagged = Required<Pick<LabelModifyKeysParameters, '@type'>> & LabelModifyKeysParameters;
 
@@ -41,27 +40,29 @@ interface LabelModifyKeysOutputs {
 /**
  * Build parameters.
  *
+ * @param label_out output label file
+ * @param column select a single column to use
+
+the column number or name
  * @param label_in the input label file
  * @param remap_file text file with old and new key values
- * @param label_out output label file
- * @param opt_column_column select a single column to use: the column number or name
  *
  * @returns Parameter dictionary
  */
 function label_modify_keys_params(
+    label_out: string,
+    column: string | null,
     label_in: InputPathType,
     remap_file: string,
-    label_out: string,
-    opt_column_column: string | null = null,
 ): LabelModifyKeysParametersTagged {
     const params = {
         "@type": "workbench/label-modify-keys" as const,
-        "label_in": label_in,
-        "remap_file": remap_file,
-        "label_out": label_out,
+        "label-out": label_out,
+        "label-in": label_in,
+        "remap-file": remap_file,
     };
-    if (opt_column_column !== null) {
-        params["opt_column_column"] = opt_column_column;
+    if (column !== null) {
+        params["column"] = column;
     }
     return params;
 }
@@ -80,17 +81,17 @@ function label_modify_keys_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-label-modify-keys");
-    cargs.push(execution.inputFile((params["label_in"] ?? null)));
-    cargs.push((params["remap_file"] ?? null));
-    cargs.push((params["label_out"] ?? null));
-    if ((params["opt_column_column"] ?? null) !== null) {
+    if ((params["column"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-label-modify-keys",
+            (params["label-out"] ?? null),
             "-column",
-            (params["opt_column_column"] ?? null)
+            (params["column"] ?? null)
         );
     }
+    cargs.push(execution.inputFile((params["label-in"] ?? null)));
+    cargs.push((params["remap-file"] ?? null));
     return cargs;
 }
 
@@ -109,16 +110,14 @@ function label_modify_keys_outputs(
 ): LabelModifyKeysOutputs {
     const ret: LabelModifyKeysOutputs = {
         root: execution.outputFile("."),
-        label_out: execution.outputFile([(params["label_out"] ?? null)].join('')),
+        label_out: execution.outputFile([(params["label-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * label-modify-keys
- *
- * Change key values in a label file.
+ * CHANGE KEY VALUES IN A LABEL FILE.
  *
  * <remap-file> should have lines of the form 'oldkey newkey', like so:
  *
@@ -127,10 +126,6 @@ function label_modify_keys_outputs(
  * 8 2
  *
  * This would change the current label with key '3' to use the key '5' instead, 5 would use 8, and 8 would use 2.  Any collision in key values results in the label that was not specified in the remap file getting remapped to an otherwise unused key.  Remapping more than one key to the same new key, or the same key to more than one new key, results in an error.  This will not change the appearance of the file when displayed, as it will change the key values in the data at the same time.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -152,9 +147,7 @@ function label_modify_keys_execute(
 
 
 /**
- * label-modify-keys
- *
- * Change key values in a label file.
+ * CHANGE KEY VALUES IN A LABEL FILE.
  *
  * <remap-file> should have lines of the form 'oldkey newkey', like so:
  *
@@ -164,26 +157,24 @@ function label_modify_keys_execute(
  *
  * This would change the current label with key '3' to use the key '5' instead, 5 would use 8, and 8 would use 2.  Any collision in key values results in the label that was not specified in the remap file getting remapped to an otherwise unused key.  Remapping more than one key to the same new key, or the same key to more than one new key, results in an error.  This will not change the appearance of the file when displayed, as it will change the key values in the data at the same time.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param label_out output label file
+ * @param column select a single column to use
+
+the column number or name
  * @param label_in the input label file
  * @param remap_file text file with old and new key values
- * @param label_out output label file
- * @param opt_column_column select a single column to use: the column number or name
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelModifyKeysOutputs`).
  */
 function label_modify_keys(
+    label_out: string,
+    column: string | null,
     label_in: InputPathType,
     remap_file: string,
-    label_out: string,
-    opt_column_column: string | null = null,
     runner: Runner | null = null,
 ): LabelModifyKeysOutputs {
-    const params = label_modify_keys_params(label_in, remap_file, label_out, opt_column_column)
+    const params = label_modify_keys_params(label_out, column, label_in, remap_file)
     return label_modify_keys_execute(params, runner);
 }
 

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_APPLY_TRANSFORMS_METADATA: Metadata = {
-    id: "e900efb5c61d125a4b8b98be92b7c777df8489a4.boutiques",
+    id: "b2a458e411cfbc6687dbc4a31f95f2b6ac33d716.boutiques",
     name: "antsApplyTransforms",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -21,7 +21,7 @@ type AntsApplyTransformsWarpedOutputParametersTagged = Required<Pick<AntsApplyTr
 interface AntsApplyTransformsCompositeDisplacementFieldOutputParameters {
     "@type"?: "compositeDisplacementFieldOutput";
     "compositeDisplacementField": string;
-    "printOutCompositeWarpFile"?: 0 | 1 | null | undefined;
+    "printOutCompositeWarpFile"?: boolean | null | undefined;
 }
 type AntsApplyTransformsCompositeDisplacementFieldOutputParametersTagged = Required<Pick<AntsApplyTransformsCompositeDisplacementFieldOutputParameters, '@type'>> & AntsApplyTransformsCompositeDisplacementFieldOutputParameters;
 
@@ -29,7 +29,7 @@ type AntsApplyTransformsCompositeDisplacementFieldOutputParametersTagged = Requi
 interface AntsApplyTransformsGenericAffineTransformOutputParameters {
     "@type"?: "genericAffineTransformOutput";
     "genericAffineTransformFile": string;
-    "calculateInverse"?: 0 | 1 | null | undefined;
+    "calculateInverse"?: boolean | null | undefined;
 }
 type AntsApplyTransformsGenericAffineTransformOutputParametersTagged = Required<Pick<AntsApplyTransformsGenericAffineTransformOutputParameters, '@type'>> & AntsApplyTransformsGenericAffineTransformOutputParameters;
 
@@ -66,16 +66,9 @@ interface AntsApplyTransformsAlphaParameters {
 type AntsApplyTransformsAlphaParametersTagged = Required<Pick<AntsApplyTransformsAlphaParameters, '@type'>> & AntsApplyTransformsAlphaParameters;
 
 
-interface AntsApplyTransformsParamParameters {
-    "@type"?: "param";
-    "params": Array<AntsApplyTransformsSigmaParametersTagged | AntsApplyTransformsAlphaParametersTagged>;
-}
-type AntsApplyTransformsParamParametersTagged = Required<Pick<AntsApplyTransformsParamParameters, '@type'>> & AntsApplyTransformsParamParameters;
-
-
 interface AntsApplyTransformsMultiLabelParameters {
     "@type"?: "multiLabel";
-    "params": AntsApplyTransformsParamParameters;
+    "params": Array<AntsApplyTransformsSigmaParametersTagged | AntsApplyTransformsAlphaParametersTagged>;
 }
 type AntsApplyTransformsMultiLabelParametersTagged = Required<Pick<AntsApplyTransformsMultiLabelParameters, '@type'>> & AntsApplyTransformsMultiLabelParameters;
 
@@ -152,8 +145,8 @@ interface AntsApplyTransformsParameters {
     "transform"?: Array<AntsApplyTransformsTransformFileNameParametersTagged | AntsApplyTransformsUseInverseParametersTagged> | null | undefined;
     "default_value"?: number | null | undefined;
     "static_cast_for_R"?: string | null | undefined;
-    "float"?: 0 | 1 | null | undefined;
-    "verbose"?: 0 | 1 | null | undefined;
+    "float"?: boolean | null | undefined;
+    "verbose"?: boolean | null | undefined;
 }
 type AntsApplyTransformsParametersTagged = Required<Pick<AntsApplyTransformsParameters, '@type'>> & AntsApplyTransformsParameters;
 
@@ -407,7 +400,7 @@ interface AntsApplyTransformsCompositeDisplacementFieldOutputOutputs {
  */
 function ants_apply_transforms_composite_displacement_field_output_params(
     composite_displacement_field: string,
-    print_out_composite_warp_file: 0 | 1 | null = null,
+    print_out_composite_warp_file: boolean | null = null,
 ): AntsApplyTransformsCompositeDisplacementFieldOutputParametersTagged {
     const params = {
         "@type": "compositeDisplacementFieldOutput" as const,
@@ -434,7 +427,7 @@ function ants_apply_transforms_composite_displacement_field_output_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["printOutCompositeWarpFile"] ?? null) !== null) {
-        cargs.push(["[", (params["compositeDisplacementField"] ?? null), ",printOutCompositeWarpFile=", String((params["printOutCompositeWarpFile"] ?? null)), "]"].join(''));
+        cargs.push(["[", (params["compositeDisplacementField"] ?? null), ",printOutCompositeWarpFile=", ((params["printOutCompositeWarpFile"] ?? null) ? "1" : "0"), "]"].join(''));
     }
     return cargs;
 }
@@ -487,7 +480,7 @@ interface AntsApplyTransformsGenericAffineTransformOutputOutputs {
  */
 function ants_apply_transforms_generic_affine_transform_output_params(
     generic_affine_transform_file: string,
-    calculate_inverse: 0 | 1 | null = null,
+    calculate_inverse: boolean | null = null,
 ): AntsApplyTransformsGenericAffineTransformOutputParametersTagged {
     const params = {
         "@type": "genericAffineTransformOutput" as const,
@@ -514,7 +507,7 @@ function ants_apply_transforms_generic_affine_transform_output_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["calculateInverse"] ?? null) !== null) {
-        cargs.push(["Linear[", (params["genericAffineTransformFile"] ?? null), ",calculateInverse=", String((params["calculateInverse"] ?? null)), "]"].join(''));
+        cargs.push(["Linear[", (params["genericAffineTransformFile"] ?? null), ",calculateInverse=", ((params["calculateInverse"] ?? null) ? "1" : "0"), "]"].join(''));
     }
     return cargs;
 }
@@ -714,43 +707,8 @@ function ants_apply_transforms_alpha_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_apply_transforms_param_params(
-    params_: Array<AntsApplyTransformsSigmaParametersTagged | AntsApplyTransformsAlphaParametersTagged>,
-): AntsApplyTransformsParamParametersTagged {
-    const params = {
-        "@type": "param" as const,
-        "params": params_,
-    };
-    return params;
-}
-
-
-/**
- * Build command-line arguments from parameters.
- *
- * @param params The parameters.
- * @param execution The execution object for resolving input paths.
- *
- * @returns Command-line arguments.
- */
-function ants_apply_transforms_param_cargs(
-    params: AntsApplyTransformsParamParameters,
-    execution: Execution,
-): string[] {
-    const cargs: string[] = [];
-    cargs.push(["[", (params["params"] ?? null).map(s => ants_apply_transforms_params_cargs_dyn_fn(s["@type"])(s, execution)).flat().join(","), "]"].join(''));
-    return cargs;
-}
-
-
-/**
- * Build parameters.
- *
- *
- * @returns Parameter dictionary
- */
 function ants_apply_transforms_multi_label_params(
-    params_: AntsApplyTransformsParamParameters,
+    params_: Array<AntsApplyTransformsSigmaParametersTagged | AntsApplyTransformsAlphaParametersTagged>,
 ): AntsApplyTransformsMultiLabelParametersTagged {
     const params = {
         "@type": "multiLabel" as const,
@@ -773,7 +731,7 @@ function ants_apply_transforms_multi_label_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(["MultiLabel", ants_apply_transforms_param_cargs((params["params"] ?? null), execution).join("")].join(''));
+    cargs.push(["[", (params["params"] ?? null).map(s => ants_apply_transforms_params_cargs_dyn_fn(s["@type"])(s, execution)).flat().join(","), "]"].join(''));
     return cargs;
 }
 
@@ -857,7 +815,7 @@ function ants_apply_transforms_bspline_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["order"] ?? null) !== null) {
-        cargs.push(["BSpline[order=", String((params["order"] ?? null)), "]"].join(''));
+        cargs.push(["BSpline[", String((params["order"] ?? null)), "]"].join(''));
     }
     return cargs;
 }
@@ -1149,8 +1107,8 @@ function ants_apply_transforms_params(
     transform: Array<AntsApplyTransformsTransformFileNameParametersTagged | AntsApplyTransformsUseInverseParametersTagged> | null = null,
     default_value: number | null = null,
     static_cast_for_r: string | null = null,
-    float: 0 | 1 | null = null,
-    verbose: 0 | 1 | null = null,
+    float: boolean | null = null,
+    verbose: boolean | null = null,
 ): AntsApplyTransformsParametersTagged {
     const params = {
         "@type": "ants/antsApplyTransforms" as const,
@@ -1264,13 +1222,13 @@ function ants_apply_transforms_cargs(
     if ((params["float"] ?? null) !== null) {
         cargs.push(
             "--float",
-            String((params["float"] ?? null))
+            ((params["float"] ?? null) ? "1" : "0")
         );
     }
     if ((params["verbose"] ?? null) !== null) {
         cargs.push(
             "--verbose",
-            String((params["verbose"] ?? null))
+            ((params["verbose"] ?? null) ? "1" : "0")
         );
     }
     return cargs;
@@ -1361,8 +1319,8 @@ function ants_apply_transforms(
     transform: Array<AntsApplyTransformsTransformFileNameParametersTagged | AntsApplyTransformsUseInverseParametersTagged> | null = null,
     default_value: number | null = null,
     static_cast_for_r: string | null = null,
-    float: 0 | 1 | null = null,
-    verbose: 0 | 1 | null = null,
+    float: boolean | null = null,
+    verbose: boolean | null = null,
     runner: Runner | null = null,
 ): AntsApplyTransformsOutputs {
     const params = ants_apply_transforms_params(reference_image, output, dimensionality, input_image_type, input_image, interpolation, output_data_type, transform, default_value, static_cast_for_r, float, verbose)
@@ -1391,7 +1349,6 @@ export {
       ants_apply_transforms_multi_label_params,
       ants_apply_transforms_multi_labelnoparams_params,
       ants_apply_transforms_nearest_neighbor_params,
-      ants_apply_transforms_param_params,
       ants_apply_transforms_params,
       ants_apply_transforms_sigma_params,
       ants_apply_transforms_transform_file_name_params,

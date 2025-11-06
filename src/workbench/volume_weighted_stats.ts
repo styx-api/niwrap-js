@@ -4,47 +4,39 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_WEIGHTED_STATS_METADATA: Metadata = {
-    id: "cc98b5f18ee1944d35c3bdc722bfbd19a6850252.boutiques",
+    id: "4e95434c5f2fd06962a53dcd7657c6c2bbb93a7b.workbench",
     name: "volume-weighted-stats",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface VolumeWeightedStatsWeightVolumeParameters {
-    "@type"?: "weight_volume";
-    "weight_volume": InputPathType;
-    "opt_match_maps": boolean;
+    "@type"?: "weight-volume";
+    "weight-volume": InputPathType;
+    "match-maps": boolean;
 }
 type VolumeWeightedStatsWeightVolumeParametersTagged = Required<Pick<VolumeWeightedStatsWeightVolumeParameters, '@type'>> & VolumeWeightedStatsWeightVolumeParameters;
 
 
 interface VolumeWeightedStatsRoiParameters {
     "@type"?: "roi";
-    "roi_volume": InputPathType;
-    "opt_match_maps": boolean;
+    "roi-volume": InputPathType;
+    "match-maps": boolean;
 }
 type VolumeWeightedStatsRoiParametersTagged = Required<Pick<VolumeWeightedStatsRoiParameters, '@type'>> & VolumeWeightedStatsRoiParameters;
 
 
-interface VolumeWeightedStatsStdevParameters {
-    "@type"?: "stdev";
-    "opt_sample": boolean;
-}
-type VolumeWeightedStatsStdevParametersTagged = Required<Pick<VolumeWeightedStatsStdevParameters, '@type'>> & VolumeWeightedStatsStdevParameters;
-
-
 interface VolumeWeightedStatsParameters {
     "@type"?: "workbench/volume-weighted-stats";
-    "volume_in": InputPathType;
-    "weight_volume"?: VolumeWeightedStatsWeightVolumeParameters | null | undefined;
-    "opt_subvolume_subvolume"?: string | null | undefined;
+    "weight-volume"?: VolumeWeightedStatsWeightVolumeParameters | null | undefined;
+    "subvolume"?: string | null | undefined;
     "roi"?: VolumeWeightedStatsRoiParameters | null | undefined;
-    "opt_mean": boolean;
-    "stdev"?: VolumeWeightedStatsStdevParameters | null | undefined;
-    "opt_percentile_percent"?: number | null | undefined;
-    "opt_sum": boolean;
-    "opt_show_map_name": boolean;
+    "mean": boolean;
+    "sample"?: boolean | null | undefined;
+    "percent"?: number | null | undefined;
+    "sum": boolean;
+    "show-map-name": boolean;
+    "volume-in": InputPathType;
 }
 type VolumeWeightedStatsParametersTagged = Required<Pick<VolumeWeightedStatsParameters, '@type'>> & VolumeWeightedStatsParameters;
 
@@ -53,18 +45,18 @@ type VolumeWeightedStatsParametersTagged = Required<Pick<VolumeWeightedStatsPara
  * Build parameters.
  *
  * @param weight_volume volume file containing the weights
- * @param opt_match_maps each subvolume of input uses the corresponding subvolume from the weights file
+ * @param match_maps each subvolume of input uses the corresponding subvolume from the weights file
  *
  * @returns Parameter dictionary
  */
 function volume_weighted_stats_weight_volume_params(
     weight_volume: InputPathType,
-    opt_match_maps: boolean = false,
+    match_maps: boolean = false,
 ): VolumeWeightedStatsWeightVolumeParametersTagged {
     const params = {
-        "@type": "weight_volume" as const,
-        "weight_volume": weight_volume,
-        "opt_match_maps": opt_match_maps,
+        "@type": "weight-volume" as const,
+        "weight-volume": weight_volume,
+        "match-maps": match_maps,
     };
     return params;
 }
@@ -83,10 +75,12 @@ function volume_weighted_stats_weight_volume_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-weight-volume");
-    cargs.push(execution.inputFile((params["weight_volume"] ?? null)));
-    if ((params["opt_match_maps"] ?? false)) {
-        cargs.push("-match-maps");
+    if ((params["match-maps"] ?? false)) {
+        cargs.push(
+            "-weight-volume",
+            execution.inputFile((params["weight-volume"] ?? null)),
+            "-match-maps"
+        );
     }
     return cargs;
 }
@@ -96,18 +90,18 @@ function volume_weighted_stats_weight_volume_cargs(
  * Build parameters.
  *
  * @param roi_volume the roi, as a volume file
- * @param opt_match_maps each subvolume of input uses the corresponding subvolume from the roi file
+ * @param match_maps each subvolume of input uses the corresponding subvolume from the roi file
  *
  * @returns Parameter dictionary
  */
 function volume_weighted_stats_roi_params(
     roi_volume: InputPathType,
-    opt_match_maps: boolean = false,
+    match_maps: boolean = false,
 ): VolumeWeightedStatsRoiParametersTagged {
     const params = {
         "@type": "roi" as const,
-        "roi_volume": roi_volume,
-        "opt_match_maps": opt_match_maps,
+        "roi-volume": roi_volume,
+        "match-maps": match_maps,
     };
     return params;
 }
@@ -126,49 +120,12 @@ function volume_weighted_stats_roi_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-roi");
-    cargs.push(execution.inputFile((params["roi_volume"] ?? null)));
-    if ((params["opt_match_maps"] ?? false)) {
-        cargs.push("-match-maps");
-    }
-    return cargs;
-}
-
-
-/**
- * Build parameters.
- *
- * @param opt_sample estimate population stdev from the sample
- *
- * @returns Parameter dictionary
- */
-function volume_weighted_stats_stdev_params(
-    opt_sample: boolean = false,
-): VolumeWeightedStatsStdevParametersTagged {
-    const params = {
-        "@type": "stdev" as const,
-        "opt_sample": opt_sample,
-    };
-    return params;
-}
-
-
-/**
- * Build command-line arguments from parameters.
- *
- * @param params The parameters.
- * @param execution The execution object for resolving input paths.
- *
- * @returns Command-line arguments.
- */
-function volume_weighted_stats_stdev_cargs(
-    params: VolumeWeightedStatsStdevParameters,
-    execution: Execution,
-): string[] {
-    const cargs: string[] = [];
-    cargs.push("-stdev");
-    if ((params["opt_sample"] ?? false)) {
-        cargs.push("-sample");
+    if ((params["match-maps"] ?? false)) {
+        cargs.push(
+            "-roi",
+            execution.inputFile((params["roi-volume"] ?? null)),
+            "-match-maps"
+        );
     }
     return cargs;
 }
@@ -190,50 +147,56 @@ interface VolumeWeightedStatsOutputs {
 /**
  * Build parameters.
  *
+ * @param subvolume only display output for one subvolume
+
+the subvolume number or name
+ * @param percent compute weighted percentile
+
+the percentile to find, must be between 0 and 100
  * @param volume_in the input volume
  * @param weight_volume use weights from a volume file
- * @param opt_subvolume_subvolume only display output for one subvolume: the subvolume number or name
  * @param roi only consider data inside an roi
- * @param opt_mean compute weighted mean
- * @param stdev compute weighted standard deviation
- * @param opt_percentile_percent compute weighted percentile: the percentile to find, must be between 0 and 100
- * @param opt_sum compute weighted sum
- * @param opt_show_map_name print map index and name before each output
+ * @param mean compute weighted mean
+ * @param sample compute weighted standard deviation
+
+estimate population stdev from the sample
+ * @param sum compute weighted sum
+ * @param show_map_name print map index and name before each output
  *
  * @returns Parameter dictionary
  */
 function volume_weighted_stats_params(
+    subvolume: string | null,
+    percent: number | null,
     volume_in: InputPathType,
     weight_volume: VolumeWeightedStatsWeightVolumeParameters | null = null,
-    opt_subvolume_subvolume: string | null = null,
     roi: VolumeWeightedStatsRoiParameters | null = null,
-    opt_mean: boolean = false,
-    stdev: VolumeWeightedStatsStdevParameters | null = null,
-    opt_percentile_percent: number | null = null,
-    opt_sum: boolean = false,
-    opt_show_map_name: boolean = false,
+    mean: boolean = false,
+    sample: boolean | null = false,
+    sum: boolean = false,
+    show_map_name: boolean = false,
 ): VolumeWeightedStatsParametersTagged {
     const params = {
         "@type": "workbench/volume-weighted-stats" as const,
-        "volume_in": volume_in,
-        "opt_mean": opt_mean,
-        "opt_sum": opt_sum,
-        "opt_show_map_name": opt_show_map_name,
+        "mean": mean,
+        "sum": sum,
+        "show-map-name": show_map_name,
+        "volume-in": volume_in,
     };
     if (weight_volume !== null) {
-        params["weight_volume"] = weight_volume;
+        params["weight-volume"] = weight_volume;
     }
-    if (opt_subvolume_subvolume !== null) {
-        params["opt_subvolume_subvolume"] = opt_subvolume_subvolume;
+    if (subvolume !== null) {
+        params["subvolume"] = subvolume;
     }
     if (roi !== null) {
         params["roi"] = roi;
     }
-    if (stdev !== null) {
-        params["stdev"] = stdev;
+    if (sample !== null) {
+        params["sample"] = sample;
     }
-    if (opt_percentile_percent !== null) {
-        params["opt_percentile_percent"] = opt_percentile_percent;
+    if (percent !== null) {
+        params["percent"] = percent;
     }
     return params;
 }
@@ -252,39 +215,24 @@ function volume_weighted_stats_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-weighted-stats");
-    cargs.push(execution.inputFile((params["volume_in"] ?? null)));
-    if ((params["weight_volume"] ?? null) !== null) {
-        cargs.push(...volume_weighted_stats_weight_volume_cargs((params["weight_volume"] ?? null), execution));
-    }
-    if ((params["opt_subvolume_subvolume"] ?? null) !== null) {
+    if ((params["weight-volume"] ?? null) !== null || (params["subvolume"] ?? null) !== null || (params["roi"] ?? null) !== null || (params["mean"] ?? false) || (params["sample"] ?? false) !== null || (params["percent"] ?? null) !== null || (params["sum"] ?? false) || (params["show-map-name"] ?? false)) {
         cargs.push(
+            "wb_command",
+            "-volume-weighted-stats",
+            ...(((params["weight-volume"] ?? null) !== null) ? volume_weighted_stats_weight_volume_cargs((params["weight-volume"] ?? null), execution) : []),
             "-subvolume",
-            (params["opt_subvolume_subvolume"] ?? null)
-        );
-    }
-    if ((params["roi"] ?? null) !== null) {
-        cargs.push(...volume_weighted_stats_roi_cargs((params["roi"] ?? null), execution));
-    }
-    if ((params["opt_mean"] ?? false)) {
-        cargs.push("-mean");
-    }
-    if ((params["stdev"] ?? null) !== null) {
-        cargs.push(...volume_weighted_stats_stdev_cargs((params["stdev"] ?? null), execution));
-    }
-    if ((params["opt_percentile_percent"] ?? null) !== null) {
-        cargs.push(
+            (((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null) : ""),
+            ...(((params["roi"] ?? null) !== null) ? volume_weighted_stats_roi_cargs((params["roi"] ?? null), execution) : []),
+            (((params["mean"] ?? false)) ? "-mean" : ""),
+            "-stdev",
+            (((params["sample"] ?? false) !== null) ? "-sample" : ""),
             "-percentile",
-            String((params["opt_percentile_percent"] ?? null))
+            (((params["percent"] ?? null) !== null) ? String((params["percent"] ?? null)) : ""),
+            (((params["sum"] ?? false)) ? "-sum" : ""),
+            (((params["show-map-name"] ?? false)) ? "-show-map-name" : "")
         );
     }
-    if ((params["opt_sum"] ?? false)) {
-        cargs.push("-sum");
-    }
-    if ((params["opt_show_map_name"] ?? false)) {
-        cargs.push("-show-map-name");
-    }
+    cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     return cargs;
 }
 
@@ -309,17 +257,11 @@ function volume_weighted_stats_outputs(
 
 
 /**
- * volume-weighted-stats
- *
- * Weighted spatial statistics on a volume file.
+ * WEIGHTED SPATIAL STATISTICS ON A VOLUME FILE.
  *
  * For each subvolume of the input, a line of text is printed, resulting from the specified operation.  If -weight-volume is not specified, each voxel's volume is used.  Use -subvolume to only give output for a single subvolume.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -mean, -stdev, -percentile or -sum must be specified.
  *
  * Using -sum without -weight-volume is equivalent to integrating with respect to volume.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -341,44 +283,44 @@ function volume_weighted_stats_execute(
 
 
 /**
- * volume-weighted-stats
- *
- * Weighted spatial statistics on a volume file.
+ * WEIGHTED SPATIAL STATISTICS ON A VOLUME FILE.
  *
  * For each subvolume of the input, a line of text is printed, resulting from the specified operation.  If -weight-volume is not specified, each voxel's volume is used.  Use -subvolume to only give output for a single subvolume.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -mean, -stdev, -percentile or -sum must be specified.
  *
  * Using -sum without -weight-volume is equivalent to integrating with respect to volume.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param subvolume only display output for one subvolume
+
+the subvolume number or name
+ * @param percent compute weighted percentile
+
+the percentile to find, must be between 0 and 100
  * @param volume_in the input volume
  * @param weight_volume use weights from a volume file
- * @param opt_subvolume_subvolume only display output for one subvolume: the subvolume number or name
  * @param roi only consider data inside an roi
- * @param opt_mean compute weighted mean
- * @param stdev compute weighted standard deviation
- * @param opt_percentile_percent compute weighted percentile: the percentile to find, must be between 0 and 100
- * @param opt_sum compute weighted sum
- * @param opt_show_map_name print map index and name before each output
+ * @param mean compute weighted mean
+ * @param sample compute weighted standard deviation
+
+estimate population stdev from the sample
+ * @param sum compute weighted sum
+ * @param show_map_name print map index and name before each output
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeWeightedStatsOutputs`).
  */
 function volume_weighted_stats(
+    subvolume: string | null,
+    percent: number | null,
     volume_in: InputPathType,
     weight_volume: VolumeWeightedStatsWeightVolumeParameters | null = null,
-    opt_subvolume_subvolume: string | null = null,
     roi: VolumeWeightedStatsRoiParameters | null = null,
-    opt_mean: boolean = false,
-    stdev: VolumeWeightedStatsStdevParameters | null = null,
-    opt_percentile_percent: number | null = null,
-    opt_sum: boolean = false,
-    opt_show_map_name: boolean = false,
+    mean: boolean = false,
+    sample: boolean | null = false,
+    sum: boolean = false,
+    show_map_name: boolean = false,
     runner: Runner | null = null,
 ): VolumeWeightedStatsOutputs {
-    const params = volume_weighted_stats_params(volume_in, weight_volume, opt_subvolume_subvolume, roi, opt_mean, stdev, opt_percentile_percent, opt_sum, opt_show_map_name)
+    const params = volume_weighted_stats_params(subvolume, percent, volume_in, weight_volume, roi, mean, sample, sum, show_map_name)
     return volume_weighted_stats_execute(params, runner);
 }
 
@@ -390,6 +332,5 @@ export {
       volume_weighted_stats_execute,
       volume_weighted_stats_params,
       volume_weighted_stats_roi_params,
-      volume_weighted_stats_stdev_params,
       volume_weighted_stats_weight_volume_params,
 };

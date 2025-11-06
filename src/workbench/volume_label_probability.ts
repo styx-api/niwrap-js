@@ -4,18 +4,17 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_LABEL_PROBABILITY_METADATA: Metadata = {
-    id: "b0631ce968096664259df70f04f3e4b719f4e66d.boutiques",
+    id: "433915b90ed4936671e31ff5e9d775b5a9ffb4e9.workbench",
     name: "volume-label-probability",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface VolumeLabelProbabilityParameters {
     "@type"?: "workbench/volume-label-probability";
-    "label_maps": InputPathType;
-    "probability_out": string;
-    "opt_exclude_unlabeled": boolean;
+    "probability-out": string;
+    "exclude-unlabeled": boolean;
+    "label-maps": InputPathType;
 }
 type VolumeLabelProbabilityParametersTagged = Required<Pick<VolumeLabelProbabilityParameters, '@type'>> & VolumeLabelProbabilityParameters;
 
@@ -40,22 +39,22 @@ interface VolumeLabelProbabilityOutputs {
 /**
  * Build parameters.
  *
- * @param label_maps volume label file containing individual label maps from many subjects
  * @param probability_out the relative frequencies of each label at each voxel
- * @param opt_exclude_unlabeled don't make a probability map of the unlabeled key
+ * @param label_maps volume label file containing individual label maps from many subjects
+ * @param exclude_unlabeled don't make a probability map of the unlabeled key
  *
  * @returns Parameter dictionary
  */
 function volume_label_probability_params(
-    label_maps: InputPathType,
     probability_out: string,
-    opt_exclude_unlabeled: boolean = false,
+    label_maps: InputPathType,
+    exclude_unlabeled: boolean = false,
 ): VolumeLabelProbabilityParametersTagged {
     const params = {
         "@type": "workbench/volume-label-probability" as const,
-        "label_maps": label_maps,
-        "probability_out": probability_out,
-        "opt_exclude_unlabeled": opt_exclude_unlabeled,
+        "probability-out": probability_out,
+        "exclude-unlabeled": exclude_unlabeled,
+        "label-maps": label_maps,
     };
     return params;
 }
@@ -74,13 +73,15 @@ function volume_label_probability_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-label-probability");
-    cargs.push(execution.inputFile((params["label_maps"] ?? null)));
-    cargs.push((params["probability_out"] ?? null));
-    if ((params["opt_exclude_unlabeled"] ?? false)) {
-        cargs.push("-exclude-unlabeled");
+    if ((params["exclude-unlabeled"] ?? false)) {
+        cargs.push(
+            "wb_command",
+            "-volume-label-probability",
+            (params["probability-out"] ?? null),
+            "-exclude-unlabeled"
+        );
     }
+    cargs.push(execution.inputFile((params["label-maps"] ?? null)));
     return cargs;
 }
 
@@ -99,22 +100,16 @@ function volume_label_probability_outputs(
 ): VolumeLabelProbabilityOutputs {
     const ret: VolumeLabelProbabilityOutputs = {
         root: execution.outputFile("."),
-        probability_out: execution.outputFile([(params["probability_out"] ?? null)].join('')),
+        probability_out: execution.outputFile([(params["probability-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * volume-label-probability
- *
- * Find frequency of volume labels.
+ * FIND FREQUENCY OF VOLUME LABELS.
  *
  * This command outputs a set of soft ROIs, one for each label in the input, where the value is how many of the input maps had that label at that voxel, divided by the number of input maps.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -136,30 +131,24 @@ function volume_label_probability_execute(
 
 
 /**
- * volume-label-probability
- *
- * Find frequency of volume labels.
+ * FIND FREQUENCY OF VOLUME LABELS.
  *
  * This command outputs a set of soft ROIs, one for each label in the input, where the value is how many of the input maps had that label at that voxel, divided by the number of input maps.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
- * @param label_maps volume label file containing individual label maps from many subjects
  * @param probability_out the relative frequencies of each label at each voxel
- * @param opt_exclude_unlabeled don't make a probability map of the unlabeled key
+ * @param label_maps volume label file containing individual label maps from many subjects
+ * @param exclude_unlabeled don't make a probability map of the unlabeled key
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeLabelProbabilityOutputs`).
  */
 function volume_label_probability(
-    label_maps: InputPathType,
     probability_out: string,
-    opt_exclude_unlabeled: boolean = false,
+    label_maps: InputPathType,
+    exclude_unlabeled: boolean = false,
     runner: Runner | null = null,
 ): VolumeLabelProbabilityOutputs {
-    const params = volume_label_probability_params(label_maps, probability_out, opt_exclude_unlabeled)
+    const params = volume_label_probability_params(probability_out, label_maps, exclude_unlabeled)
     return volume_label_probability_execute(params, runner);
 }
 

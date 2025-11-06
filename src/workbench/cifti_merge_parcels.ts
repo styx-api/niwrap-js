@@ -4,25 +4,24 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_MERGE_PARCELS_METADATA: Metadata = {
-    id: "6843c1951c4ae4950f7c0694f8574395469f0819.boutiques",
+    id: "bdc0b6e6d2c4a10f36778082f10a27acb88cc48e.workbench",
     name: "cifti-merge-parcels",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiMergeParcelsCiftiParameters {
     "@type"?: "cifti";
-    "cifti_in": InputPathType;
+    "cifti-in": InputPathType;
 }
 type CiftiMergeParcelsCiftiParametersTagged = Required<Pick<CiftiMergeParcelsCiftiParameters, '@type'>> & CiftiMergeParcelsCiftiParameters;
 
 
 interface CiftiMergeParcelsParameters {
     "@type"?: "workbench/cifti-merge-parcels";
-    "direction": string;
-    "cifti_out": string;
+    "cifti-out": string;
     "cifti"?: Array<CiftiMergeParcelsCiftiParameters> | null | undefined;
+    "direction": string;
 }
 type CiftiMergeParcelsParametersTagged = Required<Pick<CiftiMergeParcelsParameters, '@type'>> & CiftiMergeParcelsParameters;
 
@@ -39,7 +38,7 @@ function cifti_merge_parcels_cifti_params(
 ): CiftiMergeParcelsCiftiParametersTagged {
     const params = {
         "@type": "cifti" as const,
-        "cifti_in": cifti_in,
+        "cifti-in": cifti_in,
     };
     return params;
 }
@@ -58,8 +57,10 @@ function cifti_merge_parcels_cifti_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-cifti");
-    cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
+    cargs.push(
+        "-cifti",
+        execution.inputFile((params["cifti-in"] ?? null))
+    );
     return cargs;
 }
 
@@ -84,21 +85,21 @@ interface CiftiMergeParcelsOutputs {
 /**
  * Build parameters.
  *
- * @param direction which dimension to merge along (integer, 'ROW', or 'COLUMN')
  * @param cifti_out the output cifti file
+ * @param direction which dimension to merge along (integer, 'ROW', or 'COLUMN')
  * @param cifti specify an input cifti file
  *
  * @returns Parameter dictionary
  */
 function cifti_merge_parcels_params(
-    direction: string,
     cifti_out: string,
+    direction: string,
     cifti: Array<CiftiMergeParcelsCiftiParameters> | null = null,
 ): CiftiMergeParcelsParametersTagged {
     const params = {
         "@type": "workbench/cifti-merge-parcels" as const,
+        "cifti-out": cifti_out,
         "direction": direction,
-        "cifti_out": cifti_out,
     };
     if (cifti !== null) {
         params["cifti"] = cifti;
@@ -120,13 +121,15 @@ function cifti_merge_parcels_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-merge-parcels");
-    cargs.push((params["direction"] ?? null));
-    cargs.push((params["cifti_out"] ?? null));
     if ((params["cifti"] ?? null) !== null) {
-        cargs.push(...(params["cifti"] ?? null).map(s => cifti_merge_parcels_cifti_cargs(s, execution)).flat());
+        cargs.push(
+            "wb_command",
+            "-cifti-merge-parcels",
+            (params["cifti-out"] ?? null),
+            ...(params["cifti"] ?? null).map(s => cifti_merge_parcels_cifti_cargs(s, execution)).flat()
+        );
     }
+    cargs.push((params["direction"] ?? null));
     return cargs;
 }
 
@@ -145,22 +148,16 @@ function cifti_merge_parcels_outputs(
 ): CiftiMergeParcelsOutputs {
     const ret: CiftiMergeParcelsOutputs = {
         root: execution.outputFile("."),
-        cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
+        cifti_out: execution.outputFile([(params["cifti-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * cifti-merge-parcels
- *
- * Merge cifti files along parcels dimension.
+ * MERGE CIFTI FILES ALONG PARCELS DIMENSION.
  *
  * The input cifti files must have matching mappings along the direction not specified, and the mapping along the specified direction must be parcels.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -182,30 +179,24 @@ function cifti_merge_parcels_execute(
 
 
 /**
- * cifti-merge-parcels
- *
- * Merge cifti files along parcels dimension.
+ * MERGE CIFTI FILES ALONG PARCELS DIMENSION.
  *
  * The input cifti files must have matching mappings along the direction not specified, and the mapping along the specified direction must be parcels.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
- * @param direction which dimension to merge along (integer, 'ROW', or 'COLUMN')
  * @param cifti_out the output cifti file
+ * @param direction which dimension to merge along (integer, 'ROW', or 'COLUMN')
  * @param cifti specify an input cifti file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiMergeParcelsOutputs`).
  */
 function cifti_merge_parcels(
-    direction: string,
     cifti_out: string,
+    direction: string,
     cifti: Array<CiftiMergeParcelsCiftiParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiMergeParcelsOutputs {
-    const params = cifti_merge_parcels_params(direction, cifti_out, cifti)
+    const params = cifti_merge_parcels_params(cifti_out, direction, cifti)
     return cifti_merge_parcels_execute(params, runner);
 }
 

@@ -4,17 +4,16 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LABEL_MERGE_METADATA: Metadata = {
-    id: "0ecf9e8d0dbbf764d34113468b73d18237947b26.boutiques",
+    id: "791909e8270318bd504b97ada9b61a7c8e2898d1.workbench",
     name: "label-merge",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface LabelMergeUpToParameters {
-    "@type"?: "up_to";
-    "last_column": string;
-    "opt_reverse": boolean;
+    "@type"?: "up-to";
+    "last-column": string;
+    "reverse": boolean;
 }
 type LabelMergeUpToParametersTagged = Required<Pick<LabelMergeUpToParameters, '@type'>> & LabelMergeUpToParameters;
 
@@ -22,14 +21,14 @@ type LabelMergeUpToParametersTagged = Required<Pick<LabelMergeUpToParameters, '@
 interface LabelMergeColumnParameters {
     "@type"?: "column";
     "column": string;
-    "up_to"?: LabelMergeUpToParameters | null | undefined;
+    "up-to"?: LabelMergeUpToParameters | null | undefined;
 }
 type LabelMergeColumnParametersTagged = Required<Pick<LabelMergeColumnParameters, '@type'>> & LabelMergeColumnParameters;
 
 
 interface LabelMergeLabelParameters {
     "@type"?: "label";
-    "label_in": InputPathType;
+    "label-in": InputPathType;
     "column"?: Array<LabelMergeColumnParameters> | null | undefined;
 }
 type LabelMergeLabelParametersTagged = Required<Pick<LabelMergeLabelParameters, '@type'>> & LabelMergeLabelParameters;
@@ -37,7 +36,7 @@ type LabelMergeLabelParametersTagged = Required<Pick<LabelMergeLabelParameters, 
 
 interface LabelMergeParameters {
     "@type"?: "workbench/label-merge";
-    "label_out": string;
+    "label-out": string;
     "label"?: Array<LabelMergeLabelParameters> | null | undefined;
 }
 type LabelMergeParametersTagged = Required<Pick<LabelMergeParameters, '@type'>> & LabelMergeParameters;
@@ -47,18 +46,18 @@ type LabelMergeParametersTagged = Required<Pick<LabelMergeParameters, '@type'>> 
  * Build parameters.
  *
  * @param last_column the number or name of the last column to include
- * @param opt_reverse use the range in reverse order
+ * @param reverse use the range in reverse order
  *
  * @returns Parameter dictionary
  */
 function label_merge_up_to_params(
     last_column: string,
-    opt_reverse: boolean = false,
+    reverse: boolean = false,
 ): LabelMergeUpToParametersTagged {
     const params = {
-        "@type": "up_to" as const,
-        "last_column": last_column,
-        "opt_reverse": opt_reverse,
+        "@type": "up-to" as const,
+        "last-column": last_column,
+        "reverse": reverse,
     };
     return params;
 }
@@ -77,10 +76,12 @@ function label_merge_up_to_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-up-to");
-    cargs.push((params["last_column"] ?? null));
-    if ((params["opt_reverse"] ?? false)) {
-        cargs.push("-reverse");
+    if ((params["reverse"] ?? false)) {
+        cargs.push(
+            "-up-to",
+            (params["last-column"] ?? null),
+            "-reverse"
+        );
     }
     return cargs;
 }
@@ -103,7 +104,7 @@ function label_merge_column_params(
         "column": column,
     };
     if (up_to !== null) {
-        params["up_to"] = up_to;
+        params["up-to"] = up_to;
     }
     return params;
 }
@@ -122,10 +123,12 @@ function label_merge_column_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-column");
-    cargs.push((params["column"] ?? null));
-    if ((params["up_to"] ?? null) !== null) {
-        cargs.push(...label_merge_up_to_cargs((params["up_to"] ?? null), execution));
+    if ((params["up-to"] ?? null) !== null) {
+        cargs.push(
+            "-column",
+            (params["column"] ?? null),
+            ...label_merge_up_to_cargs((params["up-to"] ?? null), execution)
+        );
     }
     return cargs;
 }
@@ -145,7 +148,7 @@ function label_merge_label_params(
 ): LabelMergeLabelParametersTagged {
     const params = {
         "@type": "label" as const,
-        "label_in": label_in,
+        "label-in": label_in,
     };
     if (column !== null) {
         params["column"] = column;
@@ -167,10 +170,12 @@ function label_merge_label_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-label");
-    cargs.push(execution.inputFile((params["label_in"] ?? null)));
     if ((params["column"] ?? null) !== null) {
-        cargs.push(...(params["column"] ?? null).map(s => label_merge_column_cargs(s, execution)).flat());
+        cargs.push(
+            "-label",
+            execution.inputFile((params["label-in"] ?? null)),
+            ...(params["column"] ?? null).map(s => label_merge_column_cargs(s, execution)).flat()
+        );
     }
     return cargs;
 }
@@ -207,7 +212,7 @@ function label_merge_params(
 ): LabelMergeParametersTagged {
     const params = {
         "@type": "workbench/label-merge" as const,
-        "label_out": label_out,
+        "label-out": label_out,
     };
     if (label !== null) {
         params["label"] = label;
@@ -229,11 +234,13 @@ function label_merge_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-label-merge");
-    cargs.push((params["label_out"] ?? null));
     if ((params["label"] ?? null) !== null) {
-        cargs.push(...(params["label"] ?? null).map(s => label_merge_label_cargs(s, execution)).flat());
+        cargs.push(
+            "wb_command",
+            "-label-merge",
+            (params["label-out"] ?? null),
+            ...(params["label"] ?? null).map(s => label_merge_label_cargs(s, execution)).flat()
+        );
     }
     return cargs;
 }
@@ -253,26 +260,20 @@ function label_merge_outputs(
 ): LabelMergeOutputs {
     const ret: LabelMergeOutputs = {
         root: execution.outputFile("."),
-        label_out: execution.outputFile([(params["label_out"] ?? null)].join('')),
+        label_out: execution.outputFile([(params["label-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * label-merge
- *
- * Merge label files into a new file.
+ * MERGE LABEL FILES INTO A NEW FILE.
  *
  * Takes one or more label files and constructs a new label file by concatenating columns from them.  The input files must have the same number of vertices and the same structure.
  *
  * Example: wb_command -label-merge out.label.gii -label first.label.gii -column 1 -label second.label.gii
  *
  * This example would take the first column from first.label.gii and all subvolumes from second.label.gii, and write these to out.label.gii.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -294,19 +295,13 @@ function label_merge_execute(
 
 
 /**
- * label-merge
- *
- * Merge label files into a new file.
+ * MERGE LABEL FILES INTO A NEW FILE.
  *
  * Takes one or more label files and constructs a new label file by concatenating columns from them.  The input files must have the same number of vertices and the same structure.
  *
  * Example: wb_command -label-merge out.label.gii -label first.label.gii -column 1 -label second.label.gii
  *
  * This example would take the first column from first.label.gii and all subvolumes from second.label.gii, and write these to out.label.gii.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param label_out the output label
  * @param label specify an input label

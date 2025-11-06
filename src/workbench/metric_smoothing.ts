@@ -4,33 +4,32 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_SMOOTHING_METADATA: Metadata = {
-    id: "0a396b41d5717355e9d6de5fcc33e96e22014d30.boutiques",
+    id: "4cac13b0419558d62931d434fd4c5540aac0f7fe.workbench",
     name: "metric-smoothing",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface MetricSmoothingRoiParameters {
     "@type"?: "roi";
-    "roi_metric": InputPathType;
-    "opt_match_columns": boolean;
+    "roi-metric": InputPathType;
+    "match-columns": boolean;
 }
 type MetricSmoothingRoiParametersTagged = Required<Pick<MetricSmoothingRoiParameters, '@type'>> & MetricSmoothingRoiParameters;
 
 
 interface MetricSmoothingParameters {
     "@type"?: "workbench/metric-smoothing";
-    "surface": InputPathType;
-    "metric_in": InputPathType;
-    "smoothing_kernel": number;
-    "metric_out": string;
-    "opt_fwhm": boolean;
+    "metric-out": string;
+    "fwhm": boolean;
     "roi"?: MetricSmoothingRoiParameters | null | undefined;
-    "opt_fix_zeros": boolean;
-    "opt_column_column"?: string | null | undefined;
-    "opt_corrected_areas_area_metric"?: InputPathType | null | undefined;
-    "opt_method_method"?: string | null | undefined;
+    "fix-zeros": boolean;
+    "column"?: string | null | undefined;
+    "area-metric"?: InputPathType | null | undefined;
+    "method"?: string | null | undefined;
+    "surface": InputPathType;
+    "metric-in": InputPathType;
+    "smoothing-kernel": number;
 }
 type MetricSmoothingParametersTagged = Required<Pick<MetricSmoothingParameters, '@type'>> & MetricSmoothingParameters;
 
@@ -39,18 +38,18 @@ type MetricSmoothingParametersTagged = Required<Pick<MetricSmoothingParameters, 
  * Build parameters.
  *
  * @param roi_metric the roi to smooth within, as a metric
- * @param opt_match_columns for each input column, use the corresponding column from the roi
+ * @param match_columns for each input column, use the corresponding column from the roi
  *
  * @returns Parameter dictionary
  */
 function metric_smoothing_roi_params(
     roi_metric: InputPathType,
-    opt_match_columns: boolean = false,
+    match_columns: boolean = false,
 ): MetricSmoothingRoiParametersTagged {
     const params = {
         "@type": "roi" as const,
-        "roi_metric": roi_metric,
-        "opt_match_columns": opt_match_columns,
+        "roi-metric": roi_metric,
+        "match-columns": match_columns,
     };
     return params;
 }
@@ -69,10 +68,12 @@ function metric_smoothing_roi_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-roi");
-    cargs.push(execution.inputFile((params["roi_metric"] ?? null)));
-    if ((params["opt_match_columns"] ?? false)) {
-        cargs.push("-match-columns");
+    if ((params["match-columns"] ?? false)) {
+        cargs.push(
+            "-roi",
+            execution.inputFile((params["roi-metric"] ?? null)),
+            "-match-columns"
+        );
     }
     return cargs;
 }
@@ -98,51 +99,57 @@ interface MetricSmoothingOutputs {
 /**
  * Build parameters.
  *
+ * @param metric_out the output metric
+ * @param column select a single column to smooth
+
+the column number or name
+ * @param area_metric vertex areas to use instead of computing them from the surface
+
+the corrected vertex areas, as a metric
+ * @param method select smoothing method, default GEO_GAUSS_AREA
+
+the name of the smoothing method
  * @param surface the surface to smooth on
  * @param metric_in the metric to smooth
  * @param smoothing_kernel the size of the gaussian smoothing kernel in mm, as sigma by default
- * @param metric_out the output metric
- * @param opt_fwhm kernel size is FWHM, not sigma
+ * @param fwhm kernel size is FWHM, not sigma
  * @param roi select a region of interest to smooth
- * @param opt_fix_zeros treat zero values as not being data
- * @param opt_column_column select a single column to smooth: the column number or name
- * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
- * @param opt_method_method select smoothing method, default GEO_GAUSS_AREA: the name of the smoothing method
+ * @param fix_zeros treat zero values as not being data
  *
  * @returns Parameter dictionary
  */
 function metric_smoothing_params(
+    metric_out: string,
+    column: string | null,
+    area_metric: InputPathType | null,
+    method: string | null,
     surface: InputPathType,
     metric_in: InputPathType,
     smoothing_kernel: number,
-    metric_out: string,
-    opt_fwhm: boolean = false,
+    fwhm: boolean = false,
     roi: MetricSmoothingRoiParameters | null = null,
-    opt_fix_zeros: boolean = false,
-    opt_column_column: string | null = null,
-    opt_corrected_areas_area_metric: InputPathType | null = null,
-    opt_method_method: string | null = null,
+    fix_zeros: boolean = false,
 ): MetricSmoothingParametersTagged {
     const params = {
         "@type": "workbench/metric-smoothing" as const,
+        "metric-out": metric_out,
+        "fwhm": fwhm,
+        "fix-zeros": fix_zeros,
         "surface": surface,
-        "metric_in": metric_in,
-        "smoothing_kernel": smoothing_kernel,
-        "metric_out": metric_out,
-        "opt_fwhm": opt_fwhm,
-        "opt_fix_zeros": opt_fix_zeros,
+        "metric-in": metric_in,
+        "smoothing-kernel": smoothing_kernel,
     };
     if (roi !== null) {
         params["roi"] = roi;
     }
-    if (opt_column_column !== null) {
-        params["opt_column_column"] = opt_column_column;
+    if (column !== null) {
+        params["column"] = column;
     }
-    if (opt_corrected_areas_area_metric !== null) {
-        params["opt_corrected_areas_area_metric"] = opt_corrected_areas_area_metric;
+    if (area_metric !== null) {
+        params["area-metric"] = area_metric;
     }
-    if (opt_method_method !== null) {
-        params["opt_method_method"] = opt_method_method;
+    if (method !== null) {
+        params["method"] = method;
     }
     return params;
 }
@@ -161,39 +168,25 @@ function metric_smoothing_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-metric-smoothing");
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(execution.inputFile((params["metric_in"] ?? null)));
-    cargs.push(String((params["smoothing_kernel"] ?? null)));
-    cargs.push((params["metric_out"] ?? null));
-    if ((params["opt_fwhm"] ?? false)) {
-        cargs.push("-fwhm");
-    }
-    if ((params["roi"] ?? null) !== null) {
-        cargs.push(...metric_smoothing_roi_cargs((params["roi"] ?? null), execution));
-    }
-    if ((params["opt_fix_zeros"] ?? false)) {
-        cargs.push("-fix-zeros");
-    }
-    if ((params["opt_column_column"] ?? null) !== null) {
+    if ((params["fwhm"] ?? false) || (params["roi"] ?? null) !== null || (params["fix-zeros"] ?? false) || (params["column"] ?? null) !== null || (params["area-metric"] ?? null) !== null || (params["method"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-metric-smoothing",
+            (params["metric-out"] ?? null),
+            (((params["fwhm"] ?? false)) ? "-fwhm" : ""),
+            ...(((params["roi"] ?? null) !== null) ? metric_smoothing_roi_cargs((params["roi"] ?? null), execution) : []),
+            (((params["fix-zeros"] ?? false)) ? "-fix-zeros" : ""),
             "-column",
-            (params["opt_column_column"] ?? null)
-        );
-    }
-    if ((params["opt_corrected_areas_area_metric"] ?? null) !== null) {
-        cargs.push(
+            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
             "-corrected-areas",
-            execution.inputFile((params["opt_corrected_areas_area_metric"] ?? null))
-        );
-    }
-    if ((params["opt_method_method"] ?? null) !== null) {
-        cargs.push(
+            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : ""),
             "-method",
-            (params["opt_method_method"] ?? null)
+            (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : "")
         );
     }
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
+    cargs.push(String((params["smoothing-kernel"] ?? null)));
     return cargs;
 }
 
@@ -212,16 +205,14 @@ function metric_smoothing_outputs(
 ): MetricSmoothingOutputs {
     const ret: MetricSmoothingOutputs = {
         root: execution.outputFile("."),
-        metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
+        metric_out: execution.outputFile([(params["metric-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * metric-smoothing
- *
- * Smooth a metric file.
+ * SMOOTH A METRIC FILE.
  *
  * Smooth a metric file on a surface.  By default, smooths all input columns on the entire surface, specify -column to use only one input column, and -roi to smooth only where the roi metric is greater than 0, outputting zeros elsewhere.
  *
@@ -240,10 +231,6 @@ function metric_smoothing_outputs(
  * GEO_GAUSS - matches geodesic gaussian smoothing from caret5, but does not check kernels for having unequal importance
  *
  * The GEO_GAUSS_AREA method is the default because it is usually the correct choice.  GEO_GAUSS_EQUAL may be the correct choice when the sum of vertex values is more meaningful then the surface integral (sum of values .* areas), for instance when smoothing vertex areas (the sum is the total surface area, while the surface integral is the sum of squares of the vertex areas).  The GEO_GAUSS method is not recommended, it exists mainly to replicate methods of studies done with caret5's geodesic smoothing.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -265,9 +252,7 @@ function metric_smoothing_execute(
 
 
 /**
- * metric-smoothing
- *
- * Smooth a metric file.
+ * SMOOTH A METRIC FILE.
  *
  * Smooth a metric file on a surface.  By default, smooths all input columns on the entire surface, specify -column to use only one input column, and -roi to smooth only where the roi metric is greater than 0, outputting zeros elsewhere.
  *
@@ -287,38 +272,40 @@ function metric_smoothing_execute(
  *
  * The GEO_GAUSS_AREA method is the default because it is usually the correct choice.  GEO_GAUSS_EQUAL may be the correct choice when the sum of vertex values is more meaningful then the surface integral (sum of values .* areas), for instance when smoothing vertex areas (the sum is the total surface area, while the surface integral is the sum of squares of the vertex areas).  The GEO_GAUSS method is not recommended, it exists mainly to replicate methods of studies done with caret5's geodesic smoothing.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param metric_out the output metric
+ * @param column select a single column to smooth
+
+the column number or name
+ * @param area_metric vertex areas to use instead of computing them from the surface
+
+the corrected vertex areas, as a metric
+ * @param method select smoothing method, default GEO_GAUSS_AREA
+
+the name of the smoothing method
  * @param surface the surface to smooth on
  * @param metric_in the metric to smooth
  * @param smoothing_kernel the size of the gaussian smoothing kernel in mm, as sigma by default
- * @param metric_out the output metric
- * @param opt_fwhm kernel size is FWHM, not sigma
+ * @param fwhm kernel size is FWHM, not sigma
  * @param roi select a region of interest to smooth
- * @param opt_fix_zeros treat zero values as not being data
- * @param opt_column_column select a single column to smooth: the column number or name
- * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
- * @param opt_method_method select smoothing method, default GEO_GAUSS_AREA: the name of the smoothing method
+ * @param fix_zeros treat zero values as not being data
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricSmoothingOutputs`).
  */
 function metric_smoothing(
+    metric_out: string,
+    column: string | null,
+    area_metric: InputPathType | null,
+    method: string | null,
     surface: InputPathType,
     metric_in: InputPathType,
     smoothing_kernel: number,
-    metric_out: string,
-    opt_fwhm: boolean = false,
+    fwhm: boolean = false,
     roi: MetricSmoothingRoiParameters | null = null,
-    opt_fix_zeros: boolean = false,
-    opt_column_column: string | null = null,
-    opt_corrected_areas_area_metric: InputPathType | null = null,
-    opt_method_method: string | null = null,
+    fix_zeros: boolean = false,
     runner: Runner | null = null,
 ): MetricSmoothingOutputs {
-    const params = metric_smoothing_params(surface, metric_in, smoothing_kernel, metric_out, opt_fwhm, roi, opt_fix_zeros, opt_column_column, opt_corrected_areas_area_metric, opt_method_method)
+    const params = metric_smoothing_params(metric_out, column, area_metric, method, surface, metric_in, smoothing_kernel, fwhm, roi, fix_zeros)
     return metric_smoothing_execute(params, runner);
 }
 

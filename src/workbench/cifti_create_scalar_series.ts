@@ -4,10 +4,9 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_CREATE_SCALAR_SERIES_METADATA: Metadata = {
-    id: "89382f5dba10644cb62354103467cd5b9bd291f2.boutiques",
+    id: "8d713a958679f48506f74cec988ea68de2166f03.workbench",
     name: "cifti-create-scalar-series",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
@@ -22,11 +21,11 @@ type CiftiCreateScalarSeriesSeriesParametersTagged = Required<Pick<CiftiCreateSc
 
 interface CiftiCreateScalarSeriesParameters {
     "@type"?: "workbench/cifti-create-scalar-series";
-    "input": string;
-    "cifti_out": string;
-    "opt_transpose": boolean;
-    "opt_name_file_file"?: string | null | undefined;
+    "cifti-out": string;
+    "transpose": boolean;
+    "file"?: string | null | undefined;
     "series"?: CiftiCreateScalarSeriesSeriesParameters | null | undefined;
+    "input": string;
 }
 type CiftiCreateScalarSeriesParametersTagged = Required<Pick<CiftiCreateScalarSeriesParameters, '@type'>> & CiftiCreateScalarSeriesParameters;
 
@@ -68,10 +67,12 @@ function cifti_create_scalar_series_series_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-series");
-    cargs.push((params["unit"] ?? null));
-    cargs.push(String((params["start"] ?? null)));
-    cargs.push(String((params["step"] ?? null)));
+    cargs.push(
+        "-series",
+        (params["unit"] ?? null),
+        String((params["start"] ?? null)),
+        String((params["step"] ?? null))
+    );
     return cargs;
 }
 
@@ -96,29 +97,31 @@ interface CiftiCreateScalarSeriesOutputs {
 /**
  * Build parameters.
  *
- * @param input input file
  * @param cifti_out output cifti file
- * @param opt_transpose use if the rows of the text file are along the scalar dimension
- * @param opt_name_file_file use a text file to set names on scalar dimension: text file containing names, one per line
+ * @param file use a text file to set names on scalar dimension
+
+text file containing names, one per line
+ * @param input input file
+ * @param transpose use if the rows of the text file are along the scalar dimension
  * @param series set the units and values of the series
  *
  * @returns Parameter dictionary
  */
 function cifti_create_scalar_series_params(
-    input: string,
     cifti_out: string,
-    opt_transpose: boolean = false,
-    opt_name_file_file: string | null = null,
+    file: string | null,
+    input: string,
+    transpose: boolean = false,
     series: CiftiCreateScalarSeriesSeriesParameters | null = null,
 ): CiftiCreateScalarSeriesParametersTagged {
     const params = {
         "@type": "workbench/cifti-create-scalar-series" as const,
+        "cifti-out": cifti_out,
+        "transpose": transpose,
         "input": input,
-        "cifti_out": cifti_out,
-        "opt_transpose": opt_transpose,
     };
-    if (opt_name_file_file !== null) {
-        params["opt_name_file_file"] = opt_name_file_file;
+    if (file !== null) {
+        params["file"] = file;
     }
     if (series !== null) {
         params["series"] = series;
@@ -140,22 +143,18 @@ function cifti_create_scalar_series_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-create-scalar-series");
-    cargs.push((params["input"] ?? null));
-    cargs.push((params["cifti_out"] ?? null));
-    if ((params["opt_transpose"] ?? false)) {
-        cargs.push("-transpose");
-    }
-    if ((params["opt_name_file_file"] ?? null) !== null) {
+    if ((params["transpose"] ?? false) || (params["file"] ?? null) !== null || (params["series"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-cifti-create-scalar-series",
+            (params["cifti-out"] ?? null),
+            (((params["transpose"] ?? false)) ? "-transpose" : ""),
             "-name-file",
-            (params["opt_name_file_file"] ?? null)
+            (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : ""),
+            ...(((params["series"] ?? null) !== null) ? cifti_create_scalar_series_series_cargs((params["series"] ?? null), execution) : [])
         );
     }
-    if ((params["series"] ?? null) !== null) {
-        cargs.push(...cifti_create_scalar_series_series_cargs((params["series"] ?? null), execution));
-    }
+    cargs.push((params["input"] ?? null));
     return cargs;
 }
 
@@ -174,16 +173,14 @@ function cifti_create_scalar_series_outputs(
 ): CiftiCreateScalarSeriesOutputs {
     const ret: CiftiCreateScalarSeriesOutputs = {
         root: execution.outputFile("."),
-        cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
+        cifti_out: execution.outputFile([(params["cifti-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * cifti-create-scalar-series
- *
- * Import series data into cifti.
+ * IMPORT SERIES DATA INTO CIFTI.
  *
  * Convert a text file containing series of equal length into a cifti file.  The text file should have lines made up of numbers separated by whitespace, with no extra newlines between lines.
  *
@@ -193,10 +190,6 @@ function cifti_create_scalar_series_outputs(
  * HERTZ
  * METER
  * RADIAN.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -218,9 +211,7 @@ function cifti_create_scalar_series_execute(
 
 
 /**
- * cifti-create-scalar-series
- *
- * Import series data into cifti.
+ * IMPORT SERIES DATA INTO CIFTI.
  *
  * Convert a text file containing series of equal length into a cifti file.  The text file should have lines made up of numbers separated by whitespace, with no extra newlines between lines.
  *
@@ -231,28 +222,26 @@ function cifti_create_scalar_series_execute(
  * METER
  * RADIAN.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
- * @param input input file
  * @param cifti_out output cifti file
- * @param opt_transpose use if the rows of the text file are along the scalar dimension
- * @param opt_name_file_file use a text file to set names on scalar dimension: text file containing names, one per line
+ * @param file use a text file to set names on scalar dimension
+
+text file containing names, one per line
+ * @param input input file
+ * @param transpose use if the rows of the text file are along the scalar dimension
  * @param series set the units and values of the series
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiCreateScalarSeriesOutputs`).
  */
 function cifti_create_scalar_series(
-    input: string,
     cifti_out: string,
-    opt_transpose: boolean = false,
-    opt_name_file_file: string | null = null,
+    file: string | null,
+    input: string,
+    transpose: boolean = false,
     series: CiftiCreateScalarSeriesSeriesParameters | null = null,
     runner: Runner | null = null,
 ): CiftiCreateScalarSeriesOutputs {
-    const params = cifti_create_scalar_series_params(input, cifti_out, opt_transpose, opt_name_file_file, series)
+    const params = cifti_create_scalar_series_params(cifti_out, file, input, transpose, series)
     return cifti_create_scalar_series_execute(params, runner);
 }
 

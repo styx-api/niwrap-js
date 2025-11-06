@@ -4,17 +4,16 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_COORDINATES_TO_METRIC_METADATA: Metadata = {
-    id: "5cba1432e52e6cde1dfbf6613fe3e4f9bb95feee.boutiques",
+    id: "8854ebdafebd2ec6672ea73ead63ee985ee25822.workbench",
     name: "surface-coordinates-to-metric",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface SurfaceCoordinatesToMetricParameters {
     "@type"?: "workbench/surface-coordinates-to-metric";
+    "metric-out": string;
     "surface": InputPathType;
-    "metric_out": string;
 }
 type SurfaceCoordinatesToMetricParametersTagged = Required<Pick<SurfaceCoordinatesToMetricParameters, '@type'>> & SurfaceCoordinatesToMetricParameters;
 
@@ -39,19 +38,19 @@ interface SurfaceCoordinatesToMetricOutputs {
 /**
  * Build parameters.
  *
- * @param surface the surface to use the coordinates of
  * @param metric_out the output metric
+ * @param surface the surface to use the coordinates of
  *
  * @returns Parameter dictionary
  */
 function surface_coordinates_to_metric_params(
-    surface: InputPathType,
     metric_out: string,
+    surface: InputPathType,
 ): SurfaceCoordinatesToMetricParametersTagged {
     const params = {
         "@type": "workbench/surface-coordinates-to-metric" as const,
+        "metric-out": metric_out,
         "surface": surface,
-        "metric_out": metric_out,
     };
     return params;
 }
@@ -70,10 +69,12 @@ function surface_coordinates_to_metric_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-surface-coordinates-to-metric");
+    cargs.push(
+        "wb_command",
+        "-surface-coordinates-to-metric",
+        (params["metric-out"] ?? null)
+    );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push((params["metric_out"] ?? null));
     return cargs;
 }
 
@@ -92,22 +93,16 @@ function surface_coordinates_to_metric_outputs(
 ): SurfaceCoordinatesToMetricOutputs {
     const ret: SurfaceCoordinatesToMetricOutputs = {
         root: execution.outputFile("."),
-        metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
+        metric_out: execution.outputFile([(params["metric-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * surface-coordinates-to-metric
- *
- * Make metric file of surface coordinates.
+ * MAKE METRIC FILE OF SURFACE COORDINATES.
  *
  * Puts the coordinates of the surface into a 3-map metric file, as x, y, z.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -129,28 +124,22 @@ function surface_coordinates_to_metric_execute(
 
 
 /**
- * surface-coordinates-to-metric
- *
- * Make metric file of surface coordinates.
+ * MAKE METRIC FILE OF SURFACE COORDINATES.
  *
  * Puts the coordinates of the surface into a 3-map metric file, as x, y, z.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
- * @param surface the surface to use the coordinates of
  * @param metric_out the output metric
+ * @param surface the surface to use the coordinates of
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceCoordinatesToMetricOutputs`).
  */
 function surface_coordinates_to_metric(
-    surface: InputPathType,
     metric_out: string,
+    surface: InputPathType,
     runner: Runner | null = null,
 ): SurfaceCoordinatesToMetricOutputs {
-    const params = surface_coordinates_to_metric_params(surface, metric_out)
+    const params = surface_coordinates_to_metric_params(metric_out, surface)
     return surface_coordinates_to_metric_execute(params, runner);
 }
 

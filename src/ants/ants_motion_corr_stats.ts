@@ -17,10 +17,10 @@ interface AntsMotionCorrStatsParameters {
     "moco_params": InputPathType;
     "output": string;
     "transform_index"?: number | null | undefined;
-    "framewise"?: 0 | 1 | null | undefined;
+    "framewise"?: boolean | null | undefined;
     "spatial_map": boolean;
     "timeseries_displacement": boolean;
-    "help"?: 0 | 1 | null | undefined;
+    "help"?: boolean | null | undefined;
 }
 type AntsMotionCorrStatsParametersTagged = Required<Pick<AntsMotionCorrStatsParameters, '@type'>> & AntsMotionCorrStatsParameters;
 
@@ -61,10 +61,10 @@ function ants_motion_corr_stats_params(
     moco_params: InputPathType,
     output: string,
     transform_index: number | null = null,
-    framewise: 0 | 1 | null = null,
+    framewise: boolean | null = null,
     spatial_map: boolean = false,
     timeseries_displacement: boolean = false,
-    help: 0 | 1 | null = null,
+    help: boolean | null = null,
 ): AntsMotionCorrStatsParametersTagged {
     const params = {
         "@type": "ants/antsMotionCorrStats" as const,
@@ -122,7 +122,7 @@ function ants_motion_corr_stats_cargs(
     if ((params["framewise"] ?? null) !== null) {
         cargs.push(
             "-f",
-            String((params["framewise"] ?? null))
+            ((params["framewise"] ?? null) ? "1" : "0")
         );
     }
     if ((params["spatial_map"] ?? false)) {
@@ -134,7 +134,7 @@ function ants_motion_corr_stats_cargs(
     if ((params["help"] ?? null) !== null) {
         cargs.push(
             "--help",
-            String((params["help"] ?? null))
+            ((params["help"] ?? null) ? "1" : "0")
         );
     }
     return cargs;
@@ -215,10 +215,10 @@ function ants_motion_corr_stats(
     moco_params: InputPathType,
     output: string,
     transform_index: number | null = null,
-    framewise: 0 | 1 | null = null,
+    framewise: boolean | null = null,
     spatial_map: boolean = false,
     timeseries_displacement: boolean = false,
-    help: 0 | 1 | null = null,
+    help: boolean | null = null,
     runner: Runner | null = null,
 ): AntsMotionCorrStatsOutputs {
     const params = ants_motion_corr_stats_params(mask, moco_params, output, transform_index, framewise, spatial_map, timeseries_displacement, help)

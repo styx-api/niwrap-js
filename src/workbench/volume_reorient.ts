@@ -4,18 +4,17 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_REORIENT_METADATA: Metadata = {
-    id: "993d128d1b8587b85bf89235de06096fbfc8baea.boutiques",
+    id: "ac98f3ba2fd629f5cfa857bbbce2391858db0cba.workbench",
     name: "volume-reorient",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface VolumeReorientParameters {
     "@type"?: "workbench/volume-reorient";
     "volume": InputPathType;
-    "orient_string": string;
-    "volume_out": string;
+    "orient-string": string;
+    "volume-out": string;
 }
 type VolumeReorientParametersTagged = Required<Pick<VolumeReorientParameters, '@type'>> & VolumeReorientParameters;
 
@@ -50,8 +49,8 @@ function volume_reorient_params(
     const params = {
         "@type": "workbench/volume-reorient" as const,
         "volume": volume,
-        "orient_string": orient_string,
-        "volume_out": volume_out,
+        "orient-string": orient_string,
+        "volume-out": volume_out,
     };
     return params;
 }
@@ -70,11 +69,13 @@ function volume_reorient_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-reorient");
+    cargs.push(
+        "wb_command",
+        "-volume-reorient"
+    );
     cargs.push(execution.inputFile((params["volume"] ?? null)));
-    cargs.push((params["orient_string"] ?? null));
-    cargs.push((params["volume_out"] ?? null));
+    cargs.push((params["orient-string"] ?? null));
+    cargs.push((params["volume-out"] ?? null));
     return cargs;
 }
 
@@ -99,9 +100,7 @@ function volume_reorient_outputs(
 
 
 /**
- * volume-reorient
- *
- * Change voxel order of a volume file.
+ * CHANGE VOXEL ORDER OF A VOLUME FILE.
  *
  * Changes the voxel order and the header spacing/origin information such that the value of any spatial point is unchanged.  Orientation strings look like 'LPI', which means first index is left to right, second is posterior to anterior, and third is inferior to superior.  The valid characters are:
  *
@@ -111,10 +110,6 @@ function volume_reorient_outputs(
  * A      anterior to posterior
  * I      inferior to superior
  * S      superior to inferior.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -136,9 +131,7 @@ function volume_reorient_execute(
 
 
 /**
- * volume-reorient
- *
- * Change voxel order of a volume file.
+ * CHANGE VOXEL ORDER OF A VOLUME FILE.
  *
  * Changes the voxel order and the header spacing/origin information such that the value of any spatial point is unchanged.  Orientation strings look like 'LPI', which means first index is left to right, second is posterior to anterior, and third is inferior to superior.  The valid characters are:
  *
@@ -148,10 +141,6 @@ function volume_reorient_execute(
  * A      anterior to posterior
  * I      inferior to superior
  * S      superior to inferior.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param volume the volume to reorient
  * @param orient_string the desired orientation

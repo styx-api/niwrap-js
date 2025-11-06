@@ -4,19 +4,18 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_REMOVE_ISLANDS_METADATA: Metadata = {
-    id: "e985bca06df5a5d0c37e22c118468bf7cef4f5d3.boutiques",
+    id: "e1ca1127c9380dc9d8ce9364a1b74e3cb9676753.workbench",
     name: "metric-remove-islands",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface MetricRemoveIslandsParameters {
     "@type"?: "workbench/metric-remove-islands";
+    "metric-out": string;
+    "area-metric"?: InputPathType | null | undefined;
     "surface": InputPathType;
-    "metric_in": InputPathType;
-    "metric_out": string;
-    "opt_corrected_areas_area_metric"?: InputPathType | null | undefined;
+    "metric-in": InputPathType;
 }
 type MetricRemoveIslandsParametersTagged = Required<Pick<MetricRemoveIslandsParameters, '@type'>> & MetricRemoveIslandsParameters;
 
@@ -41,27 +40,29 @@ interface MetricRemoveIslandsOutputs {
 /**
  * Build parameters.
  *
+ * @param metric_out the output ROI metric
+ * @param area_metric vertex areas to use instead of computing them from the surface
+
+the corrected vertex areas, as a metric
  * @param surface the surface to use for neighbor information
  * @param metric_in the input ROI metric
- * @param metric_out the output ROI metric
- * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
 function metric_remove_islands_params(
+    metric_out: string,
+    area_metric: InputPathType | null,
     surface: InputPathType,
     metric_in: InputPathType,
-    metric_out: string,
-    opt_corrected_areas_area_metric: InputPathType | null = null,
 ): MetricRemoveIslandsParametersTagged {
     const params = {
         "@type": "workbench/metric-remove-islands" as const,
+        "metric-out": metric_out,
         "surface": surface,
-        "metric_in": metric_in,
-        "metric_out": metric_out,
+        "metric-in": metric_in,
     };
-    if (opt_corrected_areas_area_metric !== null) {
-        params["opt_corrected_areas_area_metric"] = opt_corrected_areas_area_metric;
+    if (area_metric !== null) {
+        params["area-metric"] = area_metric;
     }
     return params;
 }
@@ -80,17 +81,17 @@ function metric_remove_islands_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-metric-remove-islands");
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(execution.inputFile((params["metric_in"] ?? null)));
-    cargs.push((params["metric_out"] ?? null));
-    if ((params["opt_corrected_areas_area_metric"] ?? null) !== null) {
+    if ((params["area-metric"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-metric-remove-islands",
+            (params["metric-out"] ?? null),
             "-corrected-areas",
-            execution.inputFile((params["opt_corrected_areas_area_metric"] ?? null))
+            execution.inputFile((params["area-metric"] ?? null))
         );
     }
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     return cargs;
 }
 
@@ -109,22 +110,16 @@ function metric_remove_islands_outputs(
 ): MetricRemoveIslandsOutputs {
     const ret: MetricRemoveIslandsOutputs = {
         root: execution.outputFile("."),
-        metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
+        metric_out: execution.outputFile([(params["metric-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * metric-remove-islands
- *
- * Remove islands from an roi metric.
+ * REMOVE ISLANDS FROM AN ROI METRIC.
  *
  * Finds all connected areas in the ROI, and zeros out all but the largest one, in terms of surface area.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -146,32 +141,28 @@ function metric_remove_islands_execute(
 
 
 /**
- * metric-remove-islands
- *
- * Remove islands from an roi metric.
+ * REMOVE ISLANDS FROM AN ROI METRIC.
  *
  * Finds all connected areas in the ROI, and zeros out all but the largest one, in terms of surface area.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param metric_out the output ROI metric
+ * @param area_metric vertex areas to use instead of computing them from the surface
+
+the corrected vertex areas, as a metric
  * @param surface the surface to use for neighbor information
  * @param metric_in the input ROI metric
- * @param metric_out the output ROI metric
- * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricRemoveIslandsOutputs`).
  */
 function metric_remove_islands(
+    metric_out: string,
+    area_metric: InputPathType | null,
     surface: InputPathType,
     metric_in: InputPathType,
-    metric_out: string,
-    opt_corrected_areas_area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricRemoveIslandsOutputs {
-    const params = metric_remove_islands_params(surface, metric_in, metric_out, opt_corrected_areas_area_metric)
+    const params = metric_remove_islands_params(metric_out, area_metric, surface, metric_in)
     return metric_remove_islands_execute(params, runner);
 }
 

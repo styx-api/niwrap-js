@@ -18,9 +18,9 @@ interface MriEditSegmentationWithSurfacesParameters {
     "norm_volume": InputPathType;
     "output_volume": string;
     "label_file"?: InputPathType | null | undefined;
-    "hypo_flag"?: "1" | "0" | null | undefined;
-    "cerebellum_flag"?: "1" | "0" | null | undefined;
-    "cortex_flag"?: "1" | "0" | null | undefined;
+    "hypo_flag"?: boolean | null | undefined;
+    "cerebellum_flag"?: boolean | null | undefined;
+    "cortex_flag"?: boolean | null | undefined;
     "annotation_file"?: InputPathType | null | undefined;
 }
 type MriEditSegmentationWithSurfacesParametersTagged = Required<Pick<MriEditSegmentationWithSurfacesParameters, '@type'>> & MriEditSegmentationWithSurfacesParameters;
@@ -64,9 +64,9 @@ function mri_edit_segmentation_with_surfaces_params(
     norm_volume: InputPathType,
     output_volume: string,
     label_file: InputPathType | null = null,
-    hypo_flag: "1" | "0" | null = null,
-    cerebellum_flag: "1" | "0" | null = null,
-    cortex_flag: "1" | "0" | null = null,
+    hypo_flag: boolean | null = null,
+    cerebellum_flag: boolean | null = null,
+    cortex_flag: boolean | null = null,
     annotation_file: InputPathType | null = null,
 ): MriEditSegmentationWithSurfacesParametersTagged {
     const params = {
@@ -122,19 +122,19 @@ function mri_edit_segmentation_with_surfaces_cargs(
     if ((params["hypo_flag"] ?? null) !== null) {
         cargs.push(
             "-hypo",
-            (params["hypo_flag"] ?? null)
+            ((params["hypo_flag"] ?? null) ? "1" : "0")
         );
     }
     if ((params["cerebellum_flag"] ?? null) !== null) {
         cargs.push(
             "-cerebellum",
-            (params["cerebellum_flag"] ?? null)
+            ((params["cerebellum_flag"] ?? null) ? "1" : "0")
         );
     }
     if ((params["cortex_flag"] ?? null) !== null) {
         cargs.push(
             "-cortex",
-            (params["cortex_flag"] ?? null)
+            ((params["cortex_flag"] ?? null) ? "1" : "0")
         );
     }
     if ((params["annotation_file"] ?? null) !== null) {
@@ -223,9 +223,9 @@ function mri_edit_segmentation_with_surfaces(
     norm_volume: InputPathType,
     output_volume: string,
     label_file: InputPathType | null = null,
-    hypo_flag: "1" | "0" | null = null,
-    cerebellum_flag: "1" | "0" | null = null,
-    cortex_flag: "1" | "0" | null = null,
+    hypo_flag: boolean | null = null,
+    cerebellum_flag: boolean | null = null,
+    cortex_flag: boolean | null = null,
     annotation_file: InputPathType | null = null,
     runner: Runner | null = null,
 ): MriEditSegmentationWithSurfacesOutputs {

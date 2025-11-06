@@ -4,19 +4,18 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_LABEL_MODIFY_KEYS_METADATA: Metadata = {
-    id: "1bcb2eb82887a4d5a5737e8b723dfa3e56ab0d0b.boutiques",
+    id: "6f0777ef0f6c477c81ddf6a694255d974aa7d61a.workbench",
     name: "volume-label-modify-keys",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface VolumeLabelModifyKeysParameters {
     "@type"?: "workbench/volume-label-modify-keys";
-    "volume_in": InputPathType;
-    "remap_file": string;
-    "volume_out": string;
-    "opt_subvolume_subvolume"?: string | null | undefined;
+    "volume-out": string;
+    "subvolume"?: string | null | undefined;
+    "volume-in": InputPathType;
+    "remap-file": string;
 }
 type VolumeLabelModifyKeysParametersTagged = Required<Pick<VolumeLabelModifyKeysParameters, '@type'>> & VolumeLabelModifyKeysParameters;
 
@@ -41,27 +40,29 @@ interface VolumeLabelModifyKeysOutputs {
 /**
  * Build parameters.
  *
+ * @param volume_out the output volume label file
+ * @param subvolume select a single subvolume
+
+the subvolume number or name
  * @param volume_in the input volume label file
  * @param remap_file text file with old and new key values
- * @param volume_out the output volume label file
- * @param opt_subvolume_subvolume select a single subvolume: the subvolume number or name
  *
  * @returns Parameter dictionary
  */
 function volume_label_modify_keys_params(
+    volume_out: string,
+    subvolume: string | null,
     volume_in: InputPathType,
     remap_file: string,
-    volume_out: string,
-    opt_subvolume_subvolume: string | null = null,
 ): VolumeLabelModifyKeysParametersTagged {
     const params = {
         "@type": "workbench/volume-label-modify-keys" as const,
-        "volume_in": volume_in,
-        "remap_file": remap_file,
-        "volume_out": volume_out,
+        "volume-out": volume_out,
+        "volume-in": volume_in,
+        "remap-file": remap_file,
     };
-    if (opt_subvolume_subvolume !== null) {
-        params["opt_subvolume_subvolume"] = opt_subvolume_subvolume;
+    if (subvolume !== null) {
+        params["subvolume"] = subvolume;
     }
     return params;
 }
@@ -80,17 +81,17 @@ function volume_label_modify_keys_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-label-modify-keys");
-    cargs.push(execution.inputFile((params["volume_in"] ?? null)));
-    cargs.push((params["remap_file"] ?? null));
-    cargs.push((params["volume_out"] ?? null));
-    if ((params["opt_subvolume_subvolume"] ?? null) !== null) {
+    if ((params["subvolume"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-volume-label-modify-keys",
+            (params["volume-out"] ?? null),
             "-subvolume",
-            (params["opt_subvolume_subvolume"] ?? null)
+            (params["subvolume"] ?? null)
         );
     }
+    cargs.push(execution.inputFile((params["volume-in"] ?? null)));
+    cargs.push((params["remap-file"] ?? null));
     return cargs;
 }
 
@@ -109,16 +110,14 @@ function volume_label_modify_keys_outputs(
 ): VolumeLabelModifyKeysOutputs {
     const ret: VolumeLabelModifyKeysOutputs = {
         root: execution.outputFile("."),
-        volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
+        volume_out: execution.outputFile([(params["volume-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * volume-label-modify-keys
- *
- * Change key values in a volume label file.
+ * CHANGE KEY VALUES IN A VOLUME LABEL FILE.
  *
  * <remap-file> should have lines of the form 'oldkey newkey', like so:
  *
@@ -127,10 +126,6 @@ function volume_label_modify_keys_outputs(
  * 8 2
  *
  * This would change the current label with key '3' to use the key '5' instead, 5 would use 8, and 8 would use 2.  Any collision in key values results in the label that was not specified in the remap file getting remapped to an otherwise unused key.  Remapping more than one key to the same new key, or the same key to more than one new key, results in an error.  This will not change the appearance of the file when displayed, as it will change the key values in the data at the same time.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -152,9 +147,7 @@ function volume_label_modify_keys_execute(
 
 
 /**
- * volume-label-modify-keys
- *
- * Change key values in a volume label file.
+ * CHANGE KEY VALUES IN A VOLUME LABEL FILE.
  *
  * <remap-file> should have lines of the form 'oldkey newkey', like so:
  *
@@ -164,26 +157,24 @@ function volume_label_modify_keys_execute(
  *
  * This would change the current label with key '3' to use the key '5' instead, 5 would use 8, and 8 would use 2.  Any collision in key values results in the label that was not specified in the remap file getting remapped to an otherwise unused key.  Remapping more than one key to the same new key, or the same key to more than one new key, results in an error.  This will not change the appearance of the file when displayed, as it will change the key values in the data at the same time.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param volume_out the output volume label file
+ * @param subvolume select a single subvolume
+
+the subvolume number or name
  * @param volume_in the input volume label file
  * @param remap_file text file with old and new key values
- * @param volume_out the output volume label file
- * @param opt_subvolume_subvolume select a single subvolume: the subvolume number or name
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeLabelModifyKeysOutputs`).
  */
 function volume_label_modify_keys(
+    volume_out: string,
+    subvolume: string | null,
     volume_in: InputPathType,
     remap_file: string,
-    volume_out: string,
-    opt_subvolume_subvolume: string | null = null,
     runner: Runner | null = null,
 ): VolumeLabelModifyKeysOutputs {
-    const params = volume_label_modify_keys_params(volume_in, remap_file, volume_out, opt_subvolume_subvolume)
+    const params = volume_label_modify_keys_params(volume_out, subvolume, volume_in, remap_file)
     return volume_label_modify_keys_execute(params, runner);
 }
 

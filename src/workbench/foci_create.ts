@@ -4,17 +4,16 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FOCI_CREATE_METADATA: Metadata = {
-    id: "2e6c039919782b63c07e5badc35659f838c016d5.boutiques",
+    id: "1960245f5f1335cfba8188182bda09435e59d575.workbench",
     name: "foci-create",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface FociCreateClassParameters {
     "@type"?: "class";
-    "class_name": string;
-    "foci_list_file": string;
+    "class-name": string;
+    "foci-list-file": string;
     "surface": InputPathType;
 }
 type FociCreateClassParametersTagged = Required<Pick<FociCreateClassParameters, '@type'>> & FociCreateClassParameters;
@@ -44,8 +43,8 @@ function foci_create_class_params(
 ): FociCreateClassParametersTagged {
     const params = {
         "@type": "class" as const,
-        "class_name": class_name,
-        "foci_list_file": foci_list_file,
+        "class-name": class_name,
+        "foci-list-file": foci_list_file,
         "surface": surface,
     };
     return params;
@@ -65,10 +64,12 @@ function foci_create_class_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-class");
-    cargs.push((params["class_name"] ?? null));
-    cargs.push((params["foci_list_file"] ?? null));
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(
+        "-class",
+        (params["class-name"] ?? null),
+        (params["foci-list-file"] ?? null),
+        execution.inputFile((params["surface"] ?? null))
+    );
     return cargs;
 }
 
@@ -126,11 +127,13 @@ function foci_create_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-foci-create");
-    cargs.push((params["output"] ?? null));
     if ((params["class"] ?? null) !== null) {
-        cargs.push(...(params["class"] ?? null).map(s => foci_create_class_cargs(s, execution)).flat());
+        cargs.push(
+            "wb_command",
+            "-foci-create",
+            (params["output"] ?? null),
+            ...(params["class"] ?? null).map(s => foci_create_class_cargs(s, execution)).flat()
+        );
     }
     return cargs;
 }
@@ -157,9 +160,7 @@ function foci_create_outputs(
 
 
 /**
- * foci-create
- *
- * Create a foci file.
+ * CREATE A FOCI FILE.
  *
  * Creates a foci file from names, coordinates, and RGB values in a text file.  The text file must have the following format (2 lines per focus):
  *
@@ -172,10 +173,6 @@ function foci_create_outputs(
  * Foci are grouped into classes and the name for the class is specified using the <class-name> parameter.
  *
  * All foci within one text file must be associated with the structure contained in the <surface> parameter and are projected to that surface.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -197,9 +194,7 @@ function foci_create_execute(
 
 
 /**
- * foci-create
- *
- * Create a foci file.
+ * CREATE A FOCI FILE.
  *
  * Creates a foci file from names, coordinates, and RGB values in a text file.  The text file must have the following format (2 lines per focus):
  *
@@ -212,10 +207,6 @@ function foci_create_execute(
  * Foci are grouped into classes and the name for the class is specified using the <class-name> parameter.
  *
  * All foci within one text file must be associated with the structure contained in the <surface> parameter and are projected to that surface.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param output the output foci file
  * @param class_ specify class input data

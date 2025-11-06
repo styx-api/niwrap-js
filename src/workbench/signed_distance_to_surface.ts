@@ -4,19 +4,18 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SIGNED_DISTANCE_TO_SURFACE_METADATA: Metadata = {
-    id: "8c819d933d40718709f36a80f07be61f04dd0058.boutiques",
+    id: "344a7869e0c667f1b8e4af3135dc6ab6eadc0253.workbench",
     name: "signed-distance-to-surface",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface SignedDistanceToSurfaceParameters {
     "@type"?: "workbench/signed-distance-to-surface";
-    "surface_comp": InputPathType;
-    "surface_ref": InputPathType;
     "metric": string;
-    "opt_winding_method"?: string | null | undefined;
+    "method"?: string | null | undefined;
+    "surface-comp": InputPathType;
+    "surface-ref": InputPathType;
 }
 type SignedDistanceToSurfaceParametersTagged = Required<Pick<SignedDistanceToSurfaceParameters, '@type'>> & SignedDistanceToSurfaceParameters;
 
@@ -41,27 +40,29 @@ interface SignedDistanceToSurfaceOutputs {
 /**
  * Build parameters.
  *
+ * @param metric the output metric
+ * @param method winding method for point inside surface test
+
+name of the method (default EVEN_ODD)
  * @param surface_comp the comparison surface to measure the signed distance on
  * @param surface_ref the reference surface that defines the signed distance function
- * @param metric the output metric
- * @param opt_winding_method winding method for point inside surface test: name of the method (default EVEN_ODD)
  *
  * @returns Parameter dictionary
  */
 function signed_distance_to_surface_params(
+    metric: string,
+    method: string | null,
     surface_comp: InputPathType,
     surface_ref: InputPathType,
-    metric: string,
-    opt_winding_method: string | null = null,
 ): SignedDistanceToSurfaceParametersTagged {
     const params = {
         "@type": "workbench/signed-distance-to-surface" as const,
-        "surface_comp": surface_comp,
-        "surface_ref": surface_ref,
         "metric": metric,
+        "surface-comp": surface_comp,
+        "surface-ref": surface_ref,
     };
-    if (opt_winding_method !== null) {
-        params["opt_winding_method"] = opt_winding_method;
+    if (method !== null) {
+        params["method"] = method;
     }
     return params;
 }
@@ -80,17 +81,17 @@ function signed_distance_to_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-signed-distance-to-surface");
-    cargs.push(execution.inputFile((params["surface_comp"] ?? null)));
-    cargs.push(execution.inputFile((params["surface_ref"] ?? null)));
-    cargs.push((params["metric"] ?? null));
-    if ((params["opt_winding_method"] ?? null) !== null) {
+    if ((params["method"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-signed-distance-to-surface",
+            (params["metric"] ?? null),
             "-winding",
-            (params["opt_winding_method"] ?? null)
+            (params["method"] ?? null)
         );
     }
+    cargs.push(execution.inputFile((params["surface-comp"] ?? null)));
+    cargs.push(execution.inputFile((params["surface-ref"] ?? null)));
     return cargs;
 }
 
@@ -116,9 +117,7 @@ function signed_distance_to_surface_outputs(
 
 
 /**
- * signed-distance-to-surface
- *
- * Compute signed distance from one surface to another.
+ * COMPUTE SIGNED DISTANCE FROM ONE SURFACE TO ANOTHER.
  *
  * Compute the signed distance function of the reference surface at every vertex on the comparison surface.  NOTE: this relation is NOT symmetric, the line from a vertex to the closest point on the 'ref' surface (the one that defines the signed distance function) will only align with the normal of the 'ref' surface.  Valid specifiers for winding methods are as follows:
  *
@@ -128,10 +127,6 @@ function signed_distance_to_surface_outputs(
  * NORMALS
  *
  * The NORMALS method uses the normals of triangles and edges, or the closest triangle hit by a ray from the point.  This method may be slightly faster, but is only reliable for a closed surface that does not cross through itself.  All other methods count entry (positive) and exit (negative) crossings of a vertical ray from the point, then counts as inside if the total is odd, negative, or nonzero, respectively.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -153,9 +148,7 @@ function signed_distance_to_surface_execute(
 
 
 /**
- * signed-distance-to-surface
- *
- * Compute signed distance from one surface to another.
+ * COMPUTE SIGNED DISTANCE FROM ONE SURFACE TO ANOTHER.
  *
  * Compute the signed distance function of the reference surface at every vertex on the comparison surface.  NOTE: this relation is NOT symmetric, the line from a vertex to the closest point on the 'ref' surface (the one that defines the signed distance function) will only align with the normal of the 'ref' surface.  Valid specifiers for winding methods are as follows:
  *
@@ -166,26 +159,24 @@ function signed_distance_to_surface_execute(
  *
  * The NORMALS method uses the normals of triangles and edges, or the closest triangle hit by a ray from the point.  This method may be slightly faster, but is only reliable for a closed surface that does not cross through itself.  All other methods count entry (positive) and exit (negative) crossings of a vertical ray from the point, then counts as inside if the total is odd, negative, or nonzero, respectively.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param metric the output metric
+ * @param method winding method for point inside surface test
+
+name of the method (default EVEN_ODD)
  * @param surface_comp the comparison surface to measure the signed distance on
  * @param surface_ref the reference surface that defines the signed distance function
- * @param metric the output metric
- * @param opt_winding_method winding method for point inside surface test: name of the method (default EVEN_ODD)
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SignedDistanceToSurfaceOutputs`).
  */
 function signed_distance_to_surface(
+    metric: string,
+    method: string | null,
     surface_comp: InputPathType,
     surface_ref: InputPathType,
-    metric: string,
-    opt_winding_method: string | null = null,
     runner: Runner | null = null,
 ): SignedDistanceToSurfaceOutputs {
-    const params = signed_distance_to_surface_params(surface_comp, surface_ref, metric, opt_winding_method)
+    const params = signed_distance_to_surface_params(metric, method, surface_comp, surface_ref)
     return signed_distance_to_surface_execute(params, runner);
 }
 

@@ -17,7 +17,7 @@ interface AddNoiseToImageParameters {
     "input_image": InputPathType;
     "noise_model": "AdditiveGaussian" | "SaltAndPepper" | "Shot" | "Speckle";
     "output": string;
-    "verbose"?: 0 | 1 | null | undefined;
+    "verbose"?: boolean | null | undefined;
 }
 type AddNoiseToImageParametersTagged = Required<Pick<AddNoiseToImageParameters, '@type'>> & AddNoiseToImageParameters;
 
@@ -55,7 +55,7 @@ function add_noise_to_image_params(
     noise_model: "AdditiveGaussian" | "SaltAndPepper" | "Shot" | "Speckle",
     output: string,
     image_dimensionality: 2 | 3 | 4 | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
 ): AddNoiseToImageParametersTagged {
     const params = {
         "@type": "ants/AddNoiseToImage" as const,
@@ -108,7 +108,7 @@ function add_noise_to_image_cargs(
     if ((params["verbose"] ?? null) !== null) {
         cargs.push(
             "--verbose",
-            String((params["verbose"] ?? null))
+            ((params["verbose"] ?? null) ? "1" : "0")
         );
     }
     return cargs;
@@ -186,7 +186,7 @@ function add_noise_to_image(
     noise_model: "AdditiveGaussian" | "SaltAndPepper" | "Shot" | "Speckle",
     output: string,
     image_dimensionality: 2 | 3 | 4 | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
     runner: Runner | null = null,
 ): AddNoiseToImageOutputs {
     const params = add_noise_to_image_params(input_image, noise_model, output, image_dimensionality, verbose)

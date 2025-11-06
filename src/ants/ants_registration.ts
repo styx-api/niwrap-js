@@ -21,7 +21,7 @@ type AntsRegistrationInitialMovingTransformParametersTagged = Required<Pick<Ants
 interface AntsRegistrationInitialMovingTransformUseInverseParameters {
     "@type"?: "initial_moving_transform_use_inverse";
     "initial_moving_transform": InputPathType;
-    "use_inverse"?: 0 | 1 | null | undefined;
+    "use_inverse"?: boolean | null | undefined;
 }
 type AntsRegistrationInitialMovingTransformUseInverseParametersTagged = Required<Pick<AntsRegistrationInitialMovingTransformUseInverseParameters, '@type'>> & AntsRegistrationInitialMovingTransformUseInverseParameters;
 
@@ -167,7 +167,7 @@ interface AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParameters {
     "radius"?: number | null | undefined;
     "sampling_strategy"?: "None" | "Regular" | "Random" | null | undefined;
     "sampling_percentage"?: number | null | undefined;
-    "use_gradient_filter"?: "true" | "false" | null | undefined;
+    "use_gradient_filter"?: boolean | null | undefined;
 }
 type AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParametersTagged = Required<Pick<AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParameters, '@type'>> & AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParameters;
 
@@ -180,7 +180,7 @@ interface AntsRegistrationMetricMutualInformationParameters {
     "number_of_bins"?: number | null | undefined;
     "sampling_strategy"?: "None" | "Regular" | "Random" | null | undefined;
     "sampling_percentage"?: number | null | undefined;
-    "use_gradient_filter"?: "true" | "false" | null | undefined;
+    "use_gradient_filter"?: boolean | null | undefined;
 }
 type AntsRegistrationMetricMutualInformationParametersTagged = Required<Pick<AntsRegistrationMetricMutualInformationParameters, '@type'>> & AntsRegistrationMetricMutualInformationParameters;
 
@@ -193,7 +193,7 @@ interface AntsRegistrationMetricMattesParameters {
     "number_of_bins"?: number | null | undefined;
     "sampling_strategy"?: "None" | "Regular" | "Random" | null | undefined;
     "sampling_percentage"?: number | null | undefined;
-    "use_gradient_filter"?: "true" | "false" | null | undefined;
+    "use_gradient_filter"?: boolean | null | undefined;
 }
 type AntsRegistrationMetricMattesParametersTagged = Required<Pick<AntsRegistrationMetricMattesParameters, '@type'>> & AntsRegistrationMetricMattesParameters;
 
@@ -206,7 +206,7 @@ interface AntsRegistrationMetricMeanSquaresParameters {
     "radius"?: number | null | undefined;
     "sampling_strategy"?: "None" | "Regular" | "Random" | null | undefined;
     "sampling_percentage"?: number | null | undefined;
-    "use_gradient_filter"?: "true" | "false" | null | undefined;
+    "use_gradient_filter"?: boolean | null | undefined;
 }
 type AntsRegistrationMetricMeanSquaresParametersTagged = Required<Pick<AntsRegistrationMetricMeanSquaresParameters, '@type'>> & AntsRegistrationMetricMeanSquaresParameters;
 
@@ -219,7 +219,7 @@ interface AntsRegistrationMetricDemonsParameters {
     "number_of_bins"?: number | null | undefined;
     "sampling_strategy"?: "None" | "Regular" | "Random" | null | undefined;
     "sampling_percentage"?: number | null | undefined;
-    "use_gradient_filter"?: "true" | "false" | null | undefined;
+    "use_gradient_filter"?: boolean | null | undefined;
 }
 type AntsRegistrationMetricDemonsParametersTagged = Required<Pick<AntsRegistrationMetricDemonsParameters, '@type'>> & AntsRegistrationMetricDemonsParameters;
 
@@ -232,7 +232,7 @@ interface AntsRegistrationMetricGlobalCorrelationParameters {
     "radius"?: number | null | undefined;
     "sampling_strategy"?: "None" | "Regular" | "Random" | null | undefined;
     "sampling_percentage"?: number | null | undefined;
-    "use_gradient_filter"?: "true" | "false" | null | undefined;
+    "use_gradient_filter"?: boolean | null | undefined;
 }
 type AntsRegistrationMetricGlobalCorrelationParametersTagged = Required<Pick<AntsRegistrationMetricGlobalCorrelationParameters, '@type'>> & AntsRegistrationMetricGlobalCorrelationParameters;
 
@@ -292,7 +292,7 @@ interface AntsRegistrationStageParameters {
     "convergence": AntsRegistrationConvergenceParameters;
     "smoothing_sigmas": string;
     "shrink_factors": string;
-    "use_histogram_matching"?: 0 | 1 | null | undefined;
+    "use_histogram_matching"?: boolean | null | undefined;
 }
 type AntsRegistrationStageParametersTagged = Required<Pick<AntsRegistrationStageParameters, '@type'>> & AntsRegistrationStageParameters;
 
@@ -319,22 +319,22 @@ interface AntsRegistrationParameters {
     "output"?: string | null | undefined;
     "save_state"?: string | null | undefined;
     "restore_state"?: string | null | undefined;
-    "write_composite_transform"?: 0 | 1 | null | undefined;
+    "write_composite_transform"?: boolean | null | undefined;
     "print_similarity_measure_interval"?: number | null | undefined;
     "write_interval_volumes"?: number | null | undefined;
-    "collapse_output_transforms"?: 1 | 0 | null | undefined;
-    "initialize_transforms_per_stage"?: 1 | 0 | null | undefined;
+    "collapse_output_transforms"?: boolean | null | undefined;
+    "initialize_transforms_per_stage"?: boolean | null | undefined;
     "interpolation"?: "Linear" | "NearestNeighbor" | "MultiLabel" | "Gaussian" | "BSpline" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | "GenericLabel" | null | undefined;
-    "restrict_deformation"?: Array<0 | 1> | null | undefined;
+    "restrict_deformation"?: Array<boolean> | null | undefined;
     "initial_fixed_transform"?: string | null | undefined;
     "initial_moving_transform"?: AntsRegistrationInitialMovingTransformParametersTagged | AntsRegistrationInitialMovingTransformUseInverseParametersTagged | AntsRegistrationInitialMovingTransformInitializationFeatureParametersTagged | null | undefined;
     "stages": Array<AntsRegistrationStageParameters>;
     "winsorize_image_intensities"?: AntsRegistrationWinsorizeImageIntensitiesParameters | null | undefined;
     "masks"?: AntsRegistrationMasksParameters | null | undefined;
-    "minc"?: 0 | 1 | null | undefined;
+    "minc"?: boolean | null | undefined;
     "random_seed"?: number | null | undefined;
-    "verbose"?: 0 | 1 | null | undefined;
-    "float"?: 0 | 1 | null | undefined;
+    "verbose"?: boolean | null | undefined;
+    "float"?: boolean | null | undefined;
 }
 type AntsRegistrationParametersTagged = Required<Pick<AntsRegistrationParameters, '@type'>> & AntsRegistrationParameters;
 
@@ -506,7 +506,7 @@ function ants_registration_initial_moving_transform_cargs(
  */
 function ants_registration_initial_moving_transform_use_inverse_params(
     initial_moving_transform: InputPathType,
-    use_inverse: 0 | 1 | null = null,
+    use_inverse: boolean | null = null,
 ): AntsRegistrationInitialMovingTransformUseInverseParametersTagged {
     const params = {
         "@type": "initial_moving_transform_use_inverse" as const,
@@ -533,7 +533,7 @@ function ants_registration_initial_moving_transform_use_inverse_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["use_inverse"] ?? null) !== null) {
-        cargs.push(["[", execution.inputFile((params["initial_moving_transform"] ?? null)), ",", String((params["use_inverse"] ?? null)), "]"].join(''));
+        cargs.push(["[", execution.inputFile((params["initial_moving_transform"] ?? null)), ",", ((params["use_inverse"] ?? null) ? "1" : "0"), "]"].join(''));
     }
     return cargs;
 }
@@ -1160,7 +1160,7 @@ function ants_registration_metric_ants_neighbourhood_cross_correlation_params(
     radius: number | null = null,
     sampling_strategy: "None" | "Regular" | "Random" | null = null,
     sampling_percentage: number | null = null,
-    use_gradient_filter: "true" | "false" | null = null,
+    use_gradient_filter: boolean | null = null,
 ): AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParametersTagged {
     const params = {
         "@type": "metric_ants_neighbourhood_cross_correlation" as const,
@@ -1198,7 +1198,7 @@ function ants_registration_metric_ants_neighbourhood_cross_correlation_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["radius"] ?? null) !== null || (params["sampling_strategy"] ?? null) !== null || (params["sampling_percentage"] ?? null) !== null || (params["use_gradient_filter"] ?? null) !== null) {
-        cargs.push(["CC[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["radius"] ?? null) !== null) ? String((params["radius"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? (params["use_gradient_filter"] ?? null) : ""), "]"].join(''));
+        cargs.push(["CC[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["radius"] ?? null) !== null) ? String((params["radius"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? ((params["use_gradient_filter"] ?? null) ? "true" : "false") : ""), "]"].join(''));
     }
     return cargs;
 }
@@ -1217,7 +1217,7 @@ function ants_registration_metric_mutual_information_params(
     number_of_bins: number | null = null,
     sampling_strategy: "None" | "Regular" | "Random" | null = null,
     sampling_percentage: number | null = null,
-    use_gradient_filter: "true" | "false" | null = null,
+    use_gradient_filter: boolean | null = null,
 ): AntsRegistrationMetricMutualInformationParametersTagged {
     const params = {
         "@type": "metric_mutual_information" as const,
@@ -1255,7 +1255,7 @@ function ants_registration_metric_mutual_information_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["number_of_bins"] ?? null) !== null || (params["sampling_strategy"] ?? null) !== null || (params["sampling_percentage"] ?? null) !== null || (params["use_gradient_filter"] ?? null) !== null) {
-        cargs.push(["MI[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["number_of_bins"] ?? null) !== null) ? String((params["number_of_bins"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? (params["use_gradient_filter"] ?? null) : ""), "]"].join(''));
+        cargs.push(["MI[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["number_of_bins"] ?? null) !== null) ? String((params["number_of_bins"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? ((params["use_gradient_filter"] ?? null) ? "true" : "false") : ""), "]"].join(''));
     }
     return cargs;
 }
@@ -1274,7 +1274,7 @@ function ants_registration_metric_mattes_params(
     number_of_bins: number | null = null,
     sampling_strategy: "None" | "Regular" | "Random" | null = null,
     sampling_percentage: number | null = null,
-    use_gradient_filter: "true" | "false" | null = null,
+    use_gradient_filter: boolean | null = null,
 ): AntsRegistrationMetricMattesParametersTagged {
     const params = {
         "@type": "metric_mattes" as const,
@@ -1312,7 +1312,7 @@ function ants_registration_metric_mattes_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["number_of_bins"] ?? null) !== null || (params["sampling_strategy"] ?? null) !== null || (params["sampling_percentage"] ?? null) !== null || (params["use_gradient_filter"] ?? null) !== null) {
-        cargs.push(["Mattes[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["number_of_bins"] ?? null) !== null) ? String((params["number_of_bins"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? (params["use_gradient_filter"] ?? null) : ""), "]"].join(''));
+        cargs.push(["Mattes[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["number_of_bins"] ?? null) !== null) ? String((params["number_of_bins"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? ((params["use_gradient_filter"] ?? null) ? "true" : "false") : ""), "]"].join(''));
     }
     return cargs;
 }
@@ -1331,7 +1331,7 @@ function ants_registration_metric_mean_squares_params(
     radius: number | null = null,
     sampling_strategy: "None" | "Regular" | "Random" | null = null,
     sampling_percentage: number | null = null,
-    use_gradient_filter: "true" | "false" | null = null,
+    use_gradient_filter: boolean | null = null,
 ): AntsRegistrationMetricMeanSquaresParametersTagged {
     const params = {
         "@type": "metric_mean_squares" as const,
@@ -1369,7 +1369,7 @@ function ants_registration_metric_mean_squares_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["radius"] ?? null) !== null || (params["sampling_strategy"] ?? null) !== null || (params["sampling_percentage"] ?? null) !== null || (params["use_gradient_filter"] ?? null) !== null) {
-        cargs.push(["MeanSquares[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["radius"] ?? null) !== null) ? String((params["radius"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? (params["use_gradient_filter"] ?? null) : ""), "]"].join(''));
+        cargs.push(["MeanSquares[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["radius"] ?? null) !== null) ? String((params["radius"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? ((params["use_gradient_filter"] ?? null) ? "true" : "false") : ""), "]"].join(''));
     }
     return cargs;
 }
@@ -1388,7 +1388,7 @@ function ants_registration_metric_demons_params(
     number_of_bins: number | null = null,
     sampling_strategy: "None" | "Regular" | "Random" | null = null,
     sampling_percentage: number | null = null,
-    use_gradient_filter: "true" | "false" | null = null,
+    use_gradient_filter: boolean | null = null,
 ): AntsRegistrationMetricDemonsParametersTagged {
     const params = {
         "@type": "metric_demons" as const,
@@ -1426,7 +1426,7 @@ function ants_registration_metric_demons_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["number_of_bins"] ?? null) !== null || (params["sampling_strategy"] ?? null) !== null || (params["sampling_percentage"] ?? null) !== null || (params["use_gradient_filter"] ?? null) !== null) {
-        cargs.push(["Demons[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["number_of_bins"] ?? null) !== null) ? String((params["number_of_bins"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? (params["use_gradient_filter"] ?? null) : ""), "]"].join(''));
+        cargs.push(["Demons[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["number_of_bins"] ?? null) !== null) ? String((params["number_of_bins"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? ((params["use_gradient_filter"] ?? null) ? "true" : "false") : ""), "]"].join(''));
     }
     return cargs;
 }
@@ -1445,7 +1445,7 @@ function ants_registration_metric_global_correlation_params(
     radius: number | null = null,
     sampling_strategy: "None" | "Regular" | "Random" | null = null,
     sampling_percentage: number | null = null,
-    use_gradient_filter: "true" | "false" | null = null,
+    use_gradient_filter: boolean | null = null,
 ): AntsRegistrationMetricGlobalCorrelationParametersTagged {
     const params = {
         "@type": "metric_global_correlation" as const,
@@ -1483,7 +1483,7 @@ function ants_registration_metric_global_correlation_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["radius"] ?? null) !== null || (params["sampling_strategy"] ?? null) !== null || (params["sampling_percentage"] ?? null) !== null || (params["use_gradient_filter"] ?? null) !== null) {
-        cargs.push(["GC[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["radius"] ?? null) !== null) ? String((params["radius"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? (params["use_gradient_filter"] ?? null) : ""), "]"].join(''));
+        cargs.push(["GC[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["radius"] ?? null) !== null) ? String((params["radius"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? ((params["use_gradient_filter"] ?? null) ? "true" : "false") : ""), "]"].join(''));
     }
     return cargs;
 }
@@ -1729,7 +1729,7 @@ function ants_registration_stage_params(
     convergence: AntsRegistrationConvergenceParameters,
     smoothing_sigmas: string,
     shrink_factors: string,
-    use_histogram_matching: 0 | 1 | null = null,
+    use_histogram_matching: boolean | null = null,
 ): AntsRegistrationStageParametersTagged {
     const params = {
         "@type": "stage" as const,
@@ -1782,7 +1782,7 @@ function ants_registration_stage_cargs(
     if ((params["use_histogram_matching"] ?? null) !== null) {
         cargs.push(
             "--use-histogram-matching",
-            String((params["use_histogram_matching"] ?? null))
+            ((params["use_histogram_matching"] ?? null) ? "1" : "0")
         );
     }
     return cargs;
@@ -1935,21 +1935,21 @@ function ants_registration_params(
     output: string | null = null,
     save_state: string | null = null,
     restore_state: string | null = null,
-    write_composite_transform: 0 | 1 | null = null,
+    write_composite_transform: boolean | null = null,
     print_similarity_measure_interval: number | null = null,
     write_interval_volumes: number | null = null,
-    collapse_output_transforms: 1 | 0 | null = null,
-    initialize_transforms_per_stage: 1 | 0 | null = null,
+    collapse_output_transforms: boolean | null = null,
+    initialize_transforms_per_stage: boolean | null = null,
     interpolation: "Linear" | "NearestNeighbor" | "MultiLabel" | "Gaussian" | "BSpline" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | "GenericLabel" | null = null,
-    restrict_deformation: Array<0 | 1> | null = null,
+    restrict_deformation: Array<boolean> | null = null,
     initial_fixed_transform: string | null = null,
     initial_moving_transform: AntsRegistrationInitialMovingTransformParametersTagged | AntsRegistrationInitialMovingTransformUseInverseParametersTagged | AntsRegistrationInitialMovingTransformInitializationFeatureParametersTagged | null = null,
     winsorize_image_intensities: AntsRegistrationWinsorizeImageIntensitiesParameters | null = null,
     masks: AntsRegistrationMasksParameters | null = null,
-    minc: 0 | 1 | null = null,
+    minc: boolean | null = null,
     random_seed: number | null = null,
-    verbose: 0 | 1 | null = null,
-    float: 0 | 1 | null = null,
+    verbose: boolean | null = null,
+    float: boolean | null = null,
 ): AntsRegistrationParametersTagged {
     const params = {
         "@type": "ants/antsRegistration" as const,
@@ -2057,7 +2057,7 @@ function ants_registration_cargs(
     if ((params["write_composite_transform"] ?? null) !== null) {
         cargs.push(
             "-a",
-            String((params["write_composite_transform"] ?? null))
+            ((params["write_composite_transform"] ?? null) ? "1" : "0")
         );
     }
     if ((params["print_similarity_measure_interval"] ?? null) !== null) {
@@ -2075,13 +2075,13 @@ function ants_registration_cargs(
     if ((params["collapse_output_transforms"] ?? null) !== null) {
         cargs.push(
             "--collapse-output-transforms",
-            String((params["collapse_output_transforms"] ?? null))
+            ((params["collapse_output_transforms"] ?? null) ? "1" : "0")
         );
     }
     if ((params["initialize_transforms_per_stage"] ?? null) !== null) {
         cargs.push(
             "-i",
-            String((params["initialize_transforms_per_stage"] ?? null))
+            ((params["initialize_transforms_per_stage"] ?? null) ? "1" : "0")
         );
     }
     if ((params["interpolation"] ?? null) !== null) {
@@ -2093,7 +2093,7 @@ function ants_registration_cargs(
     if ((params["restrict_deformation"] ?? null) !== null) {
         cargs.push(
             "-g",
-            (params["restrict_deformation"] ?? null).map(String).join("x")
+            (params["restrict_deformation"] ?? null).map(v => v ? "1" : "0").join("x")
         );
     }
     if ((params["initial_fixed_transform"] ?? null) !== null) {
@@ -2124,7 +2124,7 @@ function ants_registration_cargs(
     if ((params["minc"] ?? null) !== null) {
         cargs.push(
             "--minc",
-            String((params["minc"] ?? null))
+            ((params["minc"] ?? null) ? "1" : "0")
         );
     }
     if ((params["random_seed"] ?? null) !== null) {
@@ -2136,13 +2136,13 @@ function ants_registration_cargs(
     if ((params["verbose"] ?? null) !== null) {
         cargs.push(
             "-v",
-            String((params["verbose"] ?? null))
+            ((params["verbose"] ?? null) ? "1" : "0")
         );
     }
     if ((params["float"] ?? null) !== null) {
         cargs.push(
             "--float",
-            String((params["float"] ?? null))
+            ((params["float"] ?? null) ? "1" : "0")
         );
     }
     return cargs;
@@ -2241,21 +2241,21 @@ function ants_registration(
     output: string | null = null,
     save_state: string | null = null,
     restore_state: string | null = null,
-    write_composite_transform: 0 | 1 | null = null,
+    write_composite_transform: boolean | null = null,
     print_similarity_measure_interval: number | null = null,
     write_interval_volumes: number | null = null,
-    collapse_output_transforms: 1 | 0 | null = null,
-    initialize_transforms_per_stage: 1 | 0 | null = null,
+    collapse_output_transforms: boolean | null = null,
+    initialize_transforms_per_stage: boolean | null = null,
     interpolation: "Linear" | "NearestNeighbor" | "MultiLabel" | "Gaussian" | "BSpline" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | "GenericLabel" | null = null,
-    restrict_deformation: Array<0 | 1> | null = null,
+    restrict_deformation: Array<boolean> | null = null,
     initial_fixed_transform: string | null = null,
     initial_moving_transform: AntsRegistrationInitialMovingTransformParametersTagged | AntsRegistrationInitialMovingTransformUseInverseParametersTagged | AntsRegistrationInitialMovingTransformInitializationFeatureParametersTagged | null = null,
     winsorize_image_intensities: AntsRegistrationWinsorizeImageIntensitiesParameters | null = null,
     masks: AntsRegistrationMasksParameters | null = null,
-    minc: 0 | 1 | null = null,
+    minc: boolean | null = null,
     random_seed: number | null = null,
-    verbose: 0 | 1 | null = null,
-    float: 0 | 1 | null = null,
+    verbose: boolean | null = null,
+    float: boolean | null = null,
     runner: Runner | null = null,
 ): AntsRegistrationOutputs {
     const params = ants_registration_params(stages, dimensionality, output, save_state, restore_state, write_composite_transform, print_similarity_measure_interval, write_interval_volumes, collapse_output_transforms, initialize_transforms_per_stage, interpolation, restrict_deformation, initial_fixed_transform, initial_moving_transform, winsorize_image_intensities, masks, minc, random_seed, verbose, float)

@@ -4,34 +4,33 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_CORRELATION_METADATA: Metadata = {
-    id: "af245290fbe6593faa46f40cb576c436c697b361.boutiques",
+    id: "dcfca8ed7e2b49948aa64aa87d5693dc899aee50.workbench",
     name: "cifti-correlation",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiCorrelationRoiOverrideParameters {
-    "@type"?: "roi_override";
-    "opt_left_roi_roi_metric"?: InputPathType | null | undefined;
-    "opt_right_roi_roi_metric"?: InputPathType | null | undefined;
-    "opt_cerebellum_roi_roi_metric"?: InputPathType | null | undefined;
-    "opt_vol_roi_roi_vol"?: InputPathType | null | undefined;
-    "opt_cifti_roi_roi_cifti"?: InputPathType | null | undefined;
+    "@type"?: "roi-override";
+    "roi-metric"?: InputPathType | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
+    "roi-vol"?: InputPathType | null | undefined;
+    "roi-cifti"?: InputPathType | null | undefined;
 }
 type CiftiCorrelationRoiOverrideParametersTagged = Required<Pick<CiftiCorrelationRoiOverrideParameters, '@type'>> & CiftiCorrelationRoiOverrideParameters;
 
 
 interface CiftiCorrelationParameters {
     "@type"?: "workbench/cifti-correlation";
+    "cifti-out": string;
+    "roi-override"?: CiftiCorrelationRoiOverrideParameters | null | undefined;
+    "weight-file"?: string | null | undefined;
+    "fisher-z": boolean;
+    "no-demean": boolean;
+    "covariance": boolean;
+    "limit-GB"?: number | null | undefined;
     "cifti": InputPathType;
-    "cifti_out": string;
-    "roi_override"?: CiftiCorrelationRoiOverrideParameters | null | undefined;
-    "opt_weights_weight_file"?: string | null | undefined;
-    "opt_fisher_z": boolean;
-    "opt_no_demean": boolean;
-    "opt_covariance": boolean;
-    "opt_mem_limit_limit_gb"?: number | null | undefined;
 }
 type CiftiCorrelationParametersTagged = Required<Pick<CiftiCorrelationParameters, '@type'>> & CiftiCorrelationParameters;
 
@@ -39,38 +38,48 @@ type CiftiCorrelationParametersTagged = Required<Pick<CiftiCorrelationParameters
 /**
  * Build parameters.
  *
- * @param opt_left_roi_roi_metric use an roi for left hempsphere: the left roi as a metric file
- * @param opt_right_roi_roi_metric use an roi for right hempsphere: the right roi as a metric file
- * @param opt_cerebellum_roi_roi_metric use an roi for cerebellum: the cerebellum roi as a metric file
- * @param opt_vol_roi_roi_vol use an roi for volume: the volume roi file
- * @param opt_cifti_roi_roi_cifti use a cifti file for combined rois: the cifti roi file
+ * @param roi_metric use an roi for left hempsphere
+
+the left roi as a metric file
+ * @param roi_metric_ use an roi for right hempsphere
+
+the right roi as a metric file
+ * @param roi_metric_2 use an roi for cerebellum
+
+the cerebellum roi as a metric file
+ * @param roi_vol use an roi for volume
+
+the volume roi file
+ * @param roi_cifti use a cifti file for combined rois
+
+the cifti roi file
  *
  * @returns Parameter dictionary
  */
 function cifti_correlation_roi_override_params(
-    opt_left_roi_roi_metric: InputPathType | null = null,
-    opt_right_roi_roi_metric: InputPathType | null = null,
-    opt_cerebellum_roi_roi_metric: InputPathType | null = null,
-    opt_vol_roi_roi_vol: InputPathType | null = null,
-    opt_cifti_roi_roi_cifti: InputPathType | null = null,
+    roi_metric: InputPathType | null,
+    roi_metric_: InputPathType | null,
+    roi_metric_2: InputPathType | null,
+    roi_vol: InputPathType | null,
+    roi_cifti: InputPathType | null,
 ): CiftiCorrelationRoiOverrideParametersTagged {
     const params = {
-        "@type": "roi_override" as const,
+        "@type": "roi-override" as const,
     };
-    if (opt_left_roi_roi_metric !== null) {
-        params["opt_left_roi_roi_metric"] = opt_left_roi_roi_metric;
+    if (roi_metric !== null) {
+        params["roi-metric"] = roi_metric;
     }
-    if (opt_right_roi_roi_metric !== null) {
-        params["opt_right_roi_roi_metric"] = opt_right_roi_roi_metric;
+    if (roi_metric_ !== null) {
+        params["roi-metric"] = roi_metric_;
     }
-    if (opt_cerebellum_roi_roi_metric !== null) {
-        params["opt_cerebellum_roi_roi_metric"] = opt_cerebellum_roi_roi_metric;
+    if (roi_metric_2 !== null) {
+        params["roi-metric"] = roi_metric_2;
     }
-    if (opt_vol_roi_roi_vol !== null) {
-        params["opt_vol_roi_roi_vol"] = opt_vol_roi_roi_vol;
+    if (roi_vol !== null) {
+        params["roi-vol"] = roi_vol;
     }
-    if (opt_cifti_roi_roi_cifti !== null) {
-        params["opt_cifti_roi_roi_cifti"] = opt_cifti_roi_roi_cifti;
+    if (roi_cifti !== null) {
+        params["roi-cifti"] = roi_cifti;
     }
     return params;
 }
@@ -89,35 +98,19 @@ function cifti_correlation_roi_override_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-roi-override");
-    if ((params["opt_left_roi_roi_metric"] ?? null) !== null) {
+    if ((params["roi-metric"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["roi-vol"] ?? null) !== null || (params["roi-cifti"] ?? null) !== null) {
         cargs.push(
+            "-roi-override",
             "-left-roi",
-            execution.inputFile((params["opt_left_roi_roi_metric"] ?? null))
-        );
-    }
-    if ((params["opt_right_roi_roi_metric"] ?? null) !== null) {
-        cargs.push(
+            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
             "-right-roi",
-            execution.inputFile((params["opt_right_roi_roi_metric"] ?? null))
-        );
-    }
-    if ((params["opt_cerebellum_roi_roi_metric"] ?? null) !== null) {
-        cargs.push(
+            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
             "-cerebellum-roi",
-            execution.inputFile((params["opt_cerebellum_roi_roi_metric"] ?? null))
-        );
-    }
-    if ((params["opt_vol_roi_roi_vol"] ?? null) !== null) {
-        cargs.push(
+            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
             "-vol-roi",
-            execution.inputFile((params["opt_vol_roi_roi_vol"] ?? null))
-        );
-    }
-    if ((params["opt_cifti_roi_roi_cifti"] ?? null) !== null) {
-        cargs.push(
+            (((params["roi-vol"] ?? null) !== null) ? execution.inputFile((params["roi-vol"] ?? null)) : ""),
             "-cifti-roi",
-            execution.inputFile((params["opt_cifti_roi_roi_cifti"] ?? null))
+            (((params["roi-cifti"] ?? null) !== null) ? execution.inputFile((params["roi-cifti"] ?? null)) : "")
         );
     }
     return cargs;
@@ -144,43 +137,47 @@ interface CiftiCorrelationOutputs {
 /**
  * Build parameters.
  *
- * @param cifti input cifti file
  * @param cifti_out output cifti file
+ * @param weight_file specify column weights
+
+text file containing one weight per column
+ * @param limit_gb restrict memory usage
+
+memory limit in gigabytes
+ * @param cifti input cifti file
  * @param roi_override perform correlation from a subset of rows to all rows
- * @param opt_weights_weight_file specify column weights: text file containing one weight per column
- * @param opt_fisher_z apply fisher small z transform (ie, artanh) to correlation
- * @param opt_no_demean instead of correlation, do dot product of rows, then normalize by diagonal
- * @param opt_covariance compute covariance instead of correlation
- * @param opt_mem_limit_limit_gb restrict memory usage: memory limit in gigabytes
+ * @param fisher_z apply fisher small z transform (ie, artanh) to correlation
+ * @param no_demean instead of correlation, do dot product of rows, then normalize by diagonal
+ * @param covariance compute covariance instead of correlation
  *
  * @returns Parameter dictionary
  */
 function cifti_correlation_params(
-    cifti: InputPathType,
     cifti_out: string,
+    weight_file: string | null,
+    limit_gb: number | null,
+    cifti: InputPathType,
     roi_override: CiftiCorrelationRoiOverrideParameters | null = null,
-    opt_weights_weight_file: string | null = null,
-    opt_fisher_z: boolean = false,
-    opt_no_demean: boolean = false,
-    opt_covariance: boolean = false,
-    opt_mem_limit_limit_gb: number | null = null,
+    fisher_z: boolean = false,
+    no_demean: boolean = false,
+    covariance: boolean = false,
 ): CiftiCorrelationParametersTagged {
     const params = {
         "@type": "workbench/cifti-correlation" as const,
+        "cifti-out": cifti_out,
+        "fisher-z": fisher_z,
+        "no-demean": no_demean,
+        "covariance": covariance,
         "cifti": cifti,
-        "cifti_out": cifti_out,
-        "opt_fisher_z": opt_fisher_z,
-        "opt_no_demean": opt_no_demean,
-        "opt_covariance": opt_covariance,
     };
     if (roi_override !== null) {
-        params["roi_override"] = roi_override;
+        params["roi-override"] = roi_override;
     }
-    if (opt_weights_weight_file !== null) {
-        params["opt_weights_weight_file"] = opt_weights_weight_file;
+    if (weight_file !== null) {
+        params["weight-file"] = weight_file;
     }
-    if (opt_mem_limit_limit_gb !== null) {
-        params["opt_mem_limit_limit_gb"] = opt_mem_limit_limit_gb;
+    if (limit_gb !== null) {
+        params["limit-GB"] = limit_gb;
     }
     return params;
 }
@@ -199,34 +196,22 @@ function cifti_correlation_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-correlation");
-    cargs.push(execution.inputFile((params["cifti"] ?? null)));
-    cargs.push((params["cifti_out"] ?? null));
-    if ((params["roi_override"] ?? null) !== null) {
-        cargs.push(...cifti_correlation_roi_override_cargs((params["roi_override"] ?? null), execution));
-    }
-    if ((params["opt_weights_weight_file"] ?? null) !== null) {
+    if ((params["roi-override"] ?? null) !== null || (params["weight-file"] ?? null) !== null || (params["fisher-z"] ?? false) || (params["no-demean"] ?? false) || (params["covariance"] ?? false) || (params["limit-GB"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-cifti-correlation",
+            (params["cifti-out"] ?? null),
+            ...(((params["roi-override"] ?? null) !== null) ? cifti_correlation_roi_override_cargs((params["roi-override"] ?? null), execution) : []),
             "-weights",
-            (params["opt_weights_weight_file"] ?? null)
-        );
-    }
-    if ((params["opt_fisher_z"] ?? false)) {
-        cargs.push("-fisher-z");
-    }
-    if ((params["opt_no_demean"] ?? false)) {
-        cargs.push("-no-demean");
-    }
-    if ((params["opt_covariance"] ?? false)) {
-        cargs.push("-covariance");
-    }
-    if ((params["opt_mem_limit_limit_gb"] ?? null) !== null) {
-        cargs.push(
+            (((params["weight-file"] ?? null) !== null) ? (params["weight-file"] ?? null) : ""),
+            (((params["fisher-z"] ?? false)) ? "-fisher-z" : ""),
+            (((params["no-demean"] ?? false)) ? "-no-demean" : ""),
+            (((params["covariance"] ?? false)) ? "-covariance" : ""),
             "-mem-limit",
-            String((params["opt_mem_limit_limit_gb"] ?? null))
+            (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : "")
         );
     }
+    cargs.push(execution.inputFile((params["cifti"] ?? null)));
     return cargs;
 }
 
@@ -245,26 +230,20 @@ function cifti_correlation_outputs(
 ): CiftiCorrelationOutputs {
     const ret: CiftiCorrelationOutputs = {
         root: execution.outputFile("."),
-        cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
+        cifti_out: execution.outputFile([(params["cifti-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * cifti-correlation
- *
- * Generate correlation of rows in a cifti file.
+ * GENERATE CORRELATION OF ROWS IN A CIFTI FILE.
  *
  * For each row (or each row inside an roi if -roi-override is specified), correlate to all other rows.  The -cifti-roi suboption to -roi-override may not be specified with any other -*-roi suboption, but you may specify the other -*-roi suboptions together.
  *
  * When using the -fisher-z option, the output is NOT a Z-score, it is artanh(r), to do further math on this output, consider using -cifti-math.
  *
  * Restricting the memory usage will make it calculate the output in chunks, and if the input file size is more than 70% of the memory limit, it will also read through the input file as rows are required, resulting in several passes through the input file (once per chunk).  Memory limit does not need to be an integer, you may also specify 0 to calculate a single output row at a time (this may be very slow).
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -286,9 +265,7 @@ function cifti_correlation_execute(
 
 
 /**
- * cifti-correlation
- *
- * Generate correlation of rows in a cifti file.
+ * GENERATE CORRELATION OF ROWS IN A CIFTI FILE.
  *
  * For each row (or each row inside an roi if -roi-override is specified), correlate to all other rows.  The -cifti-roi suboption to -roi-override may not be specified with any other -*-roi suboption, but you may specify the other -*-roi suboptions together.
  *
@@ -296,34 +273,34 @@ function cifti_correlation_execute(
  *
  * Restricting the memory usage will make it calculate the output in chunks, and if the input file size is more than 70% of the memory limit, it will also read through the input file as rows are required, resulting in several passes through the input file (once per chunk).  Memory limit does not need to be an integer, you may also specify 0 to calculate a single output row at a time (this may be very slow).
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
- * @param cifti input cifti file
  * @param cifti_out output cifti file
+ * @param weight_file specify column weights
+
+text file containing one weight per column
+ * @param limit_gb restrict memory usage
+
+memory limit in gigabytes
+ * @param cifti input cifti file
  * @param roi_override perform correlation from a subset of rows to all rows
- * @param opt_weights_weight_file specify column weights: text file containing one weight per column
- * @param opt_fisher_z apply fisher small z transform (ie, artanh) to correlation
- * @param opt_no_demean instead of correlation, do dot product of rows, then normalize by diagonal
- * @param opt_covariance compute covariance instead of correlation
- * @param opt_mem_limit_limit_gb restrict memory usage: memory limit in gigabytes
+ * @param fisher_z apply fisher small z transform (ie, artanh) to correlation
+ * @param no_demean instead of correlation, do dot product of rows, then normalize by diagonal
+ * @param covariance compute covariance instead of correlation
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiCorrelationOutputs`).
  */
 function cifti_correlation(
-    cifti: InputPathType,
     cifti_out: string,
+    weight_file: string | null,
+    limit_gb: number | null,
+    cifti: InputPathType,
     roi_override: CiftiCorrelationRoiOverrideParameters | null = null,
-    opt_weights_weight_file: string | null = null,
-    opt_fisher_z: boolean = false,
-    opt_no_demean: boolean = false,
-    opt_covariance: boolean = false,
-    opt_mem_limit_limit_gb: number | null = null,
+    fisher_z: boolean = false,
+    no_demean: boolean = false,
+    covariance: boolean = false,
     runner: Runner | null = null,
 ): CiftiCorrelationOutputs {
-    const params = cifti_correlation_params(cifti, cifti_out, roi_override, opt_weights_weight_file, opt_fisher_z, opt_no_demean, opt_covariance, opt_mem_limit_limit_gb)
+    const params = cifti_correlation_params(cifti_out, weight_file, limit_gb, cifti, roi_override, fisher_z, no_demean, covariance)
     return cifti_correlation_execute(params, runner);
 }
 

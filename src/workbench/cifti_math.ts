@@ -4,10 +4,9 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_MATH_METADATA: Metadata = {
-    id: "452fbf26e7e7dec769a52f1743e09cb940aeff81.boutiques",
+    id: "78bc304aa1a0ed74c8c953b7728762dcccfadd4c.workbench",
     name: "cifti-math",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
@@ -15,7 +14,7 @@ interface CiftiMathSelectParameters {
     "@type"?: "select";
     "dim": number;
     "index": string;
-    "opt_repeat": boolean;
+    "repeat": boolean;
 }
 type CiftiMathSelectParametersTagged = Required<Pick<CiftiMathSelectParameters, '@type'>> & CiftiMathSelectParameters;
 
@@ -31,11 +30,11 @@ type CiftiMathVarParametersTagged = Required<Pick<CiftiMathVarParameters, '@type
 
 interface CiftiMathParameters {
     "@type"?: "workbench/cifti-math";
-    "expression": string;
-    "cifti_out": string;
-    "opt_fixnan_replace"?: number | null | undefined;
-    "opt_override_mapping_check": boolean;
+    "cifti-out": string;
+    "replace"?: number | null | undefined;
+    "override-mapping-check": boolean;
     "var"?: Array<CiftiMathVarParameters> | null | undefined;
+    "expression": string;
 }
 type CiftiMathParametersTagged = Required<Pick<CiftiMathParameters, '@type'>> & CiftiMathParameters;
 
@@ -45,20 +44,20 @@ type CiftiMathParametersTagged = Required<Pick<CiftiMathParameters, '@type'>> & 
  *
  * @param dim the dimension to select from (1-based)
  * @param index the index number (1-based) or map name to use
- * @param opt_repeat repeat the selected values for each index of output in this dimension
+ * @param repeat repeat the selected values for each index of output in this dimension
  *
  * @returns Parameter dictionary
  */
 function cifti_math_select_params(
     dim: number,
     index: string,
-    opt_repeat: boolean = false,
+    repeat: boolean = false,
 ): CiftiMathSelectParametersTagged {
     const params = {
         "@type": "select" as const,
         "dim": dim,
         "index": index,
-        "opt_repeat": opt_repeat,
+        "repeat": repeat,
     };
     return params;
 }
@@ -77,11 +76,13 @@ function cifti_math_select_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-select");
-    cargs.push(String((params["dim"] ?? null)));
-    cargs.push((params["index"] ?? null));
-    if ((params["opt_repeat"] ?? false)) {
-        cargs.push("-repeat");
+    if ((params["repeat"] ?? false)) {
+        cargs.push(
+            "-select",
+            String((params["dim"] ?? null)),
+            (params["index"] ?? null),
+            "-repeat"
+        );
     }
     return cargs;
 }
@@ -126,11 +127,13 @@ function cifti_math_var_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-var");
-    cargs.push((params["name"] ?? null));
-    cargs.push(execution.inputFile((params["cifti"] ?? null)));
     if ((params["select"] ?? null) !== null) {
-        cargs.push(...(params["select"] ?? null).map(s => cifti_math_select_cargs(s, execution)).flat());
+        cargs.push(
+            "-var",
+            (params["name"] ?? null),
+            execution.inputFile((params["cifti"] ?? null)),
+            ...(params["select"] ?? null).map(s => cifti_math_select_cargs(s, execution)).flat()
+        );
     }
     return cargs;
 }
@@ -156,29 +159,31 @@ interface CiftiMathOutputs {
 /**
  * Build parameters.
  *
- * @param expression the expression to evaluate, in quotes
  * @param cifti_out the output cifti file
- * @param opt_fixnan_replace replace NaN results with a value: value to replace NaN with
- * @param opt_override_mapping_check don't check the mappings for compatibility, only check length
+ * @param replace replace NaN results with a value
+
+value to replace NaN with
+ * @param expression the expression to evaluate, in quotes
+ * @param override_mapping_check don't check the mappings for compatibility, only check length
  * @param var_ a cifti file to use as a variable
  *
  * @returns Parameter dictionary
  */
 function cifti_math_params(
-    expression: string,
     cifti_out: string,
-    opt_fixnan_replace: number | null = null,
-    opt_override_mapping_check: boolean = false,
+    replace: number | null,
+    expression: string,
+    override_mapping_check: boolean = false,
     var_: Array<CiftiMathVarParameters> | null = null,
 ): CiftiMathParametersTagged {
     const params = {
         "@type": "workbench/cifti-math" as const,
+        "cifti-out": cifti_out,
+        "override-mapping-check": override_mapping_check,
         "expression": expression,
-        "cifti_out": cifti_out,
-        "opt_override_mapping_check": opt_override_mapping_check,
     };
-    if (opt_fixnan_replace !== null) {
-        params["opt_fixnan_replace"] = opt_fixnan_replace;
+    if (replace !== null) {
+        params["replace"] = replace;
     }
     if (var_ !== null) {
         params["var"] = var_;
@@ -200,22 +205,18 @@ function cifti_math_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-math");
-    cargs.push((params["expression"] ?? null));
-    cargs.push((params["cifti_out"] ?? null));
-    if ((params["opt_fixnan_replace"] ?? null) !== null) {
+    if ((params["replace"] ?? null) !== null || (params["override-mapping-check"] ?? false) || (params["var"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-cifti-math",
+            (params["cifti-out"] ?? null),
             "-fixnan",
-            String((params["opt_fixnan_replace"] ?? null))
+            (((params["replace"] ?? null) !== null) ? String((params["replace"] ?? null)) : ""),
+            (((params["override-mapping-check"] ?? false)) ? "-override-mapping-check" : ""),
+            ...(((params["var"] ?? null) !== null) ? (params["var"] ?? null).map(s => cifti_math_var_cargs(s, execution)).flat() : [])
         );
     }
-    if ((params["opt_override_mapping_check"] ?? false)) {
-        cargs.push("-override-mapping-check");
-    }
-    if ((params["var"] ?? null) !== null) {
-        cargs.push(...(params["var"] ?? null).map(s => cifti_math_var_cargs(s, execution)).flat());
-    }
+    cargs.push((params["expression"] ?? null));
     return cargs;
 }
 
@@ -234,16 +235,14 @@ function cifti_math_outputs(
 ): CiftiMathOutputs {
     const ret: CiftiMathOutputs = {
         root: execution.outputFile("."),
-        cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
+        cifti_out: execution.outputFile([(params["cifti-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * cifti-math
- *
- * Evaluate expression on cifti files.
+ * EVALUATE EXPRESSION ON CIFTI FILES.
  *
  * This command evaluates <expression> at each matrix element independently.  There must be at least one -var option (to get the output layout from), even if the <name> specified in it isn't used in <expression>.
  *
@@ -287,10 +286,6 @@ function cifti_math_outputs(
  *    mod: 2 arguments, mod(x, y) = x - y * floor(x / y), or 0 if y == 0
  *    clamp: 3 arguments, clamp(x, low, high) = min(max(x, low), high)
  * .
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -312,9 +307,7 @@ function cifti_math_execute(
 
 
 /**
- * cifti-math
- *
- * Evaluate expression on cifti files.
+ * EVALUATE EXPRESSION ON CIFTI FILES.
  *
  * This command evaluates <expression> at each matrix element independently.  There must be at least one -var option (to get the output layout from), even if the <name> specified in it isn't used in <expression>.
  *
@@ -359,28 +352,26 @@ function cifti_math_execute(
  *    clamp: 3 arguments, clamp(x, low, high) = min(max(x, low), high)
  * .
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
- * @param expression the expression to evaluate, in quotes
  * @param cifti_out the output cifti file
- * @param opt_fixnan_replace replace NaN results with a value: value to replace NaN with
- * @param opt_override_mapping_check don't check the mappings for compatibility, only check length
+ * @param replace replace NaN results with a value
+
+value to replace NaN with
+ * @param expression the expression to evaluate, in quotes
+ * @param override_mapping_check don't check the mappings for compatibility, only check length
  * @param var_ a cifti file to use as a variable
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiMathOutputs`).
  */
 function cifti_math(
-    expression: string,
     cifti_out: string,
-    opt_fixnan_replace: number | null = null,
-    opt_override_mapping_check: boolean = false,
+    replace: number | null,
+    expression: string,
+    override_mapping_check: boolean = false,
     var_: Array<CiftiMathVarParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiMathOutputs {
-    const params = cifti_math_params(expression, cifti_out, opt_fixnan_replace, opt_override_mapping_check, var_)
+    const params = cifti_math_params(cifti_out, replace, expression, override_mapping_check, var_)
     return cifti_math_execute(params, runner);
 }
 

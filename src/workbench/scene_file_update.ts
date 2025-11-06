@@ -4,46 +4,45 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SCENE_FILE_UPDATE_METADATA: Metadata = {
-    id: "b53f9555bf7b49feaf8c70bbf947464884f01049.boutiques",
+    id: "74fc5b736152760ce25b6a49aed11ec82a2d48ab.workbench",
     name: "scene-file-update",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface SceneFileUpdateCopyMapOnePaletteParameters {
-    "@type"?: "copy_map_one_palette";
-    "data_file_name_suffix": string;
+    "@type"?: "copy-map-one-palette";
+    "Data File Name Suffix": string;
 }
 type SceneFileUpdateCopyMapOnePaletteParametersTagged = Required<Pick<SceneFileUpdateCopyMapOnePaletteParameters, '@type'>> & SceneFileUpdateCopyMapOnePaletteParameters;
 
 
 interface SceneFileUpdateDataFileAddParameters {
-    "@type"?: "data_file_add";
-    "name_of_data_file": string;
+    "@type"?: "data-file-add";
+    "Name of data file": string;
 }
 type SceneFileUpdateDataFileAddParametersTagged = Required<Pick<SceneFileUpdateDataFileAddParameters, '@type'>> & SceneFileUpdateDataFileAddParameters;
 
 
 interface SceneFileUpdateDataFileRemoveParameters {
-    "@type"?: "data_file_remove";
-    "name_of_data_file": string;
+    "@type"?: "data-file-remove";
+    "Name of data file": string;
 }
 type SceneFileUpdateDataFileRemoveParametersTagged = Required<Pick<SceneFileUpdateDataFileRemoveParameters, '@type'>> & SceneFileUpdateDataFileRemoveParameters;
 
 
 interface SceneFileUpdateParameters {
     "@type"?: "workbench/scene-file-update";
-    "input_scene_file": string;
-    "output_scene_file": string;
-    "scene_name_or_number": string;
-    "opt_fix_map_palette_settings": boolean;
-    "opt_remove_missing_files": boolean;
-    "opt_error": boolean;
-    "opt_verbose": boolean;
-    "copy_map_one_palette"?: Array<SceneFileUpdateCopyMapOnePaletteParameters> | null | undefined;
-    "data_file_add"?: Array<SceneFileUpdateDataFileAddParameters> | null | undefined;
-    "data_file_remove"?: Array<SceneFileUpdateDataFileRemoveParameters> | null | undefined;
+    "fix-map-palette-settings": boolean;
+    "remove-missing-files": boolean;
+    "error": boolean;
+    "verbose": boolean;
+    "copy-map-one-palette"?: Array<SceneFileUpdateCopyMapOnePaletteParameters> | null | undefined;
+    "data-file-add"?: Array<SceneFileUpdateDataFileAddParameters> | null | undefined;
+    "data-file-remove"?: Array<SceneFileUpdateDataFileRemoveParameters> | null | undefined;
+    "input-scene-file": string;
+    "output-scene-file": string;
+    "scene-name-or-number": string;
 }
 type SceneFileUpdateParametersTagged = Required<Pick<SceneFileUpdateParameters, '@type'>> & SceneFileUpdateParameters;
 
@@ -59,8 +58,8 @@ function scene_file_update_copy_map_one_palette_params(
     data_file_name_suffix: string,
 ): SceneFileUpdateCopyMapOnePaletteParametersTagged {
     const params = {
-        "@type": "copy_map_one_palette" as const,
-        "data_file_name_suffix": data_file_name_suffix,
+        "@type": "copy-map-one-palette" as const,
+        "Data File Name Suffix": data_file_name_suffix,
     };
     return params;
 }
@@ -79,8 +78,10 @@ function scene_file_update_copy_map_one_palette_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-copy-map-one-palette");
-    cargs.push((params["data_file_name_suffix"] ?? null));
+    cargs.push(
+        "-copy-map-one-palette",
+        (params["Data File Name Suffix"] ?? null)
+    );
     return cargs;
 }
 
@@ -98,8 +99,8 @@ function scene_file_update_data_file_add_params(
     name_of_data_file: string,
 ): SceneFileUpdateDataFileAddParametersTagged {
     const params = {
-        "@type": "data_file_add" as const,
-        "name_of_data_file": name_of_data_file,
+        "@type": "data-file-add" as const,
+        "Name of data file": name_of_data_file,
     };
     return params;
 }
@@ -118,8 +119,10 @@ function scene_file_update_data_file_add_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-data-file-add");
-    cargs.push((params["name_of_data_file"] ?? null));
+    cargs.push(
+        "-data-file-add",
+        (params["Name of data file"] ?? null)
+    );
     return cargs;
 }
 
@@ -137,8 +140,8 @@ function scene_file_update_data_file_remove_params(
     name_of_data_file: string,
 ): SceneFileUpdateDataFileRemoveParametersTagged {
     const params = {
-        "@type": "data_file_remove" as const,
-        "name_of_data_file": name_of_data_file,
+        "@type": "data-file-remove" as const,
+        "Name of data file": name_of_data_file,
     };
     return params;
 }
@@ -157,8 +160,10 @@ function scene_file_update_data_file_remove_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-data-file-remove");
-    cargs.push((params["name_of_data_file"] ?? null));
+    cargs.push(
+        "-data-file-remove",
+        (params["Name of data file"] ?? null)
+    );
     return cargs;
 }
 
@@ -182,10 +187,10 @@ interface SceneFileUpdateOutputs {
  * @param input_scene_file the input scene file
  * @param output_scene_file the new scene file to create
  * @param scene_name_or_number name or number (starting at one) of the scene in the scene file
- * @param opt_fix_map_palette_settings Fix palette settings for files with change in number of maps
- * @param opt_remove_missing_files Remove missing files from SpecFile
- * @param opt_error Abort command if there is an error performing any of the operations on the scene file
- * @param opt_verbose Print names of files that have palettes updated
+ * @param fix_map_palette_settings Fix palette settings for files with change in number of maps
+ * @param remove_missing_files Remove missing files from SpecFile
+ * @param error Abort command if there is an error performing any of the operations on the scene file
+ * @param verbose Print names of files that have palettes updated
  * @param copy_map_one_palette Copy palettes settings from first map to all maps in a data file
  * @param data_file_add Add a data file to scene's loaded files
  * @param data_file_remove Remove a data file from scene's loaded files
@@ -196,32 +201,32 @@ function scene_file_update_params(
     input_scene_file: string,
     output_scene_file: string,
     scene_name_or_number: string,
-    opt_fix_map_palette_settings: boolean = false,
-    opt_remove_missing_files: boolean = false,
-    opt_error: boolean = false,
-    opt_verbose: boolean = false,
+    fix_map_palette_settings: boolean = false,
+    remove_missing_files: boolean = false,
+    error: boolean = false,
+    verbose: boolean = false,
     copy_map_one_palette: Array<SceneFileUpdateCopyMapOnePaletteParameters> | null = null,
     data_file_add: Array<SceneFileUpdateDataFileAddParameters> | null = null,
     data_file_remove: Array<SceneFileUpdateDataFileRemoveParameters> | null = null,
 ): SceneFileUpdateParametersTagged {
     const params = {
         "@type": "workbench/scene-file-update" as const,
-        "input_scene_file": input_scene_file,
-        "output_scene_file": output_scene_file,
-        "scene_name_or_number": scene_name_or_number,
-        "opt_fix_map_palette_settings": opt_fix_map_palette_settings,
-        "opt_remove_missing_files": opt_remove_missing_files,
-        "opt_error": opt_error,
-        "opt_verbose": opt_verbose,
+        "fix-map-palette-settings": fix_map_palette_settings,
+        "remove-missing-files": remove_missing_files,
+        "error": error,
+        "verbose": verbose,
+        "input-scene-file": input_scene_file,
+        "output-scene-file": output_scene_file,
+        "scene-name-or-number": scene_name_or_number,
     };
     if (copy_map_one_palette !== null) {
-        params["copy_map_one_palette"] = copy_map_one_palette;
+        params["copy-map-one-palette"] = copy_map_one_palette;
     }
     if (data_file_add !== null) {
-        params["data_file_add"] = data_file_add;
+        params["data-file-add"] = data_file_add;
     }
     if (data_file_remove !== null) {
-        params["data_file_remove"] = data_file_remove;
+        params["data-file-remove"] = data_file_remove;
     }
     return params;
 }
@@ -240,32 +245,22 @@ function scene_file_update_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-scene-file-update");
-    cargs.push((params["input_scene_file"] ?? null));
-    cargs.push((params["output_scene_file"] ?? null));
-    cargs.push((params["scene_name_or_number"] ?? null));
-    if ((params["opt_fix_map_palette_settings"] ?? false)) {
-        cargs.push("-fix-map-palette-settings");
+    if ((params["fix-map-palette-settings"] ?? false) || (params["remove-missing-files"] ?? false) || (params["error"] ?? false) || (params["verbose"] ?? false) || (params["copy-map-one-palette"] ?? null) !== null || (params["data-file-add"] ?? null) !== null || (params["data-file-remove"] ?? null) !== null) {
+        cargs.push(
+            "wb_command",
+            "-scene-file-update",
+            (((params["fix-map-palette-settings"] ?? false)) ? "-fix-map-palette-settings" : ""),
+            (((params["remove-missing-files"] ?? false)) ? "-remove-missing-files" : ""),
+            (((params["error"] ?? false)) ? "-error" : ""),
+            (((params["verbose"] ?? false)) ? "-verbose" : ""),
+            ...(((params["copy-map-one-palette"] ?? null) !== null) ? (params["copy-map-one-palette"] ?? null).map(s => scene_file_update_copy_map_one_palette_cargs(s, execution)).flat() : []),
+            ...(((params["data-file-add"] ?? null) !== null) ? (params["data-file-add"] ?? null).map(s => scene_file_update_data_file_add_cargs(s, execution)).flat() : []),
+            ...(((params["data-file-remove"] ?? null) !== null) ? (params["data-file-remove"] ?? null).map(s => scene_file_update_data_file_remove_cargs(s, execution)).flat() : [])
+        );
     }
-    if ((params["opt_remove_missing_files"] ?? false)) {
-        cargs.push("-remove-missing-files");
-    }
-    if ((params["opt_error"] ?? false)) {
-        cargs.push("-error");
-    }
-    if ((params["opt_verbose"] ?? false)) {
-        cargs.push("-verbose");
-    }
-    if ((params["copy_map_one_palette"] ?? null) !== null) {
-        cargs.push(...(params["copy_map_one_palette"] ?? null).map(s => scene_file_update_copy_map_one_palette_cargs(s, execution)).flat());
-    }
-    if ((params["data_file_add"] ?? null) !== null) {
-        cargs.push(...(params["data_file_add"] ?? null).map(s => scene_file_update_data_file_add_cargs(s, execution)).flat());
-    }
-    if ((params["data_file_remove"] ?? null) !== null) {
-        cargs.push(...(params["data_file_remove"] ?? null).map(s => scene_file_update_data_file_remove_cargs(s, execution)).flat());
-    }
+    cargs.push((params["input-scene-file"] ?? null));
+    cargs.push((params["output-scene-file"] ?? null));
+    cargs.push((params["scene-name-or-number"] ?? null));
     return cargs;
 }
 
@@ -290,9 +285,7 @@ function scene_file_update_outputs(
 
 
 /**
- * scene-file-update
- *
- * Update scene file.
+ * UPDATE SCENE FILE.
  *
  * This command will update a scene for specific changes in data files.
  *
@@ -304,10 +297,6 @@ function scene_file_update_outputs(
  *
  * "-error" If this option is provided and there is an error while performing any of the scene operations, the command will immediately cease processing and the output scene file will not be created.   Otherwise any errors will be listed after the command finishes.
  * .
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -329,9 +318,7 @@ function scene_file_update_execute(
 
 
 /**
- * scene-file-update
- *
- * Update scene file.
+ * UPDATE SCENE FILE.
  *
  * This command will update a scene for specific changes in data files.
  *
@@ -344,17 +331,13 @@ function scene_file_update_execute(
  * "-error" If this option is provided and there is an error while performing any of the scene operations, the command will immediately cease processing and the output scene file will not be created.   Otherwise any errors will be listed after the command finishes.
  * .
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
  * @param input_scene_file the input scene file
  * @param output_scene_file the new scene file to create
  * @param scene_name_or_number name or number (starting at one) of the scene in the scene file
- * @param opt_fix_map_palette_settings Fix palette settings for files with change in number of maps
- * @param opt_remove_missing_files Remove missing files from SpecFile
- * @param opt_error Abort command if there is an error performing any of the operations on the scene file
- * @param opt_verbose Print names of files that have palettes updated
+ * @param fix_map_palette_settings Fix palette settings for files with change in number of maps
+ * @param remove_missing_files Remove missing files from SpecFile
+ * @param error Abort command if there is an error performing any of the operations on the scene file
+ * @param verbose Print names of files that have palettes updated
  * @param copy_map_one_palette Copy palettes settings from first map to all maps in a data file
  * @param data_file_add Add a data file to scene's loaded files
  * @param data_file_remove Remove a data file from scene's loaded files
@@ -366,16 +349,16 @@ function scene_file_update(
     input_scene_file: string,
     output_scene_file: string,
     scene_name_or_number: string,
-    opt_fix_map_palette_settings: boolean = false,
-    opt_remove_missing_files: boolean = false,
-    opt_error: boolean = false,
-    opt_verbose: boolean = false,
+    fix_map_palette_settings: boolean = false,
+    remove_missing_files: boolean = false,
+    error: boolean = false,
+    verbose: boolean = false,
     copy_map_one_palette: Array<SceneFileUpdateCopyMapOnePaletteParameters> | null = null,
     data_file_add: Array<SceneFileUpdateDataFileAddParameters> | null = null,
     data_file_remove: Array<SceneFileUpdateDataFileRemoveParameters> | null = null,
     runner: Runner | null = null,
 ): SceneFileUpdateOutputs {
-    const params = scene_file_update_params(input_scene_file, output_scene_file, scene_name_or_number, opt_fix_map_palette_settings, opt_remove_missing_files, opt_error, opt_verbose, copy_map_one_palette, data_file_add, data_file_remove)
+    const params = scene_file_update_params(input_scene_file, output_scene_file, scene_name_or_number, fix_map_palette_settings, remove_missing_files, error, verbose, copy_map_one_palette, data_file_add, data_file_remove)
     return scene_file_update_execute(params, runner);
 }
 

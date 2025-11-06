@@ -4,55 +4,54 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CONVERT_AFFINE_METADATA: Metadata = {
-    id: "4cd37f69e7dc378d87a51d9e406bdba4fef416e6.boutiques",
+    id: "f8f331e0186c1d179bf357df5d5eadf7019f39e3.workbench",
     name: "convert-affine",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface ConvertAffineFromWorldParameters {
-    "@type"?: "from_world";
+    "@type"?: "from-world";
     "input": string;
-    "opt_inverse": boolean;
+    "inverse": boolean;
 }
 type ConvertAffineFromWorldParametersTagged = Required<Pick<ConvertAffineFromWorldParameters, '@type'>> & ConvertAffineFromWorldParameters;
 
 
 interface ConvertAffineFromFlirtParameters {
-    "@type"?: "from_flirt";
+    "@type"?: "from-flirt";
     "input": string;
-    "source_volume": string;
-    "target_volume": string;
+    "source-volume": string;
+    "target-volume": string;
 }
 type ConvertAffineFromFlirtParametersTagged = Required<Pick<ConvertAffineFromFlirtParameters, '@type'>> & ConvertAffineFromFlirtParameters;
 
 
 interface ConvertAffineToWorldParameters {
-    "@type"?: "to_world";
+    "@type"?: "to-world";
     "output": string;
-    "opt_inverse": boolean;
+    "inverse": boolean;
 }
 type ConvertAffineToWorldParametersTagged = Required<Pick<ConvertAffineToWorldParameters, '@type'>> & ConvertAffineToWorldParameters;
 
 
 interface ConvertAffineToFlirtParameters {
-    "@type"?: "to_flirt";
+    "@type"?: "to-flirt";
     "output": string;
-    "source_volume": string;
-    "target_volume": string;
+    "source-volume": string;
+    "target-volume": string;
 }
 type ConvertAffineToFlirtParametersTagged = Required<Pick<ConvertAffineToFlirtParameters, '@type'>> & ConvertAffineToFlirtParameters;
 
 
 interface ConvertAffineParameters {
     "@type"?: "workbench/convert-affine";
-    "from_world"?: ConvertAffineFromWorldParameters | null | undefined;
-    "opt_from_itk_input"?: string | null | undefined;
-    "from_flirt"?: ConvertAffineFromFlirtParameters | null | undefined;
-    "to_world"?: ConvertAffineToWorldParameters | null | undefined;
-    "opt_to_itk_output"?: string | null | undefined;
-    "to_flirt"?: Array<ConvertAffineToFlirtParameters> | null | undefined;
+    "from-world"?: ConvertAffineFromWorldParameters | null | undefined;
+    "input"?: string | null | undefined;
+    "from-flirt"?: ConvertAffineFromFlirtParameters | null | undefined;
+    "to-world"?: ConvertAffineToWorldParameters | null | undefined;
+    "output"?: string | null | undefined;
+    "to-flirt"?: Array<ConvertAffineToFlirtParameters> | null | undefined;
 }
 type ConvertAffineParametersTagged = Required<Pick<ConvertAffineParameters, '@type'>> & ConvertAffineParameters;
 
@@ -61,18 +60,18 @@ type ConvertAffineParametersTagged = Required<Pick<ConvertAffineParameters, '@ty
  * Build parameters.
  *
  * @param input the input affine
- * @param opt_inverse for files that use 'target to source' convention
+ * @param inverse for files that use 'target to source' convention
  *
  * @returns Parameter dictionary
  */
 function convert_affine_from_world_params(
     input: string,
-    opt_inverse: boolean = false,
+    inverse: boolean = false,
 ): ConvertAffineFromWorldParametersTagged {
     const params = {
-        "@type": "from_world" as const,
+        "@type": "from-world" as const,
         "input": input,
-        "opt_inverse": opt_inverse,
+        "inverse": inverse,
     };
     return params;
 }
@@ -91,10 +90,12 @@ function convert_affine_from_world_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-from-world");
-    cargs.push((params["input"] ?? null));
-    if ((params["opt_inverse"] ?? false)) {
-        cargs.push("-inverse");
+    if ((params["inverse"] ?? false)) {
+        cargs.push(
+            "-from-world",
+            (params["input"] ?? null),
+            "-inverse"
+        );
     }
     return cargs;
 }
@@ -115,10 +116,10 @@ function convert_affine_from_flirt_params(
     target_volume: string,
 ): ConvertAffineFromFlirtParametersTagged {
     const params = {
-        "@type": "from_flirt" as const,
+        "@type": "from-flirt" as const,
         "input": input,
-        "source_volume": source_volume,
-        "target_volume": target_volume,
+        "source-volume": source_volume,
+        "target-volume": target_volume,
     };
     return params;
 }
@@ -137,10 +138,12 @@ function convert_affine_from_flirt_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-from-flirt");
-    cargs.push((params["input"] ?? null));
-    cargs.push((params["source_volume"] ?? null));
-    cargs.push((params["target_volume"] ?? null));
+    cargs.push(
+        "-from-flirt",
+        (params["input"] ?? null),
+        (params["source-volume"] ?? null),
+        (params["target-volume"] ?? null)
+    );
     return cargs;
 }
 
@@ -149,18 +152,18 @@ function convert_affine_from_flirt_cargs(
  * Build parameters.
  *
  * @param output output - the output affine
- * @param opt_inverse write file using 'target to source' convention
+ * @param inverse write file using 'target to source' convention
  *
  * @returns Parameter dictionary
  */
 function convert_affine_to_world_params(
     output: string,
-    opt_inverse: boolean = false,
+    inverse: boolean = false,
 ): ConvertAffineToWorldParametersTagged {
     const params = {
-        "@type": "to_world" as const,
+        "@type": "to-world" as const,
         "output": output,
-        "opt_inverse": opt_inverse,
+        "inverse": inverse,
     };
     return params;
 }
@@ -179,10 +182,12 @@ function convert_affine_to_world_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-to-world");
-    cargs.push((params["output"] ?? null));
-    if ((params["opt_inverse"] ?? false)) {
-        cargs.push("-inverse");
+    if ((params["inverse"] ?? false)) {
+        cargs.push(
+            "-to-world",
+            (params["output"] ?? null),
+            "-inverse"
+        );
     }
     return cargs;
 }
@@ -203,10 +208,10 @@ function convert_affine_to_flirt_params(
     target_volume: string,
 ): ConvertAffineToFlirtParametersTagged {
     const params = {
-        "@type": "to_flirt" as const,
+        "@type": "to-flirt" as const,
         "output": output,
-        "source_volume": source_volume,
-        "target_volume": target_volume,
+        "source-volume": source_volume,
+        "target-volume": target_volume,
     };
     return params;
 }
@@ -225,10 +230,12 @@ function convert_affine_to_flirt_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-to-flirt");
-    cargs.push((params["output"] ?? null));
-    cargs.push((params["source_volume"] ?? null));
-    cargs.push((params["target_volume"] ?? null));
+    cargs.push(
+        "-to-flirt",
+        (params["output"] ?? null),
+        (params["source-volume"] ?? null),
+        (params["target-volume"] ?? null)
+    );
     return cargs;
 }
 
@@ -249,43 +256,47 @@ interface ConvertAffineOutputs {
 /**
  * Build parameters.
  *
+ * @param input input is an ITK matrix
+
+the input affine
+ * @param output write output as an ITK affine
+
+output - the output affine
  * @param from_world input is a NIFTI 'world' affine
- * @param opt_from_itk_input input is an ITK matrix: the input affine
  * @param from_flirt input is a flirt matrix
  * @param to_world write output as a NIFTI 'world' affine
- * @param opt_to_itk_output write output as an ITK affine: output - the output affine
  * @param to_flirt write output as a flirt matrix
  *
  * @returns Parameter dictionary
  */
 function convert_affine_params(
+    input: string | null,
+    output: string | null,
     from_world: ConvertAffineFromWorldParameters | null = null,
-    opt_from_itk_input: string | null = null,
     from_flirt: ConvertAffineFromFlirtParameters | null = null,
     to_world: ConvertAffineToWorldParameters | null = null,
-    opt_to_itk_output: string | null = null,
     to_flirt: Array<ConvertAffineToFlirtParameters> | null = null,
 ): ConvertAffineParametersTagged {
     const params = {
         "@type": "workbench/convert-affine" as const,
     };
     if (from_world !== null) {
-        params["from_world"] = from_world;
+        params["from-world"] = from_world;
     }
-    if (opt_from_itk_input !== null) {
-        params["opt_from_itk_input"] = opt_from_itk_input;
+    if (input !== null) {
+        params["input"] = input;
     }
     if (from_flirt !== null) {
-        params["from_flirt"] = from_flirt;
+        params["from-flirt"] = from_flirt;
     }
     if (to_world !== null) {
-        params["to_world"] = to_world;
+        params["to-world"] = to_world;
     }
-    if (opt_to_itk_output !== null) {
-        params["opt_to_itk_output"] = opt_to_itk_output;
+    if (output !== null) {
+        params["output"] = output;
     }
     if (to_flirt !== null) {
-        params["to_flirt"] = to_flirt;
+        params["to-flirt"] = to_flirt;
     }
     return params;
 }
@@ -304,31 +315,19 @@ function convert_affine_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-convert-affine");
-    if ((params["from_world"] ?? null) !== null) {
-        cargs.push(...convert_affine_from_world_cargs((params["from_world"] ?? null), execution));
-    }
-    if ((params["opt_from_itk_input"] ?? null) !== null) {
+    if ((params["from-world"] ?? null) !== null || (params["input"] ?? null) !== null || (params["from-flirt"] ?? null) !== null || (params["to-world"] ?? null) !== null || (params["output"] ?? null) !== null || (params["to-flirt"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-convert-affine",
+            ...(((params["from-world"] ?? null) !== null) ? convert_affine_from_world_cargs((params["from-world"] ?? null), execution) : []),
             "-from-itk",
-            (params["opt_from_itk_input"] ?? null)
-        );
-    }
-    if ((params["from_flirt"] ?? null) !== null) {
-        cargs.push(...convert_affine_from_flirt_cargs((params["from_flirt"] ?? null), execution));
-    }
-    if ((params["to_world"] ?? null) !== null) {
-        cargs.push(...convert_affine_to_world_cargs((params["to_world"] ?? null), execution));
-    }
-    if ((params["opt_to_itk_output"] ?? null) !== null) {
-        cargs.push(
+            (((params["input"] ?? null) !== null) ? (params["input"] ?? null) : ""),
+            ...(((params["from-flirt"] ?? null) !== null) ? convert_affine_from_flirt_cargs((params["from-flirt"] ?? null), execution) : []),
+            ...(((params["to-world"] ?? null) !== null) ? convert_affine_to_world_cargs((params["to-world"] ?? null), execution) : []),
             "-to-itk",
-            (params["opt_to_itk_output"] ?? null)
+            (((params["output"] ?? null) !== null) ? (params["output"] ?? null) : ""),
+            ...(((params["to-flirt"] ?? null) !== null) ? (params["to-flirt"] ?? null).map(s => convert_affine_to_flirt_cargs(s, execution)).flat() : [])
         );
-    }
-    if ((params["to_flirt"] ?? null) !== null) {
-        cargs.push(...(params["to_flirt"] ?? null).map(s => convert_affine_to_flirt_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -354,19 +353,13 @@ function convert_affine_outputs(
 
 
 /**
- * convert-affine
- *
- * Convert an affine file between conventions.
+ * CONVERT AN AFFINE FILE BETWEEN CONVENTIONS.
  *
  * NIFTI world matrices can be used directly on mm coordinates via matrix multiplication, they use the NIFTI coordinate system, that is, positive X is right, positive Y is anterior, and positive Z is superior.  Note that wb_command assumes that world matrices transform source coordinates to target coordinates, while other tools may use affines that transform target coordinates to source coordinates.
  *
  * The ITK format is used by ANTS.
  *
  * You must specify exactly one -from option, but you may specify multiple -to options, and -to-flirt may be specified more than once.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -388,9 +381,7 @@ function convert_affine_execute(
 
 
 /**
- * convert-affine
- *
- * Convert an affine file between conventions.
+ * CONVERT AN AFFINE FILE BETWEEN CONVENTIONS.
  *
  * NIFTI world matrices can be used directly on mm coordinates via matrix multiplication, they use the NIFTI coordinate system, that is, positive X is right, positive Y is anterior, and positive Z is superior.  Note that wb_command assumes that world matrices transform source coordinates to target coordinates, while other tools may use affines that transform target coordinates to source coordinates.
  *
@@ -398,30 +389,30 @@ function convert_affine_execute(
  *
  * You must specify exactly one -from option, but you may specify multiple -to options, and -to-flirt may be specified more than once.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param input input is an ITK matrix
+
+the input affine
+ * @param output write output as an ITK affine
+
+output - the output affine
  * @param from_world input is a NIFTI 'world' affine
- * @param opt_from_itk_input input is an ITK matrix: the input affine
  * @param from_flirt input is a flirt matrix
  * @param to_world write output as a NIFTI 'world' affine
- * @param opt_to_itk_output write output as an ITK affine: output - the output affine
  * @param to_flirt write output as a flirt matrix
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConvertAffineOutputs`).
  */
 function convert_affine(
+    input: string | null,
+    output: string | null,
     from_world: ConvertAffineFromWorldParameters | null = null,
-    opt_from_itk_input: string | null = null,
     from_flirt: ConvertAffineFromFlirtParameters | null = null,
     to_world: ConvertAffineToWorldParameters | null = null,
-    opt_to_itk_output: string | null = null,
     to_flirt: Array<ConvertAffineToFlirtParameters> | null = null,
     runner: Runner | null = null,
 ): ConvertAffineOutputs {
-    const params = convert_affine_params(from_world, opt_from_itk_input, from_flirt, to_world, opt_to_itk_output, to_flirt)
+    const params = convert_affine_params(input, output, from_world, from_flirt, to_world, to_flirt)
     return convert_affine_execute(params, runner);
 }
 

@@ -17,9 +17,9 @@ interface AntsMultivariateTemplateConstruction2ShParameters {
     "output_prefix"?: string | null | undefined;
     "image_statistic"?: 0 | 1 | 2 | null | undefined;
     "sharpening"?: 0 | 1 | 2 | null | undefined;
-    "backup_images"?: 0 | 1 | null | undefined;
+    "backup_images"?: boolean | null | undefined;
     "parallel_control"?: 0 | 1 | 2 | 3 | 4 | 5 | null | undefined;
-    "single_precision"?: 0 | 1 | null | undefined;
+    "single_precision"?: boolean | null | undefined;
     "gradient_step"?: number | null | undefined;
     "iterations"?: number | null | undefined;
     "cpu_cores"?: number | null | undefined;
@@ -28,16 +28,16 @@ interface AntsMultivariateTemplateConstruction2ShParameters {
     "max_iterations"?: string | null | undefined;
     "shrink_factors"?: string | null | undefined;
     "smoothing_kernels"?: string | null | undefined;
-    "n4_bias_correction"?: 0 | 1 | null | undefined;
+    "n4_bias_correction"?: boolean | null | undefined;
     "prepend_commands"?: string | null | undefined;
-    "rigid_registration"?: 0 | 1 | null | undefined;
-    "linear_registration"?: 0 | 1 | null | undefined;
+    "rigid_registration"?: boolean | null | undefined;
+    "linear_registration"?: boolean | null | undefined;
     "similarity_metric"?: string | null | undefined;
     "transformation_type"?: string | null | undefined;
     "walltime"?: string | null | undefined;
     "memory_limit"?: string | null | undefined;
     "xgrid_args"?: string | null | undefined;
-    "update_template"?: 0 | 1 | null | undefined;
+    "update_template"?: boolean | null | undefined;
     "target_volume"?: Array<InputPathType> | null | undefined;
     "input_images": Array<InputPathType>;
 }
@@ -100,9 +100,9 @@ function ants_multivariate_template_construction2_sh_params(
     output_prefix: string | null = null,
     image_statistic: 0 | 1 | 2 | null = null,
     sharpening: 0 | 1 | 2 | null = null,
-    backup_images: 0 | 1 | null = null,
+    backup_images: boolean | null = null,
     parallel_control: 0 | 1 | 2 | 3 | 4 | 5 | null = null,
-    single_precision: 0 | 1 | null = null,
+    single_precision: boolean | null = null,
     gradient_step: number | null = null,
     iterations: number | null = null,
     cpu_cores: number | null = null,
@@ -111,16 +111,16 @@ function ants_multivariate_template_construction2_sh_params(
     max_iterations: string | null = null,
     shrink_factors: string | null = null,
     smoothing_kernels: string | null = null,
-    n4_bias_correction: 0 | 1 | null = null,
+    n4_bias_correction: boolean | null = null,
     prepend_commands: string | null = null,
-    rigid_registration: 0 | 1 | null = null,
-    linear_registration: 0 | 1 | null = null,
+    rigid_registration: boolean | null = null,
+    linear_registration: boolean | null = null,
     similarity_metric: string | null = null,
     transformation_type: string | null = null,
     walltime: string | null = null,
     memory_limit: string | null = null,
     xgrid_args: string | null = null,
-    update_template: 0 | 1 | null = null,
+    update_template: boolean | null = null,
     target_volume: Array<InputPathType> | null = null,
 ): AntsMultivariateTemplateConstruction2ShParametersTagged {
     const params = {
@@ -246,7 +246,7 @@ function ants_multivariate_template_construction2_sh_cargs(
     if ((params["backup_images"] ?? null) !== null) {
         cargs.push(
             "-b",
-            String((params["backup_images"] ?? null))
+            ((params["backup_images"] ?? null) ? "1" : "0")
         );
     }
     if ((params["parallel_control"] ?? null) !== null) {
@@ -258,7 +258,7 @@ function ants_multivariate_template_construction2_sh_cargs(
     if ((params["single_precision"] ?? null) !== null) {
         cargs.push(
             "-e",
-            String((params["single_precision"] ?? null))
+            ((params["single_precision"] ?? null) ? "1" : "0")
         );
     }
     if ((params["gradient_step"] ?? null) !== null) {
@@ -312,7 +312,7 @@ function ants_multivariate_template_construction2_sh_cargs(
     if ((params["n4_bias_correction"] ?? null) !== null) {
         cargs.push(
             "-n",
-            String((params["n4_bias_correction"] ?? null))
+            ((params["n4_bias_correction"] ?? null) ? "1" : "0")
         );
     }
     if ((params["prepend_commands"] ?? null) !== null) {
@@ -324,13 +324,13 @@ function ants_multivariate_template_construction2_sh_cargs(
     if ((params["rigid_registration"] ?? null) !== null) {
         cargs.push(
             "-r",
-            String((params["rigid_registration"] ?? null))
+            ((params["rigid_registration"] ?? null) ? "1" : "0")
         );
     }
     if ((params["linear_registration"] ?? null) !== null) {
         cargs.push(
             "-l",
-            String((params["linear_registration"] ?? null))
+            ((params["linear_registration"] ?? null) ? "1" : "0")
         );
     }
     if ((params["similarity_metric"] ?? null) !== null) {
@@ -366,7 +366,7 @@ function ants_multivariate_template_construction2_sh_cargs(
     if ((params["update_template"] ?? null) !== null) {
         cargs.push(
             "-y",
-            String((params["update_template"] ?? null))
+            ((params["update_template"] ?? null) ? "1" : "0")
         );
     }
     if ((params["target_volume"] ?? null) !== null) {
@@ -474,9 +474,9 @@ function ants_multivariate_template_construction2_sh(
     output_prefix: string | null = null,
     image_statistic: 0 | 1 | 2 | null = null,
     sharpening: 0 | 1 | 2 | null = null,
-    backup_images: 0 | 1 | null = null,
+    backup_images: boolean | null = null,
     parallel_control: 0 | 1 | 2 | 3 | 4 | 5 | null = null,
-    single_precision: 0 | 1 | null = null,
+    single_precision: boolean | null = null,
     gradient_step: number | null = null,
     iterations: number | null = null,
     cpu_cores: number | null = null,
@@ -485,16 +485,16 @@ function ants_multivariate_template_construction2_sh(
     max_iterations: string | null = null,
     shrink_factors: string | null = null,
     smoothing_kernels: string | null = null,
-    n4_bias_correction: 0 | 1 | null = null,
+    n4_bias_correction: boolean | null = null,
     prepend_commands: string | null = null,
-    rigid_registration: 0 | 1 | null = null,
-    linear_registration: 0 | 1 | null = null,
+    rigid_registration: boolean | null = null,
+    linear_registration: boolean | null = null,
     similarity_metric: string | null = null,
     transformation_type: string | null = null,
     walltime: string | null = null,
     memory_limit: string | null = null,
     xgrid_args: string | null = null,
-    update_template: 0 | 1 | null = null,
+    update_template: boolean | null = null,
     target_volume: Array<InputPathType> | null = null,
     runner: Runner | null = null,
 ): AntsMultivariateTemplateConstruction2ShOutputs {

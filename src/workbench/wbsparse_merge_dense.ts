@@ -4,25 +4,24 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const WBSPARSE_MERGE_DENSE_METADATA: Metadata = {
-    id: "678d6e48841edbd3b84295894b5e17d9b4f6d090.boutiques",
+    id: "69e9cfff66f0dc37b20b5be7517c4b481e100f89.workbench",
     name: "wbsparse-merge-dense",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface WbsparseMergeDenseWbsparseParameters {
     "@type"?: "wbsparse";
-    "wbsparse_in": string;
+    "wbsparse-in": string;
 }
 type WbsparseMergeDenseWbsparseParametersTagged = Required<Pick<WbsparseMergeDenseWbsparseParameters, '@type'>> & WbsparseMergeDenseWbsparseParameters;
 
 
 interface WbsparseMergeDenseParameters {
     "@type"?: "workbench/wbsparse-merge-dense";
-    "direction": string;
-    "wbsparse_out": string;
     "wbsparse"?: Array<WbsparseMergeDenseWbsparseParameters> | null | undefined;
+    "direction": string;
+    "wbsparse-out": string;
 }
 type WbsparseMergeDenseParametersTagged = Required<Pick<WbsparseMergeDenseParameters, '@type'>> & WbsparseMergeDenseParameters;
 
@@ -39,7 +38,7 @@ function wbsparse_merge_dense_wbsparse_params(
 ): WbsparseMergeDenseWbsparseParametersTagged {
     const params = {
         "@type": "wbsparse" as const,
-        "wbsparse_in": wbsparse_in,
+        "wbsparse-in": wbsparse_in,
     };
     return params;
 }
@@ -58,8 +57,10 @@ function wbsparse_merge_dense_wbsparse_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-wbsparse");
-    cargs.push((params["wbsparse_in"] ?? null));
+    cargs.push(
+        "-wbsparse",
+        (params["wbsparse-in"] ?? null)
+    );
     return cargs;
 }
 
@@ -94,7 +95,7 @@ function wbsparse_merge_dense_params(
     const params = {
         "@type": "workbench/wbsparse-merge-dense" as const,
         "direction": direction,
-        "wbsparse_out": wbsparse_out,
+        "wbsparse-out": wbsparse_out,
     };
     if (wbsparse !== null) {
         params["wbsparse"] = wbsparse;
@@ -116,13 +117,15 @@ function wbsparse_merge_dense_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-wbsparse-merge-dense");
-    cargs.push((params["direction"] ?? null));
-    cargs.push((params["wbsparse_out"] ?? null));
     if ((params["wbsparse"] ?? null) !== null) {
-        cargs.push(...(params["wbsparse"] ?? null).map(s => wbsparse_merge_dense_wbsparse_cargs(s, execution)).flat());
+        cargs.push(
+            "wb_command",
+            "-wbsparse-merge-dense",
+            ...(params["wbsparse"] ?? null).map(s => wbsparse_merge_dense_wbsparse_cargs(s, execution)).flat()
+        );
     }
+    cargs.push((params["direction"] ?? null));
+    cargs.push((params["wbsparse-out"] ?? null));
     return cargs;
 }
 
@@ -147,15 +150,9 @@ function wbsparse_merge_dense_outputs(
 
 
 /**
- * wbsparse-merge-dense
- *
- * Merge wbsparse files along dense dimension.
+ * MERGE WBSPARSE FILES ALONG DENSE DIMENSION.
  *
  * The input wbsparse files must have matching mappings along the direction not specified, and the mapping along the specified direction must be brain models.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -177,15 +174,9 @@ function wbsparse_merge_dense_execute(
 
 
 /**
- * wbsparse-merge-dense
- *
- * Merge wbsparse files along dense dimension.
+ * MERGE WBSPARSE FILES ALONG DENSE DIMENSION.
  *
  * The input wbsparse files must have matching mappings along the direction not specified, and the mapping along the specified direction must be brain models.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param direction which dimension to merge along, ROW or COLUMN
  * @param wbsparse_out output - the output wbsparse file

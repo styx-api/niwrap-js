@@ -4,37 +4,36 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_TFCE_METADATA: Metadata = {
-    id: "00af94a3601fb72ac5202dedc89a1c5c427cb460.boutiques",
+    id: "88157dd1b5611c70b241d14e8a78bfe6302ab544.workbench",
     name: "volume-tfce",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface VolumeTfcePresmoothParameters {
     "@type"?: "presmooth";
     "kernel": number;
-    "opt_fwhm": boolean;
+    "fwhm": boolean;
 }
 type VolumeTfcePresmoothParametersTagged = Required<Pick<VolumeTfcePresmoothParameters, '@type'>> & VolumeTfcePresmoothParameters;
 
 
 interface VolumeTfceParametersParameters {
     "@type"?: "parameters";
-    "e": number;
-    "h": number;
+    "E": number;
+    "H": number;
 }
 type VolumeTfceParametersParametersTagged = Required<Pick<VolumeTfceParametersParameters, '@type'>> & VolumeTfceParametersParameters;
 
 
 interface VolumeTfceParameters {
     "@type"?: "workbench/volume-tfce";
-    "volume_in": InputPathType;
-    "volume_out": string;
+    "volume-out": string;
     "presmooth"?: VolumeTfcePresmoothParameters | null | undefined;
-    "opt_roi_roi_volume"?: InputPathType | null | undefined;
+    "roi-volume"?: InputPathType | null | undefined;
     "parameters"?: VolumeTfceParametersParameters | null | undefined;
-    "opt_subvolume_subvolume"?: string | null | undefined;
+    "subvolume"?: string | null | undefined;
+    "volume-in": InputPathType;
 }
 type VolumeTfceParametersTagged = Required<Pick<VolumeTfceParameters, '@type'>> & VolumeTfceParameters;
 
@@ -43,18 +42,18 @@ type VolumeTfceParametersTagged = Required<Pick<VolumeTfceParameters, '@type'>> 
  * Build parameters.
  *
  * @param kernel the size of the gaussian smoothing kernel in mm, as sigma by default
- * @param opt_fwhm smoothing kernel size is FWHM, not sigma
+ * @param fwhm smoothing kernel size is FWHM, not sigma
  *
  * @returns Parameter dictionary
  */
 function volume_tfce_presmooth_params(
     kernel: number,
-    opt_fwhm: boolean = false,
+    fwhm: boolean = false,
 ): VolumeTfcePresmoothParametersTagged {
     const params = {
         "@type": "presmooth" as const,
         "kernel": kernel,
-        "opt_fwhm": opt_fwhm,
+        "fwhm": fwhm,
     };
     return params;
 }
@@ -73,10 +72,12 @@ function volume_tfce_presmooth_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-presmooth");
-    cargs.push(String((params["kernel"] ?? null)));
-    if ((params["opt_fwhm"] ?? false)) {
-        cargs.push("-fwhm");
+    if ((params["fwhm"] ?? false)) {
+        cargs.push(
+            "-presmooth",
+            String((params["kernel"] ?? null)),
+            "-fwhm"
+        );
     }
     return cargs;
 }
@@ -96,8 +97,8 @@ function volume_tfce_parameters_params(
 ): VolumeTfceParametersParametersTagged {
     const params = {
         "@type": "parameters" as const,
-        "e": e,
-        "h": h,
+        "E": e,
+        "H": h,
     };
     return params;
 }
@@ -116,9 +117,11 @@ function volume_tfce_parameters_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-parameters");
-    cargs.push(String((params["e"] ?? null)));
-    cargs.push(String((params["h"] ?? null)));
+    cargs.push(
+        "-parameters",
+        String((params["E"] ?? null)),
+        String((params["H"] ?? null))
+    );
     return cargs;
 }
 
@@ -143,39 +146,43 @@ interface VolumeTfceOutputs {
 /**
  * Build parameters.
  *
- * @param volume_in the volume to run TFCE on
  * @param volume_out the output volume
+ * @param roi_volume select a region of interest to run TFCE on
+
+the area to run TFCE on, as a volume
+ * @param subvolume select a single subvolume
+
+the subvolume number or name
+ * @param volume_in the volume to run TFCE on
  * @param presmooth smooth the volume before running TFCE
- * @param opt_roi_roi_volume select a region of interest to run TFCE on: the area to run TFCE on, as a volume
  * @param parameters set parameters for TFCE integral
- * @param opt_subvolume_subvolume select a single subvolume: the subvolume number or name
  *
  * @returns Parameter dictionary
  */
 function volume_tfce_params(
-    volume_in: InputPathType,
     volume_out: string,
+    roi_volume: InputPathType | null,
+    subvolume: string | null,
+    volume_in: InputPathType,
     presmooth: VolumeTfcePresmoothParameters | null = null,
-    opt_roi_roi_volume: InputPathType | null = null,
     parameters: VolumeTfceParametersParameters | null = null,
-    opt_subvolume_subvolume: string | null = null,
 ): VolumeTfceParametersTagged {
     const params = {
         "@type": "workbench/volume-tfce" as const,
-        "volume_in": volume_in,
-        "volume_out": volume_out,
+        "volume-out": volume_out,
+        "volume-in": volume_in,
     };
     if (presmooth !== null) {
         params["presmooth"] = presmooth;
     }
-    if (opt_roi_roi_volume !== null) {
-        params["opt_roi_roi_volume"] = opt_roi_roi_volume;
+    if (roi_volume !== null) {
+        params["roi-volume"] = roi_volume;
     }
     if (parameters !== null) {
         params["parameters"] = parameters;
     }
-    if (opt_subvolume_subvolume !== null) {
-        params["opt_subvolume_subvolume"] = opt_subvolume_subvolume;
+    if (subvolume !== null) {
+        params["subvolume"] = subvolume;
     }
     return params;
 }
@@ -194,28 +201,20 @@ function volume_tfce_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-tfce");
-    cargs.push(execution.inputFile((params["volume_in"] ?? null)));
-    cargs.push((params["volume_out"] ?? null));
-    if ((params["presmooth"] ?? null) !== null) {
-        cargs.push(...volume_tfce_presmooth_cargs((params["presmooth"] ?? null), execution));
-    }
-    if ((params["opt_roi_roi_volume"] ?? null) !== null) {
+    if ((params["presmooth"] ?? null) !== null || (params["roi-volume"] ?? null) !== null || (params["parameters"] ?? null) !== null || (params["subvolume"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-volume-tfce",
+            (params["volume-out"] ?? null),
+            ...(((params["presmooth"] ?? null) !== null) ? volume_tfce_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
             "-roi",
-            execution.inputFile((params["opt_roi_roi_volume"] ?? null))
-        );
-    }
-    if ((params["parameters"] ?? null) !== null) {
-        cargs.push(...volume_tfce_parameters_cargs((params["parameters"] ?? null), execution));
-    }
-    if ((params["opt_subvolume_subvolume"] ?? null) !== null) {
-        cargs.push(
+            (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
+            ...(((params["parameters"] ?? null) !== null) ? volume_tfce_parameters_cargs((params["parameters"] ?? null), execution) : []),
             "-subvolume",
-            (params["opt_subvolume_subvolume"] ?? null)
+            (((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null) : "")
         );
     }
+    cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     return cargs;
 }
 
@@ -234,16 +233,14 @@ function volume_tfce_outputs(
 ): VolumeTfceOutputs {
     const ret: VolumeTfceOutputs = {
         root: execution.outputFile("."),
-        volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
+        volume_out: execution.outputFile([(params["volume-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * volume-tfce
- *
- * Do tfce on a volume file.
+ * DO TFCE ON A VOLUME FILE.
  *
  * This command does not do any statistical analysis.  Please use something like PALM if you are just trying to do statistics on your data.
  *
@@ -254,10 +251,6 @@ function volume_tfce_outputs(
  * at each voxel p, where h ranges from 0 to the maximum value in the data, and e(h, p) is the extent of the cluster containing voxel p at threshold h.  Negative values are similarly enhanced by negating the data, running the same process, and negating the result.
  *
  * This method is explained in: Smith SM, Nichols TE., "Threshold-free cluster enhancement: addressing problems of smoothing, threshold dependence and localisation in cluster inference." Neuroimage. 2009 Jan 1;44(1):83-98. PMID: 18501637.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -279,9 +272,7 @@ function volume_tfce_execute(
 
 
 /**
- * volume-tfce
- *
- * Do tfce on a volume file.
+ * DO TFCE ON A VOLUME FILE.
  *
  * This command does not do any statistical analysis.  Please use something like PALM if you are just trying to do statistics on your data.
  *
@@ -293,30 +284,30 @@ function volume_tfce_execute(
  *
  * This method is explained in: Smith SM, Nichols TE., "Threshold-free cluster enhancement: addressing problems of smoothing, threshold dependence and localisation in cluster inference." Neuroimage. 2009 Jan 1;44(1):83-98. PMID: 18501637.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
- * @param volume_in the volume to run TFCE on
  * @param volume_out the output volume
+ * @param roi_volume select a region of interest to run TFCE on
+
+the area to run TFCE on, as a volume
+ * @param subvolume select a single subvolume
+
+the subvolume number or name
+ * @param volume_in the volume to run TFCE on
  * @param presmooth smooth the volume before running TFCE
- * @param opt_roi_roi_volume select a region of interest to run TFCE on: the area to run TFCE on, as a volume
  * @param parameters set parameters for TFCE integral
- * @param opt_subvolume_subvolume select a single subvolume: the subvolume number or name
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeTfceOutputs`).
  */
 function volume_tfce(
-    volume_in: InputPathType,
     volume_out: string,
+    roi_volume: InputPathType | null,
+    subvolume: string | null,
+    volume_in: InputPathType,
     presmooth: VolumeTfcePresmoothParameters | null = null,
-    opt_roi_roi_volume: InputPathType | null = null,
     parameters: VolumeTfceParametersParameters | null = null,
-    opt_subvolume_subvolume: string | null = null,
     runner: Runner | null = null,
 ): VolumeTfceOutputs {
-    const params = volume_tfce_params(volume_in, volume_out, presmooth, opt_roi_roi_volume, parameters, opt_subvolume_subvolume)
+    const params = volume_tfce_params(volume_out, roi_volume, subvolume, volume_in, presmooth, parameters)
     return volume_tfce_execute(params, runner);
 }
 

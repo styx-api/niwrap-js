@@ -4,42 +4,41 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_RESAMPLE_METADATA: Metadata = {
-    id: "4d1e7adf2fc4fb2797a0f461eb652d3ebf3b8ce7.boutiques",
+    id: "15cbd9ee4611659b2625a9bb44679901f4b387a8.workbench",
     name: "metric-resample",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface MetricResampleAreaSurfsParameters {
-    "@type"?: "area_surfs";
-    "current_area": InputPathType;
-    "new_area": InputPathType;
+    "@type"?: "area-surfs";
+    "current-area": InputPathType;
+    "new-area": InputPathType;
 }
 type MetricResampleAreaSurfsParametersTagged = Required<Pick<MetricResampleAreaSurfsParameters, '@type'>> & MetricResampleAreaSurfsParameters;
 
 
 interface MetricResampleAreaMetricsParameters {
-    "@type"?: "area_metrics";
-    "current_area": InputPathType;
-    "new_area": InputPathType;
+    "@type"?: "area-metrics";
+    "current-area": InputPathType;
+    "new-area": InputPathType;
 }
 type MetricResampleAreaMetricsParametersTagged = Required<Pick<MetricResampleAreaMetricsParameters, '@type'>> & MetricResampleAreaMetricsParameters;
 
 
 interface MetricResampleParameters {
     "@type"?: "workbench/metric-resample";
-    "metric_in": InputPathType;
-    "current_sphere": InputPathType;
-    "new_sphere": InputPathType;
+    "metric-out": string;
+    "area-surfs"?: MetricResampleAreaSurfsParameters | null | undefined;
+    "area-metrics"?: MetricResampleAreaMetricsParameters | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
+    "roi-out"?: string | null | undefined;
+    "largest": boolean;
+    "bypass-sphere-check": boolean;
+    "metric-in": InputPathType;
+    "current-sphere": InputPathType;
+    "new-sphere": InputPathType;
     "method": string;
-    "metric_out": string;
-    "area_surfs"?: MetricResampleAreaSurfsParameters | null | undefined;
-    "area_metrics"?: MetricResampleAreaMetricsParameters | null | undefined;
-    "opt_current_roi_roi_metric"?: InputPathType | null | undefined;
-    "opt_valid_roi_out_roi_out"?: string | null | undefined;
-    "opt_largest": boolean;
-    "opt_bypass_sphere_check": boolean;
 }
 type MetricResampleParametersTagged = Required<Pick<MetricResampleParameters, '@type'>> & MetricResampleParameters;
 
@@ -57,9 +56,9 @@ function metric_resample_area_surfs_params(
     new_area: InputPathType,
 ): MetricResampleAreaSurfsParametersTagged {
     const params = {
-        "@type": "area_surfs" as const,
-        "current_area": current_area,
-        "new_area": new_area,
+        "@type": "area-surfs" as const,
+        "current-area": current_area,
+        "new-area": new_area,
     };
     return params;
 }
@@ -78,9 +77,11 @@ function metric_resample_area_surfs_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-area-surfs");
-    cargs.push(execution.inputFile((params["current_area"] ?? null)));
-    cargs.push(execution.inputFile((params["new_area"] ?? null)));
+    cargs.push(
+        "-area-surfs",
+        execution.inputFile((params["current-area"] ?? null)),
+        execution.inputFile((params["new-area"] ?? null))
+    );
     return cargs;
 }
 
@@ -98,9 +99,9 @@ function metric_resample_area_metrics_params(
     new_area: InputPathType,
 ): MetricResampleAreaMetricsParametersTagged {
     const params = {
-        "@type": "area_metrics" as const,
-        "current_area": current_area,
-        "new_area": new_area,
+        "@type": "area-metrics" as const,
+        "current-area": current_area,
+        "new-area": new_area,
     };
     return params;
 }
@@ -119,9 +120,11 @@ function metric_resample_area_metrics_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-area-metrics");
-    cargs.push(execution.inputFile((params["current_area"] ?? null)));
-    cargs.push(execution.inputFile((params["new_area"] ?? null)));
+    cargs.push(
+        "-area-metrics",
+        execution.inputFile((params["current-area"] ?? null)),
+        execution.inputFile((params["new-area"] ?? null))
+    );
     return cargs;
 }
 
@@ -140,64 +143,64 @@ interface MetricResampleOutputs {
      * the output metric
      */
     metric_out: OutputPathType;
-    /**
-     * output the ROI of vertices that got data from valid source vertices: the output roi as a metric
-     */
-    opt_valid_roi_out_roi_out: OutputPathType | null;
 }
 
 
 /**
  * Build parameters.
  *
+ * @param metric_out the output metric
+ * @param roi_metric use an input roi on the current mesh to exclude non-data vertices
+
+the roi, as a metric file
+ * @param roi_out output the ROI of vertices that got data from valid source vertices
+
+the output roi as a metric
  * @param metric_in the metric file to resample
  * @param current_sphere a sphere surface with the mesh that the metric is currently on
  * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
  * @param method the method name
- * @param metric_out the output metric
  * @param area_surfs specify surfaces to do vertex area correction based on
  * @param area_metrics specify vertex area metrics to do area correction based on
- * @param opt_current_roi_roi_metric use an input roi on the current mesh to exclude non-data vertices: the roi, as a metric file
- * @param opt_valid_roi_out_roi_out output the ROI of vertices that got data from valid source vertices: the output roi as a metric
- * @param opt_largest use only the value of the vertex with the largest weight
- * @param opt_bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
+ * @param largest use only the value of the vertex with the largest weight
+ * @param bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
  *
  * @returns Parameter dictionary
  */
 function metric_resample_params(
+    metric_out: string,
+    roi_metric: InputPathType | null,
+    roi_out: string | null,
     metric_in: InputPathType,
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     method: string,
-    metric_out: string,
     area_surfs: MetricResampleAreaSurfsParameters | null = null,
     area_metrics: MetricResampleAreaMetricsParameters | null = null,
-    opt_current_roi_roi_metric: InputPathType | null = null,
-    opt_valid_roi_out_roi_out: string | null = null,
-    opt_largest: boolean = false,
-    opt_bypass_sphere_check: boolean = false,
+    largest: boolean = false,
+    bypass_sphere_check: boolean = false,
 ): MetricResampleParametersTagged {
     const params = {
         "@type": "workbench/metric-resample" as const,
-        "metric_in": metric_in,
-        "current_sphere": current_sphere,
-        "new_sphere": new_sphere,
+        "metric-out": metric_out,
+        "largest": largest,
+        "bypass-sphere-check": bypass_sphere_check,
+        "metric-in": metric_in,
+        "current-sphere": current_sphere,
+        "new-sphere": new_sphere,
         "method": method,
-        "metric_out": metric_out,
-        "opt_largest": opt_largest,
-        "opt_bypass_sphere_check": opt_bypass_sphere_check,
     };
     if (area_surfs !== null) {
-        params["area_surfs"] = area_surfs;
+        params["area-surfs"] = area_surfs;
     }
     if (area_metrics !== null) {
-        params["area_metrics"] = area_metrics;
+        params["area-metrics"] = area_metrics;
     }
-    if (opt_current_roi_roi_metric !== null) {
-        params["opt_current_roi_roi_metric"] = opt_current_roi_roi_metric;
+    if (roi_metric !== null) {
+        params["roi-metric"] = roi_metric;
     }
-    if (opt_valid_roi_out_roi_out !== null) {
-        params["opt_valid_roi_out_roi_out"] = opt_valid_roi_out_roi_out;
+    if (roi_out !== null) {
+        params["roi-out"] = roi_out;
     }
     return params;
 }
@@ -216,37 +219,25 @@ function metric_resample_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-metric-resample");
-    cargs.push(execution.inputFile((params["metric_in"] ?? null)));
-    cargs.push(execution.inputFile((params["current_sphere"] ?? null)));
-    cargs.push(execution.inputFile((params["new_sphere"] ?? null)));
-    cargs.push((params["method"] ?? null));
-    cargs.push((params["metric_out"] ?? null));
-    if ((params["area_surfs"] ?? null) !== null) {
-        cargs.push(...metric_resample_area_surfs_cargs((params["area_surfs"] ?? null), execution));
-    }
-    if ((params["area_metrics"] ?? null) !== null) {
-        cargs.push(...metric_resample_area_metrics_cargs((params["area_metrics"] ?? null), execution));
-    }
-    if ((params["opt_current_roi_roi_metric"] ?? null) !== null) {
+    if ((params["area-surfs"] ?? null) !== null || (params["area-metrics"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["roi-out"] ?? null) !== null || (params["largest"] ?? false) || (params["bypass-sphere-check"] ?? false)) {
         cargs.push(
+            "wb_command",
+            "-metric-resample",
+            (params["metric-out"] ?? null),
+            ...(((params["area-surfs"] ?? null) !== null) ? metric_resample_area_surfs_cargs((params["area-surfs"] ?? null), execution) : []),
+            ...(((params["area-metrics"] ?? null) !== null) ? metric_resample_area_metrics_cargs((params["area-metrics"] ?? null), execution) : []),
             "-current-roi",
-            execution.inputFile((params["opt_current_roi_roi_metric"] ?? null))
-        );
-    }
-    if ((params["opt_valid_roi_out_roi_out"] ?? null) !== null) {
-        cargs.push(
+            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
             "-valid-roi-out",
-            (params["opt_valid_roi_out_roi_out"] ?? null)
+            (((params["roi-out"] ?? null) !== null) ? (params["roi-out"] ?? null) : ""),
+            (((params["largest"] ?? false)) ? "-largest" : ""),
+            (((params["bypass-sphere-check"] ?? false)) ? "-bypass-sphere-check" : "")
         );
     }
-    if ((params["opt_largest"] ?? false)) {
-        cargs.push("-largest");
-    }
-    if ((params["opt_bypass_sphere_check"] ?? false)) {
-        cargs.push("-bypass-sphere-check");
-    }
+    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
+    cargs.push(execution.inputFile((params["current-sphere"] ?? null)));
+    cargs.push(execution.inputFile((params["new-sphere"] ?? null)));
+    cargs.push((params["method"] ?? null));
     return cargs;
 }
 
@@ -265,17 +256,14 @@ function metric_resample_outputs(
 ): MetricResampleOutputs {
     const ret: MetricResampleOutputs = {
         root: execution.outputFile("."),
-        metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
-        opt_valid_roi_out_roi_out: ((params["opt_valid_roi_out_roi_out"] ?? null) !== null) ? execution.outputFile([(params["opt_valid_roi_out_roi_out"] ?? null)].join('')) : null,
+        metric_out: execution.outputFile([(params["metric-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * metric-resample
- *
- * Resample a metric file to a different mesh.
+ * RESAMPLE A METRIC FILE TO A DIFFERENT MESH.
  *
  * Resamples a metric file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.
  *
@@ -290,10 +278,6 @@ function metric_resample_outputs(
  * ADAP_BARY_AREA
  * BARYCENTRIC
  * .
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -315,9 +299,7 @@ function metric_resample_execute(
 
 
 /**
- * metric-resample
- *
- * Resample a metric file to a different mesh.
+ * RESAMPLE A METRIC FILE TO A DIFFERENT MESH.
  *
  * Resamples a metric file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.
  *
@@ -333,40 +315,40 @@ function metric_resample_execute(
  * BARYCENTRIC
  * .
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param metric_out the output metric
+ * @param roi_metric use an input roi on the current mesh to exclude non-data vertices
+
+the roi, as a metric file
+ * @param roi_out output the ROI of vertices that got data from valid source vertices
+
+the output roi as a metric
  * @param metric_in the metric file to resample
  * @param current_sphere a sphere surface with the mesh that the metric is currently on
  * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
  * @param method the method name
- * @param metric_out the output metric
  * @param area_surfs specify surfaces to do vertex area correction based on
  * @param area_metrics specify vertex area metrics to do area correction based on
- * @param opt_current_roi_roi_metric use an input roi on the current mesh to exclude non-data vertices: the roi, as a metric file
- * @param opt_valid_roi_out_roi_out output the ROI of vertices that got data from valid source vertices: the output roi as a metric
- * @param opt_largest use only the value of the vertex with the largest weight
- * @param opt_bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
+ * @param largest use only the value of the vertex with the largest weight
+ * @param bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricResampleOutputs`).
  */
 function metric_resample(
+    metric_out: string,
+    roi_metric: InputPathType | null,
+    roi_out: string | null,
     metric_in: InputPathType,
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     method: string,
-    metric_out: string,
     area_surfs: MetricResampleAreaSurfsParameters | null = null,
     area_metrics: MetricResampleAreaMetricsParameters | null = null,
-    opt_current_roi_roi_metric: InputPathType | null = null,
-    opt_valid_roi_out_roi_out: string | null = null,
-    opt_largest: boolean = false,
-    opt_bypass_sphere_check: boolean = false,
+    largest: boolean = false,
+    bypass_sphere_check: boolean = false,
     runner: Runner | null = null,
 ): MetricResampleOutputs {
-    const params = metric_resample_params(metric_in, current_sphere, new_sphere, method, metric_out, area_surfs, area_metrics, opt_current_roi_roi_metric, opt_valid_roi_out_roi_out, opt_largest, opt_bypass_sphere_check)
+    const params = metric_resample_params(metric_out, roi_metric, roi_out, metric_in, current_sphere, new_sphere, method, area_surfs, area_metrics, largest, bypass_sphere_check)
     return metric_resample_execute(params, runner);
 }
 

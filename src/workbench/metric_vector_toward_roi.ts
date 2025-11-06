@@ -4,19 +4,18 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_VECTOR_TOWARD_ROI_METADATA: Metadata = {
-    id: "6787be48822358a7213f746f7be34a018067adb3.boutiques",
+    id: "57b8d61f61212b6239a54858cfc23c4862eead0f.workbench",
     name: "metric-vector-toward-roi",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface MetricVectorTowardRoiParameters {
     "@type"?: "workbench/metric-vector-toward-roi";
+    "metric-out": string;
+    "roi-metric"?: InputPathType | null | undefined;
     "surface": InputPathType;
-    "target_roi": InputPathType;
-    "metric_out": string;
-    "opt_roi_roi_metric"?: InputPathType | null | undefined;
+    "target-roi": InputPathType;
 }
 type MetricVectorTowardRoiParametersTagged = Required<Pick<MetricVectorTowardRoiParameters, '@type'>> & MetricVectorTowardRoiParameters;
 
@@ -41,27 +40,29 @@ interface MetricVectorTowardRoiOutputs {
 /**
  * Build parameters.
  *
+ * @param metric_out the output metric
+ * @param roi_metric don't compute for vertices outside an roi
+
+the region to compute inside, as a metric
  * @param surface the surface to compute on
  * @param target_roi the roi to find the shortest path to
- * @param metric_out the output metric
- * @param opt_roi_roi_metric don't compute for vertices outside an roi: the region to compute inside, as a metric
  *
  * @returns Parameter dictionary
  */
 function metric_vector_toward_roi_params(
+    metric_out: string,
+    roi_metric: InputPathType | null,
     surface: InputPathType,
     target_roi: InputPathType,
-    metric_out: string,
-    opt_roi_roi_metric: InputPathType | null = null,
 ): MetricVectorTowardRoiParametersTagged {
     const params = {
         "@type": "workbench/metric-vector-toward-roi" as const,
+        "metric-out": metric_out,
         "surface": surface,
-        "target_roi": target_roi,
-        "metric_out": metric_out,
+        "target-roi": target_roi,
     };
-    if (opt_roi_roi_metric !== null) {
-        params["opt_roi_roi_metric"] = opt_roi_roi_metric;
+    if (roi_metric !== null) {
+        params["roi-metric"] = roi_metric;
     }
     return params;
 }
@@ -80,17 +81,17 @@ function metric_vector_toward_roi_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-metric-vector-toward-roi");
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(execution.inputFile((params["target_roi"] ?? null)));
-    cargs.push((params["metric_out"] ?? null));
-    if ((params["opt_roi_roi_metric"] ?? null) !== null) {
+    if ((params["roi-metric"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-metric-vector-toward-roi",
+            (params["metric-out"] ?? null),
             "-roi",
-            execution.inputFile((params["opt_roi_roi_metric"] ?? null))
+            execution.inputFile((params["roi-metric"] ?? null))
         );
     }
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(execution.inputFile((params["target-roi"] ?? null)));
     return cargs;
 }
 
@@ -109,22 +110,16 @@ function metric_vector_toward_roi_outputs(
 ): MetricVectorTowardRoiOutputs {
     const ret: MetricVectorTowardRoiOutputs = {
         root: execution.outputFile("."),
-        metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
+        metric_out: execution.outputFile([(params["metric-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * metric-vector-toward-roi
- *
- * Find if vectors point toward an roi.
+ * FIND IF VECTORS POINT TOWARD AN ROI.
  *
  * At each vertex, compute the vector along the start of the shortest path to the ROI.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -146,32 +141,28 @@ function metric_vector_toward_roi_execute(
 
 
 /**
- * metric-vector-toward-roi
- *
- * Find if vectors point toward an roi.
+ * FIND IF VECTORS POINT TOWARD AN ROI.
  *
  * At each vertex, compute the vector along the start of the shortest path to the ROI.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param metric_out the output metric
+ * @param roi_metric don't compute for vertices outside an roi
+
+the region to compute inside, as a metric
  * @param surface the surface to compute on
  * @param target_roi the roi to find the shortest path to
- * @param metric_out the output metric
- * @param opt_roi_roi_metric don't compute for vertices outside an roi: the region to compute inside, as a metric
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricVectorTowardRoiOutputs`).
  */
 function metric_vector_toward_roi(
+    metric_out: string,
+    roi_metric: InputPathType | null,
     surface: InputPathType,
     target_roi: InputPathType,
-    metric_out: string,
-    opt_roi_roi_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricVectorTowardRoiOutputs {
-    const params = metric_vector_toward_roi_params(surface, target_roi, metric_out, opt_roi_roi_metric)
+    const params = metric_vector_toward_roi_params(metric_out, roi_metric, surface, target_roi)
     return metric_vector_toward_roi_execute(params, runner);
 }
 

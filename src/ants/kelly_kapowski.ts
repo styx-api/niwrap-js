@@ -23,14 +23,14 @@ interface KellyKapowskiParameters {
     "gradient_step"?: number | null | undefined;
     "smoothing_variance"?: number | null | undefined;
     "smoothing_velocity_field_parameter"?: string | null | undefined;
-    "use_bspline_smoothing"?: 0 | 1 | null | undefined;
-    "use_masked_smoothing"?: 0 | 1 | null | undefined;
+    "use_bspline_smoothing"?: boolean | null | undefined;
+    "use_masked_smoothing"?: boolean | null | undefined;
     "time_points"?: string | null | undefined;
-    "restrict_deformation"?: 0 | 1 | null | undefined;
+    "restrict_deformation"?: boolean | null | undefined;
     "number_of_integration_points"?: number | null | undefined;
     "maximum_number_of_invert_displacement_field_iterations"?: number | null | undefined;
     "output": string;
-    "verbose"?: 0 | 1 | null | undefined;
+    "verbose"?: boolean | null | undefined;
 }
 type KellyKapowskiParametersTagged = Required<Pick<KellyKapowskiParameters, '@type'>> & KellyKapowskiParameters;
 
@@ -88,13 +88,13 @@ function kelly_kapowski_params(
     gradient_step: number | null = null,
     smoothing_variance: number | null = null,
     smoothing_velocity_field_parameter: string | null = null,
-    use_bspline_smoothing: 0 | 1 | null = null,
-    use_masked_smoothing: 0 | 1 | null = null,
+    use_bspline_smoothing: boolean | null = null,
+    use_masked_smoothing: boolean | null = null,
     time_points: string | null = null,
-    restrict_deformation: 0 | 1 | null = null,
+    restrict_deformation: boolean | null = null,
     number_of_integration_points: number | null = null,
     maximum_number_of_invert_displacement_field_iterations: number | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
 ): KellyKapowskiParametersTagged {
     const params = {
         "@type": "ants/KellyKapowski" as const,
@@ -232,13 +232,13 @@ function kelly_kapowski_cargs(
     if ((params["use_bspline_smoothing"] ?? null) !== null) {
         cargs.push(
             "--use-bspline-smoothing",
-            String((params["use_bspline_smoothing"] ?? null))
+            ((params["use_bspline_smoothing"] ?? null) ? "1" : "0")
         );
     }
     if ((params["use_masked_smoothing"] ?? null) !== null) {
         cargs.push(
             "--use-masked-smoothing",
-            String((params["use_masked_smoothing"] ?? null))
+            ((params["use_masked_smoothing"] ?? null) ? "1" : "0")
         );
     }
     if ((params["time_points"] ?? null) !== null) {
@@ -250,7 +250,7 @@ function kelly_kapowski_cargs(
     if ((params["restrict_deformation"] ?? null) !== null) {
         cargs.push(
             "--restrict-deformation",
-            String((params["restrict_deformation"] ?? null))
+            ((params["restrict_deformation"] ?? null) ? "1" : "0")
         );
     }
     if ((params["number_of_integration_points"] ?? null) !== null) {
@@ -272,7 +272,7 @@ function kelly_kapowski_cargs(
     if ((params["verbose"] ?? null) !== null) {
         cargs.push(
             "--verbose",
-            String((params["verbose"] ?? null))
+            ((params["verbose"] ?? null) ? "1" : "0")
         );
     }
     return cargs;
@@ -370,13 +370,13 @@ function kelly_kapowski(
     gradient_step: number | null = null,
     smoothing_variance: number | null = null,
     smoothing_velocity_field_parameter: string | null = null,
-    use_bspline_smoothing: 0 | 1 | null = null,
-    use_masked_smoothing: 0 | 1 | null = null,
+    use_bspline_smoothing: boolean | null = null,
+    use_masked_smoothing: boolean | null = null,
     time_points: string | null = null,
-    restrict_deformation: 0 | 1 | null = null,
+    restrict_deformation: boolean | null = null,
     number_of_integration_points: number | null = null,
     maximum_number_of_invert_displacement_field_iterations: number | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
     runner: Runner | null = null,
 ): KellyKapowskiOutputs {
     const params = kelly_kapowski_params(output, image_dimensionality, segmentation_image, gray_matter_probability_image, white_matter_probability_image, convergence, thickness_prior_estimate, thickness_prior_image, gradient_step, smoothing_variance, smoothing_velocity_field_parameter, use_bspline_smoothing, use_masked_smoothing, time_points, restrict_deformation, number_of_integration_points, maximum_number_of_invert_displacement_field_iterations, verbose)

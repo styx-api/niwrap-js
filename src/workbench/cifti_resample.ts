@@ -4,59 +4,58 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_RESAMPLE_METADATA: Metadata = {
-    id: "a6f5b36fba078762807c4f82e3c0374ec2f78287.boutiques",
+    id: "e71a66883dbc661cfc445c13c6c8a3b6b4db7894.workbench",
     name: "cifti-resample",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiResampleWeightedParameters {
     "@type"?: "weighted";
-    "opt_exponent_exponent"?: number | null | undefined;
-    "opt_legacy_cutoff": boolean;
+    "exponent"?: number | null | undefined;
+    "legacy-cutoff": boolean;
 }
 type CiftiResampleWeightedParametersTagged = Required<Pick<CiftiResampleWeightedParameters, '@type'>> & CiftiResampleWeightedParameters;
 
 
 interface CiftiResampleVolumePredilateParameters {
-    "@type"?: "volume_predilate";
-    "dilate_mm": number;
-    "opt_nearest": boolean;
+    "@type"?: "volume-predilate";
+    "dilate-mm": number;
+    "nearest": boolean;
     "weighted"?: CiftiResampleWeightedParameters | null | undefined;
 }
 type CiftiResampleVolumePredilateParametersTagged = Required<Pick<CiftiResampleVolumePredilateParameters, '@type'>> & CiftiResampleVolumePredilateParameters;
 
 
-interface CiftiResampleWeighted1Parameters {
-    "@type"?: "weighted_1";
-    "opt_exponent_exponent"?: number | null | undefined;
-    "opt_legacy_cutoff": boolean;
+interface CiftiResampleWeightedParameters_ {
+    "@type"?: "weighted";
+    "exponent"?: number | null | undefined;
+    "legacy-cutoff": boolean;
 }
-type CiftiResampleWeighted1ParametersTagged = Required<Pick<CiftiResampleWeighted1Parameters, '@type'>> & CiftiResampleWeighted1Parameters;
+type CiftiResampleWeightedParametersTagged_ = Required<Pick<CiftiResampleWeightedParameters_, '@type'>> & CiftiResampleWeightedParameters_;
 
 
 interface CiftiResampleSurfacePostdilateParameters {
-    "@type"?: "surface_postdilate";
-    "dilate_mm": number;
-    "opt_nearest": boolean;
-    "opt_linear": boolean;
-    "weighted"?: CiftiResampleWeighted1Parameters | null | undefined;
+    "@type"?: "surface-postdilate";
+    "dilate-mm": number;
+    "nearest": boolean;
+    "linear": boolean;
+    "weighted"?: CiftiResampleWeightedParameters_ | null | undefined;
 }
 type CiftiResampleSurfacePostdilateParametersTagged = Required<Pick<CiftiResampleSurfacePostdilateParameters, '@type'>> & CiftiResampleSurfacePostdilateParameters;
 
 
 interface CiftiResampleFlirtParameters {
     "@type"?: "flirt";
-    "source_volume": string;
-    "target_volume": string;
+    "source-volume": string;
+    "target-volume": string;
 }
 type CiftiResampleFlirtParametersTagged = Required<Pick<CiftiResampleFlirtParameters, '@type'>> & CiftiResampleFlirtParameters;
 
 
 interface CiftiResampleAffineParameters {
     "@type"?: "affine";
-    "affine_file": string;
+    "affine-file": string;
     "flirt"?: CiftiResampleFlirtParameters | null | undefined;
 }
 type CiftiResampleAffineParametersTagged = Required<Pick<CiftiResampleAffineParameters, '@type'>> & CiftiResampleAffineParameters;
@@ -65,106 +64,106 @@ type CiftiResampleAffineParametersTagged = Required<Pick<CiftiResampleAffinePara
 interface CiftiResampleWarpfieldParameters {
     "@type"?: "warpfield";
     "warpfield": string;
-    "opt_fnirt_source_volume"?: string | null | undefined;
+    "source-volume"?: string | null | undefined;
 }
 type CiftiResampleWarpfieldParametersTagged = Required<Pick<CiftiResampleWarpfieldParameters, '@type'>> & CiftiResampleWarpfieldParameters;
 
 
 interface CiftiResampleLeftAreaSurfsParameters {
-    "@type"?: "left_area_surfs";
-    "current_area": InputPathType;
-    "new_area": InputPathType;
+    "@type"?: "left-area-surfs";
+    "current-area": InputPathType;
+    "new-area": InputPathType;
 }
 type CiftiResampleLeftAreaSurfsParametersTagged = Required<Pick<CiftiResampleLeftAreaSurfsParameters, '@type'>> & CiftiResampleLeftAreaSurfsParameters;
 
 
 interface CiftiResampleLeftAreaMetricsParameters {
-    "@type"?: "left_area_metrics";
-    "current_area": InputPathType;
-    "new_area": InputPathType;
+    "@type"?: "left-area-metrics";
+    "current-area": InputPathType;
+    "new-area": InputPathType;
 }
 type CiftiResampleLeftAreaMetricsParametersTagged = Required<Pick<CiftiResampleLeftAreaMetricsParameters, '@type'>> & CiftiResampleLeftAreaMetricsParameters;
 
 
 interface CiftiResampleLeftSpheresParameters {
-    "@type"?: "left_spheres";
-    "current_sphere": InputPathType;
-    "new_sphere": InputPathType;
-    "left_area_surfs"?: CiftiResampleLeftAreaSurfsParameters | null | undefined;
-    "left_area_metrics"?: CiftiResampleLeftAreaMetricsParameters | null | undefined;
+    "@type"?: "left-spheres";
+    "current-sphere": InputPathType;
+    "new-sphere": InputPathType;
+    "left-area-surfs"?: CiftiResampleLeftAreaSurfsParameters | null | undefined;
+    "left-area-metrics"?: CiftiResampleLeftAreaMetricsParameters | null | undefined;
 }
 type CiftiResampleLeftSpheresParametersTagged = Required<Pick<CiftiResampleLeftSpheresParameters, '@type'>> & CiftiResampleLeftSpheresParameters;
 
 
 interface CiftiResampleRightAreaSurfsParameters {
-    "@type"?: "right_area_surfs";
-    "current_area": InputPathType;
-    "new_area": InputPathType;
+    "@type"?: "right-area-surfs";
+    "current-area": InputPathType;
+    "new-area": InputPathType;
 }
 type CiftiResampleRightAreaSurfsParametersTagged = Required<Pick<CiftiResampleRightAreaSurfsParameters, '@type'>> & CiftiResampleRightAreaSurfsParameters;
 
 
 interface CiftiResampleRightAreaMetricsParameters {
-    "@type"?: "right_area_metrics";
-    "current_area": InputPathType;
-    "new_area": InputPathType;
+    "@type"?: "right-area-metrics";
+    "current-area": InputPathType;
+    "new-area": InputPathType;
 }
 type CiftiResampleRightAreaMetricsParametersTagged = Required<Pick<CiftiResampleRightAreaMetricsParameters, '@type'>> & CiftiResampleRightAreaMetricsParameters;
 
 
 interface CiftiResampleRightSpheresParameters {
-    "@type"?: "right_spheres";
-    "current_sphere": InputPathType;
-    "new_sphere": InputPathType;
-    "right_area_surfs"?: CiftiResampleRightAreaSurfsParameters | null | undefined;
-    "right_area_metrics"?: CiftiResampleRightAreaMetricsParameters | null | undefined;
+    "@type"?: "right-spheres";
+    "current-sphere": InputPathType;
+    "new-sphere": InputPathType;
+    "right-area-surfs"?: CiftiResampleRightAreaSurfsParameters | null | undefined;
+    "right-area-metrics"?: CiftiResampleRightAreaMetricsParameters | null | undefined;
 }
 type CiftiResampleRightSpheresParametersTagged = Required<Pick<CiftiResampleRightSpheresParameters, '@type'>> & CiftiResampleRightSpheresParameters;
 
 
 interface CiftiResampleCerebellumAreaSurfsParameters {
-    "@type"?: "cerebellum_area_surfs";
-    "current_area": InputPathType;
-    "new_area": InputPathType;
+    "@type"?: "cerebellum-area-surfs";
+    "current-area": InputPathType;
+    "new-area": InputPathType;
 }
 type CiftiResampleCerebellumAreaSurfsParametersTagged = Required<Pick<CiftiResampleCerebellumAreaSurfsParameters, '@type'>> & CiftiResampleCerebellumAreaSurfsParameters;
 
 
 interface CiftiResampleCerebellumAreaMetricsParameters {
-    "@type"?: "cerebellum_area_metrics";
-    "current_area": InputPathType;
-    "new_area": InputPathType;
+    "@type"?: "cerebellum-area-metrics";
+    "current-area": InputPathType;
+    "new-area": InputPathType;
 }
 type CiftiResampleCerebellumAreaMetricsParametersTagged = Required<Pick<CiftiResampleCerebellumAreaMetricsParameters, '@type'>> & CiftiResampleCerebellumAreaMetricsParameters;
 
 
 interface CiftiResampleCerebellumSpheresParameters {
-    "@type"?: "cerebellum_spheres";
-    "current_sphere": InputPathType;
-    "new_sphere": InputPathType;
-    "cerebellum_area_surfs"?: CiftiResampleCerebellumAreaSurfsParameters | null | undefined;
-    "cerebellum_area_metrics"?: CiftiResampleCerebellumAreaMetricsParameters | null | undefined;
+    "@type"?: "cerebellum-spheres";
+    "current-sphere": InputPathType;
+    "new-sphere": InputPathType;
+    "cerebellum-area-surfs"?: CiftiResampleCerebellumAreaSurfsParameters | null | undefined;
+    "cerebellum-area-metrics"?: CiftiResampleCerebellumAreaMetricsParameters | null | undefined;
 }
 type CiftiResampleCerebellumSpheresParametersTagged = Required<Pick<CiftiResampleCerebellumSpheresParameters, '@type'>> & CiftiResampleCerebellumSpheresParameters;
 
 
 interface CiftiResampleParameters {
     "@type"?: "workbench/cifti-resample";
-    "cifti_in": InputPathType;
-    "direction": string;
-    "cifti_template": InputPathType;
-    "template_direction": string;
-    "surface_method": string;
-    "volume_method": string;
-    "cifti_out": string;
-    "opt_surface_largest": boolean;
-    "volume_predilate"?: CiftiResampleVolumePredilateParameters | null | undefined;
-    "surface_postdilate"?: CiftiResampleSurfacePostdilateParameters | null | undefined;
+    "cifti-out": string;
+    "surface-largest": boolean;
+    "volume-predilate"?: CiftiResampleVolumePredilateParameters | null | undefined;
+    "surface-postdilate"?: CiftiResampleSurfacePostdilateParameters | null | undefined;
     "affine"?: CiftiResampleAffineParameters | null | undefined;
     "warpfield"?: CiftiResampleWarpfieldParameters | null | undefined;
-    "left_spheres"?: CiftiResampleLeftSpheresParameters | null | undefined;
-    "right_spheres"?: CiftiResampleRightSpheresParameters | null | undefined;
-    "cerebellum_spheres"?: CiftiResampleCerebellumSpheresParameters | null | undefined;
+    "left-spheres"?: CiftiResampleLeftSpheresParameters | null | undefined;
+    "right-spheres"?: CiftiResampleRightSpheresParameters | null | undefined;
+    "cerebellum-spheres"?: CiftiResampleCerebellumSpheresParameters | null | undefined;
+    "cifti-in": InputPathType;
+    "direction": string;
+    "cifti-template": InputPathType;
+    "template-direction": string;
+    "surface-method": string;
+    "volume-method": string;
 }
 type CiftiResampleParametersTagged = Required<Pick<CiftiResampleParameters, '@type'>> & CiftiResampleParameters;
 
@@ -172,21 +171,23 @@ type CiftiResampleParametersTagged = Required<Pick<CiftiResampleParameters, '@ty
 /**
  * Build parameters.
  *
- * @param opt_exponent_exponent specify exponent in weighting function: exponent 'n' to use in (1 / (distance ^ n)) as the weighting function (default 7)
- * @param opt_legacy_cutoff use v1.3.2 logic for the kernel cutoff
+ * @param exponent specify exponent in weighting function
+
+exponent 'n' to use in (1 / (distance ^ n)) as the weighting function (default 7)
+ * @param legacy_cutoff use v1.3.2 logic for the kernel cutoff
  *
  * @returns Parameter dictionary
  */
 function cifti_resample_weighted_params(
-    opt_exponent_exponent: number | null = null,
-    opt_legacy_cutoff: boolean = false,
+    exponent: number | null,
+    legacy_cutoff: boolean = false,
 ): CiftiResampleWeightedParametersTagged {
     const params = {
         "@type": "weighted" as const,
-        "opt_legacy_cutoff": opt_legacy_cutoff,
+        "legacy-cutoff": legacy_cutoff,
     };
-    if (opt_exponent_exponent !== null) {
-        params["opt_exponent_exponent"] = opt_exponent_exponent;
+    if (exponent !== null) {
+        params["exponent"] = exponent;
     }
     return params;
 }
@@ -205,15 +206,13 @@ function cifti_resample_weighted_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-weighted");
-    if ((params["opt_exponent_exponent"] ?? null) !== null) {
+    if ((params["exponent"] ?? null) !== null || (params["legacy-cutoff"] ?? false)) {
         cargs.push(
+            "-weighted",
             "-exponent",
-            String((params["opt_exponent_exponent"] ?? null))
+            (((params["exponent"] ?? null) !== null) ? String((params["exponent"] ?? null)) : ""),
+            (((params["legacy-cutoff"] ?? false)) ? "-legacy-cutoff" : "")
         );
-    }
-    if ((params["opt_legacy_cutoff"] ?? false)) {
-        cargs.push("-legacy-cutoff");
     }
     return cargs;
 }
@@ -223,20 +222,20 @@ function cifti_resample_weighted_cargs(
  * Build parameters.
  *
  * @param dilate_mm distance, in mm, to dilate
- * @param opt_nearest use nearest value dilation
+ * @param nearest use nearest value dilation
  * @param weighted use weighted dilation (default)
  *
  * @returns Parameter dictionary
  */
 function cifti_resample_volume_predilate_params(
     dilate_mm: number,
-    opt_nearest: boolean = false,
+    nearest: boolean = false,
     weighted: CiftiResampleWeightedParameters | null = null,
 ): CiftiResampleVolumePredilateParametersTagged {
     const params = {
-        "@type": "volume_predilate" as const,
-        "dilate_mm": dilate_mm,
-        "opt_nearest": opt_nearest,
+        "@type": "volume-predilate" as const,
+        "dilate-mm": dilate_mm,
+        "nearest": nearest,
     };
     if (weighted !== null) {
         params["weighted"] = weighted;
@@ -258,13 +257,13 @@ function cifti_resample_volume_predilate_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-volume-predilate");
-    cargs.push(String((params["dilate_mm"] ?? null)));
-    if ((params["opt_nearest"] ?? false)) {
-        cargs.push("-nearest");
-    }
-    if ((params["weighted"] ?? null) !== null) {
-        cargs.push(...cifti_resample_weighted_cargs((params["weighted"] ?? null), execution));
+    if ((params["nearest"] ?? false) || (params["weighted"] ?? null) !== null) {
+        cargs.push(
+            "-volume-predilate",
+            String((params["dilate-mm"] ?? null)),
+            (((params["nearest"] ?? false)) ? "-nearest" : ""),
+            ...(((params["weighted"] ?? null) !== null) ? cifti_resample_weighted_cargs((params["weighted"] ?? null), execution) : [])
+        );
     }
     return cargs;
 }
@@ -273,21 +272,23 @@ function cifti_resample_volume_predilate_cargs(
 /**
  * Build parameters.
  *
- * @param opt_exponent_exponent specify exponent in weighting function: exponent 'n' to use in (area / (distance ^ n)) as the weighting function (default 6)
- * @param opt_legacy_cutoff use v1.3.2 logic for the kernel cutoff
+ * @param exponent specify exponent in weighting function
+
+exponent 'n' to use in (area / (distance ^ n)) as the weighting function (default 6)
+ * @param legacy_cutoff use v1.3.2 logic for the kernel cutoff
  *
  * @returns Parameter dictionary
  */
-function cifti_resample_weighted_1_params(
-    opt_exponent_exponent: number | null = null,
-    opt_legacy_cutoff: boolean = false,
-): CiftiResampleWeighted1ParametersTagged {
+function cifti_resample_weighted_params_(
+    exponent: number | null,
+    legacy_cutoff: boolean = false,
+): CiftiResampleWeightedParametersTagged_ {
     const params = {
-        "@type": "weighted_1" as const,
-        "opt_legacy_cutoff": opt_legacy_cutoff,
+        "@type": "weighted" as const,
+        "legacy-cutoff": legacy_cutoff,
     };
-    if (opt_exponent_exponent !== null) {
-        params["opt_exponent_exponent"] = opt_exponent_exponent;
+    if (exponent !== null) {
+        params["exponent"] = exponent;
     }
     return params;
 }
@@ -301,20 +302,18 @@ function cifti_resample_weighted_1_params(
  *
  * @returns Command-line arguments.
  */
-function cifti_resample_weighted_1_cargs(
-    params: CiftiResampleWeighted1Parameters,
+function cifti_resample_weighted_cargs_(
+    params: CiftiResampleWeightedParameters_,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-weighted");
-    if ((params["opt_exponent_exponent"] ?? null) !== null) {
+    if ((params["exponent"] ?? null) !== null || (params["legacy-cutoff"] ?? false)) {
         cargs.push(
+            "-weighted",
             "-exponent",
-            String((params["opt_exponent_exponent"] ?? null))
+            (((params["exponent"] ?? null) !== null) ? String((params["exponent"] ?? null)) : ""),
+            (((params["legacy-cutoff"] ?? false)) ? "-legacy-cutoff" : "")
         );
-    }
-    if ((params["opt_legacy_cutoff"] ?? false)) {
-        cargs.push("-legacy-cutoff");
     }
     return cargs;
 }
@@ -324,23 +323,23 @@ function cifti_resample_weighted_1_cargs(
  * Build parameters.
  *
  * @param dilate_mm distance, in mm, to dilate
- * @param opt_nearest use nearest value dilation
- * @param opt_linear use linear dilation
+ * @param nearest use nearest value dilation
+ * @param linear use linear dilation
  * @param weighted use weighted dilation (default for non-label data)
  *
  * @returns Parameter dictionary
  */
 function cifti_resample_surface_postdilate_params(
     dilate_mm: number,
-    opt_nearest: boolean = false,
-    opt_linear: boolean = false,
-    weighted: CiftiResampleWeighted1Parameters | null = null,
+    nearest: boolean = false,
+    linear: boolean = false,
+    weighted: CiftiResampleWeightedParameters_ | null = null,
 ): CiftiResampleSurfacePostdilateParametersTagged {
     const params = {
-        "@type": "surface_postdilate" as const,
-        "dilate_mm": dilate_mm,
-        "opt_nearest": opt_nearest,
-        "opt_linear": opt_linear,
+        "@type": "surface-postdilate" as const,
+        "dilate-mm": dilate_mm,
+        "nearest": nearest,
+        "linear": linear,
     };
     if (weighted !== null) {
         params["weighted"] = weighted;
@@ -362,16 +361,14 @@ function cifti_resample_surface_postdilate_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-surface-postdilate");
-    cargs.push(String((params["dilate_mm"] ?? null)));
-    if ((params["opt_nearest"] ?? false)) {
-        cargs.push("-nearest");
-    }
-    if ((params["opt_linear"] ?? false)) {
-        cargs.push("-linear");
-    }
-    if ((params["weighted"] ?? null) !== null) {
-        cargs.push(...cifti_resample_weighted_1_cargs((params["weighted"] ?? null), execution));
+    if ((params["nearest"] ?? false) || (params["linear"] ?? false) || (params["weighted"] ?? null) !== null) {
+        cargs.push(
+            "-surface-postdilate",
+            String((params["dilate-mm"] ?? null)),
+            (((params["nearest"] ?? false)) ? "-nearest" : ""),
+            (((params["linear"] ?? false)) ? "-linear" : ""),
+            ...(((params["weighted"] ?? null) !== null) ? cifti_resample_weighted_cargs_((params["weighted"] ?? null), execution) : [])
+        );
     }
     return cargs;
 }
@@ -391,8 +388,8 @@ function cifti_resample_flirt_params(
 ): CiftiResampleFlirtParametersTagged {
     const params = {
         "@type": "flirt" as const,
-        "source_volume": source_volume,
-        "target_volume": target_volume,
+        "source-volume": source_volume,
+        "target-volume": target_volume,
     };
     return params;
 }
@@ -411,9 +408,11 @@ function cifti_resample_flirt_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-flirt");
-    cargs.push((params["source_volume"] ?? null));
-    cargs.push((params["target_volume"] ?? null));
+    cargs.push(
+        "-flirt",
+        (params["source-volume"] ?? null),
+        (params["target-volume"] ?? null)
+    );
     return cargs;
 }
 
@@ -432,7 +431,7 @@ function cifti_resample_affine_params(
 ): CiftiResampleAffineParametersTagged {
     const params = {
         "@type": "affine" as const,
-        "affine_file": affine_file,
+        "affine-file": affine_file,
     };
     if (flirt !== null) {
         params["flirt"] = flirt;
@@ -454,10 +453,12 @@ function cifti_resample_affine_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-affine");
-    cargs.push((params["affine_file"] ?? null));
     if ((params["flirt"] ?? null) !== null) {
-        cargs.push(...cifti_resample_flirt_cargs((params["flirt"] ?? null), execution));
+        cargs.push(
+            "-affine",
+            (params["affine-file"] ?? null),
+            ...cifti_resample_flirt_cargs((params["flirt"] ?? null), execution)
+        );
     }
     return cargs;
 }
@@ -467,20 +468,22 @@ function cifti_resample_affine_cargs(
  * Build parameters.
  *
  * @param warpfield the warpfield to use
- * @param opt_fnirt_source_volume MUST be used if using a fnirt warpfield: the source volume used when generating the warpfield
+ * @param source_volume MUST be used if using a fnirt warpfield
+
+the source volume used when generating the warpfield
  *
  * @returns Parameter dictionary
  */
 function cifti_resample_warpfield_params(
     warpfield: string,
-    opt_fnirt_source_volume: string | null = null,
+    source_volume: string | null,
 ): CiftiResampleWarpfieldParametersTagged {
     const params = {
         "@type": "warpfield" as const,
         "warpfield": warpfield,
     };
-    if (opt_fnirt_source_volume !== null) {
-        params["opt_fnirt_source_volume"] = opt_fnirt_source_volume;
+    if (source_volume !== null) {
+        params["source-volume"] = source_volume;
     }
     return params;
 }
@@ -499,12 +502,12 @@ function cifti_resample_warpfield_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-warpfield");
-    cargs.push((params["warpfield"] ?? null));
-    if ((params["opt_fnirt_source_volume"] ?? null) !== null) {
+    if ((params["source-volume"] ?? null) !== null) {
         cargs.push(
+            "-warpfield",
+            (params["warpfield"] ?? null),
             "-fnirt",
-            (params["opt_fnirt_source_volume"] ?? null)
+            (params["source-volume"] ?? null)
         );
     }
     return cargs;
@@ -524,9 +527,9 @@ function cifti_resample_left_area_surfs_params(
     new_area: InputPathType,
 ): CiftiResampleLeftAreaSurfsParametersTagged {
     const params = {
-        "@type": "left_area_surfs" as const,
-        "current_area": current_area,
-        "new_area": new_area,
+        "@type": "left-area-surfs" as const,
+        "current-area": current_area,
+        "new-area": new_area,
     };
     return params;
 }
@@ -545,9 +548,11 @@ function cifti_resample_left_area_surfs_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-left-area-surfs");
-    cargs.push(execution.inputFile((params["current_area"] ?? null)));
-    cargs.push(execution.inputFile((params["new_area"] ?? null)));
+    cargs.push(
+        "-left-area-surfs",
+        execution.inputFile((params["current-area"] ?? null)),
+        execution.inputFile((params["new-area"] ?? null))
+    );
     return cargs;
 }
 
@@ -565,9 +570,9 @@ function cifti_resample_left_area_metrics_params(
     new_area: InputPathType,
 ): CiftiResampleLeftAreaMetricsParametersTagged {
     const params = {
-        "@type": "left_area_metrics" as const,
-        "current_area": current_area,
-        "new_area": new_area,
+        "@type": "left-area-metrics" as const,
+        "current-area": current_area,
+        "new-area": new_area,
     };
     return params;
 }
@@ -586,9 +591,11 @@ function cifti_resample_left_area_metrics_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-left-area-metrics");
-    cargs.push(execution.inputFile((params["current_area"] ?? null)));
-    cargs.push(execution.inputFile((params["new_area"] ?? null)));
+    cargs.push(
+        "-left-area-metrics",
+        execution.inputFile((params["current-area"] ?? null)),
+        execution.inputFile((params["new-area"] ?? null))
+    );
     return cargs;
 }
 
@@ -610,15 +617,15 @@ function cifti_resample_left_spheres_params(
     left_area_metrics: CiftiResampleLeftAreaMetricsParameters | null = null,
 ): CiftiResampleLeftSpheresParametersTagged {
     const params = {
-        "@type": "left_spheres" as const,
-        "current_sphere": current_sphere,
-        "new_sphere": new_sphere,
+        "@type": "left-spheres" as const,
+        "current-sphere": current_sphere,
+        "new-sphere": new_sphere,
     };
     if (left_area_surfs !== null) {
-        params["left_area_surfs"] = left_area_surfs;
+        params["left-area-surfs"] = left_area_surfs;
     }
     if (left_area_metrics !== null) {
-        params["left_area_metrics"] = left_area_metrics;
+        params["left-area-metrics"] = left_area_metrics;
     }
     return params;
 }
@@ -637,14 +644,14 @@ function cifti_resample_left_spheres_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-left-spheres");
-    cargs.push(execution.inputFile((params["current_sphere"] ?? null)));
-    cargs.push(execution.inputFile((params["new_sphere"] ?? null)));
-    if ((params["left_area_surfs"] ?? null) !== null) {
-        cargs.push(...cifti_resample_left_area_surfs_cargs((params["left_area_surfs"] ?? null), execution));
-    }
-    if ((params["left_area_metrics"] ?? null) !== null) {
-        cargs.push(...cifti_resample_left_area_metrics_cargs((params["left_area_metrics"] ?? null), execution));
+    if ((params["left-area-surfs"] ?? null) !== null || (params["left-area-metrics"] ?? null) !== null) {
+        cargs.push(
+            "-left-spheres",
+            execution.inputFile((params["current-sphere"] ?? null)),
+            execution.inputFile((params["new-sphere"] ?? null)),
+            ...(((params["left-area-surfs"] ?? null) !== null) ? cifti_resample_left_area_surfs_cargs((params["left-area-surfs"] ?? null), execution) : []),
+            ...(((params["left-area-metrics"] ?? null) !== null) ? cifti_resample_left_area_metrics_cargs((params["left-area-metrics"] ?? null), execution) : [])
+        );
     }
     return cargs;
 }
@@ -663,9 +670,9 @@ function cifti_resample_right_area_surfs_params(
     new_area: InputPathType,
 ): CiftiResampleRightAreaSurfsParametersTagged {
     const params = {
-        "@type": "right_area_surfs" as const,
-        "current_area": current_area,
-        "new_area": new_area,
+        "@type": "right-area-surfs" as const,
+        "current-area": current_area,
+        "new-area": new_area,
     };
     return params;
 }
@@ -684,9 +691,11 @@ function cifti_resample_right_area_surfs_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-right-area-surfs");
-    cargs.push(execution.inputFile((params["current_area"] ?? null)));
-    cargs.push(execution.inputFile((params["new_area"] ?? null)));
+    cargs.push(
+        "-right-area-surfs",
+        execution.inputFile((params["current-area"] ?? null)),
+        execution.inputFile((params["new-area"] ?? null))
+    );
     return cargs;
 }
 
@@ -704,9 +713,9 @@ function cifti_resample_right_area_metrics_params(
     new_area: InputPathType,
 ): CiftiResampleRightAreaMetricsParametersTagged {
     const params = {
-        "@type": "right_area_metrics" as const,
-        "current_area": current_area,
-        "new_area": new_area,
+        "@type": "right-area-metrics" as const,
+        "current-area": current_area,
+        "new-area": new_area,
     };
     return params;
 }
@@ -725,9 +734,11 @@ function cifti_resample_right_area_metrics_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-right-area-metrics");
-    cargs.push(execution.inputFile((params["current_area"] ?? null)));
-    cargs.push(execution.inputFile((params["new_area"] ?? null)));
+    cargs.push(
+        "-right-area-metrics",
+        execution.inputFile((params["current-area"] ?? null)),
+        execution.inputFile((params["new-area"] ?? null))
+    );
     return cargs;
 }
 
@@ -749,15 +760,15 @@ function cifti_resample_right_spheres_params(
     right_area_metrics: CiftiResampleRightAreaMetricsParameters | null = null,
 ): CiftiResampleRightSpheresParametersTagged {
     const params = {
-        "@type": "right_spheres" as const,
-        "current_sphere": current_sphere,
-        "new_sphere": new_sphere,
+        "@type": "right-spheres" as const,
+        "current-sphere": current_sphere,
+        "new-sphere": new_sphere,
     };
     if (right_area_surfs !== null) {
-        params["right_area_surfs"] = right_area_surfs;
+        params["right-area-surfs"] = right_area_surfs;
     }
     if (right_area_metrics !== null) {
-        params["right_area_metrics"] = right_area_metrics;
+        params["right-area-metrics"] = right_area_metrics;
     }
     return params;
 }
@@ -776,14 +787,14 @@ function cifti_resample_right_spheres_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-right-spheres");
-    cargs.push(execution.inputFile((params["current_sphere"] ?? null)));
-    cargs.push(execution.inputFile((params["new_sphere"] ?? null)));
-    if ((params["right_area_surfs"] ?? null) !== null) {
-        cargs.push(...cifti_resample_right_area_surfs_cargs((params["right_area_surfs"] ?? null), execution));
-    }
-    if ((params["right_area_metrics"] ?? null) !== null) {
-        cargs.push(...cifti_resample_right_area_metrics_cargs((params["right_area_metrics"] ?? null), execution));
+    if ((params["right-area-surfs"] ?? null) !== null || (params["right-area-metrics"] ?? null) !== null) {
+        cargs.push(
+            "-right-spheres",
+            execution.inputFile((params["current-sphere"] ?? null)),
+            execution.inputFile((params["new-sphere"] ?? null)),
+            ...(((params["right-area-surfs"] ?? null) !== null) ? cifti_resample_right_area_surfs_cargs((params["right-area-surfs"] ?? null), execution) : []),
+            ...(((params["right-area-metrics"] ?? null) !== null) ? cifti_resample_right_area_metrics_cargs((params["right-area-metrics"] ?? null), execution) : [])
+        );
     }
     return cargs;
 }
@@ -802,9 +813,9 @@ function cifti_resample_cerebellum_area_surfs_params(
     new_area: InputPathType,
 ): CiftiResampleCerebellumAreaSurfsParametersTagged {
     const params = {
-        "@type": "cerebellum_area_surfs" as const,
-        "current_area": current_area,
-        "new_area": new_area,
+        "@type": "cerebellum-area-surfs" as const,
+        "current-area": current_area,
+        "new-area": new_area,
     };
     return params;
 }
@@ -823,9 +834,11 @@ function cifti_resample_cerebellum_area_surfs_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-cerebellum-area-surfs");
-    cargs.push(execution.inputFile((params["current_area"] ?? null)));
-    cargs.push(execution.inputFile((params["new_area"] ?? null)));
+    cargs.push(
+        "-cerebellum-area-surfs",
+        execution.inputFile((params["current-area"] ?? null)),
+        execution.inputFile((params["new-area"] ?? null))
+    );
     return cargs;
 }
 
@@ -843,9 +856,9 @@ function cifti_resample_cerebellum_area_metrics_params(
     new_area: InputPathType,
 ): CiftiResampleCerebellumAreaMetricsParametersTagged {
     const params = {
-        "@type": "cerebellum_area_metrics" as const,
-        "current_area": current_area,
-        "new_area": new_area,
+        "@type": "cerebellum-area-metrics" as const,
+        "current-area": current_area,
+        "new-area": new_area,
     };
     return params;
 }
@@ -864,9 +877,11 @@ function cifti_resample_cerebellum_area_metrics_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-cerebellum-area-metrics");
-    cargs.push(execution.inputFile((params["current_area"] ?? null)));
-    cargs.push(execution.inputFile((params["new_area"] ?? null)));
+    cargs.push(
+        "-cerebellum-area-metrics",
+        execution.inputFile((params["current-area"] ?? null)),
+        execution.inputFile((params["new-area"] ?? null))
+    );
     return cargs;
 }
 
@@ -888,15 +903,15 @@ function cifti_resample_cerebellum_spheres_params(
     cerebellum_area_metrics: CiftiResampleCerebellumAreaMetricsParameters | null = null,
 ): CiftiResampleCerebellumSpheresParametersTagged {
     const params = {
-        "@type": "cerebellum_spheres" as const,
-        "current_sphere": current_sphere,
-        "new_sphere": new_sphere,
+        "@type": "cerebellum-spheres" as const,
+        "current-sphere": current_sphere,
+        "new-sphere": new_sphere,
     };
     if (cerebellum_area_surfs !== null) {
-        params["cerebellum_area_surfs"] = cerebellum_area_surfs;
+        params["cerebellum-area-surfs"] = cerebellum_area_surfs;
     }
     if (cerebellum_area_metrics !== null) {
-        params["cerebellum_area_metrics"] = cerebellum_area_metrics;
+        params["cerebellum-area-metrics"] = cerebellum_area_metrics;
     }
     return params;
 }
@@ -915,14 +930,14 @@ function cifti_resample_cerebellum_spheres_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-cerebellum-spheres");
-    cargs.push(execution.inputFile((params["current_sphere"] ?? null)));
-    cargs.push(execution.inputFile((params["new_sphere"] ?? null)));
-    if ((params["cerebellum_area_surfs"] ?? null) !== null) {
-        cargs.push(...cifti_resample_cerebellum_area_surfs_cargs((params["cerebellum_area_surfs"] ?? null), execution));
-    }
-    if ((params["cerebellum_area_metrics"] ?? null) !== null) {
-        cargs.push(...cifti_resample_cerebellum_area_metrics_cargs((params["cerebellum_area_metrics"] ?? null), execution));
+    if ((params["cerebellum-area-surfs"] ?? null) !== null || (params["cerebellum-area-metrics"] ?? null) !== null) {
+        cargs.push(
+            "-cerebellum-spheres",
+            execution.inputFile((params["current-sphere"] ?? null)),
+            execution.inputFile((params["new-sphere"] ?? null)),
+            ...(((params["cerebellum-area-surfs"] ?? null) !== null) ? cifti_resample_cerebellum_area_surfs_cargs((params["cerebellum-area-surfs"] ?? null), execution) : []),
+            ...(((params["cerebellum-area-metrics"] ?? null) !== null) ? cifti_resample_cerebellum_area_metrics_cargs((params["cerebellum-area-metrics"] ?? null), execution) : [])
+        );
     }
     return cargs;
 }
@@ -948,14 +963,14 @@ interface CiftiResampleOutputs {
 /**
  * Build parameters.
  *
+ * @param cifti_out the output cifti file
  * @param cifti_in the cifti file to resample
  * @param direction the direction of the input that should be resampled, ROW or COLUMN
  * @param cifti_template a cifti file containing the cifti space to resample to
  * @param template_direction the direction of the template to use as the resampling space, ROW or COLUMN
  * @param surface_method specify a surface resampling method
  * @param volume_method specify a volume interpolation method
- * @param cifti_out the output cifti file
- * @param opt_surface_largest use largest weight instead of weighted average or popularity when doing surface resampling
+ * @param surface_largest use largest weight instead of weighted average or popularity when doing surface resampling
  * @param volume_predilate dilate the volume components before resampling
  * @param surface_postdilate dilate the surface components after resampling
  * @param affine use an affine transformation on the volume components
@@ -967,14 +982,14 @@ interface CiftiResampleOutputs {
  * @returns Parameter dictionary
  */
 function cifti_resample_params(
+    cifti_out: string,
     cifti_in: InputPathType,
     direction: string,
     cifti_template: InputPathType,
     template_direction: string,
     surface_method: string,
     volume_method: string,
-    cifti_out: string,
-    opt_surface_largest: boolean = false,
+    surface_largest: boolean = false,
     volume_predilate: CiftiResampleVolumePredilateParameters | null = null,
     surface_postdilate: CiftiResampleSurfacePostdilateParameters | null = null,
     affine: CiftiResampleAffineParameters | null = null,
@@ -985,20 +1000,20 @@ function cifti_resample_params(
 ): CiftiResampleParametersTagged {
     const params = {
         "@type": "workbench/cifti-resample" as const,
-        "cifti_in": cifti_in,
+        "cifti-out": cifti_out,
+        "surface-largest": surface_largest,
+        "cifti-in": cifti_in,
         "direction": direction,
-        "cifti_template": cifti_template,
-        "template_direction": template_direction,
-        "surface_method": surface_method,
-        "volume_method": volume_method,
-        "cifti_out": cifti_out,
-        "opt_surface_largest": opt_surface_largest,
+        "cifti-template": cifti_template,
+        "template-direction": template_direction,
+        "surface-method": surface_method,
+        "volume-method": volume_method,
     };
     if (volume_predilate !== null) {
-        params["volume_predilate"] = volume_predilate;
+        params["volume-predilate"] = volume_predilate;
     }
     if (surface_postdilate !== null) {
-        params["surface_postdilate"] = surface_postdilate;
+        params["surface-postdilate"] = surface_postdilate;
     }
     if (affine !== null) {
         params["affine"] = affine;
@@ -1007,13 +1022,13 @@ function cifti_resample_params(
         params["warpfield"] = warpfield;
     }
     if (left_spheres !== null) {
-        params["left_spheres"] = left_spheres;
+        params["left-spheres"] = left_spheres;
     }
     if (right_spheres !== null) {
-        params["right_spheres"] = right_spheres;
+        params["right-spheres"] = right_spheres;
     }
     if (cerebellum_spheres !== null) {
-        params["cerebellum_spheres"] = cerebellum_spheres;
+        params["cerebellum-spheres"] = cerebellum_spheres;
     }
     return params;
 }
@@ -1032,39 +1047,27 @@ function cifti_resample_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-resample");
-    cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
+    if ((params["surface-largest"] ?? false) || (params["volume-predilate"] ?? null) !== null || (params["surface-postdilate"] ?? null) !== null || (params["affine"] ?? null) !== null || (params["warpfield"] ?? null) !== null || (params["left-spheres"] ?? null) !== null || (params["right-spheres"] ?? null) !== null || (params["cerebellum-spheres"] ?? null) !== null) {
+        cargs.push(
+            "wb_command",
+            "-cifti-resample",
+            (params["cifti-out"] ?? null),
+            (((params["surface-largest"] ?? false)) ? "-surface-largest" : ""),
+            ...(((params["volume-predilate"] ?? null) !== null) ? cifti_resample_volume_predilate_cargs((params["volume-predilate"] ?? null), execution) : []),
+            ...(((params["surface-postdilate"] ?? null) !== null) ? cifti_resample_surface_postdilate_cargs((params["surface-postdilate"] ?? null), execution) : []),
+            ...(((params["affine"] ?? null) !== null) ? cifti_resample_affine_cargs((params["affine"] ?? null), execution) : []),
+            ...(((params["warpfield"] ?? null) !== null) ? cifti_resample_warpfield_cargs((params["warpfield"] ?? null), execution) : []),
+            ...(((params["left-spheres"] ?? null) !== null) ? cifti_resample_left_spheres_cargs((params["left-spheres"] ?? null), execution) : []),
+            ...(((params["right-spheres"] ?? null) !== null) ? cifti_resample_right_spheres_cargs((params["right-spheres"] ?? null), execution) : []),
+            ...(((params["cerebellum-spheres"] ?? null) !== null) ? cifti_resample_cerebellum_spheres_cargs((params["cerebellum-spheres"] ?? null), execution) : [])
+        );
+    }
+    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push((params["direction"] ?? null));
-    cargs.push(execution.inputFile((params["cifti_template"] ?? null)));
-    cargs.push((params["template_direction"] ?? null));
-    cargs.push((params["surface_method"] ?? null));
-    cargs.push((params["volume_method"] ?? null));
-    cargs.push((params["cifti_out"] ?? null));
-    if ((params["opt_surface_largest"] ?? false)) {
-        cargs.push("-surface-largest");
-    }
-    if ((params["volume_predilate"] ?? null) !== null) {
-        cargs.push(...cifti_resample_volume_predilate_cargs((params["volume_predilate"] ?? null), execution));
-    }
-    if ((params["surface_postdilate"] ?? null) !== null) {
-        cargs.push(...cifti_resample_surface_postdilate_cargs((params["surface_postdilate"] ?? null), execution));
-    }
-    if ((params["affine"] ?? null) !== null) {
-        cargs.push(...cifti_resample_affine_cargs((params["affine"] ?? null), execution));
-    }
-    if ((params["warpfield"] ?? null) !== null) {
-        cargs.push(...cifti_resample_warpfield_cargs((params["warpfield"] ?? null), execution));
-    }
-    if ((params["left_spheres"] ?? null) !== null) {
-        cargs.push(...cifti_resample_left_spheres_cargs((params["left_spheres"] ?? null), execution));
-    }
-    if ((params["right_spheres"] ?? null) !== null) {
-        cargs.push(...cifti_resample_right_spheres_cargs((params["right_spheres"] ?? null), execution));
-    }
-    if ((params["cerebellum_spheres"] ?? null) !== null) {
-        cargs.push(...cifti_resample_cerebellum_spheres_cargs((params["cerebellum_spheres"] ?? null), execution));
-    }
+    cargs.push(execution.inputFile((params["cifti-template"] ?? null)));
+    cargs.push((params["template-direction"] ?? null));
+    cargs.push((params["surface-method"] ?? null));
+    cargs.push((params["volume-method"] ?? null));
     return cargs;
 }
 
@@ -1083,16 +1086,14 @@ function cifti_resample_outputs(
 ): CiftiResampleOutputs {
     const ret: CiftiResampleOutputs = {
         root: execution.outputFile("."),
-        cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
+        cifti_out: execution.outputFile([(params["cifti-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * cifti-resample
- *
- * Resample a cifti file to a new cifti space.
+ * RESAMPLE A CIFTI FILE TO A NEW CIFTI SPACE.
  *
  * Resample cifti data to a different brainordinate space.  Use COLUMN for the direction to resample dscalar, dlabel, or dtseries.  Resampling both dimensions of a dconn requires running this command twice, once with COLUMN and once with ROW.  If you are resampling a dconn and your machine has a large amount of memory, you might consider using -cifti-resample-dconn-memory to avoid writing and rereading an intermediate file.  The <template-direction> argument should usually be COLUMN, as dtseries, dscalar, and dlabel all have brainordinates on that direction.  If spheres are not specified for a surface structure which exists in the cifti files, its data is copied without resampling or dilation.  Dilation is done with the 'nearest' method, and is done on <new-sphere> for surface data.  Volume components are padded before dilation so that dilation doesn't run into the edge of the component bounding box.  If neither -affine nor -warpfield are specified, the identity transform is assumed for the volume data.
  *
@@ -1109,10 +1110,6 @@ function cifti_resample_outputs(
  * ADAP_BARY_AREA
  * BARYCENTRIC
  * .
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -1134,9 +1131,7 @@ function cifti_resample_execute(
 
 
 /**
- * cifti-resample
- *
- * Resample a cifti file to a new cifti space.
+ * RESAMPLE A CIFTI FILE TO A NEW CIFTI SPACE.
  *
  * Resample cifti data to a different brainordinate space.  Use COLUMN for the direction to resample dscalar, dlabel, or dtseries.  Resampling both dimensions of a dconn requires running this command twice, once with COLUMN and once with ROW.  If you are resampling a dconn and your machine has a large amount of memory, you might consider using -cifti-resample-dconn-memory to avoid writing and rereading an intermediate file.  The <template-direction> argument should usually be COLUMN, as dtseries, dscalar, and dlabel all have brainordinates on that direction.  If spheres are not specified for a surface structure which exists in the cifti files, its data is copied without resampling or dilation.  Dilation is done with the 'nearest' method, and is done on <new-sphere> for surface data.  Volume components are padded before dilation so that dilation doesn't run into the edge of the component bounding box.  If neither -affine nor -warpfield are specified, the identity transform is assumed for the volume data.
  *
@@ -1154,18 +1149,14 @@ function cifti_resample_execute(
  * BARYCENTRIC
  * .
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param cifti_out the output cifti file
  * @param cifti_in the cifti file to resample
  * @param direction the direction of the input that should be resampled, ROW or COLUMN
  * @param cifti_template a cifti file containing the cifti space to resample to
  * @param template_direction the direction of the template to use as the resampling space, ROW or COLUMN
  * @param surface_method specify a surface resampling method
  * @param volume_method specify a volume interpolation method
- * @param cifti_out the output cifti file
- * @param opt_surface_largest use largest weight instead of weighted average or popularity when doing surface resampling
+ * @param surface_largest use largest weight instead of weighted average or popularity when doing surface resampling
  * @param volume_predilate dilate the volume components before resampling
  * @param surface_postdilate dilate the surface components after resampling
  * @param affine use an affine transformation on the volume components
@@ -1178,14 +1169,14 @@ function cifti_resample_execute(
  * @returns NamedTuple of outputs (described in `CiftiResampleOutputs`).
  */
 function cifti_resample(
+    cifti_out: string,
     cifti_in: InputPathType,
     direction: string,
     cifti_template: InputPathType,
     template_direction: string,
     surface_method: string,
     volume_method: string,
-    cifti_out: string,
-    opt_surface_largest: boolean = false,
+    surface_largest: boolean = false,
     volume_predilate: CiftiResampleVolumePredilateParameters | null = null,
     surface_postdilate: CiftiResampleSurfacePostdilateParameters | null = null,
     affine: CiftiResampleAffineParameters | null = null,
@@ -1195,7 +1186,7 @@ function cifti_resample(
     cerebellum_spheres: CiftiResampleCerebellumSpheresParameters | null = null,
     runner: Runner | null = null,
 ): CiftiResampleOutputs {
-    const params = cifti_resample_params(cifti_in, direction, cifti_template, template_direction, surface_method, volume_method, cifti_out, opt_surface_largest, volume_predilate, surface_postdilate, affine, warpfield, left_spheres, right_spheres, cerebellum_spheres)
+    const params = cifti_resample_params(cifti_out, cifti_in, direction, cifti_template, template_direction, surface_method, volume_method, surface_largest, volume_predilate, surface_postdilate, affine, warpfield, left_spheres, right_spheres, cerebellum_spheres)
     return cifti_resample_execute(params, runner);
 }
 
@@ -1220,6 +1211,6 @@ export {
       cifti_resample_surface_postdilate_params,
       cifti_resample_volume_predilate_params,
       cifti_resample_warpfield_params,
-      cifti_resample_weighted_1_params,
       cifti_resample_weighted_params,
+      cifti_resample_weighted_params_,
 };

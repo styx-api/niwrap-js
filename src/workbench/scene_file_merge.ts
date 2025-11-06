@@ -4,17 +4,16 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SCENE_FILE_MERGE_METADATA: Metadata = {
-    id: "b75bdc86e379ec346063e577c5b0039d15d9a56a.boutiques",
+    id: "72ce88135b0199024083ada6e5b4934b29d0f4bf.workbench",
     name: "scene-file-merge",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface SceneFileMergeUpToParameters {
-    "@type"?: "up_to";
-    "last_column": string;
-    "opt_reverse": boolean;
+    "@type"?: "up-to";
+    "last-column": string;
+    "reverse": boolean;
 }
 type SceneFileMergeUpToParametersTagged = Required<Pick<SceneFileMergeUpToParameters, '@type'>> & SceneFileMergeUpToParameters;
 
@@ -22,14 +21,14 @@ type SceneFileMergeUpToParametersTagged = Required<Pick<SceneFileMergeUpToParame
 interface SceneFileMergeSceneParameters {
     "@type"?: "scene";
     "scene": string;
-    "up_to"?: SceneFileMergeUpToParameters | null | undefined;
+    "up-to"?: SceneFileMergeUpToParameters | null | undefined;
 }
 type SceneFileMergeSceneParametersTagged = Required<Pick<SceneFileMergeSceneParameters, '@type'>> & SceneFileMergeSceneParameters;
 
 
 interface SceneFileMergeSceneFileParameters {
-    "@type"?: "scene_file";
-    "scene_file": string;
+    "@type"?: "scene-file";
+    "scene-file": string;
     "scene"?: Array<SceneFileMergeSceneParameters> | null | undefined;
 }
 type SceneFileMergeSceneFileParametersTagged = Required<Pick<SceneFileMergeSceneFileParameters, '@type'>> & SceneFileMergeSceneFileParameters;
@@ -37,8 +36,8 @@ type SceneFileMergeSceneFileParametersTagged = Required<Pick<SceneFileMergeScene
 
 interface SceneFileMergeParameters {
     "@type"?: "workbench/scene-file-merge";
-    "scene_file_out": string;
-    "scene_file"?: Array<SceneFileMergeSceneFileParameters> | null | undefined;
+    "scene-file"?: Array<SceneFileMergeSceneFileParameters> | null | undefined;
+    "scene-file-out": string;
 }
 type SceneFileMergeParametersTagged = Required<Pick<SceneFileMergeParameters, '@type'>> & SceneFileMergeParameters;
 
@@ -47,18 +46,18 @@ type SceneFileMergeParametersTagged = Required<Pick<SceneFileMergeParameters, '@
  * Build parameters.
  *
  * @param last_column the number or name of the last scene to include
- * @param opt_reverse use the range in reverse order
+ * @param reverse use the range in reverse order
  *
  * @returns Parameter dictionary
  */
 function scene_file_merge_up_to_params(
     last_column: string,
-    opt_reverse: boolean = false,
+    reverse: boolean = false,
 ): SceneFileMergeUpToParametersTagged {
     const params = {
-        "@type": "up_to" as const,
-        "last_column": last_column,
-        "opt_reverse": opt_reverse,
+        "@type": "up-to" as const,
+        "last-column": last_column,
+        "reverse": reverse,
     };
     return params;
 }
@@ -77,10 +76,12 @@ function scene_file_merge_up_to_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-up-to");
-    cargs.push((params["last_column"] ?? null));
-    if ((params["opt_reverse"] ?? false)) {
-        cargs.push("-reverse");
+    if ((params["reverse"] ?? false)) {
+        cargs.push(
+            "-up-to",
+            (params["last-column"] ?? null),
+            "-reverse"
+        );
     }
     return cargs;
 }
@@ -103,7 +104,7 @@ function scene_file_merge_scene_params(
         "scene": scene,
     };
     if (up_to !== null) {
-        params["up_to"] = up_to;
+        params["up-to"] = up_to;
     }
     return params;
 }
@@ -122,10 +123,12 @@ function scene_file_merge_scene_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-scene");
-    cargs.push((params["scene"] ?? null));
-    if ((params["up_to"] ?? null) !== null) {
-        cargs.push(...scene_file_merge_up_to_cargs((params["up_to"] ?? null), execution));
+    if ((params["up-to"] ?? null) !== null) {
+        cargs.push(
+            "-scene",
+            (params["scene"] ?? null),
+            ...scene_file_merge_up_to_cargs((params["up-to"] ?? null), execution)
+        );
     }
     return cargs;
 }
@@ -144,8 +147,8 @@ function scene_file_merge_scene_file_params(
     scene: Array<SceneFileMergeSceneParameters> | null = null,
 ): SceneFileMergeSceneFileParametersTagged {
     const params = {
-        "@type": "scene_file" as const,
-        "scene_file": scene_file,
+        "@type": "scene-file" as const,
+        "scene-file": scene_file,
     };
     if (scene !== null) {
         params["scene"] = scene;
@@ -167,10 +170,12 @@ function scene_file_merge_scene_file_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-scene-file");
-    cargs.push((params["scene_file"] ?? null));
     if ((params["scene"] ?? null) !== null) {
-        cargs.push(...(params["scene"] ?? null).map(s => scene_file_merge_scene_cargs(s, execution)).flat());
+        cargs.push(
+            "-scene-file",
+            (params["scene-file"] ?? null),
+            ...(params["scene"] ?? null).map(s => scene_file_merge_scene_cargs(s, execution)).flat()
+        );
     }
     return cargs;
 }
@@ -203,10 +208,10 @@ function scene_file_merge_params(
 ): SceneFileMergeParametersTagged {
     const params = {
         "@type": "workbench/scene-file-merge" as const,
-        "scene_file_out": scene_file_out,
+        "scene-file-out": scene_file_out,
     };
     if (scene_file !== null) {
-        params["scene_file"] = scene_file;
+        params["scene-file"] = scene_file;
     }
     return params;
 }
@@ -225,12 +230,14 @@ function scene_file_merge_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-scene-file-merge");
-    cargs.push((params["scene_file_out"] ?? null));
-    if ((params["scene_file"] ?? null) !== null) {
-        cargs.push(...(params["scene_file"] ?? null).map(s => scene_file_merge_scene_file_cargs(s, execution)).flat());
+    if ((params["scene-file"] ?? null) !== null) {
+        cargs.push(
+            "wb_command",
+            "-scene-file-merge",
+            ...(params["scene-file"] ?? null).map(s => scene_file_merge_scene_file_cargs(s, execution)).flat()
+        );
     }
+    cargs.push((params["scene-file-out"] ?? null));
     return cargs;
 }
 
@@ -255,19 +262,13 @@ function scene_file_merge_outputs(
 
 
 /**
- * scene-file-merge
- *
- * Rearrange scenes into a new file.
+ * REARRANGE SCENES INTO A NEW FILE.
  *
  * Takes one or more scene files and constructs a new scene file by concatenating specified scenes from them.
  *
  * Example: wb_command -scene-file-merge out.scene -scene-file first.scene -scene 1 -scene-file second.scene
  *
  * This example would take the first scene from first.scene, followed by all scenes from second.scene, and write these scenes to out.scene.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -289,19 +290,13 @@ function scene_file_merge_execute(
 
 
 /**
- * scene-file-merge
- *
- * Rearrange scenes into a new file.
+ * REARRANGE SCENES INTO A NEW FILE.
  *
  * Takes one or more scene files and constructs a new scene file by concatenating specified scenes from them.
  *
  * Example: wb_command -scene-file-merge out.scene -scene-file first.scene -scene 1 -scene-file second.scene
  *
  * This example would take the first scene from first.scene, followed by all scenes from second.scene, and write these scenes to out.scene.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param scene_file_out output - the output scene file
  * @param scene_file specify a scene file to use scenes from

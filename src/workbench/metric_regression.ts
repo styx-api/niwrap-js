@@ -4,17 +4,16 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_REGRESSION_METADATA: Metadata = {
-    id: "478fb33cff7af2c028c82b1a87cc021ded62f90d.boutiques",
+    id: "112cf7b9fc8784489485c6275842f1d2dadef8d8.workbench",
     name: "metric-regression",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface MetricRegressionRemoveParameters {
     "@type"?: "remove";
     "metric": InputPathType;
-    "opt_remove_column_column"?: string | null | undefined;
+    "column"?: string | null | undefined;
 }
 type MetricRegressionRemoveParametersTagged = Required<Pick<MetricRegressionRemoveParameters, '@type'>> & MetricRegressionRemoveParameters;
 
@@ -22,19 +21,19 @@ type MetricRegressionRemoveParametersTagged = Required<Pick<MetricRegressionRemo
 interface MetricRegressionKeepParameters {
     "@type"?: "keep";
     "metric": InputPathType;
-    "opt_keep_column_column"?: string | null | undefined;
+    "column"?: string | null | undefined;
 }
 type MetricRegressionKeepParametersTagged = Required<Pick<MetricRegressionKeepParameters, '@type'>> & MetricRegressionKeepParameters;
 
 
 interface MetricRegressionParameters {
     "@type"?: "workbench/metric-regression";
-    "metric_in": InputPathType;
-    "metric_out": string;
-    "opt_roi_roi_metric"?: InputPathType | null | undefined;
-    "opt_column_column"?: string | null | undefined;
+    "metric-out": string;
+    "roi-metric"?: InputPathType | null | undefined;
+    "column"?: string | null | undefined;
     "remove"?: Array<MetricRegressionRemoveParameters> | null | undefined;
     "keep"?: Array<MetricRegressionKeepParameters> | null | undefined;
+    "metric-in": InputPathType;
 }
 type MetricRegressionParametersTagged = Required<Pick<MetricRegressionParameters, '@type'>> & MetricRegressionParameters;
 
@@ -43,20 +42,22 @@ type MetricRegressionParametersTagged = Required<Pick<MetricRegressionParameters
  * Build parameters.
  *
  * @param metric the metric file to use
- * @param opt_remove_column_column select a column to use, rather than all: the column number or name
+ * @param column select a column to use, rather than all
+
+the column number or name
  *
  * @returns Parameter dictionary
  */
 function metric_regression_remove_params(
     metric: InputPathType,
-    opt_remove_column_column: string | null = null,
+    column: string | null,
 ): MetricRegressionRemoveParametersTagged {
     const params = {
         "@type": "remove" as const,
         "metric": metric,
     };
-    if (opt_remove_column_column !== null) {
-        params["opt_remove_column_column"] = opt_remove_column_column;
+    if (column !== null) {
+        params["column"] = column;
     }
     return params;
 }
@@ -75,12 +76,12 @@ function metric_regression_remove_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-remove");
-    cargs.push(execution.inputFile((params["metric"] ?? null)));
-    if ((params["opt_remove_column_column"] ?? null) !== null) {
+    if ((params["column"] ?? null) !== null) {
         cargs.push(
+            "-remove",
+            execution.inputFile((params["metric"] ?? null)),
             "-remove-column",
-            (params["opt_remove_column_column"] ?? null)
+            (params["column"] ?? null)
         );
     }
     return cargs;
@@ -91,20 +92,22 @@ function metric_regression_remove_cargs(
  * Build parameters.
  *
  * @param metric the metric file to use
- * @param opt_keep_column_column select a column to use, rather than all: the column number or name
+ * @param column select a column to use, rather than all
+
+the column number or name
  *
  * @returns Parameter dictionary
  */
 function metric_regression_keep_params(
     metric: InputPathType,
-    opt_keep_column_column: string | null = null,
+    column: string | null,
 ): MetricRegressionKeepParametersTagged {
     const params = {
         "@type": "keep" as const,
         "metric": metric,
     };
-    if (opt_keep_column_column !== null) {
-        params["opt_keep_column_column"] = opt_keep_column_column;
+    if (column !== null) {
+        params["column"] = column;
     }
     return params;
 }
@@ -123,12 +126,12 @@ function metric_regression_keep_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-keep");
-    cargs.push(execution.inputFile((params["metric"] ?? null)));
-    if ((params["opt_keep_column_column"] ?? null) !== null) {
+    if ((params["column"] ?? null) !== null) {
         cargs.push(
+            "-keep",
+            execution.inputFile((params["metric"] ?? null)),
             "-keep-column",
-            (params["opt_keep_column_column"] ?? null)
+            (params["column"] ?? null)
         );
     }
     return cargs;
@@ -155,33 +158,37 @@ interface MetricRegressionOutputs {
 /**
  * Build parameters.
  *
- * @param metric_in the metric to regress from
  * @param metric_out the output metric
- * @param opt_roi_roi_metric only regress inside an roi: the area to use for regression, as a metric
- * @param opt_column_column select a single column to regress from: the column number or name
+ * @param roi_metric only regress inside an roi
+
+the area to use for regression, as a metric
+ * @param column select a single column to regress from
+
+the column number or name
+ * @param metric_in the metric to regress from
  * @param remove specify a metric to regress out
  * @param keep specify a metric to include in regression, but not remove
  *
  * @returns Parameter dictionary
  */
 function metric_regression_params(
-    metric_in: InputPathType,
     metric_out: string,
-    opt_roi_roi_metric: InputPathType | null = null,
-    opt_column_column: string | null = null,
+    roi_metric: InputPathType | null,
+    column: string | null,
+    metric_in: InputPathType,
     remove: Array<MetricRegressionRemoveParameters> | null = null,
     keep: Array<MetricRegressionKeepParameters> | null = null,
 ): MetricRegressionParametersTagged {
     const params = {
         "@type": "workbench/metric-regression" as const,
-        "metric_in": metric_in,
-        "metric_out": metric_out,
+        "metric-out": metric_out,
+        "metric-in": metric_in,
     };
-    if (opt_roi_roi_metric !== null) {
-        params["opt_roi_roi_metric"] = opt_roi_roi_metric;
+    if (roi_metric !== null) {
+        params["roi-metric"] = roi_metric;
     }
-    if (opt_column_column !== null) {
-        params["opt_column_column"] = opt_column_column;
+    if (column !== null) {
+        params["column"] = column;
     }
     if (remove !== null) {
         params["remove"] = remove;
@@ -206,28 +213,20 @@ function metric_regression_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-metric-regression");
-    cargs.push(execution.inputFile((params["metric_in"] ?? null)));
-    cargs.push((params["metric_out"] ?? null));
-    if ((params["opt_roi_roi_metric"] ?? null) !== null) {
+    if ((params["roi-metric"] ?? null) !== null || (params["column"] ?? null) !== null || (params["remove"] ?? null) !== null || (params["keep"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-metric-regression",
+            (params["metric-out"] ?? null),
             "-roi",
-            execution.inputFile((params["opt_roi_roi_metric"] ?? null))
-        );
-    }
-    if ((params["opt_column_column"] ?? null) !== null) {
-        cargs.push(
+            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
             "-column",
-            (params["opt_column_column"] ?? null)
+            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
+            ...(((params["remove"] ?? null) !== null) ? (params["remove"] ?? null).map(s => metric_regression_remove_cargs(s, execution)).flat() : []),
+            ...(((params["keep"] ?? null) !== null) ? (params["keep"] ?? null).map(s => metric_regression_keep_cargs(s, execution)).flat() : [])
         );
     }
-    if ((params["remove"] ?? null) !== null) {
-        cargs.push(...(params["remove"] ?? null).map(s => metric_regression_remove_cargs(s, execution)).flat());
-    }
-    if ((params["keep"] ?? null) !== null) {
-        cargs.push(...(params["keep"] ?? null).map(s => metric_regression_keep_cargs(s, execution)).flat());
-    }
+    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     return cargs;
 }
 
@@ -246,22 +245,16 @@ function metric_regression_outputs(
 ): MetricRegressionOutputs {
     const ret: MetricRegressionOutputs = {
         root: execution.outputFile("."),
-        metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
+        metric_out: execution.outputFile([(params["metric-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * metric-regression
- *
- * Regress spatial map out of a metric file.
+ * REGRESS SPATIAL MAP OUT OF A METRIC FILE.
  *
  * For each regressor, its mean across the surface is subtracted from its data.  Each input map is then regressed against these, and a constant term.  The resulting regressed slopes of all regressors specified with -remove are multiplied with their respective regressor maps, and these are subtracted from the input map.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -283,20 +276,18 @@ function metric_regression_execute(
 
 
 /**
- * metric-regression
- *
- * Regress spatial map out of a metric file.
+ * REGRESS SPATIAL MAP OUT OF A METRIC FILE.
  *
  * For each regressor, its mean across the surface is subtracted from its data.  Each input map is then regressed against these, and a constant term.  The resulting regressed slopes of all regressors specified with -remove are multiplied with their respective regressor maps, and these are subtracted from the input map.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
- * @param metric_in the metric to regress from
  * @param metric_out the output metric
- * @param opt_roi_roi_metric only regress inside an roi: the area to use for regression, as a metric
- * @param opt_column_column select a single column to regress from: the column number or name
+ * @param roi_metric only regress inside an roi
+
+the area to use for regression, as a metric
+ * @param column select a single column to regress from
+
+the column number or name
+ * @param metric_in the metric to regress from
  * @param remove specify a metric to regress out
  * @param keep specify a metric to include in regression, but not remove
  * @param runner Command runner
@@ -304,15 +295,15 @@ function metric_regression_execute(
  * @returns NamedTuple of outputs (described in `MetricRegressionOutputs`).
  */
 function metric_regression(
-    metric_in: InputPathType,
     metric_out: string,
-    opt_roi_roi_metric: InputPathType | null = null,
-    opt_column_column: string | null = null,
+    roi_metric: InputPathType | null,
+    column: string | null,
+    metric_in: InputPathType,
     remove: Array<MetricRegressionRemoveParameters> | null = null,
     keep: Array<MetricRegressionKeepParameters> | null = null,
     runner: Runner | null = null,
 ): MetricRegressionOutputs {
-    const params = metric_regression_params(metric_in, metric_out, opt_roi_roi_metric, opt_column_column, remove, keep)
+    const params = metric_regression_params(metric_out, roi_metric, column, metric_in, remove, keep)
     return metric_regression_execute(params, runner);
 }
 

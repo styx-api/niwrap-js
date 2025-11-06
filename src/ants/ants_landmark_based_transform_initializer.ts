@@ -21,7 +21,7 @@ interface AntsLandmarkBasedTransformInitializerParameters {
     "mesh_size"?: string | null | undefined;
     "number_of_levels"?: number | null | undefined;
     "order"?: number | null | undefined;
-    "enforce_stationary_boundaries"?: 0 | 1 | null | undefined;
+    "enforce_stationary_boundaries"?: boolean | null | undefined;
     "landmark_weights"?: InputPathType | null | undefined;
 }
 type AntsLandmarkBasedTransformInitializerParametersTagged = Required<Pick<AntsLandmarkBasedTransformInitializerParameters, '@type'>> & AntsLandmarkBasedTransformInitializerParameters;
@@ -69,7 +69,7 @@ function ants_landmark_based_transform_initializer_params(
     mesh_size: string | null = null,
     number_of_levels: number | null = null,
     order: number | null = null,
-    enforce_stationary_boundaries: 0 | 1 | null = null,
+    enforce_stationary_boundaries: boolean | null = null,
     landmark_weights: InputPathType | null = null,
 ): AntsLandmarkBasedTransformInitializerParametersTagged {
     const params = {
@@ -128,7 +128,7 @@ function ants_landmark_based_transform_initializer_cargs(
         cargs.push(String((params["order"] ?? null)));
     }
     if ((params["enforce_stationary_boundaries"] ?? null) !== null) {
-        cargs.push(String((params["enforce_stationary_boundaries"] ?? null)));
+        cargs.push(((params["enforce_stationary_boundaries"] ?? null) ? "1" : "0"));
     }
     if ((params["landmark_weights"] ?? null) !== null) {
         cargs.push(execution.inputFile((params["landmark_weights"] ?? null)));
@@ -217,7 +217,7 @@ function ants_landmark_based_transform_initializer(
     mesh_size: string | null = null,
     number_of_levels: number | null = null,
     order: number | null = null,
-    enforce_stationary_boundaries: 0 | 1 | null = null,
+    enforce_stationary_boundaries: boolean | null = null,
     landmark_weights: InputPathType | null = null,
     runner: Runner | null = null,
 ): AntsLandmarkBasedTransformInitializerOutputs {

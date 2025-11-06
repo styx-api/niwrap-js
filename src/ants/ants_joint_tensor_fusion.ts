@@ -19,17 +19,17 @@ interface AntsJointTensorFusionParameters {
     "atlas_segmentation": InputPathType;
     "alpha"?: number | null | undefined;
     "beta"?: number | null | undefined;
-    "retain_label_posterior_images"?: 0 | 1 | null | undefined;
-    "retain_atlas_voting_images"?: 0 | 1 | null | undefined;
-    "constrain_nonnegative"?: 0 | 1 | null | undefined;
-    "log_euclidean"?: 0 | 1 | null | undefined;
+    "retain_label_posterior_images"?: boolean | null | undefined;
+    "retain_atlas_voting_images"?: boolean | null | undefined;
+    "constrain_nonnegative"?: boolean | null | undefined;
+    "log_euclidean"?: boolean | null | undefined;
     "patch_radius"?: string | null | undefined;
     "patch_metric"?: "PC" | "MSQ" | null | undefined;
     "search_radius"?: string | null | undefined;
     "exclusion_image"?: string | null | undefined;
     "mask_image"?: InputPathType | null | undefined;
     "output": string;
-    "verbose"?: 0 | 1 | null | undefined;
+    "verbose"?: boolean | null | undefined;
 }
 type AntsJointTensorFusionParametersTagged = Required<Pick<AntsJointTensorFusionParameters, '@type'>> & AntsJointTensorFusionParameters;
 
@@ -94,16 +94,16 @@ function ants_joint_tensor_fusion_params(
     dimensionality: 2 | 3 | 4 | null = null,
     alpha: number | null = null,
     beta: number | null = null,
-    retain_label_posterior_images: 0 | 1 | null = null,
-    retain_atlas_voting_images: 0 | 1 | null = null,
-    constrain_nonnegative: 0 | 1 | null = null,
-    log_euclidean: 0 | 1 | null = null,
+    retain_label_posterior_images: boolean | null = null,
+    retain_atlas_voting_images: boolean | null = null,
+    constrain_nonnegative: boolean | null = null,
+    log_euclidean: boolean | null = null,
     patch_radius: string | null = null,
     patch_metric: "PC" | "MSQ" | null = null,
     search_radius: string | null = null,
     exclusion_image: string | null = null,
     mask_image: InputPathType | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
 ): AntsJointTensorFusionParametersTagged {
     const params = {
         "@type": "ants/antsJointTensorFusion" as const,
@@ -202,25 +202,25 @@ function ants_joint_tensor_fusion_cargs(
     if ((params["retain_label_posterior_images"] ?? null) !== null) {
         cargs.push(
             "-r",
-            String((params["retain_label_posterior_images"] ?? null))
+            ((params["retain_label_posterior_images"] ?? null) ? "1" : "0")
         );
     }
     if ((params["retain_atlas_voting_images"] ?? null) !== null) {
         cargs.push(
             "-f",
-            String((params["retain_atlas_voting_images"] ?? null))
+            ((params["retain_atlas_voting_images"] ?? null) ? "1" : "0")
         );
     }
     if ((params["constrain_nonnegative"] ?? null) !== null) {
         cargs.push(
             "-c",
-            String((params["constrain_nonnegative"] ?? null))
+            ((params["constrain_nonnegative"] ?? null) ? "1" : "0")
         );
     }
     if ((params["log_euclidean"] ?? null) !== null) {
         cargs.push(
             "-u",
-            String((params["log_euclidean"] ?? null))
+            ((params["log_euclidean"] ?? null) ? "1" : "0")
         );
     }
     if ((params["patch_radius"] ?? null) !== null) {
@@ -260,7 +260,7 @@ function ants_joint_tensor_fusion_cargs(
     if ((params["verbose"] ?? null) !== null) {
         cargs.push(
             "-v",
-            String((params["verbose"] ?? null))
+            ((params["verbose"] ?? null) ? "1" : "0")
         );
     }
     return cargs;
@@ -356,16 +356,16 @@ function ants_joint_tensor_fusion(
     dimensionality: 2 | 3 | 4 | null = null,
     alpha: number | null = null,
     beta: number | null = null,
-    retain_label_posterior_images: 0 | 1 | null = null,
-    retain_atlas_voting_images: 0 | 1 | null = null,
-    constrain_nonnegative: 0 | 1 | null = null,
-    log_euclidean: 0 | 1 | null = null,
+    retain_label_posterior_images: boolean | null = null,
+    retain_atlas_voting_images: boolean | null = null,
+    constrain_nonnegative: boolean | null = null,
+    log_euclidean: boolean | null = null,
     patch_radius: string | null = null,
     patch_metric: "PC" | "MSQ" | null = null,
     search_radius: string | null = null,
     exclusion_image: string | null = null,
     mask_image: InputPathType | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
     runner: Runner | null = null,
 ): AntsJointTensorFusionOutputs {
     const params = ants_joint_tensor_fusion_params(target_image, atlas_image, atlas_segmentation, output, dimensionality, alpha, beta, retain_label_posterior_images, retain_atlas_voting_images, constrain_nonnegative, log_euclidean, patch_radius, patch_metric, search_radius, exclusion_image, mask_image, verbose)

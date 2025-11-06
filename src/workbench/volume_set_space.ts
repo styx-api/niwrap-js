@@ -4,59 +4,58 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_SET_SPACE_METADATA: Metadata = {
-    id: "8a2d5fe6bb459e834b704302eaed7589dbed6387.boutiques",
+    id: "39cfd66daa80ee755b48163f61a64435ef0a12be.workbench",
     name: "volume-set-space",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface VolumeSetSpacePlumbParameters {
     "@type"?: "plumb";
-    "axis_order": string;
-    "x_spacing": number;
-    "y_spacing": number;
-    "z_spacing": number;
-    "x_offset": number;
-    "y_offset": number;
-    "z_offset": number;
+    "axis-order": string;
+    "x-spacing": number;
+    "y-spacing": number;
+    "z-spacing": number;
+    "x-offset": number;
+    "y-offset": number;
+    "z-offset": number;
 }
 type VolumeSetSpacePlumbParametersTagged = Required<Pick<VolumeSetSpacePlumbParameters, '@type'>> & VolumeSetSpacePlumbParameters;
 
 
 interface VolumeSetSpaceSformParameters {
     "@type"?: "sform";
-    "xi_spacing": number;
-    "xj_spacing": number;
-    "xk_spacing": number;
-    "x_offset": number;
-    "yi_spacing": number;
-    "yj_spacing": number;
-    "yk_spacing": number;
-    "y_offset": number;
-    "zi_spacing": number;
-    "zj_spacing": number;
-    "zk_spacing": number;
-    "z_offset": number;
+    "xi-spacing": number;
+    "xj-spacing": number;
+    "xk-spacing": number;
+    "x-offset": number;
+    "yi-spacing": number;
+    "yj-spacing": number;
+    "yk-spacing": number;
+    "y-offset": number;
+    "zi-spacing": number;
+    "zj-spacing": number;
+    "zk-spacing": number;
+    "z-offset": number;
 }
 type VolumeSetSpaceSformParametersTagged = Required<Pick<VolumeSetSpaceSformParameters, '@type'>> & VolumeSetSpaceSformParameters;
 
 
 interface VolumeSetSpaceFileParameters {
     "@type"?: "file";
-    "volume_ref": string;
-    "opt_ignore_dims": boolean;
+    "volume-ref": string;
+    "ignore-dims": boolean;
 }
 type VolumeSetSpaceFileParametersTagged = Required<Pick<VolumeSetSpaceFileParameters, '@type'>> & VolumeSetSpaceFileParameters;
 
 
 interface VolumeSetSpaceParameters {
     "@type"?: "workbench/volume-set-space";
-    "volume_in": InputPathType;
-    "volume_out": string;
     "plumb"?: VolumeSetSpacePlumbParameters | null | undefined;
     "sform"?: VolumeSetSpaceSformParameters | null | undefined;
     "file"?: VolumeSetSpaceFileParameters | null | undefined;
+    "volume-in": InputPathType;
+    "volume-out": string;
 }
 type VolumeSetSpaceParametersTagged = Required<Pick<VolumeSetSpaceParameters, '@type'>> & VolumeSetSpaceParameters;
 
@@ -85,13 +84,13 @@ function volume_set_space_plumb_params(
 ): VolumeSetSpacePlumbParametersTagged {
     const params = {
         "@type": "plumb" as const,
-        "axis_order": axis_order,
-        "x_spacing": x_spacing,
-        "y_spacing": y_spacing,
-        "z_spacing": z_spacing,
-        "x_offset": x_offset,
-        "y_offset": y_offset,
-        "z_offset": z_offset,
+        "axis-order": axis_order,
+        "x-spacing": x_spacing,
+        "y-spacing": y_spacing,
+        "z-spacing": z_spacing,
+        "x-offset": x_offset,
+        "y-offset": y_offset,
+        "z-offset": z_offset,
     };
     return params;
 }
@@ -110,14 +109,16 @@ function volume_set_space_plumb_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-plumb");
-    cargs.push((params["axis_order"] ?? null));
-    cargs.push(String((params["x_spacing"] ?? null)));
-    cargs.push(String((params["y_spacing"] ?? null)));
-    cargs.push(String((params["z_spacing"] ?? null)));
-    cargs.push(String((params["x_offset"] ?? null)));
-    cargs.push(String((params["y_offset"] ?? null)));
-    cargs.push(String((params["z_offset"] ?? null)));
+    cargs.push(
+        "-plumb",
+        (params["axis-order"] ?? null),
+        String((params["x-spacing"] ?? null)),
+        String((params["y-spacing"] ?? null)),
+        String((params["z-spacing"] ?? null)),
+        String((params["x-offset"] ?? null)),
+        String((params["y-offset"] ?? null)),
+        String((params["z-offset"] ?? null))
+    );
     return cargs;
 }
 
@@ -156,18 +157,18 @@ function volume_set_space_sform_params(
 ): VolumeSetSpaceSformParametersTagged {
     const params = {
         "@type": "sform" as const,
-        "xi_spacing": xi_spacing,
-        "xj_spacing": xj_spacing,
-        "xk_spacing": xk_spacing,
-        "x_offset": x_offset,
-        "yi_spacing": yi_spacing,
-        "yj_spacing": yj_spacing,
-        "yk_spacing": yk_spacing,
-        "y_offset": y_offset,
-        "zi_spacing": zi_spacing,
-        "zj_spacing": zj_spacing,
-        "zk_spacing": zk_spacing,
-        "z_offset": z_offset,
+        "xi-spacing": xi_spacing,
+        "xj-spacing": xj_spacing,
+        "xk-spacing": xk_spacing,
+        "x-offset": x_offset,
+        "yi-spacing": yi_spacing,
+        "yj-spacing": yj_spacing,
+        "yk-spacing": yk_spacing,
+        "y-offset": y_offset,
+        "zi-spacing": zi_spacing,
+        "zj-spacing": zj_spacing,
+        "zk-spacing": zk_spacing,
+        "z-offset": z_offset,
     };
     return params;
 }
@@ -186,19 +187,21 @@ function volume_set_space_sform_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-sform");
-    cargs.push(String((params["xi_spacing"] ?? null)));
-    cargs.push(String((params["xj_spacing"] ?? null)));
-    cargs.push(String((params["xk_spacing"] ?? null)));
-    cargs.push(String((params["x_offset"] ?? null)));
-    cargs.push(String((params["yi_spacing"] ?? null)));
-    cargs.push(String((params["yj_spacing"] ?? null)));
-    cargs.push(String((params["yk_spacing"] ?? null)));
-    cargs.push(String((params["y_offset"] ?? null)));
-    cargs.push(String((params["zi_spacing"] ?? null)));
-    cargs.push(String((params["zj_spacing"] ?? null)));
-    cargs.push(String((params["zk_spacing"] ?? null)));
-    cargs.push(String((params["z_offset"] ?? null)));
+    cargs.push(
+        "-sform",
+        String((params["xi-spacing"] ?? null)),
+        String((params["xj-spacing"] ?? null)),
+        String((params["xk-spacing"] ?? null)),
+        String((params["x-offset"] ?? null)),
+        String((params["yi-spacing"] ?? null)),
+        String((params["yj-spacing"] ?? null)),
+        String((params["yk-spacing"] ?? null)),
+        String((params["y-offset"] ?? null)),
+        String((params["zi-spacing"] ?? null)),
+        String((params["zj-spacing"] ?? null)),
+        String((params["zk-spacing"] ?? null)),
+        String((params["z-offset"] ?? null))
+    );
     return cargs;
 }
 
@@ -207,18 +210,18 @@ function volume_set_space_sform_cargs(
  * Build parameters.
  *
  * @param volume_ref volume file to use for reference space
- * @param opt_ignore_dims copy the spacing info even if the dimensions don't match
+ * @param ignore_dims copy the spacing info even if the dimensions don't match
  *
  * @returns Parameter dictionary
  */
 function volume_set_space_file_params(
     volume_ref: string,
-    opt_ignore_dims: boolean = false,
+    ignore_dims: boolean = false,
 ): VolumeSetSpaceFileParametersTagged {
     const params = {
         "@type": "file" as const,
-        "volume_ref": volume_ref,
-        "opt_ignore_dims": opt_ignore_dims,
+        "volume-ref": volume_ref,
+        "ignore-dims": ignore_dims,
     };
     return params;
 }
@@ -237,10 +240,12 @@ function volume_set_space_file_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-file");
-    cargs.push((params["volume_ref"] ?? null));
-    if ((params["opt_ignore_dims"] ?? false)) {
-        cargs.push("-ignore-dims");
+    if ((params["ignore-dims"] ?? false)) {
+        cargs.push(
+            "-file",
+            (params["volume-ref"] ?? null),
+            "-ignore-dims"
+        );
     }
     return cargs;
 }
@@ -279,8 +284,8 @@ function volume_set_space_params(
 ): VolumeSetSpaceParametersTagged {
     const params = {
         "@type": "workbench/volume-set-space" as const,
-        "volume_in": volume_in,
-        "volume_out": volume_out,
+        "volume-in": volume_in,
+        "volume-out": volume_out,
     };
     if (plumb !== null) {
         params["plumb"] = plumb;
@@ -308,19 +313,17 @@ function volume_set_space_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-set-space");
-    cargs.push(execution.inputFile((params["volume_in"] ?? null)));
-    cargs.push((params["volume_out"] ?? null));
-    if ((params["plumb"] ?? null) !== null) {
-        cargs.push(...volume_set_space_plumb_cargs((params["plumb"] ?? null), execution));
+    if ((params["plumb"] ?? null) !== null || (params["sform"] ?? null) !== null || (params["file"] ?? null) !== null) {
+        cargs.push(
+            "wb_command",
+            "-volume-set-space",
+            ...(((params["plumb"] ?? null) !== null) ? volume_set_space_plumb_cargs((params["plumb"] ?? null), execution) : []),
+            ...(((params["sform"] ?? null) !== null) ? volume_set_space_sform_cargs((params["sform"] ?? null), execution) : []),
+            ...(((params["file"] ?? null) !== null) ? volume_set_space_file_cargs((params["file"] ?? null), execution) : [])
+        );
     }
-    if ((params["sform"] ?? null) !== null) {
-        cargs.push(...volume_set_space_sform_cargs((params["sform"] ?? null), execution));
-    }
-    if ((params["file"] ?? null) !== null) {
-        cargs.push(...volume_set_space_file_cargs((params["file"] ?? null), execution));
-    }
+    cargs.push(execution.inputFile((params["volume-in"] ?? null)));
+    cargs.push((params["volume-out"] ?? null));
     return cargs;
 }
 
@@ -345,15 +348,9 @@ function volume_set_space_outputs(
 
 
 /**
- * volume-set-space
- *
- * Change volume space information.
+ * CHANGE VOLUME SPACE INFORMATION.
  *
  * Writes a copy of the volume file, with the spacing information changed as specified.  No reordering of the voxel data occurs, see -volume-reorient to change the volume indexing order and reorder the voxels to match.  Exactly one of -plumb, -sform, or -file must be specified.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -375,15 +372,9 @@ function volume_set_space_execute(
 
 
 /**
- * volume-set-space
- *
- * Change volume space information.
+ * CHANGE VOLUME SPACE INFORMATION.
  *
  * Writes a copy of the volume file, with the spacing information changed as specified.  No reordering of the voxel data occurs, see -volume-reorient to change the volume indexing order and reorder the voxels to match.  Exactly one of -plumb, -sform, or -file must be specified.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param volume_in the input volume
  * @param volume_out output - the output volume

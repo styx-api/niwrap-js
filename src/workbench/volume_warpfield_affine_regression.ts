@@ -4,28 +4,27 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_WARPFIELD_AFFINE_REGRESSION_METADATA: Metadata = {
-    id: "e61fbc4ce12b2c7a4b5f716606949064603e9c48.boutiques",
+    id: "89e83249d5059a7e652b2c0a10e95f7e3d72df57.workbench",
     name: "volume-warpfield-affine-regression",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface VolumeWarpfieldAffineRegressionFlirtOutParameters {
-    "@type"?: "flirt_out";
-    "source_volume": string;
-    "target_volume": string;
+    "@type"?: "flirt-out";
+    "source-volume": string;
+    "target-volume": string;
 }
 type VolumeWarpfieldAffineRegressionFlirtOutParametersTagged = Required<Pick<VolumeWarpfieldAffineRegressionFlirtOutParameters, '@type'>> & VolumeWarpfieldAffineRegressionFlirtOutParameters;
 
 
 interface VolumeWarpfieldAffineRegressionParameters {
     "@type"?: "workbench/volume-warpfield-affine-regression";
+    "roi-vol"?: InputPathType | null | undefined;
+    "source-volume"?: string | null | undefined;
+    "flirt-out"?: VolumeWarpfieldAffineRegressionFlirtOutParameters | null | undefined;
     "warpfield": string;
-    "affine_out": string;
-    "opt_roi_roi_vol"?: InputPathType | null | undefined;
-    "opt_fnirt_source_volume"?: string | null | undefined;
-    "flirt_out"?: VolumeWarpfieldAffineRegressionFlirtOutParameters | null | undefined;
+    "affine-out": string;
 }
 type VolumeWarpfieldAffineRegressionParametersTagged = Required<Pick<VolumeWarpfieldAffineRegressionParameters, '@type'>> & VolumeWarpfieldAffineRegressionParameters;
 
@@ -43,9 +42,9 @@ function volume_warpfield_affine_regression_flirt_out_params(
     target_volume: string,
 ): VolumeWarpfieldAffineRegressionFlirtOutParametersTagged {
     const params = {
-        "@type": "flirt_out" as const,
-        "source_volume": source_volume,
-        "target_volume": target_volume,
+        "@type": "flirt-out" as const,
+        "source-volume": source_volume,
+        "target-volume": target_volume,
     };
     return params;
 }
@@ -64,9 +63,11 @@ function volume_warpfield_affine_regression_flirt_out_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-flirt-out");
-    cargs.push((params["source_volume"] ?? null));
-    cargs.push((params["target_volume"] ?? null));
+    cargs.push(
+        "-flirt-out",
+        (params["source-volume"] ?? null),
+        (params["target-volume"] ?? null)
+    );
     return cargs;
 }
 
@@ -87,34 +88,38 @@ interface VolumeWarpfieldAffineRegressionOutputs {
 /**
  * Build parameters.
  *
+ * @param roi_vol only consider voxels within a mask (e.g., a brain mask)
+
+the mask volume
+ * @param source_volume input is a fnirt warpfield
+
+the source volume used when generating the fnirt warpfield
  * @param warpfield the input warpfield
  * @param affine_out output - the output affine file
- * @param opt_roi_roi_vol only consider voxels within a mask (e.g., a brain mask): the mask volume
- * @param opt_fnirt_source_volume input is a fnirt warpfield: the source volume used when generating the fnirt warpfield
  * @param flirt_out write output as a flirt matrix rather than a world coordinate transform
  *
  * @returns Parameter dictionary
  */
 function volume_warpfield_affine_regression_params(
+    roi_vol: InputPathType | null,
+    source_volume: string | null,
     warpfield: string,
     affine_out: string,
-    opt_roi_roi_vol: InputPathType | null = null,
-    opt_fnirt_source_volume: string | null = null,
     flirt_out: VolumeWarpfieldAffineRegressionFlirtOutParameters | null = null,
 ): VolumeWarpfieldAffineRegressionParametersTagged {
     const params = {
         "@type": "workbench/volume-warpfield-affine-regression" as const,
         "warpfield": warpfield,
-        "affine_out": affine_out,
+        "affine-out": affine_out,
     };
-    if (opt_roi_roi_vol !== null) {
-        params["opt_roi_roi_vol"] = opt_roi_roi_vol;
+    if (roi_vol !== null) {
+        params["roi-vol"] = roi_vol;
     }
-    if (opt_fnirt_source_volume !== null) {
-        params["opt_fnirt_source_volume"] = opt_fnirt_source_volume;
+    if (source_volume !== null) {
+        params["source-volume"] = source_volume;
     }
     if (flirt_out !== null) {
-        params["flirt_out"] = flirt_out;
+        params["flirt-out"] = flirt_out;
     }
     return params;
 }
@@ -133,25 +138,19 @@ function volume_warpfield_affine_regression_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-warpfield-affine-regression");
-    cargs.push((params["warpfield"] ?? null));
-    cargs.push((params["affine_out"] ?? null));
-    if ((params["opt_roi_roi_vol"] ?? null) !== null) {
+    if ((params["roi-vol"] ?? null) !== null || (params["source-volume"] ?? null) !== null || (params["flirt-out"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-volume-warpfield-affine-regression",
             "-roi",
-            execution.inputFile((params["opt_roi_roi_vol"] ?? null))
-        );
-    }
-    if ((params["opt_fnirt_source_volume"] ?? null) !== null) {
-        cargs.push(
+            (((params["roi-vol"] ?? null) !== null) ? execution.inputFile((params["roi-vol"] ?? null)) : ""),
             "-fnirt",
-            (params["opt_fnirt_source_volume"] ?? null)
+            (((params["source-volume"] ?? null) !== null) ? (params["source-volume"] ?? null) : ""),
+            ...(((params["flirt-out"] ?? null) !== null) ? volume_warpfield_affine_regression_flirt_out_cargs((params["flirt-out"] ?? null), execution) : [])
         );
     }
-    if ((params["flirt_out"] ?? null) !== null) {
-        cargs.push(...volume_warpfield_affine_regression_flirt_out_cargs((params["flirt_out"] ?? null), execution));
-    }
+    cargs.push((params["warpfield"] ?? null));
+    cargs.push((params["affine-out"] ?? null));
     return cargs;
 }
 
@@ -176,17 +175,11 @@ function volume_warpfield_affine_regression_outputs(
 
 
 /**
- * volume-warpfield-affine-regression
- *
- * Regress affine from warpfield.
+ * REGRESS AFFINE FROM WARPFIELD.
  *
  * For all voxels in the warpfield, do a regression that predicts the post-warp coordinate from the source coordinate.  When -roi is specified, only consider voxels with a value greater than 0 in <roi-vol>.
  *
- * The default is to expect the warpfield to be in relative world coordinates (mm space), and to write the output as a world affine (mm space to mm space).  If you are using FSL-created files and utilities, specify -fnirt and -flirt as needed, as their coordinate conventions are different.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
+ * The default is to expect the warpfield to be in relative world coordinates (mm space), and to write the output as a world affine (mm space to mm space).  If you are using FSL-created files and utilities, specify -fnirt and -flirt-out as needed, as their coordinate conventions are different.
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -208,36 +201,34 @@ function volume_warpfield_affine_regression_execute(
 
 
 /**
- * volume-warpfield-affine-regression
- *
- * Regress affine from warpfield.
+ * REGRESS AFFINE FROM WARPFIELD.
  *
  * For all voxels in the warpfield, do a regression that predicts the post-warp coordinate from the source coordinate.  When -roi is specified, only consider voxels with a value greater than 0 in <roi-vol>.
  *
- * The default is to expect the warpfield to be in relative world coordinates (mm space), and to write the output as a world affine (mm space to mm space).  If you are using FSL-created files and utilities, specify -fnirt and -flirt as needed, as their coordinate conventions are different.
+ * The default is to expect the warpfield to be in relative world coordinates (mm space), and to write the output as a world affine (mm space to mm space).  If you are using FSL-created files and utilities, specify -fnirt and -flirt-out as needed, as their coordinate conventions are different.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param roi_vol only consider voxels within a mask (e.g., a brain mask)
+
+the mask volume
+ * @param source_volume input is a fnirt warpfield
+
+the source volume used when generating the fnirt warpfield
  * @param warpfield the input warpfield
  * @param affine_out output - the output affine file
- * @param opt_roi_roi_vol only consider voxels within a mask (e.g., a brain mask): the mask volume
- * @param opt_fnirt_source_volume input is a fnirt warpfield: the source volume used when generating the fnirt warpfield
  * @param flirt_out write output as a flirt matrix rather than a world coordinate transform
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeWarpfieldAffineRegressionOutputs`).
  */
 function volume_warpfield_affine_regression(
+    roi_vol: InputPathType | null,
+    source_volume: string | null,
     warpfield: string,
     affine_out: string,
-    opt_roi_roi_vol: InputPathType | null = null,
-    opt_fnirt_source_volume: string | null = null,
     flirt_out: VolumeWarpfieldAffineRegressionFlirtOutParameters | null = null,
     runner: Runner | null = null,
 ): VolumeWarpfieldAffineRegressionOutputs {
-    const params = volume_warpfield_affine_regression_params(warpfield, affine_out, opt_roi_roi_vol, opt_fnirt_source_volume, flirt_out)
+    const params = volume_warpfield_affine_regression_params(roi_vol, source_volume, warpfield, affine_out, flirt_out)
     return volume_warpfield_affine_regression_execute(params, runner);
 }
 

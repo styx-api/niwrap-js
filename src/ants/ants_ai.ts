@@ -16,7 +16,7 @@ interface AntsAiParameters {
     "dimensionality"?: 2 | 3 | null | undefined;
     "metric": "Mattes[fixedImage,movingImage]" | "GC[fixedImage,movingImage]" | "MI[fixedImage,movingImage]";
     "transform": "Rigid[gradientStep]" | "Affine[gradientStep]" | "Similarity[gradientStep]" | "AlignGeometricCenters" | "AlignCentersOfMass";
-    "align_principal_axes"?: 0 | 1 | null | undefined;
+    "align_principal_axes"?: boolean | null | undefined;
     "align_blobs"?: "numberOfBlobsToExtract" | "[numberOfBlobsToExtract,numberOfBlobsToMatch]" | null | undefined;
     "search_factor"?: "searchFactor" | "[searchFactor,arcFraction]" | null | undefined;
     "translation_search_grid"?: "[stepSize, AxBxC]" | null | undefined;
@@ -24,7 +24,7 @@ interface AntsAiParameters {
     "masks"?: "fixedImageMask" | "[fixedImageMask,movingImageMask]" | null | undefined;
     "output": string;
     "random_seed"?: number | null | undefined;
-    "verbose"?: 0 | 1 | null | undefined;
+    "verbose"?: boolean | null | undefined;
 }
 type AntsAiParametersTagged = Required<Pick<AntsAiParameters, '@type'>> & AntsAiParameters;
 
@@ -69,14 +69,14 @@ function ants_ai_params(
     transform: "Rigid[gradientStep]" | "Affine[gradientStep]" | "Similarity[gradientStep]" | "AlignGeometricCenters" | "AlignCentersOfMass",
     output: string,
     dimensionality: 2 | 3 | null = null,
-    align_principal_axes: 0 | 1 | null = null,
+    align_principal_axes: boolean | null = null,
     align_blobs: "numberOfBlobsToExtract" | "[numberOfBlobsToExtract,numberOfBlobsToMatch]" | null = null,
     search_factor: "searchFactor" | "[searchFactor,arcFraction]" | null = null,
     translation_search_grid: "[stepSize, AxBxC]" | null = null,
     convergence: "numberOfIterations" | "[numberOfIterations,convergenceThreshold,convergenceWindowSize]" | null = null,
     masks: "fixedImageMask" | "[fixedImageMask,movingImageMask]" | null = null,
     random_seed: number | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
 ): AntsAiParametersTagged {
     const params = {
         "@type": "ants/antsAI" as const,
@@ -146,7 +146,7 @@ function ants_ai_cargs(
     if ((params["align_principal_axes"] ?? null) !== null) {
         cargs.push(
             "-p",
-            String((params["align_principal_axes"] ?? null))
+            ((params["align_principal_axes"] ?? null) ? "1" : "0")
         );
     }
     if ((params["align_blobs"] ?? null) !== null) {
@@ -192,7 +192,7 @@ function ants_ai_cargs(
     if ((params["verbose"] ?? null) !== null) {
         cargs.push(
             "-v",
-            String((params["verbose"] ?? null))
+            ((params["verbose"] ?? null) ? "1" : "0")
         );
     }
     return cargs;
@@ -277,14 +277,14 @@ function ants_ai(
     transform: "Rigid[gradientStep]" | "Affine[gradientStep]" | "Similarity[gradientStep]" | "AlignGeometricCenters" | "AlignCentersOfMass",
     output: string,
     dimensionality: 2 | 3 | null = null,
-    align_principal_axes: 0 | 1 | null = null,
+    align_principal_axes: boolean | null = null,
     align_blobs: "numberOfBlobsToExtract" | "[numberOfBlobsToExtract,numberOfBlobsToMatch]" | null = null,
     search_factor: "searchFactor" | "[searchFactor,arcFraction]" | null = null,
     translation_search_grid: "[stepSize, AxBxC]" | null = null,
     convergence: "numberOfIterations" | "[numberOfIterations,convergenceThreshold,convergenceWindowSize]" | null = null,
     masks: "fixedImageMask" | "[fixedImageMask,movingImageMask]" | null = null,
     random_seed: number | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
     runner: Runner | null = null,
 ): AntsAiOutputs {
     const params = ants_ai_params(metric, transform, output, dimensionality, align_principal_axes, align_blobs, search_factor, translation_search_grid, convergence, masks, random_seed, verbose)

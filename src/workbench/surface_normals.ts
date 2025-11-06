@@ -4,17 +4,16 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_NORMALS_METADATA: Metadata = {
-    id: "a04e63a81424932a907bb5d57ff1d5439a7a29aa.boutiques",
+    id: "83e8a1501232a070f787b1bba983b4bc5b446ed2.workbench",
     name: "surface-normals",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface SurfaceNormalsParameters {
     "@type"?: "workbench/surface-normals";
+    "metric-out": string;
     "surface": InputPathType;
-    "metric_out": string;
 }
 type SurfaceNormalsParametersTagged = Required<Pick<SurfaceNormalsParameters, '@type'>> & SurfaceNormalsParameters;
 
@@ -39,19 +38,19 @@ interface SurfaceNormalsOutputs {
 /**
  * Build parameters.
  *
- * @param surface the surface to output the normals of
  * @param metric_out the normal vectors
+ * @param surface the surface to output the normals of
  *
  * @returns Parameter dictionary
  */
 function surface_normals_params(
-    surface: InputPathType,
     metric_out: string,
+    surface: InputPathType,
 ): SurfaceNormalsParametersTagged {
     const params = {
         "@type": "workbench/surface-normals" as const,
+        "metric-out": metric_out,
         "surface": surface,
-        "metric_out": metric_out,
     };
     return params;
 }
@@ -70,10 +69,12 @@ function surface_normals_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-surface-normals");
+    cargs.push(
+        "wb_command",
+        "-surface-normals",
+        (params["metric-out"] ?? null)
+    );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push((params["metric_out"] ?? null));
     return cargs;
 }
 
@@ -92,22 +93,16 @@ function surface_normals_outputs(
 ): SurfaceNormalsOutputs {
     const ret: SurfaceNormalsOutputs = {
         root: execution.outputFile("."),
-        metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
+        metric_out: execution.outputFile([(params["metric-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * surface-normals
- *
- * Output vertex normals as metric file.
+ * OUTPUT VERTEX NORMALS AS METRIC FILE.
  *
  * Computes the normal vectors of the surface file, and outputs them as a 3 column metric file.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -129,28 +124,22 @@ function surface_normals_execute(
 
 
 /**
- * surface-normals
- *
- * Output vertex normals as metric file.
+ * OUTPUT VERTEX NORMALS AS METRIC FILE.
  *
  * Computes the normal vectors of the surface file, and outputs them as a 3 column metric file.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
- * @param surface the surface to output the normals of
  * @param metric_out the normal vectors
+ * @param surface the surface to output the normals of
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceNormalsOutputs`).
  */
 function surface_normals(
-    surface: InputPathType,
     metric_out: string,
+    surface: InputPathType,
     runner: Runner | null = null,
 ): SurfaceNormalsOutputs {
-    const params = surface_normals_params(surface, metric_out)
+    const params = surface_normals_params(metric_out, surface)
     return surface_normals_execute(params, runner);
 }
 

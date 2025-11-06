@@ -28,7 +28,7 @@ interface TopupParameters {
     "ssqlambda": boolean;
     "regmod"?: "membrane_energy" | "bending_energy" | null | undefined;
     "estmov": boolean;
-    "minmet"?: 0 | 1 | null | undefined;
+    "minmet"?: boolean | null | undefined;
     "splineorder"?: 2 | 3 | null | undefined;
     "numprec"?: "double" | "float" | null | undefined;
     "interp"?: "linear" | "spline" | null | undefined;
@@ -118,7 +118,7 @@ function topup_params(
     ssqlambda: boolean = false,
     regmod: "membrane_energy" | "bending_energy" | null = null,
     estmov: boolean = false,
-    minmet: 0 | 1 | null = null,
+    minmet: boolean | null = null,
     splineorder: 2 | 3 | null = null,
     numprec: "double" | "float" | null = null,
     interp: "linear" | "spline" | null = null,
@@ -245,7 +245,7 @@ function topup_cargs(
         cargs.push("--estmov");
     }
     if ((params["minmet"] ?? null) !== null) {
-        cargs.push(["--minmet=", String((params["minmet"] ?? null))].join(''));
+        cargs.push(["--minmet=", ((params["minmet"] ?? null) ? "1" : "0")].join(''));
     }
     if ((params["splineorder"] ?? null) !== null) {
         cargs.push(["--splineorder=", String((params["splineorder"] ?? null))].join(''));
@@ -376,7 +376,7 @@ function topup(
     ssqlambda: boolean = false,
     regmod: "membrane_energy" | "bending_energy" | null = null,
     estmov: boolean = false,
-    minmet: 0 | 1 | null = null,
+    minmet: boolean | null = null,
     splineorder: 2 | 3 | null = null,
     numprec: "double" | "float" | null = null,
     interp: "linear" | "spline" | null = null,

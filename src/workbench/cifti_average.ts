@@ -4,34 +4,33 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_AVERAGE_METADATA: Metadata = {
-    id: "e097bdbc9855ceeaf5b5317f6d524a83688c3dbe.boutiques",
+    id: "f30740343235dc708940e806f82a27a090de7bc3.workbench",
     name: "cifti-average",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiAverageExcludeOutliersParameters {
-    "@type"?: "exclude_outliers";
-    "sigma_below": number;
-    "sigma_above": number;
+    "@type"?: "exclude-outliers";
+    "sigma-below": number;
+    "sigma-above": number;
 }
 type CiftiAverageExcludeOutliersParametersTagged = Required<Pick<CiftiAverageExcludeOutliersParameters, '@type'>> & CiftiAverageExcludeOutliersParameters;
 
 
 interface CiftiAverageCiftiParameters {
     "@type"?: "cifti";
-    "cifti_in": InputPathType;
-    "opt_weight_weight"?: number | null | undefined;
+    "cifti-in": InputPathType;
+    "weight"?: number | null | undefined;
 }
 type CiftiAverageCiftiParametersTagged = Required<Pick<CiftiAverageCiftiParameters, '@type'>> & CiftiAverageCiftiParameters;
 
 
 interface CiftiAverageParameters {
     "@type"?: "workbench/cifti-average";
-    "cifti_out": string;
-    "exclude_outliers"?: CiftiAverageExcludeOutliersParameters | null | undefined;
-    "opt_mem_limit_limit_gb"?: number | null | undefined;
+    "cifti-out": string;
+    "exclude-outliers"?: CiftiAverageExcludeOutliersParameters | null | undefined;
+    "limit-GB"?: number | null | undefined;
     "cifti"?: Array<CiftiAverageCiftiParameters> | null | undefined;
 }
 type CiftiAverageParametersTagged = Required<Pick<CiftiAverageParameters, '@type'>> & CiftiAverageParameters;
@@ -50,9 +49,9 @@ function cifti_average_exclude_outliers_params(
     sigma_above: number,
 ): CiftiAverageExcludeOutliersParametersTagged {
     const params = {
-        "@type": "exclude_outliers" as const,
-        "sigma_below": sigma_below,
-        "sigma_above": sigma_above,
+        "@type": "exclude-outliers" as const,
+        "sigma-below": sigma_below,
+        "sigma-above": sigma_above,
     };
     return params;
 }
@@ -71,9 +70,11 @@ function cifti_average_exclude_outliers_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-exclude-outliers");
-    cargs.push(String((params["sigma_below"] ?? null)));
-    cargs.push(String((params["sigma_above"] ?? null)));
+    cargs.push(
+        "-exclude-outliers",
+        String((params["sigma-below"] ?? null)),
+        String((params["sigma-above"] ?? null))
+    );
     return cargs;
 }
 
@@ -82,20 +83,22 @@ function cifti_average_exclude_outliers_cargs(
  * Build parameters.
  *
  * @param cifti_in the input cifti file
- * @param opt_weight_weight give a weight for this file: the weight to use
+ * @param weight give a weight for this file
+
+the weight to use
  *
  * @returns Parameter dictionary
  */
 function cifti_average_cifti_params(
     cifti_in: InputPathType,
-    opt_weight_weight: number | null = null,
+    weight: number | null,
 ): CiftiAverageCiftiParametersTagged {
     const params = {
         "@type": "cifti" as const,
-        "cifti_in": cifti_in,
+        "cifti-in": cifti_in,
     };
-    if (opt_weight_weight !== null) {
-        params["opt_weight_weight"] = opt_weight_weight;
+    if (weight !== null) {
+        params["weight"] = weight;
     }
     return params;
 }
@@ -114,12 +117,12 @@ function cifti_average_cifti_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-cifti");
-    cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
-    if ((params["opt_weight_weight"] ?? null) !== null) {
+    if ((params["weight"] ?? null) !== null) {
         cargs.push(
+            "-cifti",
+            execution.inputFile((params["cifti-in"] ?? null)),
             "-weight",
-            String((params["opt_weight_weight"] ?? null))
+            String((params["weight"] ?? null))
         );
     }
     return cargs;
@@ -147,27 +150,29 @@ interface CiftiAverageOutputs {
  * Build parameters.
  *
  * @param cifti_out output cifti file
+ * @param limit_gb restrict memory used for file reading efficiency
+
+memory limit in gigabytes
  * @param exclude_outliers exclude outliers by standard deviation of each element across files
- * @param opt_mem_limit_limit_gb restrict memory used for file reading efficiency: memory limit in gigabytes
  * @param cifti specify an input file
  *
  * @returns Parameter dictionary
  */
 function cifti_average_params(
     cifti_out: string,
+    limit_gb: number | null,
     exclude_outliers: CiftiAverageExcludeOutliersParameters | null = null,
-    opt_mem_limit_limit_gb: number | null = null,
     cifti: Array<CiftiAverageCiftiParameters> | null = null,
 ): CiftiAverageParametersTagged {
     const params = {
         "@type": "workbench/cifti-average" as const,
-        "cifti_out": cifti_out,
+        "cifti-out": cifti_out,
     };
     if (exclude_outliers !== null) {
-        params["exclude_outliers"] = exclude_outliers;
+        params["exclude-outliers"] = exclude_outliers;
     }
-    if (opt_mem_limit_limit_gb !== null) {
-        params["opt_mem_limit_limit_gb"] = opt_mem_limit_limit_gb;
+    if (limit_gb !== null) {
+        params["limit-GB"] = limit_gb;
     }
     if (cifti !== null) {
         params["cifti"] = cifti;
@@ -189,20 +194,16 @@ function cifti_average_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-average");
-    cargs.push((params["cifti_out"] ?? null));
-    if ((params["exclude_outliers"] ?? null) !== null) {
-        cargs.push(...cifti_average_exclude_outliers_cargs((params["exclude_outliers"] ?? null), execution));
-    }
-    if ((params["opt_mem_limit_limit_gb"] ?? null) !== null) {
+    if ((params["exclude-outliers"] ?? null) !== null || (params["limit-GB"] ?? null) !== null || (params["cifti"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-cifti-average",
+            (params["cifti-out"] ?? null),
+            ...(((params["exclude-outliers"] ?? null) !== null) ? cifti_average_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : []),
             "-mem-limit",
-            String((params["opt_mem_limit_limit_gb"] ?? null))
+            (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : ""),
+            ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_average_cifti_cargs(s, execution)).flat() : [])
         );
-    }
-    if ((params["cifti"] ?? null) !== null) {
-        cargs.push(...(params["cifti"] ?? null).map(s => cifti_average_cifti_cargs(s, execution)).flat());
     }
     return cargs;
 }
@@ -222,22 +223,16 @@ function cifti_average_outputs(
 ): CiftiAverageOutputs {
     const ret: CiftiAverageOutputs = {
         root: execution.outputFile("."),
-        cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
+        cifti_out: execution.outputFile([(params["cifti-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * cifti-average
- *
- * Average cifti files.
+ * AVERAGE CIFTI FILES.
  *
  * Averages cifti files together.  Files without -weight specified are given a weight of 1.  If -exclude-outliers is specified, at each element, the data across all files is taken as a set, its unweighted mean and sample standard deviation are found, and values outside the specified number of standard deviations are excluded from the (potentially weighted) average at that element.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -259,19 +254,15 @@ function cifti_average_execute(
 
 
 /**
- * cifti-average
- *
- * Average cifti files.
+ * AVERAGE CIFTI FILES.
  *
  * Averages cifti files together.  Files without -weight specified are given a weight of 1.  If -exclude-outliers is specified, at each element, the data across all files is taken as a set, its unweighted mean and sample standard deviation are found, and values outside the specified number of standard deviations are excluded from the (potentially weighted) average at that element.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
  * @param cifti_out output cifti file
+ * @param limit_gb restrict memory used for file reading efficiency
+
+memory limit in gigabytes
  * @param exclude_outliers exclude outliers by standard deviation of each element across files
- * @param opt_mem_limit_limit_gb restrict memory used for file reading efficiency: memory limit in gigabytes
  * @param cifti specify an input file
  * @param runner Command runner
  *
@@ -279,12 +270,12 @@ function cifti_average_execute(
  */
 function cifti_average(
     cifti_out: string,
+    limit_gb: number | null,
     exclude_outliers: CiftiAverageExcludeOutliersParameters | null = null,
-    opt_mem_limit_limit_gb: number | null = null,
     cifti: Array<CiftiAverageCiftiParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiAverageOutputs {
-    const params = cifti_average_params(cifti_out, exclude_outliers, opt_mem_limit_limit_gb, cifti)
+    const params = cifti_average_params(cifti_out, limit_gb, exclude_outliers, cifti)
     return cifti_average_execute(params, runner);
 }
 

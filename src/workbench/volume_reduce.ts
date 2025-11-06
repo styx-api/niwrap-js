@@ -4,28 +4,27 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_REDUCE_METADATA: Metadata = {
-    id: "b2718ba70f250a6a0f620b99082f70f83dcd9fe0.boutiques",
+    id: "640fab587d02e7f004bb3968f135463a35a2774a.workbench",
     name: "volume-reduce",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface VolumeReduceExcludeOutliersParameters {
-    "@type"?: "exclude_outliers";
-    "sigma_below": number;
-    "sigma_above": number;
+    "@type"?: "exclude-outliers";
+    "sigma-below": number;
+    "sigma-above": number;
 }
 type VolumeReduceExcludeOutliersParametersTagged = Required<Pick<VolumeReduceExcludeOutliersParameters, '@type'>> & VolumeReduceExcludeOutliersParameters;
 
 
 interface VolumeReduceParameters {
     "@type"?: "workbench/volume-reduce";
-    "volume_in": InputPathType;
+    "volume-out": string;
+    "exclude-outliers"?: VolumeReduceExcludeOutliersParameters | null | undefined;
+    "only-numeric": boolean;
+    "volume-in": InputPathType;
     "operation": string;
-    "volume_out": string;
-    "exclude_outliers"?: VolumeReduceExcludeOutliersParameters | null | undefined;
-    "opt_only_numeric": boolean;
 }
 type VolumeReduceParametersTagged = Required<Pick<VolumeReduceParameters, '@type'>> & VolumeReduceParameters;
 
@@ -43,9 +42,9 @@ function volume_reduce_exclude_outliers_params(
     sigma_above: number,
 ): VolumeReduceExcludeOutliersParametersTagged {
     const params = {
-        "@type": "exclude_outliers" as const,
-        "sigma_below": sigma_below,
-        "sigma_above": sigma_above,
+        "@type": "exclude-outliers" as const,
+        "sigma-below": sigma_below,
+        "sigma-above": sigma_above,
     };
     return params;
 }
@@ -64,9 +63,11 @@ function volume_reduce_exclude_outliers_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-exclude-outliers");
-    cargs.push(String((params["sigma_below"] ?? null)));
-    cargs.push(String((params["sigma_above"] ?? null)));
+    cargs.push(
+        "-exclude-outliers",
+        String((params["sigma-below"] ?? null)),
+        String((params["sigma-above"] ?? null))
+    );
     return cargs;
 }
 
@@ -91,30 +92,30 @@ interface VolumeReduceOutputs {
 /**
  * Build parameters.
  *
+ * @param volume_out the output volume
  * @param volume_in the volume file to reduce
  * @param operation the reduction operator to use
- * @param volume_out the output volume
  * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
- * @param opt_only_numeric exclude non-numeric values
+ * @param only_numeric exclude non-numeric values
  *
  * @returns Parameter dictionary
  */
 function volume_reduce_params(
+    volume_out: string,
     volume_in: InputPathType,
     operation: string,
-    volume_out: string,
     exclude_outliers: VolumeReduceExcludeOutliersParameters | null = null,
-    opt_only_numeric: boolean = false,
+    only_numeric: boolean = false,
 ): VolumeReduceParametersTagged {
     const params = {
         "@type": "workbench/volume-reduce" as const,
-        "volume_in": volume_in,
+        "volume-out": volume_out,
+        "only-numeric": only_numeric,
+        "volume-in": volume_in,
         "operation": operation,
-        "volume_out": volume_out,
-        "opt_only_numeric": opt_only_numeric,
     };
     if (exclude_outliers !== null) {
-        params["exclude_outliers"] = exclude_outliers;
+        params["exclude-outliers"] = exclude_outliers;
     }
     return params;
 }
@@ -133,17 +134,17 @@ function volume_reduce_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-reduce");
-    cargs.push(execution.inputFile((params["volume_in"] ?? null)));
+    if ((params["exclude-outliers"] ?? null) !== null || (params["only-numeric"] ?? false)) {
+        cargs.push(
+            "wb_command",
+            "-volume-reduce",
+            (params["volume-out"] ?? null),
+            ...(((params["exclude-outliers"] ?? null) !== null) ? volume_reduce_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : []),
+            (((params["only-numeric"] ?? false)) ? "-only-numeric" : "")
+        );
+    }
+    cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     cargs.push((params["operation"] ?? null));
-    cargs.push((params["volume_out"] ?? null));
-    if ((params["exclude_outliers"] ?? null) !== null) {
-        cargs.push(...volume_reduce_exclude_outliers_cargs((params["exclude_outliers"] ?? null), execution));
-    }
-    if ((params["opt_only_numeric"] ?? false)) {
-        cargs.push("-only-numeric");
-    }
     return cargs;
 }
 
@@ -162,16 +163,14 @@ function volume_reduce_outputs(
 ): VolumeReduceOutputs {
     const ret: VolumeReduceOutputs = {
         root: execution.outputFile("."),
-        volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
+        volume_out: execution.outputFile([(params["volume-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * volume-reduce
- *
- * Perform reduction operation across subvolumes.
+ * PERFORM REDUCTION OPERATION ACROSS SUBVOLUMES.
  *
  * For each voxel, takes the data across subvolumes as a vector, and performs the specified reduction on it, putting the result into the single output volume at that voxel.  The reduction operators are as follows:
  *
@@ -192,10 +191,6 @@ function volume_reduce_outputs(
  * MODE: the mode of the data
  * COUNT_NONZERO: the number of nonzero elements in the data
  * .
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -217,9 +212,7 @@ function volume_reduce_execute(
 
 
 /**
- * volume-reduce
- *
- * Perform reduction operation across subvolumes.
+ * PERFORM REDUCTION OPERATION ACROSS SUBVOLUMES.
  *
  * For each voxel, takes the data across subvolumes as a vector, and performs the specified reduction on it, putting the result into the single output volume at that voxel.  The reduction operators are as follows:
  *
@@ -241,28 +234,24 @@ function volume_reduce_execute(
  * COUNT_NONZERO: the number of nonzero elements in the data
  * .
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param volume_out the output volume
  * @param volume_in the volume file to reduce
  * @param operation the reduction operator to use
- * @param volume_out the output volume
  * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
- * @param opt_only_numeric exclude non-numeric values
+ * @param only_numeric exclude non-numeric values
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeReduceOutputs`).
  */
 function volume_reduce(
+    volume_out: string,
     volume_in: InputPathType,
     operation: string,
-    volume_out: string,
     exclude_outliers: VolumeReduceExcludeOutliersParameters | null = null,
-    opt_only_numeric: boolean = false,
+    only_numeric: boolean = false,
     runner: Runner | null = null,
 ): VolumeReduceOutputs {
-    const params = volume_reduce_params(volume_in, operation, volume_out, exclude_outliers, opt_only_numeric)
+    const params = volume_reduce_params(volume_out, volume_in, operation, exclude_outliers, only_numeric)
     return volume_reduce_execute(params, runner);
 }
 

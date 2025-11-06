@@ -4,23 +4,22 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_VECTOR_OPERATION_METADATA: Metadata = {
-    id: "627385804ad049aa609edba2efb31867d3112b21.boutiques",
+    id: "65ffcaf250032f2877d161286b6492b7d52088ef.workbench",
     name: "volume-vector-operation",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface VolumeVectorOperationParameters {
     "@type"?: "workbench/volume-vector-operation";
-    "vectors_a": InputPathType;
-    "vectors_b": InputPathType;
+    "volume-out": string;
+    "normalize-a": boolean;
+    "normalize-b": boolean;
+    "normalize-output": boolean;
+    "magnitude": boolean;
+    "vectors-a": InputPathType;
+    "vectors-b": InputPathType;
     "operation": string;
-    "volume_out": string;
-    "opt_normalize_a": boolean;
-    "opt_normalize_b": boolean;
-    "opt_normalize_output": boolean;
-    "opt_magnitude": boolean;
 }
 type VolumeVectorOperationParametersTagged = Required<Pick<VolumeVectorOperationParameters, '@type'>> & VolumeVectorOperationParameters;
 
@@ -45,37 +44,37 @@ interface VolumeVectorOperationOutputs {
 /**
  * Build parameters.
  *
+ * @param volume_out the output file
  * @param vectors_a first vector input file
  * @param vectors_b second vector input file
  * @param operation what vector operation to do
- * @param volume_out the output file
- * @param opt_normalize_a normalize vectors of first input
- * @param opt_normalize_b normalize vectors of second input
- * @param opt_normalize_output normalize output vectors (not valid for dot product)
- * @param opt_magnitude output the magnitude of the result (not valid for dot product)
+ * @param normalize_a normalize vectors of first input
+ * @param normalize_b normalize vectors of second input
+ * @param normalize_output normalize output vectors (not valid for dot product)
+ * @param magnitude output the magnitude of the result (not valid for dot product)
  *
  * @returns Parameter dictionary
  */
 function volume_vector_operation_params(
+    volume_out: string,
     vectors_a: InputPathType,
     vectors_b: InputPathType,
     operation: string,
-    volume_out: string,
-    opt_normalize_a: boolean = false,
-    opt_normalize_b: boolean = false,
-    opt_normalize_output: boolean = false,
-    opt_magnitude: boolean = false,
+    normalize_a: boolean = false,
+    normalize_b: boolean = false,
+    normalize_output: boolean = false,
+    magnitude: boolean = false,
 ): VolumeVectorOperationParametersTagged {
     const params = {
         "@type": "workbench/volume-vector-operation" as const,
-        "vectors_a": vectors_a,
-        "vectors_b": vectors_b,
+        "volume-out": volume_out,
+        "normalize-a": normalize_a,
+        "normalize-b": normalize_b,
+        "normalize-output": normalize_output,
+        "magnitude": magnitude,
+        "vectors-a": vectors_a,
+        "vectors-b": vectors_b,
         "operation": operation,
-        "volume_out": volume_out,
-        "opt_normalize_a": opt_normalize_a,
-        "opt_normalize_b": opt_normalize_b,
-        "opt_normalize_output": opt_normalize_output,
-        "opt_magnitude": opt_magnitude,
     };
     return params;
 }
@@ -94,24 +93,20 @@ function volume_vector_operation_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-vector-operation");
-    cargs.push(execution.inputFile((params["vectors_a"] ?? null)));
-    cargs.push(execution.inputFile((params["vectors_b"] ?? null)));
+    if ((params["normalize-a"] ?? false) || (params["normalize-b"] ?? false) || (params["normalize-output"] ?? false) || (params["magnitude"] ?? false)) {
+        cargs.push(
+            "wb_command",
+            "-volume-vector-operation",
+            (params["volume-out"] ?? null),
+            (((params["normalize-a"] ?? false)) ? "-normalize-a" : ""),
+            (((params["normalize-b"] ?? false)) ? "-normalize-b" : ""),
+            (((params["normalize-output"] ?? false)) ? "-normalize-output" : ""),
+            (((params["magnitude"] ?? false)) ? "-magnitude" : "")
+        );
+    }
+    cargs.push(execution.inputFile((params["vectors-a"] ?? null)));
+    cargs.push(execution.inputFile((params["vectors-b"] ?? null)));
     cargs.push((params["operation"] ?? null));
-    cargs.push((params["volume_out"] ?? null));
-    if ((params["opt_normalize_a"] ?? false)) {
-        cargs.push("-normalize-a");
-    }
-    if ((params["opt_normalize_b"] ?? false)) {
-        cargs.push("-normalize-b");
-    }
-    if ((params["opt_normalize_output"] ?? false)) {
-        cargs.push("-normalize-output");
-    }
-    if ((params["opt_magnitude"] ?? false)) {
-        cargs.push("-magnitude");
-    }
     return cargs;
 }
 
@@ -130,16 +125,14 @@ function volume_vector_operation_outputs(
 ): VolumeVectorOperationOutputs {
     const ret: VolumeVectorOperationOutputs = {
         root: execution.outputFile("."),
-        volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
+        volume_out: execution.outputFile([(params["volume-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * volume-vector-operation
- *
- * Do a vector operation on volume files.
+ * DO A VECTOR OPERATION ON VOLUME FILES.
  *
  * Does a vector operation on two volume files (that must have a multiple of 3 subvolumes).  Either of the inputs may have multiple vectors (more than 3 subvolumes), but not both (at least one must have exactly 3 subvolumes).  The -magnitude and -normalize-output options may not be specified together, or with the DOT operation.  The <operation> parameter must be one of the following:
  *
@@ -147,10 +140,6 @@ function volume_vector_operation_outputs(
  * CROSS
  * ADD
  * SUBTRACT.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -172,9 +161,7 @@ function volume_vector_operation_execute(
 
 
 /**
- * volume-vector-operation
- *
- * Do a vector operation on volume files.
+ * DO A VECTOR OPERATION ON VOLUME FILES.
  *
  * Does a vector operation on two volume files (that must have a multiple of 3 subvolumes).  Either of the inputs may have multiple vectors (more than 3 subvolumes), but not both (at least one must have exactly 3 subvolumes).  The -magnitude and -normalize-output options may not be specified together, or with the DOT operation.  The <operation> parameter must be one of the following:
  *
@@ -183,34 +170,30 @@ function volume_vector_operation_execute(
  * ADD
  * SUBTRACT.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param volume_out the output file
  * @param vectors_a first vector input file
  * @param vectors_b second vector input file
  * @param operation what vector operation to do
- * @param volume_out the output file
- * @param opt_normalize_a normalize vectors of first input
- * @param opt_normalize_b normalize vectors of second input
- * @param opt_normalize_output normalize output vectors (not valid for dot product)
- * @param opt_magnitude output the magnitude of the result (not valid for dot product)
+ * @param normalize_a normalize vectors of first input
+ * @param normalize_b normalize vectors of second input
+ * @param normalize_output normalize output vectors (not valid for dot product)
+ * @param magnitude output the magnitude of the result (not valid for dot product)
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeVectorOperationOutputs`).
  */
 function volume_vector_operation(
+    volume_out: string,
     vectors_a: InputPathType,
     vectors_b: InputPathType,
     operation: string,
-    volume_out: string,
-    opt_normalize_a: boolean = false,
-    opt_normalize_b: boolean = false,
-    opt_normalize_output: boolean = false,
-    opt_magnitude: boolean = false,
+    normalize_a: boolean = false,
+    normalize_b: boolean = false,
+    normalize_output: boolean = false,
+    magnitude: boolean = false,
     runner: Runner | null = null,
 ): VolumeVectorOperationOutputs {
-    const params = volume_vector_operation_params(vectors_a, vectors_b, operation, volume_out, opt_normalize_a, opt_normalize_b, opt_normalize_output, opt_magnitude)
+    const params = volume_vector_operation_params(volume_out, vectors_a, vectors_b, operation, normalize_a, normalize_b, normalize_output, magnitude)
     return volume_vector_operation_execute(params, runner);
 }
 

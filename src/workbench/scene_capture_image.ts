@@ -4,15 +4,14 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SCENE_CAPTURE_IMAGE_METADATA: Metadata = {
-    id: "55af0e180213a5b9c01ff3c05ec7ffefe348871b.boutiques",
+    id: "d7f78e620a92e4692790ceda0d24ff04fb837ed8.workbench",
     name: "scene-capture-image",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface SceneCaptureImageSizeWidthHeightParameters {
-    "@type"?: "size_width_height";
+    "@type"?: "size-width-height";
     "width": number;
     "height": number;
 }
@@ -21,22 +20,22 @@ type SceneCaptureImageSizeWidthHeightParametersTagged = Required<Pick<SceneCaptu
 
 interface SceneCaptureImageResolutionParameters {
     "@type"?: "resolution";
-    "number_of_pixels": number;
-    "units_name": string;
+    "Number of pixels": number;
+    "Units Name": string;
 }
 type SceneCaptureImageResolutionParametersTagged = Required<Pick<SceneCaptureImageResolutionParameters, '@type'>> & SceneCaptureImageResolutionParameters;
 
 
 interface SceneCaptureImageSetMapYokeParameters {
-    "@type"?: "set_map_yoke";
-    "map_yoking_roman_numeral": string;
-    "map_undex": number;
+    "@type"?: "set-map-yoke";
+    "map yoking roman numeral": string;
+    "map undex": number;
 }
 type SceneCaptureImageSetMapYokeParametersTagged = Required<Pick<SceneCaptureImageSetMapYokeParameters, '@type'>> & SceneCaptureImageSetMapYokeParameters;
 
 
 interface SceneCaptureImageConnDbLoginParameters {
-    "@type"?: "conn_db_login";
+    "@type"?: "conn-db-login";
     "username": string;
     "password": string;
 }
@@ -45,23 +44,23 @@ type SceneCaptureImageConnDbLoginParametersTagged = Required<Pick<SceneCaptureIm
 
 interface SceneCaptureImageParameters {
     "@type"?: "workbench/scene-capture-image";
-    "scene_file": string;
-    "scene_name_or_number": string;
-    "image_file_name": string;
-    "opt_size_window": boolean;
-    "opt_size_capture": boolean;
-    "size_width_height"?: SceneCaptureImageSizeWidthHeightParameters | null | undefined;
-    "opt_size_width_width"?: number | null | undefined;
-    "opt_size_height_height"?: number | null | undefined;
-    "opt_units_units"?: string | null | undefined;
+    "size-window": boolean;
+    "size-capture": boolean;
+    "size-width-height"?: SceneCaptureImageSizeWidthHeightParameters | null | undefined;
+    "width"?: number | null | undefined;
+    "height"?: number | null | undefined;
+    "units"?: string | null | undefined;
     "resolution"?: SceneCaptureImageResolutionParameters | null | undefined;
-    "opt_margin_size"?: number | null | undefined;
-    "opt_no_scene_colors": boolean;
-    "set_map_yoke"?: SceneCaptureImageSetMapYokeParameters | null | undefined;
-    "conn_db_login"?: SceneCaptureImageConnDbLoginParameters | null | undefined;
-    "opt_show_capture_settings": boolean;
-    "opt_renderer_renderer"?: string | null | undefined;
-    "opt_print_image_info": boolean;
+    "size"?: number | null | undefined;
+    "no-scene-colors": boolean;
+    "set-map-yoke"?: SceneCaptureImageSetMapYokeParameters | null | undefined;
+    "conn-db-login"?: SceneCaptureImageConnDbLoginParameters | null | undefined;
+    "show-capture-settings": boolean;
+    "Renderer"?: string | null | undefined;
+    "print-image-info": boolean;
+    "scene-file": string;
+    "scene-name-or-number": string;
+    "image-file-name": string;
 }
 type SceneCaptureImageParametersTagged = Required<Pick<SceneCaptureImageParameters, '@type'>> & SceneCaptureImageParameters;
 
@@ -79,7 +78,7 @@ function scene_capture_image_size_width_height_params(
     height: number,
 ): SceneCaptureImageSizeWidthHeightParametersTagged {
     const params = {
-        "@type": "size_width_height" as const,
+        "@type": "size-width-height" as const,
         "width": width,
         "height": height,
     };
@@ -100,9 +99,11 @@ function scene_capture_image_size_width_height_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-size-width-height");
-    cargs.push(String((params["width"] ?? null)));
-    cargs.push(String((params["height"] ?? null)));
+    cargs.push(
+        "-size-width-height",
+        String((params["width"] ?? null)),
+        String((params["height"] ?? null))
+    );
     return cargs;
 }
 
@@ -126,8 +127,8 @@ function scene_capture_image_resolution_params(
 ): SceneCaptureImageResolutionParametersTagged {
     const params = {
         "@type": "resolution" as const,
-        "number_of_pixels": number_of_pixels,
-        "units_name": units_name,
+        "Number of pixels": number_of_pixels,
+        "Units Name": units_name,
     };
     return params;
 }
@@ -146,9 +147,11 @@ function scene_capture_image_resolution_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-resolution");
-    cargs.push(String((params["number_of_pixels"] ?? null)));
-    cargs.push((params["units_name"] ?? null));
+    cargs.push(
+        "-resolution",
+        String((params["Number of pixels"] ?? null)),
+        (params["Units Name"] ?? null)
+    );
     return cargs;
 }
 
@@ -166,9 +169,9 @@ function scene_capture_image_set_map_yoke_params(
     map_undex: number,
 ): SceneCaptureImageSetMapYokeParametersTagged {
     const params = {
-        "@type": "set_map_yoke" as const,
-        "map_yoking_roman_numeral": map_yoking_roman_numeral,
-        "map_undex": map_undex,
+        "@type": "set-map-yoke" as const,
+        "map yoking roman numeral": map_yoking_roman_numeral,
+        "map undex": map_undex,
     };
     return params;
 }
@@ -187,9 +190,11 @@ function scene_capture_image_set_map_yoke_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-set-map-yoke");
-    cargs.push((params["map_yoking_roman_numeral"] ?? null));
-    cargs.push(String((params["map_undex"] ?? null)));
+    cargs.push(
+        "-set-map-yoke",
+        (params["map yoking roman numeral"] ?? null),
+        String((params["map undex"] ?? null))
+    );
     return cargs;
 }
 
@@ -207,7 +212,7 @@ function scene_capture_image_conn_db_login_params(
     password: string,
 ): SceneCaptureImageConnDbLoginParametersTagged {
     const params = {
-        "@type": "conn_db_login" as const,
+        "@type": "conn-db-login" as const,
         "username": username,
         "password": password,
     };
@@ -228,9 +233,11 @@ function scene_capture_image_conn_db_login_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-conn-db-login");
-    cargs.push((params["username"] ?? null));
-    cargs.push((params["password"] ?? null));
+    cargs.push(
+        "-conn-db-login",
+        (params["username"] ?? null),
+        (params["password"] ?? null)
+    );
     return cargs;
 }
 
@@ -251,93 +258,106 @@ interface SceneCaptureImageOutputs {
 /**
  * Build parameters.
  *
- * @param scene_file scene file
- * @param scene_name_or_number name or number (starting at one) of the scene in the scene file
- * @param image_file_name output - image file name
-   The file name must end with a valid extension that identifies the image file format.  Valid extensions on this system are: (.bmp .jpeg .jpg .png .ppm).
+ * @param width Width for output image.  Height is computed using the aspect ratio from the window's width and height saved in the scene.
 
-   If there is more than one window in the scene, multiple image files are output with the window's number inserted into the name of the image file immediately before the image file's extension.
- * @param opt_size_window Output image is size of window's graphics region from when scene was created.
- * @param opt_size_capture Output image uses size from Capture Dialog when scene was created
- * @param size_width_height Width and height for output image
- * @param opt_size_width_width Width for output image.  Height is computed using the aspect ratio from the window's width and height saved in the scene.: Width for output image
- * @param opt_size_height_height Height for output image.  Width is computed using the aspect ratio from the window's width and height saved in the scene.: Height for output image
- * @param opt_units_units Units for image width/height
-      Default is PIXELS: Name of units for image width/height.  Valid units are:
+Width for output image
+ * @param height Height for output image.  Width is computed using the aspect ratio from the window's width and height saved in the scene.
+
+Height for output image
+ * @param units Units for image width/height
+      Default is PIXELS
+
+Name of units for image width/height.  Valid units are:
    INCHES
    CENTIMETERS
    MILLIMETERS
    METERS
    PIXELS
 
+ * @param size Add a margin to sides of the image using the window's background color.
+
+size of margin, in pixels, added to all sides of output image
+ * @param renderer Select renderer for drawing image
+
+Name of renderer to use for drawing image
+   Available renderers are (first is default):
+   OSMesa - Mesa3D OSMesa software renderer
+
+ * @param scene_file scene file
+ * @param scene_name_or_number name or number (starting at one) of the scene in the scene file
+ * @param image_file_name output - image file name
+   The file name must end with a valid extension that identifies the image file format.  Valid extensions on this system are: (.bmp .jpeg .jpg .png .ppm).
+
+   If there is more than one window in the scene, multiple image files are output with the window's number inserted into the name of the image file immediately before the image file's extension.
+ * @param size_window Output image is size of window's graphics region from when scene was created.
+ * @param size_capture Output image uses size from Capture Dialog when scene was created
+ * @param size_width_height Width and height for output image
  * @param resolution Image resolution (number pixels per size unit)
       Default is 300 PIXELS_PER_INCH
- * @param opt_margin_size Add a margin to sides of the image using the window's background color.: size of margin, in pixels, added to all sides of output image
- * @param opt_no_scene_colors Do not use background and foreground colors in scene
+ * @param no_scene_colors Do not use background and foreground colors in scene
  * @param set_map_yoke Override selected map index for a map yoking group.
  * @param conn_db_login Login for scenes with files in Connectome Database.  If this option is not specified, the login and password stored in the user's preferences is used.
- * @param opt_show_capture_settings Print settings from Capture Dialog only, DO NOT create image file(s)
- * @param opt_renderer_renderer Select renderer for drawing image: Name of renderer to use for drawing image
- * @param opt_print_image_info Print the size and other information about output images only and DO NOT create any output images
+ * @param show_capture_settings Print settings from Capture Dialog only, DO NOT create image file(s)
+ * @param print_image_info Print the size and other information about output images only and DO NOT create any output images
  *
  * @returns Parameter dictionary
  */
 function scene_capture_image_params(
+    width: number | null,
+    height: number | null,
+    units: string | null,
+    size: number | null,
+    renderer: string | null,
     scene_file: string,
     scene_name_or_number: string,
     image_file_name: string,
-    opt_size_window: boolean = false,
-    opt_size_capture: boolean = false,
+    size_window: boolean = false,
+    size_capture: boolean = false,
     size_width_height: SceneCaptureImageSizeWidthHeightParameters | null = null,
-    opt_size_width_width: number | null = null,
-    opt_size_height_height: number | null = null,
-    opt_units_units: string | null = null,
     resolution: SceneCaptureImageResolutionParameters | null = null,
-    opt_margin_size: number | null = null,
-    opt_no_scene_colors: boolean = false,
+    no_scene_colors: boolean = false,
     set_map_yoke: SceneCaptureImageSetMapYokeParameters | null = null,
     conn_db_login: SceneCaptureImageConnDbLoginParameters | null = null,
-    opt_show_capture_settings: boolean = false,
-    opt_renderer_renderer: string | null = null,
-    opt_print_image_info: boolean = false,
+    show_capture_settings: boolean = false,
+    print_image_info: boolean = false,
 ): SceneCaptureImageParametersTagged {
     const params = {
         "@type": "workbench/scene-capture-image" as const,
-        "scene_file": scene_file,
-        "scene_name_or_number": scene_name_or_number,
-        "image_file_name": image_file_name,
-        "opt_size_window": opt_size_window,
-        "opt_size_capture": opt_size_capture,
-        "opt_no_scene_colors": opt_no_scene_colors,
-        "opt_show_capture_settings": opt_show_capture_settings,
-        "opt_print_image_info": opt_print_image_info,
+        "size-window": size_window,
+        "size-capture": size_capture,
+        "no-scene-colors": no_scene_colors,
+        "show-capture-settings": show_capture_settings,
+        "print-image-info": print_image_info,
+        "scene-file": scene_file,
+        "scene-name-or-number": scene_name_or_number,
+        "image-file-name": image_file_name,
     };
     if (size_width_height !== null) {
-        params["size_width_height"] = size_width_height;
+        params["size-width-height"] = size_width_height;
     }
-    if (opt_size_width_width !== null) {
-        params["opt_size_width_width"] = opt_size_width_width;
+    if (width !== null) {
+        params["width"] = width;
     }
-    if (opt_size_height_height !== null) {
-        params["opt_size_height_height"] = opt_size_height_height;
+    if (height !== null) {
+        params["height"] = height;
     }
-    if (opt_units_units !== null) {
-        params["opt_units_units"] = opt_units_units;
+    if (units !== null) {
+        params["units"] = units;
     }
     if (resolution !== null) {
         params["resolution"] = resolution;
     }
-    if (opt_margin_size !== null) {
-        params["opt_margin_size"] = opt_margin_size;
+    if (size !== null) {
+        params["size"] = size;
     }
     if (set_map_yoke !== null) {
-        params["set_map_yoke"] = set_map_yoke;
+        params["set-map-yoke"] = set_map_yoke;
     }
     if (conn_db_login !== null) {
-        params["conn_db_login"] = conn_db_login;
+        params["conn-db-login"] = conn_db_login;
     }
-    if (opt_renderer_renderer !== null) {
-        params["opt_renderer_renderer"] = opt_renderer_renderer;
+    if (renderer !== null) {
+        params["Renderer"] = renderer;
     }
     return params;
 }
@@ -356,68 +376,34 @@ function scene_capture_image_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-scene-capture-image");
-    cargs.push((params["scene_file"] ?? null));
-    cargs.push((params["scene_name_or_number"] ?? null));
-    cargs.push((params["image_file_name"] ?? null));
-    if ((params["opt_size_window"] ?? false)) {
-        cargs.push("-size-window");
-    }
-    if ((params["opt_size_capture"] ?? false)) {
-        cargs.push("-size-capture");
-    }
-    if ((params["size_width_height"] ?? null) !== null) {
-        cargs.push(...scene_capture_image_size_width_height_cargs((params["size_width_height"] ?? null), execution));
-    }
-    if ((params["opt_size_width_width"] ?? null) !== null) {
+    if ((params["size-window"] ?? false) || (params["size-capture"] ?? false) || (params["size-width-height"] ?? null) !== null || (params["width"] ?? null) !== null || (params["height"] ?? null) !== null || (params["units"] ?? null) !== null || (params["resolution"] ?? null) !== null || (params["size"] ?? null) !== null || (params["no-scene-colors"] ?? false) || (params["set-map-yoke"] ?? null) !== null || (params["conn-db-login"] ?? null) !== null || (params["show-capture-settings"] ?? false) || (params["Renderer"] ?? null) !== null || (params["print-image-info"] ?? false)) {
         cargs.push(
+            "wb_command",
+            "-scene-capture-image",
+            (((params["size-window"] ?? false)) ? "-size-window" : ""),
+            (((params["size-capture"] ?? false)) ? "-size-capture" : ""),
+            ...(((params["size-width-height"] ?? null) !== null) ? scene_capture_image_size_width_height_cargs((params["size-width-height"] ?? null), execution) : []),
             "-size-width",
-            String((params["opt_size_width_width"] ?? null))
-        );
-    }
-    if ((params["opt_size_height_height"] ?? null) !== null) {
-        cargs.push(
+            (((params["width"] ?? null) !== null) ? String((params["width"] ?? null)) : ""),
             "-size-height",
-            String((params["opt_size_height_height"] ?? null))
-        );
-    }
-    if ((params["opt_units_units"] ?? null) !== null) {
-        cargs.push(
+            (((params["height"] ?? null) !== null) ? String((params["height"] ?? null)) : ""),
             "-units",
-            (params["opt_units_units"] ?? null)
-        );
-    }
-    if ((params["resolution"] ?? null) !== null) {
-        cargs.push(...scene_capture_image_resolution_cargs((params["resolution"] ?? null), execution));
-    }
-    if ((params["opt_margin_size"] ?? null) !== null) {
-        cargs.push(
+            (((params["units"] ?? null) !== null) ? (params["units"] ?? null) : ""),
+            ...(((params["resolution"] ?? null) !== null) ? scene_capture_image_resolution_cargs((params["resolution"] ?? null), execution) : []),
             "-margin",
-            String((params["opt_margin_size"] ?? null))
-        );
-    }
-    if ((params["opt_no_scene_colors"] ?? false)) {
-        cargs.push("-no-scene-colors");
-    }
-    if ((params["set_map_yoke"] ?? null) !== null) {
-        cargs.push(...scene_capture_image_set_map_yoke_cargs((params["set_map_yoke"] ?? null), execution));
-    }
-    if ((params["conn_db_login"] ?? null) !== null) {
-        cargs.push(...scene_capture_image_conn_db_login_cargs((params["conn_db_login"] ?? null), execution));
-    }
-    if ((params["opt_show_capture_settings"] ?? false)) {
-        cargs.push("-show-capture-settings");
-    }
-    if ((params["opt_renderer_renderer"] ?? null) !== null) {
-        cargs.push(
+            (((params["size"] ?? null) !== null) ? String((params["size"] ?? null)) : ""),
+            (((params["no-scene-colors"] ?? false)) ? "-no-scene-colors" : ""),
+            ...(((params["set-map-yoke"] ?? null) !== null) ? scene_capture_image_set_map_yoke_cargs((params["set-map-yoke"] ?? null), execution) : []),
+            ...(((params["conn-db-login"] ?? null) !== null) ? scene_capture_image_conn_db_login_cargs((params["conn-db-login"] ?? null), execution) : []),
+            (((params["show-capture-settings"] ?? false)) ? "-show-capture-settings" : ""),
             "-renderer",
-            (params["opt_renderer_renderer"] ?? null)
+            (((params["Renderer"] ?? null) !== null) ? (params["Renderer"] ?? null) : ""),
+            (((params["print-image-info"] ?? false)) ? "-print-image-info" : "")
         );
     }
-    if ((params["opt_print_image_info"] ?? false)) {
-        cargs.push("-print-image-info");
-    }
+    cargs.push((params["scene-file"] ?? null));
+    cargs.push((params["scene-name-or-number"] ?? null));
+    cargs.push((params["image-file-name"] ?? null));
     return cargs;
 }
 
@@ -442,9 +428,7 @@ function scene_capture_image_outputs(
 
 
 /**
- * scene-capture-image
- *
- * Offscreen rendering of scene to an image file.
+ * OFFSCREEN RENDERING OF SCENE TO AN IMAGE FILE.
  *
  * ----------------------------------------------------------------------
  *
@@ -473,18 +457,7 @@ function scene_capture_image_outputs(
  *    -size-width 4.5 -units CENTIMETERS -print-image-info
  *
  *
- *
- *
- * NO OFF SCREEN RENDERERS AVAILABLE ON THIS SYSTEM.  COMMAND WILL FAIL !!!!
- *
- *
- * ERROR: -scene-capture-image is not available !
- * A required library for this command, Mesa3D (software version of OpenGL), was not available when this software was created.  This command is not available for the Windows version of this software but should always be available in the Linux and MacOS versions.
  * .
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -506,9 +479,7 @@ function scene_capture_image_execute(
 
 
 /**
- * scene-capture-image
- *
- * Offscreen rendering of scene to an image file.
+ * OFFSCREEN RENDERING OF SCENE TO AN IMAGE FILE.
  *
  * ----------------------------------------------------------------------
  *
@@ -537,72 +508,74 @@ function scene_capture_image_execute(
  *    -size-width 4.5 -units CENTIMETERS -print-image-info
  *
  *
- *
- *
- * NO OFF SCREEN RENDERERS AVAILABLE ON THIS SYSTEM.  COMMAND WILL FAIL !!!!
- *
- *
- * ERROR: -scene-capture-image is not available !
- * A required library for this command, Mesa3D (software version of OpenGL), was not available when this software was created.  This command is not available for the Windows version of this software but should always be available in the Linux and MacOS versions.
  * .
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
- * @param scene_file scene file
- * @param scene_name_or_number name or number (starting at one) of the scene in the scene file
- * @param image_file_name output - image file name
-   The file name must end with a valid extension that identifies the image file format.  Valid extensions on this system are: (.bmp .jpeg .jpg .png .ppm).
+ * @param width Width for output image.  Height is computed using the aspect ratio from the window's width and height saved in the scene.
 
-   If there is more than one window in the scene, multiple image files are output with the window's number inserted into the name of the image file immediately before the image file's extension.
- * @param opt_size_window Output image is size of window's graphics region from when scene was created.
- * @param opt_size_capture Output image uses size from Capture Dialog when scene was created
- * @param size_width_height Width and height for output image
- * @param opt_size_width_width Width for output image.  Height is computed using the aspect ratio from the window's width and height saved in the scene.: Width for output image
- * @param opt_size_height_height Height for output image.  Width is computed using the aspect ratio from the window's width and height saved in the scene.: Height for output image
- * @param opt_units_units Units for image width/height
-      Default is PIXELS: Name of units for image width/height.  Valid units are:
+Width for output image
+ * @param height Height for output image.  Width is computed using the aspect ratio from the window's width and height saved in the scene.
+
+Height for output image
+ * @param units Units for image width/height
+      Default is PIXELS
+
+Name of units for image width/height.  Valid units are:
    INCHES
    CENTIMETERS
    MILLIMETERS
    METERS
    PIXELS
 
+ * @param size Add a margin to sides of the image using the window's background color.
+
+size of margin, in pixels, added to all sides of output image
+ * @param renderer Select renderer for drawing image
+
+Name of renderer to use for drawing image
+   Available renderers are (first is default):
+   OSMesa - Mesa3D OSMesa software renderer
+
+ * @param scene_file scene file
+ * @param scene_name_or_number name or number (starting at one) of the scene in the scene file
+ * @param image_file_name output - image file name
+   The file name must end with a valid extension that identifies the image file format.  Valid extensions on this system are: (.bmp .jpeg .jpg .png .ppm).
+
+   If there is more than one window in the scene, multiple image files are output with the window's number inserted into the name of the image file immediately before the image file's extension.
+ * @param size_window Output image is size of window's graphics region from when scene was created.
+ * @param size_capture Output image uses size from Capture Dialog when scene was created
+ * @param size_width_height Width and height for output image
  * @param resolution Image resolution (number pixels per size unit)
       Default is 300 PIXELS_PER_INCH
- * @param opt_margin_size Add a margin to sides of the image using the window's background color.: size of margin, in pixels, added to all sides of output image
- * @param opt_no_scene_colors Do not use background and foreground colors in scene
+ * @param no_scene_colors Do not use background and foreground colors in scene
  * @param set_map_yoke Override selected map index for a map yoking group.
  * @param conn_db_login Login for scenes with files in Connectome Database.  If this option is not specified, the login and password stored in the user's preferences is used.
- * @param opt_show_capture_settings Print settings from Capture Dialog only, DO NOT create image file(s)
- * @param opt_renderer_renderer Select renderer for drawing image: Name of renderer to use for drawing image
- * @param opt_print_image_info Print the size and other information about output images only and DO NOT create any output images
+ * @param show_capture_settings Print settings from Capture Dialog only, DO NOT create image file(s)
+ * @param print_image_info Print the size and other information about output images only and DO NOT create any output images
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SceneCaptureImageOutputs`).
  */
 function scene_capture_image(
+    width: number | null,
+    height: number | null,
+    units: string | null,
+    size: number | null,
+    renderer: string | null,
     scene_file: string,
     scene_name_or_number: string,
     image_file_name: string,
-    opt_size_window: boolean = false,
-    opt_size_capture: boolean = false,
+    size_window: boolean = false,
+    size_capture: boolean = false,
     size_width_height: SceneCaptureImageSizeWidthHeightParameters | null = null,
-    opt_size_width_width: number | null = null,
-    opt_size_height_height: number | null = null,
-    opt_units_units: string | null = null,
     resolution: SceneCaptureImageResolutionParameters | null = null,
-    opt_margin_size: number | null = null,
-    opt_no_scene_colors: boolean = false,
+    no_scene_colors: boolean = false,
     set_map_yoke: SceneCaptureImageSetMapYokeParameters | null = null,
     conn_db_login: SceneCaptureImageConnDbLoginParameters | null = null,
-    opt_show_capture_settings: boolean = false,
-    opt_renderer_renderer: string | null = null,
-    opt_print_image_info: boolean = false,
+    show_capture_settings: boolean = false,
+    print_image_info: boolean = false,
     runner: Runner | null = null,
 ): SceneCaptureImageOutputs {
-    const params = scene_capture_image_params(scene_file, scene_name_or_number, image_file_name, opt_size_window, opt_size_capture, size_width_height, opt_size_width_width, opt_size_height_height, opt_units_units, resolution, opt_margin_size, opt_no_scene_colors, set_map_yoke, conn_db_login, opt_show_capture_settings, opt_renderer_renderer, opt_print_image_info)
+    const params = scene_capture_image_params(width, height, units, size, renderer, scene_file, scene_name_or_number, image_file_name, size_window, size_capture, size_width_height, resolution, no_scene_colors, set_map_yoke, conn_db_login, show_capture_settings, print_image_info)
     return scene_capture_image_execute(params, runner);
 }
 

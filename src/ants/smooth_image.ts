@@ -17,8 +17,8 @@ interface SmoothImageParameters {
     "image_ext": InputPathType;
     "smoothing_sigma": string;
     "out_image_ext": string;
-    "sigma_units"?: 0 | 1 | null | undefined;
-    "median_filter"?: 0 | 1 | null | undefined;
+    "sigma_units"?: boolean | null | undefined;
+    "median_filter"?: boolean | null | undefined;
 }
 type SmoothImageParametersTagged = Required<Pick<SmoothImageParameters, '@type'>> & SmoothImageParameters;
 
@@ -57,8 +57,8 @@ function smooth_image_params(
     image_ext: InputPathType,
     smoothing_sigma: string,
     out_image_ext: string,
-    sigma_units: 0 | 1 | null = null,
-    median_filter: 0 | 1 | null = null,
+    sigma_units: boolean | null = null,
+    median_filter: boolean | null = null,
 ): SmoothImageParametersTagged {
     const params = {
         "@type": "ants/SmoothImage" as const,
@@ -96,10 +96,10 @@ function smooth_image_cargs(
     cargs.push((params["smoothing_sigma"] ?? null));
     cargs.push((params["out_image_ext"] ?? null));
     if ((params["sigma_units"] ?? null) !== null) {
-        cargs.push(String((params["sigma_units"] ?? null)));
+        cargs.push(((params["sigma_units"] ?? null) ? "1" : "0"));
     }
     if ((params["median_filter"] ?? null) !== null) {
-        cargs.push(String((params["median_filter"] ?? null)));
+        cargs.push(((params["median_filter"] ?? null) ? "1" : "0"));
     }
     return cargs;
 }
@@ -177,8 +177,8 @@ function smooth_image(
     image_ext: InputPathType,
     smoothing_sigma: string,
     out_image_ext: string,
-    sigma_units: 0 | 1 | null = null,
-    median_filter: 0 | 1 | null = null,
+    sigma_units: boolean | null = null,
+    median_filter: boolean | null = null,
     runner: Runner | null = null,
 ): SmoothImageOutputs {
     const params = smooth_image_params(image_dimension, image_ext, smoothing_sigma, out_image_ext, sigma_units, median_filter)

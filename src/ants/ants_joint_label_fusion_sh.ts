@@ -20,7 +20,7 @@ interface AntsJointLabelFusionShParameters {
     "rigid_transform"?: string | null | undefined;
     "similarity_metric"?: string | null | undefined;
     "other_options"?: string | null | undefined;
-    "verbose"?: 0 | 1 | null | undefined;
+    "verbose"?: boolean | null | undefined;
     "target_image": string;
     "mask_image": string;
     "rigid_transform_additional_options"?: string | null | undefined;
@@ -74,7 +74,7 @@ function ants_joint_label_fusion_sh_params(
     rigid_transform: string | null = null,
     similarity_metric: string | null = null,
     other_options: string | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
     rigid_transform_additional_options: string | null = null,
     similarity_metric_additional_options: string | null = null,
 ): AntsJointLabelFusionShParametersTagged {
@@ -176,7 +176,7 @@ function ants_joint_label_fusion_sh_cargs(
     if ((params["verbose"] ?? null) !== null) {
         cargs.push(
             "-v",
-            String((params["verbose"] ?? null))
+            ((params["verbose"] ?? null) ? "1" : "0")
         );
     }
     cargs.push(
@@ -286,7 +286,7 @@ function ants_joint_label_fusion_sh(
     rigid_transform: string | null = null,
     similarity_metric: string | null = null,
     other_options: string | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
     rigid_transform_additional_options: string | null = null,
     similarity_metric_additional_options: string | null = null,
     runner: Runner | null = null,

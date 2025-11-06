@@ -34,7 +34,7 @@ interface DenoiseImageParameters {
     "mask_image"?: InputPathType | null | undefined;
     "patch_radius"?: string | null | undefined;
     "search_radius"?: string | null | undefined;
-    "verbose"?: 0 | 1 | null | undefined;
+    "verbose"?: boolean | null | undefined;
     "input_image": InputPathType;
     "output": DenoiseImageCorrectedOutputParametersTagged | DenoiseImageCorrectedOutputNoiseParametersTagged;
 }
@@ -276,7 +276,7 @@ function denoise_image_params(
     mask_image: InputPathType | null = null,
     patch_radius: string | null = null,
     search_radius: string | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
 ): DenoiseImageParametersTagged {
     const params = {
         "@type": "ants/DenoiseImage" as const,
@@ -361,7 +361,7 @@ function denoise_image_cargs(
     if ((params["verbose"] ?? null) !== null) {
         cargs.push(
             "--verbose",
-            String((params["verbose"] ?? null))
+            ((params["verbose"] ?? null) ? "1" : "0")
         );
     }
     cargs.push(
@@ -455,7 +455,7 @@ function denoise_image(
     mask_image: InputPathType | null = null,
     patch_radius: string | null = null,
     search_radius: string | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
     runner: Runner | null = null,
 ): DenoiseImageOutputs {
     const params = denoise_image_params(input_image, output, image_dimensionality, noise_model, shrink_factor, mask_image, patch_radius, search_radius, verbose)

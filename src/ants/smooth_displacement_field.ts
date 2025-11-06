@@ -19,7 +19,7 @@ interface SmoothDisplacementFieldParameters {
     "variance_or_mesh_size_base_level": number;
     "number_of_levels"?: number | null | undefined;
     "spline_order"?: number | null | undefined;
-    "estimate_inverse"?: 0 | 1 | null | undefined;
+    "estimate_inverse"?: boolean | null | undefined;
     "confidence_image"?: InputPathType | null | undefined;
 }
 type SmoothDisplacementFieldParametersTagged = Required<Pick<SmoothDisplacementFieldParameters, '@type'>> & SmoothDisplacementFieldParameters;
@@ -67,7 +67,7 @@ function smooth_displacement_field_params(
     variance_or_mesh_size_base_level: number,
     number_of_levels: number | null = null,
     spline_order: number | null = null,
-    estimate_inverse: 0 | 1 | null = null,
+    estimate_inverse: boolean | null = null,
     confidence_image: InputPathType | null = null,
 ): SmoothDisplacementFieldParametersTagged {
     const params = {
@@ -118,7 +118,7 @@ function smooth_displacement_field_cargs(
         cargs.push(String((params["spline_order"] ?? null)));
     }
     if ((params["estimate_inverse"] ?? null) !== null) {
-        cargs.push(String((params["estimate_inverse"] ?? null)));
+        cargs.push(((params["estimate_inverse"] ?? null) ? "1" : "0"));
     }
     if ((params["confidence_image"] ?? null) !== null) {
         cargs.push(execution.inputFile((params["confidence_image"] ?? null)));
@@ -204,7 +204,7 @@ function smooth_displacement_field(
     variance_or_mesh_size_base_level: number,
     number_of_levels: number | null = null,
     spline_order: number | null = null,
-    estimate_inverse: 0 | 1 | null = null,
+    estimate_inverse: boolean | null = null,
     confidence_image: InputPathType | null = null,
     runner: Runner | null = null,
 ): SmoothDisplacementFieldOutputs {

@@ -4,19 +4,18 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_SPHERE_PROJECT_UNPROJECT_METADATA: Metadata = {
-    id: "ec00569346766fa83a8b274b19856b08f237baba.boutiques",
+    id: "142e37fc5627ecfadf24cbd4bebe0d1242646548.workbench",
     name: "surface-sphere-project-unproject",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface SurfaceSphereProjectUnprojectParameters {
     "@type"?: "workbench/surface-sphere-project-unproject";
-    "sphere_in": InputPathType;
-    "sphere_project_to": InputPathType;
-    "sphere_unproject_from": InputPathType;
-    "sphere_out": string;
+    "sphere-out": string;
+    "sphere-in": InputPathType;
+    "sphere-project-to": InputPathType;
+    "sphere-unproject-from": InputPathType;
 }
 type SurfaceSphereProjectUnprojectParametersTagged = Required<Pick<SurfaceSphereProjectUnprojectParameters, '@type'>> & SurfaceSphereProjectUnprojectParameters;
 
@@ -41,25 +40,25 @@ interface SurfaceSphereProjectUnprojectOutputs {
 /**
  * Build parameters.
  *
+ * @param sphere_out the output sphere
  * @param sphere_in a sphere with the desired output mesh
  * @param sphere_project_to a sphere that aligns with sphere-in
  * @param sphere_unproject_from <sphere-project-to> deformed to the desired output space
- * @param sphere_out the output sphere
  *
  * @returns Parameter dictionary
  */
 function surface_sphere_project_unproject_params(
+    sphere_out: string,
     sphere_in: InputPathType,
     sphere_project_to: InputPathType,
     sphere_unproject_from: InputPathType,
-    sphere_out: string,
 ): SurfaceSphereProjectUnprojectParametersTagged {
     const params = {
         "@type": "workbench/surface-sphere-project-unproject" as const,
-        "sphere_in": sphere_in,
-        "sphere_project_to": sphere_project_to,
-        "sphere_unproject_from": sphere_unproject_from,
-        "sphere_out": sphere_out,
+        "sphere-out": sphere_out,
+        "sphere-in": sphere_in,
+        "sphere-project-to": sphere_project_to,
+        "sphere-unproject-from": sphere_unproject_from,
     };
     return params;
 }
@@ -78,12 +77,14 @@ function surface_sphere_project_unproject_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-surface-sphere-project-unproject");
-    cargs.push(execution.inputFile((params["sphere_in"] ?? null)));
-    cargs.push(execution.inputFile((params["sphere_project_to"] ?? null)));
-    cargs.push(execution.inputFile((params["sphere_unproject_from"] ?? null)));
-    cargs.push((params["sphere_out"] ?? null));
+    cargs.push(
+        "wb_command",
+        "-surface-sphere-project-unproject",
+        (params["sphere-out"] ?? null)
+    );
+    cargs.push(execution.inputFile((params["sphere-in"] ?? null)));
+    cargs.push(execution.inputFile((params["sphere-project-to"] ?? null)));
+    cargs.push(execution.inputFile((params["sphere-unproject-from"] ?? null)));
     return cargs;
 }
 
@@ -102,16 +103,14 @@ function surface_sphere_project_unproject_outputs(
 ): SurfaceSphereProjectUnprojectOutputs {
     const ret: SurfaceSphereProjectUnprojectOutputs = {
         root: execution.outputFile("."),
-        sphere_out: execution.outputFile([(params["sphere_out"] ?? null)].join('')),
+        sphere_out: execution.outputFile([(params["sphere-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * surface-sphere-project-unproject
- *
- * Copy registration deformations to different sphere.
+ * COPY REGISTRATION DEFORMATIONS TO DIFFERENT SPHERE.
  *
  * Background: A surface registration starts with an input sphere, and moves its vertices around on the sphere until it matches the template data.  This means that the registration deformation is actually represented as the difference between two separate files - the starting sphere, and the registered sphere.  Since the starting sphere of the registration may not have vertex correspondence to any other sphere (often, it is a native sphere), it can be inconvenient to manipulate or compare these deformations across subjects, etc.
  *
@@ -126,10 +125,6 @@ function surface_sphere_project_unproject_outputs(
  * Example 2: You have a Human to Chimpanzee registration, but what you really want is the inverse, that is, the sphere as if you had run the registration from Chimpanzee to Human.  If you use the Chimpanzee standard sphere as sphere-in, the Human sphere registered to Chimpanzee as project-to, and the standard Human sphere as unproject-from, the output will be the Chimpanzee sphere in register with the Human.
  *
  * Technical details: Each vertex of <sphere-in> is projected to a triangle of <sphere-project-to>, and its new position is determined by the position of the corresponding triangle in <sphere-unproject-from>.  The output is a sphere with the topology of <sphere-in>, but coordinates shifted by the deformation from <sphere-project-to> to <sphere-unproject-from>.  <sphere-project-to> and <sphere-unproject-from> must have the same topology as each other, but <sphere-in> may have any topology.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -151,9 +146,7 @@ function surface_sphere_project_unproject_execute(
 
 
 /**
- * surface-sphere-project-unproject
- *
- * Copy registration deformations to different sphere.
+ * COPY REGISTRATION DEFORMATIONS TO DIFFERENT SPHERE.
  *
  * Background: A surface registration starts with an input sphere, and moves its vertices around on the sphere until it matches the template data.  This means that the registration deformation is actually represented as the difference between two separate files - the starting sphere, and the registered sphere.  Since the starting sphere of the registration may not have vertex correspondence to any other sphere (often, it is a native sphere), it can be inconvenient to manipulate or compare these deformations across subjects, etc.
  *
@@ -169,26 +162,22 @@ function surface_sphere_project_unproject_execute(
  *
  * Technical details: Each vertex of <sphere-in> is projected to a triangle of <sphere-project-to>, and its new position is determined by the position of the corresponding triangle in <sphere-unproject-from>.  The output is a sphere with the topology of <sphere-in>, but coordinates shifted by the deformation from <sphere-project-to> to <sphere-unproject-from>.  <sphere-project-to> and <sphere-unproject-from> must have the same topology as each other, but <sphere-in> may have any topology.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param sphere_out the output sphere
  * @param sphere_in a sphere with the desired output mesh
  * @param sphere_project_to a sphere that aligns with sphere-in
  * @param sphere_unproject_from <sphere-project-to> deformed to the desired output space
- * @param sphere_out the output sphere
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceSphereProjectUnprojectOutputs`).
  */
 function surface_sphere_project_unproject(
+    sphere_out: string,
     sphere_in: InputPathType,
     sphere_project_to: InputPathType,
     sphere_unproject_from: InputPathType,
-    sphere_out: string,
     runner: Runner | null = null,
 ): SurfaceSphereProjectUnprojectOutputs {
-    const params = surface_sphere_project_unproject_params(sphere_in, sphere_project_to, sphere_unproject_from, sphere_out)
+    const params = surface_sphere_project_unproject_params(sphere_out, sphere_in, sphere_project_to, sphere_unproject_from)
     return surface_sphere_project_unproject_execute(params, runner);
 }
 

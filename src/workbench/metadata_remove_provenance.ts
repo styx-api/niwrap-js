@@ -4,17 +4,16 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METADATA_REMOVE_PROVENANCE_METADATA: Metadata = {
-    id: "4800e85a5fdc741153c992271baa48d72065973e.boutiques",
+    id: "e8c16ad9420831ac3f90677352afe3ddc5dcbac7.workbench",
     name: "metadata-remove-provenance",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface MetadataRemoveProvenanceParameters {
     "@type"?: "workbench/metadata-remove-provenance";
-    "input_file": string;
-    "output_file": string;
+    "input-file": string;
+    "output-file": string;
 }
 type MetadataRemoveProvenanceParametersTagged = Required<Pick<MetadataRemoveProvenanceParameters, '@type'>> & MetadataRemoveProvenanceParameters;
 
@@ -46,8 +45,8 @@ function metadata_remove_provenance_params(
 ): MetadataRemoveProvenanceParametersTagged {
     const params = {
         "@type": "workbench/metadata-remove-provenance" as const,
-        "input_file": input_file,
-        "output_file": output_file,
+        "input-file": input_file,
+        "output-file": output_file,
     };
     return params;
 }
@@ -66,10 +65,12 @@ function metadata_remove_provenance_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-metadata-remove-provenance");
-    cargs.push((params["input_file"] ?? null));
-    cargs.push((params["output_file"] ?? null));
+    cargs.push(
+        "wb_command",
+        "-metadata-remove-provenance"
+    );
+    cargs.push((params["input-file"] ?? null));
+    cargs.push((params["output-file"] ?? null));
     return cargs;
 }
 
@@ -94,15 +95,9 @@ function metadata_remove_provenance_outputs(
 
 
 /**
- * metadata-remove-provenance
- *
- * Remove provenance information from file metadata.
+ * REMOVE PROVENANCE INFORMATION FROM FILE METADATA.
  *
  * Removes the provenance metadata fields added by workbench during processing.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -124,15 +119,9 @@ function metadata_remove_provenance_execute(
 
 
 /**
- * metadata-remove-provenance
- *
- * Remove provenance information from file metadata.
+ * REMOVE PROVENANCE INFORMATION FROM FILE METADATA.
  *
  * Removes the provenance metadata fields added by workbench during processing.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param input_file the file to remove provenance information from
  * @param output_file output - the name to save the modified file as

@@ -4,19 +4,18 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_GENERATE_INFLATED_METADATA: Metadata = {
-    id: "27b14fd47a41d6ad62e63cedcf7c0e24652ecc90.boutiques",
+    id: "355a98e0d7f2dd37d2a8db3706f4c44d3c0fd8e8.workbench",
     name: "surface-generate-inflated",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface SurfaceGenerateInflatedParameters {
     "@type"?: "workbench/surface-generate-inflated";
-    "anatomical_surface_in": InputPathType;
-    "inflated_surface_out": string;
-    "very_inflated_surface_out": string;
-    "opt_iterations_scale_iterations_scale_value"?: number | null | undefined;
+    "inflated-surface-out": string;
+    "very-inflated-surface-out": string;
+    "iterations-scale-value"?: number | null | undefined;
+    "anatomical-surface-in": InputPathType;
 }
 type SurfaceGenerateInflatedParametersTagged = Required<Pick<SurfaceGenerateInflatedParameters, '@type'>> & SurfaceGenerateInflatedParameters;
 
@@ -45,27 +44,29 @@ interface SurfaceGenerateInflatedOutputs {
 /**
  * Build parameters.
  *
- * @param anatomical_surface_in the anatomical surface
  * @param inflated_surface_out the output inflated surface
  * @param very_inflated_surface_out the output very inflated surface
- * @param opt_iterations_scale_iterations_scale_value optional iterations scaling: iterations-scale value
+ * @param iterations_scale_value optional iterations scaling
+
+iterations-scale value
+ * @param anatomical_surface_in the anatomical surface
  *
  * @returns Parameter dictionary
  */
 function surface_generate_inflated_params(
-    anatomical_surface_in: InputPathType,
     inflated_surface_out: string,
     very_inflated_surface_out: string,
-    opt_iterations_scale_iterations_scale_value: number | null = null,
+    iterations_scale_value: number | null,
+    anatomical_surface_in: InputPathType,
 ): SurfaceGenerateInflatedParametersTagged {
     const params = {
         "@type": "workbench/surface-generate-inflated" as const,
-        "anatomical_surface_in": anatomical_surface_in,
-        "inflated_surface_out": inflated_surface_out,
-        "very_inflated_surface_out": very_inflated_surface_out,
+        "inflated-surface-out": inflated_surface_out,
+        "very-inflated-surface-out": very_inflated_surface_out,
+        "anatomical-surface-in": anatomical_surface_in,
     };
-    if (opt_iterations_scale_iterations_scale_value !== null) {
-        params["opt_iterations_scale_iterations_scale_value"] = opt_iterations_scale_iterations_scale_value;
+    if (iterations_scale_value !== null) {
+        params["iterations-scale-value"] = iterations_scale_value;
     }
     return params;
 }
@@ -84,17 +85,17 @@ function surface_generate_inflated_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-surface-generate-inflated");
-    cargs.push(execution.inputFile((params["anatomical_surface_in"] ?? null)));
-    cargs.push((params["inflated_surface_out"] ?? null));
-    cargs.push((params["very_inflated_surface_out"] ?? null));
-    if ((params["opt_iterations_scale_iterations_scale_value"] ?? null) !== null) {
+    if ((params["iterations-scale-value"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-surface-generate-inflated",
+            (params["inflated-surface-out"] ?? null),
+            (params["very-inflated-surface-out"] ?? null),
             "-iterations-scale",
-            String((params["opt_iterations_scale_iterations_scale_value"] ?? null))
+            String((params["iterations-scale-value"] ?? null))
         );
     }
+    cargs.push(execution.inputFile((params["anatomical-surface-in"] ?? null)));
     return cargs;
 }
 
@@ -113,23 +114,17 @@ function surface_generate_inflated_outputs(
 ): SurfaceGenerateInflatedOutputs {
     const ret: SurfaceGenerateInflatedOutputs = {
         root: execution.outputFile("."),
-        inflated_surface_out: execution.outputFile([(params["inflated_surface_out"] ?? null)].join('')),
-        very_inflated_surface_out: execution.outputFile([(params["very_inflated_surface_out"] ?? null)].join('')),
+        inflated_surface_out: execution.outputFile([(params["inflated-surface-out"] ?? null)].join('')),
+        very_inflated_surface_out: execution.outputFile([(params["very-inflated-surface-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * surface-generate-inflated
- *
- * Surface generate inflated.
+ * SURFACE GENERATE INFLATED.
  *
  * Generate inflated and very inflated surfaces. The output surfaces are 'matched' (have same XYZ range) to the anatomical surface. In most cases, an iterations-scale of 1.0 (default) is sufficient.  However, if the surface contains a large number of vertices (150,000), try an iterations-scale of 2.5.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -151,32 +146,28 @@ function surface_generate_inflated_execute(
 
 
 /**
- * surface-generate-inflated
- *
- * Surface generate inflated.
+ * SURFACE GENERATE INFLATED.
  *
  * Generate inflated and very inflated surfaces. The output surfaces are 'matched' (have same XYZ range) to the anatomical surface. In most cases, an iterations-scale of 1.0 (default) is sufficient.  However, if the surface contains a large number of vertices (150,000), try an iterations-scale of 2.5.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
- * @param anatomical_surface_in the anatomical surface
  * @param inflated_surface_out the output inflated surface
  * @param very_inflated_surface_out the output very inflated surface
- * @param opt_iterations_scale_iterations_scale_value optional iterations scaling: iterations-scale value
+ * @param iterations_scale_value optional iterations scaling
+
+iterations-scale value
+ * @param anatomical_surface_in the anatomical surface
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceGenerateInflatedOutputs`).
  */
 function surface_generate_inflated(
-    anatomical_surface_in: InputPathType,
     inflated_surface_out: string,
     very_inflated_surface_out: string,
-    opt_iterations_scale_iterations_scale_value: number | null = null,
+    iterations_scale_value: number | null,
+    anatomical_surface_in: InputPathType,
     runner: Runner | null = null,
 ): SurfaceGenerateInflatedOutputs {
-    const params = surface_generate_inflated_params(anatomical_surface_in, inflated_surface_out, very_inflated_surface_out, opt_iterations_scale_iterations_scale_value)
+    const params = surface_generate_inflated_params(inflated_surface_out, very_inflated_surface_out, iterations_scale_value, anatomical_surface_in)
     return surface_generate_inflated_execute(params, runner);
 }
 

@@ -4,17 +4,16 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CONVERT_FIBER_ORIENTATIONS_METADATA: Metadata = {
-    id: "848dea6b577ee4b94a5e883dc7976a17d71a95af.boutiques",
+    id: "c03f58871879950a5d06809f88add9efe24fe896.workbench",
     name: "convert-fiber-orientations",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface ConvertFiberOrientationsFiberParameters {
     "@type"?: "fiber";
-    "mean_f": InputPathType;
-    "stdev_f": InputPathType;
+    "mean-f": InputPathType;
+    "stdev-f": InputPathType;
     "theta": InputPathType;
     "phi": InputPathType;
     "psi": InputPathType;
@@ -26,9 +25,9 @@ type ConvertFiberOrientationsFiberParametersTagged = Required<Pick<ConvertFiberO
 
 interface ConvertFiberOrientationsParameters {
     "@type"?: "workbench/convert-fiber-orientations";
-    "label_volume": InputPathType;
-    "fiber_out": string;
+    "fiber-out": string;
     "fiber"?: Array<ConvertFiberOrientationsFiberParameters> | null | undefined;
+    "label-volume": InputPathType;
 }
 type ConvertFiberOrientationsParametersTagged = Required<Pick<ConvertFiberOrientationsParameters, '@type'>> & ConvertFiberOrientationsParameters;
 
@@ -57,8 +56,8 @@ function convert_fiber_orientations_fiber_params(
 ): ConvertFiberOrientationsFiberParametersTagged {
     const params = {
         "@type": "fiber" as const,
-        "mean_f": mean_f,
-        "stdev_f": stdev_f,
+        "mean-f": mean_f,
+        "stdev-f": stdev_f,
         "theta": theta,
         "phi": phi,
         "psi": psi,
@@ -82,14 +81,16 @@ function convert_fiber_orientations_fiber_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-fiber");
-    cargs.push(execution.inputFile((params["mean_f"] ?? null)));
-    cargs.push(execution.inputFile((params["stdev_f"] ?? null)));
-    cargs.push(execution.inputFile((params["theta"] ?? null)));
-    cargs.push(execution.inputFile((params["phi"] ?? null)));
-    cargs.push(execution.inputFile((params["psi"] ?? null)));
-    cargs.push(execution.inputFile((params["ka"] ?? null)));
-    cargs.push(execution.inputFile((params["kb"] ?? null)));
+    cargs.push(
+        "-fiber",
+        execution.inputFile((params["mean-f"] ?? null)),
+        execution.inputFile((params["stdev-f"] ?? null)),
+        execution.inputFile((params["theta"] ?? null)),
+        execution.inputFile((params["phi"] ?? null)),
+        execution.inputFile((params["psi"] ?? null)),
+        execution.inputFile((params["ka"] ?? null)),
+        execution.inputFile((params["kb"] ?? null))
+    );
     return cargs;
 }
 
@@ -114,21 +115,21 @@ interface ConvertFiberOrientationsOutputs {
 /**
  * Build parameters.
  *
- * @param label_volume volume of cifti structure labels
  * @param fiber_out the output fiber orientation file
+ * @param label_volume volume of cifti structure labels
  * @param fiber specify the parameter volumes for a fiber
  *
  * @returns Parameter dictionary
  */
 function convert_fiber_orientations_params(
-    label_volume: InputPathType,
     fiber_out: string,
+    label_volume: InputPathType,
     fiber: Array<ConvertFiberOrientationsFiberParameters> | null = null,
 ): ConvertFiberOrientationsParametersTagged {
     const params = {
         "@type": "workbench/convert-fiber-orientations" as const,
-        "label_volume": label_volume,
-        "fiber_out": fiber_out,
+        "fiber-out": fiber_out,
+        "label-volume": label_volume,
     };
     if (fiber !== null) {
         params["fiber"] = fiber;
@@ -150,13 +151,15 @@ function convert_fiber_orientations_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-convert-fiber-orientations");
-    cargs.push(execution.inputFile((params["label_volume"] ?? null)));
-    cargs.push((params["fiber_out"] ?? null));
     if ((params["fiber"] ?? null) !== null) {
-        cargs.push(...(params["fiber"] ?? null).map(s => convert_fiber_orientations_fiber_cargs(s, execution)).flat());
+        cargs.push(
+            "wb_command",
+            "-convert-fiber-orientations",
+            (params["fiber-out"] ?? null),
+            ...(params["fiber"] ?? null).map(s => convert_fiber_orientations_fiber_cargs(s, execution)).flat()
+        );
     }
+    cargs.push(execution.inputFile((params["label-volume"] ?? null)));
     return cargs;
 }
 
@@ -175,16 +178,14 @@ function convert_fiber_orientations_outputs(
 ): ConvertFiberOrientationsOutputs {
     const ret: ConvertFiberOrientationsOutputs = {
         root: execution.outputFile("."),
-        fiber_out: execution.outputFile([(params["fiber_out"] ?? null)].join('')),
+        fiber_out: execution.outputFile([(params["fiber-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * convert-fiber-orientations
- *
- * Convert bingham parameter volumes to fiber orientation file.
+ * CONVERT BINGHAM PARAMETER VOLUMES TO FIBER ORIENTATION FILE.
  *
  * Takes precomputed bingham parameters from volume files and converts them to the format workbench uses for display.  The <label-volume> argument must be a label volume, where the labels use these strings:
  *
@@ -212,6 +213,8 @@ function convert_fiber_orientations_outputs(
  * DIENCEPHALON_VENTRAL_RIGHT
  * HIPPOCAMPUS_LEFT
  * HIPPOCAMPUS_RIGHT
+ * HIPPOCAMPUS_DENTATE_LEFT
+ * HIPPOCAMPUS_DENTATE_RIGHT
  * INVALID
  * OTHER
  * OTHER_GREY_MATTER
@@ -222,10 +225,6 @@ function convert_fiber_orientations_outputs(
  * PUTAMEN_RIGHT
  * THALAMUS_LEFT
  * THALAMUS_RIGHT.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -247,9 +246,7 @@ function convert_fiber_orientations_execute(
 
 
 /**
- * convert-fiber-orientations
- *
- * Convert bingham parameter volumes to fiber orientation file.
+ * CONVERT BINGHAM PARAMETER VOLUMES TO FIBER ORIENTATION FILE.
  *
  * Takes precomputed bingham parameters from volume files and converts them to the format workbench uses for display.  The <label-volume> argument must be a label volume, where the labels use these strings:
  *
@@ -277,6 +274,8 @@ function convert_fiber_orientations_execute(
  * DIENCEPHALON_VENTRAL_RIGHT
  * HIPPOCAMPUS_LEFT
  * HIPPOCAMPUS_RIGHT
+ * HIPPOCAMPUS_DENTATE_LEFT
+ * HIPPOCAMPUS_DENTATE_RIGHT
  * INVALID
  * OTHER
  * OTHER_GREY_MATTER
@@ -288,24 +287,20 @@ function convert_fiber_orientations_execute(
  * THALAMUS_LEFT
  * THALAMUS_RIGHT.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
- * @param label_volume volume of cifti structure labels
  * @param fiber_out the output fiber orientation file
+ * @param label_volume volume of cifti structure labels
  * @param fiber specify the parameter volumes for a fiber
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConvertFiberOrientationsOutputs`).
  */
 function convert_fiber_orientations(
-    label_volume: InputPathType,
     fiber_out: string,
+    label_volume: InputPathType,
     fiber: Array<ConvertFiberOrientationsFiberParameters> | null = null,
     runner: Runner | null = null,
 ): ConvertFiberOrientationsOutputs {
-    const params = convert_fiber_orientations_params(label_volume, fiber_out, fiber)
+    const params = convert_fiber_orientations_params(fiber_out, label_volume, fiber)
     return convert_fiber_orientations_execute(params, runner);
 }
 

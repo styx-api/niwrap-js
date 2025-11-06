@@ -4,17 +4,16 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_FLIP_NORMALS_METADATA: Metadata = {
-    id: "8c4d88c8e5e251d057b6e23e7ae572f3f1462cc3.boutiques",
+    id: "bd50d144fdc0e871fae85f49e492aee6de124549.workbench",
     name: "surface-flip-normals",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface SurfaceFlipNormalsParameters {
     "@type"?: "workbench/surface-flip-normals";
+    "surface-out": string;
     "surface": InputPathType;
-    "surface_out": string;
 }
 type SurfaceFlipNormalsParametersTagged = Required<Pick<SurfaceFlipNormalsParameters, '@type'>> & SurfaceFlipNormalsParameters;
 
@@ -39,19 +38,19 @@ interface SurfaceFlipNormalsOutputs {
 /**
  * Build parameters.
  *
- * @param surface the surface to flip the normals of
  * @param surface_out the output surface
+ * @param surface the surface to flip the normals of
  *
  * @returns Parameter dictionary
  */
 function surface_flip_normals_params(
-    surface: InputPathType,
     surface_out: string,
+    surface: InputPathType,
 ): SurfaceFlipNormalsParametersTagged {
     const params = {
         "@type": "workbench/surface-flip-normals" as const,
+        "surface-out": surface_out,
         "surface": surface,
-        "surface_out": surface_out,
     };
     return params;
 }
@@ -70,10 +69,12 @@ function surface_flip_normals_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-surface-flip-normals");
+    cargs.push(
+        "wb_command",
+        "-surface-flip-normals",
+        (params["surface-out"] ?? null)
+    );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push((params["surface_out"] ?? null));
     return cargs;
 }
 
@@ -92,22 +93,16 @@ function surface_flip_normals_outputs(
 ): SurfaceFlipNormalsOutputs {
     const ret: SurfaceFlipNormalsOutputs = {
         root: execution.outputFile("."),
-        surface_out: execution.outputFile([(params["surface_out"] ?? null)].join('')),
+        surface_out: execution.outputFile([(params["surface-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * surface-flip-normals
- *
- * Flip all tiles on a surface.
+ * FLIP ALL TILES ON A SURFACE.
  *
  * Flips all triangles on a surface, resulting in surface normals being flipped the other direction (inward vs outward).  If you transform a surface with an affine that has negative determinant, or a warpfield that similarly flips the surface, you may end up with a surface that has normals pointing inwards, which may have display problems.  Using this command will solve that problem.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -129,28 +124,22 @@ function surface_flip_normals_execute(
 
 
 /**
- * surface-flip-normals
- *
- * Flip all tiles on a surface.
+ * FLIP ALL TILES ON A SURFACE.
  *
  * Flips all triangles on a surface, resulting in surface normals being flipped the other direction (inward vs outward).  If you transform a surface with an affine that has negative determinant, or a warpfield that similarly flips the surface, you may end up with a surface that has normals pointing inwards, which may have display problems.  Using this command will solve that problem.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
- * @param surface the surface to flip the normals of
  * @param surface_out the output surface
+ * @param surface the surface to flip the normals of
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceFlipNormalsOutputs`).
  */
 function surface_flip_normals(
-    surface: InputPathType,
     surface_out: string,
+    surface: InputPathType,
     runner: Runner | null = null,
 ): SurfaceFlipNormalsOutputs {
-    const params = surface_flip_normals_params(surface, surface_out)
+    const params = surface_flip_normals_params(surface_out, surface)
     return surface_flip_normals_execute(params, runner);
 }
 

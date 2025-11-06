@@ -4,27 +4,26 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_LABEL_TO_BORDER_METADATA: Metadata = {
-    id: "47da628bfbf4e955d157fbb860fd530ed67ce718.boutiques",
+    id: "ad9549859ecd3b88b8cca8704b00cceb77188e6a.workbench",
     name: "cifti-label-to-border",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiLabelToBorderBorderParameters {
     "@type"?: "border";
     "surface": InputPathType;
-    "border_out": string;
+    "border-out": string;
 }
 type CiftiLabelToBorderBorderParametersTagged = Required<Pick<CiftiLabelToBorderBorderParameters, '@type'>> & CiftiLabelToBorderBorderParameters;
 
 
 interface CiftiLabelToBorderParameters {
     "@type"?: "workbench/cifti-label-to-border";
-    "cifti_in": InputPathType;
-    "opt_placement_fraction"?: number | null | undefined;
-    "opt_column_column"?: string | null | undefined;
+    "fraction"?: number | null | undefined;
+    "column"?: string | null | undefined;
     "border"?: Array<CiftiLabelToBorderBorderParameters> | null | undefined;
+    "cifti-in": InputPathType;
 }
 type CiftiLabelToBorderParametersTagged = Required<Pick<CiftiLabelToBorderParameters, '@type'>> & CiftiLabelToBorderParameters;
 
@@ -61,7 +60,7 @@ function cifti_label_to_border_border_params(
     const params = {
         "@type": "border" as const,
         "surface": surface,
-        "border_out": border_out,
+        "border-out": border_out,
     };
     return params;
 }
@@ -80,9 +79,11 @@ function cifti_label_to_border_border_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-border");
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push((params["border_out"] ?? null));
+    cargs.push(
+        "-border",
+        execution.inputFile((params["surface"] ?? null)),
+        (params["border-out"] ?? null)
+    );
     return cargs;
 }
 
@@ -101,7 +102,7 @@ function cifti_label_to_border_border_outputs(
 ): CiftiLabelToBorderBorderOutputs {
     const ret: CiftiLabelToBorderBorderOutputs = {
         root: execution.outputFile("."),
-        border_out: execution.outputFile([(params["border_out"] ?? null)].join('')),
+        border_out: execution.outputFile([(params["border-out"] ?? null)].join('')),
     };
     return ret;
 }
@@ -127,28 +128,32 @@ interface CiftiLabelToBorderOutputs {
 /**
  * Build parameters.
  *
+ * @param fraction set how far along the edge border points are drawn
+
+fraction along edge from inside vertex (default 0.33)
+ * @param column select a single column
+
+the column number or name
  * @param cifti_in the input cifti dlabel file
- * @param opt_placement_fraction set how far along the edge border points are drawn: fraction along edge from inside vertex (default 0.33)
- * @param opt_column_column select a single column: the column number or name
  * @param border specify output file for a surface structure
  *
  * @returns Parameter dictionary
  */
 function cifti_label_to_border_params(
+    fraction: number | null,
+    column: string | null,
     cifti_in: InputPathType,
-    opt_placement_fraction: number | null = null,
-    opt_column_column: string | null = null,
     border: Array<CiftiLabelToBorderBorderParameters> | null = null,
 ): CiftiLabelToBorderParametersTagged {
     const params = {
         "@type": "workbench/cifti-label-to-border" as const,
-        "cifti_in": cifti_in,
+        "cifti-in": cifti_in,
     };
-    if (opt_placement_fraction !== null) {
-        params["opt_placement_fraction"] = opt_placement_fraction;
+    if (fraction !== null) {
+        params["fraction"] = fraction;
     }
-    if (opt_column_column !== null) {
-        params["opt_column_column"] = opt_column_column;
+    if (column !== null) {
+        params["column"] = column;
     }
     if (border !== null) {
         params["border"] = border;
@@ -170,24 +175,18 @@ function cifti_label_to_border_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-label-to-border");
-    cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
-    if ((params["opt_placement_fraction"] ?? null) !== null) {
+    if ((params["fraction"] ?? null) !== null || (params["column"] ?? null) !== null || (params["border"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-cifti-label-to-border",
             "-placement",
-            String((params["opt_placement_fraction"] ?? null))
-        );
-    }
-    if ((params["opt_column_column"] ?? null) !== null) {
-        cargs.push(
+            (((params["fraction"] ?? null) !== null) ? String((params["fraction"] ?? null)) : ""),
             "-column",
-            (params["opt_column_column"] ?? null)
+            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
+            ...(((params["border"] ?? null) !== null) ? (params["border"] ?? null).map(s => cifti_label_to_border_border_cargs(s, execution)).flat() : [])
         );
     }
-    if ((params["border"] ?? null) !== null) {
-        cargs.push(...(params["border"] ?? null).map(s => cifti_label_to_border_border_cargs(s, execution)).flat());
-    }
+    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     return cargs;
 }
 
@@ -213,15 +212,9 @@ function cifti_label_to_border_outputs(
 
 
 /**
- * cifti-label-to-border
- *
- * Draw borders around cifti labels.
+ * DRAW BORDERS AROUND CIFTI LABELS.
  *
  * For each surface, takes the labels on the matching structure and draws borders around the labels.  Use -column to only draw borders around one label map.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -243,32 +236,30 @@ function cifti_label_to_border_execute(
 
 
 /**
- * cifti-label-to-border
- *
- * Draw borders around cifti labels.
+ * DRAW BORDERS AROUND CIFTI LABELS.
  *
  * For each surface, takes the labels on the matching structure and draws borders around the labels.  Use -column to only draw borders around one label map.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param fraction set how far along the edge border points are drawn
+
+fraction along edge from inside vertex (default 0.33)
+ * @param column select a single column
+
+the column number or name
  * @param cifti_in the input cifti dlabel file
- * @param opt_placement_fraction set how far along the edge border points are drawn: fraction along edge from inside vertex (default 0.33)
- * @param opt_column_column select a single column: the column number or name
  * @param border specify output file for a surface structure
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiLabelToBorderOutputs`).
  */
 function cifti_label_to_border(
+    fraction: number | null,
+    column: string | null,
     cifti_in: InputPathType,
-    opt_placement_fraction: number | null = null,
-    opt_column_column: string | null = null,
     border: Array<CiftiLabelToBorderBorderParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiLabelToBorderOutputs {
-    const params = cifti_label_to_border_params(cifti_in, opt_placement_fraction, opt_column_column, border)
+    const params = cifti_label_to_border_params(fraction, column, cifti_in, border)
     return cifti_label_to_border_execute(params, runner);
 }
 

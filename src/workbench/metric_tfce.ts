@@ -4,39 +4,38 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_TFCE_METADATA: Metadata = {
-    id: "924978b01979428d340e99932f7ca7e01166c2fb.boutiques",
+    id: "08ff0e7a57ecc93cc6a3d034347b01fa26e0507a.workbench",
     name: "metric-tfce",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface MetricTfcePresmoothParameters {
     "@type"?: "presmooth";
     "kernel": number;
-    "opt_fwhm": boolean;
+    "fwhm": boolean;
 }
 type MetricTfcePresmoothParametersTagged = Required<Pick<MetricTfcePresmoothParameters, '@type'>> & MetricTfcePresmoothParameters;
 
 
 interface MetricTfceParametersParameters {
     "@type"?: "parameters";
-    "e": number;
-    "h": number;
+    "E": number;
+    "H": number;
 }
 type MetricTfceParametersParametersTagged = Required<Pick<MetricTfceParametersParameters, '@type'>> & MetricTfceParametersParameters;
 
 
 interface MetricTfceParameters {
     "@type"?: "workbench/metric-tfce";
-    "surface": InputPathType;
-    "metric_in": InputPathType;
-    "metric_out": string;
+    "metric-out": string;
     "presmooth"?: MetricTfcePresmoothParameters | null | undefined;
-    "opt_roi_roi_metric"?: InputPathType | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
     "parameters"?: MetricTfceParametersParameters | null | undefined;
-    "opt_column_column"?: string | null | undefined;
-    "opt_corrected_areas_area_metric"?: InputPathType | null | undefined;
+    "column"?: string | null | undefined;
+    "area-metric"?: InputPathType | null | undefined;
+    "surface": InputPathType;
+    "metric-in": InputPathType;
 }
 type MetricTfceParametersTagged = Required<Pick<MetricTfceParameters, '@type'>> & MetricTfceParameters;
 
@@ -45,18 +44,18 @@ type MetricTfceParametersTagged = Required<Pick<MetricTfceParameters, '@type'>> 
  * Build parameters.
  *
  * @param kernel the size of the gaussian smoothing kernel in mm, as sigma by default
- * @param opt_fwhm kernel size is FWHM, not sigma
+ * @param fwhm kernel size is FWHM, not sigma
  *
  * @returns Parameter dictionary
  */
 function metric_tfce_presmooth_params(
     kernel: number,
-    opt_fwhm: boolean = false,
+    fwhm: boolean = false,
 ): MetricTfcePresmoothParametersTagged {
     const params = {
         "@type": "presmooth" as const,
         "kernel": kernel,
-        "opt_fwhm": opt_fwhm,
+        "fwhm": fwhm,
     };
     return params;
 }
@@ -75,10 +74,12 @@ function metric_tfce_presmooth_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-presmooth");
-    cargs.push(String((params["kernel"] ?? null)));
-    if ((params["opt_fwhm"] ?? false)) {
-        cargs.push("-fwhm");
+    if ((params["fwhm"] ?? false)) {
+        cargs.push(
+            "-presmooth",
+            String((params["kernel"] ?? null)),
+            "-fwhm"
+        );
     }
     return cargs;
 }
@@ -98,8 +99,8 @@ function metric_tfce_parameters_params(
 ): MetricTfceParametersParametersTagged {
     const params = {
         "@type": "parameters" as const,
-        "e": e,
-        "h": h,
+        "E": e,
+        "H": h,
     };
     return params;
 }
@@ -118,9 +119,11 @@ function metric_tfce_parameters_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-parameters");
-    cargs.push(String((params["e"] ?? null)));
-    cargs.push(String((params["h"] ?? null)));
+    cargs.push(
+        "-parameters",
+        String((params["E"] ?? null)),
+        String((params["H"] ?? null))
+    );
     return cargs;
 }
 
@@ -145,47 +148,53 @@ interface MetricTfceOutputs {
 /**
  * Build parameters.
  *
+ * @param metric_out the output metric
+ * @param roi_metric select a region of interest to run TFCE on
+
+the area to run TFCE on, as a metric
+ * @param column select a single column
+
+the column number or name
+ * @param area_metric vertex areas to use instead of computing them from the surface
+
+the corrected vertex areas, as a metric
  * @param surface the surface to compute on
  * @param metric_in the metric to run TFCE on
- * @param metric_out the output metric
  * @param presmooth smooth the metric before running TFCE
- * @param opt_roi_roi_metric select a region of interest to run TFCE on: the area to run TFCE on, as a metric
  * @param parameters set parameters for TFCE integral
- * @param opt_column_column select a single column: the column number or name
- * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
 function metric_tfce_params(
+    metric_out: string,
+    roi_metric: InputPathType | null,
+    column: string | null,
+    area_metric: InputPathType | null,
     surface: InputPathType,
     metric_in: InputPathType,
-    metric_out: string,
     presmooth: MetricTfcePresmoothParameters | null = null,
-    opt_roi_roi_metric: InputPathType | null = null,
     parameters: MetricTfceParametersParameters | null = null,
-    opt_column_column: string | null = null,
-    opt_corrected_areas_area_metric: InputPathType | null = null,
 ): MetricTfceParametersTagged {
     const params = {
         "@type": "workbench/metric-tfce" as const,
+        "metric-out": metric_out,
         "surface": surface,
-        "metric_in": metric_in,
-        "metric_out": metric_out,
+        "metric-in": metric_in,
     };
     if (presmooth !== null) {
         params["presmooth"] = presmooth;
     }
-    if (opt_roi_roi_metric !== null) {
-        params["opt_roi_roi_metric"] = opt_roi_roi_metric;
+    if (roi_metric !== null) {
+        params["roi-metric"] = roi_metric;
     }
     if (parameters !== null) {
         params["parameters"] = parameters;
     }
-    if (opt_column_column !== null) {
-        params["opt_column_column"] = opt_column_column;
+    if (column !== null) {
+        params["column"] = column;
     }
-    if (opt_corrected_areas_area_metric !== null) {
-        params["opt_corrected_areas_area_metric"] = opt_corrected_areas_area_metric;
+    if (area_metric !== null) {
+        params["area-metric"] = area_metric;
     }
     return params;
 }
@@ -204,35 +213,23 @@ function metric_tfce_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-metric-tfce");
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(execution.inputFile((params["metric_in"] ?? null)));
-    cargs.push((params["metric_out"] ?? null));
-    if ((params["presmooth"] ?? null) !== null) {
-        cargs.push(...metric_tfce_presmooth_cargs((params["presmooth"] ?? null), execution));
-    }
-    if ((params["opt_roi_roi_metric"] ?? null) !== null) {
+    if ((params["presmooth"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["parameters"] ?? null) !== null || (params["column"] ?? null) !== null || (params["area-metric"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-metric-tfce",
+            (params["metric-out"] ?? null),
+            ...(((params["presmooth"] ?? null) !== null) ? metric_tfce_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
             "-roi",
-            execution.inputFile((params["opt_roi_roi_metric"] ?? null))
-        );
-    }
-    if ((params["parameters"] ?? null) !== null) {
-        cargs.push(...metric_tfce_parameters_cargs((params["parameters"] ?? null), execution));
-    }
-    if ((params["opt_column_column"] ?? null) !== null) {
-        cargs.push(
+            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
+            ...(((params["parameters"] ?? null) !== null) ? metric_tfce_parameters_cargs((params["parameters"] ?? null), execution) : []),
             "-column",
-            (params["opt_column_column"] ?? null)
-        );
-    }
-    if ((params["opt_corrected_areas_area_metric"] ?? null) !== null) {
-        cargs.push(
+            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
             "-corrected-areas",
-            execution.inputFile((params["opt_corrected_areas_area_metric"] ?? null))
+            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
         );
     }
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     return cargs;
 }
 
@@ -251,16 +248,14 @@ function metric_tfce_outputs(
 ): MetricTfceOutputs {
     const ret: MetricTfceOutputs = {
         root: execution.outputFile("."),
-        metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
+        metric_out: execution.outputFile([(params["metric-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * metric-tfce
- *
- * Do tfce on a metric file.
+ * DO TFCE ON A METRIC FILE.
  *
  * This command does not do any statistical analysis.  Please use something like PALM if you are just trying to do statistics on your data.
  *
@@ -273,10 +268,6 @@ function metric_tfce_outputs(
  * When using -presmooth with -corrected-areas, note that it is an approximate correction within the smoothing algorithm (the TFCE correction is exact).  Doing smoothing on individual surfaces before averaging/TFCE is preferred, when possible, in order to better tie the smoothing kernel size to the original feature size.
  *
  * The TFCE method is explained in: Smith SM, Nichols TE., "Threshold-free cluster enhancement: addressing problems of smoothing, threshold dependence and localisation in cluster inference." Neuroimage. 2009 Jan 1;44(1):83-98. PMID: 18501637.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -298,9 +289,7 @@ function metric_tfce_execute(
 
 
 /**
- * metric-tfce
- *
- * Do tfce on a metric file.
+ * DO TFCE ON A METRIC FILE.
  *
  * This command does not do any statistical analysis.  Please use something like PALM if you are just trying to do statistics on your data.
  *
@@ -314,34 +303,36 @@ function metric_tfce_execute(
  *
  * The TFCE method is explained in: Smith SM, Nichols TE., "Threshold-free cluster enhancement: addressing problems of smoothing, threshold dependence and localisation in cluster inference." Neuroimage. 2009 Jan 1;44(1):83-98. PMID: 18501637.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param metric_out the output metric
+ * @param roi_metric select a region of interest to run TFCE on
+
+the area to run TFCE on, as a metric
+ * @param column select a single column
+
+the column number or name
+ * @param area_metric vertex areas to use instead of computing them from the surface
+
+the corrected vertex areas, as a metric
  * @param surface the surface to compute on
  * @param metric_in the metric to run TFCE on
- * @param metric_out the output metric
  * @param presmooth smooth the metric before running TFCE
- * @param opt_roi_roi_metric select a region of interest to run TFCE on: the area to run TFCE on, as a metric
  * @param parameters set parameters for TFCE integral
- * @param opt_column_column select a single column: the column number or name
- * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricTfceOutputs`).
  */
 function metric_tfce(
+    metric_out: string,
+    roi_metric: InputPathType | null,
+    column: string | null,
+    area_metric: InputPathType | null,
     surface: InputPathType,
     metric_in: InputPathType,
-    metric_out: string,
     presmooth: MetricTfcePresmoothParameters | null = null,
-    opt_roi_roi_metric: InputPathType | null = null,
     parameters: MetricTfceParametersParameters | null = null,
-    opt_column_column: string | null = null,
-    opt_corrected_areas_area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricTfceOutputs {
-    const params = metric_tfce_params(surface, metric_in, metric_out, presmooth, opt_roi_roi_metric, parameters, opt_column_column, opt_corrected_areas_area_metric)
+    const params = metric_tfce_params(metric_out, roi_metric, column, area_metric, surface, metric_in, presmooth, parameters)
     return metric_tfce_execute(params, runner);
 }
 

@@ -4,18 +4,17 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SPEC_FILE_MERGE_METADATA: Metadata = {
-    id: "dc8ed74b03797d25ba546c4df5d98037f0153fa7.boutiques",
+    id: "85ecceaff1fc0a1530a0d4627dab53d2a72a20ea.workbench",
     name: "spec-file-merge",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface SpecFileMergeParameters {
     "@type"?: "workbench/spec-file-merge";
-    "spec_1": string;
-    "spec_2": string;
-    "out_spec": string;
+    "spec-1": string;
+    "spec-2": string;
+    "out-spec": string;
 }
 type SpecFileMergeParametersTagged = Required<Pick<SpecFileMergeParameters, '@type'>> & SpecFileMergeParameters;
 
@@ -49,9 +48,9 @@ function spec_file_merge_params(
 ): SpecFileMergeParametersTagged {
     const params = {
         "@type": "workbench/spec-file-merge" as const,
-        "spec_1": spec_1,
-        "spec_2": spec_2,
-        "out_spec": out_spec,
+        "spec-1": spec_1,
+        "spec-2": spec_2,
+        "out-spec": out_spec,
     };
     return params;
 }
@@ -70,11 +69,13 @@ function spec_file_merge_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-spec-file-merge");
-    cargs.push((params["spec_1"] ?? null));
-    cargs.push((params["spec_2"] ?? null));
-    cargs.push((params["out_spec"] ?? null));
+    cargs.push(
+        "wb_command",
+        "-spec-file-merge"
+    );
+    cargs.push((params["spec-1"] ?? null));
+    cargs.push((params["spec-2"] ?? null));
+    cargs.push((params["out-spec"] ?? null));
     return cargs;
 }
 
@@ -99,15 +100,9 @@ function spec_file_merge_outputs(
 
 
 /**
- * spec-file-merge
- *
- * Merge two spec files into one.
+ * MERGE TWO SPEC FILES INTO ONE.
  *
  * The output spec file contains every file that is in either of the input spec files.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -129,15 +124,9 @@ function spec_file_merge_execute(
 
 
 /**
- * spec-file-merge
- *
- * Merge two spec files into one.
+ * MERGE TWO SPEC FILES INTO ONE.
  *
  * The output spec file contains every file that is in either of the input spec files.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param spec_1 first spec file to merge
  * @param spec_2 second spec file to merge

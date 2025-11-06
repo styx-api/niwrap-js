@@ -4,21 +4,21 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_LABEL_IMPORT_METADATA: Metadata = {
-    id: "ff57f7adfa683ce934248ecdc96b3c5c9f99b22e.boutiques",
+    id: "a6ac49efad7e33730c569a6154b9c1ecb184a663.workbench",
     name: "cifti-label-import",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiLabelImportParameters {
     "@type"?: "workbench/cifti-label-import";
-    "input": InputPathType;
-    "label_list_file": string;
     "output": string;
-    "opt_discard_others": boolean;
-    "opt_unlabeled_value_value"?: number | null | undefined;
-    "opt_drop_unused_labels": boolean;
+    "discard-others": boolean;
+    "value"?: number | null | undefined;
+    "drop-unused-labels": boolean;
+    "file"?: string | null | undefined;
+    "input": InputPathType;
+    "label-list-file": string;
 }
 type CiftiLabelImportParametersTagged = Required<Pick<CiftiLabelImportParameters, '@type'>> & CiftiLabelImportParameters;
 
@@ -43,33 +43,42 @@ interface CiftiLabelImportOutputs {
 /**
  * Build parameters.
  *
+ * @param output the output cifti label file
+ * @param value set the value that will be interpreted as unlabeled
+
+the numeric value for unlabeled (default 0)
+ * @param file read label name hierarchy from a json file
+
+the input json file
  * @param input the input cifti file
  * @param label_list_file text file containing the values and names for labels
- * @param output the output cifti label file
- * @param opt_discard_others set any values not mentioned in the label list to the ??? label
- * @param opt_unlabeled_value_value set the value that will be interpreted as unlabeled: the numeric value for unlabeled (default 0)
- * @param opt_drop_unused_labels remove any unused label values from the label table
+ * @param discard_others set any values not mentioned in the label list to the ??? label
+ * @param drop_unused_labels remove any unused label values from the label table
  *
  * @returns Parameter dictionary
  */
 function cifti_label_import_params(
+    output: string,
+    value: number | null,
+    file: string | null,
     input: InputPathType,
     label_list_file: string,
-    output: string,
-    opt_discard_others: boolean = false,
-    opt_unlabeled_value_value: number | null = null,
-    opt_drop_unused_labels: boolean = false,
+    discard_others: boolean = false,
+    drop_unused_labels: boolean = false,
 ): CiftiLabelImportParametersTagged {
     const params = {
         "@type": "workbench/cifti-label-import" as const,
-        "input": input,
-        "label_list_file": label_list_file,
         "output": output,
-        "opt_discard_others": opt_discard_others,
-        "opt_drop_unused_labels": opt_drop_unused_labels,
+        "discard-others": discard_others,
+        "drop-unused-labels": drop_unused_labels,
+        "input": input,
+        "label-list-file": label_list_file,
     };
-    if (opt_unlabeled_value_value !== null) {
-        params["opt_unlabeled_value_value"] = opt_unlabeled_value_value;
+    if (value !== null) {
+        params["value"] = value;
+    }
+    if (file !== null) {
+        params["file"] = file;
     }
     return params;
 }
@@ -88,23 +97,21 @@ function cifti_label_import_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-label-import");
-    cargs.push(execution.inputFile((params["input"] ?? null)));
-    cargs.push((params["label_list_file"] ?? null));
-    cargs.push((params["output"] ?? null));
-    if ((params["opt_discard_others"] ?? false)) {
-        cargs.push("-discard-others");
-    }
-    if ((params["opt_unlabeled_value_value"] ?? null) !== null) {
+    if ((params["discard-others"] ?? false) || (params["value"] ?? null) !== null || (params["drop-unused-labels"] ?? false) || (params["file"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-cifti-label-import",
+            (params["output"] ?? null),
+            (((params["discard-others"] ?? false)) ? "-discard-others" : ""),
             "-unlabeled-value",
-            String((params["opt_unlabeled_value_value"] ?? null))
+            (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
+            (((params["drop-unused-labels"] ?? false)) ? "-drop-unused-labels" : ""),
+            "-hierarchy",
+            (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : "")
         );
     }
-    if ((params["opt_drop_unused_labels"] ?? false)) {
-        cargs.push("-drop-unused-labels");
-    }
+    cargs.push(execution.inputFile((params["input"] ?? null)));
+    cargs.push((params["label-list-file"] ?? null));
     return cargs;
 }
 
@@ -130,9 +137,7 @@ function cifti_label_import_outputs(
 
 
 /**
- * cifti-label-import
- *
- * Make a cifti label file from a cifti file.
+ * MAKE A CIFTI LABEL FILE FROM A CIFTI FILE.
  *
  * Creates a cifti label file from a cifti file with label-like values.  You may specify the empty string (use "") for <label-list-file>, which will be treated as if it is an empty file.  The label list file must have the following format (2 lines per label):
  *
@@ -143,10 +148,6 @@ function cifti_label_import_outputs(
  * Label names are specified on a separate line from their value and color, in order to let label names contain spaces.  Whitespace is trimmed from both ends of the label name, but is kept if it is in the middle of a label.  Do not specify the "unlabeled" key in the file, it is assumed that 0 means not labeled unless -unlabeled-value is specified.  The value of <key> specifies what value in the imported file should be used as this label (these same key values are also used in the output file).  The values of <red>, <green>, <blue> and <alpha> must be integers from 0 to 255, and will specify the color the label is drawn as (alpha of 255 means fully opaque, which is probably what you want).
  *
  * By default, it will create new label names with names like LABEL_5 for any values encountered that are not mentioned in the list file, specify -discard-others to instead set these values to the "unlabeled" key.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -168,9 +169,7 @@ function cifti_label_import_execute(
 
 
 /**
- * cifti-label-import
- *
- * Make a cifti label file from a cifti file.
+ * MAKE A CIFTI LABEL FILE FROM A CIFTI FILE.
  *
  * Creates a cifti label file from a cifti file with label-like values.  You may specify the empty string (use "") for <label-list-file>, which will be treated as if it is an empty file.  The label list file must have the following format (2 lines per label):
  *
@@ -182,30 +181,32 @@ function cifti_label_import_execute(
  *
  * By default, it will create new label names with names like LABEL_5 for any values encountered that are not mentioned in the list file, specify -discard-others to instead set these values to the "unlabeled" key.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param output the output cifti label file
+ * @param value set the value that will be interpreted as unlabeled
+
+the numeric value for unlabeled (default 0)
+ * @param file read label name hierarchy from a json file
+
+the input json file
  * @param input the input cifti file
  * @param label_list_file text file containing the values and names for labels
- * @param output the output cifti label file
- * @param opt_discard_others set any values not mentioned in the label list to the ??? label
- * @param opt_unlabeled_value_value set the value that will be interpreted as unlabeled: the numeric value for unlabeled (default 0)
- * @param opt_drop_unused_labels remove any unused label values from the label table
+ * @param discard_others set any values not mentioned in the label list to the ??? label
+ * @param drop_unused_labels remove any unused label values from the label table
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiLabelImportOutputs`).
  */
 function cifti_label_import(
+    output: string,
+    value: number | null,
+    file: string | null,
     input: InputPathType,
     label_list_file: string,
-    output: string,
-    opt_discard_others: boolean = false,
-    opt_unlabeled_value_value: number | null = null,
-    opt_drop_unused_labels: boolean = false,
+    discard_others: boolean = false,
+    drop_unused_labels: boolean = false,
     runner: Runner | null = null,
 ): CiftiLabelImportOutputs {
-    const params = cifti_label_import_params(input, label_list_file, output, opt_discard_others, opt_unlabeled_value_value, opt_drop_unused_labels)
+    const params = cifti_label_import_params(output, value, file, input, label_list_file, discard_others, drop_unused_labels)
     return cifti_label_import_execute(params, runner);
 }
 

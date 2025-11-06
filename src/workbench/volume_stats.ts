@@ -4,29 +4,28 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_STATS_METADATA: Metadata = {
-    id: "aee8e35b38c06ea18eeb42aa6c5076216e3ebc0c.boutiques",
+    id: "ec1af7e3dc9990ebe00878d35008f857657ae3d6.workbench",
     name: "volume-stats",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface VolumeStatsRoiParameters {
     "@type"?: "roi";
-    "roi_volume": InputPathType;
-    "opt_match_maps": boolean;
+    "roi-volume": InputPathType;
+    "match-maps": boolean;
 }
 type VolumeStatsRoiParametersTagged = Required<Pick<VolumeStatsRoiParameters, '@type'>> & VolumeStatsRoiParameters;
 
 
 interface VolumeStatsParameters {
     "@type"?: "workbench/volume-stats";
-    "volume_in": InputPathType;
-    "opt_reduce_operation"?: string | null | undefined;
-    "opt_percentile_percent"?: number | null | undefined;
-    "opt_subvolume_subvolume"?: string | null | undefined;
+    "operation"?: string | null | undefined;
+    "percent"?: number | null | undefined;
+    "subvolume"?: string | null | undefined;
     "roi"?: VolumeStatsRoiParameters | null | undefined;
-    "opt_show_map_name": boolean;
+    "show-map-name": boolean;
+    "volume-in": InputPathType;
 }
 type VolumeStatsParametersTagged = Required<Pick<VolumeStatsParameters, '@type'>> & VolumeStatsParameters;
 
@@ -35,18 +34,18 @@ type VolumeStatsParametersTagged = Required<Pick<VolumeStatsParameters, '@type'>
  * Build parameters.
  *
  * @param roi_volume the roi, as a volume file
- * @param opt_match_maps each subvolume of input uses the corresponding subvolume from the roi file
+ * @param match_maps each subvolume of input uses the corresponding subvolume from the roi file
  *
  * @returns Parameter dictionary
  */
 function volume_stats_roi_params(
     roi_volume: InputPathType,
-    opt_match_maps: boolean = false,
+    match_maps: boolean = false,
 ): VolumeStatsRoiParametersTagged {
     const params = {
         "@type": "roi" as const,
-        "roi_volume": roi_volume,
-        "opt_match_maps": opt_match_maps,
+        "roi-volume": roi_volume,
+        "match-maps": match_maps,
     };
     return params;
 }
@@ -65,10 +64,12 @@ function volume_stats_roi_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-roi");
-    cargs.push(execution.inputFile((params["roi_volume"] ?? null)));
-    if ((params["opt_match_maps"] ?? false)) {
-        cargs.push("-match-maps");
+    if ((params["match-maps"] ?? false)) {
+        cargs.push(
+            "-roi",
+            execution.inputFile((params["roi-volume"] ?? null)),
+            "-match-maps"
+        );
     }
     return cargs;
 }
@@ -90,36 +91,42 @@ interface VolumeStatsOutputs {
 /**
  * Build parameters.
  *
+ * @param operation use a reduction operation
+
+the reduction operation
+ * @param percent give the value at a percentile
+
+the percentile to find, must be between 0 and 100
+ * @param subvolume only display output for one subvolume
+
+the subvolume number or name
  * @param volume_in the input volume
- * @param opt_reduce_operation use a reduction operation: the reduction operation
- * @param opt_percentile_percent give the value at a percentile: the percentile to find, must be between 0 and 100
- * @param opt_subvolume_subvolume only display output for one subvolume: the subvolume number or name
  * @param roi only consider data inside an roi
- * @param opt_show_map_name print map index and name before each output
+ * @param show_map_name print map index and name before each output
  *
  * @returns Parameter dictionary
  */
 function volume_stats_params(
+    operation: string | null,
+    percent: number | null,
+    subvolume: string | null,
     volume_in: InputPathType,
-    opt_reduce_operation: string | null = null,
-    opt_percentile_percent: number | null = null,
-    opt_subvolume_subvolume: string | null = null,
     roi: VolumeStatsRoiParameters | null = null,
-    opt_show_map_name: boolean = false,
+    show_map_name: boolean = false,
 ): VolumeStatsParametersTagged {
     const params = {
         "@type": "workbench/volume-stats" as const,
-        "volume_in": volume_in,
-        "opt_show_map_name": opt_show_map_name,
+        "show-map-name": show_map_name,
+        "volume-in": volume_in,
     };
-    if (opt_reduce_operation !== null) {
-        params["opt_reduce_operation"] = opt_reduce_operation;
+    if (operation !== null) {
+        params["operation"] = operation;
     }
-    if (opt_percentile_percent !== null) {
-        params["opt_percentile_percent"] = opt_percentile_percent;
+    if (percent !== null) {
+        params["percent"] = percent;
     }
-    if (opt_subvolume_subvolume !== null) {
-        params["opt_subvolume_subvolume"] = opt_subvolume_subvolume;
+    if (subvolume !== null) {
+        params["subvolume"] = subvolume;
     }
     if (roi !== null) {
         params["roi"] = roi;
@@ -141,33 +148,21 @@ function volume_stats_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-stats");
-    cargs.push(execution.inputFile((params["volume_in"] ?? null)));
-    if ((params["opt_reduce_operation"] ?? null) !== null) {
+    if ((params["operation"] ?? null) !== null || (params["percent"] ?? null) !== null || (params["subvolume"] ?? null) !== null || (params["roi"] ?? null) !== null || (params["show-map-name"] ?? false)) {
         cargs.push(
+            "wb_command",
+            "-volume-stats",
             "-reduce",
-            (params["opt_reduce_operation"] ?? null)
-        );
-    }
-    if ((params["opt_percentile_percent"] ?? null) !== null) {
-        cargs.push(
+            (((params["operation"] ?? null) !== null) ? (params["operation"] ?? null) : ""),
             "-percentile",
-            String((params["opt_percentile_percent"] ?? null))
-        );
-    }
-    if ((params["opt_subvolume_subvolume"] ?? null) !== null) {
-        cargs.push(
+            (((params["percent"] ?? null) !== null) ? String((params["percent"] ?? null)) : ""),
             "-subvolume",
-            (params["opt_subvolume_subvolume"] ?? null)
+            (((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null) : ""),
+            ...(((params["roi"] ?? null) !== null) ? volume_stats_roi_cargs((params["roi"] ?? null), execution) : []),
+            (((params["show-map-name"] ?? false)) ? "-show-map-name" : "")
         );
     }
-    if ((params["roi"] ?? null) !== null) {
-        cargs.push(...volume_stats_roi_cargs((params["roi"] ?? null), execution));
-    }
-    if ((params["opt_show_map_name"] ?? false)) {
-        cargs.push("-show-map-name");
-    }
+    cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     return cargs;
 }
 
@@ -192,9 +187,7 @@ function volume_stats_outputs(
 
 
 /**
- * volume-stats
- *
- * Spatial statistics on a volume file.
+ * SPATIAL STATISTICS ON A VOLUME FILE.
  *
  * For each subvolume of the input, a line of text is printed, resulting from the specified reduction or percentile operation.  Use -subvolume to only give output for a single subvolume.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -reduce or -percentile must be specified.
  *
@@ -217,10 +210,6 @@ function volume_stats_outputs(
  * MODE: the mode of the data
  * COUNT_NONZERO: the number of nonzero elements in the data
  * .
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -242,9 +231,7 @@ function volume_stats_execute(
 
 
 /**
- * volume-stats
- *
- * Spatial statistics on a volume file.
+ * SPATIAL STATISTICS ON A VOLUME FILE.
  *
  * For each subvolume of the input, a line of text is printed, resulting from the specified reduction or percentile operation.  Use -subvolume to only give output for a single subvolume.  If the -roi option is used without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Exactly one of -reduce or -percentile must be specified.
  *
@@ -268,30 +255,32 @@ function volume_stats_execute(
  * COUNT_NONZERO: the number of nonzero elements in the data
  * .
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param operation use a reduction operation
+
+the reduction operation
+ * @param percent give the value at a percentile
+
+the percentile to find, must be between 0 and 100
+ * @param subvolume only display output for one subvolume
+
+the subvolume number or name
  * @param volume_in the input volume
- * @param opt_reduce_operation use a reduction operation: the reduction operation
- * @param opt_percentile_percent give the value at a percentile: the percentile to find, must be between 0 and 100
- * @param opt_subvolume_subvolume only display output for one subvolume: the subvolume number or name
  * @param roi only consider data inside an roi
- * @param opt_show_map_name print map index and name before each output
+ * @param show_map_name print map index and name before each output
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeStatsOutputs`).
  */
 function volume_stats(
+    operation: string | null,
+    percent: number | null,
+    subvolume: string | null,
     volume_in: InputPathType,
-    opt_reduce_operation: string | null = null,
-    opt_percentile_percent: number | null = null,
-    opt_subvolume_subvolume: string | null = null,
     roi: VolumeStatsRoiParameters | null = null,
-    opt_show_map_name: boolean = false,
+    show_map_name: boolean = false,
     runner: Runner | null = null,
 ): VolumeStatsOutputs {
-    const params = volume_stats_params(volume_in, opt_reduce_operation, opt_percentile_percent, opt_subvolume_subvolume, roi, opt_show_map_name)
+    const params = volume_stats_params(operation, percent, subvolume, volume_in, roi, show_map_name)
     return volume_stats_execute(params, runner);
 }
 

@@ -4,20 +4,19 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_LABEL_ADJACENCY_METADATA: Metadata = {
-    id: "bcb2ac9510f2329e36c8dab72f902febc2c62123.boutiques",
+    id: "2e19cd8506381d00a3254296038c79a01dddd353.workbench",
     name: "cifti-label-adjacency",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiLabelAdjacencyParameters {
     "@type"?: "workbench/cifti-label-adjacency";
-    "label_in": InputPathType;
-    "adjacency_out": string;
-    "opt_left_surface_surface"?: InputPathType | null | undefined;
-    "opt_right_surface_surface"?: InputPathType | null | undefined;
-    "opt_cerebellum_surface_surface"?: InputPathType | null | undefined;
+    "adjacency-out": string;
+    "surface"?: InputPathType | null | undefined;
+    "surface"?: InputPathType | null | undefined;
+    "surface"?: InputPathType | null | undefined;
+    "label-in": InputPathType;
 }
 type CiftiLabelAdjacencyParametersTagged = Required<Pick<CiftiLabelAdjacencyParameters, '@type'>> & CiftiLabelAdjacencyParameters;
 
@@ -42,34 +41,40 @@ interface CiftiLabelAdjacencyOutputs {
 /**
  * Build parameters.
  *
- * @param label_in the input cifti label file
  * @param adjacency_out the output cifti pconn adjacency matrix
- * @param opt_left_surface_surface specify the left surface to use: the left surface file
- * @param opt_right_surface_surface specify the right surface to use: the right surface file
- * @param opt_cerebellum_surface_surface specify the cerebellum surface to use: the cerebellum surface file
+ * @param surface specify the left surface to use
+
+the left surface file
+ * @param surface_ specify the right surface to use
+
+the right surface file
+ * @param surface_2 specify the cerebellum surface to use
+
+the cerebellum surface file
+ * @param label_in the input cifti label file
  *
  * @returns Parameter dictionary
  */
 function cifti_label_adjacency_params(
-    label_in: InputPathType,
     adjacency_out: string,
-    opt_left_surface_surface: InputPathType | null = null,
-    opt_right_surface_surface: InputPathType | null = null,
-    opt_cerebellum_surface_surface: InputPathType | null = null,
+    surface: InputPathType | null,
+    surface_: InputPathType | null,
+    surface_2: InputPathType | null,
+    label_in: InputPathType,
 ): CiftiLabelAdjacencyParametersTagged {
     const params = {
         "@type": "workbench/cifti-label-adjacency" as const,
-        "label_in": label_in,
-        "adjacency_out": adjacency_out,
+        "adjacency-out": adjacency_out,
+        "label-in": label_in,
     };
-    if (opt_left_surface_surface !== null) {
-        params["opt_left_surface_surface"] = opt_left_surface_surface;
+    if (surface !== null) {
+        params["surface"] = surface;
     }
-    if (opt_right_surface_surface !== null) {
-        params["opt_right_surface_surface"] = opt_right_surface_surface;
+    if (surface_ !== null) {
+        params["surface"] = surface_;
     }
-    if (opt_cerebellum_surface_surface !== null) {
-        params["opt_cerebellum_surface_surface"] = opt_cerebellum_surface_surface;
+    if (surface_2 !== null) {
+        params["surface"] = surface_2;
     }
     return params;
 }
@@ -88,28 +93,20 @@ function cifti_label_adjacency_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-label-adjacency");
-    cargs.push(execution.inputFile((params["label_in"] ?? null)));
-    cargs.push((params["adjacency_out"] ?? null));
-    if ((params["opt_left_surface_surface"] ?? null) !== null) {
+    if ((params["surface"] ?? null) !== null || (params["surface"] ?? null) !== null || (params["surface"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-cifti-label-adjacency",
+            (params["adjacency-out"] ?? null),
             "-left-surface",
-            execution.inputFile((params["opt_left_surface_surface"] ?? null))
-        );
-    }
-    if ((params["opt_right_surface_surface"] ?? null) !== null) {
-        cargs.push(
+            (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),
             "-right-surface",
-            execution.inputFile((params["opt_right_surface_surface"] ?? null))
-        );
-    }
-    if ((params["opt_cerebellum_surface_surface"] ?? null) !== null) {
-        cargs.push(
+            (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),
             "-cerebellum-surface",
-            execution.inputFile((params["opt_cerebellum_surface_surface"] ?? null))
+            (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : "")
         );
     }
+    cargs.push(execution.inputFile((params["label-in"] ?? null)));
     return cargs;
 }
 
@@ -128,22 +125,16 @@ function cifti_label_adjacency_outputs(
 ): CiftiLabelAdjacencyOutputs {
     const ret: CiftiLabelAdjacencyOutputs = {
         root: execution.outputFile("."),
-        adjacency_out: execution.outputFile([(params["adjacency_out"] ?? null)].join('')),
+        adjacency_out: execution.outputFile([(params["adjacency-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * cifti-label-adjacency
- *
- * Make adjacency matrix of a cifti label file.
+ * MAKE ADJACENCY MATRIX OF A CIFTI LABEL FILE.
  *
  * Find face-adjacent voxels and connected vertices that have different label values, and count them for each pair.  Put the resulting counts into a parcellated connectivity file, with the diagonal being zero.  This gives a rough estimate of how long or expansive the border between two labels is.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -165,34 +156,34 @@ function cifti_label_adjacency_execute(
 
 
 /**
- * cifti-label-adjacency
- *
- * Make adjacency matrix of a cifti label file.
+ * MAKE ADJACENCY MATRIX OF A CIFTI LABEL FILE.
  *
  * Find face-adjacent voxels and connected vertices that have different label values, and count them for each pair.  Put the resulting counts into a parcellated connectivity file, with the diagonal being zero.  This gives a rough estimate of how long or expansive the border between two labels is.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
- * @param label_in the input cifti label file
  * @param adjacency_out the output cifti pconn adjacency matrix
- * @param opt_left_surface_surface specify the left surface to use: the left surface file
- * @param opt_right_surface_surface specify the right surface to use: the right surface file
- * @param opt_cerebellum_surface_surface specify the cerebellum surface to use: the cerebellum surface file
+ * @param surface specify the left surface to use
+
+the left surface file
+ * @param surface_ specify the right surface to use
+
+the right surface file
+ * @param surface_2 specify the cerebellum surface to use
+
+the cerebellum surface file
+ * @param label_in the input cifti label file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiLabelAdjacencyOutputs`).
  */
 function cifti_label_adjacency(
-    label_in: InputPathType,
     adjacency_out: string,
-    opt_left_surface_surface: InputPathType | null = null,
-    opt_right_surface_surface: InputPathType | null = null,
-    opt_cerebellum_surface_surface: InputPathType | null = null,
+    surface: InputPathType | null,
+    surface_: InputPathType | null,
+    surface_2: InputPathType | null,
+    label_in: InputPathType,
     runner: Runner | null = null,
 ): CiftiLabelAdjacencyOutputs {
-    const params = cifti_label_adjacency_params(label_in, adjacency_out, opt_left_surface_surface, opt_right_surface_surface, opt_cerebellum_surface_surface)
+    const params = cifti_label_adjacency_params(adjacency_out, surface, surface_, surface_2, label_in)
     return cifti_label_adjacency_execute(params, runner);
 }
 

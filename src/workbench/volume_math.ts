@@ -4,10 +4,9 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_MATH_METADATA: Metadata = {
-    id: "a726aa1b4d69c5d8136af6cd6d227b61c7f03acf.boutiques",
+    id: "ed80a7d73850df806877a40dcced769f42073178.workbench",
     name: "volume-math",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
@@ -15,18 +14,18 @@ interface VolumeMathVarParameters {
     "@type"?: "var";
     "name": string;
     "volume": InputPathType;
-    "opt_subvolume_subvol"?: string | null | undefined;
-    "opt_repeat": boolean;
+    "subvol"?: string | null | undefined;
+    "repeat": boolean;
 }
 type VolumeMathVarParametersTagged = Required<Pick<VolumeMathVarParameters, '@type'>> & VolumeMathVarParameters;
 
 
 interface VolumeMathParameters {
     "@type"?: "workbench/volume-math";
-    "expression": string;
-    "volume_out": string;
-    "opt_fixnan_replace"?: number | null | undefined;
+    "volume-out": string;
+    "replace"?: number | null | undefined;
     "var"?: Array<VolumeMathVarParameters> | null | undefined;
+    "expression": string;
 }
 type VolumeMathParametersTagged = Required<Pick<VolumeMathParameters, '@type'>> & VolumeMathParameters;
 
@@ -36,25 +35,27 @@ type VolumeMathParametersTagged = Required<Pick<VolumeMathParameters, '@type'>> 
  *
  * @param name the name of the variable, as used in the expression
  * @param volume the volume file to use as this variable
- * @param opt_subvolume_subvol select a single subvolume: the subvolume number or name
- * @param opt_repeat reuse a single subvolume for each subvolume of calculation
+ * @param subvol select a single subvolume
+
+the subvolume number or name
+ * @param repeat reuse a single subvolume for each subvolume of calculation
  *
  * @returns Parameter dictionary
  */
 function volume_math_var_params(
     name: string,
     volume: InputPathType,
-    opt_subvolume_subvol: string | null = null,
-    opt_repeat: boolean = false,
+    subvol: string | null,
+    repeat: boolean = false,
 ): VolumeMathVarParametersTagged {
     const params = {
         "@type": "var" as const,
         "name": name,
         "volume": volume,
-        "opt_repeat": opt_repeat,
+        "repeat": repeat,
     };
-    if (opt_subvolume_subvol !== null) {
-        params["opt_subvolume_subvol"] = opt_subvolume_subvol;
+    if (subvol !== null) {
+        params["subvol"] = subvol;
     }
     return params;
 }
@@ -73,17 +74,15 @@ function volume_math_var_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-var");
-    cargs.push((params["name"] ?? null));
-    cargs.push(execution.inputFile((params["volume"] ?? null)));
-    if ((params["opt_subvolume_subvol"] ?? null) !== null) {
+    if ((params["subvol"] ?? null) !== null || (params["repeat"] ?? false)) {
         cargs.push(
+            "-var",
+            (params["name"] ?? null),
+            execution.inputFile((params["volume"] ?? null)),
             "-subvolume",
-            (params["opt_subvolume_subvol"] ?? null)
+            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : ""),
+            (((params["repeat"] ?? false)) ? "-repeat" : "")
         );
-    }
-    if ((params["opt_repeat"] ?? false)) {
-        cargs.push("-repeat");
     }
     return cargs;
 }
@@ -109,26 +108,28 @@ interface VolumeMathOutputs {
 /**
  * Build parameters.
  *
- * @param expression the expression to evaluate, in quotes
  * @param volume_out the output volume
- * @param opt_fixnan_replace replace NaN results with a value: value to replace NaN with
+ * @param replace replace NaN results with a value
+
+value to replace NaN with
+ * @param expression the expression to evaluate, in quotes
  * @param var_ a volume file to use as a variable
  *
  * @returns Parameter dictionary
  */
 function volume_math_params(
-    expression: string,
     volume_out: string,
-    opt_fixnan_replace: number | null = null,
+    replace: number | null,
+    expression: string,
     var_: Array<VolumeMathVarParameters> | null = null,
 ): VolumeMathParametersTagged {
     const params = {
         "@type": "workbench/volume-math" as const,
+        "volume-out": volume_out,
         "expression": expression,
-        "volume_out": volume_out,
     };
-    if (opt_fixnan_replace !== null) {
-        params["opt_fixnan_replace"] = opt_fixnan_replace;
+    if (replace !== null) {
+        params["replace"] = replace;
     }
     if (var_ !== null) {
         params["var"] = var_;
@@ -150,19 +151,17 @@ function volume_math_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-math");
-    cargs.push((params["expression"] ?? null));
-    cargs.push((params["volume_out"] ?? null));
-    if ((params["opt_fixnan_replace"] ?? null) !== null) {
+    if ((params["replace"] ?? null) !== null || (params["var"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-volume-math",
+            (params["volume-out"] ?? null),
             "-fixnan",
-            String((params["opt_fixnan_replace"] ?? null))
+            (((params["replace"] ?? null) !== null) ? String((params["replace"] ?? null)) : ""),
+            ...(((params["var"] ?? null) !== null) ? (params["var"] ?? null).map(s => volume_math_var_cargs(s, execution)).flat() : [])
         );
     }
-    if ((params["var"] ?? null) !== null) {
-        cargs.push(...(params["var"] ?? null).map(s => volume_math_var_cargs(s, execution)).flat());
-    }
+    cargs.push((params["expression"] ?? null));
     return cargs;
 }
 
@@ -181,16 +180,14 @@ function volume_math_outputs(
 ): VolumeMathOutputs {
     const ret: VolumeMathOutputs = {
         root: execution.outputFile("."),
-        volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
+        volume_out: execution.outputFile([(params["volume-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * volume-math
- *
- * Evaluate expression on volume files.
+ * EVALUATE EXPRESSION ON VOLUME FILES.
  *
  * This command evaluates <expression> at each voxel independently.  There must be at least one -var option (to get the volume space from), even if the <name> specified in it isn't used in <expression>.  All volumes must have the same volume space.  Filenames are not valid in <expression>, use a variable name and a -var option with matching <name> to specify an input file.  If the -subvolume option is given to any -var option, only one subvolume is used from that file.  If -repeat is specified, the file must either have only one subvolume, or have the -subvolume option specified.  All files that don't use -repeat must have the same number of subvolumes requested to be used.  The format of <expression> is as follows:
  *
@@ -230,10 +227,6 @@ function volume_math_outputs(
  *    mod: 2 arguments, mod(x, y) = x - y * floor(x / y), or 0 if y == 0
  *    clamp: 3 arguments, clamp(x, low, high) = min(max(x, low), high)
  * .
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -255,9 +248,7 @@ function volume_math_execute(
 
 
 /**
- * volume-math
- *
- * Evaluate expression on volume files.
+ * EVALUATE EXPRESSION ON VOLUME FILES.
  *
  * This command evaluates <expression> at each voxel independently.  There must be at least one -var option (to get the volume space from), even if the <name> specified in it isn't used in <expression>.  All volumes must have the same volume space.  Filenames are not valid in <expression>, use a variable name and a -var option with matching <name> to specify an input file.  If the -subvolume option is given to any -var option, only one subvolume is used from that file.  If -repeat is specified, the file must either have only one subvolume, or have the -subvolume option specified.  All files that don't use -repeat must have the same number of subvolumes requested to be used.  The format of <expression> is as follows:
  *
@@ -298,26 +289,24 @@ function volume_math_execute(
  *    clamp: 3 arguments, clamp(x, low, high) = min(max(x, low), high)
  * .
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
- * @param expression the expression to evaluate, in quotes
  * @param volume_out the output volume
- * @param opt_fixnan_replace replace NaN results with a value: value to replace NaN with
+ * @param replace replace NaN results with a value
+
+value to replace NaN with
+ * @param expression the expression to evaluate, in quotes
  * @param var_ a volume file to use as a variable
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeMathOutputs`).
  */
 function volume_math(
-    expression: string,
     volume_out: string,
-    opt_fixnan_replace: number | null = null,
+    replace: number | null,
+    expression: string,
     var_: Array<VolumeMathVarParameters> | null = null,
     runner: Runner | null = null,
 ): VolumeMathOutputs {
-    const params = volume_math_params(expression, volume_out, opt_fixnan_replace, var_)
+    const params = volume_math_params(volume_out, replace, expression, var_)
     return volume_math_execute(params, runner);
 }
 

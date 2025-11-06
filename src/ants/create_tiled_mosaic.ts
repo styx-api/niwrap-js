@@ -24,7 +24,7 @@ interface CreateTiledMosaicParameters {
     "pad_or_crop"?: string | null | undefined;
     "slices"?: string | null | undefined;
     "flip_slice"?: string | null | undefined;
-    "permute_axes"?: 0 | 1 | null | undefined;
+    "permute_axes"?: boolean | null | undefined;
 }
 type CreateTiledMosaicParametersTagged = Required<Pick<CreateTiledMosaicParameters, '@type'>> & CreateTiledMosaicParameters;
 
@@ -76,7 +76,7 @@ function create_tiled_mosaic_params(
     pad_or_crop: string | null = null,
     slices: string | null = null,
     flip_slice: string | null = null,
-    permute_axes: 0 | 1 | null = null,
+    permute_axes: boolean | null = null,
 ): CreateTiledMosaicParametersTagged {
     const params = {
         "@type": "ants/CreateTiledMosaic" as const,
@@ -196,7 +196,7 @@ function create_tiled_mosaic_cargs(
     if ((params["permute_axes"] ?? null) !== null) {
         cargs.push(
             "-g",
-            String((params["permute_axes"] ?? null))
+            ((params["permute_axes"] ?? null) ? "1" : "0")
         );
     }
     return cargs;
@@ -288,7 +288,7 @@ function create_tiled_mosaic(
     pad_or_crop: string | null = null,
     slices: string | null = null,
     flip_slice: string | null = null,
-    permute_axes: 0 | 1 | null = null,
+    permute_axes: boolean | null = null,
     runner: Runner | null = null,
 ): CreateTiledMosaicOutputs {
     const params = create_tiled_mosaic_params(input_image, output, rgb_image, mask_image, alpha, functional_overlay, tile_geometry, direction, pad_or_crop, slices, flip_slice, permute_axes)

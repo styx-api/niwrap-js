@@ -4,31 +4,31 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_LABEL_TO_SURFACE_MAPPING_METADATA: Metadata = {
-    id: "7b2c1281854788e8dba27a0d6884b9c1e7b7708e.boutiques",
+    id: "e946cc13f052329cb404822b10b801d01f5c7e09.workbench",
     name: "volume-label-to-surface-mapping",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface VolumeLabelToSurfaceMappingRibbonConstrainedParameters {
-    "@type"?: "ribbon_constrained";
-    "inner_surf": InputPathType;
-    "outer_surf": InputPathType;
-    "opt_volume_roi_roi_volume"?: InputPathType | null | undefined;
-    "opt_voxel_subdiv_subdiv_num"?: number | null | undefined;
-    "opt_thin_columns": boolean;
+    "@type"?: "ribbon-constrained";
+    "inner-surf": InputPathType;
+    "outer-surf": InputPathType;
+    "roi-volume"?: InputPathType | null | undefined;
+    "dist"?: number | null | undefined;
+    "subdiv-num"?: number | null | undefined;
+    "thin-columns": boolean;
 }
 type VolumeLabelToSurfaceMappingRibbonConstrainedParametersTagged = Required<Pick<VolumeLabelToSurfaceMappingRibbonConstrainedParameters, '@type'>> & VolumeLabelToSurfaceMappingRibbonConstrainedParameters;
 
 
 interface VolumeLabelToSurfaceMappingParameters {
     "@type"?: "workbench/volume-label-to-surface-mapping";
+    "label-out": string;
+    "ribbon-constrained"?: VolumeLabelToSurfaceMappingRibbonConstrainedParameters | null | undefined;
+    "subvol"?: string | null | undefined;
     "volume": InputPathType;
     "surface": InputPathType;
-    "label_out": string;
-    "ribbon_constrained"?: VolumeLabelToSurfaceMappingRibbonConstrainedParameters | null | undefined;
-    "opt_subvol_select_subvol"?: string | null | undefined;
 }
 type VolumeLabelToSurfaceMappingParametersTagged = Required<Pick<VolumeLabelToSurfaceMappingParameters, '@type'>> & VolumeLabelToSurfaceMappingParameters;
 
@@ -38,30 +38,41 @@ type VolumeLabelToSurfaceMappingParametersTagged = Required<Pick<VolumeLabelToSu
  *
  * @param inner_surf the inner surface of the ribbon
  * @param outer_surf the outer surface of the ribbon
- * @param opt_volume_roi_roi_volume use a volume roi: the volume file
- * @param opt_voxel_subdiv_subdiv_num voxel divisions while estimating voxel weights: number of subdivisions, default 3
- * @param opt_thin_columns use non-overlapping polyhedra
+ * @param roi_volume use a volume roi
+
+the volume file
+ * @param dist use dilation for small vertices that 'missed' the geometry tests
+
+distance in mm for dilation (can be small, like 1mm)
+ * @param subdiv_num voxel divisions while estimating voxel weights
+
+number of subdivisions, default 3
+ * @param thin_columns use non-overlapping polyhedra
  *
  * @returns Parameter dictionary
  */
 function volume_label_to_surface_mapping_ribbon_constrained_params(
     inner_surf: InputPathType,
     outer_surf: InputPathType,
-    opt_volume_roi_roi_volume: InputPathType | null = null,
-    opt_voxel_subdiv_subdiv_num: number | null = null,
-    opt_thin_columns: boolean = false,
+    roi_volume: InputPathType | null,
+    dist: number | null,
+    subdiv_num: number | null,
+    thin_columns: boolean = false,
 ): VolumeLabelToSurfaceMappingRibbonConstrainedParametersTagged {
     const params = {
-        "@type": "ribbon_constrained" as const,
-        "inner_surf": inner_surf,
-        "outer_surf": outer_surf,
-        "opt_thin_columns": opt_thin_columns,
+        "@type": "ribbon-constrained" as const,
+        "inner-surf": inner_surf,
+        "outer-surf": outer_surf,
+        "thin-columns": thin_columns,
     };
-    if (opt_volume_roi_roi_volume !== null) {
-        params["opt_volume_roi_roi_volume"] = opt_volume_roi_roi_volume;
+    if (roi_volume !== null) {
+        params["roi-volume"] = roi_volume;
     }
-    if (opt_voxel_subdiv_subdiv_num !== null) {
-        params["opt_voxel_subdiv_subdiv_num"] = opt_voxel_subdiv_subdiv_num;
+    if (dist !== null) {
+        params["dist"] = dist;
+    }
+    if (subdiv_num !== null) {
+        params["subdiv-num"] = subdiv_num;
     }
     return params;
 }
@@ -80,23 +91,19 @@ function volume_label_to_surface_mapping_ribbon_constrained_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-ribbon-constrained");
-    cargs.push(execution.inputFile((params["inner_surf"] ?? null)));
-    cargs.push(execution.inputFile((params["outer_surf"] ?? null)));
-    if ((params["opt_volume_roi_roi_volume"] ?? null) !== null) {
+    if ((params["roi-volume"] ?? null) !== null || (params["dist"] ?? null) !== null || (params["subdiv-num"] ?? null) !== null || (params["thin-columns"] ?? false)) {
         cargs.push(
+            "-ribbon-constrained",
+            execution.inputFile((params["inner-surf"] ?? null)),
+            execution.inputFile((params["outer-surf"] ?? null)),
             "-volume-roi",
-            execution.inputFile((params["opt_volume_roi_roi_volume"] ?? null))
-        );
-    }
-    if ((params["opt_voxel_subdiv_subdiv_num"] ?? null) !== null) {
-        cargs.push(
+            (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
+            "-dilate-missing",
+            (((params["dist"] ?? null) !== null) ? String((params["dist"] ?? null)) : ""),
             "-voxel-subdiv",
-            String((params["opt_voxel_subdiv_subdiv_num"] ?? null))
+            (((params["subdiv-num"] ?? null) !== null) ? String((params["subdiv-num"] ?? null)) : ""),
+            (((params["thin-columns"] ?? false)) ? "-thin-columns" : "")
         );
-    }
-    if ((params["opt_thin_columns"] ?? false)) {
-        cargs.push("-thin-columns");
     }
     return cargs;
 }
@@ -122,32 +129,34 @@ interface VolumeLabelToSurfaceMappingOutputs {
 /**
  * Build parameters.
  *
+ * @param label_out the output gifti label file
+ * @param subvol select a single subvolume to map
+
+the subvolume number or name
  * @param volume the volume to map data from
  * @param surface the surface to map the data onto
- * @param label_out the output gifti label file
  * @param ribbon_constrained use ribbon constrained mapping algorithm
- * @param opt_subvol_select_subvol select a single subvolume to map: the subvolume number or name
  *
  * @returns Parameter dictionary
  */
 function volume_label_to_surface_mapping_params(
+    label_out: string,
+    subvol: string | null,
     volume: InputPathType,
     surface: InputPathType,
-    label_out: string,
     ribbon_constrained: VolumeLabelToSurfaceMappingRibbonConstrainedParameters | null = null,
-    opt_subvol_select_subvol: string | null = null,
 ): VolumeLabelToSurfaceMappingParametersTagged {
     const params = {
         "@type": "workbench/volume-label-to-surface-mapping" as const,
+        "label-out": label_out,
         "volume": volume,
         "surface": surface,
-        "label_out": label_out,
     };
     if (ribbon_constrained !== null) {
-        params["ribbon_constrained"] = ribbon_constrained;
+        params["ribbon-constrained"] = ribbon_constrained;
     }
-    if (opt_subvol_select_subvol !== null) {
-        params["opt_subvol_select_subvol"] = opt_subvol_select_subvol;
+    if (subvol !== null) {
+        params["subvol"] = subvol;
     }
     return params;
 }
@@ -166,20 +175,18 @@ function volume_label_to_surface_mapping_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-label-to-surface-mapping");
-    cargs.push(execution.inputFile((params["volume"] ?? null)));
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push((params["label_out"] ?? null));
-    if ((params["ribbon_constrained"] ?? null) !== null) {
-        cargs.push(...volume_label_to_surface_mapping_ribbon_constrained_cargs((params["ribbon_constrained"] ?? null), execution));
-    }
-    if ((params["opt_subvol_select_subvol"] ?? null) !== null) {
+    if ((params["ribbon-constrained"] ?? null) !== null || (params["subvol"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-volume-label-to-surface-mapping",
+            (params["label-out"] ?? null),
+            ...(((params["ribbon-constrained"] ?? null) !== null) ? volume_label_to_surface_mapping_ribbon_constrained_cargs((params["ribbon-constrained"] ?? null), execution) : []),
             "-subvol-select",
-            (params["opt_subvol_select_subvol"] ?? null)
+            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
         );
     }
+    cargs.push(execution.inputFile((params["volume"] ?? null)));
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
     return cargs;
 }
 
@@ -198,22 +205,16 @@ function volume_label_to_surface_mapping_outputs(
 ): VolumeLabelToSurfaceMappingOutputs {
     const ret: VolumeLabelToSurfaceMappingOutputs = {
         root: execution.outputFile("."),
-        label_out: execution.outputFile([(params["label_out"] ?? null)].join('')),
+        label_out: execution.outputFile([(params["label-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * volume-label-to-surface-mapping
- *
- * Map a label volume to a surface label file.
+ * MAP A LABEL VOLUME TO A SURFACE LABEL FILE.
  *
  * Map label volume data to a surface.  If -ribbon-constrained is not specified, uses the enclosing voxel method.  The ribbon mapping method constructs a polyhedron from the vertex's neighbors on each surface, and estimates the amount of this polyhedron's volume that falls inside any nearby voxels, to use as the weights for a popularity comparison.  If -thin-columns is specified, the polyhedron uses the edge midpoints and triangle centroids, so that neighboring vertices do not have overlapping polyhedra.  This may require increasing -voxel-subdiv to get enough samples in each voxel to reliably land inside these smaller polyhedra.  The volume ROI is useful to exclude partial volume effects of voxels the surfaces pass through, and will cause the mapping to ignore voxels that don't have a positive value in the mask.  The subdivision number specifies how it approximates the amount of the volume the polyhedron intersects, by splitting each voxel into NxNxN pieces, and checking whether the center of each piece is inside the polyhedron.  If you have very large voxels, consider increasing this if you get unexpected unlabeled vertices in your output.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -235,34 +236,30 @@ function volume_label_to_surface_mapping_execute(
 
 
 /**
- * volume-label-to-surface-mapping
- *
- * Map a label volume to a surface label file.
+ * MAP A LABEL VOLUME TO A SURFACE LABEL FILE.
  *
  * Map label volume data to a surface.  If -ribbon-constrained is not specified, uses the enclosing voxel method.  The ribbon mapping method constructs a polyhedron from the vertex's neighbors on each surface, and estimates the amount of this polyhedron's volume that falls inside any nearby voxels, to use as the weights for a popularity comparison.  If -thin-columns is specified, the polyhedron uses the edge midpoints and triangle centroids, so that neighboring vertices do not have overlapping polyhedra.  This may require increasing -voxel-subdiv to get enough samples in each voxel to reliably land inside these smaller polyhedra.  The volume ROI is useful to exclude partial volume effects of voxels the surfaces pass through, and will cause the mapping to ignore voxels that don't have a positive value in the mask.  The subdivision number specifies how it approximates the amount of the volume the polyhedron intersects, by splitting each voxel into NxNxN pieces, and checking whether the center of each piece is inside the polyhedron.  If you have very large voxels, consider increasing this if you get unexpected unlabeled vertices in your output.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param label_out the output gifti label file
+ * @param subvol select a single subvolume to map
+
+the subvolume number or name
  * @param volume the volume to map data from
  * @param surface the surface to map the data onto
- * @param label_out the output gifti label file
  * @param ribbon_constrained use ribbon constrained mapping algorithm
- * @param opt_subvol_select_subvol select a single subvolume to map: the subvolume number or name
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeLabelToSurfaceMappingOutputs`).
  */
 function volume_label_to_surface_mapping(
+    label_out: string,
+    subvol: string | null,
     volume: InputPathType,
     surface: InputPathType,
-    label_out: string,
     ribbon_constrained: VolumeLabelToSurfaceMappingRibbonConstrainedParameters | null = null,
-    opt_subvol_select_subvol: string | null = null,
     runner: Runner | null = null,
 ): VolumeLabelToSurfaceMappingOutputs {
-    const params = volume_label_to_surface_mapping_params(volume, surface, label_out, ribbon_constrained, opt_subvol_select_subvol)
+    const params = volume_label_to_surface_mapping_params(label_out, subvol, volume, surface, ribbon_constrained)
     return volume_label_to_surface_mapping_execute(params, runner);
 }
 

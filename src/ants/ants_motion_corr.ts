@@ -16,7 +16,7 @@ interface AntsMotionCorrParameters {
     "dimensionality"?: 2 | 3 | null | undefined;
     "n_images"?: number | null | undefined;
     "metric"?: string | null | undefined;
-    "use_fixed_reference_image"?: 0 | 1 | null | undefined;
+    "use_fixed_reference_image"?: boolean | null | undefined;
     "use_scales_estimator": boolean;
     "transform"?: string | null | undefined;
     "iterations"?: string | null | undefined;
@@ -25,10 +25,10 @@ interface AntsMotionCorrParameters {
     "output"?: string | null | undefined;
     "average_image": boolean;
     "write_displacement": boolean;
-    "use_histogram_matching"?: 0 | 1 | null | undefined;
+    "use_histogram_matching"?: boolean | null | undefined;
     "random_seed"?: number | null | undefined;
     "interpolation"?: "Linear" | "NearestNeighbor" | "BSpline" | "BlackmanWindowedSinc" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | null | undefined;
-    "verbose"?: 0 | 1 | null | undefined;
+    "verbose"?: boolean | null | undefined;
 }
 type AntsMotionCorrParametersTagged = Required<Pick<AntsMotionCorrParameters, '@type'>> & AntsMotionCorrParameters;
 
@@ -84,7 +84,7 @@ function ants_motion_corr_params(
     dimensionality: 2 | 3 | null = null,
     n_images: number | null = null,
     metric: string | null = null,
-    use_fixed_reference_image: 0 | 1 | null = null,
+    use_fixed_reference_image: boolean | null = null,
     use_scales_estimator: boolean = false,
     transform: string | null = null,
     iterations: string | null = null,
@@ -93,10 +93,10 @@ function ants_motion_corr_params(
     output: string | null = null,
     average_image: boolean = false,
     write_displacement: boolean = false,
-    use_histogram_matching: 0 | 1 | null = null,
+    use_histogram_matching: boolean | null = null,
     random_seed: number | null = null,
     interpolation: "Linear" | "NearestNeighbor" | "BSpline" | "BlackmanWindowedSinc" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
 ): AntsMotionCorrParametersTagged {
     const params = {
         "@type": "ants/antsMotionCorr" as const,
@@ -182,7 +182,7 @@ function ants_motion_corr_cargs(
     if ((params["use_fixed_reference_image"] ?? null) !== null) {
         cargs.push(
             "--useFixedReferenceImage",
-            String((params["use_fixed_reference_image"] ?? null))
+            ((params["use_fixed_reference_image"] ?? null) ? "1" : "0")
         );
     }
     if ((params["use_scales_estimator"] ?? false)) {
@@ -227,7 +227,7 @@ function ants_motion_corr_cargs(
     if ((params["use_histogram_matching"] ?? null) !== null) {
         cargs.push(
             "--use-histogram-matching",
-            String((params["use_histogram_matching"] ?? null))
+            ((params["use_histogram_matching"] ?? null) ? "1" : "0")
         );
     }
     if ((params["random_seed"] ?? null) !== null) {
@@ -245,7 +245,7 @@ function ants_motion_corr_cargs(
     if ((params["verbose"] ?? null) !== null) {
         cargs.push(
             "--verbose",
-            String((params["verbose"] ?? null))
+            ((params["verbose"] ?? null) ? "1" : "0")
         );
     }
     return cargs;
@@ -335,7 +335,7 @@ function ants_motion_corr(
     dimensionality: 2 | 3 | null = null,
     n_images: number | null = null,
     metric: string | null = null,
-    use_fixed_reference_image: 0 | 1 | null = null,
+    use_fixed_reference_image: boolean | null = null,
     use_scales_estimator: boolean = false,
     transform: string | null = null,
     iterations: string | null = null,
@@ -344,10 +344,10 @@ function ants_motion_corr(
     output: string | null = null,
     average_image: boolean = false,
     write_displacement: boolean = false,
-    use_histogram_matching: 0 | 1 | null = null,
+    use_histogram_matching: boolean | null = null,
     random_seed: number | null = null,
     interpolation: "Linear" | "NearestNeighbor" | "BSpline" | "BlackmanWindowedSinc" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
     runner: Runner | null = null,
 ): AntsMotionCorrOutputs {
     const params = ants_motion_corr_params(dimensionality, n_images, metric, use_fixed_reference_image, use_scales_estimator, transform, iterations, smoothing_sigmas, shrink_factors, output, average_image, write_displacement, use_histogram_matching, random_seed, interpolation, verbose)

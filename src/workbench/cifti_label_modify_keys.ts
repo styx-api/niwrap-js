@@ -4,19 +4,18 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_LABEL_MODIFY_KEYS_METADATA: Metadata = {
-    id: "e0c244e89a233c2d2fc2fd062eb1b5f673b28511.boutiques",
+    id: "c1b64c2a3ef6542f7a8f34965d349c950dd4cb74.workbench",
     name: "cifti-label-modify-keys",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiLabelModifyKeysParameters {
     "@type"?: "workbench/cifti-label-modify-keys";
-    "cifti_in": InputPathType;
-    "remap_file": string;
-    "cifti_out": string;
-    "opt_column_column"?: string | null | undefined;
+    "cifti-out": string;
+    "column"?: string | null | undefined;
+    "cifti-in": InputPathType;
+    "remap-file": string;
 }
 type CiftiLabelModifyKeysParametersTagged = Required<Pick<CiftiLabelModifyKeysParameters, '@type'>> & CiftiLabelModifyKeysParameters;
 
@@ -41,27 +40,29 @@ interface CiftiLabelModifyKeysOutputs {
 /**
  * Build parameters.
  *
+ * @param cifti_out the output dlabel file
+ * @param column select a single column to use
+
+the column number or name
  * @param cifti_in the input dlabel file
  * @param remap_file text file with old and new key values
- * @param cifti_out the output dlabel file
- * @param opt_column_column select a single column to use: the column number or name
  *
  * @returns Parameter dictionary
  */
 function cifti_label_modify_keys_params(
+    cifti_out: string,
+    column: string | null,
     cifti_in: InputPathType,
     remap_file: string,
-    cifti_out: string,
-    opt_column_column: string | null = null,
 ): CiftiLabelModifyKeysParametersTagged {
     const params = {
         "@type": "workbench/cifti-label-modify-keys" as const,
-        "cifti_in": cifti_in,
-        "remap_file": remap_file,
-        "cifti_out": cifti_out,
+        "cifti-out": cifti_out,
+        "cifti-in": cifti_in,
+        "remap-file": remap_file,
     };
-    if (opt_column_column !== null) {
-        params["opt_column_column"] = opt_column_column;
+    if (column !== null) {
+        params["column"] = column;
     }
     return params;
 }
@@ -80,17 +81,17 @@ function cifti_label_modify_keys_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-label-modify-keys");
-    cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
-    cargs.push((params["remap_file"] ?? null));
-    cargs.push((params["cifti_out"] ?? null));
-    if ((params["opt_column_column"] ?? null) !== null) {
+    if ((params["column"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-cifti-label-modify-keys",
+            (params["cifti-out"] ?? null),
             "-column",
-            (params["opt_column_column"] ?? null)
+            (params["column"] ?? null)
         );
     }
+    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
+    cargs.push((params["remap-file"] ?? null));
     return cargs;
 }
 
@@ -109,16 +110,14 @@ function cifti_label_modify_keys_outputs(
 ): CiftiLabelModifyKeysOutputs {
     const ret: CiftiLabelModifyKeysOutputs = {
         root: execution.outputFile("."),
-        cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
+        cifti_out: execution.outputFile([(params["cifti-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * cifti-label-modify-keys
- *
- * Change key values in a dlabel file.
+ * CHANGE KEY VALUES IN A DLABEL FILE.
  *
  * <remap-file> should have lines of the form 'oldkey newkey', like so:
  *
@@ -127,10 +126,6 @@ function cifti_label_modify_keys_outputs(
  * 8 2
  *
  * This would change the current label with key '3' to use the key '5' instead, 5 would use 8, and 8 would use 2.  Any collision in key values results in the label that was not specified in the remap file getting remapped to an otherwise unused key.  Remapping more than one key to the same new key, or the same key to more than one new key, results in an error.  This will not change the appearance of the file when displayed, as it will change the key values in the data at the same time.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -152,9 +147,7 @@ function cifti_label_modify_keys_execute(
 
 
 /**
- * cifti-label-modify-keys
- *
- * Change key values in a dlabel file.
+ * CHANGE KEY VALUES IN A DLABEL FILE.
  *
  * <remap-file> should have lines of the form 'oldkey newkey', like so:
  *
@@ -164,26 +157,24 @@ function cifti_label_modify_keys_execute(
  *
  * This would change the current label with key '3' to use the key '5' instead, 5 would use 8, and 8 would use 2.  Any collision in key values results in the label that was not specified in the remap file getting remapped to an otherwise unused key.  Remapping more than one key to the same new key, or the same key to more than one new key, results in an error.  This will not change the appearance of the file when displayed, as it will change the key values in the data at the same time.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param cifti_out the output dlabel file
+ * @param column select a single column to use
+
+the column number or name
  * @param cifti_in the input dlabel file
  * @param remap_file text file with old and new key values
- * @param cifti_out the output dlabel file
- * @param opt_column_column select a single column to use: the column number or name
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiLabelModifyKeysOutputs`).
  */
 function cifti_label_modify_keys(
+    cifti_out: string,
+    column: string | null,
     cifti_in: InputPathType,
     remap_file: string,
-    cifti_out: string,
-    opt_column_column: string | null = null,
     runner: Runner | null = null,
 ): CiftiLabelModifyKeysOutputs {
-    const params = cifti_label_modify_keys_params(cifti_in, remap_file, cifti_out, opt_column_column)
+    const params = cifti_label_modify_keys_params(cifti_out, column, cifti_in, remap_file)
     return cifti_label_modify_keys_execute(params, runner);
 }
 

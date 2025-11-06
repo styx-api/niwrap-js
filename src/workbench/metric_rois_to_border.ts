@@ -4,21 +4,20 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_ROIS_TO_BORDER_METADATA: Metadata = {
-    id: "4a9c089ac2e77aebb94a3e0cd49e5786b1ab89ee.boutiques",
+    id: "ae7c7bdc27fb14b4ccb473f0ba599b0647222c8f.workbench",
     name: "metric-rois-to-border",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface MetricRoisToBorderParameters {
     "@type"?: "workbench/metric-rois-to-border";
+    "border-out": string;
+    "fraction"?: number | null | undefined;
+    "column"?: string | null | undefined;
     "surface": InputPathType;
     "metric": InputPathType;
-    "class_name": string;
-    "border_out": string;
-    "opt_placement_fraction"?: number | null | undefined;
-    "opt_column_column"?: string | null | undefined;
+    "class-name": string;
 }
 type MetricRoisToBorderParametersTagged = Required<Pick<MetricRoisToBorderParameters, '@type'>> & MetricRoisToBorderParameters;
 
@@ -43,35 +42,39 @@ interface MetricRoisToBorderOutputs {
 /**
  * Build parameters.
  *
+ * @param border_out the output border file
+ * @param fraction set how far along the edge border points are drawn
+
+fraction along edge from inside vertex (default 0.33)
+ * @param column select a single column
+
+the column number or name
  * @param surface the surface to use for neighbor information
  * @param metric the input metric containing ROIs
  * @param class_name the name to use for the class of the output borders
- * @param border_out the output border file
- * @param opt_placement_fraction set how far along the edge border points are drawn: fraction along edge from inside vertex (default 0.33)
- * @param opt_column_column select a single column: the column number or name
  *
  * @returns Parameter dictionary
  */
 function metric_rois_to_border_params(
+    border_out: string,
+    fraction: number | null,
+    column: string | null,
     surface: InputPathType,
     metric: InputPathType,
     class_name: string,
-    border_out: string,
-    opt_placement_fraction: number | null = null,
-    opt_column_column: string | null = null,
 ): MetricRoisToBorderParametersTagged {
     const params = {
         "@type": "workbench/metric-rois-to-border" as const,
+        "border-out": border_out,
         "surface": surface,
         "metric": metric,
-        "class_name": class_name,
-        "border_out": border_out,
+        "class-name": class_name,
     };
-    if (opt_placement_fraction !== null) {
-        params["opt_placement_fraction"] = opt_placement_fraction;
+    if (fraction !== null) {
+        params["fraction"] = fraction;
     }
-    if (opt_column_column !== null) {
-        params["opt_column_column"] = opt_column_column;
+    if (column !== null) {
+        params["column"] = column;
     }
     return params;
 }
@@ -90,24 +93,20 @@ function metric_rois_to_border_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-metric-rois-to-border");
+    if ((params["fraction"] ?? null) !== null || (params["column"] ?? null) !== null) {
+        cargs.push(
+            "wb_command",
+            "-metric-rois-to-border",
+            (params["border-out"] ?? null),
+            "-placement",
+            (((params["fraction"] ?? null) !== null) ? String((params["fraction"] ?? null)) : ""),
+            "-column",
+            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")
+        );
+    }
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric"] ?? null)));
-    cargs.push((params["class_name"] ?? null));
-    cargs.push((params["border_out"] ?? null));
-    if ((params["opt_placement_fraction"] ?? null) !== null) {
-        cargs.push(
-            "-placement",
-            String((params["opt_placement_fraction"] ?? null))
-        );
-    }
-    if ((params["opt_column_column"] ?? null) !== null) {
-        cargs.push(
-            "-column",
-            (params["opt_column_column"] ?? null)
-        );
-    }
+    cargs.push((params["class-name"] ?? null));
     return cargs;
 }
 
@@ -126,22 +125,16 @@ function metric_rois_to_border_outputs(
 ): MetricRoisToBorderOutputs {
     const ret: MetricRoisToBorderOutputs = {
         root: execution.outputFile("."),
-        border_out: execution.outputFile([(params["border_out"] ?? null)].join('')),
+        border_out: execution.outputFile([(params["border-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * metric-rois-to-border
- *
- * Draw borders around metric rois.
+ * DRAW BORDERS AROUND METRIC ROIS.
  *
  * For each ROI column, finds all edges on the mesh that cross the boundary of the ROI, and draws borders through them.  By default, this is done on all columns in the input file, using the map name as the name for the border.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -163,36 +156,34 @@ function metric_rois_to_border_execute(
 
 
 /**
- * metric-rois-to-border
- *
- * Draw borders around metric rois.
+ * DRAW BORDERS AROUND METRIC ROIS.
  *
  * For each ROI column, finds all edges on the mesh that cross the boundary of the ROI, and draws borders through them.  By default, this is done on all columns in the input file, using the map name as the name for the border.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param border_out the output border file
+ * @param fraction set how far along the edge border points are drawn
+
+fraction along edge from inside vertex (default 0.33)
+ * @param column select a single column
+
+the column number or name
  * @param surface the surface to use for neighbor information
  * @param metric the input metric containing ROIs
  * @param class_name the name to use for the class of the output borders
- * @param border_out the output border file
- * @param opt_placement_fraction set how far along the edge border points are drawn: fraction along edge from inside vertex (default 0.33)
- * @param opt_column_column select a single column: the column number or name
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricRoisToBorderOutputs`).
  */
 function metric_rois_to_border(
+    border_out: string,
+    fraction: number | null,
+    column: string | null,
     surface: InputPathType,
     metric: InputPathType,
     class_name: string,
-    border_out: string,
-    opt_placement_fraction: number | null = null,
-    opt_column_column: string | null = null,
     runner: Runner | null = null,
 ): MetricRoisToBorderOutputs {
-    const params = metric_rois_to_border_params(surface, metric, class_name, border_out, opt_placement_fraction, opt_column_column)
+    const params = metric_rois_to_border_params(border_out, fraction, column, surface, metric, class_name)
     return metric_rois_to_border_execute(params, runner);
 }
 

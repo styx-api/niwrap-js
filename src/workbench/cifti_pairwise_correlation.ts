@@ -4,20 +4,19 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_PAIRWISE_CORRELATION_METADATA: Metadata = {
-    id: "028724c21d89b563d8ea997344bbbb94f43f23a0.boutiques",
+    id: "ad1c3d662547315bfc0576b17cb38a01d7cddf48.workbench",
     name: "cifti-pairwise-correlation",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiPairwiseCorrelationParameters {
     "@type"?: "workbench/cifti-pairwise-correlation";
-    "cifti_a": InputPathType;
-    "cifti_b": InputPathType;
-    "cifti_out": string;
-    "opt_fisher_z": boolean;
-    "opt_override_mapping_check": boolean;
+    "cifti-out": string;
+    "fisher-z": boolean;
+    "override-mapping-check": boolean;
+    "cifti-a": InputPathType;
+    "cifti-b": InputPathType;
 }
 type CiftiPairwiseCorrelationParametersTagged = Required<Pick<CiftiPairwiseCorrelationParameters, '@type'>> & CiftiPairwiseCorrelationParameters;
 
@@ -42,28 +41,28 @@ interface CiftiPairwiseCorrelationOutputs {
 /**
  * Build parameters.
  *
+ * @param cifti_out output cifti file
  * @param cifti_a first input cifti file
  * @param cifti_b second input cifti file
- * @param cifti_out output cifti file
- * @param opt_fisher_z apply fisher small z transform (ie, artanh) to correlation
- * @param opt_override_mapping_check don't check the mappings for compatibility, only check length
+ * @param fisher_z apply fisher small z transform (ie, artanh) to correlation
+ * @param override_mapping_check don't check the mappings for compatibility, only check length
  *
  * @returns Parameter dictionary
  */
 function cifti_pairwise_correlation_params(
+    cifti_out: string,
     cifti_a: InputPathType,
     cifti_b: InputPathType,
-    cifti_out: string,
-    opt_fisher_z: boolean = false,
-    opt_override_mapping_check: boolean = false,
+    fisher_z: boolean = false,
+    override_mapping_check: boolean = false,
 ): CiftiPairwiseCorrelationParametersTagged {
     const params = {
         "@type": "workbench/cifti-pairwise-correlation" as const,
-        "cifti_a": cifti_a,
-        "cifti_b": cifti_b,
-        "cifti_out": cifti_out,
-        "opt_fisher_z": opt_fisher_z,
-        "opt_override_mapping_check": opt_override_mapping_check,
+        "cifti-out": cifti_out,
+        "fisher-z": fisher_z,
+        "override-mapping-check": override_mapping_check,
+        "cifti-a": cifti_a,
+        "cifti-b": cifti_b,
     };
     return params;
 }
@@ -82,17 +81,17 @@ function cifti_pairwise_correlation_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-pairwise-correlation");
-    cargs.push(execution.inputFile((params["cifti_a"] ?? null)));
-    cargs.push(execution.inputFile((params["cifti_b"] ?? null)));
-    cargs.push((params["cifti_out"] ?? null));
-    if ((params["opt_fisher_z"] ?? false)) {
-        cargs.push("-fisher-z");
+    if ((params["fisher-z"] ?? false) || (params["override-mapping-check"] ?? false)) {
+        cargs.push(
+            "wb_command",
+            "-cifti-pairwise-correlation",
+            (params["cifti-out"] ?? null),
+            (((params["fisher-z"] ?? false)) ? "-fisher-z" : ""),
+            (((params["override-mapping-check"] ?? false)) ? "-override-mapping-check" : "")
+        );
     }
-    if ((params["opt_override_mapping_check"] ?? false)) {
-        cargs.push("-override-mapping-check");
-    }
+    cargs.push(execution.inputFile((params["cifti-a"] ?? null)));
+    cargs.push(execution.inputFile((params["cifti-b"] ?? null)));
     return cargs;
 }
 
@@ -111,22 +110,16 @@ function cifti_pairwise_correlation_outputs(
 ): CiftiPairwiseCorrelationOutputs {
     const ret: CiftiPairwiseCorrelationOutputs = {
         root: execution.outputFile("."),
-        cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
+        cifti_out: execution.outputFile([(params["cifti-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * cifti-pairwise-correlation
- *
- * Correlate paired rows between two cifti files.
+ * CORRELATE PAIRED ROWS BETWEEN TWO CIFTI FILES.
  *
  * For each row in <cifti-a>, correlate it with the same row in <cifti-b>, and put the result in the same row of <cifti-out>, which has only one column.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -148,34 +141,28 @@ function cifti_pairwise_correlation_execute(
 
 
 /**
- * cifti-pairwise-correlation
- *
- * Correlate paired rows between two cifti files.
+ * CORRELATE PAIRED ROWS BETWEEN TWO CIFTI FILES.
  *
  * For each row in <cifti-a>, correlate it with the same row in <cifti-b>, and put the result in the same row of <cifti-out>, which has only one column.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param cifti_out output cifti file
  * @param cifti_a first input cifti file
  * @param cifti_b second input cifti file
- * @param cifti_out output cifti file
- * @param opt_fisher_z apply fisher small z transform (ie, artanh) to correlation
- * @param opt_override_mapping_check don't check the mappings for compatibility, only check length
+ * @param fisher_z apply fisher small z transform (ie, artanh) to correlation
+ * @param override_mapping_check don't check the mappings for compatibility, only check length
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiPairwiseCorrelationOutputs`).
  */
 function cifti_pairwise_correlation(
+    cifti_out: string,
     cifti_a: InputPathType,
     cifti_b: InputPathType,
-    cifti_out: string,
-    opt_fisher_z: boolean = false,
-    opt_override_mapping_check: boolean = false,
+    fisher_z: boolean = false,
+    override_mapping_check: boolean = false,
     runner: Runner | null = null,
 ): CiftiPairwiseCorrelationOutputs {
-    const params = cifti_pairwise_correlation_params(cifti_a, cifti_b, cifti_out, opt_fisher_z, opt_override_mapping_check)
+    const params = cifti_pairwise_correlation_params(cifti_out, cifti_a, cifti_b, fisher_z, override_mapping_check)
     return cifti_pairwise_correlation_execute(params, runner);
 }
 

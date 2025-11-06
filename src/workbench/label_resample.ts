@@ -4,42 +4,41 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LABEL_RESAMPLE_METADATA: Metadata = {
-    id: "27cac022f876a408a3e9c32a66575355a7783848.boutiques",
+    id: "c5578cc16cfdc8f6e4a75e75e6c10f719016d2e0.workbench",
     name: "label-resample",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface LabelResampleAreaSurfsParameters {
-    "@type"?: "area_surfs";
-    "current_area": InputPathType;
-    "new_area": InputPathType;
+    "@type"?: "area-surfs";
+    "current-area": InputPathType;
+    "new-area": InputPathType;
 }
 type LabelResampleAreaSurfsParametersTagged = Required<Pick<LabelResampleAreaSurfsParameters, '@type'>> & LabelResampleAreaSurfsParameters;
 
 
 interface LabelResampleAreaMetricsParameters {
-    "@type"?: "area_metrics";
-    "current_area": InputPathType;
-    "new_area": InputPathType;
+    "@type"?: "area-metrics";
+    "current-area": InputPathType;
+    "new-area": InputPathType;
 }
 type LabelResampleAreaMetricsParametersTagged = Required<Pick<LabelResampleAreaMetricsParameters, '@type'>> & LabelResampleAreaMetricsParameters;
 
 
 interface LabelResampleParameters {
     "@type"?: "workbench/label-resample";
-    "label_in": InputPathType;
-    "current_sphere": InputPathType;
-    "new_sphere": InputPathType;
+    "label-out": string;
+    "area-surfs"?: LabelResampleAreaSurfsParameters | null | undefined;
+    "area-metrics"?: LabelResampleAreaMetricsParameters | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
+    "roi-out"?: string | null | undefined;
+    "largest": boolean;
+    "bypass-sphere-check": boolean;
+    "label-in": InputPathType;
+    "current-sphere": InputPathType;
+    "new-sphere": InputPathType;
     "method": string;
-    "label_out": string;
-    "area_surfs"?: LabelResampleAreaSurfsParameters | null | undefined;
-    "area_metrics"?: LabelResampleAreaMetricsParameters | null | undefined;
-    "opt_current_roi_roi_metric"?: InputPathType | null | undefined;
-    "opt_valid_roi_out_roi_out"?: string | null | undefined;
-    "opt_largest": boolean;
-    "opt_bypass_sphere_check": boolean;
 }
 type LabelResampleParametersTagged = Required<Pick<LabelResampleParameters, '@type'>> & LabelResampleParameters;
 
@@ -57,9 +56,9 @@ function label_resample_area_surfs_params(
     new_area: InputPathType,
 ): LabelResampleAreaSurfsParametersTagged {
     const params = {
-        "@type": "area_surfs" as const,
-        "current_area": current_area,
-        "new_area": new_area,
+        "@type": "area-surfs" as const,
+        "current-area": current_area,
+        "new-area": new_area,
     };
     return params;
 }
@@ -78,9 +77,11 @@ function label_resample_area_surfs_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-area-surfs");
-    cargs.push(execution.inputFile((params["current_area"] ?? null)));
-    cargs.push(execution.inputFile((params["new_area"] ?? null)));
+    cargs.push(
+        "-area-surfs",
+        execution.inputFile((params["current-area"] ?? null)),
+        execution.inputFile((params["new-area"] ?? null))
+    );
     return cargs;
 }
 
@@ -98,9 +99,9 @@ function label_resample_area_metrics_params(
     new_area: InputPathType,
 ): LabelResampleAreaMetricsParametersTagged {
     const params = {
-        "@type": "area_metrics" as const,
-        "current_area": current_area,
-        "new_area": new_area,
+        "@type": "area-metrics" as const,
+        "current-area": current_area,
+        "new-area": new_area,
     };
     return params;
 }
@@ -119,9 +120,11 @@ function label_resample_area_metrics_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-area-metrics");
-    cargs.push(execution.inputFile((params["current_area"] ?? null)));
-    cargs.push(execution.inputFile((params["new_area"] ?? null)));
+    cargs.push(
+        "-area-metrics",
+        execution.inputFile((params["current-area"] ?? null)),
+        execution.inputFile((params["new-area"] ?? null))
+    );
     return cargs;
 }
 
@@ -140,64 +143,64 @@ interface LabelResampleOutputs {
      * the output label file
      */
     label_out: OutputPathType;
-    /**
-     * output the ROI of vertices that got data from valid source vertices: the output roi as a metric
-     */
-    opt_valid_roi_out_roi_out: OutputPathType | null;
 }
 
 
 /**
  * Build parameters.
  *
+ * @param label_out the output label file
+ * @param roi_metric use an input roi on the current mesh to exclude non-data vertices
+
+the roi, as a metric file
+ * @param roi_out output the ROI of vertices that got data from valid source vertices
+
+the output roi as a metric
  * @param label_in the label file to resample
  * @param current_sphere a sphere surface with the mesh that the label file is currently on
  * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
  * @param method the method name
- * @param label_out the output label file
  * @param area_surfs specify surfaces to do vertex area correction based on
  * @param area_metrics specify vertex area metrics to do area correction based on
- * @param opt_current_roi_roi_metric use an input roi on the current mesh to exclude non-data vertices: the roi, as a metric file
- * @param opt_valid_roi_out_roi_out output the ROI of vertices that got data from valid source vertices: the output roi as a metric
- * @param opt_largest use only the label of the vertex with the largest weight
- * @param opt_bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
+ * @param largest use only the label of the vertex with the largest weight
+ * @param bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
  *
  * @returns Parameter dictionary
  */
 function label_resample_params(
+    label_out: string,
+    roi_metric: InputPathType | null,
+    roi_out: string | null,
     label_in: InputPathType,
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     method: string,
-    label_out: string,
     area_surfs: LabelResampleAreaSurfsParameters | null = null,
     area_metrics: LabelResampleAreaMetricsParameters | null = null,
-    opt_current_roi_roi_metric: InputPathType | null = null,
-    opt_valid_roi_out_roi_out: string | null = null,
-    opt_largest: boolean = false,
-    opt_bypass_sphere_check: boolean = false,
+    largest: boolean = false,
+    bypass_sphere_check: boolean = false,
 ): LabelResampleParametersTagged {
     const params = {
         "@type": "workbench/label-resample" as const,
-        "label_in": label_in,
-        "current_sphere": current_sphere,
-        "new_sphere": new_sphere,
+        "label-out": label_out,
+        "largest": largest,
+        "bypass-sphere-check": bypass_sphere_check,
+        "label-in": label_in,
+        "current-sphere": current_sphere,
+        "new-sphere": new_sphere,
         "method": method,
-        "label_out": label_out,
-        "opt_largest": opt_largest,
-        "opt_bypass_sphere_check": opt_bypass_sphere_check,
     };
     if (area_surfs !== null) {
-        params["area_surfs"] = area_surfs;
+        params["area-surfs"] = area_surfs;
     }
     if (area_metrics !== null) {
-        params["area_metrics"] = area_metrics;
+        params["area-metrics"] = area_metrics;
     }
-    if (opt_current_roi_roi_metric !== null) {
-        params["opt_current_roi_roi_metric"] = opt_current_roi_roi_metric;
+    if (roi_metric !== null) {
+        params["roi-metric"] = roi_metric;
     }
-    if (opt_valid_roi_out_roi_out !== null) {
-        params["opt_valid_roi_out_roi_out"] = opt_valid_roi_out_roi_out;
+    if (roi_out !== null) {
+        params["roi-out"] = roi_out;
     }
     return params;
 }
@@ -216,37 +219,25 @@ function label_resample_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-label-resample");
-    cargs.push(execution.inputFile((params["label_in"] ?? null)));
-    cargs.push(execution.inputFile((params["current_sphere"] ?? null)));
-    cargs.push(execution.inputFile((params["new_sphere"] ?? null)));
-    cargs.push((params["method"] ?? null));
-    cargs.push((params["label_out"] ?? null));
-    if ((params["area_surfs"] ?? null) !== null) {
-        cargs.push(...label_resample_area_surfs_cargs((params["area_surfs"] ?? null), execution));
-    }
-    if ((params["area_metrics"] ?? null) !== null) {
-        cargs.push(...label_resample_area_metrics_cargs((params["area_metrics"] ?? null), execution));
-    }
-    if ((params["opt_current_roi_roi_metric"] ?? null) !== null) {
+    if ((params["area-surfs"] ?? null) !== null || (params["area-metrics"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["roi-out"] ?? null) !== null || (params["largest"] ?? false) || (params["bypass-sphere-check"] ?? false)) {
         cargs.push(
+            "wb_command",
+            "-label-resample",
+            (params["label-out"] ?? null),
+            ...(((params["area-surfs"] ?? null) !== null) ? label_resample_area_surfs_cargs((params["area-surfs"] ?? null), execution) : []),
+            ...(((params["area-metrics"] ?? null) !== null) ? label_resample_area_metrics_cargs((params["area-metrics"] ?? null), execution) : []),
             "-current-roi",
-            execution.inputFile((params["opt_current_roi_roi_metric"] ?? null))
-        );
-    }
-    if ((params["opt_valid_roi_out_roi_out"] ?? null) !== null) {
-        cargs.push(
+            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
             "-valid-roi-out",
-            (params["opt_valid_roi_out_roi_out"] ?? null)
+            (((params["roi-out"] ?? null) !== null) ? (params["roi-out"] ?? null) : ""),
+            (((params["largest"] ?? false)) ? "-largest" : ""),
+            (((params["bypass-sphere-check"] ?? false)) ? "-bypass-sphere-check" : "")
         );
     }
-    if ((params["opt_largest"] ?? false)) {
-        cargs.push("-largest");
-    }
-    if ((params["opt_bypass_sphere_check"] ?? false)) {
-        cargs.push("-bypass-sphere-check");
-    }
+    cargs.push(execution.inputFile((params["label-in"] ?? null)));
+    cargs.push(execution.inputFile((params["current-sphere"] ?? null)));
+    cargs.push(execution.inputFile((params["new-sphere"] ?? null)));
+    cargs.push((params["method"] ?? null));
     return cargs;
 }
 
@@ -265,17 +256,14 @@ function label_resample_outputs(
 ): LabelResampleOutputs {
     const ret: LabelResampleOutputs = {
         root: execution.outputFile("."),
-        label_out: execution.outputFile([(params["label_out"] ?? null)].join('')),
-        opt_valid_roi_out_roi_out: ((params["opt_valid_roi_out_roi_out"] ?? null) !== null) ? execution.outputFile([(params["opt_valid_roi_out_roi_out"] ?? null)].join('')) : null,
+        label_out: execution.outputFile([(params["label-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * label-resample
- *
- * Resample a label file to a different mesh.
+ * RESAMPLE A LABEL FILE TO A DIFFERENT MESH.
  *
  * Resamples a label file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.
  *
@@ -290,10 +278,6 @@ function label_resample_outputs(
  * ADAP_BARY_AREA
  * BARYCENTRIC
  * .
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -315,9 +299,7 @@ function label_resample_execute(
 
 
 /**
- * label-resample
- *
- * Resample a label file to a different mesh.
+ * RESAMPLE A LABEL FILE TO A DIFFERENT MESH.
  *
  * Resamples a label file, given two spherical surfaces that are in register.  If ADAP_BARY_AREA is used, exactly one of -area-surfs or -area-metrics must be specified.
  *
@@ -333,40 +315,40 @@ function label_resample_execute(
  * BARYCENTRIC
  * .
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param label_out the output label file
+ * @param roi_metric use an input roi on the current mesh to exclude non-data vertices
+
+the roi, as a metric file
+ * @param roi_out output the ROI of vertices that got data from valid source vertices
+
+the output roi as a metric
  * @param label_in the label file to resample
  * @param current_sphere a sphere surface with the mesh that the label file is currently on
  * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
  * @param method the method name
- * @param label_out the output label file
  * @param area_surfs specify surfaces to do vertex area correction based on
  * @param area_metrics specify vertex area metrics to do area correction based on
- * @param opt_current_roi_roi_metric use an input roi on the current mesh to exclude non-data vertices: the roi, as a metric file
- * @param opt_valid_roi_out_roi_out output the ROI of vertices that got data from valid source vertices: the output roi as a metric
- * @param opt_largest use only the label of the vertex with the largest weight
- * @param opt_bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
+ * @param largest use only the label of the vertex with the largest weight
+ * @param bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelResampleOutputs`).
  */
 function label_resample(
+    label_out: string,
+    roi_metric: InputPathType | null,
+    roi_out: string | null,
     label_in: InputPathType,
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     method: string,
-    label_out: string,
     area_surfs: LabelResampleAreaSurfsParameters | null = null,
     area_metrics: LabelResampleAreaMetricsParameters | null = null,
-    opt_current_roi_roi_metric: InputPathType | null = null,
-    opt_valid_roi_out_roi_out: string | null = null,
-    opt_largest: boolean = false,
-    opt_bypass_sphere_check: boolean = false,
+    largest: boolean = false,
+    bypass_sphere_check: boolean = false,
     runner: Runner | null = null,
 ): LabelResampleOutputs {
-    const params = label_resample_params(label_in, current_sphere, new_sphere, method, label_out, area_surfs, area_metrics, opt_current_roi_roi_metric, opt_valid_roi_out_roi_out, opt_largest, opt_bypass_sphere_check)
+    const params = label_resample_params(label_out, roi_metric, roi_out, label_in, current_sphere, new_sphere, method, area_surfs, area_metrics, largest, bypass_sphere_check)
     return label_resample_execute(params, runner);
 }
 

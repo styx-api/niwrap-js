@@ -4,27 +4,26 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_CREATE_PARCELLATED_FROM_TEMPLATE_METADATA: Metadata = {
-    id: "5ab4304888f5759b5c4b5e4ccb61651a79d1f737.boutiques",
+    id: "3f274d723b32862f2a3c97e709a1481f947e0288.workbench",
     name: "cifti-create-parcellated-from-template",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiCreateParcellatedFromTemplateCiftiParameters {
     "@type"?: "cifti";
-    "cifti_in": InputPathType;
+    "cifti-in": InputPathType;
 }
 type CiftiCreateParcellatedFromTemplateCiftiParametersTagged = Required<Pick<CiftiCreateParcellatedFromTemplateCiftiParameters, '@type'>> & CiftiCreateParcellatedFromTemplateCiftiParameters;
 
 
 interface CiftiCreateParcellatedFromTemplateParameters {
     "@type"?: "workbench/cifti-create-parcellated-from-template";
-    "cifti_template": InputPathType;
-    "modify_direction": string;
-    "cifti_out": string;
-    "opt_fill_value_value"?: number | null | undefined;
+    "cifti-out": string;
+    "value"?: number | null | undefined;
     "cifti"?: Array<CiftiCreateParcellatedFromTemplateCiftiParameters> | null | undefined;
+    "cifti-template": InputPathType;
+    "modify-direction": string;
 }
 type CiftiCreateParcellatedFromTemplateParametersTagged = Required<Pick<CiftiCreateParcellatedFromTemplateParameters, '@type'>> & CiftiCreateParcellatedFromTemplateParameters;
 
@@ -41,7 +40,7 @@ function cifti_create_parcellated_from_template_cifti_params(
 ): CiftiCreateParcellatedFromTemplateCiftiParametersTagged {
     const params = {
         "@type": "cifti" as const,
-        "cifti_in": cifti_in,
+        "cifti-in": cifti_in,
     };
     return params;
 }
@@ -60,8 +59,10 @@ function cifti_create_parcellated_from_template_cifti_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-cifti");
-    cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
+    cargs.push(
+        "-cifti",
+        execution.inputFile((params["cifti-in"] ?? null))
+    );
     return cargs;
 }
 
@@ -86,29 +87,31 @@ interface CiftiCreateParcellatedFromTemplateOutputs {
 /**
  * Build parameters.
  *
+ * @param cifti_out the output cifti file
+ * @param value specify value to be used in parcels that don't match
+
+value to use (default 0)
  * @param cifti_template a cifti file with the template parcel mapping along column
  * @param modify_direction which dimension of the output file should match the template (integer, 'ROW', or 'COLUMN')
- * @param cifti_out the output cifti file
- * @param opt_fill_value_value specify value to be used in parcels that don't match: value to use (default 0)
  * @param cifti specify an input cifti file
  *
  * @returns Parameter dictionary
  */
 function cifti_create_parcellated_from_template_params(
+    cifti_out: string,
+    value: number | null,
     cifti_template: InputPathType,
     modify_direction: string,
-    cifti_out: string,
-    opt_fill_value_value: number | null = null,
     cifti: Array<CiftiCreateParcellatedFromTemplateCiftiParameters> | null = null,
 ): CiftiCreateParcellatedFromTemplateParametersTagged {
     const params = {
         "@type": "workbench/cifti-create-parcellated-from-template" as const,
-        "cifti_template": cifti_template,
-        "modify_direction": modify_direction,
-        "cifti_out": cifti_out,
+        "cifti-out": cifti_out,
+        "cifti-template": cifti_template,
+        "modify-direction": modify_direction,
     };
-    if (opt_fill_value_value !== null) {
-        params["opt_fill_value_value"] = opt_fill_value_value;
+    if (value !== null) {
+        params["value"] = value;
     }
     if (cifti !== null) {
         params["cifti"] = cifti;
@@ -130,20 +133,18 @@ function cifti_create_parcellated_from_template_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-create-parcellated-from-template");
-    cargs.push(execution.inputFile((params["cifti_template"] ?? null)));
-    cargs.push((params["modify_direction"] ?? null));
-    cargs.push((params["cifti_out"] ?? null));
-    if ((params["opt_fill_value_value"] ?? null) !== null) {
+    if ((params["value"] ?? null) !== null || (params["cifti"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-cifti-create-parcellated-from-template",
+            (params["cifti-out"] ?? null),
             "-fill-value",
-            String((params["opt_fill_value_value"] ?? null))
+            (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
+            ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_create_parcellated_from_template_cifti_cargs(s, execution)).flat() : [])
         );
     }
-    if ((params["cifti"] ?? null) !== null) {
-        cargs.push(...(params["cifti"] ?? null).map(s => cifti_create_parcellated_from_template_cifti_cargs(s, execution)).flat());
-    }
+    cargs.push(execution.inputFile((params["cifti-template"] ?? null)));
+    cargs.push((params["modify-direction"] ?? null));
     return cargs;
 }
 
@@ -162,22 +163,16 @@ function cifti_create_parcellated_from_template_outputs(
 ): CiftiCreateParcellatedFromTemplateOutputs {
     const ret: CiftiCreateParcellatedFromTemplateOutputs = {
         root: execution.outputFile("."),
-        cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
+        cifti_out: execution.outputFile([(params["cifti-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * cifti-create-parcellated-from-template
- *
- * Match parcels to template by name.
+ * MATCH PARCELS TO TEMPLATE BY NAME.
  *
  * For each parcel name in the template mapping, find that name in an input cifti file and use its data in the output file.  All input cifti files must have a parcels mapping along <modify-direction> and matching mappings along other dimensions.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -199,34 +194,30 @@ function cifti_create_parcellated_from_template_execute(
 
 
 /**
- * cifti-create-parcellated-from-template
- *
- * Match parcels to template by name.
+ * MATCH PARCELS TO TEMPLATE BY NAME.
  *
  * For each parcel name in the template mapping, find that name in an input cifti file and use its data in the output file.  All input cifti files must have a parcels mapping along <modify-direction> and matching mappings along other dimensions.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param cifti_out the output cifti file
+ * @param value specify value to be used in parcels that don't match
+
+value to use (default 0)
  * @param cifti_template a cifti file with the template parcel mapping along column
  * @param modify_direction which dimension of the output file should match the template (integer, 'ROW', or 'COLUMN')
- * @param cifti_out the output cifti file
- * @param opt_fill_value_value specify value to be used in parcels that don't match: value to use (default 0)
  * @param cifti specify an input cifti file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiCreateParcellatedFromTemplateOutputs`).
  */
 function cifti_create_parcellated_from_template(
+    cifti_out: string,
+    value: number | null,
     cifti_template: InputPathType,
     modify_direction: string,
-    cifti_out: string,
-    opt_fill_value_value: number | null = null,
     cifti: Array<CiftiCreateParcellatedFromTemplateCiftiParameters> | null = null,
     runner: Runner | null = null,
 ): CiftiCreateParcellatedFromTemplateOutputs {
-    const params = cifti_create_parcellated_from_template_params(cifti_template, modify_direction, cifti_out, opt_fill_value_value, cifti)
+    const params = cifti_create_parcellated_from_template_params(cifti_out, value, cifti_template, modify_direction, cifti)
     return cifti_create_parcellated_from_template_execute(params, runner);
 }
 

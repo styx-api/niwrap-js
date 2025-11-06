@@ -4,25 +4,24 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BORDER_FILE_EXPORT_TO_CARET5_METADATA: Metadata = {
-    id: "5bdb523cf35c997b31a3b9033a83e1125033b032.boutiques",
+    id: "d4e6431becb0638cb3d2c64db0bbecb9e7a7b28c.workbench",
     name: "border-file-export-to-caret5",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface BorderFileExportToCaret5SurfaceParameters {
     "@type"?: "surface";
-    "surface_in": InputPathType;
+    "surface-in": InputPathType;
 }
 type BorderFileExportToCaret5SurfaceParametersTagged = Required<Pick<BorderFileExportToCaret5SurfaceParameters, '@type'>> & BorderFileExportToCaret5SurfaceParameters;
 
 
 interface BorderFileExportToCaret5Parameters {
     "@type"?: "workbench/border-file-export-to-caret5";
-    "border_file": string;
-    "output_file_prefix": string;
     "surface"?: Array<BorderFileExportToCaret5SurfaceParameters> | null | undefined;
+    "border-file": string;
+    "output-file-prefix": string;
 }
 type BorderFileExportToCaret5ParametersTagged = Required<Pick<BorderFileExportToCaret5Parameters, '@type'>> & BorderFileExportToCaret5Parameters;
 
@@ -39,7 +38,7 @@ function border_file_export_to_caret5_surface_params(
 ): BorderFileExportToCaret5SurfaceParametersTagged {
     const params = {
         "@type": "surface" as const,
-        "surface_in": surface_in,
+        "surface-in": surface_in,
     };
     return params;
 }
@@ -58,8 +57,10 @@ function border_file_export_to_caret5_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-surface");
-    cargs.push(execution.inputFile((params["surface_in"] ?? null)));
+    cargs.push(
+        "-surface",
+        execution.inputFile((params["surface-in"] ?? null))
+    );
     return cargs;
 }
 
@@ -93,8 +94,8 @@ function border_file_export_to_caret5_params(
 ): BorderFileExportToCaret5ParametersTagged {
     const params = {
         "@type": "workbench/border-file-export-to-caret5" as const,
-        "border_file": border_file,
-        "output_file_prefix": output_file_prefix,
+        "border-file": border_file,
+        "output-file-prefix": output_file_prefix,
     };
     if (surface !== null) {
         params["surface"] = surface;
@@ -116,13 +117,15 @@ function border_file_export_to_caret5_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-border-file-export-to-caret5");
-    cargs.push((params["border_file"] ?? null));
-    cargs.push((params["output_file_prefix"] ?? null));
     if ((params["surface"] ?? null) !== null) {
-        cargs.push(...(params["surface"] ?? null).map(s => border_file_export_to_caret5_surface_cargs(s, execution)).flat());
+        cargs.push(
+            "wb_command",
+            "-border-file-export-to-caret5",
+            ...(params["surface"] ?? null).map(s => border_file_export_to_caret5_surface_cargs(s, execution)).flat()
+        );
     }
+    cargs.push((params["border-file"] ?? null));
+    cargs.push((params["output-file-prefix"] ?? null));
     return cargs;
 }
 
@@ -147,9 +150,7 @@ function border_file_export_to_caret5_outputs(
 
 
 /**
- * border-file-export-to-caret5
- *
- * Export border file to caret5 file format.
+ * EXPORT BORDER FILE TO CARET5 FILE FORMAT.
  *
  * A Workbench border file may contain borders for multiple structures and borders that are both projected and unprojected.  It also contains a color table for the borders. 
  *
@@ -162,10 +163,6 @@ function border_file_export_to_caret5_outputs(
  * Providing surface(s) as input parameters is optional, but recommended. Surfaces may be needed to create both projected and/or unprojected coordinates of borders.  If there is a failure to produce an output border or border projection due to a missing surface with the matching structure, an error message will be displayed and some output files will not be created. 
  *
  * When writing new files, this command will overwrite a file with the same name. .
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -187,9 +184,7 @@ function border_file_export_to_caret5_execute(
 
 
 /**
- * border-file-export-to-caret5
- *
- * Export border file to caret5 file format.
+ * EXPORT BORDER FILE TO CARET5 FILE FORMAT.
  *
  * A Workbench border file may contain borders for multiple structures and borders that are both projected and unprojected.  It also contains a color table for the borders. 
  *
@@ -202,10 +197,6 @@ function border_file_export_to_caret5_execute(
  * Providing surface(s) as input parameters is optional, but recommended. Surfaces may be needed to create both projected and/or unprojected coordinates of borders.  If there is a failure to produce an output border or border projection due to a missing surface with the matching structure, an error message will be displayed and some output files will not be created. 
  *
  * When writing new files, this command will overwrite a file with the same name. .
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param border_file workbench border file
  * @param output_file_prefix prefix for name of output caret5 border/borderproj/bordercolor files

@@ -14,7 +14,7 @@ const CREATE_DISPLACEMENT_FIELD_METADATA: Metadata = {
 interface CreateDisplacementFieldParameters {
     "@type"?: "ants/CreateDisplacementField";
     "image_dimension": number;
-    "enforce_zero_boundary_flag": 0 | 1;
+    "enforce_zero_boundary_flag": boolean;
     "component_images": Array<InputPathType>;
     "output_image": string;
 }
@@ -50,7 +50,7 @@ interface CreateDisplacementFieldOutputs {
  */
 function create_displacement_field_params(
     image_dimension: number,
-    enforce_zero_boundary_flag: 0 | 1,
+    enforce_zero_boundary_flag: boolean,
     component_images: Array<InputPathType>,
     output_image: string,
 ): CreateDisplacementFieldParametersTagged {
@@ -80,7 +80,7 @@ function create_displacement_field_cargs(
     const cargs: string[] = [];
     cargs.push("CreateDisplacementField");
     cargs.push(String((params["image_dimension"] ?? null)));
-    cargs.push(String((params["enforce_zero_boundary_flag"] ?? null)));
+    cargs.push(((params["enforce_zero_boundary_flag"] ?? null) ? "1" : "0"));
     cargs.push(...(params["component_images"] ?? null).map(f => execution.inputFile(f)));
     cargs.push((params["output_image"] ?? null));
     return cargs;
@@ -154,7 +154,7 @@ function create_displacement_field_execute(
  */
 function create_displacement_field(
     image_dimension: number,
-    enforce_zero_boundary_flag: 0 | 1,
+    enforce_zero_boundary_flag: boolean,
     component_images: Array<InputPathType>,
     output_image: string,
     runner: Runner | null = null,

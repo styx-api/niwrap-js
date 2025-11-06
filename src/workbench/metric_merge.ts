@@ -4,17 +4,16 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_MERGE_METADATA: Metadata = {
-    id: "fc657fa415442ff85ef1c87698be56c45aad5857.boutiques",
+    id: "58734bb6d294ee25611f347ddc44d2a3b041b696.workbench",
     name: "metric-merge",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface MetricMergeUpToParameters {
-    "@type"?: "up_to";
-    "last_column": string;
-    "opt_reverse": boolean;
+    "@type"?: "up-to";
+    "last-column": string;
+    "reverse": boolean;
 }
 type MetricMergeUpToParametersTagged = Required<Pick<MetricMergeUpToParameters, '@type'>> & MetricMergeUpToParameters;
 
@@ -22,14 +21,14 @@ type MetricMergeUpToParametersTagged = Required<Pick<MetricMergeUpToParameters, 
 interface MetricMergeColumnParameters {
     "@type"?: "column";
     "column": string;
-    "up_to"?: MetricMergeUpToParameters | null | undefined;
+    "up-to"?: MetricMergeUpToParameters | null | undefined;
 }
 type MetricMergeColumnParametersTagged = Required<Pick<MetricMergeColumnParameters, '@type'>> & MetricMergeColumnParameters;
 
 
 interface MetricMergeMetricParameters {
     "@type"?: "metric";
-    "metric_in": InputPathType;
+    "metric-in": InputPathType;
     "column"?: Array<MetricMergeColumnParameters> | null | undefined;
 }
 type MetricMergeMetricParametersTagged = Required<Pick<MetricMergeMetricParameters, '@type'>> & MetricMergeMetricParameters;
@@ -37,7 +36,7 @@ type MetricMergeMetricParametersTagged = Required<Pick<MetricMergeMetricParamete
 
 interface MetricMergeParameters {
     "@type"?: "workbench/metric-merge";
-    "metric_out": string;
+    "metric-out": string;
     "metric"?: Array<MetricMergeMetricParameters> | null | undefined;
 }
 type MetricMergeParametersTagged = Required<Pick<MetricMergeParameters, '@type'>> & MetricMergeParameters;
@@ -47,18 +46,18 @@ type MetricMergeParametersTagged = Required<Pick<MetricMergeParameters, '@type'>
  * Build parameters.
  *
  * @param last_column the number or name of the last column to include
- * @param opt_reverse use the range in reverse order
+ * @param reverse use the range in reverse order
  *
  * @returns Parameter dictionary
  */
 function metric_merge_up_to_params(
     last_column: string,
-    opt_reverse: boolean = false,
+    reverse: boolean = false,
 ): MetricMergeUpToParametersTagged {
     const params = {
-        "@type": "up_to" as const,
-        "last_column": last_column,
-        "opt_reverse": opt_reverse,
+        "@type": "up-to" as const,
+        "last-column": last_column,
+        "reverse": reverse,
     };
     return params;
 }
@@ -77,10 +76,12 @@ function metric_merge_up_to_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-up-to");
-    cargs.push((params["last_column"] ?? null));
-    if ((params["opt_reverse"] ?? false)) {
-        cargs.push("-reverse");
+    if ((params["reverse"] ?? false)) {
+        cargs.push(
+            "-up-to",
+            (params["last-column"] ?? null),
+            "-reverse"
+        );
     }
     return cargs;
 }
@@ -103,7 +104,7 @@ function metric_merge_column_params(
         "column": column,
     };
     if (up_to !== null) {
-        params["up_to"] = up_to;
+        params["up-to"] = up_to;
     }
     return params;
 }
@@ -122,10 +123,12 @@ function metric_merge_column_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-column");
-    cargs.push((params["column"] ?? null));
-    if ((params["up_to"] ?? null) !== null) {
-        cargs.push(...metric_merge_up_to_cargs((params["up_to"] ?? null), execution));
+    if ((params["up-to"] ?? null) !== null) {
+        cargs.push(
+            "-column",
+            (params["column"] ?? null),
+            ...metric_merge_up_to_cargs((params["up-to"] ?? null), execution)
+        );
     }
     return cargs;
 }
@@ -145,7 +148,7 @@ function metric_merge_metric_params(
 ): MetricMergeMetricParametersTagged {
     const params = {
         "@type": "metric" as const,
-        "metric_in": metric_in,
+        "metric-in": metric_in,
     };
     if (column !== null) {
         params["column"] = column;
@@ -167,10 +170,12 @@ function metric_merge_metric_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-metric");
-    cargs.push(execution.inputFile((params["metric_in"] ?? null)));
     if ((params["column"] ?? null) !== null) {
-        cargs.push(...(params["column"] ?? null).map(s => metric_merge_column_cargs(s, execution)).flat());
+        cargs.push(
+            "-metric",
+            execution.inputFile((params["metric-in"] ?? null)),
+            ...(params["column"] ?? null).map(s => metric_merge_column_cargs(s, execution)).flat()
+        );
     }
     return cargs;
 }
@@ -207,7 +212,7 @@ function metric_merge_params(
 ): MetricMergeParametersTagged {
     const params = {
         "@type": "workbench/metric-merge" as const,
-        "metric_out": metric_out,
+        "metric-out": metric_out,
     };
     if (metric !== null) {
         params["metric"] = metric;
@@ -229,11 +234,13 @@ function metric_merge_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-metric-merge");
-    cargs.push((params["metric_out"] ?? null));
     if ((params["metric"] ?? null) !== null) {
-        cargs.push(...(params["metric"] ?? null).map(s => metric_merge_metric_cargs(s, execution)).flat());
+        cargs.push(
+            "wb_command",
+            "-metric-merge",
+            (params["metric-out"] ?? null),
+            ...(params["metric"] ?? null).map(s => metric_merge_metric_cargs(s, execution)).flat()
+        );
     }
     return cargs;
 }
@@ -253,26 +260,20 @@ function metric_merge_outputs(
 ): MetricMergeOutputs {
     const ret: MetricMergeOutputs = {
         root: execution.outputFile("."),
-        metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
+        metric_out: execution.outputFile([(params["metric-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * metric-merge
- *
- * Merge metric files into a new file.
+ * MERGE METRIC FILES INTO A NEW FILE.
  *
  * Takes one or more metric files and constructs a new metric file by concatenating columns from them.  The input metric files must have the same number of vertices and same structure.
  *
  * Example: wb_command -metric-merge out.func.gii -metric first.func.gii -column 1 -metric second.func.gii
  *
  * This example would take the first column from first.func.gii, followed by all columns from second.func.gii, and write these columns to out.func.gii.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -294,19 +295,13 @@ function metric_merge_execute(
 
 
 /**
- * metric-merge
- *
- * Merge metric files into a new file.
+ * MERGE METRIC FILES INTO A NEW FILE.
  *
  * Takes one or more metric files and constructs a new metric file by concatenating columns from them.  The input metric files must have the same number of vertices and same structure.
  *
  * Example: wb_command -metric-merge out.func.gii -metric first.func.gii -column 1 -metric second.func.gii
  *
  * This example would take the first column from first.func.gii, followed by all columns from second.func.gii, and write these columns to out.func.gii.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param metric_out the output metric
  * @param metric specify an input metric

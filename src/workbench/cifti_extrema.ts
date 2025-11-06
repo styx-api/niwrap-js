@@ -4,10 +4,9 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_EXTREMA_METADATA: Metadata = {
-    id: "30b679ce9711d1251e93a3a78a855b94ac05e5d6.boutiques",
+    id: "96cc4edc754b1196eb76c4a8761c2b9a9cc4593f.workbench",
     name: "cifti-extrema",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
@@ -21,23 +20,23 @@ type CiftiExtremaThresholdParametersTagged = Required<Pick<CiftiExtremaThreshold
 
 interface CiftiExtremaParameters {
     "@type"?: "workbench/cifti-extrema";
-    "cifti": InputPathType;
-    "surface_distance": number;
-    "volume_distance": number;
-    "direction": string;
-    "cifti_out": string;
-    "opt_left_surface_surface"?: InputPathType | null | undefined;
-    "opt_right_surface_surface"?: InputPathType | null | undefined;
-    "opt_cerebellum_surface_surface"?: InputPathType | null | undefined;
-    "opt_surface_presmooth_surface_kernel"?: number | null | undefined;
-    "opt_volume_presmooth_volume_kernel"?: number | null | undefined;
-    "opt_presmooth_fwhm": boolean;
+    "cifti-out": string;
+    "surface"?: InputPathType | null | undefined;
+    "surface"?: InputPathType | null | undefined;
+    "surface"?: InputPathType | null | undefined;
+    "surface-kernel"?: number | null | undefined;
+    "volume-kernel"?: number | null | undefined;
+    "presmooth-fwhm": boolean;
     "threshold"?: CiftiExtremaThresholdParameters | null | undefined;
-    "opt_merged_volume": boolean;
-    "opt_sum_maps": boolean;
-    "opt_consolidate_mode": boolean;
-    "opt_only_maxima": boolean;
-    "opt_only_minima": boolean;
+    "merged-volume": boolean;
+    "sum-maps": boolean;
+    "consolidate-mode": boolean;
+    "only-maxima": boolean;
+    "only-minima": boolean;
+    "cifti": InputPathType;
+    "surface-distance": number;
+    "volume-distance": number;
+    "direction": string;
 }
 type CiftiExtremaParametersTagged = Required<Pick<CiftiExtremaParameters, '@type'>> & CiftiExtremaParameters;
 
@@ -76,9 +75,11 @@ function cifti_extrema_threshold_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-threshold");
-    cargs.push(String((params["low"] ?? null)));
-    cargs.push(String((params["high"] ?? null)));
+    cargs.push(
+        "-threshold",
+        String((params["low"] ?? null)),
+        String((params["high"] ?? null))
+    );
     return cargs;
 }
 
@@ -103,73 +104,83 @@ interface CiftiExtremaOutputs {
 /**
  * Build parameters.
  *
+ * @param cifti_out the output cifti
+ * @param surface specify the left surface to use
+
+the left surface file
+ * @param surface_ specify the right surface to use
+
+the right surface file
+ * @param surface_2 specify the cerebellum surface to use
+
+the cerebellum surface file
+ * @param surface_kernel smooth on the surface before finding extrema
+
+the size of the gaussian surface smoothing kernel in mm, as sigma by default
+ * @param volume_kernel smooth volume components before finding extrema
+
+the size of the gaussian volume smoothing kernel in mm, as sigma by default
  * @param cifti the input cifti
  * @param surface_distance the minimum distance between extrema of the same type, for surface components
  * @param volume_distance the minimum distance between extrema of the same type, for volume components
  * @param direction which dimension to find extrema along, ROW or COLUMN
- * @param cifti_out the output cifti
- * @param opt_left_surface_surface specify the left surface to use: the left surface file
- * @param opt_right_surface_surface specify the right surface to use: the right surface file
- * @param opt_cerebellum_surface_surface specify the cerebellum surface to use: the cerebellum surface file
- * @param opt_surface_presmooth_surface_kernel smooth on the surface before finding extrema: the size of the gaussian surface smoothing kernel in mm, as sigma by default
- * @param opt_volume_presmooth_volume_kernel smooth volume components before finding extrema: the size of the gaussian volume smoothing kernel in mm, as sigma by default
- * @param opt_presmooth_fwhm smoothing kernel distances are FWHM, not sigma
+ * @param presmooth_fwhm smoothing kernel distances are FWHM, not sigma
  * @param threshold ignore small extrema
- * @param opt_merged_volume treat volume components as if they were a single component
- * @param opt_sum_maps output the sum of the extrema maps instead of each map separately
- * @param opt_consolidate_mode use consolidation of local minima instead of a large neighborhood
- * @param opt_only_maxima only find the maxima
- * @param opt_only_minima only find the minima
+ * @param merged_volume treat volume components as if they were a single component
+ * @param sum_maps output the sum of the extrema maps instead of each map separately
+ * @param consolidate_mode use consolidation of local minima instead of a large neighborhood
+ * @param only_maxima only find the maxima
+ * @param only_minima only find the minima
  *
  * @returns Parameter dictionary
  */
 function cifti_extrema_params(
+    cifti_out: string,
+    surface: InputPathType | null,
+    surface_: InputPathType | null,
+    surface_2: InputPathType | null,
+    surface_kernel: number | null,
+    volume_kernel: number | null,
     cifti: InputPathType,
     surface_distance: number,
     volume_distance: number,
     direction: string,
-    cifti_out: string,
-    opt_left_surface_surface: InputPathType | null = null,
-    opt_right_surface_surface: InputPathType | null = null,
-    opt_cerebellum_surface_surface: InputPathType | null = null,
-    opt_surface_presmooth_surface_kernel: number | null = null,
-    opt_volume_presmooth_volume_kernel: number | null = null,
-    opt_presmooth_fwhm: boolean = false,
+    presmooth_fwhm: boolean = false,
     threshold: CiftiExtremaThresholdParameters | null = null,
-    opt_merged_volume: boolean = false,
-    opt_sum_maps: boolean = false,
-    opt_consolidate_mode: boolean = false,
-    opt_only_maxima: boolean = false,
-    opt_only_minima: boolean = false,
+    merged_volume: boolean = false,
+    sum_maps: boolean = false,
+    consolidate_mode: boolean = false,
+    only_maxima: boolean = false,
+    only_minima: boolean = false,
 ): CiftiExtremaParametersTagged {
     const params = {
         "@type": "workbench/cifti-extrema" as const,
+        "cifti-out": cifti_out,
+        "presmooth-fwhm": presmooth_fwhm,
+        "merged-volume": merged_volume,
+        "sum-maps": sum_maps,
+        "consolidate-mode": consolidate_mode,
+        "only-maxima": only_maxima,
+        "only-minima": only_minima,
         "cifti": cifti,
-        "surface_distance": surface_distance,
-        "volume_distance": volume_distance,
+        "surface-distance": surface_distance,
+        "volume-distance": volume_distance,
         "direction": direction,
-        "cifti_out": cifti_out,
-        "opt_presmooth_fwhm": opt_presmooth_fwhm,
-        "opt_merged_volume": opt_merged_volume,
-        "opt_sum_maps": opt_sum_maps,
-        "opt_consolidate_mode": opt_consolidate_mode,
-        "opt_only_maxima": opt_only_maxima,
-        "opt_only_minima": opt_only_minima,
     };
-    if (opt_left_surface_surface !== null) {
-        params["opt_left_surface_surface"] = opt_left_surface_surface;
+    if (surface !== null) {
+        params["surface"] = surface;
     }
-    if (opt_right_surface_surface !== null) {
-        params["opt_right_surface_surface"] = opt_right_surface_surface;
+    if (surface_ !== null) {
+        params["surface"] = surface_;
     }
-    if (opt_cerebellum_surface_surface !== null) {
-        params["opt_cerebellum_surface_surface"] = opt_cerebellum_surface_surface;
+    if (surface_2 !== null) {
+        params["surface"] = surface_2;
     }
-    if (opt_surface_presmooth_surface_kernel !== null) {
-        params["opt_surface_presmooth_surface_kernel"] = opt_surface_presmooth_surface_kernel;
+    if (surface_kernel !== null) {
+        params["surface-kernel"] = surface_kernel;
     }
-    if (opt_volume_presmooth_volume_kernel !== null) {
-        params["opt_volume_presmooth_volume_kernel"] = opt_volume_presmooth_volume_kernel;
+    if (volume_kernel !== null) {
+        params["volume-kernel"] = volume_kernel;
     }
     if (threshold !== null) {
         params["threshold"] = threshold;
@@ -191,64 +202,34 @@ function cifti_extrema_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-extrema");
-    cargs.push(execution.inputFile((params["cifti"] ?? null)));
-    cargs.push(String((params["surface_distance"] ?? null)));
-    cargs.push(String((params["volume_distance"] ?? null)));
-    cargs.push((params["direction"] ?? null));
-    cargs.push((params["cifti_out"] ?? null));
-    if ((params["opt_left_surface_surface"] ?? null) !== null) {
+    if ((params["surface"] ?? null) !== null || (params["surface"] ?? null) !== null || (params["surface"] ?? null) !== null || (params["surface-kernel"] ?? null) !== null || (params["volume-kernel"] ?? null) !== null || (params["presmooth-fwhm"] ?? false) || (params["threshold"] ?? null) !== null || (params["merged-volume"] ?? false) || (params["sum-maps"] ?? false) || (params["consolidate-mode"] ?? false) || (params["only-maxima"] ?? false) || (params["only-minima"] ?? false)) {
         cargs.push(
+            "wb_command",
+            "-cifti-extrema",
+            (params["cifti-out"] ?? null),
             "-left-surface",
-            execution.inputFile((params["opt_left_surface_surface"] ?? null))
-        );
-    }
-    if ((params["opt_right_surface_surface"] ?? null) !== null) {
-        cargs.push(
+            (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),
             "-right-surface",
-            execution.inputFile((params["opt_right_surface_surface"] ?? null))
-        );
-    }
-    if ((params["opt_cerebellum_surface_surface"] ?? null) !== null) {
-        cargs.push(
+            (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),
             "-cerebellum-surface",
-            execution.inputFile((params["opt_cerebellum_surface_surface"] ?? null))
-        );
-    }
-    if ((params["opt_surface_presmooth_surface_kernel"] ?? null) !== null) {
-        cargs.push(
+            (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),
             "-surface-presmooth",
-            String((params["opt_surface_presmooth_surface_kernel"] ?? null))
-        );
-    }
-    if ((params["opt_volume_presmooth_volume_kernel"] ?? null) !== null) {
-        cargs.push(
+            (((params["surface-kernel"] ?? null) !== null) ? String((params["surface-kernel"] ?? null)) : ""),
             "-volume-presmooth",
-            String((params["opt_volume_presmooth_volume_kernel"] ?? null))
+            (((params["volume-kernel"] ?? null) !== null) ? String((params["volume-kernel"] ?? null)) : ""),
+            (((params["presmooth-fwhm"] ?? false)) ? "-presmooth-fwhm" : ""),
+            ...(((params["threshold"] ?? null) !== null) ? cifti_extrema_threshold_cargs((params["threshold"] ?? null), execution) : []),
+            (((params["merged-volume"] ?? false)) ? "-merged-volume" : ""),
+            (((params["sum-maps"] ?? false)) ? "-sum-maps" : ""),
+            (((params["consolidate-mode"] ?? false)) ? "-consolidate-mode" : ""),
+            (((params["only-maxima"] ?? false)) ? "-only-maxima" : ""),
+            (((params["only-minima"] ?? false)) ? "-only-minima" : "")
         );
     }
-    if ((params["opt_presmooth_fwhm"] ?? false)) {
-        cargs.push("-presmooth-fwhm");
-    }
-    if ((params["threshold"] ?? null) !== null) {
-        cargs.push(...cifti_extrema_threshold_cargs((params["threshold"] ?? null), execution));
-    }
-    if ((params["opt_merged_volume"] ?? false)) {
-        cargs.push("-merged-volume");
-    }
-    if ((params["opt_sum_maps"] ?? false)) {
-        cargs.push("-sum-maps");
-    }
-    if ((params["opt_consolidate_mode"] ?? false)) {
-        cargs.push("-consolidate-mode");
-    }
-    if ((params["opt_only_maxima"] ?? false)) {
-        cargs.push("-only-maxima");
-    }
-    if ((params["opt_only_minima"] ?? false)) {
-        cargs.push("-only-minima");
-    }
+    cargs.push(execution.inputFile((params["cifti"] ?? null)));
+    cargs.push(String((params["surface-distance"] ?? null)));
+    cargs.push(String((params["volume-distance"] ?? null)));
+    cargs.push((params["direction"] ?? null));
     return cargs;
 }
 
@@ -267,22 +248,16 @@ function cifti_extrema_outputs(
 ): CiftiExtremaOutputs {
     const ret: CiftiExtremaOutputs = {
         root: execution.outputFile("."),
-        cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
+        cifti_out: execution.outputFile([(params["cifti-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * cifti-extrema
- *
- * Find extrema in a cifti file.
+ * FIND EXTREMA IN A CIFTI FILE.
  *
  * Finds spatial locations in a cifti file that have more extreme values than all nearby locations in the same component (surface or volume structure).  The input cifti file must have a brain models mapping along the specified direction.  COLUMN is the direction that works on dtseries and dscalar.  For dconn, if it is symmetric use COLUMN, otherwise use ROW.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -304,58 +279,62 @@ function cifti_extrema_execute(
 
 
 /**
- * cifti-extrema
- *
- * Find extrema in a cifti file.
+ * FIND EXTREMA IN A CIFTI FILE.
  *
  * Finds spatial locations in a cifti file that have more extreme values than all nearby locations in the same component (surface or volume structure).  The input cifti file must have a brain models mapping along the specified direction.  COLUMN is the direction that works on dtseries and dscalar.  For dconn, if it is symmetric use COLUMN, otherwise use ROW.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param cifti_out the output cifti
+ * @param surface specify the left surface to use
+
+the left surface file
+ * @param surface_ specify the right surface to use
+
+the right surface file
+ * @param surface_2 specify the cerebellum surface to use
+
+the cerebellum surface file
+ * @param surface_kernel smooth on the surface before finding extrema
+
+the size of the gaussian surface smoothing kernel in mm, as sigma by default
+ * @param volume_kernel smooth volume components before finding extrema
+
+the size of the gaussian volume smoothing kernel in mm, as sigma by default
  * @param cifti the input cifti
  * @param surface_distance the minimum distance between extrema of the same type, for surface components
  * @param volume_distance the minimum distance between extrema of the same type, for volume components
  * @param direction which dimension to find extrema along, ROW or COLUMN
- * @param cifti_out the output cifti
- * @param opt_left_surface_surface specify the left surface to use: the left surface file
- * @param opt_right_surface_surface specify the right surface to use: the right surface file
- * @param opt_cerebellum_surface_surface specify the cerebellum surface to use: the cerebellum surface file
- * @param opt_surface_presmooth_surface_kernel smooth on the surface before finding extrema: the size of the gaussian surface smoothing kernel in mm, as sigma by default
- * @param opt_volume_presmooth_volume_kernel smooth volume components before finding extrema: the size of the gaussian volume smoothing kernel in mm, as sigma by default
- * @param opt_presmooth_fwhm smoothing kernel distances are FWHM, not sigma
+ * @param presmooth_fwhm smoothing kernel distances are FWHM, not sigma
  * @param threshold ignore small extrema
- * @param opt_merged_volume treat volume components as if they were a single component
- * @param opt_sum_maps output the sum of the extrema maps instead of each map separately
- * @param opt_consolidate_mode use consolidation of local minima instead of a large neighborhood
- * @param opt_only_maxima only find the maxima
- * @param opt_only_minima only find the minima
+ * @param merged_volume treat volume components as if they were a single component
+ * @param sum_maps output the sum of the extrema maps instead of each map separately
+ * @param consolidate_mode use consolidation of local minima instead of a large neighborhood
+ * @param only_maxima only find the maxima
+ * @param only_minima only find the minima
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiExtremaOutputs`).
  */
 function cifti_extrema(
+    cifti_out: string,
+    surface: InputPathType | null,
+    surface_: InputPathType | null,
+    surface_2: InputPathType | null,
+    surface_kernel: number | null,
+    volume_kernel: number | null,
     cifti: InputPathType,
     surface_distance: number,
     volume_distance: number,
     direction: string,
-    cifti_out: string,
-    opt_left_surface_surface: InputPathType | null = null,
-    opt_right_surface_surface: InputPathType | null = null,
-    opt_cerebellum_surface_surface: InputPathType | null = null,
-    opt_surface_presmooth_surface_kernel: number | null = null,
-    opt_volume_presmooth_volume_kernel: number | null = null,
-    opt_presmooth_fwhm: boolean = false,
+    presmooth_fwhm: boolean = false,
     threshold: CiftiExtremaThresholdParameters | null = null,
-    opt_merged_volume: boolean = false,
-    opt_sum_maps: boolean = false,
-    opt_consolidate_mode: boolean = false,
-    opt_only_maxima: boolean = false,
-    opt_only_minima: boolean = false,
+    merged_volume: boolean = false,
+    sum_maps: boolean = false,
+    consolidate_mode: boolean = false,
+    only_maxima: boolean = false,
+    only_minima: boolean = false,
     runner: Runner | null = null,
 ): CiftiExtremaOutputs {
-    const params = cifti_extrema_params(cifti, surface_distance, volume_distance, direction, cifti_out, opt_left_surface_surface, opt_right_surface_surface, opt_cerebellum_surface_surface, opt_surface_presmooth_surface_kernel, opt_volume_presmooth_volume_kernel, opt_presmooth_fwhm, threshold, opt_merged_volume, opt_sum_maps, opt_consolidate_mode, opt_only_maxima, opt_only_minima)
+    const params = cifti_extrema_params(cifti_out, surface, surface_, surface_2, surface_kernel, volume_kernel, cifti, surface_distance, volume_distance, direction, presmooth_fwhm, threshold, merged_volume, sum_maps, consolidate_mode, only_maxima, only_minima)
     return cifti_extrema_execute(params, runner);
 }
 

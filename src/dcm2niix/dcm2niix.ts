@@ -14,30 +14,30 @@ const DCM2NIIX_METADATA: Metadata = {
 interface Dcm2niixParameters {
     "@type"?: "dcm2niix/dcm2niix";
     "compression_level"?: number | null | undefined;
-    "adjacent"?: "y" | "n" | null | undefined;
+    "adjacent"?: boolean | null | undefined;
     "bids"?: "y" | "n" | "o" | null | undefined;
-    "bids_anon"?: "y" | "n" | null | undefined;
+    "bids_anon"?: boolean | null | undefined;
     "comment"?: string | null | undefined;
     "depth"?: number | null | undefined;
     "export_format"?: "y" | "n" | "o" | "j" | "b" | null | undefined;
     "filename"?: string | null | undefined;
     "defaults"?: "y" | "n" | "o" | "i" | null | undefined;
-    "ignore_derived"?: "y" | "n" | null | undefined;
+    "ignore_derived"?: boolean | null | undefined;
     "scaling"?: "y" | "n" | "o" | null | undefined;
     "merge_2d"?: "n" | "y" | "0" | "1" | "2" | null | undefined;
     "series_number"?: string | null | undefined;
     "output_dir"?: string | null | undefined;
-    "philips_scaling"?: "y" | "n" | null | undefined;
+    "philips_scaling"?: boolean | null | undefined;
     "search_mode"?: "y" | "l" | "n" | null | undefined;
-    "rename"?: "y" | "n" | null | undefined;
-    "single_file"?: "y" | "n" | null | undefined;
+    "rename"?: boolean | null | undefined;
+    "single_file"?: boolean | null | undefined;
     "update_check": boolean;
     "verbose"?: "0" | "1" | "2" | null | undefined;
     "conflict_behavior"?: number | null | undefined;
     "crop_3d"?: "y" | "n" | "i" | null | undefined;
     "compression"?: "y" | "o" | "i" | "n" | "3" | null | undefined;
     "endian"?: "y" | "n" | "o" | null | undefined;
-    "progress"?: "y" | "n" | null | undefined;
+    "progress"?: boolean | null | undefined;
     "ignore_trigger": boolean;
     "terse": boolean;
     "xml": boolean;
@@ -97,30 +97,30 @@ interface Dcm2niixOutputs {
 function dcm2niix_params(
     input_dir: InputPathType,
     compression_level: number | null = null,
-    adjacent: "y" | "n" | null = null,
+    adjacent: boolean | null = null,
     bids: "y" | "n" | "o" | null = null,
-    bids_anon: "y" | "n" | null = null,
+    bids_anon: boolean | null = null,
     comment: string | null = null,
     depth: number | null = null,
     export_format: "y" | "n" | "o" | "j" | "b" | null = null,
     filename: string | null = null,
     defaults: "y" | "n" | "o" | "i" | null = null,
-    ignore_derived: "y" | "n" | null = null,
+    ignore_derived: boolean | null = null,
     scaling: "y" | "n" | "o" | null = null,
     merge_2d: "n" | "y" | "0" | "1" | "2" | null = null,
     series_number: string | null = null,
     output_dir: string | null = ".",
-    philips_scaling: "y" | "n" | null = null,
+    philips_scaling: boolean | null = null,
     search_mode: "y" | "l" | "n" | null = null,
-    rename: "y" | "n" | null = null,
-    single_file: "y" | "n" | null = null,
+    rename: boolean | null = null,
+    single_file: boolean | null = null,
     update_check: boolean = false,
     verbose: "0" | "1" | "2" | null = null,
     conflict_behavior: number | null = null,
     crop_3d: "y" | "n" | "i" | null = null,
     compression: "y" | "o" | "i" | "n" | "3" | null = null,
     endian: "y" | "n" | "o" | null = null,
-    progress: "y" | "n" | null = null,
+    progress: boolean | null = null,
     ignore_trigger: boolean = false,
     terse: boolean = false,
     xml: boolean = false,
@@ -229,7 +229,7 @@ function dcm2niix_cargs(
     if ((params["adjacent"] ?? null) !== null) {
         cargs.push(
             "-a",
-            (params["adjacent"] ?? null)
+            ((params["adjacent"] ?? null) ? "y" : "n")
         );
     }
     if ((params["bids"] ?? null) !== null) {
@@ -241,7 +241,7 @@ function dcm2niix_cargs(
     if ((params["bids_anon"] ?? null) !== null) {
         cargs.push(
             "-ba",
-            (params["bids_anon"] ?? null)
+            ((params["bids_anon"] ?? null) ? "y" : "n")
         );
     }
     if ((params["comment"] ?? null) !== null) {
@@ -277,7 +277,7 @@ function dcm2niix_cargs(
     if ((params["ignore_derived"] ?? null) !== null) {
         cargs.push(
             "-i",
-            (params["ignore_derived"] ?? null)
+            ((params["ignore_derived"] ?? null) ? "y" : "n")
         );
     }
     if ((params["scaling"] ?? null) !== null) {
@@ -307,7 +307,7 @@ function dcm2niix_cargs(
     if ((params["philips_scaling"] ?? null) !== null) {
         cargs.push(
             "-p",
-            (params["philips_scaling"] ?? null)
+            ((params["philips_scaling"] ?? null) ? "y" : "n")
         );
     }
     if ((params["search_mode"] ?? null) !== null) {
@@ -319,13 +319,13 @@ function dcm2niix_cargs(
     if ((params["rename"] ?? null) !== null) {
         cargs.push(
             "-r",
-            (params["rename"] ?? null)
+            ((params["rename"] ?? null) ? "y" : "n")
         );
     }
     if ((params["single_file"] ?? null) !== null) {
         cargs.push(
             "-s",
-            (params["single_file"] ?? null)
+            ((params["single_file"] ?? null) ? "y" : "n")
         );
     }
     if ((params["update_check"] ?? false)) {
@@ -364,7 +364,7 @@ function dcm2niix_cargs(
     if ((params["progress"] ?? null) !== null) {
         cargs.push(
             "--progress",
-            (params["progress"] ?? null)
+            ((params["progress"] ?? null) ? "y" : "n")
         );
     }
     if ((params["ignore_trigger"] ?? false)) {
@@ -469,30 +469,30 @@ function dcm2niix_execute(
 function dcm2niix_(
     input_dir: InputPathType,
     compression_level: number | null = null,
-    adjacent: "y" | "n" | null = null,
+    adjacent: boolean | null = null,
     bids: "y" | "n" | "o" | null = null,
-    bids_anon: "y" | "n" | null = null,
+    bids_anon: boolean | null = null,
     comment: string | null = null,
     depth: number | null = null,
     export_format: "y" | "n" | "o" | "j" | "b" | null = null,
     filename: string | null = null,
     defaults: "y" | "n" | "o" | "i" | null = null,
-    ignore_derived: "y" | "n" | null = null,
+    ignore_derived: boolean | null = null,
     scaling: "y" | "n" | "o" | null = null,
     merge_2d: "n" | "y" | "0" | "1" | "2" | null = null,
     series_number: string | null = null,
     output_dir: string | null = ".",
-    philips_scaling: "y" | "n" | null = null,
+    philips_scaling: boolean | null = null,
     search_mode: "y" | "l" | "n" | null = null,
-    rename: "y" | "n" | null = null,
-    single_file: "y" | "n" | null = null,
+    rename: boolean | null = null,
+    single_file: boolean | null = null,
     update_check: boolean = false,
     verbose: "0" | "1" | "2" | null = null,
     conflict_behavior: number | null = null,
     crop_3d: "y" | "n" | "i" | null = null,
     compression: "y" | "o" | "i" | "n" | "3" | null = null,
     endian: "y" | "n" | "o" | null = null,
-    progress: "y" | "n" | null = null,
+    progress: boolean | null = null,
     ignore_trigger: boolean = false,
     terse: boolean = false,
     xml: boolean = false,

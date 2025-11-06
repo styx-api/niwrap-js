@@ -4,25 +4,24 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FILE_CONVERT_METADATA: Metadata = {
-    id: "2ba9bfe538f65b507e6368c6504e85d0210593d5.boutiques",
+    id: "955bdf431ca1cccbf73a19afbeac8667fbb4a28c.workbench",
     name: "file-convert",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface FileConvertBorderVersionConvertParameters {
-    "@type"?: "border_version_convert";
-    "border_in": InputPathType;
-    "out_version": number;
-    "border_out": string;
-    "opt_surface_surface"?: InputPathType | null | undefined;
+    "@type"?: "border-version-convert";
+    "border-in": InputPathType;
+    "out-version": number;
+    "border-out": string;
+    "surface"?: InputPathType | null | undefined;
 }
 type FileConvertBorderVersionConvertParametersTagged = Required<Pick<FileConvertBorderVersionConvertParameters, '@type'>> & FileConvertBorderVersionConvertParameters;
 
 
 interface FileConvertNiftiVersionConvertParameters {
-    "@type"?: "nifti_version_convert";
+    "@type"?: "nifti-version-convert";
     "input": string;
     "version": number;
     "output": string;
@@ -31,19 +30,19 @@ type FileConvertNiftiVersionConvertParametersTagged = Required<Pick<FileConvertN
 
 
 interface FileConvertCiftiVersionConvertParameters {
-    "@type"?: "cifti_version_convert";
-    "cifti_in": InputPathType;
+    "@type"?: "cifti-version-convert";
+    "cifti-in": InputPathType;
     "version": string;
-    "cifti_out": string;
+    "cifti-out": string;
 }
 type FileConvertCiftiVersionConvertParametersTagged = Required<Pick<FileConvertCiftiVersionConvertParameters, '@type'>> & FileConvertCiftiVersionConvertParameters;
 
 
 interface FileConvertParameters {
     "@type"?: "workbench/file-convert";
-    "border_version_convert"?: FileConvertBorderVersionConvertParameters | null | undefined;
-    "nifti_version_convert"?: FileConvertNiftiVersionConvertParameters | null | undefined;
-    "cifti_version_convert"?: FileConvertCiftiVersionConvertParameters | null | undefined;
+    "border-version-convert"?: FileConvertBorderVersionConvertParameters | null | undefined;
+    "nifti-version-convert"?: FileConvertNiftiVersionConvertParameters | null | undefined;
+    "cifti-version-convert"?: FileConvertCiftiVersionConvertParameters | null | undefined;
 }
 type FileConvertParametersTagged = Required<Pick<FileConvertParameters, '@type'>> & FileConvertParameters;
 
@@ -54,7 +53,9 @@ type FileConvertParametersTagged = Required<Pick<FileConvertParameters, '@type'>
  * @param border_in the input border file
  * @param out_version the format version to write as, 1 or 3 (2 doesn't exist)
  * @param border_out output - the output border file
- * @param opt_surface_surface must be specified if the input is version 1: use this surface file for structure and number of vertices, ignore borders on other structures
+ * @param surface must be specified if the input is version 1
+
+use this surface file for structure and number of vertices, ignore borders on other structures
  *
  * @returns Parameter dictionary
  */
@@ -62,16 +63,16 @@ function file_convert_border_version_convert_params(
     border_in: InputPathType,
     out_version: number,
     border_out: string,
-    opt_surface_surface: InputPathType | null = null,
+    surface: InputPathType | null,
 ): FileConvertBorderVersionConvertParametersTagged {
     const params = {
-        "@type": "border_version_convert" as const,
-        "border_in": border_in,
-        "out_version": out_version,
-        "border_out": border_out,
+        "@type": "border-version-convert" as const,
+        "border-in": border_in,
+        "out-version": out_version,
+        "border-out": border_out,
     };
-    if (opt_surface_surface !== null) {
-        params["opt_surface_surface"] = opt_surface_surface;
+    if (surface !== null) {
+        params["surface"] = surface;
     }
     return params;
 }
@@ -90,14 +91,14 @@ function file_convert_border_version_convert_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-border-version-convert");
-    cargs.push(execution.inputFile((params["border_in"] ?? null)));
-    cargs.push(String((params["out_version"] ?? null)));
-    cargs.push((params["border_out"] ?? null));
-    if ((params["opt_surface_surface"] ?? null) !== null) {
+    if ((params["surface"] ?? null) !== null) {
         cargs.push(
+            "-border-version-convert",
+            execution.inputFile((params["border-in"] ?? null)),
+            String((params["out-version"] ?? null)),
+            (params["border-out"] ?? null),
             "-surface",
-            execution.inputFile((params["opt_surface_surface"] ?? null))
+            execution.inputFile((params["surface"] ?? null))
         );
     }
     return cargs;
@@ -119,7 +120,7 @@ function file_convert_nifti_version_convert_params(
     output: string,
 ): FileConvertNiftiVersionConvertParametersTagged {
     const params = {
-        "@type": "nifti_version_convert" as const,
+        "@type": "nifti-version-convert" as const,
         "input": input,
         "version": version,
         "output": output,
@@ -141,10 +142,12 @@ function file_convert_nifti_version_convert_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-nifti-version-convert");
-    cargs.push((params["input"] ?? null));
-    cargs.push(String((params["version"] ?? null)));
-    cargs.push((params["output"] ?? null));
+    cargs.push(
+        "-nifti-version-convert",
+        (params["input"] ?? null),
+        String((params["version"] ?? null)),
+        (params["output"] ?? null)
+    );
     return cargs;
 }
 
@@ -164,10 +167,10 @@ function file_convert_cifti_version_convert_params(
     cifti_out: string,
 ): FileConvertCiftiVersionConvertParametersTagged {
     const params = {
-        "@type": "cifti_version_convert" as const,
-        "cifti_in": cifti_in,
+        "@type": "cifti-version-convert" as const,
+        "cifti-in": cifti_in,
         "version": version,
-        "cifti_out": cifti_out,
+        "cifti-out": cifti_out,
     };
     return params;
 }
@@ -186,10 +189,12 @@ function file_convert_cifti_version_convert_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-cifti-version-convert");
-    cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
-    cargs.push((params["version"] ?? null));
-    cargs.push((params["cifti_out"] ?? null));
+    cargs.push(
+        "-cifti-version-convert",
+        execution.inputFile((params["cifti-in"] ?? null)),
+        (params["version"] ?? null),
+        (params["cifti-out"] ?? null)
+    );
     return cargs;
 }
 
@@ -225,13 +230,13 @@ function file_convert_params(
         "@type": "workbench/file-convert" as const,
     };
     if (border_version_convert !== null) {
-        params["border_version_convert"] = border_version_convert;
+        params["border-version-convert"] = border_version_convert;
     }
     if (nifti_version_convert !== null) {
-        params["nifti_version_convert"] = nifti_version_convert;
+        params["nifti-version-convert"] = nifti_version_convert;
     }
     if (cifti_version_convert !== null) {
-        params["cifti_version_convert"] = cifti_version_convert;
+        params["cifti-version-convert"] = cifti_version_convert;
     }
     return params;
 }
@@ -250,16 +255,14 @@ function file_convert_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-file-convert");
-    if ((params["border_version_convert"] ?? null) !== null) {
-        cargs.push(...file_convert_border_version_convert_cargs((params["border_version_convert"] ?? null), execution));
-    }
-    if ((params["nifti_version_convert"] ?? null) !== null) {
-        cargs.push(...file_convert_nifti_version_convert_cargs((params["nifti_version_convert"] ?? null), execution));
-    }
-    if ((params["cifti_version_convert"] ?? null) !== null) {
-        cargs.push(...file_convert_cifti_version_convert_cargs((params["cifti_version_convert"] ?? null), execution));
+    if ((params["border-version-convert"] ?? null) !== null || (params["nifti-version-convert"] ?? null) !== null || (params["cifti-version-convert"] ?? null) !== null) {
+        cargs.push(
+            "wb_command",
+            "-file-convert",
+            ...(((params["border-version-convert"] ?? null) !== null) ? file_convert_border_version_convert_cargs((params["border-version-convert"] ?? null), execution) : []),
+            ...(((params["nifti-version-convert"] ?? null) !== null) ? file_convert_nifti_version_convert_cargs((params["nifti-version-convert"] ?? null), execution) : []),
+            ...(((params["cifti-version-convert"] ?? null) !== null) ? file_convert_cifti_version_convert_cargs((params["cifti-version-convert"] ?? null), execution) : [])
+        );
     }
     return cargs;
 }
@@ -285,15 +288,9 @@ function file_convert_outputs(
 
 
 /**
- * file-convert
- *
- * Change version of file format.
+ * CHANGE VERSION OF FILE FORMAT.
  *
  * You may only specify one top-level option.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -315,15 +312,9 @@ function file_convert_execute(
 
 
 /**
- * file-convert
- *
- * Change version of file format.
+ * CHANGE VERSION OF FILE FORMAT.
  *
  * You may only specify one top-level option.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param border_version_convert write a border file with a different version
  * @param nifti_version_convert write a nifti file with a different version

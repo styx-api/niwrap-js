@@ -4,18 +4,17 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LABEL_PROBABILITY_METADATA: Metadata = {
-    id: "17883125fa07b84610948fe71508e3f8bf4671e0.boutiques",
+    id: "3036af31e9086ad81e72bfa02cf68fef734a77c9.workbench",
     name: "label-probability",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface LabelProbabilityParameters {
     "@type"?: "workbench/label-probability";
-    "label_maps": InputPathType;
-    "probability_metric_out": string;
-    "opt_exclude_unlabeled": boolean;
+    "probability-metric-out": string;
+    "exclude-unlabeled": boolean;
+    "label-maps": InputPathType;
 }
 type LabelProbabilityParametersTagged = Required<Pick<LabelProbabilityParameters, '@type'>> & LabelProbabilityParameters;
 
@@ -40,22 +39,22 @@ interface LabelProbabilityOutputs {
 /**
  * Build parameters.
  *
- * @param label_maps label file containing individual label maps from many subjects
  * @param probability_metric_out the relative frequencies of each label at each vertex
- * @param opt_exclude_unlabeled don't make a probability map of the unlabeled key
+ * @param label_maps label file containing individual label maps from many subjects
+ * @param exclude_unlabeled don't make a probability map of the unlabeled key
  *
  * @returns Parameter dictionary
  */
 function label_probability_params(
-    label_maps: InputPathType,
     probability_metric_out: string,
-    opt_exclude_unlabeled: boolean = false,
+    label_maps: InputPathType,
+    exclude_unlabeled: boolean = false,
 ): LabelProbabilityParametersTagged {
     const params = {
         "@type": "workbench/label-probability" as const,
-        "label_maps": label_maps,
-        "probability_metric_out": probability_metric_out,
-        "opt_exclude_unlabeled": opt_exclude_unlabeled,
+        "probability-metric-out": probability_metric_out,
+        "exclude-unlabeled": exclude_unlabeled,
+        "label-maps": label_maps,
     };
     return params;
 }
@@ -74,13 +73,15 @@ function label_probability_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-label-probability");
-    cargs.push(execution.inputFile((params["label_maps"] ?? null)));
-    cargs.push((params["probability_metric_out"] ?? null));
-    if ((params["opt_exclude_unlabeled"] ?? false)) {
-        cargs.push("-exclude-unlabeled");
+    if ((params["exclude-unlabeled"] ?? false)) {
+        cargs.push(
+            "wb_command",
+            "-label-probability",
+            (params["probability-metric-out"] ?? null),
+            "-exclude-unlabeled"
+        );
     }
+    cargs.push(execution.inputFile((params["label-maps"] ?? null)));
     return cargs;
 }
 
@@ -99,22 +100,16 @@ function label_probability_outputs(
 ): LabelProbabilityOutputs {
     const ret: LabelProbabilityOutputs = {
         root: execution.outputFile("."),
-        probability_metric_out: execution.outputFile([(params["probability_metric_out"] ?? null)].join('')),
+        probability_metric_out: execution.outputFile([(params["probability-metric-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * label-probability
- *
- * Find frequency of surface labels.
+ * FIND FREQUENCY OF SURFACE LABELS.
  *
  * This command outputs a set of soft ROIs, one for each label in the input, where the value is how many of the input maps had that label at that vertex, divided by the number of input maps.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -136,30 +131,24 @@ function label_probability_execute(
 
 
 /**
- * label-probability
- *
- * Find frequency of surface labels.
+ * FIND FREQUENCY OF SURFACE LABELS.
  *
  * This command outputs a set of soft ROIs, one for each label in the input, where the value is how many of the input maps had that label at that vertex, divided by the number of input maps.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
- * @param label_maps label file containing individual label maps from many subjects
  * @param probability_metric_out the relative frequencies of each label at each vertex
- * @param opt_exclude_unlabeled don't make a probability map of the unlabeled key
+ * @param label_maps label file containing individual label maps from many subjects
+ * @param exclude_unlabeled don't make a probability map of the unlabeled key
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelProbabilityOutputs`).
  */
 function label_probability(
-    label_maps: InputPathType,
     probability_metric_out: string,
-    opt_exclude_unlabeled: boolean = false,
+    label_maps: InputPathType,
+    exclude_unlabeled: boolean = false,
     runner: Runner | null = null,
 ): LabelProbabilityOutputs {
-    const params = label_probability_params(label_maps, probability_metric_out, opt_exclude_unlabeled)
+    const params = label_probability_params(probability_metric_out, label_maps, exclude_unlabeled)
     return label_probability_execute(params, runner);
 }
 

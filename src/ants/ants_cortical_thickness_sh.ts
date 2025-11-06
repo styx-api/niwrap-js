@@ -22,19 +22,19 @@ interface AntsCorticalThicknessShParameters {
     "image_file_suffix"?: string | null | undefined;
     "template_for_t1_registration"?: InputPathType | null | undefined;
     "extraction_registration_mask"?: InputPathType | null | undefined;
-    "keep_temporary_files"?: 0 | 1 | null | undefined;
-    "denoise_anatomical_images"?: 0 | 1 | null | undefined;
+    "keep_temporary_files"?: boolean | null | undefined;
+    "denoise_anatomical_images"?: boolean | null | undefined;
     "max_iterations_for_registration"?: string | null | undefined;
     "atropos_prior_segmentation_weight"?: number | null | undefined;
     "number_of_segmentation_iterations"?: number | null | undefined;
     "posterior_formulation"?: string | null | undefined;
-    "use_floating_point_precision"?: 0 | 1 | null | undefined;
-    "use_random_seeding"?: 0 | 1 | null | undefined;
-    "use_b_spline_smoothing"?: 0 | 1 | null | undefined;
+    "use_floating_point_precision"?: boolean | null | undefined;
+    "use_random_seeding"?: boolean | null | undefined;
+    "use_b_spline_smoothing"?: boolean | null | undefined;
     "cortical_thickness_prior_image"?: InputPathType | null | undefined;
     "label_propagation"?: string | null | undefined;
     "additional_priors_for_thickness"?: string | null | undefined;
-    "use_quick_registration_parameters"?: 0 | 1 | null | undefined;
+    "use_quick_registration_parameters"?: boolean | null | undefined;
     "atropos_iterations"?: number | null | undefined;
     "script_stage_to_run"?: number | null | undefined;
     "test_debug_mode"?: number | null | undefined;
@@ -112,19 +112,19 @@ function ants_cortical_thickness_sh_params(
     image_file_suffix: string | null = null,
     template_for_t1_registration: InputPathType | null = null,
     extraction_registration_mask: InputPathType | null = null,
-    keep_temporary_files: 0 | 1 | null = null,
-    denoise_anatomical_images: 0 | 1 | null = null,
+    keep_temporary_files: boolean | null = null,
+    denoise_anatomical_images: boolean | null = null,
     max_iterations_for_registration: string | null = null,
     atropos_prior_segmentation_weight: number | null = null,
     number_of_segmentation_iterations: number | null = null,
     posterior_formulation: string | null = null,
-    use_floating_point_precision: 0 | 1 | null = null,
-    use_random_seeding: 0 | 1 | null = null,
-    use_b_spline_smoothing: 0 | 1 | null = null,
+    use_floating_point_precision: boolean | null = null,
+    use_random_seeding: boolean | null = null,
+    use_b_spline_smoothing: boolean | null = null,
     cortical_thickness_prior_image: InputPathType | null = null,
     label_propagation: string | null = null,
     additional_priors_for_thickness: string | null = null,
-    use_quick_registration_parameters: 0 | 1 | null = null,
+    use_quick_registration_parameters: boolean | null = null,
     atropos_iterations: number | null = null,
     script_stage_to_run: number | null = null,
     test_debug_mode: number | null = null,
@@ -258,13 +258,13 @@ function ants_cortical_thickness_sh_cargs(
     if ((params["keep_temporary_files"] ?? null) !== null) {
         cargs.push(
             "-k",
-            String((params["keep_temporary_files"] ?? null))
+            ((params["keep_temporary_files"] ?? null) ? "1" : "0")
         );
     }
     if ((params["denoise_anatomical_images"] ?? null) !== null) {
         cargs.push(
             "-g",
-            String((params["denoise_anatomical_images"] ?? null))
+            ((params["denoise_anatomical_images"] ?? null) ? "1" : "0")
         );
     }
     if ((params["max_iterations_for_registration"] ?? null) !== null) {
@@ -294,19 +294,19 @@ function ants_cortical_thickness_sh_cargs(
     if ((params["use_floating_point_precision"] ?? null) !== null) {
         cargs.push(
             "-j",
-            String((params["use_floating_point_precision"] ?? null))
+            ((params["use_floating_point_precision"] ?? null) ? "1" : "0")
         );
     }
     if ((params["use_random_seeding"] ?? null) !== null) {
         cargs.push(
             "-u",
-            String((params["use_random_seeding"] ?? null))
+            ((params["use_random_seeding"] ?? null) ? "1" : "0")
         );
     }
     if ((params["use_b_spline_smoothing"] ?? null) !== null) {
         cargs.push(
             "-v",
-            String((params["use_b_spline_smoothing"] ?? null))
+            ((params["use_b_spline_smoothing"] ?? null) ? "1" : "0")
         );
     }
     if ((params["cortical_thickness_prior_image"] ?? null) !== null) {
@@ -330,7 +330,7 @@ function ants_cortical_thickness_sh_cargs(
     if ((params["use_quick_registration_parameters"] ?? null) !== null) {
         cargs.push(
             "-q",
-            String((params["use_quick_registration_parameters"] ?? null))
+            ((params["use_quick_registration_parameters"] ?? null) ? "1" : "0")
         );
     }
     if ((params["atropos_iterations"] ?? null) !== null) {
@@ -454,19 +454,19 @@ function ants_cortical_thickness_sh(
     image_file_suffix: string | null = null,
     template_for_t1_registration: InputPathType | null = null,
     extraction_registration_mask: InputPathType | null = null,
-    keep_temporary_files: 0 | 1 | null = null,
-    denoise_anatomical_images: 0 | 1 | null = null,
+    keep_temporary_files: boolean | null = null,
+    denoise_anatomical_images: boolean | null = null,
     max_iterations_for_registration: string | null = null,
     atropos_prior_segmentation_weight: number | null = null,
     number_of_segmentation_iterations: number | null = null,
     posterior_formulation: string | null = null,
-    use_floating_point_precision: 0 | 1 | null = null,
-    use_random_seeding: 0 | 1 | null = null,
-    use_b_spline_smoothing: 0 | 1 | null = null,
+    use_floating_point_precision: boolean | null = null,
+    use_random_seeding: boolean | null = null,
+    use_b_spline_smoothing: boolean | null = null,
     cortical_thickness_prior_image: InputPathType | null = null,
     label_propagation: string | null = null,
     additional_priors_for_thickness: string | null = null,
-    use_quick_registration_parameters: 0 | 1 | null = null,
+    use_quick_registration_parameters: boolean | null = null,
     atropos_iterations: number | null = null,
     script_stage_to_run: number | null = null,
     test_debug_mode: number | null = null,

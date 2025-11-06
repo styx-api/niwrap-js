@@ -4,22 +4,22 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_LABEL_IMPORT_METADATA: Metadata = {
-    id: "fd15dc2f6291be132cb199977df9b1c5b85a16ab.boutiques",
+    id: "8ebfebc97768bf77ee4f3467a6f745021a8c3a59.workbench",
     name: "volume-label-import",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface VolumeLabelImportParameters {
     "@type"?: "workbench/volume-label-import";
-    "input": InputPathType;
-    "label_list_file": string;
     "output": string;
-    "opt_discard_others": boolean;
-    "opt_unlabeled_value_value"?: number | null | undefined;
-    "opt_subvolume_subvol"?: string | null | undefined;
-    "opt_drop_unused_labels": boolean;
+    "discard-others": boolean;
+    "value"?: number | null | undefined;
+    "subvol"?: string | null | undefined;
+    "drop-unused-labels": boolean;
+    "file"?: string | null | undefined;
+    "input": InputPathType;
+    "label-list-file": string;
 }
 type VolumeLabelImportParametersTagged = Required<Pick<VolumeLabelImportParameters, '@type'>> & VolumeLabelImportParameters;
 
@@ -44,38 +44,49 @@ interface VolumeLabelImportOutputs {
 /**
  * Build parameters.
  *
+ * @param output the output workbench label volume
+ * @param value set the value that will be interpreted as unlabeled
+
+the numeric value for unlabeled (default 0)
+ * @param subvol select a single subvolume to import
+
+the subvolume number or name
+ * @param file read label name hierarchy from a json file
+
+the input json file
  * @param input the input volume file
  * @param label_list_file text file containing the values and names for labels
- * @param output the output workbench label volume
- * @param opt_discard_others set any voxels with values not mentioned in the label list to the ??? label
- * @param opt_unlabeled_value_value set the value that will be interpreted as unlabeled: the numeric value for unlabeled (default 0)
- * @param opt_subvolume_subvol select a single subvolume to import: the subvolume number or name
- * @param opt_drop_unused_labels remove any unused label values from the label table
+ * @param discard_others set any voxels with values not mentioned in the label list to the ??? label
+ * @param drop_unused_labels remove any unused label values from the label table
  *
  * @returns Parameter dictionary
  */
 function volume_label_import_params(
+    output: string,
+    value: number | null,
+    subvol: string | null,
+    file: string | null,
     input: InputPathType,
     label_list_file: string,
-    output: string,
-    opt_discard_others: boolean = false,
-    opt_unlabeled_value_value: number | null = null,
-    opt_subvolume_subvol: string | null = null,
-    opt_drop_unused_labels: boolean = false,
+    discard_others: boolean = false,
+    drop_unused_labels: boolean = false,
 ): VolumeLabelImportParametersTagged {
     const params = {
         "@type": "workbench/volume-label-import" as const,
-        "input": input,
-        "label_list_file": label_list_file,
         "output": output,
-        "opt_discard_others": opt_discard_others,
-        "opt_drop_unused_labels": opt_drop_unused_labels,
+        "discard-others": discard_others,
+        "drop-unused-labels": drop_unused_labels,
+        "input": input,
+        "label-list-file": label_list_file,
     };
-    if (opt_unlabeled_value_value !== null) {
-        params["opt_unlabeled_value_value"] = opt_unlabeled_value_value;
+    if (value !== null) {
+        params["value"] = value;
     }
-    if (opt_subvolume_subvol !== null) {
-        params["opt_subvolume_subvol"] = opt_subvolume_subvol;
+    if (subvol !== null) {
+        params["subvol"] = subvol;
+    }
+    if (file !== null) {
+        params["file"] = file;
     }
     return params;
 }
@@ -94,29 +105,23 @@ function volume_label_import_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-label-import");
-    cargs.push(execution.inputFile((params["input"] ?? null)));
-    cargs.push((params["label_list_file"] ?? null));
-    cargs.push((params["output"] ?? null));
-    if ((params["opt_discard_others"] ?? false)) {
-        cargs.push("-discard-others");
-    }
-    if ((params["opt_unlabeled_value_value"] ?? null) !== null) {
+    if ((params["discard-others"] ?? false) || (params["value"] ?? null) !== null || (params["subvol"] ?? null) !== null || (params["drop-unused-labels"] ?? false) || (params["file"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-volume-label-import",
+            (params["output"] ?? null),
+            (((params["discard-others"] ?? false)) ? "-discard-others" : ""),
             "-unlabeled-value",
-            String((params["opt_unlabeled_value_value"] ?? null))
-        );
-    }
-    if ((params["opt_subvolume_subvol"] ?? null) !== null) {
-        cargs.push(
+            (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
             "-subvolume",
-            (params["opt_subvolume_subvol"] ?? null)
+            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : ""),
+            (((params["drop-unused-labels"] ?? false)) ? "-drop-unused-labels" : ""),
+            "-hierarchy",
+            (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : "")
         );
     }
-    if ((params["opt_drop_unused_labels"] ?? false)) {
-        cargs.push("-drop-unused-labels");
-    }
+    cargs.push(execution.inputFile((params["input"] ?? null)));
+    cargs.push((params["label-list-file"] ?? null));
     return cargs;
 }
 
@@ -142,9 +147,7 @@ function volume_label_import_outputs(
 
 
 /**
- * volume-label-import
- *
- * Import a label volume to workbench format.
+ * IMPORT A LABEL VOLUME TO WORKBENCH FORMAT.
  *
  * Creates a label volume from an integer-valued volume file.  The label name and color information is stored in the volume header in a nifti extension, with a similar format as in caret5, see -volume-help.  You may specify the empty string (use "") for <label-list-file>, which will be treated as if it is an empty file.  The label list file must have the following format (2 lines per label):
  *
@@ -155,10 +158,6 @@ function volume_label_import_outputs(
  * Label names are specified on a separate line from their value and color, in order to let label names contain spaces.  Whitespace is trimmed from both ends of the label name, but is kept if it is in the middle of a label.  Do not specify the "unlabeled" key in the file, it is assumed that 0 means not labeled unless -unlabeled-value is specified.  The value of <key> specifies what value in the imported file should be used as this label (these same key values are also used in the output file).  The values of <red>, <green>, <blue> and <alpha> must be integers from 0 to 255, and will specify the color the label is drawn as (alpha of 255 means fully opaque, which is probably what you want).
  *
  * By default, it will create new label names with names like LABEL_5 for any values encountered that are not mentioned in the list file, specify -discard-others to instead set these values to the "unlabeled" key.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -180,9 +179,7 @@ function volume_label_import_execute(
 
 
 /**
- * volume-label-import
- *
- * Import a label volume to workbench format.
+ * IMPORT A LABEL VOLUME TO WORKBENCH FORMAT.
  *
  * Creates a label volume from an integer-valued volume file.  The label name and color information is stored in the volume header in a nifti extension, with a similar format as in caret5, see -volume-help.  You may specify the empty string (use "") for <label-list-file>, which will be treated as if it is an empty file.  The label list file must have the following format (2 lines per label):
  *
@@ -194,32 +191,36 @@ function volume_label_import_execute(
  *
  * By default, it will create new label names with names like LABEL_5 for any values encountered that are not mentioned in the list file, specify -discard-others to instead set these values to the "unlabeled" key.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param output the output workbench label volume
+ * @param value set the value that will be interpreted as unlabeled
+
+the numeric value for unlabeled (default 0)
+ * @param subvol select a single subvolume to import
+
+the subvolume number or name
+ * @param file read label name hierarchy from a json file
+
+the input json file
  * @param input the input volume file
  * @param label_list_file text file containing the values and names for labels
- * @param output the output workbench label volume
- * @param opt_discard_others set any voxels with values not mentioned in the label list to the ??? label
- * @param opt_unlabeled_value_value set the value that will be interpreted as unlabeled: the numeric value for unlabeled (default 0)
- * @param opt_subvolume_subvol select a single subvolume to import: the subvolume number or name
- * @param opt_drop_unused_labels remove any unused label values from the label table
+ * @param discard_others set any voxels with values not mentioned in the label list to the ??? label
+ * @param drop_unused_labels remove any unused label values from the label table
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeLabelImportOutputs`).
  */
 function volume_label_import(
+    output: string,
+    value: number | null,
+    subvol: string | null,
+    file: string | null,
     input: InputPathType,
     label_list_file: string,
-    output: string,
-    opt_discard_others: boolean = false,
-    opt_unlabeled_value_value: number | null = null,
-    opt_subvolume_subvol: string | null = null,
-    opt_drop_unused_labels: boolean = false,
+    discard_others: boolean = false,
+    drop_unused_labels: boolean = false,
     runner: Runner | null = null,
 ): VolumeLabelImportOutputs {
-    const params = volume_label_import_params(input, label_list_file, output, opt_discard_others, opt_unlabeled_value_value, opt_subvolume_subvol, opt_drop_unused_labels)
+    const params = volume_label_import_params(output, value, subvol, file, input, label_list_file, discard_others, drop_unused_labels)
     return volume_label_import_execute(params, runner);
 }
 

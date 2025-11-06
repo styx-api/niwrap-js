@@ -4,19 +4,18 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_PARCEL_MAPPING_TO_LABEL_METADATA: Metadata = {
-    id: "0bf15c8c4c3f06d434147770f8cfca4d5d152ae9.boutiques",
+    id: "ce08a74db6f042fde95fefc290e8baf47feda5cc.workbench",
     name: "cifti-parcel-mapping-to-label",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiParcelMappingToLabelParameters {
     "@type"?: "workbench/cifti-parcel-mapping-to-label";
-    "cifti_in": InputPathType;
+    "dlabel-out": string;
+    "cifti-in": InputPathType;
     "direction": string;
-    "template_cifti": InputPathType;
-    "dlabel_out": string;
+    "template-cifti": InputPathType;
 }
 type CiftiParcelMappingToLabelParametersTagged = Required<Pick<CiftiParcelMappingToLabelParameters, '@type'>> & CiftiParcelMappingToLabelParameters;
 
@@ -41,25 +40,25 @@ interface CiftiParcelMappingToLabelOutputs {
 /**
  * Build parameters.
  *
+ * @param dlabel_out the output dense label file
  * @param cifti_in the input parcellated file
  * @param direction which dimension to take the parcel map from, ROW or COLUMN
  * @param template_cifti a cifti file with the desired dense mapping along column
- * @param dlabel_out the output dense label file
  *
  * @returns Parameter dictionary
  */
 function cifti_parcel_mapping_to_label_params(
+    dlabel_out: string,
     cifti_in: InputPathType,
     direction: string,
     template_cifti: InputPathType,
-    dlabel_out: string,
 ): CiftiParcelMappingToLabelParametersTagged {
     const params = {
         "@type": "workbench/cifti-parcel-mapping-to-label" as const,
-        "cifti_in": cifti_in,
+        "dlabel-out": dlabel_out,
+        "cifti-in": cifti_in,
         "direction": direction,
-        "template_cifti": template_cifti,
-        "dlabel_out": dlabel_out,
+        "template-cifti": template_cifti,
     };
     return params;
 }
@@ -78,12 +77,14 @@ function cifti_parcel_mapping_to_label_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-parcel-mapping-to-label");
-    cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
+    cargs.push(
+        "wb_command",
+        "-cifti-parcel-mapping-to-label",
+        (params["dlabel-out"] ?? null)
+    );
+    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push((params["direction"] ?? null));
-    cargs.push(execution.inputFile((params["template_cifti"] ?? null)));
-    cargs.push((params["dlabel_out"] ?? null));
+    cargs.push(execution.inputFile((params["template-cifti"] ?? null)));
     return cargs;
 }
 
@@ -102,24 +103,18 @@ function cifti_parcel_mapping_to_label_outputs(
 ): CiftiParcelMappingToLabelOutputs {
     const ret: CiftiParcelMappingToLabelOutputs = {
         root: execution.outputFile("."),
-        dlabel_out: execution.outputFile([(params["dlabel_out"] ?? null)].join('')),
+        dlabel_out: execution.outputFile([(params["dlabel-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * cifti-parcel-mapping-to-label
- *
- * Create dlabel from parcellated file.
+ * CREATE DLABEL FROM PARCELLATED FILE.
  *
  * This command will output a dlabel file, useful for doing the same parcellation to another dense file.
  *
  * For ptseries, pscalar, plabel, pconn, and pdconn, using COLUMN for <direction> will work.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -141,34 +136,28 @@ function cifti_parcel_mapping_to_label_execute(
 
 
 /**
- * cifti-parcel-mapping-to-label
- *
- * Create dlabel from parcellated file.
+ * CREATE DLABEL FROM PARCELLATED FILE.
  *
  * This command will output a dlabel file, useful for doing the same parcellation to another dense file.
  *
  * For ptseries, pscalar, plabel, pconn, and pdconn, using COLUMN for <direction> will work.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param dlabel_out the output dense label file
  * @param cifti_in the input parcellated file
  * @param direction which dimension to take the parcel map from, ROW or COLUMN
  * @param template_cifti a cifti file with the desired dense mapping along column
- * @param dlabel_out the output dense label file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiParcelMappingToLabelOutputs`).
  */
 function cifti_parcel_mapping_to_label(
+    dlabel_out: string,
     cifti_in: InputPathType,
     direction: string,
     template_cifti: InputPathType,
-    dlabel_out: string,
     runner: Runner | null = null,
 ): CiftiParcelMappingToLabelOutputs {
-    const params = cifti_parcel_mapping_to_label_params(cifti_in, direction, template_cifti, dlabel_out)
+    const params = cifti_parcel_mapping_to_label_params(dlabel_out, cifti_in, direction, template_cifti)
     return cifti_parcel_mapping_to_label_execute(params, runner);
 }
 

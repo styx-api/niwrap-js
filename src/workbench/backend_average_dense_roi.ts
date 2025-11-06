@@ -4,17 +4,16 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const BACKEND_AVERAGE_DENSE_ROI_METADATA: Metadata = {
-    id: "b14d4ef91f39d8749a47f7c791bcd6bf8525bc4d.boutiques",
+    id: "af0de4e5ef947f744f8051acd2cc8811f3f4cf73.workbench",
     name: "backend-average-dense-roi",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface BackendAverageDenseRoiParameters {
     "@type"?: "workbench/backend-average-dense-roi";
-    "index_list": string;
-    "out_file": string;
+    "index-list": string;
+    "out-file": string;
 }
 type BackendAverageDenseRoiParametersTagged = Required<Pick<BackendAverageDenseRoiParameters, '@type'>> & BackendAverageDenseRoiParameters;
 
@@ -46,8 +45,8 @@ function backend_average_dense_roi_params(
 ): BackendAverageDenseRoiParametersTagged {
     const params = {
         "@type": "workbench/backend-average-dense-roi" as const,
-        "index_list": index_list,
-        "out_file": out_file,
+        "index-list": index_list,
+        "out-file": out_file,
     };
     return params;
 }
@@ -66,10 +65,12 @@ function backend_average_dense_roi_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-backend-average-dense-roi");
-    cargs.push((params["index_list"] ?? null));
-    cargs.push((params["out_file"] ?? null));
+    cargs.push(
+        "wb_command",
+        "-backend-average-dense-roi"
+    );
+    cargs.push((params["index-list"] ?? null));
+    cargs.push((params["out-file"] ?? null));
     return cargs;
 }
 
@@ -94,15 +95,9 @@ function backend_average_dense_roi_outputs(
 
 
 /**
- * backend-average-dense-roi
- *
- * Connectome db backend command for cifti average dense roi.
+ * CONNECTOME DB BACKEND COMMAND FOR CIFTI AVERAGE DENSE ROI.
  *
  * This command is probably not the one you are looking for, try -cifti-average-dense-roi.  It takes the list of cifti files to average from standard input, and writes its output as little endian, 32-bit integer of row size followed by the row as 32-bit floats.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -124,15 +119,9 @@ function backend_average_dense_roi_execute(
 
 
 /**
- * backend-average-dense-roi
- *
- * Connectome db backend command for cifti average dense roi.
+ * CONNECTOME DB BACKEND COMMAND FOR CIFTI AVERAGE DENSE ROI.
  *
  * This command is probably not the one you are looking for, try -cifti-average-dense-roi.  It takes the list of cifti files to average from standard input, and writes its output as little endian, 32-bit integer of row size followed by the row as 32-bit floats.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param index_list comma separated list of cifti indexes to average
  * @param out_file file to write the average row to

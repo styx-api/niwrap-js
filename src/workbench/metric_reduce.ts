@@ -4,28 +4,27 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_REDUCE_METADATA: Metadata = {
-    id: "1d37ac901662d6962e04b6b12face19d11c30fc5.boutiques",
+    id: "16a5b7e816fece45188696cd1530041a0b700afe.workbench",
     name: "metric-reduce",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface MetricReduceExcludeOutliersParameters {
-    "@type"?: "exclude_outliers";
-    "sigma_below": number;
-    "sigma_above": number;
+    "@type"?: "exclude-outliers";
+    "sigma-below": number;
+    "sigma-above": number;
 }
 type MetricReduceExcludeOutliersParametersTagged = Required<Pick<MetricReduceExcludeOutliersParameters, '@type'>> & MetricReduceExcludeOutliersParameters;
 
 
 interface MetricReduceParameters {
     "@type"?: "workbench/metric-reduce";
-    "metric_in": InputPathType;
+    "metric-out": string;
+    "exclude-outliers"?: MetricReduceExcludeOutliersParameters | null | undefined;
+    "only-numeric": boolean;
+    "metric-in": InputPathType;
     "operation": string;
-    "metric_out": string;
-    "exclude_outliers"?: MetricReduceExcludeOutliersParameters | null | undefined;
-    "opt_only_numeric": boolean;
 }
 type MetricReduceParametersTagged = Required<Pick<MetricReduceParameters, '@type'>> & MetricReduceParameters;
 
@@ -43,9 +42,9 @@ function metric_reduce_exclude_outliers_params(
     sigma_above: number,
 ): MetricReduceExcludeOutliersParametersTagged {
     const params = {
-        "@type": "exclude_outliers" as const,
-        "sigma_below": sigma_below,
-        "sigma_above": sigma_above,
+        "@type": "exclude-outliers" as const,
+        "sigma-below": sigma_below,
+        "sigma-above": sigma_above,
     };
     return params;
 }
@@ -64,9 +63,11 @@ function metric_reduce_exclude_outliers_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-exclude-outliers");
-    cargs.push(String((params["sigma_below"] ?? null)));
-    cargs.push(String((params["sigma_above"] ?? null)));
+    cargs.push(
+        "-exclude-outliers",
+        String((params["sigma-below"] ?? null)),
+        String((params["sigma-above"] ?? null))
+    );
     return cargs;
 }
 
@@ -91,30 +92,30 @@ interface MetricReduceOutputs {
 /**
  * Build parameters.
  *
+ * @param metric_out the output metric
  * @param metric_in the metric to reduce
  * @param operation the reduction operator to use
- * @param metric_out the output metric
  * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
- * @param opt_only_numeric exclude non-numeric values
+ * @param only_numeric exclude non-numeric values
  *
  * @returns Parameter dictionary
  */
 function metric_reduce_params(
+    metric_out: string,
     metric_in: InputPathType,
     operation: string,
-    metric_out: string,
     exclude_outliers: MetricReduceExcludeOutliersParameters | null = null,
-    opt_only_numeric: boolean = false,
+    only_numeric: boolean = false,
 ): MetricReduceParametersTagged {
     const params = {
         "@type": "workbench/metric-reduce" as const,
-        "metric_in": metric_in,
+        "metric-out": metric_out,
+        "only-numeric": only_numeric,
+        "metric-in": metric_in,
         "operation": operation,
-        "metric_out": metric_out,
-        "opt_only_numeric": opt_only_numeric,
     };
     if (exclude_outliers !== null) {
-        params["exclude_outliers"] = exclude_outliers;
+        params["exclude-outliers"] = exclude_outliers;
     }
     return params;
 }
@@ -133,17 +134,17 @@ function metric_reduce_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-metric-reduce");
-    cargs.push(execution.inputFile((params["metric_in"] ?? null)));
+    if ((params["exclude-outliers"] ?? null) !== null || (params["only-numeric"] ?? false)) {
+        cargs.push(
+            "wb_command",
+            "-metric-reduce",
+            (params["metric-out"] ?? null),
+            ...(((params["exclude-outliers"] ?? null) !== null) ? metric_reduce_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : []),
+            (((params["only-numeric"] ?? false)) ? "-only-numeric" : "")
+        );
+    }
+    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     cargs.push((params["operation"] ?? null));
-    cargs.push((params["metric_out"] ?? null));
-    if ((params["exclude_outliers"] ?? null) !== null) {
-        cargs.push(...metric_reduce_exclude_outliers_cargs((params["exclude_outliers"] ?? null), execution));
-    }
-    if ((params["opt_only_numeric"] ?? false)) {
-        cargs.push("-only-numeric");
-    }
     return cargs;
 }
 
@@ -162,16 +163,14 @@ function metric_reduce_outputs(
 ): MetricReduceOutputs {
     const ret: MetricReduceOutputs = {
         root: execution.outputFile("."),
-        metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
+        metric_out: execution.outputFile([(params["metric-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * metric-reduce
- *
- * Perform reduction operation across metric columns.
+ * PERFORM REDUCTION OPERATION ACROSS METRIC COLUMNS.
  *
  * For each surface vertex, takes the data across columns as a vector, and performs the specified reduction on it, putting the result into the single output column at that vertex.  The reduction operators are as follows:
  *
@@ -192,10 +191,6 @@ function metric_reduce_outputs(
  * MODE: the mode of the data
  * COUNT_NONZERO: the number of nonzero elements in the data
  * .
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -217,9 +212,7 @@ function metric_reduce_execute(
 
 
 /**
- * metric-reduce
- *
- * Perform reduction operation across metric columns.
+ * PERFORM REDUCTION OPERATION ACROSS METRIC COLUMNS.
  *
  * For each surface vertex, takes the data across columns as a vector, and performs the specified reduction on it, putting the result into the single output column at that vertex.  The reduction operators are as follows:
  *
@@ -241,28 +234,24 @@ function metric_reduce_execute(
  * COUNT_NONZERO: the number of nonzero elements in the data
  * .
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param metric_out the output metric
  * @param metric_in the metric to reduce
  * @param operation the reduction operator to use
- * @param metric_out the output metric
  * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
- * @param opt_only_numeric exclude non-numeric values
+ * @param only_numeric exclude non-numeric values
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricReduceOutputs`).
  */
 function metric_reduce(
+    metric_out: string,
     metric_in: InputPathType,
     operation: string,
-    metric_out: string,
     exclude_outliers: MetricReduceExcludeOutliersParameters | null = null,
-    opt_only_numeric: boolean = false,
+    only_numeric: boolean = false,
     runner: Runner | null = null,
 ): MetricReduceOutputs {
-    const params = metric_reduce_params(metric_in, operation, metric_out, exclude_outliers, opt_only_numeric)
+    const params = metric_reduce_params(metric_out, metric_in, operation, exclude_outliers, only_numeric)
     return metric_reduce_execute(params, runner);
 }
 

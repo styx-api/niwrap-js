@@ -4,22 +4,21 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LABEL_DILATE_METADATA: Metadata = {
-    id: "73edd274bc940fb62891aa8ff3534fdafc214402.boutiques",
+    id: "e02283fd8307f04426742148eee8e3e920bc3fac.workbench",
     name: "label-dilate",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface LabelDilateParameters {
     "@type"?: "workbench/label-dilate";
+    "label-out": string;
+    "roi-metric"?: InputPathType | null | undefined;
+    "column"?: string | null | undefined;
+    "area-metric"?: InputPathType | null | undefined;
     "label": InputPathType;
     "surface": InputPathType;
-    "dilate_dist": number;
-    "label_out": string;
-    "opt_bad_vertex_roi_roi_metric"?: InputPathType | null | undefined;
-    "opt_column_column"?: string | null | undefined;
-    "opt_corrected_areas_area_metric"?: InputPathType | null | undefined;
+    "dilate-dist": number;
 }
 type LabelDilateParametersTagged = Required<Pick<LabelDilateParameters, '@type'>> & LabelDilateParameters;
 
@@ -44,40 +43,46 @@ interface LabelDilateOutputs {
 /**
  * Build parameters.
  *
+ * @param label_out the output label file
+ * @param roi_metric specify an roi of vertices to overwrite, rather than vertices with the unlabeled key
+
+metric file, positive values denote vertices to have their values replaced
+ * @param column select a single column to dilate
+
+the column number or name
+ * @param area_metric vertex areas to use instead of computing them from the surface
+
+the corrected vertex areas, as a metric
  * @param label the input label
  * @param surface the surface to dilate on
  * @param dilate_dist distance in mm to dilate the labels
- * @param label_out the output label file
- * @param opt_bad_vertex_roi_roi_metric specify an roi of vertices to overwrite, rather than vertices with the unlabeled key: metric file, positive values denote vertices to have their values replaced
- * @param opt_column_column select a single column to dilate: the column number or name
- * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
 function label_dilate_params(
+    label_out: string,
+    roi_metric: InputPathType | null,
+    column: string | null,
+    area_metric: InputPathType | null,
     label: InputPathType,
     surface: InputPathType,
     dilate_dist: number,
-    label_out: string,
-    opt_bad_vertex_roi_roi_metric: InputPathType | null = null,
-    opt_column_column: string | null = null,
-    opt_corrected_areas_area_metric: InputPathType | null = null,
 ): LabelDilateParametersTagged {
     const params = {
         "@type": "workbench/label-dilate" as const,
+        "label-out": label_out,
         "label": label,
         "surface": surface,
-        "dilate_dist": dilate_dist,
-        "label_out": label_out,
+        "dilate-dist": dilate_dist,
     };
-    if (opt_bad_vertex_roi_roi_metric !== null) {
-        params["opt_bad_vertex_roi_roi_metric"] = opt_bad_vertex_roi_roi_metric;
+    if (roi_metric !== null) {
+        params["roi-metric"] = roi_metric;
     }
-    if (opt_column_column !== null) {
-        params["opt_column_column"] = opt_column_column;
+    if (column !== null) {
+        params["column"] = column;
     }
-    if (opt_corrected_areas_area_metric !== null) {
-        params["opt_corrected_areas_area_metric"] = opt_corrected_areas_area_metric;
+    if (area_metric !== null) {
+        params["area-metric"] = area_metric;
     }
     return params;
 }
@@ -96,30 +101,22 @@ function label_dilate_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-label-dilate");
+    if ((params["roi-metric"] ?? null) !== null || (params["column"] ?? null) !== null || (params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "wb_command",
+            "-label-dilate",
+            (params["label-out"] ?? null),
+            "-bad-vertex-roi",
+            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
+            "-column",
+            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
+            "-corrected-areas",
+            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
+        );
+    }
     cargs.push(execution.inputFile((params["label"] ?? null)));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(String((params["dilate_dist"] ?? null)));
-    cargs.push((params["label_out"] ?? null));
-    if ((params["opt_bad_vertex_roi_roi_metric"] ?? null) !== null) {
-        cargs.push(
-            "-bad-vertex-roi",
-            execution.inputFile((params["opt_bad_vertex_roi_roi_metric"] ?? null))
-        );
-    }
-    if ((params["opt_column_column"] ?? null) !== null) {
-        cargs.push(
-            "-column",
-            (params["opt_column_column"] ?? null)
-        );
-    }
-    if ((params["opt_corrected_areas_area_metric"] ?? null) !== null) {
-        cargs.push(
-            "-corrected-areas",
-            execution.inputFile((params["opt_corrected_areas_area_metric"] ?? null))
-        );
-    }
+    cargs.push(String((params["dilate-dist"] ?? null)));
     return cargs;
 }
 
@@ -138,22 +135,16 @@ function label_dilate_outputs(
 ): LabelDilateOutputs {
     const ret: LabelDilateOutputs = {
         root: execution.outputFile("."),
-        label_out: execution.outputFile([(params["label_out"] ?? null)].join('')),
+        label_out: execution.outputFile([(params["label-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * label-dilate
- *
- * Dilate a label file.
+ * DILATE A LABEL FILE.
  *
  * Fills in label information for all vertices designated as bad, up to the specified distance away from other labels.  If -bad-vertex-roi is specified, all vertices, including those with the unlabeled key, are good, except for vertices with a positive value in the ROI.  If it is not specified, only vertices with the unlabeled key are bad.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -175,38 +166,38 @@ function label_dilate_execute(
 
 
 /**
- * label-dilate
- *
- * Dilate a label file.
+ * DILATE A LABEL FILE.
  *
  * Fills in label information for all vertices designated as bad, up to the specified distance away from other labels.  If -bad-vertex-roi is specified, all vertices, including those with the unlabeled key, are good, except for vertices with a positive value in the ROI.  If it is not specified, only vertices with the unlabeled key are bad.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param label_out the output label file
+ * @param roi_metric specify an roi of vertices to overwrite, rather than vertices with the unlabeled key
+
+metric file, positive values denote vertices to have their values replaced
+ * @param column select a single column to dilate
+
+the column number or name
+ * @param area_metric vertex areas to use instead of computing them from the surface
+
+the corrected vertex areas, as a metric
  * @param label the input label
  * @param surface the surface to dilate on
  * @param dilate_dist distance in mm to dilate the labels
- * @param label_out the output label file
- * @param opt_bad_vertex_roi_roi_metric specify an roi of vertices to overwrite, rather than vertices with the unlabeled key: metric file, positive values denote vertices to have their values replaced
- * @param opt_column_column select a single column to dilate: the column number or name
- * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelDilateOutputs`).
  */
 function label_dilate(
+    label_out: string,
+    roi_metric: InputPathType | null,
+    column: string | null,
+    area_metric: InputPathType | null,
     label: InputPathType,
     surface: InputPathType,
     dilate_dist: number,
-    label_out: string,
-    opt_bad_vertex_roi_roi_metric: InputPathType | null = null,
-    opt_column_column: string | null = null,
-    opt_corrected_areas_area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): LabelDilateOutputs {
-    const params = label_dilate_params(label, surface, dilate_dist, label_out, opt_bad_vertex_roi_roi_metric, opt_column_column, opt_corrected_areas_area_metric)
+    const params = label_dilate_params(label_out, roi_metric, column, area_metric, label, surface, dilate_dist)
     return label_dilate_execute(params, runner);
 }
 

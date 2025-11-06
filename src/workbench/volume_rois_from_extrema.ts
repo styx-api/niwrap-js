@@ -4,22 +4,21 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_ROIS_FROM_EXTREMA_METADATA: Metadata = {
-    id: "fff039813d35484e8dfeace02e6d5c8748973490.boutiques",
+    id: "9741081a1f9bdfe5deb553d7d2cb39c92eb6cafe.workbench",
     name: "volume-rois-from-extrema",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface VolumeRoisFromExtremaParameters {
     "@type"?: "workbench/volume-rois-from-extrema";
-    "volume_in": InputPathType;
+    "volume-out": string;
+    "sigma"?: number | null | undefined;
+    "roi-volume"?: InputPathType | null | undefined;
+    "method"?: string | null | undefined;
+    "subvol"?: string | null | undefined;
+    "volume-in": InputPathType;
     "limit": number;
-    "volume_out": string;
-    "opt_gaussian_sigma"?: number | null | undefined;
-    "opt_roi_roi_volume"?: InputPathType | null | undefined;
-    "opt_overlap_logic_method"?: string | null | undefined;
-    "opt_subvolume_subvol"?: string | null | undefined;
 }
 type VolumeRoisFromExtremaParametersTagged = Required<Pick<VolumeRoisFromExtremaParameters, '@type'>> & VolumeRoisFromExtremaParameters;
 
@@ -44,42 +43,50 @@ interface VolumeRoisFromExtremaOutputs {
 /**
  * Build parameters.
  *
+ * @param volume_out the output volume
+ * @param sigma generate a gaussian kernel instead of a flat ROI
+
+the sigma for the gaussian kernel, in mm
+ * @param roi_volume select a region of interest to use
+
+the region to use
+ * @param method how to handle overlapping ROIs, default ALLOW
+
+the method of resolving overlaps
+ * @param subvol select a single subvolume to take the gradient of
+
+the subvolume number or name
  * @param volume_in the input volume
  * @param limit distance limit from voxel center, in mm
- * @param volume_out the output volume
- * @param opt_gaussian_sigma generate a gaussian kernel instead of a flat ROI: the sigma for the gaussian kernel, in mm
- * @param opt_roi_roi_volume select a region of interest to use: the region to use
- * @param opt_overlap_logic_method how to handle overlapping ROIs, default ALLOW: the method of resolving overlaps
- * @param opt_subvolume_subvol select a single subvolume to take the gradient of: the subvolume number or name
  *
  * @returns Parameter dictionary
  */
 function volume_rois_from_extrema_params(
+    volume_out: string,
+    sigma: number | null,
+    roi_volume: InputPathType | null,
+    method: string | null,
+    subvol: string | null,
     volume_in: InputPathType,
     limit: number,
-    volume_out: string,
-    opt_gaussian_sigma: number | null = null,
-    opt_roi_roi_volume: InputPathType | null = null,
-    opt_overlap_logic_method: string | null = null,
-    opt_subvolume_subvol: string | null = null,
 ): VolumeRoisFromExtremaParametersTagged {
     const params = {
         "@type": "workbench/volume-rois-from-extrema" as const,
-        "volume_in": volume_in,
+        "volume-out": volume_out,
+        "volume-in": volume_in,
         "limit": limit,
-        "volume_out": volume_out,
     };
-    if (opt_gaussian_sigma !== null) {
-        params["opt_gaussian_sigma"] = opt_gaussian_sigma;
+    if (sigma !== null) {
+        params["sigma"] = sigma;
     }
-    if (opt_roi_roi_volume !== null) {
-        params["opt_roi_roi_volume"] = opt_roi_roi_volume;
+    if (roi_volume !== null) {
+        params["roi-volume"] = roi_volume;
     }
-    if (opt_overlap_logic_method !== null) {
-        params["opt_overlap_logic_method"] = opt_overlap_logic_method;
+    if (method !== null) {
+        params["method"] = method;
     }
-    if (opt_subvolume_subvol !== null) {
-        params["opt_subvolume_subvol"] = opt_subvolume_subvol;
+    if (subvol !== null) {
+        params["subvol"] = subvol;
     }
     return params;
 }
@@ -98,35 +105,23 @@ function volume_rois_from_extrema_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-rois-from-extrema");
-    cargs.push(execution.inputFile((params["volume_in"] ?? null)));
-    cargs.push(String((params["limit"] ?? null)));
-    cargs.push((params["volume_out"] ?? null));
-    if ((params["opt_gaussian_sigma"] ?? null) !== null) {
+    if ((params["sigma"] ?? null) !== null || (params["roi-volume"] ?? null) !== null || (params["method"] ?? null) !== null || (params["subvol"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-volume-rois-from-extrema",
+            (params["volume-out"] ?? null),
             "-gaussian",
-            String((params["opt_gaussian_sigma"] ?? null))
-        );
-    }
-    if ((params["opt_roi_roi_volume"] ?? null) !== null) {
-        cargs.push(
+            (((params["sigma"] ?? null) !== null) ? String((params["sigma"] ?? null)) : ""),
             "-roi",
-            execution.inputFile((params["opt_roi_roi_volume"] ?? null))
-        );
-    }
-    if ((params["opt_overlap_logic_method"] ?? null) !== null) {
-        cargs.push(
+            (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
             "-overlap-logic",
-            (params["opt_overlap_logic_method"] ?? null)
-        );
-    }
-    if ((params["opt_subvolume_subvol"] ?? null) !== null) {
-        cargs.push(
+            (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : ""),
             "-subvolume",
-            (params["opt_subvolume_subvol"] ?? null)
+            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
         );
     }
+    cargs.push(execution.inputFile((params["volume-in"] ?? null)));
+    cargs.push(String((params["limit"] ?? null)));
     return cargs;
 }
 
@@ -145,22 +140,16 @@ function volume_rois_from_extrema_outputs(
 ): VolumeRoisFromExtremaOutputs {
     const ret: VolumeRoisFromExtremaOutputs = {
         root: execution.outputFile("."),
-        volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
+        volume_out: execution.outputFile([(params["volume-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * volume-rois-from-extrema
- *
- * Create volume roi maps from extrema maps.
+ * CREATE VOLUME ROI MAPS FROM EXTREMA MAPS.
  *
  * For each nonzero value in each map, make a map with an ROI around that location.  If the -gaussian option is specified, then normalized gaussian kernels are output instead of ROIs.  The <method> argument to -overlap-logic must be one of ALLOW, CLOSEST, or EXCLUDE.  ALLOW is the default, and means that ROIs are treated independently and may overlap.  CLOSEST means that ROIs may not overlap, and that no ROI contains vertices that are closer to a different seed vertex.  EXCLUDE means that ROIs may not overlap, and that any vertex within range of more than one ROI does not belong to any ROI.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -182,38 +171,40 @@ function volume_rois_from_extrema_execute(
 
 
 /**
- * volume-rois-from-extrema
- *
- * Create volume roi maps from extrema maps.
+ * CREATE VOLUME ROI MAPS FROM EXTREMA MAPS.
  *
  * For each nonzero value in each map, make a map with an ROI around that location.  If the -gaussian option is specified, then normalized gaussian kernels are output instead of ROIs.  The <method> argument to -overlap-logic must be one of ALLOW, CLOSEST, or EXCLUDE.  ALLOW is the default, and means that ROIs are treated independently and may overlap.  CLOSEST means that ROIs may not overlap, and that no ROI contains vertices that are closer to a different seed vertex.  EXCLUDE means that ROIs may not overlap, and that any vertex within range of more than one ROI does not belong to any ROI.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param volume_out the output volume
+ * @param sigma generate a gaussian kernel instead of a flat ROI
+
+the sigma for the gaussian kernel, in mm
+ * @param roi_volume select a region of interest to use
+
+the region to use
+ * @param method how to handle overlapping ROIs, default ALLOW
+
+the method of resolving overlaps
+ * @param subvol select a single subvolume to take the gradient of
+
+the subvolume number or name
  * @param volume_in the input volume
  * @param limit distance limit from voxel center, in mm
- * @param volume_out the output volume
- * @param opt_gaussian_sigma generate a gaussian kernel instead of a flat ROI: the sigma for the gaussian kernel, in mm
- * @param opt_roi_roi_volume select a region of interest to use: the region to use
- * @param opt_overlap_logic_method how to handle overlapping ROIs, default ALLOW: the method of resolving overlaps
- * @param opt_subvolume_subvol select a single subvolume to take the gradient of: the subvolume number or name
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeRoisFromExtremaOutputs`).
  */
 function volume_rois_from_extrema(
+    volume_out: string,
+    sigma: number | null,
+    roi_volume: InputPathType | null,
+    method: string | null,
+    subvol: string | null,
     volume_in: InputPathType,
     limit: number,
-    volume_out: string,
-    opt_gaussian_sigma: number | null = null,
-    opt_roi_roi_volume: InputPathType | null = null,
-    opt_overlap_logic_method: string | null = null,
-    opt_subvolume_subvol: string | null = null,
     runner: Runner | null = null,
 ): VolumeRoisFromExtremaOutputs {
-    const params = volume_rois_from_extrema_params(volume_in, limit, volume_out, opt_gaussian_sigma, opt_roi_roi_volume, opt_overlap_logic_method, opt_subvolume_subvol)
+    const params = volume_rois_from_extrema_params(volume_out, sigma, roi_volume, method, subvol, volume_in, limit)
     return volume_rois_from_extrema_execute(params, runner);
 }
 

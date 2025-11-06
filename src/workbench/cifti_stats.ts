@@ -4,29 +4,28 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_STATS_METADATA: Metadata = {
-    id: "852ba0d83f7d875e846bb1d014e2f98430b0a0ae.boutiques",
+    id: "f349676d3d092156442226a065fb86440603b2ac.workbench",
     name: "cifti-stats",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiStatsRoiParameters {
     "@type"?: "roi";
-    "roi_cifti": InputPathType;
-    "opt_match_maps": boolean;
+    "roi-cifti": InputPathType;
+    "match-maps": boolean;
 }
 type CiftiStatsRoiParametersTagged = Required<Pick<CiftiStatsRoiParameters, '@type'>> & CiftiStatsRoiParameters;
 
 
 interface CiftiStatsParameters {
     "@type"?: "workbench/cifti-stats";
-    "cifti_in": InputPathType;
-    "opt_reduce_operation"?: string | null | undefined;
-    "opt_percentile_percent"?: number | null | undefined;
-    "opt_column_column"?: number | null | undefined;
+    "operation"?: string | null | undefined;
+    "percent"?: number | null | undefined;
+    "column"?: number | null | undefined;
     "roi"?: CiftiStatsRoiParameters | null | undefined;
-    "opt_show_map_name": boolean;
+    "show-map-name": boolean;
+    "cifti-in": InputPathType;
 }
 type CiftiStatsParametersTagged = Required<Pick<CiftiStatsParameters, '@type'>> & CiftiStatsParameters;
 
@@ -35,18 +34,18 @@ type CiftiStatsParametersTagged = Required<Pick<CiftiStatsParameters, '@type'>> 
  * Build parameters.
  *
  * @param roi_cifti the roi, as a cifti file
- * @param opt_match_maps each column of input uses the corresponding column from the roi file
+ * @param match_maps each column of input uses the corresponding column from the roi file
  *
  * @returns Parameter dictionary
  */
 function cifti_stats_roi_params(
     roi_cifti: InputPathType,
-    opt_match_maps: boolean = false,
+    match_maps: boolean = false,
 ): CiftiStatsRoiParametersTagged {
     const params = {
         "@type": "roi" as const,
-        "roi_cifti": roi_cifti,
-        "opt_match_maps": opt_match_maps,
+        "roi-cifti": roi_cifti,
+        "match-maps": match_maps,
     };
     return params;
 }
@@ -65,10 +64,12 @@ function cifti_stats_roi_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-roi");
-    cargs.push(execution.inputFile((params["roi_cifti"] ?? null)));
-    if ((params["opt_match_maps"] ?? false)) {
-        cargs.push("-match-maps");
+    if ((params["match-maps"] ?? false)) {
+        cargs.push(
+            "-roi",
+            execution.inputFile((params["roi-cifti"] ?? null)),
+            "-match-maps"
+        );
     }
     return cargs;
 }
@@ -90,36 +91,42 @@ interface CiftiStatsOutputs {
 /**
  * Build parameters.
  *
+ * @param operation use a reduction operation
+
+the reduction operation
+ * @param percent give the value at a percentile
+
+the percentile to find, must be between 0 and 100
+ * @param column only display output for one column
+
+the column index (starting from 1)
  * @param cifti_in the input cifti
- * @param opt_reduce_operation use a reduction operation: the reduction operation
- * @param opt_percentile_percent give the value at a percentile: the percentile to find, must be between 0 and 100
- * @param opt_column_column only display output for one column: the column index (starting from 1)
  * @param roi only consider data inside an roi
- * @param opt_show_map_name print column index and name before each output
+ * @param show_map_name print column index and name before each output
  *
  * @returns Parameter dictionary
  */
 function cifti_stats_params(
+    operation: string | null,
+    percent: number | null,
+    column: number | null,
     cifti_in: InputPathType,
-    opt_reduce_operation: string | null = null,
-    opt_percentile_percent: number | null = null,
-    opt_column_column: number | null = null,
     roi: CiftiStatsRoiParameters | null = null,
-    opt_show_map_name: boolean = false,
+    show_map_name: boolean = false,
 ): CiftiStatsParametersTagged {
     const params = {
         "@type": "workbench/cifti-stats" as const,
-        "cifti_in": cifti_in,
-        "opt_show_map_name": opt_show_map_name,
+        "show-map-name": show_map_name,
+        "cifti-in": cifti_in,
     };
-    if (opt_reduce_operation !== null) {
-        params["opt_reduce_operation"] = opt_reduce_operation;
+    if (operation !== null) {
+        params["operation"] = operation;
     }
-    if (opt_percentile_percent !== null) {
-        params["opt_percentile_percent"] = opt_percentile_percent;
+    if (percent !== null) {
+        params["percent"] = percent;
     }
-    if (opt_column_column !== null) {
-        params["opt_column_column"] = opt_column_column;
+    if (column !== null) {
+        params["column"] = column;
     }
     if (roi !== null) {
         params["roi"] = roi;
@@ -141,33 +148,21 @@ function cifti_stats_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-stats");
-    cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
-    if ((params["opt_reduce_operation"] ?? null) !== null) {
+    if ((params["operation"] ?? null) !== null || (params["percent"] ?? null) !== null || (params["column"] ?? null) !== null || (params["roi"] ?? null) !== null || (params["show-map-name"] ?? false)) {
         cargs.push(
+            "wb_command",
+            "-cifti-stats",
             "-reduce",
-            (params["opt_reduce_operation"] ?? null)
-        );
-    }
-    if ((params["opt_percentile_percent"] ?? null) !== null) {
-        cargs.push(
+            (((params["operation"] ?? null) !== null) ? (params["operation"] ?? null) : ""),
             "-percentile",
-            String((params["opt_percentile_percent"] ?? null))
-        );
-    }
-    if ((params["opt_column_column"] ?? null) !== null) {
-        cargs.push(
+            (((params["percent"] ?? null) !== null) ? String((params["percent"] ?? null)) : ""),
             "-column",
-            String((params["opt_column_column"] ?? null))
+            (((params["column"] ?? null) !== null) ? String((params["column"] ?? null)) : ""),
+            ...(((params["roi"] ?? null) !== null) ? cifti_stats_roi_cargs((params["roi"] ?? null), execution) : []),
+            (((params["show-map-name"] ?? false)) ? "-show-map-name" : "")
         );
     }
-    if ((params["roi"] ?? null) !== null) {
-        cargs.push(...cifti_stats_roi_cargs((params["roi"] ?? null), execution));
-    }
-    if ((params["opt_show_map_name"] ?? false)) {
-        cargs.push("-show-map-name");
-    }
+    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     return cargs;
 }
 
@@ -192,9 +187,7 @@ function cifti_stats_outputs(
 
 
 /**
- * cifti-stats
- *
- * Statistics along cifti columns.
+ * STATISTICS ALONG CIFTI COLUMNS.
  *
  * For each column of the input, a line of text is printed, resulting from the specified reduction or percentile operation.  If -roi is specified without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Use -column to only give output for a single data column.  Exactly one of -reduce or -percentile must be specified.
  *
@@ -217,10 +210,6 @@ function cifti_stats_outputs(
  * MODE: the mode of the data
  * COUNT_NONZERO: the number of nonzero elements in the data
  * .
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -242,9 +231,7 @@ function cifti_stats_execute(
 
 
 /**
- * cifti-stats
- *
- * Statistics along cifti columns.
+ * STATISTICS ALONG CIFTI COLUMNS.
  *
  * For each column of the input, a line of text is printed, resulting from the specified reduction or percentile operation.  If -roi is specified without -match-maps, then each line will contain as many numbers as there are maps in the ROI file, separated by tab characters.  Use -column to only give output for a single data column.  Exactly one of -reduce or -percentile must be specified.
  *
@@ -268,30 +255,32 @@ function cifti_stats_execute(
  * COUNT_NONZERO: the number of nonzero elements in the data
  * .
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param operation use a reduction operation
+
+the reduction operation
+ * @param percent give the value at a percentile
+
+the percentile to find, must be between 0 and 100
+ * @param column only display output for one column
+
+the column index (starting from 1)
  * @param cifti_in the input cifti
- * @param opt_reduce_operation use a reduction operation: the reduction operation
- * @param opt_percentile_percent give the value at a percentile: the percentile to find, must be between 0 and 100
- * @param opt_column_column only display output for one column: the column index (starting from 1)
  * @param roi only consider data inside an roi
- * @param opt_show_map_name print column index and name before each output
+ * @param show_map_name print column index and name before each output
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiStatsOutputs`).
  */
 function cifti_stats(
+    operation: string | null,
+    percent: number | null,
+    column: number | null,
     cifti_in: InputPathType,
-    opt_reduce_operation: string | null = null,
-    opt_percentile_percent: number | null = null,
-    opt_column_column: number | null = null,
     roi: CiftiStatsRoiParameters | null = null,
-    opt_show_map_name: boolean = false,
+    show_map_name: boolean = false,
     runner: Runner | null = null,
 ): CiftiStatsOutputs {
-    const params = cifti_stats_params(cifti_in, opt_reduce_operation, opt_percentile_percent, opt_column_column, roi, opt_show_map_name)
+    const params = cifti_stats_params(operation, percent, column, cifti_in, roi, show_map_name)
     return cifti_stats_execute(params, runner);
 }
 

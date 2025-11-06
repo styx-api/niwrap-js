@@ -4,27 +4,26 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_DILATE_METADATA: Metadata = {
-    id: "228bae2c95e281c1ed3d0fb17aed811d10a80e3b.boutiques",
+    id: "5f7bbed13558b8a40bfedd7f35e6b45da7a74ffa.workbench",
     name: "metric-dilate",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface MetricDilateParameters {
     "@type"?: "workbench/metric-dilate";
+    "metric-out": string;
+    "roi-metric"?: InputPathType | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
+    "column"?: string | null | undefined;
+    "nearest": boolean;
+    "linear": boolean;
+    "exponent"?: number | null | undefined;
+    "area-metric"?: InputPathType | null | undefined;
+    "legacy-cutoff": boolean;
     "metric": InputPathType;
     "surface": InputPathType;
     "distance": number;
-    "metric_out": string;
-    "opt_bad_vertex_roi_roi_metric"?: InputPathType | null | undefined;
-    "opt_data_roi_roi_metric"?: InputPathType | null | undefined;
-    "opt_column_column"?: string | null | undefined;
-    "opt_nearest": boolean;
-    "opt_linear": boolean;
-    "opt_exponent_exponent"?: number | null | undefined;
-    "opt_corrected_areas_area_metric"?: InputPathType | null | undefined;
-    "opt_legacy_cutoff": boolean;
 }
 type MetricDilateParametersTagged = Required<Pick<MetricDilateParameters, '@type'>> & MetricDilateParameters;
 
@@ -49,59 +48,69 @@ interface MetricDilateOutputs {
 /**
  * Build parameters.
  *
+ * @param metric_out the output metric
+ * @param roi_metric specify an roi of vertices to overwrite, rather than vertices with value zero
+
+metric file, positive values denote vertices to have their values replaced
+ * @param roi_metric_ specify an roi of where there is data
+
+metric file, positive values denote vertices that have data
+ * @param column select a single column to dilate
+
+the column number or name
+ * @param exponent use a different exponent in the weighting function
+
+exponent 'n' to use in (area / (distance ^ n)) as the weighting function (default 6)
+ * @param area_metric vertex areas to use instead of computing them from the surface
+
+the corrected vertex areas, as a metric
  * @param metric the metric to dilate
  * @param surface the surface to compute on
  * @param distance distance in mm to dilate
- * @param metric_out the output metric
- * @param opt_bad_vertex_roi_roi_metric specify an roi of vertices to overwrite, rather than vertices with value zero: metric file, positive values denote vertices to have their values replaced
- * @param opt_data_roi_roi_metric specify an roi of where there is data: metric file, positive values denote vertices that have data
- * @param opt_column_column select a single column to dilate: the column number or name
- * @param opt_nearest use the nearest good value instead of a weighted average
- * @param opt_linear fill in values with linear interpolation along strongest gradient
- * @param opt_exponent_exponent use a different exponent in the weighting function: exponent 'n' to use in (area / (distance ^ n)) as the weighting function (default 6)
- * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
- * @param opt_legacy_cutoff use the v1.3.2 method of choosing how many vertices to use when calulating the dilated value with weighted method
+ * @param nearest use the nearest good value instead of a weighted average
+ * @param linear fill in values with linear interpolation along strongest gradient
+ * @param legacy_cutoff use the v1.3.2 method of choosing how many vertices to use when calulating the dilated value with weighted method
  *
  * @returns Parameter dictionary
  */
 function metric_dilate_params(
+    metric_out: string,
+    roi_metric: InputPathType | null,
+    roi_metric_: InputPathType | null,
+    column: string | null,
+    exponent: number | null,
+    area_metric: InputPathType | null,
     metric: InputPathType,
     surface: InputPathType,
     distance: number,
-    metric_out: string,
-    opt_bad_vertex_roi_roi_metric: InputPathType | null = null,
-    opt_data_roi_roi_metric: InputPathType | null = null,
-    opt_column_column: string | null = null,
-    opt_nearest: boolean = false,
-    opt_linear: boolean = false,
-    opt_exponent_exponent: number | null = null,
-    opt_corrected_areas_area_metric: InputPathType | null = null,
-    opt_legacy_cutoff: boolean = false,
+    nearest: boolean = false,
+    linear: boolean = false,
+    legacy_cutoff: boolean = false,
 ): MetricDilateParametersTagged {
     const params = {
         "@type": "workbench/metric-dilate" as const,
+        "metric-out": metric_out,
+        "nearest": nearest,
+        "linear": linear,
+        "legacy-cutoff": legacy_cutoff,
         "metric": metric,
         "surface": surface,
         "distance": distance,
-        "metric_out": metric_out,
-        "opt_nearest": opt_nearest,
-        "opt_linear": opt_linear,
-        "opt_legacy_cutoff": opt_legacy_cutoff,
     };
-    if (opt_bad_vertex_roi_roi_metric !== null) {
-        params["opt_bad_vertex_roi_roi_metric"] = opt_bad_vertex_roi_roi_metric;
+    if (roi_metric !== null) {
+        params["roi-metric"] = roi_metric;
     }
-    if (opt_data_roi_roi_metric !== null) {
-        params["opt_data_roi_roi_metric"] = opt_data_roi_roi_metric;
+    if (roi_metric_ !== null) {
+        params["roi-metric"] = roi_metric_;
     }
-    if (opt_column_column !== null) {
-        params["opt_column_column"] = opt_column_column;
+    if (column !== null) {
+        params["column"] = column;
     }
-    if (opt_exponent_exponent !== null) {
-        params["opt_exponent_exponent"] = opt_exponent_exponent;
+    if (exponent !== null) {
+        params["exponent"] = exponent;
     }
-    if (opt_corrected_areas_area_metric !== null) {
-        params["opt_corrected_areas_area_metric"] = opt_corrected_areas_area_metric;
+    if (area_metric !== null) {
+        params["area-metric"] = area_metric;
     }
     return params;
 }
@@ -120,51 +129,29 @@ function metric_dilate_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-metric-dilate");
+    if ((params["roi-metric"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["column"] ?? null) !== null || (params["nearest"] ?? false) || (params["linear"] ?? false) || (params["exponent"] ?? null) !== null || (params["area-metric"] ?? null) !== null || (params["legacy-cutoff"] ?? false)) {
+        cargs.push(
+            "wb_command",
+            "-metric-dilate",
+            (params["metric-out"] ?? null),
+            "-bad-vertex-roi",
+            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
+            "-data-roi",
+            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
+            "-column",
+            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
+            (((params["nearest"] ?? false)) ? "-nearest" : ""),
+            (((params["linear"] ?? false)) ? "-linear" : ""),
+            "-exponent",
+            (((params["exponent"] ?? null) !== null) ? String((params["exponent"] ?? null)) : ""),
+            "-corrected-areas",
+            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : ""),
+            (((params["legacy-cutoff"] ?? false)) ? "-legacy-cutoff" : "")
+        );
+    }
     cargs.push(execution.inputFile((params["metric"] ?? null)));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(String((params["distance"] ?? null)));
-    cargs.push((params["metric_out"] ?? null));
-    if ((params["opt_bad_vertex_roi_roi_metric"] ?? null) !== null) {
-        cargs.push(
-            "-bad-vertex-roi",
-            execution.inputFile((params["opt_bad_vertex_roi_roi_metric"] ?? null))
-        );
-    }
-    if ((params["opt_data_roi_roi_metric"] ?? null) !== null) {
-        cargs.push(
-            "-data-roi",
-            execution.inputFile((params["opt_data_roi_roi_metric"] ?? null))
-        );
-    }
-    if ((params["opt_column_column"] ?? null) !== null) {
-        cargs.push(
-            "-column",
-            (params["opt_column_column"] ?? null)
-        );
-    }
-    if ((params["opt_nearest"] ?? false)) {
-        cargs.push("-nearest");
-    }
-    if ((params["opt_linear"] ?? false)) {
-        cargs.push("-linear");
-    }
-    if ((params["opt_exponent_exponent"] ?? null) !== null) {
-        cargs.push(
-            "-exponent",
-            String((params["opt_exponent_exponent"] ?? null))
-        );
-    }
-    if ((params["opt_corrected_areas_area_metric"] ?? null) !== null) {
-        cargs.push(
-            "-corrected-areas",
-            execution.inputFile((params["opt_corrected_areas_area_metric"] ?? null))
-        );
-    }
-    if ((params["opt_legacy_cutoff"] ?? false)) {
-        cargs.push("-legacy-cutoff");
-    }
     return cargs;
 }
 
@@ -183,16 +170,14 @@ function metric_dilate_outputs(
 ): MetricDilateOutputs {
     const ret: MetricDilateOutputs = {
         root: execution.outputFile("."),
-        metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
+        metric_out: execution.outputFile([(params["metric-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * metric-dilate
- *
- * Dilate a metric file.
+ * DILATE A METRIC FILE.
  *
  * For all metric vertices that are designated as bad, if they neighbor a non-bad vertex with data or are within the specified distance of such a vertex, replace the value with a distance-based weighted average of nearby non-bad vertices that have data, otherwise set the value to zero.  No matter how small <distance> is, dilation will always use at least the immediate neighbor vertices.  If -nearest is specified, it will use the value from the closest non-bad vertex with data within range instead of a weighted average.
  *
@@ -201,10 +186,6 @@ function metric_dilate_outputs(
  * Note that the -corrected-areas option uses an approximate correction for the change in distances along a group average surface.
  *
  * To get the behavior of version 1.3.2 or earlier, use '-legacy-cutoff -exponent 2'.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -226,9 +207,7 @@ function metric_dilate_execute(
 
 
 /**
- * metric-dilate
- *
- * Dilate a metric file.
+ * DILATE A METRIC FILE.
  *
  * For all metric vertices that are designated as bad, if they neighbor a non-bad vertex with data or are within the specified distance of such a vertex, replace the value with a distance-based weighted average of nearby non-bad vertices that have data, otherwise set the value to zero.  No matter how small <distance> is, dilation will always use at least the immediate neighbor vertices.  If -nearest is specified, it will use the value from the closest non-bad vertex with data within range instead of a weighted average.
  *
@@ -238,42 +217,48 @@ function metric_dilate_execute(
  *
  * To get the behavior of version 1.3.2 or earlier, use '-legacy-cutoff -exponent 2'.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param metric_out the output metric
+ * @param roi_metric specify an roi of vertices to overwrite, rather than vertices with value zero
+
+metric file, positive values denote vertices to have their values replaced
+ * @param roi_metric_ specify an roi of where there is data
+
+metric file, positive values denote vertices that have data
+ * @param column select a single column to dilate
+
+the column number or name
+ * @param exponent use a different exponent in the weighting function
+
+exponent 'n' to use in (area / (distance ^ n)) as the weighting function (default 6)
+ * @param area_metric vertex areas to use instead of computing them from the surface
+
+the corrected vertex areas, as a metric
  * @param metric the metric to dilate
  * @param surface the surface to compute on
  * @param distance distance in mm to dilate
- * @param metric_out the output metric
- * @param opt_bad_vertex_roi_roi_metric specify an roi of vertices to overwrite, rather than vertices with value zero: metric file, positive values denote vertices to have their values replaced
- * @param opt_data_roi_roi_metric specify an roi of where there is data: metric file, positive values denote vertices that have data
- * @param opt_column_column select a single column to dilate: the column number or name
- * @param opt_nearest use the nearest good value instead of a weighted average
- * @param opt_linear fill in values with linear interpolation along strongest gradient
- * @param opt_exponent_exponent use a different exponent in the weighting function: exponent 'n' to use in (area / (distance ^ n)) as the weighting function (default 6)
- * @param opt_corrected_areas_area_metric vertex areas to use instead of computing them from the surface: the corrected vertex areas, as a metric
- * @param opt_legacy_cutoff use the v1.3.2 method of choosing how many vertices to use when calulating the dilated value with weighted method
+ * @param nearest use the nearest good value instead of a weighted average
+ * @param linear fill in values with linear interpolation along strongest gradient
+ * @param legacy_cutoff use the v1.3.2 method of choosing how many vertices to use when calulating the dilated value with weighted method
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricDilateOutputs`).
  */
 function metric_dilate(
+    metric_out: string,
+    roi_metric: InputPathType | null,
+    roi_metric_: InputPathType | null,
+    column: string | null,
+    exponent: number | null,
+    area_metric: InputPathType | null,
     metric: InputPathType,
     surface: InputPathType,
     distance: number,
-    metric_out: string,
-    opt_bad_vertex_roi_roi_metric: InputPathType | null = null,
-    opt_data_roi_roi_metric: InputPathType | null = null,
-    opt_column_column: string | null = null,
-    opt_nearest: boolean = false,
-    opt_linear: boolean = false,
-    opt_exponent_exponent: number | null = null,
-    opt_corrected_areas_area_metric: InputPathType | null = null,
-    opt_legacy_cutoff: boolean = false,
+    nearest: boolean = false,
+    linear: boolean = false,
+    legacy_cutoff: boolean = false,
     runner: Runner | null = null,
 ): MetricDilateOutputs {
-    const params = metric_dilate_params(metric, surface, distance, metric_out, opt_bad_vertex_roi_roi_metric, opt_data_roi_roi_metric, opt_column_column, opt_nearest, opt_linear, opt_exponent_exponent, opt_corrected_areas_area_metric, opt_legacy_cutoff)
+    const params = metric_dilate_params(metric_out, roi_metric, roi_metric_, column, exponent, area_metric, metric, surface, distance, nearest, linear, legacy_cutoff)
     return metric_dilate_execute(params, runner);
 }
 

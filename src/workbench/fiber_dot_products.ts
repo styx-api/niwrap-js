@@ -4,21 +4,20 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FIBER_DOT_PRODUCTS_METADATA: Metadata = {
-    id: "1bea023ebc341c8821892b782bf2c571990af31a.boutiques",
+    id: "59c62ac73c0dcf4d07840b26ea3183b46e8c89ab.workbench",
     name: "fiber-dot-products",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface FiberDotProductsParameters {
     "@type"?: "workbench/fiber-dot-products";
-    "white_surf": InputPathType;
-    "fiber_file": InputPathType;
-    "max_dist": number;
+    "dot-metric": string;
+    "f-metric": string;
+    "white-surf": InputPathType;
+    "fiber-file": InputPathType;
+    "max-dist": number;
     "direction": string;
-    "dot_metric": string;
-    "f_metric": string;
 }
 type FiberDotProductsParametersTagged = Required<Pick<FiberDotProductsParameters, '@type'>> & FiberDotProductsParameters;
 
@@ -47,31 +46,31 @@ interface FiberDotProductsOutputs {
 /**
  * Build parameters.
  *
+ * @param dot_metric the metric of dot products
+ * @param f_metric a metric of the f values of the fiber distributions
  * @param white_surf the white/gray boundary surface
  * @param fiber_file the fiber orientation file
  * @param max_dist the maximum distance from any surface vertex a fiber population may be, in mm
  * @param direction test against surface for whether a fiber population should be used
- * @param dot_metric the metric of dot products
- * @param f_metric a metric of the f values of the fiber distributions
  *
  * @returns Parameter dictionary
  */
 function fiber_dot_products_params(
+    dot_metric: string,
+    f_metric: string,
     white_surf: InputPathType,
     fiber_file: InputPathType,
     max_dist: number,
     direction: string,
-    dot_metric: string,
-    f_metric: string,
 ): FiberDotProductsParametersTagged {
     const params = {
         "@type": "workbench/fiber-dot-products" as const,
-        "white_surf": white_surf,
-        "fiber_file": fiber_file,
-        "max_dist": max_dist,
+        "dot-metric": dot_metric,
+        "f-metric": f_metric,
+        "white-surf": white_surf,
+        "fiber-file": fiber_file,
+        "max-dist": max_dist,
         "direction": direction,
-        "dot_metric": dot_metric,
-        "f_metric": f_metric,
     };
     return params;
 }
@@ -90,14 +89,16 @@ function fiber_dot_products_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-fiber-dot-products");
-    cargs.push(execution.inputFile((params["white_surf"] ?? null)));
-    cargs.push(execution.inputFile((params["fiber_file"] ?? null)));
-    cargs.push(String((params["max_dist"] ?? null)));
+    cargs.push(
+        "wb_command",
+        "-fiber-dot-products",
+        (params["dot-metric"] ?? null),
+        (params["f-metric"] ?? null)
+    );
+    cargs.push(execution.inputFile((params["white-surf"] ?? null)));
+    cargs.push(execution.inputFile((params["fiber-file"] ?? null)));
+    cargs.push(String((params["max-dist"] ?? null)));
     cargs.push((params["direction"] ?? null));
-    cargs.push((params["dot_metric"] ?? null));
-    cargs.push((params["f_metric"] ?? null));
     return cargs;
 }
 
@@ -116,23 +117,17 @@ function fiber_dot_products_outputs(
 ): FiberDotProductsOutputs {
     const ret: FiberDotProductsOutputs = {
         root: execution.outputFile("."),
-        dot_metric: execution.outputFile([(params["dot_metric"] ?? null)].join('')),
-        f_metric: execution.outputFile([(params["f_metric"] ?? null)].join('')),
+        dot_metric: execution.outputFile([(params["dot-metric"] ?? null)].join('')),
+        f_metric: execution.outputFile([(params["f-metric"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * fiber-dot-products
- *
- * Compute dot products of fiber orientations with surface normals.
+ * COMPUTE DOT PRODUCTS OF FIBER ORIENTATIONS WITH SURFACE NORMALS.
  *
  * For each vertex, this command finds the closest fiber population that satisfies the <direction> test, and computes the absolute value of the dot product of the surface normal and the normalized mean direction of each fiber.  The <direction> test must be one of INSIDE, OUTSIDE, or ANY, which causes the command to only use fiber populations that are inside the surface, outside the surface, or to not care which direction it is from the surface.  Each fiber population is output in a separate metric column.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -154,36 +149,30 @@ function fiber_dot_products_execute(
 
 
 /**
- * fiber-dot-products
- *
- * Compute dot products of fiber orientations with surface normals.
+ * COMPUTE DOT PRODUCTS OF FIBER ORIENTATIONS WITH SURFACE NORMALS.
  *
  * For each vertex, this command finds the closest fiber population that satisfies the <direction> test, and computes the absolute value of the dot product of the surface normal and the normalized mean direction of each fiber.  The <direction> test must be one of INSIDE, OUTSIDE, or ANY, which causes the command to only use fiber populations that are inside the surface, outside the surface, or to not care which direction it is from the surface.  Each fiber population is output in a separate metric column.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param dot_metric the metric of dot products
+ * @param f_metric a metric of the f values of the fiber distributions
  * @param white_surf the white/gray boundary surface
  * @param fiber_file the fiber orientation file
  * @param max_dist the maximum distance from any surface vertex a fiber population may be, in mm
  * @param direction test against surface for whether a fiber population should be used
- * @param dot_metric the metric of dot products
- * @param f_metric a metric of the f values of the fiber distributions
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FiberDotProductsOutputs`).
  */
 function fiber_dot_products(
+    dot_metric: string,
+    f_metric: string,
     white_surf: InputPathType,
     fiber_file: InputPathType,
     max_dist: number,
     direction: string,
-    dot_metric: string,
-    f_metric: string,
     runner: Runner | null = null,
 ): FiberDotProductsOutputs {
-    const params = fiber_dot_products_params(white_surf, fiber_file, max_dist, direction, dot_metric, f_metric)
+    const params = fiber_dot_products_params(dot_metric, f_metric, white_surf, fiber_file, max_dist, direction)
     return fiber_dot_products_execute(params, runner);
 }
 

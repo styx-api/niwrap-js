@@ -56,12 +56,12 @@ interface N4BiasFieldCorrectionParameters {
     "image_dimensionality"?: 2 | 3 | 4 | null | undefined;
     "shrink_factor"?: number | null | undefined;
     "mask_image"?: InputPathType | null | undefined;
-    "rescale_intensities"?: 0 | 1 | null | undefined;
+    "rescale_intensities"?: boolean | null | undefined;
     "weight_image"?: InputPathType | null | undefined;
     "convergence"?: N4BiasFieldCorrectionConvergenceParameters | null | undefined;
     "bspline_fitting"?: N4BiasFieldCorrectionBsplineFittingParameters | null | undefined;
     "histogram_sharpening"?: N4BiasFieldCorrectionHistogramSharpeningParameters | null | undefined;
-    "verbose"?: 0 | 1 | null | undefined;
+    "verbose"?: boolean | null | undefined;
     "input_image": InputPathType;
     "output": N4BiasFieldCorrectionCorrectedOutputParametersTagged | N4BiasFieldCorrectionCorrectedOutputNoiseParametersTagged;
 }
@@ -431,12 +431,12 @@ function n4_bias_field_correction_params(
     image_dimensionality: 2 | 3 | 4 | null = null,
     shrink_factor: number | null = null,
     mask_image: InputPathType | null = null,
-    rescale_intensities: 0 | 1 | null = null,
+    rescale_intensities: boolean | null = null,
     weight_image: InputPathType | null = null,
     convergence: N4BiasFieldCorrectionConvergenceParameters | null = null,
     bspline_fitting: N4BiasFieldCorrectionBsplineFittingParameters | null = null,
     histogram_sharpening: N4BiasFieldCorrectionHistogramSharpeningParameters | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
 ): N4BiasFieldCorrectionParametersTagged {
     const params = {
         "@type": "ants/N4BiasFieldCorrection" as const,
@@ -509,7 +509,7 @@ function n4_bias_field_correction_cargs(
     if ((params["rescale_intensities"] ?? null) !== null) {
         cargs.push(
             "--rescale-intensities",
-            String((params["rescale_intensities"] ?? null))
+            ((params["rescale_intensities"] ?? null) ? "1" : "0")
         );
     }
     if ((params["weight_image"] ?? null) !== null) {
@@ -539,7 +539,7 @@ function n4_bias_field_correction_cargs(
     if ((params["verbose"] ?? null) !== null) {
         cargs.push(
             "--verbose",
-            String((params["verbose"] ?? null))
+            ((params["verbose"] ?? null) ? "1" : "0")
         );
     }
     cargs.push(
@@ -632,12 +632,12 @@ function n4_bias_field_correction(
     image_dimensionality: 2 | 3 | 4 | null = null,
     shrink_factor: number | null = null,
     mask_image: InputPathType | null = null,
-    rescale_intensities: 0 | 1 | null = null,
+    rescale_intensities: boolean | null = null,
     weight_image: InputPathType | null = null,
     convergence: N4BiasFieldCorrectionConvergenceParameters | null = null,
     bspline_fitting: N4BiasFieldCorrectionBsplineFittingParameters | null = null,
     histogram_sharpening: N4BiasFieldCorrectionHistogramSharpeningParameters | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
     runner: Runner | null = null,
 ): N4BiasFieldCorrectionOutputs {
     const params = n4_bias_field_correction_params(input_image, output, image_dimensionality, shrink_factor, mask_image, rescale_intensities, weight_image, convergence, bspline_fitting, histogram_sharpening, verbose)

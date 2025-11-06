@@ -4,18 +4,18 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_LABEL_EXPORT_TABLE_METADATA: Metadata = {
-    id: "a31add98256d4ff82cd9abbe5312eef2ca2e6451.boutiques",
+    id: "6da54211fa44d381c5a103ea7e5e59ecf82e5e80.workbench",
     name: "cifti-label-export-table",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiLabelExportTableParameters {
     "@type"?: "workbench/cifti-label-export-table";
-    "label_in": InputPathType;
+    "json-out"?: string | null | undefined;
+    "label-in": InputPathType;
     "map": string;
-    "table_out": string;
+    "table-out": string;
 }
 type CiftiLabelExportTableParametersTagged = Required<Pick<CiftiLabelExportTableParameters, '@type'>> & CiftiLabelExportTableParameters;
 
@@ -36,6 +36,9 @@ interface CiftiLabelExportTableOutputs {
 /**
  * Build parameters.
  *
+ * @param json_out export the hierarchy as json
+
+output - filename to write hierarchy to
  * @param label_in the input cifti label file
  * @param map the number or name of the label map to use
  * @param table_out output - the output text file
@@ -43,16 +46,20 @@ interface CiftiLabelExportTableOutputs {
  * @returns Parameter dictionary
  */
 function cifti_label_export_table_params(
+    json_out: string | null,
     label_in: InputPathType,
     map: string,
     table_out: string,
 ): CiftiLabelExportTableParametersTagged {
     const params = {
         "@type": "workbench/cifti-label-export-table" as const,
-        "label_in": label_in,
+        "label-in": label_in,
         "map": map,
-        "table_out": table_out,
+        "table-out": table_out,
     };
+    if (json_out !== null) {
+        params["json-out"] = json_out;
+    }
     return params;
 }
 
@@ -70,11 +77,17 @@ function cifti_label_export_table_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-label-export-table");
-    cargs.push(execution.inputFile((params["label_in"] ?? null)));
+    if ((params["json-out"] ?? null) !== null) {
+        cargs.push(
+            "wb_command",
+            "-cifti-label-export-table",
+            "-hierarchy",
+            (params["json-out"] ?? null)
+        );
+    }
+    cargs.push(execution.inputFile((params["label-in"] ?? null)));
     cargs.push((params["map"] ?? null));
-    cargs.push((params["table_out"] ?? null));
+    cargs.push((params["table-out"] ?? null));
     return cargs;
 }
 
@@ -99,15 +112,9 @@ function cifti_label_export_table_outputs(
 
 
 /**
- * cifti-label-export-table
- *
- * Export label table from cifti as text.
+ * EXPORT LABEL TABLE FROM CIFTI AS TEXT.
  *
  * Takes the label table from the cifti label map, and writes it to a text format matching what is expected by -cifti-label-import.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -129,16 +136,13 @@ function cifti_label_export_table_execute(
 
 
 /**
- * cifti-label-export-table
- *
- * Export label table from cifti as text.
+ * EXPORT LABEL TABLE FROM CIFTI AS TEXT.
  *
  * Takes the label table from the cifti label map, and writes it to a text format matching what is expected by -cifti-label-import.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param json_out export the hierarchy as json
+
+output - filename to write hierarchy to
  * @param label_in the input cifti label file
  * @param map the number or name of the label map to use
  * @param table_out output - the output text file
@@ -147,12 +151,13 @@ function cifti_label_export_table_execute(
  * @returns NamedTuple of outputs (described in `CiftiLabelExportTableOutputs`).
  */
 function cifti_label_export_table(
+    json_out: string | null,
     label_in: InputPathType,
     map: string,
     table_out: string,
     runner: Runner | null = null,
 ): CiftiLabelExportTableOutputs {
-    const params = cifti_label_export_table_params(label_in, map, table_out)
+    const params = cifti_label_export_table_params(json_out, label_in, map, table_out)
     return cifti_label_export_table_execute(params, runner);
 }
 

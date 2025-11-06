@@ -25,7 +25,7 @@ interface AlignEpiAnatPyParameters {
     "ginormous_move": boolean;
     "keep_rm_files": boolean;
     "prep_only": boolean;
-    "ana_has_skull"?: "yes" | "no" | null | undefined;
+    "ana_has_skull"?: boolean | null | undefined;
     "epi_strip"?: "3dSkullStrip" | "3dAutomask" | "None" | null | undefined;
     "volreg_method"?: "3dvolreg" | "3dWarpDrive" | "3dAllineate" | null | undefined;
     "ex_mode"?: "quiet" | "echo" | "dry_run" | "script" | null | undefined;
@@ -91,7 +91,7 @@ function align_epi_anat_py_params(
     ginormous_move: boolean = false,
     keep_rm_files: boolean = false,
     prep_only: boolean = false,
-    ana_has_skull: "yes" | "no" | null = null,
+    ana_has_skull: boolean | null = null,
     epi_strip: "3dSkullStrip" | "3dAutomask" | "None" | null = null,
     volreg_method: "3dvolreg" | "3dWarpDrive" | "3dAllineate" | null = null,
     ex_mode: "quiet" | "echo" | "dry_run" | "script" | null = null,
@@ -190,7 +190,7 @@ function align_epi_anat_py_cargs(
     if ((params["ana_has_skull"] ?? null) !== null) {
         cargs.push(
             "-anat_has_skull",
-            (params["ana_has_skull"] ?? null)
+            ((params["ana_has_skull"] ?? null) ? "yes" : "no")
         );
     }
     if ((params["epi_strip"] ?? null) !== null) {
@@ -310,7 +310,7 @@ function align_epi_anat_py(
     ginormous_move: boolean = false,
     keep_rm_files: boolean = false,
     prep_only: boolean = false,
-    ana_has_skull: "yes" | "no" | null = null,
+    ana_has_skull: boolean | null = null,
     epi_strip: "3dSkullStrip" | "3dAutomask" | "None" | null = null,
     volreg_method: "3dvolreg" | "3dWarpDrive" | "3dAllineate" | null = null,
     ex_mode: "quiet" | "echo" | "dry_run" | "script" | null = null,

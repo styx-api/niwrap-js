@@ -4,46 +4,45 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FOCI_RESAMPLE_METADATA: Metadata = {
-    id: "a6b7818d908aa723048260f636255843659503e2.boutiques",
+    id: "6683a0cb7080f4729048697e248762fc138498eb.workbench",
     name: "foci-resample",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface FociResampleLeftSurfacesParameters {
-    "@type"?: "left_surfaces";
-    "current_surf": InputPathType;
-    "new_surf": InputPathType;
+    "@type"?: "left-surfaces";
+    "current-surf": InputPathType;
+    "new-surf": InputPathType;
 }
 type FociResampleLeftSurfacesParametersTagged = Required<Pick<FociResampleLeftSurfacesParameters, '@type'>> & FociResampleLeftSurfacesParameters;
 
 
 interface FociResampleRightSurfacesParameters {
-    "@type"?: "right_surfaces";
-    "current_surf": InputPathType;
-    "new_surf": InputPathType;
+    "@type"?: "right-surfaces";
+    "current-surf": InputPathType;
+    "new-surf": InputPathType;
 }
 type FociResampleRightSurfacesParametersTagged = Required<Pick<FociResampleRightSurfacesParameters, '@type'>> & FociResampleRightSurfacesParameters;
 
 
 interface FociResampleCerebellumSurfacesParameters {
-    "@type"?: "cerebellum_surfaces";
-    "current_surf": InputPathType;
-    "new_surf": InputPathType;
+    "@type"?: "cerebellum-surfaces";
+    "current-surf": InputPathType;
+    "new-surf": InputPathType;
 }
 type FociResampleCerebellumSurfacesParametersTagged = Required<Pick<FociResampleCerebellumSurfacesParameters, '@type'>> & FociResampleCerebellumSurfacesParameters;
 
 
 interface FociResampleParameters {
     "@type"?: "workbench/foci-resample";
-    "foci_in": InputPathType;
-    "foci_out": string;
-    "left_surfaces"?: FociResampleLeftSurfacesParameters | null | undefined;
-    "right_surfaces"?: FociResampleRightSurfacesParameters | null | undefined;
-    "cerebellum_surfaces"?: FociResampleCerebellumSurfacesParameters | null | undefined;
-    "opt_discard_distance_from_surface": boolean;
-    "opt_restore_xyz": boolean;
+    "foci-out": string;
+    "left-surfaces"?: FociResampleLeftSurfacesParameters | null | undefined;
+    "right-surfaces"?: FociResampleRightSurfacesParameters | null | undefined;
+    "cerebellum-surfaces"?: FociResampleCerebellumSurfacesParameters | null | undefined;
+    "discard-distance-from-surface": boolean;
+    "restore-xyz": boolean;
+    "foci-in": InputPathType;
 }
 type FociResampleParametersTagged = Required<Pick<FociResampleParameters, '@type'>> & FociResampleParameters;
 
@@ -61,9 +60,9 @@ function foci_resample_left_surfaces_params(
     new_surf: InputPathType,
 ): FociResampleLeftSurfacesParametersTagged {
     const params = {
-        "@type": "left_surfaces" as const,
-        "current_surf": current_surf,
-        "new_surf": new_surf,
+        "@type": "left-surfaces" as const,
+        "current-surf": current_surf,
+        "new-surf": new_surf,
     };
     return params;
 }
@@ -82,9 +81,11 @@ function foci_resample_left_surfaces_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-left-surfaces");
-    cargs.push(execution.inputFile((params["current_surf"] ?? null)));
-    cargs.push(execution.inputFile((params["new_surf"] ?? null)));
+    cargs.push(
+        "-left-surfaces",
+        execution.inputFile((params["current-surf"] ?? null)),
+        execution.inputFile((params["new-surf"] ?? null))
+    );
     return cargs;
 }
 
@@ -102,9 +103,9 @@ function foci_resample_right_surfaces_params(
     new_surf: InputPathType,
 ): FociResampleRightSurfacesParametersTagged {
     const params = {
-        "@type": "right_surfaces" as const,
-        "current_surf": current_surf,
-        "new_surf": new_surf,
+        "@type": "right-surfaces" as const,
+        "current-surf": current_surf,
+        "new-surf": new_surf,
     };
     return params;
 }
@@ -123,9 +124,11 @@ function foci_resample_right_surfaces_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-right-surfaces");
-    cargs.push(execution.inputFile((params["current_surf"] ?? null)));
-    cargs.push(execution.inputFile((params["new_surf"] ?? null)));
+    cargs.push(
+        "-right-surfaces",
+        execution.inputFile((params["current-surf"] ?? null)),
+        execution.inputFile((params["new-surf"] ?? null))
+    );
     return cargs;
 }
 
@@ -143,9 +146,9 @@ function foci_resample_cerebellum_surfaces_params(
     new_surf: InputPathType,
 ): FociResampleCerebellumSurfacesParametersTagged {
     const params = {
-        "@type": "cerebellum_surfaces" as const,
-        "current_surf": current_surf,
-        "new_surf": new_surf,
+        "@type": "cerebellum-surfaces" as const,
+        "current-surf": current_surf,
+        "new-surf": new_surf,
     };
     return params;
 }
@@ -164,9 +167,11 @@ function foci_resample_cerebellum_surfaces_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-cerebellum-surfaces");
-    cargs.push(execution.inputFile((params["current_surf"] ?? null)));
-    cargs.push(execution.inputFile((params["new_surf"] ?? null)));
+    cargs.push(
+        "-cerebellum-surfaces",
+        execution.inputFile((params["current-surf"] ?? null)),
+        execution.inputFile((params["new-surf"] ?? null))
+    );
     return cargs;
 }
 
@@ -191,40 +196,40 @@ interface FociResampleOutputs {
 /**
  * Build parameters.
  *
- * @param foci_in the input foci file
  * @param foci_out the output foci file
+ * @param foci_in the input foci file
  * @param left_surfaces the left surfaces for resampling
  * @param right_surfaces the right surfaces for resampling
  * @param cerebellum_surfaces the cerebellum surfaces for resampling
- * @param opt_discard_distance_from_surface ignore the distance the foci are above or below the current surface
- * @param opt_restore_xyz put the original xyz coordinates into the foci, rather than the coordinates obtained from unprojection
+ * @param discard_distance_from_surface ignore the distance the foci are above or below the current surface
+ * @param restore_xyz put the original xyz coordinates into the foci, rather than the coordinates obtained from unprojection
  *
  * @returns Parameter dictionary
  */
 function foci_resample_params(
-    foci_in: InputPathType,
     foci_out: string,
+    foci_in: InputPathType,
     left_surfaces: FociResampleLeftSurfacesParameters | null = null,
     right_surfaces: FociResampleRightSurfacesParameters | null = null,
     cerebellum_surfaces: FociResampleCerebellumSurfacesParameters | null = null,
-    opt_discard_distance_from_surface: boolean = false,
-    opt_restore_xyz: boolean = false,
+    discard_distance_from_surface: boolean = false,
+    restore_xyz: boolean = false,
 ): FociResampleParametersTagged {
     const params = {
         "@type": "workbench/foci-resample" as const,
-        "foci_in": foci_in,
-        "foci_out": foci_out,
-        "opt_discard_distance_from_surface": opt_discard_distance_from_surface,
-        "opt_restore_xyz": opt_restore_xyz,
+        "foci-out": foci_out,
+        "discard-distance-from-surface": discard_distance_from_surface,
+        "restore-xyz": restore_xyz,
+        "foci-in": foci_in,
     };
     if (left_surfaces !== null) {
-        params["left_surfaces"] = left_surfaces;
+        params["left-surfaces"] = left_surfaces;
     }
     if (right_surfaces !== null) {
-        params["right_surfaces"] = right_surfaces;
+        params["right-surfaces"] = right_surfaces;
     }
     if (cerebellum_surfaces !== null) {
-        params["cerebellum_surfaces"] = cerebellum_surfaces;
+        params["cerebellum-surfaces"] = cerebellum_surfaces;
     }
     return params;
 }
@@ -243,25 +248,19 @@ function foci_resample_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-foci-resample");
-    cargs.push(execution.inputFile((params["foci_in"] ?? null)));
-    cargs.push((params["foci_out"] ?? null));
-    if ((params["left_surfaces"] ?? null) !== null) {
-        cargs.push(...foci_resample_left_surfaces_cargs((params["left_surfaces"] ?? null), execution));
+    if ((params["left-surfaces"] ?? null) !== null || (params["right-surfaces"] ?? null) !== null || (params["cerebellum-surfaces"] ?? null) !== null || (params["discard-distance-from-surface"] ?? false) || (params["restore-xyz"] ?? false)) {
+        cargs.push(
+            "wb_command",
+            "-foci-resample",
+            (params["foci-out"] ?? null),
+            ...(((params["left-surfaces"] ?? null) !== null) ? foci_resample_left_surfaces_cargs((params["left-surfaces"] ?? null), execution) : []),
+            ...(((params["right-surfaces"] ?? null) !== null) ? foci_resample_right_surfaces_cargs((params["right-surfaces"] ?? null), execution) : []),
+            ...(((params["cerebellum-surfaces"] ?? null) !== null) ? foci_resample_cerebellum_surfaces_cargs((params["cerebellum-surfaces"] ?? null), execution) : []),
+            (((params["discard-distance-from-surface"] ?? false)) ? "-discard-distance-from-surface" : ""),
+            (((params["restore-xyz"] ?? false)) ? "-restore-xyz" : "")
+        );
     }
-    if ((params["right_surfaces"] ?? null) !== null) {
-        cargs.push(...foci_resample_right_surfaces_cargs((params["right_surfaces"] ?? null), execution));
-    }
-    if ((params["cerebellum_surfaces"] ?? null) !== null) {
-        cargs.push(...foci_resample_cerebellum_surfaces_cargs((params["cerebellum_surfaces"] ?? null), execution));
-    }
-    if ((params["opt_discard_distance_from_surface"] ?? false)) {
-        cargs.push("-discard-distance-from-surface");
-    }
-    if ((params["opt_restore_xyz"] ?? false)) {
-        cargs.push("-restore-xyz");
-    }
+    cargs.push(execution.inputFile((params["foci-in"] ?? null)));
     return cargs;
 }
 
@@ -280,22 +279,16 @@ function foci_resample_outputs(
 ): FociResampleOutputs {
     const ret: FociResampleOutputs = {
         root: execution.outputFile("."),
-        foci_out: execution.outputFile([(params["foci_out"] ?? null)].join('')),
+        foci_out: execution.outputFile([(params["foci-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * foci-resample
- *
- * Project foci to a different surface.
+ * PROJECT FOCI TO A DIFFERENT SURFACE.
  *
  * Unprojects foci from the <current-surf> for the structure, then projects them to <new-surf>.  If the foci have meaningful distances above or below the surface, use anatomical surfaces.  If the foci should be on the surface, use registered spheres and the options -discard-distance-from-surface and -restore-xyz.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -317,38 +310,32 @@ function foci_resample_execute(
 
 
 /**
- * foci-resample
- *
- * Project foci to a different surface.
+ * PROJECT FOCI TO A DIFFERENT SURFACE.
  *
  * Unprojects foci from the <current-surf> for the structure, then projects them to <new-surf>.  If the foci have meaningful distances above or below the surface, use anatomical surfaces.  If the foci should be on the surface, use registered spheres and the options -discard-distance-from-surface and -restore-xyz.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
- * @param foci_in the input foci file
  * @param foci_out the output foci file
+ * @param foci_in the input foci file
  * @param left_surfaces the left surfaces for resampling
  * @param right_surfaces the right surfaces for resampling
  * @param cerebellum_surfaces the cerebellum surfaces for resampling
- * @param opt_discard_distance_from_surface ignore the distance the foci are above or below the current surface
- * @param opt_restore_xyz put the original xyz coordinates into the foci, rather than the coordinates obtained from unprojection
+ * @param discard_distance_from_surface ignore the distance the foci are above or below the current surface
+ * @param restore_xyz put the original xyz coordinates into the foci, rather than the coordinates obtained from unprojection
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FociResampleOutputs`).
  */
 function foci_resample(
-    foci_in: InputPathType,
     foci_out: string,
+    foci_in: InputPathType,
     left_surfaces: FociResampleLeftSurfacesParameters | null = null,
     right_surfaces: FociResampleRightSurfacesParameters | null = null,
     cerebellum_surfaces: FociResampleCerebellumSurfacesParameters | null = null,
-    opt_discard_distance_from_surface: boolean = false,
-    opt_restore_xyz: boolean = false,
+    discard_distance_from_surface: boolean = false,
+    restore_xyz: boolean = false,
     runner: Runner | null = null,
 ): FociResampleOutputs {
-    const params = foci_resample_params(foci_in, foci_out, left_surfaces, right_surfaces, cerebellum_surfaces, opt_discard_distance_from_surface, opt_restore_xyz)
+    const params = foci_resample_params(foci_out, foci_in, left_surfaces, right_surfaces, cerebellum_surfaces, discard_distance_from_surface, restore_xyz)
     return foci_resample_execute(params, runner);
 }
 

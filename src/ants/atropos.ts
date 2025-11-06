@@ -18,20 +18,20 @@ interface AtroposParameters {
     "bspline"?: string | null | undefined;
     "initialization": string;
     "partial_volume_label_set"?: string | null | undefined;
-    "use_partial_volume_likelihoods"?: 0 | 1 | null | undefined;
+    "use_partial_volume_likelihoods"?: boolean | null | undefined;
     "posterior_formulation"?: string | null | undefined;
     "mask_image": InputPathType;
     "convergence": string;
     "likelihood_model": string;
     "mrf"?: string | null | undefined;
     "icm"?: string | null | undefined;
-    "use_random_seed"?: 0 | 1 | null | undefined;
+    "use_random_seed"?: boolean | null | undefined;
     "output": string;
-    "minimize_memory_usage"?: 0 | 1 | null | undefined;
+    "minimize_memory_usage"?: boolean | null | undefined;
     "winsorize_outliers"?: string | null | undefined;
-    "use_euclidean_distance"?: 0 | 1 | null | undefined;
+    "use_euclidean_distance"?: boolean | null | undefined;
     "label_propagation"?: string | null | undefined;
-    "verbose"?: 0 | 1 | null | undefined;
+    "verbose"?: boolean | null | undefined;
 }
 type AtroposParametersTagged = Required<Pick<AtroposParameters, '@type'>> & AtroposParameters;
 
@@ -92,16 +92,16 @@ function atropos_params(
     image_dimensionality: 2 | 3 | 4 | null = null,
     bspline: string | null = null,
     partial_volume_label_set: string | null = null,
-    use_partial_volume_likelihoods: 0 | 1 | null = null,
+    use_partial_volume_likelihoods: boolean | null = null,
     posterior_formulation: string | null = null,
     mrf: string | null = null,
     icm: string | null = null,
-    use_random_seed: 0 | 1 | null = null,
-    minimize_memory_usage: 0 | 1 | null = null,
+    use_random_seed: boolean | null = null,
+    minimize_memory_usage: boolean | null = null,
     winsorize_outliers: string | null = null,
-    use_euclidean_distance: 0 | 1 | null = null,
+    use_euclidean_distance: boolean | null = null,
     label_propagation: string | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
 ): AtroposParametersTagged {
     const params = {
         "@type": "ants/Atropos" as const,
@@ -198,7 +198,7 @@ function atropos_cargs(
     if ((params["use_partial_volume_likelihoods"] ?? null) !== null) {
         cargs.push(
             "--use-partial-volume-likelihoods",
-            String((params["use_partial_volume_likelihoods"] ?? null))
+            ((params["use_partial_volume_likelihoods"] ?? null) ? "1" : "0")
         );
     }
     if ((params["posterior_formulation"] ?? null) !== null) {
@@ -234,7 +234,7 @@ function atropos_cargs(
     if ((params["use_random_seed"] ?? null) !== null) {
         cargs.push(
             "-r",
-            String((params["use_random_seed"] ?? null))
+            ((params["use_random_seed"] ?? null) ? "1" : "0")
         );
     }
     cargs.push(
@@ -244,7 +244,7 @@ function atropos_cargs(
     if ((params["minimize_memory_usage"] ?? null) !== null) {
         cargs.push(
             "-u",
-            String((params["minimize_memory_usage"] ?? null))
+            ((params["minimize_memory_usage"] ?? null) ? "1" : "0")
         );
     }
     if ((params["winsorize_outliers"] ?? null) !== null) {
@@ -256,7 +256,7 @@ function atropos_cargs(
     if ((params["use_euclidean_distance"] ?? null) !== null) {
         cargs.push(
             "-e",
-            String((params["use_euclidean_distance"] ?? null))
+            ((params["use_euclidean_distance"] ?? null) ? "1" : "0")
         );
     }
     if ((params["label_propagation"] ?? null) !== null) {
@@ -268,7 +268,7 @@ function atropos_cargs(
     if ((params["verbose"] ?? null) !== null) {
         cargs.push(
             "-v",
-            String((params["verbose"] ?? null))
+            ((params["verbose"] ?? null) ? "1" : "0")
         );
     }
     return cargs;
@@ -366,16 +366,16 @@ function atropos(
     image_dimensionality: 2 | 3 | 4 | null = null,
     bspline: string | null = null,
     partial_volume_label_set: string | null = null,
-    use_partial_volume_likelihoods: 0 | 1 | null = null,
+    use_partial_volume_likelihoods: boolean | null = null,
     posterior_formulation: string | null = null,
     mrf: string | null = null,
     icm: string | null = null,
-    use_random_seed: 0 | 1 | null = null,
-    minimize_memory_usage: 0 | 1 | null = null,
+    use_random_seed: boolean | null = null,
+    minimize_memory_usage: boolean | null = null,
     winsorize_outliers: string | null = null,
-    use_euclidean_distance: 0 | 1 | null = null,
+    use_euclidean_distance: boolean | null = null,
     label_propagation: string | null = null,
-    verbose: 0 | 1 | null = null,
+    verbose: boolean | null = null,
     runner: Runner | null = null,
 ): AtroposOutputs {
     const params = atropos_params(intensity_image, initialization, mask_image, convergence, likelihood_model, output, image_dimensionality, bspline, partial_volume_label_set, use_partial_volume_likelihoods, posterior_formulation, mrf, icm, use_random_seed, minimize_memory_usage, winsorize_outliers, use_euclidean_distance, label_propagation, verbose)

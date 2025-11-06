@@ -4,23 +4,22 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const METRIC_ROIS_FROM_EXTREMA_METADATA: Metadata = {
-    id: "81f2e3d9eb7747f150a4127da8e7d52ba7efd320.boutiques",
+    id: "f848c1442e1f12445caedd02a0679985ee1cf53c.workbench",
     name: "metric-rois-from-extrema",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface MetricRoisFromExtremaParameters {
     "@type"?: "workbench/metric-rois-from-extrema";
+    "metric-out": string;
+    "sigma"?: number | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
+    "method"?: string | null | undefined;
+    "column"?: string | null | undefined;
     "surface": InputPathType;
     "metric": InputPathType;
     "limit": number;
-    "metric_out": string;
-    "opt_gaussian_sigma"?: number | null | undefined;
-    "opt_roi_roi_metric"?: InputPathType | null | undefined;
-    "opt_overlap_logic_method"?: string | null | undefined;
-    "opt_column_column"?: string | null | undefined;
 }
 type MetricRoisFromExtremaParametersTagged = Required<Pick<MetricRoisFromExtremaParameters, '@type'>> & MetricRoisFromExtremaParameters;
 
@@ -45,45 +44,53 @@ interface MetricRoisFromExtremaOutputs {
 /**
  * Build parameters.
  *
+ * @param metric_out the output metric file
+ * @param sigma generate a gaussian kernel instead of a flat ROI
+
+the sigma for the gaussian kernel, in mm
+ * @param roi_metric select a region of interest to use
+
+the area to use, as a metric
+ * @param method how to handle overlapping ROIs, default ALLOW
+
+the method of resolving overlaps
+ * @param column select a single input column to use
+
+the column number or name
  * @param surface the surface to use for geodesic distance
  * @param metric the input metric file
  * @param limit geodesic distance limit from vertex, in mm
- * @param metric_out the output metric file
- * @param opt_gaussian_sigma generate a gaussian kernel instead of a flat ROI: the sigma for the gaussian kernel, in mm
- * @param opt_roi_roi_metric select a region of interest to use: the area to use, as a metric
- * @param opt_overlap_logic_method how to handle overlapping ROIs, default ALLOW: the method of resolving overlaps
- * @param opt_column_column select a single input column to use: the column number or name
  *
  * @returns Parameter dictionary
  */
 function metric_rois_from_extrema_params(
+    metric_out: string,
+    sigma: number | null,
+    roi_metric: InputPathType | null,
+    method: string | null,
+    column: string | null,
     surface: InputPathType,
     metric: InputPathType,
     limit: number,
-    metric_out: string,
-    opt_gaussian_sigma: number | null = null,
-    opt_roi_roi_metric: InputPathType | null = null,
-    opt_overlap_logic_method: string | null = null,
-    opt_column_column: string | null = null,
 ): MetricRoisFromExtremaParametersTagged {
     const params = {
         "@type": "workbench/metric-rois-from-extrema" as const,
+        "metric-out": metric_out,
         "surface": surface,
         "metric": metric,
         "limit": limit,
-        "metric_out": metric_out,
     };
-    if (opt_gaussian_sigma !== null) {
-        params["opt_gaussian_sigma"] = opt_gaussian_sigma;
+    if (sigma !== null) {
+        params["sigma"] = sigma;
     }
-    if (opt_roi_roi_metric !== null) {
-        params["opt_roi_roi_metric"] = opt_roi_roi_metric;
+    if (roi_metric !== null) {
+        params["roi-metric"] = roi_metric;
     }
-    if (opt_overlap_logic_method !== null) {
-        params["opt_overlap_logic_method"] = opt_overlap_logic_method;
+    if (method !== null) {
+        params["method"] = method;
     }
-    if (opt_column_column !== null) {
-        params["opt_column_column"] = opt_column_column;
+    if (column !== null) {
+        params["column"] = column;
     }
     return params;
 }
@@ -102,36 +109,24 @@ function metric_rois_from_extrema_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-metric-rois-from-extrema");
+    if ((params["sigma"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["method"] ?? null) !== null || (params["column"] ?? null) !== null) {
+        cargs.push(
+            "wb_command",
+            "-metric-rois-from-extrema",
+            (params["metric-out"] ?? null),
+            "-gaussian",
+            (((params["sigma"] ?? null) !== null) ? String((params["sigma"] ?? null)) : ""),
+            "-roi",
+            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
+            "-overlap-logic",
+            (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : ""),
+            "-column",
+            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")
+        );
+    }
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric"] ?? null)));
     cargs.push(String((params["limit"] ?? null)));
-    cargs.push((params["metric_out"] ?? null));
-    if ((params["opt_gaussian_sigma"] ?? null) !== null) {
-        cargs.push(
-            "-gaussian",
-            String((params["opt_gaussian_sigma"] ?? null))
-        );
-    }
-    if ((params["opt_roi_roi_metric"] ?? null) !== null) {
-        cargs.push(
-            "-roi",
-            execution.inputFile((params["opt_roi_roi_metric"] ?? null))
-        );
-    }
-    if ((params["opt_overlap_logic_method"] ?? null) !== null) {
-        cargs.push(
-            "-overlap-logic",
-            (params["opt_overlap_logic_method"] ?? null)
-        );
-    }
-    if ((params["opt_column_column"] ?? null) !== null) {
-        cargs.push(
-            "-column",
-            (params["opt_column_column"] ?? null)
-        );
-    }
     return cargs;
 }
 
@@ -150,22 +145,16 @@ function metric_rois_from_extrema_outputs(
 ): MetricRoisFromExtremaOutputs {
     const ret: MetricRoisFromExtremaOutputs = {
         root: execution.outputFile("."),
-        metric_out: execution.outputFile([(params["metric_out"] ?? null)].join('')),
+        metric_out: execution.outputFile([(params["metric-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * metric-rois-from-extrema
- *
- * Create metric roi maps from extrema maps.
+ * CREATE METRIC ROI MAPS FROM EXTREMA MAPS.
  *
  * For each nonzero value in each map, make a map with an ROI around that location.  If the -gaussian option is specified, then normalized gaussian kernels are output instead of ROIs.  The <method> argument to -overlap-logic must be one of ALLOW, CLOSEST, or EXCLUDE.  ALLOW is the default, and means that ROIs are treated independently and may overlap.  CLOSEST means that ROIs may not overlap, and that no ROI contains vertices that are closer to a different seed vertex.  EXCLUDE means that ROIs may not overlap, and that any vertex within range of more than one ROI does not belong to any ROI.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -187,40 +176,42 @@ function metric_rois_from_extrema_execute(
 
 
 /**
- * metric-rois-from-extrema
- *
- * Create metric roi maps from extrema maps.
+ * CREATE METRIC ROI MAPS FROM EXTREMA MAPS.
  *
  * For each nonzero value in each map, make a map with an ROI around that location.  If the -gaussian option is specified, then normalized gaussian kernels are output instead of ROIs.  The <method> argument to -overlap-logic must be one of ALLOW, CLOSEST, or EXCLUDE.  ALLOW is the default, and means that ROIs are treated independently and may overlap.  CLOSEST means that ROIs may not overlap, and that no ROI contains vertices that are closer to a different seed vertex.  EXCLUDE means that ROIs may not overlap, and that any vertex within range of more than one ROI does not belong to any ROI.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param metric_out the output metric file
+ * @param sigma generate a gaussian kernel instead of a flat ROI
+
+the sigma for the gaussian kernel, in mm
+ * @param roi_metric select a region of interest to use
+
+the area to use, as a metric
+ * @param method how to handle overlapping ROIs, default ALLOW
+
+the method of resolving overlaps
+ * @param column select a single input column to use
+
+the column number or name
  * @param surface the surface to use for geodesic distance
  * @param metric the input metric file
  * @param limit geodesic distance limit from vertex, in mm
- * @param metric_out the output metric file
- * @param opt_gaussian_sigma generate a gaussian kernel instead of a flat ROI: the sigma for the gaussian kernel, in mm
- * @param opt_roi_roi_metric select a region of interest to use: the area to use, as a metric
- * @param opt_overlap_logic_method how to handle overlapping ROIs, default ALLOW: the method of resolving overlaps
- * @param opt_column_column select a single input column to use: the column number or name
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricRoisFromExtremaOutputs`).
  */
 function metric_rois_from_extrema(
+    metric_out: string,
+    sigma: number | null,
+    roi_metric: InputPathType | null,
+    method: string | null,
+    column: string | null,
     surface: InputPathType,
     metric: InputPathType,
     limit: number,
-    metric_out: string,
-    opt_gaussian_sigma: number | null = null,
-    opt_roi_roi_metric: InputPathType | null = null,
-    opt_overlap_logic_method: string | null = null,
-    opt_column_column: string | null = null,
     runner: Runner | null = null,
 ): MetricRoisFromExtremaOutputs {
-    const params = metric_rois_from_extrema_params(surface, metric, limit, metric_out, opt_gaussian_sigma, opt_roi_roi_metric, opt_overlap_logic_method, opt_column_column)
+    const params = metric_rois_from_extrema_params(metric_out, sigma, roi_metric, method, column, surface, metric, limit)
     return metric_rois_from_extrema_execute(params, runner);
 }
 

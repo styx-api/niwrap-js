@@ -4,16 +4,15 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CONVERT_MATRIX4_TO_WORKBENCH_SPARSE_METADATA: Metadata = {
-    id: "9de14d1819ec9b8a462cc20406cc4824564bd8e3.boutiques",
+    id: "bb2236b447f9edba4ba2e429ee0ed0348145ebe7.workbench",
     name: "convert-matrix4-to-workbench-sparse",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters {
-    "@type"?: "volume_seeds";
-    "cifti_template": InputPathType;
+    "@type"?: "volume-seeds";
+    "cifti-template": InputPathType;
     "direction": string;
 }
 type ConvertMatrix4ToWorkbenchSparseVolumeSeedsParametersTagged = Required<Pick<ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters, '@type'>> & ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters;
@@ -21,14 +20,14 @@ type ConvertMatrix4ToWorkbenchSparseVolumeSeedsParametersTagged = Required<Pick<
 
 interface ConvertMatrix4ToWorkbenchSparseParameters {
     "@type"?: "workbench/convert-matrix4-to-workbench-sparse";
+    "seed-roi"?: InputPathType | null | undefined;
+    "volume-seeds"?: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters | null | undefined;
     "matrix4_1": string;
     "matrix4_2": string;
     "matrix4_3": string;
-    "orientation_file": InputPathType;
-    "voxel_list": string;
-    "wb_sparse_out": string;
-    "opt_surface_seeds_seed_roi"?: InputPathType | null | undefined;
-    "volume_seeds"?: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters | null | undefined;
+    "orientation-file": InputPathType;
+    "voxel-list": string;
+    "wb-sparse-out": string;
 }
 type ConvertMatrix4ToWorkbenchSparseParametersTagged = Required<Pick<ConvertMatrix4ToWorkbenchSparseParameters, '@type'>> & ConvertMatrix4ToWorkbenchSparseParameters;
 
@@ -46,8 +45,8 @@ function convert_matrix4_to_workbench_sparse_volume_seeds_params(
     direction: string,
 ): ConvertMatrix4ToWorkbenchSparseVolumeSeedsParametersTagged {
     const params = {
-        "@type": "volume_seeds" as const,
-        "cifti_template": cifti_template,
+        "@type": "volume-seeds" as const,
+        "cifti-template": cifti_template,
         "direction": direction,
     };
     return params;
@@ -67,9 +66,11 @@ function convert_matrix4_to_workbench_sparse_volume_seeds_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-volume-seeds");
-    cargs.push(execution.inputFile((params["cifti_template"] ?? null)));
-    cargs.push((params["direction"] ?? null));
+    cargs.push(
+        "-volume-seeds",
+        execution.inputFile((params["cifti-template"] ?? null)),
+        (params["direction"] ?? null)
+    );
     return cargs;
 }
 
@@ -90,25 +91,27 @@ interface ConvertMatrix4ToWorkbenchSparseOutputs {
 /**
  * Build parameters.
  *
+ * @param seed_roi specify the surface seed space
+
+metric roi file of all vertices used in the seed space
  * @param matrix4_1 the first matrix4 file
  * @param matrix4_2 the second matrix4 file
  * @param matrix4_3 the third matrix4 file
  * @param orientation_file the .fiberTEMP.nii file this trajectory file applies to
  * @param voxel_list list of white matter voxel index triplets as used in the trajectory matrix
  * @param wb_sparse_out output - the output workbench sparse file
- * @param opt_surface_seeds_seed_roi specify the surface seed space: metric roi file of all vertices used in the seed space
  * @param volume_seeds specify the volume seed space
  *
  * @returns Parameter dictionary
  */
 function convert_matrix4_to_workbench_sparse_params(
+    seed_roi: InputPathType | null,
     matrix4_1: string,
     matrix4_2: string,
     matrix4_3: string,
     orientation_file: InputPathType,
     voxel_list: string,
     wb_sparse_out: string,
-    opt_surface_seeds_seed_roi: InputPathType | null = null,
     volume_seeds: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters | null = null,
 ): ConvertMatrix4ToWorkbenchSparseParametersTagged {
     const params = {
@@ -116,15 +119,15 @@ function convert_matrix4_to_workbench_sparse_params(
         "matrix4_1": matrix4_1,
         "matrix4_2": matrix4_2,
         "matrix4_3": matrix4_3,
-        "orientation_file": orientation_file,
-        "voxel_list": voxel_list,
-        "wb_sparse_out": wb_sparse_out,
+        "orientation-file": orientation_file,
+        "voxel-list": voxel_list,
+        "wb-sparse-out": wb_sparse_out,
     };
-    if (opt_surface_seeds_seed_roi !== null) {
-        params["opt_surface_seeds_seed_roi"] = opt_surface_seeds_seed_roi;
+    if (seed_roi !== null) {
+        params["seed-roi"] = seed_roi;
     }
     if (volume_seeds !== null) {
-        params["volume_seeds"] = volume_seeds;
+        params["volume-seeds"] = volume_seeds;
     }
     return params;
 }
@@ -143,23 +146,21 @@ function convert_matrix4_to_workbench_sparse_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-convert-matrix4-to-workbench-sparse");
+    if ((params["seed-roi"] ?? null) !== null || (params["volume-seeds"] ?? null) !== null) {
+        cargs.push(
+            "wb_command",
+            "-convert-matrix4-to-workbench-sparse",
+            "-surface-seeds",
+            (((params["seed-roi"] ?? null) !== null) ? execution.inputFile((params["seed-roi"] ?? null)) : ""),
+            ...(((params["volume-seeds"] ?? null) !== null) ? convert_matrix4_to_workbench_sparse_volume_seeds_cargs((params["volume-seeds"] ?? null), execution) : [])
+        );
+    }
     cargs.push((params["matrix4_1"] ?? null));
     cargs.push((params["matrix4_2"] ?? null));
     cargs.push((params["matrix4_3"] ?? null));
-    cargs.push(execution.inputFile((params["orientation_file"] ?? null)));
-    cargs.push((params["voxel_list"] ?? null));
-    cargs.push((params["wb_sparse_out"] ?? null));
-    if ((params["opt_surface_seeds_seed_roi"] ?? null) !== null) {
-        cargs.push(
-            "-surface-seeds",
-            execution.inputFile((params["opt_surface_seeds_seed_roi"] ?? null))
-        );
-    }
-    if ((params["volume_seeds"] ?? null) !== null) {
-        cargs.push(...convert_matrix4_to_workbench_sparse_volume_seeds_cargs((params["volume_seeds"] ?? null), execution));
-    }
+    cargs.push(execution.inputFile((params["orientation-file"] ?? null)));
+    cargs.push((params["voxel-list"] ?? null));
+    cargs.push((params["wb-sparse-out"] ?? null));
     return cargs;
 }
 
@@ -184,15 +185,9 @@ function convert_matrix4_to_workbench_sparse_outputs(
 
 
 /**
- * convert-matrix4-to-workbench-sparse
- *
- * Convert a 3-file matrix4 to a workbench sparse file.
+ * CONVERT A 3-FILE MATRIX4 TO A WORKBENCH SPARSE FILE.
  *
  * Converts the matrix 4 output of probtrackx to workbench sparse file format.  Exactly one of -surface-seeds and -volume-seeds must be specified.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -214,40 +209,36 @@ function convert_matrix4_to_workbench_sparse_execute(
 
 
 /**
- * convert-matrix4-to-workbench-sparse
- *
- * Convert a 3-file matrix4 to a workbench sparse file.
+ * CONVERT A 3-FILE MATRIX4 TO A WORKBENCH SPARSE FILE.
  *
  * Converts the matrix 4 output of probtrackx to workbench sparse file format.  Exactly one of -surface-seeds and -volume-seeds must be specified.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param seed_roi specify the surface seed space
+
+metric roi file of all vertices used in the seed space
  * @param matrix4_1 the first matrix4 file
  * @param matrix4_2 the second matrix4 file
  * @param matrix4_3 the third matrix4 file
  * @param orientation_file the .fiberTEMP.nii file this trajectory file applies to
  * @param voxel_list list of white matter voxel index triplets as used in the trajectory matrix
  * @param wb_sparse_out output - the output workbench sparse file
- * @param opt_surface_seeds_seed_roi specify the surface seed space: metric roi file of all vertices used in the seed space
  * @param volume_seeds specify the volume seed space
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConvertMatrix4ToWorkbenchSparseOutputs`).
  */
 function convert_matrix4_to_workbench_sparse(
+    seed_roi: InputPathType | null,
     matrix4_1: string,
     matrix4_2: string,
     matrix4_3: string,
     orientation_file: InputPathType,
     voxel_list: string,
     wb_sparse_out: string,
-    opt_surface_seeds_seed_roi: InputPathType | null = null,
     volume_seeds: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters | null = null,
     runner: Runner | null = null,
 ): ConvertMatrix4ToWorkbenchSparseOutputs {
-    const params = convert_matrix4_to_workbench_sparse_params(matrix4_1, matrix4_2, matrix4_3, orientation_file, voxel_list, wb_sparse_out, opt_surface_seeds_seed_roi, volume_seeds)
+    const params = convert_matrix4_to_workbench_sparse_params(seed_roi, matrix4_1, matrix4_2, matrix4_3, orientation_file, voxel_list, wb_sparse_out, volume_seeds)
     return convert_matrix4_to_workbench_sparse_execute(params, runner);
 }
 

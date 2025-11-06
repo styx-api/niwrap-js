@@ -4,18 +4,17 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_EXPORT_DENSE_MAPPING_METADATA: Metadata = {
-    id: "afadf58bea912ea0926f8e689df519c578fbdafa.boutiques",
+    id: "caf8dad8ae4809da9a7eb9ca3301a06449390ae2.workbench",
     name: "cifti-export-dense-mapping",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiExportDenseMappingVolumeAllParameters {
-    "@type"?: "volume_all";
-    "text_out": string;
-    "opt_no_cifti_index": boolean;
-    "opt_structure": boolean;
+    "@type"?: "volume-all";
+    "text-out": string;
+    "no-cifti-index": boolean;
+    "structure": boolean;
 }
 type CiftiExportDenseMappingVolumeAllParametersTagged = Required<Pick<CiftiExportDenseMappingVolumeAllParameters, '@type'>> & CiftiExportDenseMappingVolumeAllParameters;
 
@@ -23,8 +22,8 @@ type CiftiExportDenseMappingVolumeAllParametersTagged = Required<Pick<CiftiExpor
 interface CiftiExportDenseMappingSurfaceParameters {
     "@type"?: "surface";
     "structure": string;
-    "text_out": string;
-    "opt_no_cifti_index": boolean;
+    "text-out": string;
+    "no-cifti-index": boolean;
 }
 type CiftiExportDenseMappingSurfaceParametersTagged = Required<Pick<CiftiExportDenseMappingSurfaceParameters, '@type'>> & CiftiExportDenseMappingSurfaceParameters;
 
@@ -32,19 +31,19 @@ type CiftiExportDenseMappingSurfaceParametersTagged = Required<Pick<CiftiExportD
 interface CiftiExportDenseMappingVolumeParameters {
     "@type"?: "volume";
     "structure": string;
-    "text_out": string;
-    "opt_no_cifti_index": boolean;
+    "text-out": string;
+    "no-cifti-index": boolean;
 }
 type CiftiExportDenseMappingVolumeParametersTagged = Required<Pick<CiftiExportDenseMappingVolumeParameters, '@type'>> & CiftiExportDenseMappingVolumeParameters;
 
 
 interface CiftiExportDenseMappingParameters {
     "@type"?: "workbench/cifti-export-dense-mapping";
-    "cifti": InputPathType;
-    "direction": string;
-    "volume_all"?: CiftiExportDenseMappingVolumeAllParameters | null | undefined;
+    "volume-all"?: CiftiExportDenseMappingVolumeAllParameters | null | undefined;
     "surface"?: Array<CiftiExportDenseMappingSurfaceParameters> | null | undefined;
     "volume"?: Array<CiftiExportDenseMappingVolumeParameters> | null | undefined;
+    "cifti": InputPathType;
+    "direction": string;
 }
 type CiftiExportDenseMappingParametersTagged = Required<Pick<CiftiExportDenseMappingParameters, '@type'>> & CiftiExportDenseMappingParameters;
 
@@ -53,21 +52,21 @@ type CiftiExportDenseMappingParametersTagged = Required<Pick<CiftiExportDenseMap
  * Build parameters.
  *
  * @param text_out output - the output text file
- * @param opt_no_cifti_index don't write the cifti index in the output file
- * @param opt_structure write the structure each voxel belongs to in the output file
+ * @param no_cifti_index don't write the cifti index in the output file
+ * @param structure write the structure each voxel belongs to in the output file
  *
  * @returns Parameter dictionary
  */
 function cifti_export_dense_mapping_volume_all_params(
     text_out: string,
-    opt_no_cifti_index: boolean = false,
-    opt_structure: boolean = false,
+    no_cifti_index: boolean = false,
+    structure: boolean = false,
 ): CiftiExportDenseMappingVolumeAllParametersTagged {
     const params = {
-        "@type": "volume_all" as const,
-        "text_out": text_out,
-        "opt_no_cifti_index": opt_no_cifti_index,
-        "opt_structure": opt_structure,
+        "@type": "volume-all" as const,
+        "text-out": text_out,
+        "no-cifti-index": no_cifti_index,
+        "structure": structure,
     };
     return params;
 }
@@ -86,13 +85,13 @@ function cifti_export_dense_mapping_volume_all_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-volume-all");
-    cargs.push((params["text_out"] ?? null));
-    if ((params["opt_no_cifti_index"] ?? false)) {
-        cargs.push("-no-cifti-index");
-    }
-    if ((params["opt_structure"] ?? false)) {
-        cargs.push("-structure");
+    if ((params["no-cifti-index"] ?? false) || (params["structure"] ?? false)) {
+        cargs.push(
+            "-volume-all",
+            (params["text-out"] ?? null),
+            (((params["no-cifti-index"] ?? false)) ? "-no-cifti-index" : ""),
+            (((params["structure"] ?? false)) ? "-structure" : "")
+        );
     }
     return cargs;
 }
@@ -103,20 +102,20 @@ function cifti_export_dense_mapping_volume_all_cargs(
  *
  * @param structure the structure to output
  * @param text_out output - the output text file
- * @param opt_no_cifti_index don't write the cifti index in the output file
+ * @param no_cifti_index don't write the cifti index in the output file
  *
  * @returns Parameter dictionary
  */
 function cifti_export_dense_mapping_surface_params(
     structure: string,
     text_out: string,
-    opt_no_cifti_index: boolean = false,
+    no_cifti_index: boolean = false,
 ): CiftiExportDenseMappingSurfaceParametersTagged {
     const params = {
         "@type": "surface" as const,
         "structure": structure,
-        "text_out": text_out,
-        "opt_no_cifti_index": opt_no_cifti_index,
+        "text-out": text_out,
+        "no-cifti-index": no_cifti_index,
     };
     return params;
 }
@@ -135,11 +134,13 @@ function cifti_export_dense_mapping_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-surface");
-    cargs.push((params["structure"] ?? null));
-    cargs.push((params["text_out"] ?? null));
-    if ((params["opt_no_cifti_index"] ?? false)) {
-        cargs.push("-no-cifti-index");
+    if ((params["no-cifti-index"] ?? false)) {
+        cargs.push(
+            "-surface",
+            (params["structure"] ?? null),
+            (params["text-out"] ?? null),
+            "-no-cifti-index"
+        );
     }
     return cargs;
 }
@@ -150,20 +151,20 @@ function cifti_export_dense_mapping_surface_cargs(
  *
  * @param structure the structure to output
  * @param text_out output - the output text file
- * @param opt_no_cifti_index don't write the cifti index in the output file
+ * @param no_cifti_index don't write the cifti index in the output file
  *
  * @returns Parameter dictionary
  */
 function cifti_export_dense_mapping_volume_params(
     structure: string,
     text_out: string,
-    opt_no_cifti_index: boolean = false,
+    no_cifti_index: boolean = false,
 ): CiftiExportDenseMappingVolumeParametersTagged {
     const params = {
         "@type": "volume" as const,
         "structure": structure,
-        "text_out": text_out,
-        "opt_no_cifti_index": opt_no_cifti_index,
+        "text-out": text_out,
+        "no-cifti-index": no_cifti_index,
     };
     return params;
 }
@@ -182,11 +183,13 @@ function cifti_export_dense_mapping_volume_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-volume");
-    cargs.push((params["structure"] ?? null));
-    cargs.push((params["text_out"] ?? null));
-    if ((params["opt_no_cifti_index"] ?? false)) {
-        cargs.push("-no-cifti-index");
+    if ((params["no-cifti-index"] ?? false)) {
+        cargs.push(
+            "-volume",
+            (params["structure"] ?? null),
+            (params["text-out"] ?? null),
+            "-no-cifti-index"
+        );
     }
     return cargs;
 }
@@ -229,7 +232,7 @@ function cifti_export_dense_mapping_params(
         "direction": direction,
     };
     if (volume_all !== null) {
-        params["volume_all"] = volume_all;
+        params["volume-all"] = volume_all;
     }
     if (surface !== null) {
         params["surface"] = surface;
@@ -254,19 +257,17 @@ function cifti_export_dense_mapping_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-export-dense-mapping");
+    if ((params["volume-all"] ?? null) !== null || (params["surface"] ?? null) !== null || (params["volume"] ?? null) !== null) {
+        cargs.push(
+            "wb_command",
+            "-cifti-export-dense-mapping",
+            ...(((params["volume-all"] ?? null) !== null) ? cifti_export_dense_mapping_volume_all_cargs((params["volume-all"] ?? null), execution) : []),
+            ...(((params["surface"] ?? null) !== null) ? (params["surface"] ?? null).map(s => cifti_export_dense_mapping_surface_cargs(s, execution)).flat() : []),
+            ...(((params["volume"] ?? null) !== null) ? (params["volume"] ?? null).map(s => cifti_export_dense_mapping_volume_cargs(s, execution)).flat() : [])
+        );
+    }
     cargs.push(execution.inputFile((params["cifti"] ?? null)));
     cargs.push((params["direction"] ?? null));
-    if ((params["volume_all"] ?? null) !== null) {
-        cargs.push(...cifti_export_dense_mapping_volume_all_cargs((params["volume_all"] ?? null), execution));
-    }
-    if ((params["surface"] ?? null) !== null) {
-        cargs.push(...(params["surface"] ?? null).map(s => cifti_export_dense_mapping_surface_cargs(s, execution)).flat());
-    }
-    if ((params["volume"] ?? null) !== null) {
-        cargs.push(...(params["volume"] ?? null).map(s => cifti_export_dense_mapping_volume_cargs(s, execution)).flat());
-    }
     return cargs;
 }
 
@@ -291,9 +292,7 @@ function cifti_export_dense_mapping_outputs(
 
 
 /**
- * cifti-export-dense-mapping
- *
- * Write index to element mapping as text.
+ * WRITE INDEX TO ELEMENT MAPPING AS TEXT.
  *
  * This command produces text files that describe the mapping from cifti indices to surface vertices or voxels.  All indices are zero-based.  The default format for -surface is lines of the form:
  *
@@ -328,6 +327,8 @@ function cifti_export_dense_mapping_outputs(
  * DIENCEPHALON_VENTRAL_RIGHT
  * HIPPOCAMPUS_LEFT
  * HIPPOCAMPUS_RIGHT
+ * HIPPOCAMPUS_DENTATE_LEFT
+ * HIPPOCAMPUS_DENTATE_RIGHT
  * INVALID
  * OTHER
  * OTHER_GREY_MATTER
@@ -338,10 +339,6 @@ function cifti_export_dense_mapping_outputs(
  * PUTAMEN_RIGHT
  * THALAMUS_LEFT
  * THALAMUS_RIGHT.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -363,9 +360,7 @@ function cifti_export_dense_mapping_execute(
 
 
 /**
- * cifti-export-dense-mapping
- *
- * Write index to element mapping as text.
+ * WRITE INDEX TO ELEMENT MAPPING AS TEXT.
  *
  * This command produces text files that describe the mapping from cifti indices to surface vertices or voxels.  All indices are zero-based.  The default format for -surface is lines of the form:
  *
@@ -400,6 +395,8 @@ function cifti_export_dense_mapping_execute(
  * DIENCEPHALON_VENTRAL_RIGHT
  * HIPPOCAMPUS_LEFT
  * HIPPOCAMPUS_RIGHT
+ * HIPPOCAMPUS_DENTATE_LEFT
+ * HIPPOCAMPUS_DENTATE_RIGHT
  * INVALID
  * OTHER
  * OTHER_GREY_MATTER
@@ -410,10 +407,6 @@ function cifti_export_dense_mapping_execute(
  * PUTAMEN_RIGHT
  * THALAMUS_LEFT
  * THALAMUS_RIGHT.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param cifti the cifti file
  * @param direction which direction to export the mapping from, ROW or COLUMN

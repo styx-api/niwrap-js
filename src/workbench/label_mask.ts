@@ -4,19 +4,18 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const LABEL_MASK_METADATA: Metadata = {
-    id: "2fc5f189aae547c65690dd8d76630ca35d872552.boutiques",
+    id: "8143b670e00529bec92d2236053b58d9bab6aa76.workbench",
     name: "label-mask",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface LabelMaskParameters {
     "@type"?: "workbench/label-mask";
+    "label-out": string;
+    "column"?: string | null | undefined;
     "label": InputPathType;
     "mask": InputPathType;
-    "label_out": string;
-    "opt_column_column"?: string | null | undefined;
 }
 type LabelMaskParametersTagged = Required<Pick<LabelMaskParameters, '@type'>> & LabelMaskParameters;
 
@@ -41,27 +40,29 @@ interface LabelMaskOutputs {
 /**
  * Build parameters.
  *
+ * @param label_out the output label file
+ * @param column select a single column
+
+the column number or name
  * @param label the label file to mask
  * @param mask the mask metric
- * @param label_out the output label file
- * @param opt_column_column select a single column: the column number or name
  *
  * @returns Parameter dictionary
  */
 function label_mask_params(
+    label_out: string,
+    column: string | null,
     label: InputPathType,
     mask: InputPathType,
-    label_out: string,
-    opt_column_column: string | null = null,
 ): LabelMaskParametersTagged {
     const params = {
         "@type": "workbench/label-mask" as const,
+        "label-out": label_out,
         "label": label,
         "mask": mask,
-        "label_out": label_out,
     };
-    if (opt_column_column !== null) {
-        params["opt_column_column"] = opt_column_column;
+    if (column !== null) {
+        params["column"] = column;
     }
     return params;
 }
@@ -80,17 +81,17 @@ function label_mask_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-label-mask");
-    cargs.push(execution.inputFile((params["label"] ?? null)));
-    cargs.push(execution.inputFile((params["mask"] ?? null)));
-    cargs.push((params["label_out"] ?? null));
-    if ((params["opt_column_column"] ?? null) !== null) {
+    if ((params["column"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-label-mask",
+            (params["label-out"] ?? null),
             "-column",
-            (params["opt_column_column"] ?? null)
+            (params["column"] ?? null)
         );
     }
+    cargs.push(execution.inputFile((params["label"] ?? null)));
+    cargs.push(execution.inputFile((params["mask"] ?? null)));
     return cargs;
 }
 
@@ -109,22 +110,16 @@ function label_mask_outputs(
 ): LabelMaskOutputs {
     const ret: LabelMaskOutputs = {
         root: execution.outputFile("."),
-        label_out: execution.outputFile([(params["label_out"] ?? null)].join('')),
+        label_out: execution.outputFile([(params["label-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * label-mask
- *
- * Mask a label file.
+ * MASK A LABEL FILE.
  *
  * By default, the output label is a copy of the input label, but with the 'unused' label wherever the mask metric is zero or negative.  if -column is specified, the output contains only one column, the masked version of the specified input column.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -146,32 +141,28 @@ function label_mask_execute(
 
 
 /**
- * label-mask
- *
- * Mask a label file.
+ * MASK A LABEL FILE.
  *
  * By default, the output label is a copy of the input label, but with the 'unused' label wherever the mask metric is zero or negative.  if -column is specified, the output contains only one column, the masked version of the specified input column.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param label_out the output label file
+ * @param column select a single column
+
+the column number or name
  * @param label the label file to mask
  * @param mask the mask metric
- * @param label_out the output label file
- * @param opt_column_column select a single column: the column number or name
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelMaskOutputs`).
  */
 function label_mask(
+    label_out: string,
+    column: string | null,
     label: InputPathType,
     mask: InputPathType,
-    label_out: string,
-    opt_column_column: string | null = null,
     runner: Runner | null = null,
 ): LabelMaskOutputs {
-    const params = label_mask_params(label, mask, label_out, opt_column_column)
+    const params = label_mask_params(label_out, column, label, mask)
     return label_mask_execute(params, runner);
 }
 

@@ -4,19 +4,18 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_APPLY_WARPFIELD_METADATA: Metadata = {
-    id: "6a441ba1d393e5ce7c0331880f44291c415f3d62.boutiques",
+    id: "81f972736bb6af1bd37bc10b9a2daf65cf08fc89.workbench",
     name: "surface-apply-warpfield",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface SurfaceApplyWarpfieldParameters {
     "@type"?: "workbench/surface-apply-warpfield";
-    "in_surf": InputPathType;
+    "out-surf": string;
+    "forward-warp"?: string | null | undefined;
+    "in-surf": InputPathType;
     "warpfield": string;
-    "out_surf": string;
-    "opt_fnirt_forward_warp"?: string | null | undefined;
 }
 type SurfaceApplyWarpfieldParametersTagged = Required<Pick<SurfaceApplyWarpfieldParameters, '@type'>> & SurfaceApplyWarpfieldParameters;
 
@@ -41,27 +40,29 @@ interface SurfaceApplyWarpfieldOutputs {
 /**
  * Build parameters.
  *
+ * @param out_surf the output transformed surface
+ * @param forward_warp MUST be used if using a fnirt warpfield
+
+the forward warpfield
  * @param in_surf the surface to transform
  * @param warpfield the INVERSE warpfield
- * @param out_surf the output transformed surface
- * @param opt_fnirt_forward_warp MUST be used if using a fnirt warpfield: the forward warpfield
  *
  * @returns Parameter dictionary
  */
 function surface_apply_warpfield_params(
+    out_surf: string,
+    forward_warp: string | null,
     in_surf: InputPathType,
     warpfield: string,
-    out_surf: string,
-    opt_fnirt_forward_warp: string | null = null,
 ): SurfaceApplyWarpfieldParametersTagged {
     const params = {
         "@type": "workbench/surface-apply-warpfield" as const,
-        "in_surf": in_surf,
+        "out-surf": out_surf,
+        "in-surf": in_surf,
         "warpfield": warpfield,
-        "out_surf": out_surf,
     };
-    if (opt_fnirt_forward_warp !== null) {
-        params["opt_fnirt_forward_warp"] = opt_fnirt_forward_warp;
+    if (forward_warp !== null) {
+        params["forward-warp"] = forward_warp;
     }
     return params;
 }
@@ -80,17 +81,17 @@ function surface_apply_warpfield_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-surface-apply-warpfield");
-    cargs.push(execution.inputFile((params["in_surf"] ?? null)));
-    cargs.push((params["warpfield"] ?? null));
-    cargs.push((params["out_surf"] ?? null));
-    if ((params["opt_fnirt_forward_warp"] ?? null) !== null) {
+    if ((params["forward-warp"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-surface-apply-warpfield",
+            (params["out-surf"] ?? null),
             "-fnirt",
-            (params["opt_fnirt_forward_warp"] ?? null)
+            (params["forward-warp"] ?? null)
         );
     }
+    cargs.push(execution.inputFile((params["in-surf"] ?? null)));
+    cargs.push((params["warpfield"] ?? null));
     return cargs;
 }
 
@@ -109,24 +110,18 @@ function surface_apply_warpfield_outputs(
 ): SurfaceApplyWarpfieldOutputs {
     const ret: SurfaceApplyWarpfieldOutputs = {
         root: execution.outputFile("."),
-        out_surf: execution.outputFile([(params["out_surf"] ?? null)].join('')),
+        out_surf: execution.outputFile([(params["out-surf"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * surface-apply-warpfield
- *
- * Apply warpfield to surface file.
+ * APPLY WARPFIELD TO SURFACE FILE.
  *
  * NOTE: warping a surface requires the INVERSE of the warpfield used to warp the volume it lines up with.  The header of the forward warp is needed by the -fnirt option in order to correctly interpret the displacements in the fnirt warpfield.
  *
  * If the -fnirt option is not present, the warpfield must be a nifti 'world' warpfield, which can be obtained with the -convert-warpfield command.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -148,34 +143,30 @@ function surface_apply_warpfield_execute(
 
 
 /**
- * surface-apply-warpfield
- *
- * Apply warpfield to surface file.
+ * APPLY WARPFIELD TO SURFACE FILE.
  *
  * NOTE: warping a surface requires the INVERSE of the warpfield used to warp the volume it lines up with.  The header of the forward warp is needed by the -fnirt option in order to correctly interpret the displacements in the fnirt warpfield.
  *
  * If the -fnirt option is not present, the warpfield must be a nifti 'world' warpfield, which can be obtained with the -convert-warpfield command.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param out_surf the output transformed surface
+ * @param forward_warp MUST be used if using a fnirt warpfield
+
+the forward warpfield
  * @param in_surf the surface to transform
  * @param warpfield the INVERSE warpfield
- * @param out_surf the output transformed surface
- * @param opt_fnirt_forward_warp MUST be used if using a fnirt warpfield: the forward warpfield
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceApplyWarpfieldOutputs`).
  */
 function surface_apply_warpfield(
+    out_surf: string,
+    forward_warp: string | null,
     in_surf: InputPathType,
     warpfield: string,
-    out_surf: string,
-    opt_fnirt_forward_warp: string | null = null,
     runner: Runner | null = null,
 ): SurfaceApplyWarpfieldOutputs {
-    const params = surface_apply_warpfield_params(in_surf, warpfield, out_surf, opt_fnirt_forward_warp)
+    const params = surface_apply_warpfield_params(out_surf, forward_warp, in_surf, warpfield)
     return surface_apply_warpfield_execute(params, runner);
 }
 

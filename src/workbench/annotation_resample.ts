@@ -4,26 +4,25 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANNOTATION_RESAMPLE_METADATA: Metadata = {
-    id: "d27a061127258ae972e19d738c9377d395c2db20.boutiques",
+    id: "a7b40c2eabbd684e2841e97eb61c046f68f16b83.workbench",
     name: "annotation-resample",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface AnnotationResampleSurfacePairParameters {
-    "@type"?: "surface_pair";
-    "source_surface": InputPathType;
-    "target_surface": InputPathType;
+    "@type"?: "surface-pair";
+    "source-surface": InputPathType;
+    "target-surface": InputPathType;
 }
 type AnnotationResampleSurfacePairParametersTagged = Required<Pick<AnnotationResampleSurfacePairParameters, '@type'>> & AnnotationResampleSurfacePairParameters;
 
 
 interface AnnotationResampleParameters {
     "@type"?: "workbench/annotation-resample";
-    "annotation_in": InputPathType;
-    "annotation_out": string;
-    "surface_pair"?: Array<AnnotationResampleSurfacePairParameters> | null | undefined;
+    "surface-pair"?: Array<AnnotationResampleSurfacePairParameters> | null | undefined;
+    "annotation-in": InputPathType;
+    "annotation-out": string;
 }
 type AnnotationResampleParametersTagged = Required<Pick<AnnotationResampleParameters, '@type'>> & AnnotationResampleParameters;
 
@@ -41,9 +40,9 @@ function annotation_resample_surface_pair_params(
     target_surface: InputPathType,
 ): AnnotationResampleSurfacePairParametersTagged {
     const params = {
-        "@type": "surface_pair" as const,
-        "source_surface": source_surface,
-        "target_surface": target_surface,
+        "@type": "surface-pair" as const,
+        "source-surface": source_surface,
+        "target-surface": target_surface,
     };
     return params;
 }
@@ -62,9 +61,11 @@ function annotation_resample_surface_pair_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-surface-pair");
-    cargs.push(execution.inputFile((params["source_surface"] ?? null)));
-    cargs.push(execution.inputFile((params["target_surface"] ?? null)));
+    cargs.push(
+        "-surface-pair",
+        execution.inputFile((params["source-surface"] ?? null)),
+        execution.inputFile((params["target-surface"] ?? null))
+    );
     return cargs;
 }
 
@@ -98,11 +99,11 @@ function annotation_resample_params(
 ): AnnotationResampleParametersTagged {
     const params = {
         "@type": "workbench/annotation-resample" as const,
-        "annotation_in": annotation_in,
-        "annotation_out": annotation_out,
+        "annotation-in": annotation_in,
+        "annotation-out": annotation_out,
     };
     if (surface_pair !== null) {
-        params["surface_pair"] = surface_pair;
+        params["surface-pair"] = surface_pair;
     }
     return params;
 }
@@ -121,13 +122,15 @@ function annotation_resample_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-annotation-resample");
-    cargs.push(execution.inputFile((params["annotation_in"] ?? null)));
-    cargs.push((params["annotation_out"] ?? null));
-    if ((params["surface_pair"] ?? null) !== null) {
-        cargs.push(...(params["surface_pair"] ?? null).map(s => annotation_resample_surface_pair_cargs(s, execution)).flat());
+    if ((params["surface-pair"] ?? null) !== null) {
+        cargs.push(
+            "wb_command",
+            "-annotation-resample",
+            ...(params["surface-pair"] ?? null).map(s => annotation_resample_surface_pair_cargs(s, execution)).flat()
+        );
     }
+    cargs.push(execution.inputFile((params["annotation-in"] ?? null)));
+    cargs.push((params["annotation-out"] ?? null));
     return cargs;
 }
 
@@ -152,17 +155,11 @@ function annotation_resample_outputs(
 
 
 /**
- * annotation-resample
- *
- * Resample an annotation file to different meshes.
+ * RESAMPLE AN ANNOTATION FILE TO DIFFERENT MESHES.
  *
  * Resample an annotation file from the source mesh to the target mesh.
  *
  * Only annotations in surface space are modified, no changes are made to annotations in other spaces.  The -surface-pair option may be repeated for additional structures used by surface space annotations.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -184,17 +181,11 @@ function annotation_resample_execute(
 
 
 /**
- * annotation-resample
- *
- * Resample an annotation file to different meshes.
+ * RESAMPLE AN ANNOTATION FILE TO DIFFERENT MESHES.
  *
  * Resample an annotation file from the source mesh to the target mesh.
  *
  * Only annotations in surface space are modified, no changes are made to annotations in other spaces.  The -surface-pair option may be repeated for additional structures used by surface space annotations.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param annotation_in the annotation file to resample
  * @param annotation_out name of resampled annotation file

@@ -25,9 +25,9 @@ interface AntsRegistrationSyNShParameters {
     "gradient_step"?: number | null | undefined;
     "masks"?: string | null | undefined;
     "precision_type"?: "f" | "d" | null | undefined;
-    "use_histogram_matching"?: 0 | 1 | null | undefined;
-    "use_repro_mode"?: 0 | 1 | null | undefined;
-    "collapse_output_transforms"?: 0 | 1 | null | undefined;
+    "use_histogram_matching"?: boolean | null | undefined;
+    "use_repro_mode"?: boolean | null | undefined;
+    "collapse_output_transforms"?: boolean | null | undefined;
     "random_seed"?: number | null | undefined;
 }
 type AntsRegistrationSyNShParametersTagged = Required<Pick<AntsRegistrationSyNShParameters, '@type'>> & AntsRegistrationSyNShParameters;
@@ -110,9 +110,9 @@ function ants_registration_sy_n_sh_params(
     gradient_step: number | null = null,
     masks: string | null = null,
     precision_type: "f" | "d" | null = null,
-    use_histogram_matching: 0 | 1 | null = null,
-    use_repro_mode: 0 | 1 | null = null,
-    collapse_output_transforms: 0 | 1 | null = null,
+    use_histogram_matching: boolean | null = null,
+    use_repro_mode: boolean | null = null,
+    collapse_output_transforms: boolean | null = null,
     random_seed: number | null = null,
 ): AntsRegistrationSyNShParametersTagged {
     const params = {
@@ -243,19 +243,19 @@ function ants_registration_sy_n_sh_cargs(
     if ((params["use_histogram_matching"] ?? null) !== null) {
         cargs.push(
             "-j",
-            String((params["use_histogram_matching"] ?? null))
+            ((params["use_histogram_matching"] ?? null) ? "1" : "0")
         );
     }
     if ((params["use_repro_mode"] ?? null) !== null) {
         cargs.push(
             "-y",
-            String((params["use_repro_mode"] ?? null))
+            ((params["use_repro_mode"] ?? null) ? "1" : "0")
         );
     }
     if ((params["collapse_output_transforms"] ?? null) !== null) {
         cargs.push(
             "-z",
-            String((params["collapse_output_transforms"] ?? null))
+            ((params["collapse_output_transforms"] ?? null) ? "1" : "0")
         );
     }
     if ((params["random_seed"] ?? null) !== null) {
@@ -377,9 +377,9 @@ function ants_registration_sy_n_sh(
     gradient_step: number | null = null,
     masks: string | null = null,
     precision_type: "f" | "d" | null = null,
-    use_histogram_matching: 0 | 1 | null = null,
-    use_repro_mode: 0 | 1 | null = null,
-    collapse_output_transforms: 0 | 1 | null = null,
+    use_histogram_matching: boolean | null = null,
+    use_repro_mode: boolean | null = null,
+    collapse_output_transforms: boolean | null = null,
     random_seed: number | null = null,
     runner: Runner | null = null,
 ): AntsRegistrationSyNShOutputs {

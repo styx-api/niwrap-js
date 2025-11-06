@@ -4,19 +4,18 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_SMOOTHING_METADATA: Metadata = {
-    id: "637bed2038ffd3c4196fb7689a2277fcbe539159.boutiques",
+    id: "ed8f3a670c4c85072256a932d9737b524da04f12.workbench",
     name: "surface-smoothing",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface SurfaceSmoothingParameters {
     "@type"?: "workbench/surface-smoothing";
-    "surface_in": InputPathType;
-    "smoothing_strength": number;
-    "smoothing_iterations": number;
-    "surface_out": string;
+    "surface-out": string;
+    "surface-in": InputPathType;
+    "smoothing-strength": number;
+    "smoothing-iterations": number;
 }
 type SurfaceSmoothingParametersTagged = Required<Pick<SurfaceSmoothingParameters, '@type'>> & SurfaceSmoothingParameters;
 
@@ -41,25 +40,25 @@ interface SurfaceSmoothingOutputs {
 /**
  * Build parameters.
  *
+ * @param surface_out output surface file
  * @param surface_in the surface file to smooth
  * @param smoothing_strength smoothing strength (ranges [0.0 - 1.0])
  * @param smoothing_iterations smoothing iterations
- * @param surface_out output surface file
  *
  * @returns Parameter dictionary
  */
 function surface_smoothing_params(
+    surface_out: string,
     surface_in: InputPathType,
     smoothing_strength: number,
     smoothing_iterations: number,
-    surface_out: string,
 ): SurfaceSmoothingParametersTagged {
     const params = {
         "@type": "workbench/surface-smoothing" as const,
-        "surface_in": surface_in,
-        "smoothing_strength": smoothing_strength,
-        "smoothing_iterations": smoothing_iterations,
-        "surface_out": surface_out,
+        "surface-out": surface_out,
+        "surface-in": surface_in,
+        "smoothing-strength": smoothing_strength,
+        "smoothing-iterations": smoothing_iterations,
     };
     return params;
 }
@@ -78,12 +77,14 @@ function surface_smoothing_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-surface-smoothing");
-    cargs.push(execution.inputFile((params["surface_in"] ?? null)));
-    cargs.push(String((params["smoothing_strength"] ?? null)));
-    cargs.push(String((params["smoothing_iterations"] ?? null)));
-    cargs.push((params["surface_out"] ?? null));
+    cargs.push(
+        "wb_command",
+        "-surface-smoothing",
+        (params["surface-out"] ?? null)
+    );
+    cargs.push(execution.inputFile((params["surface-in"] ?? null)));
+    cargs.push(String((params["smoothing-strength"] ?? null)));
+    cargs.push(String((params["smoothing-iterations"] ?? null)));
     return cargs;
 }
 
@@ -102,22 +103,16 @@ function surface_smoothing_outputs(
 ): SurfaceSmoothingOutputs {
     const ret: SurfaceSmoothingOutputs = {
         root: execution.outputFile("."),
-        surface_out: execution.outputFile([(params["surface_out"] ?? null)].join('')),
+        surface_out: execution.outputFile([(params["surface-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * surface-smoothing
- *
- * Surface smoothing.
+ * SURFACE SMOOTHING.
  *
  * Smooths a surface by averaging vertex coordinates with those of the neighboring vertices.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -139,32 +134,26 @@ function surface_smoothing_execute(
 
 
 /**
- * surface-smoothing
- *
- * Surface smoothing.
+ * SURFACE SMOOTHING.
  *
  * Smooths a surface by averaging vertex coordinates with those of the neighboring vertices.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param surface_out output surface file
  * @param surface_in the surface file to smooth
  * @param smoothing_strength smoothing strength (ranges [0.0 - 1.0])
  * @param smoothing_iterations smoothing iterations
- * @param surface_out output surface file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceSmoothingOutputs`).
  */
 function surface_smoothing(
+    surface_out: string,
     surface_in: InputPathType,
     smoothing_strength: number,
     smoothing_iterations: number,
-    surface_out: string,
     runner: Runner | null = null,
 ): SurfaceSmoothingOutputs {
-    const params = surface_smoothing_params(surface_in, smoothing_strength, smoothing_iterations, surface_out)
+    const params = surface_smoothing_params(surface_out, surface_in, smoothing_strength, smoothing_iterations)
     return surface_smoothing_execute(params, runner);
 }
 

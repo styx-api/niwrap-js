@@ -4,18 +4,17 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SURFACE_MATCH_METADATA: Metadata = {
-    id: "975e55b50cc859adc6088f990f927b4229a7b26c.boutiques",
+    id: "6335c2c3b01da0e8439ffac4c9d4032ef21fd455.workbench",
     name: "surface-match",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface SurfaceMatchParameters {
     "@type"?: "workbench/surface-match";
-    "match_surface_file": InputPathType;
-    "input_surface_file": InputPathType;
-    "output_surface_name": string;
+    "Match Surface File": InputPathType;
+    "Input Surface File": InputPathType;
+    "Output Surface Name": string;
 }
 type SurfaceMatchParametersTagged = Required<Pick<SurfaceMatchParameters, '@type'>> & SurfaceMatchParameters;
 
@@ -49,9 +48,9 @@ function surface_match_params(
 ): SurfaceMatchParametersTagged {
     const params = {
         "@type": "workbench/surface-match" as const,
-        "match_surface_file": match_surface_file,
-        "input_surface_file": input_surface_file,
-        "output_surface_name": output_surface_name,
+        "Match Surface File": match_surface_file,
+        "Input Surface File": input_surface_file,
+        "Output Surface Name": output_surface_name,
     };
     return params;
 }
@@ -70,11 +69,13 @@ function surface_match_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-surface-match");
-    cargs.push(execution.inputFile((params["match_surface_file"] ?? null)));
-    cargs.push(execution.inputFile((params["input_surface_file"] ?? null)));
-    cargs.push((params["output_surface_name"] ?? null));
+    cargs.push(
+        "wb_command",
+        "-surface-match"
+    );
+    cargs.push(execution.inputFile((params["Match Surface File"] ?? null)));
+    cargs.push(execution.inputFile((params["Input Surface File"] ?? null)));
+    cargs.push((params["Output Surface Name"] ?? null));
     return cargs;
 }
 
@@ -99,15 +100,9 @@ function surface_match_outputs(
 
 
 /**
- * surface-match
- *
- * Surface match.
+ * SURFACE MATCH.
  *
  * The Input Surface File will be transformed so that its coordinate ranges (bounding box) match that of the Match Surface File.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -129,15 +124,9 @@ function surface_match_execute(
 
 
 /**
- * surface-match
- *
- * Surface match.
+ * SURFACE MATCH.
  *
  * The Input Surface File will be transformed so that its coordinate ranges (bounding box) match that of the Match Surface File.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param match_surface_file Match (Reference) Surface
  * @param input_surface_file File containing surface that will be transformed

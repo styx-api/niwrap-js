@@ -4,19 +4,18 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const SET_STRUCTURE_METADATA: Metadata = {
-    id: "60f5a5ba046998d47b40d412b42f09c1a0bf64b8.boutiques",
+    id: "3f017d3648fe7b335b883d3f5dcd0884cd807980.workbench",
     name: "set-structure",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface SetStructureParameters {
     "@type"?: "workbench/set-structure";
-    "data_file": string;
+    "type"?: string | null | undefined;
+    "secondary type"?: string | null | undefined;
+    "data-file": string;
     "structure": string;
-    "opt_surface_type_type"?: string | null | undefined;
-    "opt_surface_secondary_type_secondary_type"?: string | null | undefined;
 }
 type SetStructureParametersTagged = Required<Pick<SetStructureParameters, '@type'>> & SetStructureParameters;
 
@@ -37,29 +36,33 @@ interface SetStructureOutputs {
 /**
  * Build parameters.
  *
+ * @param type_ set the type of a surface (only used if file is a surface file)
+
+name of surface type
+ * @param secondary_type set the secondary type of a surface (only used if file is a surface file)
+
+name of surface secondary type
  * @param data_file the file to set the structure of
  * @param structure the structure to set the file to
- * @param opt_surface_type_type set the type of a surface (only used if file is a surface file): name of surface type
- * @param opt_surface_secondary_type_secondary_type set the secondary type of a surface (only used if file is a surface file): name of surface secondary type
  *
  * @returns Parameter dictionary
  */
 function set_structure_params(
+    type_: string | null,
+    secondary_type: string | null,
     data_file: string,
     structure: string,
-    opt_surface_type_type: string | null = null,
-    opt_surface_secondary_type_secondary_type: string | null = null,
 ): SetStructureParametersTagged {
     const params = {
         "@type": "workbench/set-structure" as const,
-        "data_file": data_file,
+        "data-file": data_file,
         "structure": structure,
     };
-    if (opt_surface_type_type !== null) {
-        params["opt_surface_type_type"] = opt_surface_type_type;
+    if (type_ !== null) {
+        params["type"] = type_;
     }
-    if (opt_surface_secondary_type_secondary_type !== null) {
-        params["opt_surface_secondary_type_secondary_type"] = opt_surface_secondary_type_secondary_type;
+    if (secondary_type !== null) {
+        params["secondary type"] = secondary_type;
     }
     return params;
 }
@@ -78,22 +81,18 @@ function set_structure_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-set-structure");
-    cargs.push((params["data_file"] ?? null));
-    cargs.push((params["structure"] ?? null));
-    if ((params["opt_surface_type_type"] ?? null) !== null) {
+    if ((params["type"] ?? null) !== null || (params["secondary type"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-set-structure",
             "-surface-type",
-            (params["opt_surface_type_type"] ?? null)
-        );
-    }
-    if ((params["opt_surface_secondary_type_secondary_type"] ?? null) !== null) {
-        cargs.push(
+            (((params["type"] ?? null) !== null) ? (params["type"] ?? null) : ""),
             "-surface-secondary-type",
-            (params["opt_surface_secondary_type_secondary_type"] ?? null)
+            (((params["secondary type"] ?? null) !== null) ? (params["secondary type"] ?? null) : "")
         );
     }
+    cargs.push((params["data-file"] ?? null));
+    cargs.push((params["structure"] ?? null));
     return cargs;
 }
 
@@ -118,9 +117,7 @@ function set_structure_outputs(
 
 
 /**
- * set-structure
- *
- * Set structure of a data file.
+ * SET STRUCTURE OF A DATA FILE.
  *
  * The existing file is modified and rewritten to the same filename.  Valid values for the structure name are:
  *
@@ -147,6 +144,8 @@ function set_structure_outputs(
  * DIENCEPHALON_VENTRAL_RIGHT
  * HIPPOCAMPUS_LEFT
  * HIPPOCAMPUS_RIGHT
+ * HIPPOCAMPUS_DENTATE_LEFT
+ * HIPPOCAMPUS_DENTATE_RIGHT
  * INVALID
  * OTHER
  * OTHER_GREY_MATTER
@@ -177,11 +176,9 @@ function set_structure_outputs(
  * GRAY_WHITE
  * MIDTHICKNESS
  * PIAL
+ * INNER
+ * OUTER
  * .
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -203,9 +200,7 @@ function set_structure_execute(
 
 
 /**
- * set-structure
- *
- * Set structure of a data file.
+ * SET STRUCTURE OF A DATA FILE.
  *
  * The existing file is modified and rewritten to the same filename.  Valid values for the structure name are:
  *
@@ -232,6 +227,8 @@ function set_structure_execute(
  * DIENCEPHALON_VENTRAL_RIGHT
  * HIPPOCAMPUS_LEFT
  * HIPPOCAMPUS_RIGHT
+ * HIPPOCAMPUS_DENTATE_LEFT
+ * HIPPOCAMPUS_DENTATE_RIGHT
  * INVALID
  * OTHER
  * OTHER_GREY_MATTER
@@ -262,28 +259,30 @@ function set_structure_execute(
  * GRAY_WHITE
  * MIDTHICKNESS
  * PIAL
+ * INNER
+ * OUTER
  * .
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param type_ set the type of a surface (only used if file is a surface file)
+
+name of surface type
+ * @param secondary_type set the secondary type of a surface (only used if file is a surface file)
+
+name of surface secondary type
  * @param data_file the file to set the structure of
  * @param structure the structure to set the file to
- * @param opt_surface_type_type set the type of a surface (only used if file is a surface file): name of surface type
- * @param opt_surface_secondary_type_secondary_type set the secondary type of a surface (only used if file is a surface file): name of surface secondary type
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SetStructureOutputs`).
  */
 function set_structure(
+    type_: string | null,
+    secondary_type: string | null,
     data_file: string,
     structure: string,
-    opt_surface_type_type: string | null = null,
-    opt_surface_secondary_type_secondary_type: string | null = null,
     runner: Runner | null = null,
 ): SetStructureOutputs {
-    const params = set_structure_params(data_file, structure, opt_surface_type_type, opt_surface_secondary_type_secondary_type)
+    const params = set_structure_params(type_, secondary_type, data_file, structure)
     return set_structure_execute(params, runner);
 }
 

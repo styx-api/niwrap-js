@@ -4,17 +4,16 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const VOLUME_EXTREMA_METADATA: Metadata = {
-    id: "35ad3fc8fea052df6bc06cbe31e38898ec741593.boutiques",
+    id: "bde4b9ab2a53737d37cd5c4267bc185877f0a3aa.workbench",
     name: "volume-extrema",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface VolumeExtremaPresmoothParameters {
     "@type"?: "presmooth";
     "kernel": number;
-    "opt_fwhm": boolean;
+    "fwhm": boolean;
 }
 type VolumeExtremaPresmoothParametersTagged = Required<Pick<VolumeExtremaPresmoothParameters, '@type'>> & VolumeExtremaPresmoothParameters;
 
@@ -29,17 +28,17 @@ type VolumeExtremaThresholdParametersTagged = Required<Pick<VolumeExtremaThresho
 
 interface VolumeExtremaParameters {
     "@type"?: "workbench/volume-extrema";
-    "volume_in": InputPathType;
-    "distance": number;
-    "volume_out": string;
+    "volume-out": string;
     "presmooth"?: VolumeExtremaPresmoothParameters | null | undefined;
-    "opt_roi_roi_volume"?: InputPathType | null | undefined;
+    "roi-volume"?: InputPathType | null | undefined;
     "threshold"?: VolumeExtremaThresholdParameters | null | undefined;
-    "opt_sum_subvols": boolean;
-    "opt_consolidate_mode": boolean;
-    "opt_only_maxima": boolean;
-    "opt_only_minima": boolean;
-    "opt_subvolume_subvolume"?: string | null | undefined;
+    "sum-subvols": boolean;
+    "consolidate-mode": boolean;
+    "only-maxima": boolean;
+    "only-minima": boolean;
+    "subvolume"?: string | null | undefined;
+    "volume-in": InputPathType;
+    "distance": number;
 }
 type VolumeExtremaParametersTagged = Required<Pick<VolumeExtremaParameters, '@type'>> & VolumeExtremaParameters;
 
@@ -48,18 +47,18 @@ type VolumeExtremaParametersTagged = Required<Pick<VolumeExtremaParameters, '@ty
  * Build parameters.
  *
  * @param kernel the size of the gaussian smoothing kernel in mm, as sigma by default
- * @param opt_fwhm kernel size is FWHM, not sigma
+ * @param fwhm kernel size is FWHM, not sigma
  *
  * @returns Parameter dictionary
  */
 function volume_extrema_presmooth_params(
     kernel: number,
-    opt_fwhm: boolean = false,
+    fwhm: boolean = false,
 ): VolumeExtremaPresmoothParametersTagged {
     const params = {
         "@type": "presmooth" as const,
         "kernel": kernel,
-        "opt_fwhm": opt_fwhm,
+        "fwhm": fwhm,
     };
     return params;
 }
@@ -78,10 +77,12 @@ function volume_extrema_presmooth_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-presmooth");
-    cargs.push(String((params["kernel"] ?? null)));
-    if ((params["opt_fwhm"] ?? false)) {
-        cargs.push("-fwhm");
+    if ((params["fwhm"] ?? false)) {
+        cargs.push(
+            "-presmooth",
+            String((params["kernel"] ?? null)),
+            "-fwhm"
+        );
     }
     return cargs;
 }
@@ -121,9 +122,11 @@ function volume_extrema_threshold_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-threshold");
-    cargs.push(String((params["low"] ?? null)));
-    cargs.push(String((params["high"] ?? null)));
+    cargs.push(
+        "-threshold",
+        String((params["low"] ?? null)),
+        String((params["high"] ?? null))
+    );
     return cargs;
 }
 
@@ -148,54 +151,58 @@ interface VolumeExtremaOutputs {
 /**
  * Build parameters.
  *
+ * @param volume_out the output extrema volume
+ * @param roi_volume ignore values outside the selected area
+
+the area to find extrema in
+ * @param subvolume select a single subvolume to find extrema in
+
+the subvolume number or name
  * @param volume_in volume file to find the extrema of
  * @param distance the minimum distance between identified extrema of the same type
- * @param volume_out the output extrema volume
  * @param presmooth smooth the volume before finding extrema
- * @param opt_roi_roi_volume ignore values outside the selected area: the area to find extrema in
  * @param threshold ignore small extrema
- * @param opt_sum_subvols output the sum of the extrema subvolumes instead of each subvolume separately
- * @param opt_consolidate_mode use consolidation of local minima instead of a large neighborhood
- * @param opt_only_maxima only find the maxima
- * @param opt_only_minima only find the minima
- * @param opt_subvolume_subvolume select a single subvolume to find extrema in: the subvolume number or name
+ * @param sum_subvols output the sum of the extrema subvolumes instead of each subvolume separately
+ * @param consolidate_mode use consolidation of local minima instead of a large neighborhood
+ * @param only_maxima only find the maxima
+ * @param only_minima only find the minima
  *
  * @returns Parameter dictionary
  */
 function volume_extrema_params(
+    volume_out: string,
+    roi_volume: InputPathType | null,
+    subvolume: string | null,
     volume_in: InputPathType,
     distance: number,
-    volume_out: string,
     presmooth: VolumeExtremaPresmoothParameters | null = null,
-    opt_roi_roi_volume: InputPathType | null = null,
     threshold: VolumeExtremaThresholdParameters | null = null,
-    opt_sum_subvols: boolean = false,
-    opt_consolidate_mode: boolean = false,
-    opt_only_maxima: boolean = false,
-    opt_only_minima: boolean = false,
-    opt_subvolume_subvolume: string | null = null,
+    sum_subvols: boolean = false,
+    consolidate_mode: boolean = false,
+    only_maxima: boolean = false,
+    only_minima: boolean = false,
 ): VolumeExtremaParametersTagged {
     const params = {
         "@type": "workbench/volume-extrema" as const,
-        "volume_in": volume_in,
+        "volume-out": volume_out,
+        "sum-subvols": sum_subvols,
+        "consolidate-mode": consolidate_mode,
+        "only-maxima": only_maxima,
+        "only-minima": only_minima,
+        "volume-in": volume_in,
         "distance": distance,
-        "volume_out": volume_out,
-        "opt_sum_subvols": opt_sum_subvols,
-        "opt_consolidate_mode": opt_consolidate_mode,
-        "opt_only_maxima": opt_only_maxima,
-        "opt_only_minima": opt_only_minima,
     };
     if (presmooth !== null) {
         params["presmooth"] = presmooth;
     }
-    if (opt_roi_roi_volume !== null) {
-        params["opt_roi_roi_volume"] = opt_roi_roi_volume;
+    if (roi_volume !== null) {
+        params["roi-volume"] = roi_volume;
     }
     if (threshold !== null) {
         params["threshold"] = threshold;
     }
-    if (opt_subvolume_subvolume !== null) {
-        params["opt_subvolume_subvolume"] = opt_subvolume_subvolume;
+    if (subvolume !== null) {
+        params["subvolume"] = subvolume;
     }
     return params;
 }
@@ -214,41 +221,25 @@ function volume_extrema_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-volume-extrema");
-    cargs.push(execution.inputFile((params["volume_in"] ?? null)));
-    cargs.push(String((params["distance"] ?? null)));
-    cargs.push((params["volume_out"] ?? null));
-    if ((params["presmooth"] ?? null) !== null) {
-        cargs.push(...volume_extrema_presmooth_cargs((params["presmooth"] ?? null), execution));
-    }
-    if ((params["opt_roi_roi_volume"] ?? null) !== null) {
+    if ((params["presmooth"] ?? null) !== null || (params["roi-volume"] ?? null) !== null || (params["threshold"] ?? null) !== null || (params["sum-subvols"] ?? false) || (params["consolidate-mode"] ?? false) || (params["only-maxima"] ?? false) || (params["only-minima"] ?? false) || (params["subvolume"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-volume-extrema",
+            (params["volume-out"] ?? null),
+            ...(((params["presmooth"] ?? null) !== null) ? volume_extrema_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
             "-roi",
-            execution.inputFile((params["opt_roi_roi_volume"] ?? null))
-        );
-    }
-    if ((params["threshold"] ?? null) !== null) {
-        cargs.push(...volume_extrema_threshold_cargs((params["threshold"] ?? null), execution));
-    }
-    if ((params["opt_sum_subvols"] ?? false)) {
-        cargs.push("-sum-subvols");
-    }
-    if ((params["opt_consolidate_mode"] ?? false)) {
-        cargs.push("-consolidate-mode");
-    }
-    if ((params["opt_only_maxima"] ?? false)) {
-        cargs.push("-only-maxima");
-    }
-    if ((params["opt_only_minima"] ?? false)) {
-        cargs.push("-only-minima");
-    }
-    if ((params["opt_subvolume_subvolume"] ?? null) !== null) {
-        cargs.push(
+            (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
+            ...(((params["threshold"] ?? null) !== null) ? volume_extrema_threshold_cargs((params["threshold"] ?? null), execution) : []),
+            (((params["sum-subvols"] ?? false)) ? "-sum-subvols" : ""),
+            (((params["consolidate-mode"] ?? false)) ? "-consolidate-mode" : ""),
+            (((params["only-maxima"] ?? false)) ? "-only-maxima" : ""),
+            (((params["only-minima"] ?? false)) ? "-only-minima" : ""),
             "-subvolume",
-            (params["opt_subvolume_subvolume"] ?? null)
+            (((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null) : "")
         );
     }
+    cargs.push(execution.inputFile((params["volume-in"] ?? null)));
+    cargs.push(String((params["distance"] ?? null)));
     return cargs;
 }
 
@@ -267,16 +258,14 @@ function volume_extrema_outputs(
 ): VolumeExtremaOutputs {
     const ret: VolumeExtremaOutputs = {
         root: execution.outputFile("."),
-        volume_out: execution.outputFile([(params["volume_out"] ?? null)].join('')),
+        volume_out: execution.outputFile([(params["volume-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * volume-extrema
- *
- * Find extrema in a volume file.
+ * FIND EXTREMA IN A VOLUME FILE.
  *
  * Finds extrema in a volume file, such that no two extrema of the same type are within <distance> of each other.  The extrema are labeled as -1 for minima, 1 for maxima, 0 otherwise.  If -only-maxima or -only-minima is specified, then it will ignore extrema not of the specified type.  These options are mutually exclusive.
  *
@@ -285,10 +274,6 @@ function volume_extrema_outputs(
  * By default, a datapoint is an extrema only if it is more extreme than every other datapoint that is within <distance> from it.  If -consolidate-mode is used, it instead starts by finding all datapoints that are more extreme than their immediate neighbors, then while there are any extrema within <distance> of each other, take the two extrema closest to each other and merge them into one by a weighted average based on how many original extrema have been merged into each.
  *
  * By default, all input subvolumes are used with no smoothing, use -subvolume to specify a single subvolume to use, and -presmooth to smooth the input before finding the extrema.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -310,9 +295,7 @@ function volume_extrema_execute(
 
 
 /**
- * volume-extrema
- *
- * Find extrema in a volume file.
+ * FIND EXTREMA IN A VOLUME FILE.
  *
  * Finds extrema in a volume file, such that no two extrema of the same type are within <distance> of each other.  The extrema are labeled as -1 for minima, 1 for maxima, 0 otherwise.  If -only-maxima or -only-minima is specified, then it will ignore extrema not of the specified type.  These options are mutually exclusive.
  *
@@ -322,40 +305,40 @@ function volume_extrema_execute(
  *
  * By default, all input subvolumes are used with no smoothing, use -subvolume to specify a single subvolume to use, and -presmooth to smooth the input before finding the extrema.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param volume_out the output extrema volume
+ * @param roi_volume ignore values outside the selected area
+
+the area to find extrema in
+ * @param subvolume select a single subvolume to find extrema in
+
+the subvolume number or name
  * @param volume_in volume file to find the extrema of
  * @param distance the minimum distance between identified extrema of the same type
- * @param volume_out the output extrema volume
  * @param presmooth smooth the volume before finding extrema
- * @param opt_roi_roi_volume ignore values outside the selected area: the area to find extrema in
  * @param threshold ignore small extrema
- * @param opt_sum_subvols output the sum of the extrema subvolumes instead of each subvolume separately
- * @param opt_consolidate_mode use consolidation of local minima instead of a large neighborhood
- * @param opt_only_maxima only find the maxima
- * @param opt_only_minima only find the minima
- * @param opt_subvolume_subvolume select a single subvolume to find extrema in: the subvolume number or name
+ * @param sum_subvols output the sum of the extrema subvolumes instead of each subvolume separately
+ * @param consolidate_mode use consolidation of local minima instead of a large neighborhood
+ * @param only_maxima only find the maxima
+ * @param only_minima only find the minima
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeExtremaOutputs`).
  */
 function volume_extrema(
+    volume_out: string,
+    roi_volume: InputPathType | null,
+    subvolume: string | null,
     volume_in: InputPathType,
     distance: number,
-    volume_out: string,
     presmooth: VolumeExtremaPresmoothParameters | null = null,
-    opt_roi_roi_volume: InputPathType | null = null,
     threshold: VolumeExtremaThresholdParameters | null = null,
-    opt_sum_subvols: boolean = false,
-    opt_consolidate_mode: boolean = false,
-    opt_only_maxima: boolean = false,
-    opt_only_minima: boolean = false,
-    opt_subvolume_subvolume: string | null = null,
+    sum_subvols: boolean = false,
+    consolidate_mode: boolean = false,
+    only_maxima: boolean = false,
+    only_minima: boolean = false,
     runner: Runner | null = null,
 ): VolumeExtremaOutputs {
-    const params = volume_extrema_params(volume_in, distance, volume_out, presmooth, opt_roi_roi_volume, threshold, opt_sum_subvols, opt_consolidate_mode, opt_only_maxima, opt_only_minima, opt_subvolume_subvolume)
+    const params = volume_extrema_params(volume_out, roi_volume, subvolume, volume_in, distance, presmooth, threshold, sum_subvols, consolidate_mode, only_maxima, only_minima)
     return volume_extrema_execute(params, runner);
 }
 

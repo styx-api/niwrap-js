@@ -4,33 +4,25 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const NIFTI_INFORMATION_METADATA: Metadata = {
-    id: "a23892d08c899f32fc5adc3d462a0e9f07f36b16.boutiques",
+    id: "e9c11d632fc070fafb7efd4e280c2753fca13b1e.workbench",
     name: "nifti-information",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
-interface NiftiInformationPrintHeaderParameters {
-    "@type"?: "print_header";
-    "opt_allow_truncated": boolean;
-}
-type NiftiInformationPrintHeaderParametersTagged = Required<Pick<NiftiInformationPrintHeaderParameters, '@type'>> & NiftiInformationPrintHeaderParameters;
-
-
 interface NiftiInformationPrintXmlParameters {
-    "@type"?: "print_xml";
-    "opt_version_version"?: string | null | undefined;
+    "@type"?: "print-xml";
+    "version"?: string | null | undefined;
 }
 type NiftiInformationPrintXmlParametersTagged = Required<Pick<NiftiInformationPrintXmlParameters, '@type'>> & NiftiInformationPrintXmlParameters;
 
 
 interface NiftiInformationParameters {
     "@type"?: "workbench/nifti-information";
-    "nifti_file": string;
-    "print_header"?: NiftiInformationPrintHeaderParameters | null | undefined;
-    "opt_print_matrix": boolean;
-    "print_xml"?: NiftiInformationPrintXmlParameters | null | undefined;
+    "allow-truncated"?: boolean | null | undefined;
+    "print-matrix": boolean;
+    "print-xml"?: NiftiInformationPrintXmlParameters | null | undefined;
+    "nifti-file": string;
 }
 type NiftiInformationParametersTagged = Required<Pick<NiftiInformationParameters, '@type'>> & NiftiInformationParameters;
 
@@ -38,57 +30,20 @@ type NiftiInformationParametersTagged = Required<Pick<NiftiInformationParameters
 /**
  * Build parameters.
  *
- * @param opt_allow_truncated print the header even if the data is truncated
- *
- * @returns Parameter dictionary
- */
-function nifti_information_print_header_params(
-    opt_allow_truncated: boolean = false,
-): NiftiInformationPrintHeaderParametersTagged {
-    const params = {
-        "@type": "print_header" as const,
-        "opt_allow_truncated": opt_allow_truncated,
-    };
-    return params;
-}
+ * @param version convert the XML to a specific CIFTI version (default is the file's cifti version)
 
-
-/**
- * Build command-line arguments from parameters.
- *
- * @param params The parameters.
- * @param execution The execution object for resolving input paths.
- *
- * @returns Command-line arguments.
- */
-function nifti_information_print_header_cargs(
-    params: NiftiInformationPrintHeaderParameters,
-    execution: Execution,
-): string[] {
-    const cargs: string[] = [];
-    cargs.push("-print-header");
-    if ((params["opt_allow_truncated"] ?? false)) {
-        cargs.push("-allow-truncated");
-    }
-    return cargs;
-}
-
-
-/**
- * Build parameters.
- *
- * @param opt_version_version convert the XML to a specific CIFTI version (default is the file's cifti version): the CIFTI version to use
+the CIFTI version to use
  *
  * @returns Parameter dictionary
  */
 function nifti_information_print_xml_params(
-    opt_version_version: string | null = null,
+    version: string | null,
 ): NiftiInformationPrintXmlParametersTagged {
     const params = {
-        "@type": "print_xml" as const,
+        "@type": "print-xml" as const,
     };
-    if (opt_version_version !== null) {
-        params["opt_version_version"] = opt_version_version;
+    if (version !== null) {
+        params["version"] = version;
     }
     return params;
 }
@@ -107,11 +62,11 @@ function nifti_information_print_xml_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-print-xml");
-    if ((params["opt_version_version"] ?? null) !== null) {
+    if ((params["version"] ?? null) !== null) {
         cargs.push(
+            "-print-xml",
             "-version",
-            (params["opt_version_version"] ?? null)
+            (params["version"] ?? null)
         );
     }
     return cargs;
@@ -135,28 +90,30 @@ interface NiftiInformationOutputs {
  * Build parameters.
  *
  * @param nifti_file the nifti/cifti file to examine
- * @param print_header display the header contents
- * @param opt_print_matrix output the values in the matrix (cifti only)
+ * @param allow_truncated display the header contents
+
+print the header even if the data is truncated
+ * @param print_matrix output the values in the matrix (cifti only)
  * @param print_xml print the cifti XML (cifti only)
  *
  * @returns Parameter dictionary
  */
 function nifti_information_params(
     nifti_file: string,
-    print_header: NiftiInformationPrintHeaderParameters | null = null,
-    opt_print_matrix: boolean = false,
+    allow_truncated: boolean | null = false,
+    print_matrix: boolean = false,
     print_xml: NiftiInformationPrintXmlParameters | null = null,
 ): NiftiInformationParametersTagged {
     const params = {
         "@type": "workbench/nifti-information" as const,
-        "nifti_file": nifti_file,
-        "opt_print_matrix": opt_print_matrix,
+        "print-matrix": print_matrix,
+        "nifti-file": nifti_file,
     };
-    if (print_header !== null) {
-        params["print_header"] = print_header;
+    if (allow_truncated !== null) {
+        params["allow-truncated"] = allow_truncated;
     }
     if (print_xml !== null) {
-        params["print_xml"] = print_xml;
+        params["print-xml"] = print_xml;
     }
     return params;
 }
@@ -175,18 +132,17 @@ function nifti_information_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-nifti-information");
-    cargs.push((params["nifti_file"] ?? null));
-    if ((params["print_header"] ?? null) !== null) {
-        cargs.push(...nifti_information_print_header_cargs((params["print_header"] ?? null), execution));
+    if ((params["allow-truncated"] ?? false) !== null || (params["print-matrix"] ?? false) || (params["print-xml"] ?? null) !== null) {
+        cargs.push(
+            "wb_command",
+            "-nifti-information",
+            "-print-header",
+            (((params["allow-truncated"] ?? false) !== null) ? "-allow-truncated" : ""),
+            (((params["print-matrix"] ?? false)) ? "-print-matrix" : ""),
+            ...(((params["print-xml"] ?? null) !== null) ? nifti_information_print_xml_cargs((params["print-xml"] ?? null), execution) : [])
+        );
     }
-    if ((params["opt_print_matrix"] ?? false)) {
-        cargs.push("-print-matrix");
-    }
-    if ((params["print_xml"] ?? null) !== null) {
-        cargs.push(...nifti_information_print_xml_cargs((params["print_xml"] ?? null), execution));
-    }
+    cargs.push((params["nifti-file"] ?? null));
     return cargs;
 }
 
@@ -211,15 +167,9 @@ function nifti_information_outputs(
 
 
 /**
- * nifti-information
- *
- * Display information about a nifti/cifti file.
+ * DISPLAY INFORMATION ABOUT A NIFTI/CIFTI FILE.
  *
  * You must specify at least one -print-* option.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -241,19 +191,15 @@ function nifti_information_execute(
 
 
 /**
- * nifti-information
- *
- * Display information about a nifti/cifti file.
+ * DISPLAY INFORMATION ABOUT A NIFTI/CIFTI FILE.
  *
  * You must specify at least one -print-* option.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
  * @param nifti_file the nifti/cifti file to examine
- * @param print_header display the header contents
- * @param opt_print_matrix output the values in the matrix (cifti only)
+ * @param allow_truncated display the header contents
+
+print the header even if the data is truncated
+ * @param print_matrix output the values in the matrix (cifti only)
  * @param print_xml print the cifti XML (cifti only)
  * @param runner Command runner
  *
@@ -261,12 +207,12 @@ function nifti_information_execute(
  */
 function nifti_information(
     nifti_file: string,
-    print_header: NiftiInformationPrintHeaderParameters | null = null,
-    opt_print_matrix: boolean = false,
+    allow_truncated: boolean | null = false,
+    print_matrix: boolean = false,
     print_xml: NiftiInformationPrintXmlParameters | null = null,
     runner: Runner | null = null,
 ): NiftiInformationOutputs {
-    const params = nifti_information_params(nifti_file, print_header, opt_print_matrix, print_xml)
+    const params = nifti_information_params(nifti_file, allow_truncated, print_matrix, print_xml)
     return nifti_information_execute(params, runner);
 }
 
@@ -277,6 +223,5 @@ export {
       nifti_information,
       nifti_information_execute,
       nifti_information_params,
-      nifti_information_print_header_params,
       nifti_information_print_xml_params,
 };

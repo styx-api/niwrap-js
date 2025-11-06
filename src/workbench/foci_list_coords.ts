@@ -4,18 +4,17 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FOCI_LIST_COORDS_METADATA: Metadata = {
-    id: "d001c0626bd77c599fb298b784da2e1f848d9719.boutiques",
+    id: "b16ceca59fb70119f927e417ec349a0afda6a816.workbench",
     name: "foci-list-coords",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface FociListCoordsParameters {
     "@type"?: "workbench/foci-list-coords";
-    "foci_file": InputPathType;
-    "coord_file_out": string;
-    "opt_names_out_names_file_out"?: string | null | undefined;
+    "names-file-out"?: string | null | undefined;
+    "foci-file": InputPathType;
+    "coord-file-out": string;
 }
 type FociListCoordsParametersTagged = Required<Pick<FociListCoordsParameters, '@type'>> & FociListCoordsParameters;
 
@@ -36,24 +35,26 @@ interface FociListCoordsOutputs {
 /**
  * Build parameters.
  *
+ * @param names_file_out output the foci names
+
+output - text file to put foci names in
  * @param foci_file input foci file
  * @param coord_file_out output - the output coordinate text file
- * @param opt_names_out_names_file_out output the foci names: output - text file to put foci names in
  *
  * @returns Parameter dictionary
  */
 function foci_list_coords_params(
+    names_file_out: string | null,
     foci_file: InputPathType,
     coord_file_out: string,
-    opt_names_out_names_file_out: string | null = null,
 ): FociListCoordsParametersTagged {
     const params = {
         "@type": "workbench/foci-list-coords" as const,
-        "foci_file": foci_file,
-        "coord_file_out": coord_file_out,
+        "foci-file": foci_file,
+        "coord-file-out": coord_file_out,
     };
-    if (opt_names_out_names_file_out !== null) {
-        params["opt_names_out_names_file_out"] = opt_names_out_names_file_out;
+    if (names_file_out !== null) {
+        params["names-file-out"] = names_file_out;
     }
     return params;
 }
@@ -72,16 +73,16 @@ function foci_list_coords_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-foci-list-coords");
-    cargs.push(execution.inputFile((params["foci_file"] ?? null)));
-    cargs.push((params["coord_file_out"] ?? null));
-    if ((params["opt_names_out_names_file_out"] ?? null) !== null) {
+    if ((params["names-file-out"] ?? null) !== null) {
         cargs.push(
+            "wb_command",
+            "-foci-list-coords",
             "-names-out",
-            (params["opt_names_out_names_file_out"] ?? null)
+            (params["names-file-out"] ?? null)
         );
     }
+    cargs.push(execution.inputFile((params["foci-file"] ?? null)));
+    cargs.push((params["coord-file-out"] ?? null));
     return cargs;
 }
 
@@ -106,15 +107,9 @@ function foci_list_coords_outputs(
 
 
 /**
- * foci-list-coords
- *
- * Output foci coordinates in a text file.
+ * OUTPUT FOCI COORDINATES IN A TEXT FILE.
  *
  * Output the coordinates for every focus in the foci file, and optionally the focus names in a second text file.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -136,30 +131,26 @@ function foci_list_coords_execute(
 
 
 /**
- * foci-list-coords
- *
- * Output foci coordinates in a text file.
+ * OUTPUT FOCI COORDINATES IN A TEXT FILE.
  *
  * Output the coordinates for every focus in the foci file, and optionally the focus names in a second text file.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param names_file_out output the foci names
+
+output - text file to put foci names in
  * @param foci_file input foci file
  * @param coord_file_out output - the output coordinate text file
- * @param opt_names_out_names_file_out output the foci names: output - text file to put foci names in
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FociListCoordsOutputs`).
  */
 function foci_list_coords(
+    names_file_out: string | null,
     foci_file: InputPathType,
     coord_file_out: string,
-    opt_names_out_names_file_out: string | null = null,
     runner: Runner | null = null,
 ): FociListCoordsOutputs {
-    const params = foci_list_coords_params(foci_file, coord_file_out, opt_names_out_names_file_out)
+    const params = foci_list_coords_params(names_file_out, foci_file, coord_file_out)
     return foci_list_coords_execute(params, runner);
 }
 

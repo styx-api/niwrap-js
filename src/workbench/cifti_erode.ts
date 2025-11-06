@@ -4,48 +4,47 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CIFTI_ERODE_METADATA: Metadata = {
-    id: "756c3e2f29cb4888d04e3fae1ffa11428dc3f2a0.boutiques",
+    id: "4f49d2de43c52dfd46795fc526b69cf0dadd9733.workbench",
     name: "cifti-erode",
     package: "workbench",
-    container_image_tag: "brainlife/connectome_workbench:1.5.0-freesurfer-update",
 };
 
 
 interface CiftiErodeLeftSurfaceParameters {
-    "@type"?: "left_surface";
+    "@type"?: "left-surface";
     "surface": InputPathType;
-    "opt_left_corrected_areas_area_metric"?: InputPathType | null | undefined;
+    "area-metric"?: InputPathType | null | undefined;
 }
 type CiftiErodeLeftSurfaceParametersTagged = Required<Pick<CiftiErodeLeftSurfaceParameters, '@type'>> & CiftiErodeLeftSurfaceParameters;
 
 
 interface CiftiErodeRightSurfaceParameters {
-    "@type"?: "right_surface";
+    "@type"?: "right-surface";
     "surface": InputPathType;
-    "opt_right_corrected_areas_area_metric"?: InputPathType | null | undefined;
+    "area-metric"?: InputPathType | null | undefined;
 }
 type CiftiErodeRightSurfaceParametersTagged = Required<Pick<CiftiErodeRightSurfaceParameters, '@type'>> & CiftiErodeRightSurfaceParameters;
 
 
 interface CiftiErodeCerebellumSurfaceParameters {
-    "@type"?: "cerebellum_surface";
+    "@type"?: "cerebellum-surface";
     "surface": InputPathType;
-    "opt_cerebellum_corrected_areas_area_metric"?: InputPathType | null | undefined;
+    "area-metric"?: InputPathType | null | undefined;
 }
 type CiftiErodeCerebellumSurfaceParametersTagged = Required<Pick<CiftiErodeCerebellumSurfaceParameters, '@type'>> & CiftiErodeCerebellumSurfaceParameters;
 
 
 interface CiftiErodeParameters {
     "@type"?: "workbench/cifti-erode";
-    "cifti_in": InputPathType;
+    "cifti-out": string;
+    "left-surface"?: CiftiErodeLeftSurfaceParameters | null | undefined;
+    "right-surface"?: CiftiErodeRightSurfaceParameters | null | undefined;
+    "cerebellum-surface"?: CiftiErodeCerebellumSurfaceParameters | null | undefined;
+    "merged-volume": boolean;
+    "cifti-in": InputPathType;
     "direction": string;
-    "surface_distance": number;
-    "volume_distance": number;
-    "cifti_out": string;
-    "left_surface"?: CiftiErodeLeftSurfaceParameters | null | undefined;
-    "right_surface"?: CiftiErodeRightSurfaceParameters | null | undefined;
-    "cerebellum_surface"?: CiftiErodeCerebellumSurfaceParameters | null | undefined;
-    "opt_merged_volume": boolean;
+    "surface-distance": number;
+    "volume-distance": number;
 }
 type CiftiErodeParametersTagged = Required<Pick<CiftiErodeParameters, '@type'>> & CiftiErodeParameters;
 
@@ -54,20 +53,22 @@ type CiftiErodeParametersTagged = Required<Pick<CiftiErodeParameters, '@type'>> 
  * Build parameters.
  *
  * @param surface the left surface file
- * @param opt_left_corrected_areas_area_metric vertex areas to use instead of computing them from the left surface: the corrected vertex areas, as a metric
+ * @param area_metric vertex areas to use instead of computing them from the left surface
+
+the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
 function cifti_erode_left_surface_params(
     surface: InputPathType,
-    opt_left_corrected_areas_area_metric: InputPathType | null = null,
+    area_metric: InputPathType | null,
 ): CiftiErodeLeftSurfaceParametersTagged {
     const params = {
-        "@type": "left_surface" as const,
+        "@type": "left-surface" as const,
         "surface": surface,
     };
-    if (opt_left_corrected_areas_area_metric !== null) {
-        params["opt_left_corrected_areas_area_metric"] = opt_left_corrected_areas_area_metric;
+    if (area_metric !== null) {
+        params["area-metric"] = area_metric;
     }
     return params;
 }
@@ -86,12 +87,12 @@ function cifti_erode_left_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-left-surface");
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    if ((params["opt_left_corrected_areas_area_metric"] ?? null) !== null) {
+    if ((params["area-metric"] ?? null) !== null) {
         cargs.push(
+            "-left-surface",
+            execution.inputFile((params["surface"] ?? null)),
             "-left-corrected-areas",
-            execution.inputFile((params["opt_left_corrected_areas_area_metric"] ?? null))
+            execution.inputFile((params["area-metric"] ?? null))
         );
     }
     return cargs;
@@ -102,20 +103,22 @@ function cifti_erode_left_surface_cargs(
  * Build parameters.
  *
  * @param surface the right surface file
- * @param opt_right_corrected_areas_area_metric vertex areas to use instead of computing them from the right surface: the corrected vertex areas, as a metric
+ * @param area_metric vertex areas to use instead of computing them from the right surface
+
+the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
 function cifti_erode_right_surface_params(
     surface: InputPathType,
-    opt_right_corrected_areas_area_metric: InputPathType | null = null,
+    area_metric: InputPathType | null,
 ): CiftiErodeRightSurfaceParametersTagged {
     const params = {
-        "@type": "right_surface" as const,
+        "@type": "right-surface" as const,
         "surface": surface,
     };
-    if (opt_right_corrected_areas_area_metric !== null) {
-        params["opt_right_corrected_areas_area_metric"] = opt_right_corrected_areas_area_metric;
+    if (area_metric !== null) {
+        params["area-metric"] = area_metric;
     }
     return params;
 }
@@ -134,12 +137,12 @@ function cifti_erode_right_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-right-surface");
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    if ((params["opt_right_corrected_areas_area_metric"] ?? null) !== null) {
+    if ((params["area-metric"] ?? null) !== null) {
         cargs.push(
+            "-right-surface",
+            execution.inputFile((params["surface"] ?? null)),
             "-right-corrected-areas",
-            execution.inputFile((params["opt_right_corrected_areas_area_metric"] ?? null))
+            execution.inputFile((params["area-metric"] ?? null))
         );
     }
     return cargs;
@@ -150,20 +153,22 @@ function cifti_erode_right_surface_cargs(
  * Build parameters.
  *
  * @param surface the cerebellum surface file
- * @param opt_cerebellum_corrected_areas_area_metric vertex areas to use instead of computing them from the cerebellum surface: the corrected vertex areas, as a metric
+ * @param area_metric vertex areas to use instead of computing them from the cerebellum surface
+
+the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
 function cifti_erode_cerebellum_surface_params(
     surface: InputPathType,
-    opt_cerebellum_corrected_areas_area_metric: InputPathType | null = null,
+    area_metric: InputPathType | null,
 ): CiftiErodeCerebellumSurfaceParametersTagged {
     const params = {
-        "@type": "cerebellum_surface" as const,
+        "@type": "cerebellum-surface" as const,
         "surface": surface,
     };
-    if (opt_cerebellum_corrected_areas_area_metric !== null) {
-        params["opt_cerebellum_corrected_areas_area_metric"] = opt_cerebellum_corrected_areas_area_metric;
+    if (area_metric !== null) {
+        params["area-metric"] = area_metric;
     }
     return params;
 }
@@ -182,12 +187,12 @@ function cifti_erode_cerebellum_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("-cerebellum-surface");
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    if ((params["opt_cerebellum_corrected_areas_area_metric"] ?? null) !== null) {
+    if ((params["area-metric"] ?? null) !== null) {
         cargs.push(
+            "-cerebellum-surface",
+            execution.inputFile((params["surface"] ?? null)),
             "-cerebellum-corrected-areas",
-            execution.inputFile((params["opt_cerebellum_corrected_areas_area_metric"] ?? null))
+            execution.inputFile((params["area-metric"] ?? null))
         );
     }
     return cargs;
@@ -214,46 +219,46 @@ interface CiftiErodeOutputs {
 /**
  * Build parameters.
  *
+ * @param cifti_out the output cifti file
  * @param cifti_in the input cifti file
  * @param direction which dimension to dilate along, ROW or COLUMN
  * @param surface_distance the distance to dilate on surfaces, in mm
  * @param volume_distance the distance to dilate in the volume, in mm
- * @param cifti_out the output cifti file
  * @param left_surface specify the left surface to use
  * @param right_surface specify the right surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
- * @param opt_merged_volume treat volume components as if they were a single component
+ * @param merged_volume treat volume components as if they were a single component
  *
  * @returns Parameter dictionary
  */
 function cifti_erode_params(
+    cifti_out: string,
     cifti_in: InputPathType,
     direction: string,
     surface_distance: number,
     volume_distance: number,
-    cifti_out: string,
     left_surface: CiftiErodeLeftSurfaceParameters | null = null,
     right_surface: CiftiErodeRightSurfaceParameters | null = null,
     cerebellum_surface: CiftiErodeCerebellumSurfaceParameters | null = null,
-    opt_merged_volume: boolean = false,
+    merged_volume: boolean = false,
 ): CiftiErodeParametersTagged {
     const params = {
         "@type": "workbench/cifti-erode" as const,
-        "cifti_in": cifti_in,
+        "cifti-out": cifti_out,
+        "merged-volume": merged_volume,
+        "cifti-in": cifti_in,
         "direction": direction,
-        "surface_distance": surface_distance,
-        "volume_distance": volume_distance,
-        "cifti_out": cifti_out,
-        "opt_merged_volume": opt_merged_volume,
+        "surface-distance": surface_distance,
+        "volume-distance": volume_distance,
     };
     if (left_surface !== null) {
-        params["left_surface"] = left_surface;
+        params["left-surface"] = left_surface;
     }
     if (right_surface !== null) {
-        params["right_surface"] = right_surface;
+        params["right-surface"] = right_surface;
     }
     if (cerebellum_surface !== null) {
-        params["cerebellum_surface"] = cerebellum_surface;
+        params["cerebellum-surface"] = cerebellum_surface;
     }
     return params;
 }
@@ -272,25 +277,21 @@ function cifti_erode_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("wb_command");
-    cargs.push("-cifti-erode");
-    cargs.push(execution.inputFile((params["cifti_in"] ?? null)));
+    if ((params["left-surface"] ?? null) !== null || (params["right-surface"] ?? null) !== null || (params["cerebellum-surface"] ?? null) !== null || (params["merged-volume"] ?? false)) {
+        cargs.push(
+            "wb_command",
+            "-cifti-erode",
+            (params["cifti-out"] ?? null),
+            ...(((params["left-surface"] ?? null) !== null) ? cifti_erode_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
+            ...(((params["right-surface"] ?? null) !== null) ? cifti_erode_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
+            ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_erode_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : []),
+            (((params["merged-volume"] ?? false)) ? "-merged-volume" : "")
+        );
+    }
+    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push((params["direction"] ?? null));
-    cargs.push(String((params["surface_distance"] ?? null)));
-    cargs.push(String((params["volume_distance"] ?? null)));
-    cargs.push((params["cifti_out"] ?? null));
-    if ((params["left_surface"] ?? null) !== null) {
-        cargs.push(...cifti_erode_left_surface_cargs((params["left_surface"] ?? null), execution));
-    }
-    if ((params["right_surface"] ?? null) !== null) {
-        cargs.push(...cifti_erode_right_surface_cargs((params["right_surface"] ?? null), execution));
-    }
-    if ((params["cerebellum_surface"] ?? null) !== null) {
-        cargs.push(...cifti_erode_cerebellum_surface_cargs((params["cerebellum_surface"] ?? null), execution));
-    }
-    if ((params["opt_merged_volume"] ?? false)) {
-        cargs.push("-merged-volume");
-    }
+    cargs.push(String((params["surface-distance"] ?? null)));
+    cargs.push(String((params["volume-distance"] ?? null)));
     return cargs;
 }
 
@@ -309,24 +310,18 @@ function cifti_erode_outputs(
 ): CiftiErodeOutputs {
     const ret: CiftiErodeOutputs = {
         root: execution.outputFile("."),
-        cifti_out: execution.outputFile([(params["cifti_out"] ?? null)].join('')),
+        cifti_out: execution.outputFile([(params["cifti-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * cifti-erode
- *
- * Erode a cifti file.
+ * ERODE A CIFTI FILE.
  *
  * For all data values that are empty (for label data, unlabeled, for other data, zero), set the surrounding values to empty.  The surrounding values are defined as the immediate neighbors and all values in the same structure within the specified distance (-merged-volume treats all voxels as one structure).
  *
  * The -*-corrected-areas options are intended for eroding on group average surfaces, but it is only an approximate correction.
- *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -348,44 +343,38 @@ function cifti_erode_execute(
 
 
 /**
- * cifti-erode
- *
- * Erode a cifti file.
+ * ERODE A CIFTI FILE.
  *
  * For all data values that are empty (for label data, unlabeled, for other data, zero), set the surrounding values to empty.  The surrounding values are defined as the immediate neighbors and all values in the same structure within the specified distance (-merged-volume treats all voxels as one structure).
  *
  * The -*-corrected-areas options are intended for eroding on group average surfaces, but it is only an approximate correction.
  *
- * Author: Connectome Workbench Developers
- *
- * URL: https://github.com/Washington-University/workbench
- *
+ * @param cifti_out the output cifti file
  * @param cifti_in the input cifti file
  * @param direction which dimension to dilate along, ROW or COLUMN
  * @param surface_distance the distance to dilate on surfaces, in mm
  * @param volume_distance the distance to dilate in the volume, in mm
- * @param cifti_out the output cifti file
  * @param left_surface specify the left surface to use
  * @param right_surface specify the right surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
- * @param opt_merged_volume treat volume components as if they were a single component
+ * @param merged_volume treat volume components as if they were a single component
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiErodeOutputs`).
  */
 function cifti_erode(
+    cifti_out: string,
     cifti_in: InputPathType,
     direction: string,
     surface_distance: number,
     volume_distance: number,
-    cifti_out: string,
     left_surface: CiftiErodeLeftSurfaceParameters | null = null,
     right_surface: CiftiErodeRightSurfaceParameters | null = null,
     cerebellum_surface: CiftiErodeCerebellumSurfaceParameters | null = null,
-    opt_merged_volume: boolean = false,
+    merged_volume: boolean = false,
     runner: Runner | null = null,
 ): CiftiErodeOutputs {
-    const params = cifti_erode_params(cifti_in, direction, surface_distance, volume_distance, cifti_out, left_surface, right_surface, cerebellum_surface, opt_merged_volume)
+    const params = cifti_erode_params(cifti_out, cifti_in, direction, surface_distance, volume_distance, left_surface, right_surface, cerebellum_surface, merged_volume)
     return cifti_erode_execute(params, runner);
 }
 
