@@ -44,27 +44,27 @@ interface VolumeSmoothingOutputs {
  * Build parameters.
  *
  * @param volume_out the output volume
- * @param roivol smooth only from data within an ROI
-
-the volume to use as an ROI
- * @param subvol select a single subvolume to smooth
-
-the subvolume number or name
  * @param volume_in the volume to smooth
  * @param kernel the size of the gaussian smoothing kernel in mm, as sigma by default
  * @param fwhm kernel size is FWHM, not sigma
+ * @param roivol smooth only from data within an ROI
+
+the volume to use as an ROI
  * @param fix_zeros treat zero values as not being data
+ * @param subvol select a single subvolume to smooth
+
+the subvolume number or name
  *
  * @returns Parameter dictionary
  */
 function volume_smoothing_params(
     volume_out: string,
-    roivol: InputPathType | null,
-    subvol: string | null,
     volume_in: InputPathType,
     kernel: number,
     fwhm: boolean = false,
+    roivol: InputPathType | null = null,
     fix_zeros: boolean = false,
+    subvol: string | null = null,
 ): VolumeSmoothingParamsDictTagged {
     const params = {
         "@type": "workbench/volume-smoothing" as const,
@@ -170,31 +170,31 @@ function volume_smoothing_execute(
  * The -fix-zeros option causes the smoothing to not use an input value if it is zero, but still write a smoothed value to the voxel.  This is useful for zeros that indicate lack of information, preventing them from pulling down the intensity of nearby voxels, while giving the zero an extrapolated value.
  *
  * @param volume_out the output volume
- * @param roivol smooth only from data within an ROI
-
-the volume to use as an ROI
- * @param subvol select a single subvolume to smooth
-
-the subvolume number or name
  * @param volume_in the volume to smooth
  * @param kernel the size of the gaussian smoothing kernel in mm, as sigma by default
  * @param fwhm kernel size is FWHM, not sigma
+ * @param roivol smooth only from data within an ROI
+
+the volume to use as an ROI
  * @param fix_zeros treat zero values as not being data
+ * @param subvol select a single subvolume to smooth
+
+the subvolume number or name
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeSmoothingOutputs`).
  */
 function volume_smoothing(
     volume_out: string,
-    roivol: InputPathType | null,
-    subvol: string | null,
     volume_in: InputPathType,
     kernel: number,
     fwhm: boolean = false,
+    roivol: InputPathType | null = null,
     fix_zeros: boolean = false,
+    subvol: string | null = null,
     runner: Runner | null = null,
 ): VolumeSmoothingOutputs {
-    const params = volume_smoothing_params(volume_out, roivol, subvol, volume_in, kernel, fwhm, fix_zeros)
+    const params = volume_smoothing_params(volume_out, volume_in, kernel, fwhm, roivol, fix_zeros, subvol)
     return volume_smoothing_execute(params, runner);
 }
 

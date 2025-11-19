@@ -49,6 +49,11 @@ interface MetricFindClustersOutputs {
  * Build parameters.
  *
  * @param metric_out the output metric
+ * @param surface the surface to compute on
+ * @param metric_in the input metric
+ * @param value_threshold threshold for data values
+ * @param minimum_area threshold for cluster area, in mm^2
+ * @param less_than find values less than <value-threshold>, rather than greater
  * @param roi_metric select a region of interest
 
 the roi, as a metric
@@ -67,27 +72,22 @@ how far from the largest cluster a cluster can be, edge to edge, in mm
  * @param startval start labeling clusters from a value other than 1
 
 the value to give the first cluster found
- * @param surface the surface to compute on
- * @param metric_in the input metric
- * @param value_threshold threshold for data values
- * @param minimum_area threshold for cluster area, in mm^2
- * @param less_than find values less than <value-threshold>, rather than greater
  *
  * @returns Parameter dictionary
  */
 function metric_find_clusters_params(
     metric_out: string,
-    roi_metric: InputPathType | null,
-    area_metric: InputPathType | null,
-    column: string | null,
-    ratio: number | null,
-    distance: number | null,
-    startval: number | null,
     surface: InputPathType,
     metric_in: InputPathType,
     value_threshold: number,
     minimum_area: number,
     less_than: boolean = false,
+    roi_metric: InputPathType | null = null,
+    area_metric: InputPathType | null = null,
+    column: string | null = null,
+    ratio: number | null = null,
+    distance: number | null = null,
+    startval: number | null = null,
 ): MetricFindClustersParamsDictTagged {
     const params = {
         "@type": "workbench/metric-find-clusters" as const,
@@ -211,6 +211,11 @@ function metric_find_clusters_execute(
  * Outputs a metric with nonzero integers for all vertices within a large enough cluster, and zeros elsewhere.  The integers denote cluster membership (by default, first cluster found will use value 1, second cluster 2, etc).  Cluster values are not reused across maps of the output, but instead keep counting up.  By default, values greater than <value-threshold> are considered to be in a cluster, use -less-than to test for values less than the threshold.  To apply this as a mask to the data, or to do more complicated thresholding, see -metric-math.
  *
  * @param metric_out the output metric
+ * @param surface the surface to compute on
+ * @param metric_in the input metric
+ * @param value_threshold threshold for data values
+ * @param minimum_area threshold for cluster area, in mm^2
+ * @param less_than find values less than <value-threshold>, rather than greater
  * @param roi_metric select a region of interest
 
 the roi, as a metric
@@ -229,31 +234,26 @@ how far from the largest cluster a cluster can be, edge to edge, in mm
  * @param startval start labeling clusters from a value other than 1
 
 the value to give the first cluster found
- * @param surface the surface to compute on
- * @param metric_in the input metric
- * @param value_threshold threshold for data values
- * @param minimum_area threshold for cluster area, in mm^2
- * @param less_than find values less than <value-threshold>, rather than greater
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricFindClustersOutputs`).
  */
 function metric_find_clusters(
     metric_out: string,
-    roi_metric: InputPathType | null,
-    area_metric: InputPathType | null,
-    column: string | null,
-    ratio: number | null,
-    distance: number | null,
-    startval: number | null,
     surface: InputPathType,
     metric_in: InputPathType,
     value_threshold: number,
     minimum_area: number,
     less_than: boolean = false,
+    roi_metric: InputPathType | null = null,
+    area_metric: InputPathType | null = null,
+    column: string | null = null,
+    ratio: number | null = null,
+    distance: number | null = null,
+    startval: number | null = null,
     runner: Runner | null = null,
 ): MetricFindClustersOutputs {
-    const params = metric_find_clusters_params(metric_out, roi_metric, area_metric, column, ratio, distance, startval, surface, metric_in, value_threshold, minimum_area, less_than)
+    const params = metric_find_clusters_params(metric_out, surface, metric_in, value_threshold, minimum_area, less_than, roi_metric, area_metric, column, ratio, distance, startval)
     return metric_find_clusters_execute(params, runner);
 }
 

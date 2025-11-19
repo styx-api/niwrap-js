@@ -216,8 +216,8 @@ memory limit in gigabytes
  */
 function cifti_merge_params(
     cifti_out: string,
-    direction: string | null,
-    limit_gb: number | null,
+    direction: string | null = null,
+    limit_gb: number | null = null,
     cifti: Array<CiftiMergeCiftiParamsDict> | null = null,
 ): CiftiMergeParamsDictTagged {
     const params = {
@@ -337,8 +337,8 @@ memory limit in gigabytes
  */
 function cifti_merge(
     cifti_out: string,
-    direction: string | null,
-    limit_gb: number | null,
+    direction: string | null = null,
+    limit_gb: number | null = null,
     cifti: Array<CiftiMergeCiftiParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiMergeOutputs {

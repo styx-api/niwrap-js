@@ -146,6 +146,7 @@ interface CiftiAverageDenseRoiOutputs {
  * Build parameters.
  *
  * @param cifti_out output cifti dscalar file
+ * @param cifti_roi cifti file containing combined weights
  * @param roi_metric weights to use for left hempsphere
 
 the left roi as a metric file
@@ -167,21 +168,20 @@ the right surface file
  * @param cerebellum_surf specify the cerebellum surface for vertex area correction
 
 the cerebellum surface file
- * @param cifti_roi cifti file containing combined weights
  * @param cifti specify an input cifti file
  *
  * @returns Parameter dictionary
  */
 function cifti_average_dense_roi_params(
     cifti_out: string,
-    roi_metric: InputPathType | null,
-    roi_metric_: InputPathType | null,
-    roi_metric_2: InputPathType | null,
-    roi_vol: InputPathType | null,
-    left_surf: InputPathType | null,
-    right_surf: InputPathType | null,
-    cerebellum_surf: InputPathType | null,
     cifti_roi: CiftiAverageDenseRoiCiftiRoiParamsDict | null = null,
+    roi_metric: InputPathType | null = null,
+    roi_metric_: InputPathType | null = null,
+    roi_metric_2: InputPathType | null = null,
+    roi_vol: InputPathType | null = null,
+    left_surf: InputPathType | null = null,
+    right_surf: InputPathType | null = null,
+    cerebellum_surf: InputPathType | null = null,
     cifti: Array<CiftiAverageDenseRoiCiftiParamsDict> | null = null,
 ): CiftiAverageDenseRoiParamsDictTagged {
     const params = {
@@ -309,6 +309,7 @@ function cifti_average_dense_roi_execute(
  * Averages rows for each map of the ROI(s), across all files.  ROI maps are treated as weighting functions, including negative values.  For efficiency, ensure that everything that is not intended to be used is zero in the ROI map.  If -cifti-roi is specified, -left-roi, -right-roi, -cerebellum-roi, and -vol-roi must not be specified.  If multiple non-cifti ROI files are specified, they must have the same number of columns.
  *
  * @param cifti_out output cifti dscalar file
+ * @param cifti_roi cifti file containing combined weights
  * @param roi_metric weights to use for left hempsphere
 
 the left roi as a metric file
@@ -330,7 +331,6 @@ the right surface file
  * @param cerebellum_surf specify the cerebellum surface for vertex area correction
 
 the cerebellum surface file
- * @param cifti_roi cifti file containing combined weights
  * @param cifti specify an input cifti file
  * @param runner Command runner
  *
@@ -338,18 +338,18 @@ the cerebellum surface file
  */
 function cifti_average_dense_roi(
     cifti_out: string,
-    roi_metric: InputPathType | null,
-    roi_metric_: InputPathType | null,
-    roi_metric_2: InputPathType | null,
-    roi_vol: InputPathType | null,
-    left_surf: InputPathType | null,
-    right_surf: InputPathType | null,
-    cerebellum_surf: InputPathType | null,
     cifti_roi: CiftiAverageDenseRoiCiftiRoiParamsDict | null = null,
+    roi_metric: InputPathType | null = null,
+    roi_metric_: InputPathType | null = null,
+    roi_metric_2: InputPathType | null = null,
+    roi_vol: InputPathType | null = null,
+    left_surf: InputPathType | null = null,
+    right_surf: InputPathType | null = null,
+    cerebellum_surf: InputPathType | null = null,
     cifti: Array<CiftiAverageDenseRoiCiftiParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiAverageDenseRoiOutputs {
-    const params = cifti_average_dense_roi_params(cifti_out, roi_metric, roi_metric_, roi_metric_2, roi_vol, left_surf, right_surf, cerebellum_surf, cifti_roi, cifti)
+    const params = cifti_average_dense_roi_params(cifti_out, cifti_roi, roi_metric, roi_metric_, roi_metric_2, roi_vol, left_surf, right_surf, cerebellum_surf, cifti)
     return cifti_average_dense_roi_execute(params, runner);
 }
 

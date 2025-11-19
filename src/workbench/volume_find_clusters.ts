@@ -47,6 +47,10 @@ interface VolumeFindClustersOutputs {
  * Build parameters.
  *
  * @param volume_out the output volume
+ * @param volume_in the input volume
+ * @param value_threshold threshold for data values
+ * @param minimum_volume threshold for cluster volume, in mm^3
+ * @param less_than find values less than <value-threshold>, rather than greater
  * @param roi_volume select a region of interest
 
 the roi, as a volume file
@@ -62,24 +66,20 @@ how far from the largest cluster a cluster can be, edge to edge, in mm
  * @param startval start labeling clusters from a value other than 1
 
 the value to give the first cluster found
- * @param volume_in the input volume
- * @param value_threshold threshold for data values
- * @param minimum_volume threshold for cluster volume, in mm^3
- * @param less_than find values less than <value-threshold>, rather than greater
  *
  * @returns Parameter dictionary
  */
 function volume_find_clusters_params(
     volume_out: string,
-    roi_volume: InputPathType | null,
-    subvol: string | null,
-    ratio: number | null,
-    distance: number | null,
-    startval: number | null,
     volume_in: InputPathType,
     value_threshold: number,
     minimum_volume: number,
     less_than: boolean = false,
+    roi_volume: InputPathType | null = null,
+    subvol: string | null = null,
+    ratio: number | null = null,
+    distance: number | null = null,
+    startval: number | null = null,
 ): VolumeFindClustersParamsDictTagged {
     const params = {
         "@type": "workbench/volume-find-clusters" as const,
@@ -196,6 +196,10 @@ function volume_find_clusters_execute(
  * Outputs a volume with nonzero integers for all voxels within a large enough cluster, and zeros elsewhere.  The integers denote cluster membership (by default, first cluster found will use value 1, second cluster 2, etc).  Cluster values are not reused across frames of the output, but instead keep counting up.  By default, values greater than <value-threshold> are considered to be in a cluster, use -less-than to test for values less than the threshold.  To apply this as a mask to the data, or to do more complicated thresholding, see -volume-math.
  *
  * @param volume_out the output volume
+ * @param volume_in the input volume
+ * @param value_threshold threshold for data values
+ * @param minimum_volume threshold for cluster volume, in mm^3
+ * @param less_than find values less than <value-threshold>, rather than greater
  * @param roi_volume select a region of interest
 
 the roi, as a volume file
@@ -211,28 +215,24 @@ how far from the largest cluster a cluster can be, edge to edge, in mm
  * @param startval start labeling clusters from a value other than 1
 
 the value to give the first cluster found
- * @param volume_in the input volume
- * @param value_threshold threshold for data values
- * @param minimum_volume threshold for cluster volume, in mm^3
- * @param less_than find values less than <value-threshold>, rather than greater
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeFindClustersOutputs`).
  */
 function volume_find_clusters(
     volume_out: string,
-    roi_volume: InputPathType | null,
-    subvol: string | null,
-    ratio: number | null,
-    distance: number | null,
-    startval: number | null,
     volume_in: InputPathType,
     value_threshold: number,
     minimum_volume: number,
     less_than: boolean = false,
+    roi_volume: InputPathType | null = null,
+    subvol: string | null = null,
+    ratio: number | null = null,
+    distance: number | null = null,
+    startval: number | null = null,
     runner: Runner | null = null,
 ): VolumeFindClustersOutputs {
-    const params = volume_find_clusters_params(volume_out, roi_volume, subvol, ratio, distance, startval, volume_in, value_threshold, minimum_volume, less_than)
+    const params = volume_find_clusters_params(volume_out, volume_in, value_threshold, minimum_volume, less_than, roi_volume, subvol, ratio, distance, startval)
     return volume_find_clusters_execute(params, runner);
 }
 

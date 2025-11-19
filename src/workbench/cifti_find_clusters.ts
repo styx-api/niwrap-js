@@ -84,7 +84,7 @@ the corrected vertex areas, as a metric
  */
 function cifti_find_clusters_left_surface(
     surface: InputPathType,
-    area_metric: InputPathType | null,
+    area_metric: InputPathType | null = null,
 ): CiftiFindClustersLeftSurfaceParamsDictTagged {
     const params = {
         "@type": "left-surface" as const,
@@ -134,7 +134,7 @@ the corrected vertex areas, as a metric
  */
 function cifti_find_clusters_right_surface(
     surface: InputPathType,
-    area_metric: InputPathType | null,
+    area_metric: InputPathType | null = null,
 ): CiftiFindClustersRightSurfaceParamsDictTagged {
     const params = {
         "@type": "right-surface" as const,
@@ -184,7 +184,7 @@ the corrected vertex areas, as a metric
  */
 function cifti_find_clusters_cerebellum_surface(
     surface: InputPathType,
-    area_metric: InputPathType | null,
+    area_metric: InputPathType | null = null,
 ): CiftiFindClustersCerebellumSurfaceParamsDictTagged {
     const params = {
         "@type": "cerebellum-surface" as const,
@@ -329,12 +329,6 @@ interface CiftiFindClustersOutputs {
  * Build parameters.
  *
  * @param cifti_out the output cifti
- * @param roi_cifti search only within regions of interest
-
-the regions to search within, as a cifti file
- * @param startval start labeling clusters from a value other than 1
-
-the value to give the first cluster found
  * @param cifti the input cifti
  * @param surface_value_threshold threshold for surface data values
  * @param surface_minimum_area threshold for surface cluster area, in mm^2
@@ -345,16 +339,20 @@ the value to give the first cluster found
  * @param left_surface specify the left surface to use
  * @param right_surface specify the right surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
+ * @param roi_cifti search only within regions of interest
+
+the regions to search within, as a cifti file
  * @param merged_volume treat volume components as if they were a single component
  * @param size_ratio ignore clusters smaller than a given fraction of the largest cluster in the structure
  * @param distance ignore clusters further than a given distance from the largest cluster in the structure
+ * @param startval start labeling clusters from a value other than 1
+
+the value to give the first cluster found
  *
  * @returns Parameter dictionary
  */
 function cifti_find_clusters_params(
     cifti_out: string,
-    roi_cifti: InputPathType | null,
-    startval: number | null,
     cifti: InputPathType,
     surface_value_threshold: number,
     surface_minimum_area: number,
@@ -365,9 +363,11 @@ function cifti_find_clusters_params(
     left_surface: CiftiFindClustersLeftSurfaceParamsDict | null = null,
     right_surface: CiftiFindClustersRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiFindClustersCerebellumSurfaceParamsDict | null = null,
+    roi_cifti: InputPathType | null = null,
     merged_volume: boolean = false,
     size_ratio: CiftiFindClustersSizeRatioParamsDict | null = null,
     distance: CiftiFindClustersDistanceParamsDict | null = null,
+    startval: number | null = null,
 ): CiftiFindClustersParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-find-clusters" as const,
@@ -497,12 +497,6 @@ function cifti_find_clusters_execute(
  * Outputs a cifti file with nonzero integers for all brainordinates within a large enough cluster, and zeros elsewhere.  The integers denote cluster membership (by default, first cluster found will use value 1, second cluster 2, etc).  Cluster values are not reused across maps of the output, but instead keep counting up.  The input cifti file must have a brain models mapping on the chosen dimension, columns for .dtseries, and either for .dconn.  The ROI should have a brain models mapping along columns, exactly matching the mapping of the chosen direction in the input file.  Data outside the ROI is ignored.
  *
  * @param cifti_out the output cifti
- * @param roi_cifti search only within regions of interest
-
-the regions to search within, as a cifti file
- * @param startval start labeling clusters from a value other than 1
-
-the value to give the first cluster found
  * @param cifti the input cifti
  * @param surface_value_threshold threshold for surface data values
  * @param surface_minimum_area threshold for surface cluster area, in mm^2
@@ -513,17 +507,21 @@ the value to give the first cluster found
  * @param left_surface specify the left surface to use
  * @param right_surface specify the right surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
+ * @param roi_cifti search only within regions of interest
+
+the regions to search within, as a cifti file
  * @param merged_volume treat volume components as if they were a single component
  * @param size_ratio ignore clusters smaller than a given fraction of the largest cluster in the structure
  * @param distance ignore clusters further than a given distance from the largest cluster in the structure
+ * @param startval start labeling clusters from a value other than 1
+
+the value to give the first cluster found
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiFindClustersOutputs`).
  */
 function cifti_find_clusters(
     cifti_out: string,
-    roi_cifti: InputPathType | null,
-    startval: number | null,
     cifti: InputPathType,
     surface_value_threshold: number,
     surface_minimum_area: number,
@@ -534,12 +532,14 @@ function cifti_find_clusters(
     left_surface: CiftiFindClustersLeftSurfaceParamsDict | null = null,
     right_surface: CiftiFindClustersRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiFindClustersCerebellumSurfaceParamsDict | null = null,
+    roi_cifti: InputPathType | null = null,
     merged_volume: boolean = false,
     size_ratio: CiftiFindClustersSizeRatioParamsDict | null = null,
     distance: CiftiFindClustersDistanceParamsDict | null = null,
+    startval: number | null = null,
     runner: Runner | null = null,
 ): CiftiFindClustersOutputs {
-    const params = cifti_find_clusters_params(cifti_out, roi_cifti, startval, cifti, surface_value_threshold, surface_minimum_area, volume_value_threshold, volume_minimum_size, direction, less_than, left_surface, right_surface, cerebellum_surface, merged_volume, size_ratio, distance)
+    const params = cifti_find_clusters_params(cifti_out, cifti, surface_value_threshold, surface_minimum_area, volume_value_threshold, volume_minimum_size, direction, less_than, left_surface, right_surface, cerebellum_surface, roi_cifti, merged_volume, size_ratio, distance, startval)
     return cifti_find_clusters_execute(params, runner);
 }
 

@@ -36,22 +36,22 @@ interface SetStructureOutputs {
 /**
  * Build parameters.
  *
+ * @param data_file the file to set the structure of
+ * @param structure the structure to set the file to
  * @param type_ set the type of a surface (only used if file is a surface file)
 
 name of surface type
  * @param secondary_type set the secondary type of a surface (only used if file is a surface file)
 
 name of surface secondary type
- * @param data_file the file to set the structure of
- * @param structure the structure to set the file to
  *
  * @returns Parameter dictionary
  */
 function set_structure_params(
-    type_: string | null,
-    secondary_type: string | null,
     data_file: string,
     structure: string,
+    type_: string | null = null,
+    secondary_type: string | null = null,
 ): SetStructureParamsDictTagged {
     const params = {
         "@type": "workbench/set-structure" as const,
@@ -263,26 +263,26 @@ function set_structure_execute(
  * OUTER
  * .
  *
+ * @param data_file the file to set the structure of
+ * @param structure the structure to set the file to
  * @param type_ set the type of a surface (only used if file is a surface file)
 
 name of surface type
  * @param secondary_type set the secondary type of a surface (only used if file is a surface file)
 
 name of surface secondary type
- * @param data_file the file to set the structure of
- * @param structure the structure to set the file to
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SetStructureOutputs`).
  */
 function set_structure(
-    type_: string | null,
-    secondary_type: string | null,
     data_file: string,
     structure: string,
+    type_: string | null = null,
+    secondary_type: string | null = null,
     runner: Runner | null = null,
 ): SetStructureOutputs {
-    const params = set_structure_params(type_, secondary_type, data_file, structure)
+    const params = set_structure_params(data_file, structure, type_, secondary_type)
     return set_structure_execute(params, runner);
 }
 

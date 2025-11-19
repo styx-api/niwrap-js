@@ -91,6 +91,7 @@ interface MetricStatsOutputs {
 /**
  * Build parameters.
  *
+ * @param metric_in the input metric
  * @param operation use a reduction operation
 
 the reduction operation
@@ -100,17 +101,16 @@ the percentile to find, must be between 0 and 100
  * @param column only display output for one column
 
 the column number or name
- * @param metric_in the input metric
  * @param roi only consider data inside an roi
  * @param show_map_name print map index and name before each output
  *
  * @returns Parameter dictionary
  */
 function metric_stats_params(
-    operation: string | null,
-    percent: number | null,
-    column: string | null,
     metric_in: InputPathType,
+    operation: string | null = null,
+    percent: number | null = null,
+    column: string | null = null,
     roi: MetricStatsRoiParamsDict | null = null,
     show_map_name: boolean = false,
 ): MetricStatsParamsDictTagged {
@@ -255,6 +255,7 @@ function metric_stats_execute(
  * COUNT_NONZERO: the number of nonzero elements in the data
  * .
  *
+ * @param metric_in the input metric
  * @param operation use a reduction operation
 
 the reduction operation
@@ -264,7 +265,6 @@ the percentile to find, must be between 0 and 100
  * @param column only display output for one column
 
 the column number or name
- * @param metric_in the input metric
  * @param roi only consider data inside an roi
  * @param show_map_name print map index and name before each output
  * @param runner Command runner
@@ -272,15 +272,15 @@ the column number or name
  * @returns NamedTuple of outputs (described in `MetricStatsOutputs`).
  */
 function metric_stats(
-    operation: string | null,
-    percent: number | null,
-    column: string | null,
     metric_in: InputPathType,
+    operation: string | null = null,
+    percent: number | null = null,
+    column: string | null = null,
     roi: MetricStatsRoiParamsDict | null = null,
     show_map_name: boolean = false,
     runner: Runner | null = null,
 ): MetricStatsOutputs {
-    const params = metric_stats_params(operation, percent, column, metric_in, roi, show_map_name)
+    const params = metric_stats_params(metric_in, operation, percent, column, roi, show_map_name)
     return metric_stats_execute(params, runner);
 }
 

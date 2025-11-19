@@ -61,7 +61,7 @@ the corrected vertex areas, as a metric
  */
 function cifti_erode_left_surface(
     surface: InputPathType,
-    area_metric: InputPathType | null,
+    area_metric: InputPathType | null = null,
 ): CiftiErodeLeftSurfaceParamsDictTagged {
     const params = {
         "@type": "left-surface" as const,
@@ -111,7 +111,7 @@ the corrected vertex areas, as a metric
  */
 function cifti_erode_right_surface(
     surface: InputPathType,
-    area_metric: InputPathType | null,
+    area_metric: InputPathType | null = null,
 ): CiftiErodeRightSurfaceParamsDictTagged {
     const params = {
         "@type": "right-surface" as const,
@@ -161,7 +161,7 @@ the corrected vertex areas, as a metric
  */
 function cifti_erode_cerebellum_surface(
     surface: InputPathType,
-    area_metric: InputPathType | null,
+    area_metric: InputPathType | null = null,
 ): CiftiErodeCerebellumSurfaceParamsDictTagged {
     const params = {
         "@type": "cerebellum-surface" as const,

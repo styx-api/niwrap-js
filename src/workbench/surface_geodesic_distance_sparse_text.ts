@@ -37,21 +37,21 @@ interface SurfaceGeodesicDistanceSparseTextOutputs {
 /**
  * Build parameters.
  *
- * @param area_metric vertex areas to use to correct the distances on a group-average surface
-
-the corrected vertex areas, as a metric
  * @param surface the surface to compute on
  * @param limit the geodesic distance limit in mm
  * @param text_out output - the output text file
+ * @param area_metric vertex areas to use to correct the distances on a group-average surface
+
+the corrected vertex areas, as a metric
  * @param naive use only neighbors, don't crawl triangles (not recommended)
  *
  * @returns Parameter dictionary
  */
 function surface_geodesic_distance_sparse_text_params(
-    area_metric: InputPathType | null,
     surface: InputPathType,
     limit: number,
     text_out: string,
+    area_metric: InputPathType | null = null,
     naive: boolean = false,
 ): SurfaceGeodesicDistanceSparseTextParamsDictTagged {
     const params = {
@@ -153,26 +153,26 @@ function surface_geodesic_distance_sparse_text_execute(
  *
  * If -naive is not specified, the algorithm uses not just immediate neighbors, but also neighbors derived from crawling across pairs of triangles that share an edge.
  *
- * @param area_metric vertex areas to use to correct the distances on a group-average surface
-
-the corrected vertex areas, as a metric
  * @param surface the surface to compute on
  * @param limit the geodesic distance limit in mm
  * @param text_out output - the output text file
+ * @param area_metric vertex areas to use to correct the distances on a group-average surface
+
+the corrected vertex areas, as a metric
  * @param naive use only neighbors, don't crawl triangles (not recommended)
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceGeodesicDistanceSparseTextOutputs`).
  */
 function surface_geodesic_distance_sparse_text(
-    area_metric: InputPathType | null,
     surface: InputPathType,
     limit: number,
     text_out: string,
+    area_metric: InputPathType | null = null,
     naive: boolean = false,
     runner: Runner | null = null,
 ): SurfaceGeodesicDistanceSparseTextOutputs {
-    const params = surface_geodesic_distance_sparse_text_params(area_metric, surface, limit, text_out, naive)
+    const params = surface_geodesic_distance_sparse_text_params(surface, limit, text_out, area_metric, naive)
     return surface_geodesic_distance_sparse_text_execute(params, runner);
 }
 

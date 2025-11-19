@@ -45,6 +45,8 @@ interface CiftiRestrictDenseMapOutputs {
  * Build parameters.
  *
  * @param cifti_out the output cifti
+ * @param cifti_in the input cifti
+ * @param direction which dimension to change the mapping on (integer, 'ROW', or 'COLUMN')
  * @param roi_cifti cifti file containing combined rois
 
 the rois as a cifti file
@@ -60,20 +62,18 @@ the cerebellum roi as a metric file
  * @param roi_vol voxels to use
 
 the roi volume file
- * @param cifti_in the input cifti
- * @param direction which dimension to change the mapping on (integer, 'ROW', or 'COLUMN')
  *
  * @returns Parameter dictionary
  */
 function cifti_restrict_dense_map_params(
     cifti_out: string,
-    roi_cifti: InputPathType | null,
-    roi_metric: InputPathType | null,
-    roi_metric_: InputPathType | null,
-    roi_metric_2: InputPathType | null,
-    roi_vol: InputPathType | null,
     cifti_in: InputPathType,
     direction: string,
+    roi_cifti: InputPathType | null = null,
+    roi_metric: InputPathType | null = null,
+    roi_metric_: InputPathType | null = null,
+    roi_metric_2: InputPathType | null = null,
+    roi_vol: InputPathType | null = null,
 ): CiftiRestrictDenseMapParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-restrict-dense-map" as const,
@@ -186,6 +186,8 @@ function cifti_restrict_dense_map_execute(
  * Writes a modified version of <cifti-in>, where all brainordinates outside the specified roi(s) are removed from the file.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.  If -cifti-roi is specified, no other -*-roi option may be specified.  If not using -cifti-roi, any -*-roi options not present will discard the relevant structure, if present in the input file.
  *
  * @param cifti_out the output cifti
+ * @param cifti_in the input cifti
+ * @param direction which dimension to change the mapping on (integer, 'ROW', or 'COLUMN')
  * @param roi_cifti cifti file containing combined rois
 
 the rois as a cifti file
@@ -201,24 +203,22 @@ the cerebellum roi as a metric file
  * @param roi_vol voxels to use
 
 the roi volume file
- * @param cifti_in the input cifti
- * @param direction which dimension to change the mapping on (integer, 'ROW', or 'COLUMN')
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiRestrictDenseMapOutputs`).
  */
 function cifti_restrict_dense_map(
     cifti_out: string,
-    roi_cifti: InputPathType | null,
-    roi_metric: InputPathType | null,
-    roi_metric_: InputPathType | null,
-    roi_metric_2: InputPathType | null,
-    roi_vol: InputPathType | null,
     cifti_in: InputPathType,
     direction: string,
+    roi_cifti: InputPathType | null = null,
+    roi_metric: InputPathType | null = null,
+    roi_metric_: InputPathType | null = null,
+    roi_metric_2: InputPathType | null = null,
+    roi_vol: InputPathType | null = null,
     runner: Runner | null = null,
 ): CiftiRestrictDenseMapOutputs {
-    const params = cifti_restrict_dense_map_params(cifti_out, roi_cifti, roi_metric, roi_metric_, roi_metric_2, roi_vol, cifti_in, direction)
+    const params = cifti_restrict_dense_map_params(cifti_out, cifti_in, direction, roi_cifti, roi_metric, roi_metric_, roi_metric_2, roi_vol)
     return cifti_restrict_dense_map_execute(params, runner);
 }
 

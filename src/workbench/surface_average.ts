@@ -40,7 +40,7 @@ the weight to use (default 1)
  */
 function surface_average_surf(
     surface: InputPathType,
-    weight: number | null,
+    weight: number | null = null,
 ): SurfaceAverageSurfParamsDictTagged {
     const params = {
         "@type": "surf" as const,
@@ -111,8 +111,8 @@ the output metric for uncertainty
  */
 function surface_average_params(
     surface_out: string,
-    stddev_metric_out: string | null,
-    uncert_metric_out: string | null,
+    stddev_metric_out: string | null = null,
+    uncert_metric_out: string | null = null,
     surf: Array<SurfaceAverageSurfParamsDict> | null = null,
 ): SurfaceAverageParamsDictTagged {
     const params = {
@@ -232,8 +232,8 @@ the output metric for uncertainty
  */
 function surface_average(
     surface_out: string,
-    stddev_metric_out: string | null,
-    uncert_metric_out: string | null,
+    stddev_metric_out: string | null = null,
+    uncert_metric_out: string | null = null,
     surf: Array<SurfaceAverageSurfParamsDict> | null = null,
     runner: Runner | null = null,
 ): SurfaceAverageOutputs {

@@ -42,10 +42,10 @@ interface VolumeDistortionOutputs {
  * Build parameters.
  *
  * @param volume_out the output distortion measures
+ * @param warpfield the warpfield to compute the distortion of
  * @param source_volume MUST be used if using a fnirt warpfield
 
 the source volume used when generating the warpfield
- * @param warpfield the warpfield to compute the distortion of
  * @param circular use the circle-based formula for the anisotropic measure
  * @param log2 apply base-2 log transform
  *
@@ -53,8 +53,8 @@ the source volume used when generating the warpfield
  */
 function volume_distortion_params(
     volume_out: string,
-    source_volume: string | null,
     warpfield: string,
+    source_volume: string | null = null,
     circular: boolean = false,
     log2: boolean = false,
 ): VolumeDistortionParamsDictTagged {
@@ -155,10 +155,10 @@ function volume_distortion_execute(
  * The -circular option instead calculates the anisotropic component by transforming the principal strains into log space, considering them as x-values of points on a circle 120 degrees apart, finds the circle's diameter, and transforms that back to a ratio.
  *
  * @param volume_out the output distortion measures
+ * @param warpfield the warpfield to compute the distortion of
  * @param source_volume MUST be used if using a fnirt warpfield
 
 the source volume used when generating the warpfield
- * @param warpfield the warpfield to compute the distortion of
  * @param circular use the circle-based formula for the anisotropic measure
  * @param log2 apply base-2 log transform
  * @param runner Command runner
@@ -167,13 +167,13 @@ the source volume used when generating the warpfield
  */
 function volume_distortion(
     volume_out: string,
-    source_volume: string | null,
     warpfield: string,
+    source_volume: string | null = null,
     circular: boolean = false,
     log2: boolean = false,
     runner: Runner | null = null,
 ): VolumeDistortionOutputs {
-    const params = volume_distortion_params(volume_out, source_volume, warpfield, circular, log2)
+    const params = volume_distortion_params(volume_out, warpfield, source_volume, circular, log2)
     return volume_distortion_execute(params, runner);
 }
 

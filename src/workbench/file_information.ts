@@ -43,7 +43,7 @@ the metadata key
  * @returns Parameter dictionary
  */
 function file_information_only_metadata(
-    key: string | null,
+    key: string | null = null,
 ): FileInformationOnlyMetadataParamsDictTagged {
     const params = {
         "@type": "only-metadata" as const,

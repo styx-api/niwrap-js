@@ -118,7 +118,7 @@ the ROI as a metric file
  */
 function cifti_create_label_left_label(
     label: InputPathType,
-    roi_metric: InputPathType | null,
+    roi_metric: InputPathType | null = null,
 ): CiftiCreateLabelLeftLabelParamsDictTagged {
     const params = {
         "@type": "left-label" as const,
@@ -168,7 +168,7 @@ the ROI as a metric file
  */
 function cifti_create_label_right_label(
     label: InputPathType,
-    roi_metric: InputPathType | null,
+    roi_metric: InputPathType | null = null,
 ): CiftiCreateLabelRightLabelParamsDictTagged {
     const params = {
         "@type": "right-label" as const,
@@ -218,7 +218,7 @@ the ROI as a metric file
  */
 function cifti_create_label_cerebellum_label(
     label: InputPathType,
-    roi_metric: InputPathType | null,
+    roi_metric: InputPathType | null = null,
 ): CiftiCreateLabelCerebellumLabelParamsDictTagged {
     const params = {
         "@type": "cerebellum-label" as const,
@@ -270,7 +270,7 @@ the ROI as a metric file
 function cifti_create_label_label(
     structure: string,
     label: InputPathType,
-    roi_metric: InputPathType | null,
+    roi_metric: InputPathType | null = null,
 ): CiftiCreateLabelLabelParamsDictTagged {
     const params = {
         "@type": "label" as const,

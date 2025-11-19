@@ -312,9 +312,15 @@ interface VolumePaletteOutputs {
 /**
  * Build parameters.
  *
+ * @param volume the volume file to modify
+ * @param mode the mapping mode
  * @param subvolume select a single subvolume
 
 the subvolume number or name
+ * @param pos_percent percentage min/max for positive data coloring
+ * @param neg_percent percentage min/max for negative data coloring
+ * @param pos_user user min/max values for positive data coloring
+ * @param neg_user user min/max values for negative data coloring
  * @param interpolate interpolate colors
 
 boolean, whether to interpolate
@@ -330,38 +336,32 @@ boolean, whether to display
  * @param name set the palette used
 
 the name of the palette
+ * @param thresholding set the thresholding
  * @param type_ specify palette inversion
 
 the type of inversion
  * @param type_2 specify normalization mode (NOTE: this is always a file-wide setting, NOT per-map)
 
 the normalization mode
- * @param volume the volume file to modify
- * @param mode the mapping mode
- * @param pos_percent percentage min/max for positive data coloring
- * @param neg_percent percentage min/max for negative data coloring
- * @param pos_user user min/max values for positive data coloring
- * @param neg_user user min/max values for negative data coloring
- * @param thresholding set the thresholding
  *
  * @returns Parameter dictionary
  */
 function volume_palette_params(
-    subvolume: string | null,
-    interpolate: boolean | null,
-    display: boolean | null,
-    display_: boolean | null,
-    display_2: boolean | null,
-    name: string | null,
-    type_: string | null,
-    type_2: string | null,
     volume: string,
     mode: string,
+    subvolume: string | null = null,
     pos_percent: VolumePalettePosPercentParamsDict | null = null,
     neg_percent: VolumePaletteNegPercentParamsDict | null = null,
     pos_user: VolumePalettePosUserParamsDict | null = null,
     neg_user: VolumePaletteNegUserParamsDict | null = null,
+    interpolate: boolean | null = null,
+    display: boolean | null = null,
+    display_: boolean | null = null,
+    display_2: boolean | null = null,
+    name: string | null = null,
     thresholding: VolumePaletteThresholdingParamsDict | null = null,
+    type_: string | null = null,
+    type_2: string | null = null,
 ): VolumePaletteParamsDictTagged {
     const params = {
         "@type": "workbench/volume-palette" as const,
@@ -655,9 +655,15 @@ function volume_palette_execute(
  * NORMALIZATION_SELECTED_MAP_DATA
  * .
  *
+ * @param volume the volume file to modify
+ * @param mode the mapping mode
  * @param subvolume select a single subvolume
 
 the subvolume number or name
+ * @param pos_percent percentage min/max for positive data coloring
+ * @param neg_percent percentage min/max for negative data coloring
+ * @param pos_user user min/max values for positive data coloring
+ * @param neg_user user min/max values for negative data coloring
  * @param interpolate interpolate colors
 
 boolean, whether to interpolate
@@ -673,42 +679,36 @@ boolean, whether to display
  * @param name set the palette used
 
 the name of the palette
+ * @param thresholding set the thresholding
  * @param type_ specify palette inversion
 
 the type of inversion
  * @param type_2 specify normalization mode (NOTE: this is always a file-wide setting, NOT per-map)
 
 the normalization mode
- * @param volume the volume file to modify
- * @param mode the mapping mode
- * @param pos_percent percentage min/max for positive data coloring
- * @param neg_percent percentage min/max for negative data coloring
- * @param pos_user user min/max values for positive data coloring
- * @param neg_user user min/max values for negative data coloring
- * @param thresholding set the thresholding
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumePaletteOutputs`).
  */
 function volume_palette(
-    subvolume: string | null,
-    interpolate: boolean | null,
-    display: boolean | null,
-    display_: boolean | null,
-    display_2: boolean | null,
-    name: string | null,
-    type_: string | null,
-    type_2: string | null,
     volume: string,
     mode: string,
+    subvolume: string | null = null,
     pos_percent: VolumePalettePosPercentParamsDict | null = null,
     neg_percent: VolumePaletteNegPercentParamsDict | null = null,
     pos_user: VolumePalettePosUserParamsDict | null = null,
     neg_user: VolumePaletteNegUserParamsDict | null = null,
+    interpolate: boolean | null = null,
+    display: boolean | null = null,
+    display_: boolean | null = null,
+    display_2: boolean | null = null,
+    name: string | null = null,
     thresholding: VolumePaletteThresholdingParamsDict | null = null,
+    type_: string | null = null,
+    type_2: string | null = null,
     runner: Runner | null = null,
 ): VolumePaletteOutputs {
-    const params = volume_palette_params(subvolume, interpolate, display, display_, display_2, name, type_, type_2, volume, mode, pos_percent, neg_percent, pos_user, neg_user, thresholding)
+    const params = volume_palette_params(volume, mode, subvolume, pos_percent, neg_percent, pos_user, neg_user, interpolate, display, display_, display_2, name, thresholding, type_, type_2)
     return volume_palette_execute(params, runner);
 }
 

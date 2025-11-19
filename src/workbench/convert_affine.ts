@@ -256,25 +256,25 @@ interface ConvertAffineOutputs {
 /**
  * Build parameters.
  *
+ * @param from_world input is a NIFTI 'world' affine
  * @param input input is an ITK matrix
 
 the input affine
+ * @param from_flirt input is a flirt matrix
+ * @param to_world write output as a NIFTI 'world' affine
  * @param output write output as an ITK affine
 
 output - the output affine
- * @param from_world input is a NIFTI 'world' affine
- * @param from_flirt input is a flirt matrix
- * @param to_world write output as a NIFTI 'world' affine
  * @param to_flirt write output as a flirt matrix
  *
  * @returns Parameter dictionary
  */
 function convert_affine_params(
-    input: string | null,
-    output: string | null,
     from_world: ConvertAffineFromWorldParamsDict | null = null,
+    input: string | null = null,
     from_flirt: ConvertAffineFromFlirtParamsDict | null = null,
     to_world: ConvertAffineToWorldParamsDict | null = null,
+    output: string | null = null,
     to_flirt: Array<ConvertAffineToFlirtParamsDict> | null = null,
 ): ConvertAffineParamsDictTagged {
     const params = {
@@ -389,30 +389,30 @@ function convert_affine_execute(
  *
  * You must specify exactly one -from option, but you may specify multiple -to options, and -to-flirt may be specified more than once.
  *
+ * @param from_world input is a NIFTI 'world' affine
  * @param input input is an ITK matrix
 
 the input affine
+ * @param from_flirt input is a flirt matrix
+ * @param to_world write output as a NIFTI 'world' affine
  * @param output write output as an ITK affine
 
 output - the output affine
- * @param from_world input is a NIFTI 'world' affine
- * @param from_flirt input is a flirt matrix
- * @param to_world write output as a NIFTI 'world' affine
  * @param to_flirt write output as a flirt matrix
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConvertAffineOutputs`).
  */
 function convert_affine(
-    input: string | null,
-    output: string | null,
     from_world: ConvertAffineFromWorldParamsDict | null = null,
+    input: string | null = null,
     from_flirt: ConvertAffineFromFlirtParamsDict | null = null,
     to_world: ConvertAffineToWorldParamsDict | null = null,
+    output: string | null = null,
     to_flirt: Array<ConvertAffineToFlirtParamsDict> | null = null,
     runner: Runner | null = null,
 ): ConvertAffineOutputs {
-    const params = convert_affine_params(input, output, from_world, from_flirt, to_world, to_flirt)
+    const params = convert_affine_params(from_world, input, from_flirt, to_world, output, to_flirt)
     return convert_affine_execute(params, runner);
 }
 

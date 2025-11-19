@@ -87,21 +87,21 @@ interface SetMapNamesOutputs {
 /**
  * Build parameters.
  *
+ * @param data_file the file to set the map names of
  * @param file use a text file to replace all map names
 
 text file containing map names, one per line
  * @param file_ use the map names from another data file
 
 a data file with the same number of maps
- * @param data_file the file to set the map names of
  * @param map specify a map to set the name of
  *
  * @returns Parameter dictionary
  */
 function set_map_names_params(
-    file: string | null,
-    file_: string | null,
     data_file: string,
+    file: string | null = null,
+    file_: string | null = null,
     map: Array<SetMapNamesMapParamsDict> | null = null,
 ): SetMapNamesParamsDictTagged {
     const params = {
@@ -198,26 +198,26 @@ function set_map_names_execute(
  *
  * Sets the name of one or more maps for metric, shape, label, volume, cifti scalar or cifti label files.  You must specify either -name-file, or -from-data-file, or at least one -map option.  The three option types are mutually exclusive.
  *
+ * @param data_file the file to set the map names of
  * @param file use a text file to replace all map names
 
 text file containing map names, one per line
  * @param file_ use the map names from another data file
 
 a data file with the same number of maps
- * @param data_file the file to set the map names of
  * @param map specify a map to set the name of
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SetMapNamesOutputs`).
  */
 function set_map_names(
-    file: string | null,
-    file_: string | null,
     data_file: string,
+    file: string | null = null,
+    file_: string | null = null,
     map: Array<SetMapNamesMapParamsDict> | null = null,
     runner: Runner | null = null,
 ): SetMapNamesOutputs {
-    const params = set_map_names_params(file, file_, data_file, map)
+    const params = set_map_names_params(data_file, file, file_, map)
     return set_map_names_execute(params, runner);
 }
 

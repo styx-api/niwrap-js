@@ -42,23 +42,23 @@ interface LabelToBorderOutputs {
  * Build parameters.
  *
  * @param border_out the output border file
+ * @param surface the surface to use for neighbor information
+ * @param label_in the input label file
  * @param fraction set how far along the edge border points are drawn
 
 fraction along edge from inside vertex (default 0.33)
  * @param column select a single column
 
 the column number or name
- * @param surface the surface to use for neighbor information
- * @param label_in the input label file
  *
  * @returns Parameter dictionary
  */
 function label_to_border_params(
     border_out: string,
-    fraction: number | null,
-    column: string | null,
     surface: InputPathType,
     label_in: InputPathType,
+    fraction: number | null = null,
+    column: string | null = null,
 ): LabelToBorderParamsDictTagged {
     const params = {
         "@type": "workbench/label-to-border" as const,
@@ -156,27 +156,27 @@ function label_to_border_execute(
  * For each label, finds all edges on the mesh that cross the boundary of the label, and draws borders through them.  By default, this is done on all columns in the input file, using the map name as the class name for the border.
  *
  * @param border_out the output border file
+ * @param surface the surface to use for neighbor information
+ * @param label_in the input label file
  * @param fraction set how far along the edge border points are drawn
 
 fraction along edge from inside vertex (default 0.33)
  * @param column select a single column
 
 the column number or name
- * @param surface the surface to use for neighbor information
- * @param label_in the input label file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelToBorderOutputs`).
  */
 function label_to_border(
     border_out: string,
-    fraction: number | null,
-    column: string | null,
     surface: InputPathType,
     label_in: InputPathType,
+    fraction: number | null = null,
+    column: string | null = null,
     runner: Runner | null = null,
 ): LabelToBorderOutputs {
-    const params = label_to_border_params(border_out, fraction, column, surface, label_in)
+    const params = label_to_border_params(border_out, surface, label_in, fraction, column)
     return label_to_border_execute(params, runner);
 }
 

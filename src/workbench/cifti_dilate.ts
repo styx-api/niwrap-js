@@ -64,7 +64,7 @@ the corrected vertex areas, as a metric
  */
 function cifti_dilate_left_surface(
     surface: InputPathType,
-    area_metric: InputPathType | null,
+    area_metric: InputPathType | null = null,
 ): CiftiDilateLeftSurfaceParamsDictTagged {
     const params = {
         "@type": "left-surface" as const,
@@ -114,7 +114,7 @@ the corrected vertex areas, as a metric
  */
 function cifti_dilate_right_surface(
     surface: InputPathType,
-    area_metric: InputPathType | null,
+    area_metric: InputPathType | null = null,
 ): CiftiDilateRightSurfaceParamsDictTagged {
     const params = {
         "@type": "right-surface" as const,
@@ -164,7 +164,7 @@ the corrected vertex areas, as a metric
  */
 function cifti_dilate_cerebellum_surface(
     surface: InputPathType,
-    area_metric: InputPathType | null,
+    area_metric: InputPathType | null = null,
 ): CiftiDilateCerebellumSurfaceParamsDictTagged {
     const params = {
         "@type": "cerebellum-surface" as const,
@@ -223,9 +223,6 @@ interface CiftiDilateOutputs {
  * Build parameters.
  *
  * @param cifti_out the output cifti file
- * @param roi_cifti specify an roi of brainordinates to overwrite, rather than zeros
-
-cifti dscalar or dtseries file, positive values denote brainordinates to have their values replaced
  * @param cifti_in the input cifti file
  * @param direction which dimension to dilate along, ROW or COLUMN
  * @param surface_distance the distance to dilate on surfaces, in mm
@@ -233,6 +230,9 @@ cifti dscalar or dtseries file, positive values denote brainordinates to have th
  * @param left_surface specify the left surface to use
  * @param right_surface specify the right surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
+ * @param roi_cifti specify an roi of brainordinates to overwrite, rather than zeros
+
+cifti dscalar or dtseries file, positive values denote brainordinates to have their values replaced
  * @param nearest use nearest good value instead of a weighted average
  * @param merged_volume treat volume components as if they were a single component
  * @param legacy_mode use the math from v1.3.2 and earlier for weighted dilation
@@ -241,7 +241,6 @@ cifti dscalar or dtseries file, positive values denote brainordinates to have th
  */
 function cifti_dilate_params(
     cifti_out: string,
-    roi_cifti: InputPathType | null,
     cifti_in: InputPathType,
     direction: string,
     surface_distance: number,
@@ -249,6 +248,7 @@ function cifti_dilate_params(
     left_surface: CiftiDilateLeftSurfaceParamsDict | null = null,
     right_surface: CiftiDilateRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiDilateCerebellumSurfaceParamsDict | null = null,
+    roi_cifti: InputPathType | null = null,
     nearest: boolean = false,
     merged_volume: boolean = false,
     legacy_mode: boolean = false,
@@ -374,9 +374,6 @@ function cifti_dilate_execute(
  * If -bad-brainordinate-roi is specified, all values, including those with value zero, are good, except for locations with a positive value in the ROI.  If it is not specified, only values equal to zero are bad.
  *
  * @param cifti_out the output cifti file
- * @param roi_cifti specify an roi of brainordinates to overwrite, rather than zeros
-
-cifti dscalar or dtseries file, positive values denote brainordinates to have their values replaced
  * @param cifti_in the input cifti file
  * @param direction which dimension to dilate along, ROW or COLUMN
  * @param surface_distance the distance to dilate on surfaces, in mm
@@ -384,6 +381,9 @@ cifti dscalar or dtseries file, positive values denote brainordinates to have th
  * @param left_surface specify the left surface to use
  * @param right_surface specify the right surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
+ * @param roi_cifti specify an roi of brainordinates to overwrite, rather than zeros
+
+cifti dscalar or dtseries file, positive values denote brainordinates to have their values replaced
  * @param nearest use nearest good value instead of a weighted average
  * @param merged_volume treat volume components as if they were a single component
  * @param legacy_mode use the math from v1.3.2 and earlier for weighted dilation
@@ -393,7 +393,6 @@ cifti dscalar or dtseries file, positive values denote brainordinates to have th
  */
 function cifti_dilate(
     cifti_out: string,
-    roi_cifti: InputPathType | null,
     cifti_in: InputPathType,
     direction: string,
     surface_distance: number,
@@ -401,12 +400,13 @@ function cifti_dilate(
     left_surface: CiftiDilateLeftSurfaceParamsDict | null = null,
     right_surface: CiftiDilateRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiDilateCerebellumSurfaceParamsDict | null = null,
+    roi_cifti: InputPathType | null = null,
     nearest: boolean = false,
     merged_volume: boolean = false,
     legacy_mode: boolean = false,
     runner: Runner | null = null,
 ): CiftiDilateOutputs {
-    const params = cifti_dilate_params(cifti_out, roi_cifti, cifti_in, direction, surface_distance, volume_distance, left_surface, right_surface, cerebellum_surface, nearest, merged_volume, legacy_mode)
+    const params = cifti_dilate_params(cifti_out, cifti_in, direction, surface_distance, volume_distance, left_surface, right_surface, cerebellum_surface, roi_cifti, nearest, merged_volume, legacy_mode)
     return cifti_dilate_execute(params, runner);
 }
 

@@ -75,7 +75,7 @@ the corrected vertex areas, as a metric
  */
 function cifti_smoothing_left_surface(
     surface: InputPathType,
-    area_metric: InputPathType | null,
+    area_metric: InputPathType | null = null,
 ): CiftiSmoothingLeftSurfaceParamsDictTagged {
     const params = {
         "@type": "left-surface" as const,
@@ -125,7 +125,7 @@ the corrected vertex areas, as a metric
  */
 function cifti_smoothing_right_surface(
     surface: InputPathType,
-    area_metric: InputPathType | null,
+    area_metric: InputPathType | null = null,
 ): CiftiSmoothingRightSurfaceParamsDictTagged {
     const params = {
         "@type": "right-surface" as const,
@@ -175,7 +175,7 @@ the corrected vertex areas, as a metric
  */
 function cifti_smoothing_cerebellum_surface(
     surface: InputPathType,
-    area_metric: InputPathType | null,
+    area_metric: InputPathType | null = null,
 ): CiftiSmoothingCerebellumSurfaceParamsDictTagged {
     const params = {
         "@type": "cerebellum-surface" as const,
@@ -227,7 +227,7 @@ the corrected vertex areas, as a metric
 function cifti_smoothing_surface(
     structure: string,
     surface: InputPathType,
-    area_metric: InputPathType | null,
+    area_metric: InputPathType | null = null,
 ): CiftiSmoothingSurfaceParamsDictTagged {
     const params = {
         "@type": "surface" as const,
@@ -288,9 +288,6 @@ interface CiftiSmoothingOutputs {
  * Build parameters.
  *
  * @param cifti_out the output cifti
- * @param roi_cifti smooth only within regions of interest
-
-the regions to smooth within, as a cifti file
  * @param cifti the input cifti
  * @param surface_kernel the size of the gaussian surface smoothing kernel in mm, as sigma by default
  * @param volume_kernel the size of the gaussian volume smoothing kernel in mm, as sigma by default
@@ -299,6 +296,9 @@ the regions to smooth within, as a cifti file
  * @param left_surface specify the left cortical surface to use
  * @param right_surface specify the right cortical surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
+ * @param roi_cifti smooth only within regions of interest
+
+the regions to smooth within, as a cifti file
  * @param fix_zeros_volume treat values of zero in the volume as missing data
  * @param fix_zeros_surface treat values of zero on the surface as missing data
  * @param merged_volume smooth across subcortical structure boundaries
@@ -308,7 +308,6 @@ the regions to smooth within, as a cifti file
  */
 function cifti_smoothing_params(
     cifti_out: string,
-    roi_cifti: InputPathType | null,
     cifti: InputPathType,
     surface_kernel: number,
     volume_kernel: number,
@@ -317,6 +316,7 @@ function cifti_smoothing_params(
     left_surface: CiftiSmoothingLeftSurfaceParamsDict | null = null,
     right_surface: CiftiSmoothingRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiSmoothingCerebellumSurfaceParamsDict | null = null,
+    roi_cifti: InputPathType | null = null,
     fix_zeros_volume: boolean = false,
     fix_zeros_surface: boolean = false,
     merged_volume: boolean = false,
@@ -525,9 +525,6 @@ function cifti_smoothing_execute(
  * THALAMUS_RIGHT.
  *
  * @param cifti_out the output cifti
- * @param roi_cifti smooth only within regions of interest
-
-the regions to smooth within, as a cifti file
  * @param cifti the input cifti
  * @param surface_kernel the size of the gaussian surface smoothing kernel in mm, as sigma by default
  * @param volume_kernel the size of the gaussian volume smoothing kernel in mm, as sigma by default
@@ -536,6 +533,9 @@ the regions to smooth within, as a cifti file
  * @param left_surface specify the left cortical surface to use
  * @param right_surface specify the right cortical surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
+ * @param roi_cifti smooth only within regions of interest
+
+the regions to smooth within, as a cifti file
  * @param fix_zeros_volume treat values of zero in the volume as missing data
  * @param fix_zeros_surface treat values of zero on the surface as missing data
  * @param merged_volume smooth across subcortical structure boundaries
@@ -546,7 +546,6 @@ the regions to smooth within, as a cifti file
  */
 function cifti_smoothing(
     cifti_out: string,
-    roi_cifti: InputPathType | null,
     cifti: InputPathType,
     surface_kernel: number,
     volume_kernel: number,
@@ -555,13 +554,14 @@ function cifti_smoothing(
     left_surface: CiftiSmoothingLeftSurfaceParamsDict | null = null,
     right_surface: CiftiSmoothingRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiSmoothingCerebellumSurfaceParamsDict | null = null,
+    roi_cifti: InputPathType | null = null,
     fix_zeros_volume: boolean = false,
     fix_zeros_surface: boolean = false,
     merged_volume: boolean = false,
     surface: Array<CiftiSmoothingSurfaceParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiSmoothingOutputs {
-    const params = cifti_smoothing_params(cifti_out, roi_cifti, cifti, surface_kernel, volume_kernel, direction, fwhm, left_surface, right_surface, cerebellum_surface, fix_zeros_volume, fix_zeros_surface, merged_volume, surface)
+    const params = cifti_smoothing_params(cifti_out, cifti, surface_kernel, volume_kernel, direction, fwhm, left_surface, right_surface, cerebellum_surface, roi_cifti, fix_zeros_volume, fix_zeros_surface, merged_volume, surface)
     return cifti_smoothing_execute(params, runner);
 }
 

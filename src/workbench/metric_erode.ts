@@ -44,6 +44,9 @@ interface MetricErodeOutputs {
  * Build parameters.
  *
  * @param metric_out the output metric
+ * @param metric the metric file to erode
+ * @param surface the surface to compute on
+ * @param distance distance in mm to erode
  * @param roi_metric assume values outside this roi are nonzero
 
 metric file, positive values denote vertices that have data
@@ -53,20 +56,17 @@ the column number or name
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
- * @param metric the metric file to erode
- * @param surface the surface to compute on
- * @param distance distance in mm to erode
  *
  * @returns Parameter dictionary
  */
 function metric_erode_params(
     metric_out: string,
-    roi_metric: InputPathType | null,
-    column: string | null,
-    area_metric: InputPathType | null,
     metric: InputPathType,
     surface: InputPathType,
     distance: number,
+    roi_metric: InputPathType | null = null,
+    column: string | null = null,
+    area_metric: InputPathType | null = null,
 ): MetricErodeParamsDictTagged {
     const params = {
         "@type": "workbench/metric-erode" as const,
@@ -175,6 +175,9 @@ function metric_erode_execute(
  * Note that the -corrected-areas option uses an approximate correction for distance along the surface.
  *
  * @param metric_out the output metric
+ * @param metric the metric file to erode
+ * @param surface the surface to compute on
+ * @param distance distance in mm to erode
  * @param roi_metric assume values outside this roi are nonzero
 
 metric file, positive values denote vertices that have data
@@ -184,24 +187,21 @@ the column number or name
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
- * @param metric the metric file to erode
- * @param surface the surface to compute on
- * @param distance distance in mm to erode
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricErodeOutputs`).
  */
 function metric_erode(
     metric_out: string,
-    roi_metric: InputPathType | null,
-    column: string | null,
-    area_metric: InputPathType | null,
     metric: InputPathType,
     surface: InputPathType,
     distance: number,
+    roi_metric: InputPathType | null = null,
+    column: string | null = null,
+    area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricErodeOutputs {
-    const params = metric_erode_params(metric_out, roi_metric, column, area_metric, metric, surface, distance)
+    const params = metric_erode_params(metric_out, metric, surface, distance, roi_metric, column, area_metric)
     return metric_erode_execute(params, runner);
 }
 

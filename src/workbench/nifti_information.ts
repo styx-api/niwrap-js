@@ -37,7 +37,7 @@ the CIFTI version to use
  * @returns Parameter dictionary
  */
 function nifti_information_print_xml(
-    version: string | null,
+    version: string | null = null,
 ): NiftiInformationPrintXmlParamsDictTagged {
     const params = {
         "@type": "print-xml" as const,
@@ -100,7 +100,7 @@ print the header even if the data is truncated
  */
 function nifti_information_params(
     nifti_file: string,
-    allow_truncated: boolean | null = false,
+    allow_truncated: boolean | null = null,
     print_matrix: boolean = false,
     print_xml: NiftiInformationPrintXmlParamsDict | null = null,
 ): NiftiInformationParamsDictTagged {
@@ -132,12 +132,12 @@ function nifti_information_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["allow-truncated"] ?? false) !== null || (params["print-matrix"] ?? false) || (params["print-xml"] ?? null) !== null) {
+    if ((params["allow-truncated"] ?? null) !== null || (params["print-matrix"] ?? false) || (params["print-xml"] ?? null) !== null) {
         cargs.push(
             "wb_command",
             "-nifti-information",
             "-print-header",
-            (((params["allow-truncated"] ?? false) !== null) ? "-allow-truncated" : ""),
+            (((params["allow-truncated"] ?? null) !== null) ? "-allow-truncated" : ""),
             (((params["print-matrix"] ?? false)) ? "-print-matrix" : ""),
             ...(((params["print-xml"] ?? null) !== null) ? nifti_information_print_xml_cargs((params["print-xml"] ?? null), execution) : [])
         );
@@ -207,7 +207,7 @@ print the header even if the data is truncated
  */
 function nifti_information(
     nifti_file: string,
-    allow_truncated: boolean | null = false,
+    allow_truncated: boolean | null = null,
     print_matrix: boolean = false,
     print_xml: NiftiInformationPrintXmlParamsDict | null = null,
     runner: Runner | null = null,

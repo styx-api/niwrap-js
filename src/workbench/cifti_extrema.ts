@@ -105,6 +105,10 @@ interface CiftiExtremaOutputs {
  * Build parameters.
  *
  * @param cifti_out the output cifti
+ * @param cifti the input cifti
+ * @param surface_distance the minimum distance between extrema of the same type, for surface components
+ * @param volume_distance the minimum distance between extrema of the same type, for volume components
+ * @param direction which dimension to find extrema along, ROW or COLUMN
  * @param surface specify the left surface to use
 
 the left surface file
@@ -120,10 +124,6 @@ the size of the gaussian surface smoothing kernel in mm, as sigma by default
  * @param volume_kernel smooth volume components before finding extrema
 
 the size of the gaussian volume smoothing kernel in mm, as sigma by default
- * @param cifti the input cifti
- * @param surface_distance the minimum distance between extrema of the same type, for surface components
- * @param volume_distance the minimum distance between extrema of the same type, for volume components
- * @param direction which dimension to find extrema along, ROW or COLUMN
  * @param presmooth_fwhm smoothing kernel distances are FWHM, not sigma
  * @param threshold ignore small extrema
  * @param merged_volume treat volume components as if they were a single component
@@ -136,15 +136,15 @@ the size of the gaussian volume smoothing kernel in mm, as sigma by default
  */
 function cifti_extrema_params(
     cifti_out: string,
-    surface: InputPathType | null,
-    surface_: InputPathType | null,
-    surface_2: InputPathType | null,
-    surface_kernel: number | null,
-    volume_kernel: number | null,
     cifti: InputPathType,
     surface_distance: number,
     volume_distance: number,
     direction: string,
+    surface: InputPathType | null = null,
+    surface_: InputPathType | null = null,
+    surface_2: InputPathType | null = null,
+    surface_kernel: number | null = null,
+    volume_kernel: number | null = null,
     presmooth_fwhm: boolean = false,
     threshold: CiftiExtremaThresholdParamsDict | null = null,
     merged_volume: boolean = false,
@@ -284,6 +284,10 @@ function cifti_extrema_execute(
  * Finds spatial locations in a cifti file that have more extreme values than all nearby locations in the same component (surface or volume structure).  The input cifti file must have a brain models mapping along the specified direction.  COLUMN is the direction that works on dtseries and dscalar.  For dconn, if it is symmetric use COLUMN, otherwise use ROW.
  *
  * @param cifti_out the output cifti
+ * @param cifti the input cifti
+ * @param surface_distance the minimum distance between extrema of the same type, for surface components
+ * @param volume_distance the minimum distance between extrema of the same type, for volume components
+ * @param direction which dimension to find extrema along, ROW or COLUMN
  * @param surface specify the left surface to use
 
 the left surface file
@@ -299,10 +303,6 @@ the size of the gaussian surface smoothing kernel in mm, as sigma by default
  * @param volume_kernel smooth volume components before finding extrema
 
 the size of the gaussian volume smoothing kernel in mm, as sigma by default
- * @param cifti the input cifti
- * @param surface_distance the minimum distance between extrema of the same type, for surface components
- * @param volume_distance the minimum distance between extrema of the same type, for volume components
- * @param direction which dimension to find extrema along, ROW or COLUMN
  * @param presmooth_fwhm smoothing kernel distances are FWHM, not sigma
  * @param threshold ignore small extrema
  * @param merged_volume treat volume components as if they were a single component
@@ -316,15 +316,15 @@ the size of the gaussian volume smoothing kernel in mm, as sigma by default
  */
 function cifti_extrema(
     cifti_out: string,
-    surface: InputPathType | null,
-    surface_: InputPathType | null,
-    surface_2: InputPathType | null,
-    surface_kernel: number | null,
-    volume_kernel: number | null,
     cifti: InputPathType,
     surface_distance: number,
     volume_distance: number,
     direction: string,
+    surface: InputPathType | null = null,
+    surface_: InputPathType | null = null,
+    surface_2: InputPathType | null = null,
+    surface_kernel: number | null = null,
+    volume_kernel: number | null = null,
     presmooth_fwhm: boolean = false,
     threshold: CiftiExtremaThresholdParamsDict | null = null,
     merged_volume: boolean = false,
@@ -334,7 +334,7 @@ function cifti_extrema(
     only_minima: boolean = false,
     runner: Runner | null = null,
 ): CiftiExtremaOutputs {
-    const params = cifti_extrema_params(cifti_out, surface, surface_, surface_2, surface_kernel, volume_kernel, cifti, surface_distance, volume_distance, direction, presmooth_fwhm, threshold, merged_volume, sum_maps, consolidate_mode, only_maxima, only_minima)
+    const params = cifti_extrema_params(cifti_out, cifti, surface_distance, volume_distance, direction, surface, surface_, surface_2, surface_kernel, volume_kernel, presmooth_fwhm, threshold, merged_volume, sum_maps, consolidate_mode, only_maxima, only_minima)
     return cifti_extrema_execute(params, runner);
 }
 

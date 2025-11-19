@@ -268,9 +268,12 @@ interface VolumeToSurfaceMappingRibbonConstrainedOutputs {
  *
  * @param inner_surf the inner surface of the ribbon
  * @param outer_surf the outer surface of the ribbon
+ * @param volume_roi use a volume roi
+ * @param dilate_missing use dilation for small vertices that 'missed' the geometry tests
  * @param subdiv_num voxel divisions while estimating voxel weights
 
 number of subdivisions, default 3
+ * @param thin_columns use non-overlapping polyhedra
  * @param scale reduce weight to voxels that aren't near <surface>
 
 value to multiply the local thickness by, to get the gaussian sigma
@@ -280,28 +283,25 @@ interpolation method, must be CUBIC, ENCLOSING_VOXEL, or TRILINEAR
  * @param roi_out output an ROI of which vertices didn't intersect any valid voxels
 
 the output metric file of vertices that have no data
+ * @param output_weights write the voxel weights for a vertex to a volume file
  * @param text_out write the voxel weights for all vertices to a text file
 
 output - the output text filename
- * @param volume_roi use a volume roi
- * @param dilate_missing use dilation for small vertices that 'missed' the geometry tests
- * @param thin_columns use non-overlapping polyhedra
- * @param output_weights write the voxel weights for a vertex to a volume file
  *
  * @returns Parameter dictionary
  */
 function volume_to_surface_mapping_ribbon_constrained(
     inner_surf: InputPathType,
     outer_surf: InputPathType,
-    subdiv_num: number | null,
-    scale: number | null,
-    method: string | null,
-    roi_out: string | null,
-    text_out: string | null,
     volume_roi: VolumeToSurfaceMappingVolumeRoiParamsDict | null = null,
     dilate_missing: VolumeToSurfaceMappingDilateMissingParamsDict | null = null,
+    subdiv_num: number | null = null,
     thin_columns: boolean = false,
+    scale: number | null = null,
+    method: string | null = null,
+    roi_out: string | null = null,
     output_weights: VolumeToSurfaceMappingOutputWeightsParamsDict | null = null,
+    text_out: string | null = null,
 ): VolumeToSurfaceMappingRibbonConstrainedParamsDictTagged {
     const params = {
         "@type": "ribbon-constrained" as const,
@@ -473,9 +473,6 @@ interface VolumeToSurfaceMappingOutputs {
  * Build parameters.
  *
  * @param metric_out the output metric file
- * @param subvol select a single subvolume to map
-
-the subvolume number or name
  * @param volume the volume to map data from
  * @param surface the surface to map the data onto
  * @param trilinear use trilinear volume interpolation
@@ -483,12 +480,14 @@ the subvolume number or name
  * @param cubic use cubic splines
  * @param ribbon_constrained use ribbon constrained mapping algorithm
  * @param myelin_style use the method from myelin mapping
+ * @param subvol select a single subvolume to map
+
+the subvolume number or name
  *
  * @returns Parameter dictionary
  */
 function volume_to_surface_mapping_params(
     metric_out: string,
-    subvol: string | null,
     volume: InputPathType,
     surface: InputPathType,
     trilinear: boolean = false,
@@ -496,6 +495,7 @@ function volume_to_surface_mapping_params(
     cubic: boolean = false,
     ribbon_constrained: VolumeToSurfaceMappingRibbonConstrainedParamsDict | null = null,
     myelin_style: VolumeToSurfaceMappingMyelinStyleParamsDict | null = null,
+    subvol: string | null = null,
 ): VolumeToSurfaceMappingParamsDictTagged {
     const params = {
         "@type": "workbench/volume-to-surface-mapping" as const,
@@ -611,9 +611,6 @@ function volume_to_surface_mapping_execute(
  * The myelin style method uses part of the caret5 myelin mapping command to do the mapping: for each surface vertex, take all voxels that are in a cylinder with radius and height equal to cortical thickness, centered on the vertex and aligned with the surface normal, and that are also within the ribbon ROI, and apply a gaussian kernel with the specified sigma to them to get the weights to use.  The -legacy-bug flag reverts to the unintended behavior present from the initial implementation up to and including v1.2.3, which had only the tangential cutoff and a bounding box intended to be larger than where the cylinder cutoff should have been.
  *
  * @param metric_out the output metric file
- * @param subvol select a single subvolume to map
-
-the subvolume number or name
  * @param volume the volume to map data from
  * @param surface the surface to map the data onto
  * @param trilinear use trilinear volume interpolation
@@ -621,13 +618,15 @@ the subvolume number or name
  * @param cubic use cubic splines
  * @param ribbon_constrained use ribbon constrained mapping algorithm
  * @param myelin_style use the method from myelin mapping
+ * @param subvol select a single subvolume to map
+
+the subvolume number or name
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeToSurfaceMappingOutputs`).
  */
 function volume_to_surface_mapping(
     metric_out: string,
-    subvol: string | null,
     volume: InputPathType,
     surface: InputPathType,
     trilinear: boolean = false,
@@ -635,9 +634,10 @@ function volume_to_surface_mapping(
     cubic: boolean = false,
     ribbon_constrained: VolumeToSurfaceMappingRibbonConstrainedParamsDict | null = null,
     myelin_style: VolumeToSurfaceMappingMyelinStyleParamsDict | null = null,
+    subvol: string | null = null,
     runner: Runner | null = null,
 ): VolumeToSurfaceMappingOutputs {
-    const params = volume_to_surface_mapping_params(metric_out, subvol, volume, surface, trilinear, enclosing, cubic, ribbon_constrained, myelin_style)
+    const params = volume_to_surface_mapping_params(metric_out, volume, surface, trilinear, enclosing, cubic, ribbon_constrained, myelin_style, subvol)
     return volume_to_surface_mapping_execute(params, runner);
 }
 

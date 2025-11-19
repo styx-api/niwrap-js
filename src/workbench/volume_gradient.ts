@@ -96,6 +96,8 @@ interface VolumeGradientOutputs {
  * Build parameters.
  *
  * @param volume_out the output gradient magnitude volume
+ * @param volume_in the input volume
+ * @param presmooth smooth the volume before computing the gradient
  * @param roi_volume select a region of interest to take the gradient of
 
 the region to take the gradient within
@@ -105,18 +107,16 @@ the vectors as a volume file
  * @param subvol select a single subvolume to take the gradient of
 
 the subvolume number or name
- * @param volume_in the input volume
- * @param presmooth smooth the volume before computing the gradient
  *
  * @returns Parameter dictionary
  */
 function volume_gradient_params(
     volume_out: string,
-    roi_volume: InputPathType | null,
-    vector_volume_out: string | null,
-    subvol: string | null,
     volume_in: InputPathType,
     presmooth: VolumeGradientPresmoothParamsDict | null = null,
+    roi_volume: InputPathType | null = null,
+    vector_volume_out: string | null = null,
+    subvol: string | null = null,
 ): VolumeGradientParamsDictTagged {
     const params = {
         "@type": "workbench/volume-gradient" as const,
@@ -221,6 +221,8 @@ function volume_gradient_execute(
  * Computes the gradient of the volume by doing linear regressions for each voxel, considering only its face neighbors unless too few face neighbors exist.  The gradient vector is constructed from the partial derivatives of the resulting linear function, and the magnitude of this vector is the output.  If specified, the volume vector output is arranged with the x, y, and z components from a subvolume as consecutive subvolumes.
  *
  * @param volume_out the output gradient magnitude volume
+ * @param volume_in the input volume
+ * @param presmooth smooth the volume before computing the gradient
  * @param roi_volume select a region of interest to take the gradient of
 
 the region to take the gradient within
@@ -230,22 +232,20 @@ the vectors as a volume file
  * @param subvol select a single subvolume to take the gradient of
 
 the subvolume number or name
- * @param volume_in the input volume
- * @param presmooth smooth the volume before computing the gradient
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeGradientOutputs`).
  */
 function volume_gradient(
     volume_out: string,
-    roi_volume: InputPathType | null,
-    vector_volume_out: string | null,
-    subvol: string | null,
     volume_in: InputPathType,
     presmooth: VolumeGradientPresmoothParamsDict | null = null,
+    roi_volume: InputPathType | null = null,
+    vector_volume_out: string | null = null,
+    subvol: string | null = null,
     runner: Runner | null = null,
 ): VolumeGradientOutputs {
-    const params = volume_gradient_params(volume_out, roi_volume, vector_volume_out, subvol, volume_in, presmooth)
+    const params = volume_gradient_params(volume_out, volume_in, presmooth, roi_volume, vector_volume_out, subvol)
     return volume_gradient_execute(params, runner);
 }
 

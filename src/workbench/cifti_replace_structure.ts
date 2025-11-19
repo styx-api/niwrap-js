@@ -253,13 +253,13 @@ interface CiftiReplaceStructureOutputs {
 /**
  * Build parameters.
  *
- * @param action how to handle conflicts between label keys
-
-'ERROR', 'LEFT_SURFACE_FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
  * @param cifti the cifti to modify
  * @param direction which dimension to interpret as a single map, ROW or COLUMN
  * @param volume_all replace the data in all volume components
  * @param discard_unused_labels when operating on a dlabel file, drop any unused label keys from the label table
+ * @param action how to handle conflicts between label keys
+
+'ERROR', 'LEFT_SURFACE_FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
  * @param label replace the data in a surface label component
  * @param metric replace the data in a surface component
  * @param volume replace the data in a volume component
@@ -267,11 +267,11 @@ interface CiftiReplaceStructureOutputs {
  * @returns Parameter dictionary
  */
 function cifti_replace_structure_params(
-    action: string | null,
     cifti: string,
     direction: string,
     volume_all: CiftiReplaceStructureVolumeAllParamsDict | null = null,
     discard_unused_labels: boolean = false,
+    action: string | null = null,
     label: Array<CiftiReplaceStructureLabelParamsDict> | null = null,
     metric: Array<CiftiReplaceStructureMetricParamsDict> | null = null,
     volume: Array<CiftiReplaceStructureVolumeParamsDict> | null = null,
@@ -457,13 +457,13 @@ function cifti_replace_structure_execute(
  * THALAMUS_LEFT
  * THALAMUS_RIGHT.
  *
- * @param action how to handle conflicts between label keys
-
-'ERROR', 'LEFT_SURFACE_FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
  * @param cifti the cifti to modify
  * @param direction which dimension to interpret as a single map, ROW or COLUMN
  * @param volume_all replace the data in all volume components
  * @param discard_unused_labels when operating on a dlabel file, drop any unused label keys from the label table
+ * @param action how to handle conflicts between label keys
+
+'ERROR', 'LEFT_SURFACE_FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
  * @param label replace the data in a surface label component
  * @param metric replace the data in a surface component
  * @param volume replace the data in a volume component
@@ -472,17 +472,17 @@ function cifti_replace_structure_execute(
  * @returns NamedTuple of outputs (described in `CiftiReplaceStructureOutputs`).
  */
 function cifti_replace_structure(
-    action: string | null,
     cifti: string,
     direction: string,
     volume_all: CiftiReplaceStructureVolumeAllParamsDict | null = null,
     discard_unused_labels: boolean = false,
+    action: string | null = null,
     label: Array<CiftiReplaceStructureLabelParamsDict> | null = null,
     metric: Array<CiftiReplaceStructureMetricParamsDict> | null = null,
     volume: Array<CiftiReplaceStructureVolumeParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiReplaceStructureOutputs {
-    const params = cifti_replace_structure_params(action, cifti, direction, volume_all, discard_unused_labels, label, metric, volume)
+    const params = cifti_replace_structure_params(cifti, direction, volume_all, discard_unused_labels, action, label, metric, volume)
     return cifti_replace_structure_execute(params, runner);
 }
 

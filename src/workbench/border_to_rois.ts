@@ -43,11 +43,11 @@ interface BorderToRoisOutputs {
  * Build parameters.
  *
  * @param metric_out the output metric file
+ * @param surface the surface the borders are drawn on
+ * @param border_file the border file
  * @param name create ROI for only one border
 
 the name of the border
- * @param surface the surface the borders are drawn on
- * @param border_file the border file
  * @param inverse use inverse selection (outside border)
  * @param include_border include vertices the border is closest to
  *
@@ -55,9 +55,9 @@ the name of the border
  */
 function border_to_rois_params(
     metric_out: string,
-    name: string | null,
     surface: InputPathType,
     border_file: InputPathType,
+    name: string | null = null,
     inverse: boolean = false,
     include_border: boolean = false,
 ): BorderToRoisParamsDictTagged {
@@ -156,11 +156,11 @@ function border_to_rois_execute(
  * By default, draws ROIs inside all borders in the border file, as separate metric columns.
  *
  * @param metric_out the output metric file
+ * @param surface the surface the borders are drawn on
+ * @param border_file the border file
  * @param name create ROI for only one border
 
 the name of the border
- * @param surface the surface the borders are drawn on
- * @param border_file the border file
  * @param inverse use inverse selection (outside border)
  * @param include_border include vertices the border is closest to
  * @param runner Command runner
@@ -169,14 +169,14 @@ the name of the border
  */
 function border_to_rois(
     metric_out: string,
-    name: string | null,
     surface: InputPathType,
     border_file: InputPathType,
+    name: string | null = null,
     inverse: boolean = false,
     include_border: boolean = false,
     runner: Runner | null = null,
 ): BorderToRoisOutputs {
-    const params = border_to_rois_params(metric_out, name, surface, border_file, inverse, include_border)
+    const params = border_to_rois_params(metric_out, surface, border_file, name, inverse, include_border)
     return border_to_rois_execute(params, runner);
 }
 

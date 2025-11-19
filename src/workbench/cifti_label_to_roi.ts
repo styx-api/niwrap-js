@@ -42,6 +42,7 @@ interface CiftiLabelToRoiOutputs {
  * Build parameters.
  *
  * @param scalar_out the output cifti scalar file
+ * @param label_in the input cifti label file
  * @param label_name select label by name
 
 the label name that you want an roi of
@@ -51,16 +52,15 @@ the label key that you want an roi of
  * @param map select a single label map to use
 
 the map number or name
- * @param label_in the input cifti label file
  *
  * @returns Parameter dictionary
  */
 function cifti_label_to_roi_params(
     scalar_out: string,
-    label_name: string | null,
-    label_key: number | null,
-    map: string | null,
     label_in: InputPathType,
+    label_name: string | null = null,
+    label_key: number | null = null,
+    map: string | null = null,
 ): CiftiLabelToRoiParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-label-to-roi" as const,
@@ -161,6 +161,7 @@ function cifti_label_to_roi_execute(
  * For each map in <label-in>, a map is created in <scalar-out> where all locations labeled with <label-name> or with a key of <label-key> are given a value of 1, and all other locations are given 0.  Exactly one of -name and -key must be specified.  Specify -map to use only one map from <label-in>.
  *
  * @param scalar_out the output cifti scalar file
+ * @param label_in the input cifti label file
  * @param label_name select label by name
 
 the label name that you want an roi of
@@ -170,20 +171,19 @@ the label key that you want an roi of
  * @param map select a single label map to use
 
 the map number or name
- * @param label_in the input cifti label file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiLabelToRoiOutputs`).
  */
 function cifti_label_to_roi(
     scalar_out: string,
-    label_name: string | null,
-    label_key: number | null,
-    map: string | null,
     label_in: InputPathType,
+    label_name: string | null = null,
+    label_key: number | null = null,
+    map: string | null = null,
     runner: Runner | null = null,
 ): CiftiLabelToRoiOutputs {
-    const params = cifti_label_to_roi_params(scalar_out, label_name, label_key, map, label_in)
+    const params = cifti_label_to_roi_params(scalar_out, label_in, label_name, label_key, map)
     return cifti_label_to_roi_execute(params, runner);
 }
 

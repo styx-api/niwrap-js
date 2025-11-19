@@ -44,6 +44,9 @@ interface LabelErodeOutputs {
  * Build parameters.
  *
  * @param label_out the output label file
+ * @param label the input label
+ * @param surface the surface to erode on
+ * @param erode_dist distance in mm to erode the labels
  * @param roi_metric assume values outside this roi are labeled
 
 metric file, positive values denote vertices that have data
@@ -53,20 +56,17 @@ the column number or name
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
- * @param label the input label
- * @param surface the surface to erode on
- * @param erode_dist distance in mm to erode the labels
  *
  * @returns Parameter dictionary
  */
 function label_erode_params(
     label_out: string,
-    roi_metric: InputPathType | null,
-    column: string | null,
-    area_metric: InputPathType | null,
     label: InputPathType,
     surface: InputPathType,
     erode_dist: number,
+    roi_metric: InputPathType | null = null,
+    column: string | null = null,
+    area_metric: InputPathType | null = null,
 ): LabelErodeParamsDictTagged {
     const params = {
         "@type": "workbench/label-erode" as const,
@@ -175,6 +175,9 @@ function label_erode_execute(
  * Note that the -corrected-areas option uses an approximate correction for distance along the surface.
  *
  * @param label_out the output label file
+ * @param label the input label
+ * @param surface the surface to erode on
+ * @param erode_dist distance in mm to erode the labels
  * @param roi_metric assume values outside this roi are labeled
 
 metric file, positive values denote vertices that have data
@@ -184,24 +187,21 @@ the column number or name
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
- * @param label the input label
- * @param surface the surface to erode on
- * @param erode_dist distance in mm to erode the labels
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelErodeOutputs`).
  */
 function label_erode(
     label_out: string,
-    roi_metric: InputPathType | null,
-    column: string | null,
-    area_metric: InputPathType | null,
     label: InputPathType,
     surface: InputPathType,
     erode_dist: number,
+    roi_metric: InputPathType | null = null,
+    column: string | null = null,
+    area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): LabelErodeOutputs {
-    const params = label_erode_params(label_out, roi_metric, column, area_metric, label, surface, erode_dist)
+    const params = label_erode_params(label_out, label, surface, erode_dist, roi_metric, column, area_metric)
     return label_erode_execute(params, runner);
 }
 

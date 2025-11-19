@@ -45,7 +45,7 @@ the subvolume number or name
 function volume_math_var(
     name: string,
     volume: InputPathType,
-    subvol: string | null,
+    subvol: string | null = null,
     repeat: boolean = false,
 ): VolumeMathVarParamsDictTagged {
     const params = {
@@ -109,18 +109,18 @@ interface VolumeMathOutputs {
  * Build parameters.
  *
  * @param volume_out the output volume
+ * @param expression the expression to evaluate, in quotes
  * @param replace replace NaN results with a value
 
 value to replace NaN with
- * @param expression the expression to evaluate, in quotes
  * @param var_ a volume file to use as a variable
  *
  * @returns Parameter dictionary
  */
 function volume_math_params(
     volume_out: string,
-    replace: number | null,
     expression: string,
+    replace: number | null = null,
     var_: Array<VolumeMathVarParamsDict> | null = null,
 ): VolumeMathParamsDictTagged {
     const params = {
@@ -290,10 +290,10 @@ function volume_math_execute(
  * .
  *
  * @param volume_out the output volume
+ * @param expression the expression to evaluate, in quotes
  * @param replace replace NaN results with a value
 
 value to replace NaN with
- * @param expression the expression to evaluate, in quotes
  * @param var_ a volume file to use as a variable
  * @param runner Command runner
  *
@@ -301,12 +301,12 @@ value to replace NaN with
  */
 function volume_math(
     volume_out: string,
-    replace: number | null,
     expression: string,
+    replace: number | null = null,
     var_: Array<VolumeMathVarParamsDict> | null = null,
     runner: Runner | null = null,
 ): VolumeMathOutputs {
-    const params = volume_math_params(volume_out, replace, expression, var_)
+    const params = volume_math_params(volume_out, expression, replace, var_)
     return volume_math_execute(params, runner);
 }
 

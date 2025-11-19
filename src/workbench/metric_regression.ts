@@ -50,7 +50,7 @@ the column number or name
  */
 function metric_regression_remove(
     metric: InputPathType,
-    column: string | null,
+    column: string | null = null,
 ): MetricRegressionRemoveParamsDictTagged {
     const params = {
         "@type": "remove" as const,
@@ -100,7 +100,7 @@ the column number or name
  */
 function metric_regression_keep(
     metric: InputPathType,
-    column: string | null,
+    column: string | null = null,
 ): MetricRegressionKeepParamsDictTagged {
     const params = {
         "@type": "keep" as const,
@@ -159,13 +159,13 @@ interface MetricRegressionOutputs {
  * Build parameters.
  *
  * @param metric_out the output metric
+ * @param metric_in the metric to regress from
  * @param roi_metric only regress inside an roi
 
 the area to use for regression, as a metric
  * @param column select a single column to regress from
 
 the column number or name
- * @param metric_in the metric to regress from
  * @param remove specify a metric to regress out
  * @param keep specify a metric to include in regression, but not remove
  *
@@ -173,9 +173,9 @@ the column number or name
  */
 function metric_regression_params(
     metric_out: string,
-    roi_metric: InputPathType | null,
-    column: string | null,
     metric_in: InputPathType,
+    roi_metric: InputPathType | null = null,
+    column: string | null = null,
     remove: Array<MetricRegressionRemoveParamsDict> | null = null,
     keep: Array<MetricRegressionKeepParamsDict> | null = null,
 ): MetricRegressionParamsDictTagged {
@@ -281,13 +281,13 @@ function metric_regression_execute(
  * For each regressor, its mean across the surface is subtracted from its data.  Each input map is then regressed against these, and a constant term.  The resulting regressed slopes of all regressors specified with -remove are multiplied with their respective regressor maps, and these are subtracted from the input map.
  *
  * @param metric_out the output metric
+ * @param metric_in the metric to regress from
  * @param roi_metric only regress inside an roi
 
 the area to use for regression, as a metric
  * @param column select a single column to regress from
 
 the column number or name
- * @param metric_in the metric to regress from
  * @param remove specify a metric to regress out
  * @param keep specify a metric to include in regression, but not remove
  * @param runner Command runner
@@ -296,14 +296,14 @@ the column number or name
  */
 function metric_regression(
     metric_out: string,
-    roi_metric: InputPathType | null,
-    column: string | null,
     metric_in: InputPathType,
+    roi_metric: InputPathType | null = null,
+    column: string | null = null,
     remove: Array<MetricRegressionRemoveParamsDict> | null = null,
     keep: Array<MetricRegressionKeepParamsDict> | null = null,
     runner: Runner | null = null,
 ): MetricRegressionOutputs {
-    const params = metric_regression_params(metric_out, roi_metric, column, metric_in, remove, keep)
+    const params = metric_regression_params(metric_out, metric_in, roi_metric, column, remove, keep)
     return metric_regression_execute(params, runner);
 }
 

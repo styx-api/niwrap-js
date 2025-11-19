@@ -43,25 +43,25 @@ interface MetricRoisToBorderOutputs {
  * Build parameters.
  *
  * @param border_out the output border file
+ * @param surface the surface to use for neighbor information
+ * @param metric the input metric containing ROIs
+ * @param class_name the name to use for the class of the output borders
  * @param fraction set how far along the edge border points are drawn
 
 fraction along edge from inside vertex (default 0.33)
  * @param column select a single column
 
 the column number or name
- * @param surface the surface to use for neighbor information
- * @param metric the input metric containing ROIs
- * @param class_name the name to use for the class of the output borders
  *
  * @returns Parameter dictionary
  */
 function metric_rois_to_border_params(
     border_out: string,
-    fraction: number | null,
-    column: string | null,
     surface: InputPathType,
     metric: InputPathType,
     class_name: string,
+    fraction: number | null = null,
+    column: string | null = null,
 ): MetricRoisToBorderParamsDictTagged {
     const params = {
         "@type": "workbench/metric-rois-to-border" as const,
@@ -161,29 +161,29 @@ function metric_rois_to_border_execute(
  * For each ROI column, finds all edges on the mesh that cross the boundary of the ROI, and draws borders through them.  By default, this is done on all columns in the input file, using the map name as the name for the border.
  *
  * @param border_out the output border file
+ * @param surface the surface to use for neighbor information
+ * @param metric the input metric containing ROIs
+ * @param class_name the name to use for the class of the output borders
  * @param fraction set how far along the edge border points are drawn
 
 fraction along edge from inside vertex (default 0.33)
  * @param column select a single column
 
 the column number or name
- * @param surface the surface to use for neighbor information
- * @param metric the input metric containing ROIs
- * @param class_name the name to use for the class of the output borders
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricRoisToBorderOutputs`).
  */
 function metric_rois_to_border(
     border_out: string,
-    fraction: number | null,
-    column: string | null,
     surface: InputPathType,
     metric: InputPathType,
     class_name: string,
+    fraction: number | null = null,
+    column: string | null = null,
     runner: Runner | null = null,
 ): MetricRoisToBorderOutputs {
-    const params = metric_rois_to_border_params(border_out, fraction, column, surface, metric, class_name)
+    const params = metric_rois_to_border_params(border_out, surface, metric, class_name, fraction, column)
     return metric_rois_to_border_execute(params, runner);
 }
 

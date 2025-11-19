@@ -100,6 +100,12 @@ interface MetricSmoothingOutputs {
  * Build parameters.
  *
  * @param metric_out the output metric
+ * @param surface the surface to smooth on
+ * @param metric_in the metric to smooth
+ * @param smoothing_kernel the size of the gaussian smoothing kernel in mm, as sigma by default
+ * @param fwhm kernel size is FWHM, not sigma
+ * @param roi select a region of interest to smooth
+ * @param fix_zeros treat zero values as not being data
  * @param column select a single column to smooth
 
 the column number or name
@@ -109,26 +115,20 @@ the corrected vertex areas, as a metric
  * @param method select smoothing method, default GEO_GAUSS_AREA
 
 the name of the smoothing method
- * @param surface the surface to smooth on
- * @param metric_in the metric to smooth
- * @param smoothing_kernel the size of the gaussian smoothing kernel in mm, as sigma by default
- * @param fwhm kernel size is FWHM, not sigma
- * @param roi select a region of interest to smooth
- * @param fix_zeros treat zero values as not being data
  *
  * @returns Parameter dictionary
  */
 function metric_smoothing_params(
     metric_out: string,
-    column: string | null,
-    area_metric: InputPathType | null,
-    method: string | null,
     surface: InputPathType,
     metric_in: InputPathType,
     smoothing_kernel: number,
     fwhm: boolean = false,
     roi: MetricSmoothingRoiParamsDict | null = null,
     fix_zeros: boolean = false,
+    column: string | null = null,
+    area_metric: InputPathType | null = null,
+    method: string | null = null,
 ): MetricSmoothingParamsDictTagged {
     const params = {
         "@type": "workbench/metric-smoothing" as const,
@@ -273,6 +273,12 @@ function metric_smoothing_execute(
  * The GEO_GAUSS_AREA method is the default because it is usually the correct choice.  GEO_GAUSS_EQUAL may be the correct choice when the sum of vertex values is more meaningful then the surface integral (sum of values .* areas), for instance when smoothing vertex areas (the sum is the total surface area, while the surface integral is the sum of squares of the vertex areas).  The GEO_GAUSS method is not recommended, it exists mainly to replicate methods of studies done with caret5's geodesic smoothing.
  *
  * @param metric_out the output metric
+ * @param surface the surface to smooth on
+ * @param metric_in the metric to smooth
+ * @param smoothing_kernel the size of the gaussian smoothing kernel in mm, as sigma by default
+ * @param fwhm kernel size is FWHM, not sigma
+ * @param roi select a region of interest to smooth
+ * @param fix_zeros treat zero values as not being data
  * @param column select a single column to smooth
 
 the column number or name
@@ -282,30 +288,24 @@ the corrected vertex areas, as a metric
  * @param method select smoothing method, default GEO_GAUSS_AREA
 
 the name of the smoothing method
- * @param surface the surface to smooth on
- * @param metric_in the metric to smooth
- * @param smoothing_kernel the size of the gaussian smoothing kernel in mm, as sigma by default
- * @param fwhm kernel size is FWHM, not sigma
- * @param roi select a region of interest to smooth
- * @param fix_zeros treat zero values as not being data
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricSmoothingOutputs`).
  */
 function metric_smoothing(
     metric_out: string,
-    column: string | null,
-    area_metric: InputPathType | null,
-    method: string | null,
     surface: InputPathType,
     metric_in: InputPathType,
     smoothing_kernel: number,
     fwhm: boolean = false,
     roi: MetricSmoothingRoiParamsDict | null = null,
     fix_zeros: boolean = false,
+    column: string | null = null,
+    area_metric: InputPathType | null = null,
+    method: string | null = null,
     runner: Runner | null = null,
 ): MetricSmoothingOutputs {
-    const params = metric_smoothing_params(metric_out, column, area_metric, method, surface, metric_in, smoothing_kernel, fwhm, roi, fix_zeros)
+    const params = metric_smoothing_params(metric_out, surface, metric_in, smoothing_kernel, fwhm, roi, fix_zeros, column, area_metric, method)
     return metric_smoothing_execute(params, runner);
 }
 

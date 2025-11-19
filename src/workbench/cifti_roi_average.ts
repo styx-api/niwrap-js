@@ -39,6 +39,8 @@ interface CiftiRoiAverageOutputs {
 /**
  * Build parameters.
  *
+ * @param cifti_in the cifti file to average rows from
+ * @param text_out output text file of the average values
  * @param roi_cifti cifti file containing combined rois
 
 the rois as a cifti file
@@ -54,19 +56,17 @@ the cerebellum roi as a metric file
  * @param roi_vol voxels to use
 
 the roi volume file
- * @param cifti_in the cifti file to average rows from
- * @param text_out output text file of the average values
  *
  * @returns Parameter dictionary
  */
 function cifti_roi_average_params(
-    roi_cifti: InputPathType | null,
-    roi_metric: InputPathType | null,
-    roi_metric_: InputPathType | null,
-    roi_metric_2: InputPathType | null,
-    roi_vol: InputPathType | null,
     cifti_in: InputPathType,
     text_out: string,
+    roi_cifti: InputPathType | null = null,
+    roi_metric: InputPathType | null = null,
+    roi_metric_: InputPathType | null = null,
+    roi_metric_2: InputPathType | null = null,
+    roi_vol: InputPathType | null = null,
 ): CiftiRoiAverageParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-roi-average" as const,
@@ -175,6 +175,8 @@ function cifti_roi_average_execute(
  *
  * Average the rows that are within the specified ROIs, and write the resulting average row to a text file, separated by newlines.  If -cifti-roi is specified, -left-roi, -right-roi, -cerebellum-roi, and -vol-roi must not be specified.
  *
+ * @param cifti_in the cifti file to average rows from
+ * @param text_out output text file of the average values
  * @param roi_cifti cifti file containing combined rois
 
 the rois as a cifti file
@@ -190,23 +192,21 @@ the cerebellum roi as a metric file
  * @param roi_vol voxels to use
 
 the roi volume file
- * @param cifti_in the cifti file to average rows from
- * @param text_out output text file of the average values
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiRoiAverageOutputs`).
  */
 function cifti_roi_average(
-    roi_cifti: InputPathType | null,
-    roi_metric: InputPathType | null,
-    roi_metric_: InputPathType | null,
-    roi_metric_2: InputPathType | null,
-    roi_vol: InputPathType | null,
     cifti_in: InputPathType,
     text_out: string,
+    roi_cifti: InputPathType | null = null,
+    roi_metric: InputPathType | null = null,
+    roi_metric_: InputPathType | null = null,
+    roi_metric_2: InputPathType | null = null,
+    roi_vol: InputPathType | null = null,
     runner: Runner | null = null,
 ): CiftiRoiAverageOutputs {
-    const params = cifti_roi_average_params(roi_cifti, roi_metric, roi_metric_, roi_metric_2, roi_vol, cifti_in, text_out)
+    const params = cifti_roi_average_params(cifti_in, text_out, roi_cifti, roi_metric, roi_metric_, roi_metric_2, roi_vol)
     return cifti_roi_average_execute(params, runner);
 }
 

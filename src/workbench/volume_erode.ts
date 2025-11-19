@@ -42,23 +42,23 @@ interface VolumeErodeOutputs {
  * Build parameters.
  *
  * @param volume_out the output volume
+ * @param volume the volume to erode
+ * @param distance distance in mm to erode
  * @param roi_volume assume voxels outside this roi are nonzero
 
 volume file, positive values denote voxels that have data
  * @param subvol select a single subvolume to dilate
 
 the subvolume number or name
- * @param volume the volume to erode
- * @param distance distance in mm to erode
  *
  * @returns Parameter dictionary
  */
 function volume_erode_params(
     volume_out: string,
-    roi_volume: InputPathType | null,
-    subvol: string | null,
     volume: InputPathType,
     distance: number,
+    roi_volume: InputPathType | null = null,
+    subvol: string | null = null,
 ): VolumeErodeParamsDictTagged {
     const params = {
         "@type": "workbench/volume-erode" as const,
@@ -156,27 +156,27 @@ function volume_erode_execute(
  * Around each voxel with a value of zero, set surrounding voxels to zero.  The surrounding voxels are all face neighbors and all voxels within the specified distance (center to center).
  *
  * @param volume_out the output volume
+ * @param volume the volume to erode
+ * @param distance distance in mm to erode
  * @param roi_volume assume voxels outside this roi are nonzero
 
 volume file, positive values denote voxels that have data
  * @param subvol select a single subvolume to dilate
 
 the subvolume number or name
- * @param volume the volume to erode
- * @param distance distance in mm to erode
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeErodeOutputs`).
  */
 function volume_erode(
     volume_out: string,
-    roi_volume: InputPathType | null,
-    subvol: string | null,
     volume: InputPathType,
     distance: number,
+    roi_volume: InputPathType | null = null,
+    subvol: string | null = null,
     runner: Runner | null = null,
 ): VolumeErodeOutputs {
-    const params = volume_erode_params(volume_out, roi_volume, subvol, volume, distance)
+    const params = volume_erode_params(volume_out, volume, distance, roi_volume, subvol)
     return volume_erode_execute(params, runner);
 }
 

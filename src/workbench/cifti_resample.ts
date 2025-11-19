@@ -179,7 +179,7 @@ exponent 'n' to use in (1 / (distance ^ n)) as the weighting function (default 7
  * @returns Parameter dictionary
  */
 function cifti_resample_weighted(
-    exponent: number | null,
+    exponent: number | null = null,
     legacy_cutoff: boolean = false,
 ): CiftiResampleWeightedParamsDictTagged {
     const params = {
@@ -280,7 +280,7 @@ exponent 'n' to use in (area / (distance ^ n)) as the weighting function (defaul
  * @returns Parameter dictionary
  */
 function cifti_resample_weighted_(
-    exponent: number | null,
+    exponent: number | null = null,
     legacy_cutoff: boolean = false,
 ): CiftiResampleWeightedParamsDictTagged_ {
     const params = {
@@ -476,7 +476,7 @@ the source volume used when generating the warpfield
  */
 function cifti_resample_warpfield(
     warpfield: string,
-    source_volume: string | null,
+    source_volume: string | null = null,
 ): CiftiResampleWarpfieldParamsDictTagged {
     const params = {
         "@type": "warpfield" as const,

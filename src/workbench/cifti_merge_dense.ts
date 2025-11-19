@@ -87,18 +87,18 @@ interface CiftiMergeDenseOutputs {
  * Build parameters.
  *
  * @param cifti_out the output cifti file
+ * @param direction which dimension to merge along, ROW or COLUMN
  * @param action how to handle conflicts between label keys
 
 'ERROR', 'FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
- * @param direction which dimension to merge along, ROW or COLUMN
  * @param cifti specify an input cifti file
  *
  * @returns Parameter dictionary
  */
 function cifti_merge_dense_params(
     cifti_out: string,
-    action: string | null,
     direction: string,
+    action: string | null = null,
     cifti: Array<CiftiMergeDenseCiftiParamsDict> | null = null,
 ): CiftiMergeDenseParamsDictTagged {
     const params = {
@@ -194,10 +194,10 @@ function cifti_merge_dense_execute(
  * The input cifti files must have matching mappings along the direction not specified, and the mapping along the specified direction must be brain models.
  *
  * @param cifti_out the output cifti file
+ * @param direction which dimension to merge along, ROW or COLUMN
  * @param action how to handle conflicts between label keys
 
 'ERROR', 'FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
- * @param direction which dimension to merge along, ROW or COLUMN
  * @param cifti specify an input cifti file
  * @param runner Command runner
  *
@@ -205,12 +205,12 @@ function cifti_merge_dense_execute(
  */
 function cifti_merge_dense(
     cifti_out: string,
-    action: string | null,
     direction: string,
+    action: string | null = null,
     cifti: Array<CiftiMergeDenseCiftiParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiMergeDenseOutputs {
-    const params = cifti_merge_dense_params(cifti_out, action, direction, cifti)
+    const params = cifti_merge_dense_params(cifti_out, direction, action, cifti)
     return cifti_merge_dense_execute(params, runner);
 }
 

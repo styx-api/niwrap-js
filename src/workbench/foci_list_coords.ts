@@ -35,18 +35,18 @@ interface FociListCoordsOutputs {
 /**
  * Build parameters.
  *
+ * @param foci_file input foci file
+ * @param coord_file_out output - the output coordinate text file
  * @param names_file_out output the foci names
 
 output - text file to put foci names in
- * @param foci_file input foci file
- * @param coord_file_out output - the output coordinate text file
  *
  * @returns Parameter dictionary
  */
 function foci_list_coords_params(
-    names_file_out: string | null,
     foci_file: InputPathType,
     coord_file_out: string,
+    names_file_out: string | null = null,
 ): FociListCoordsParamsDictTagged {
     const params = {
         "@type": "workbench/foci-list-coords" as const,
@@ -135,22 +135,22 @@ function foci_list_coords_execute(
  *
  * Output the coordinates for every focus in the foci file, and optionally the focus names in a second text file.
  *
+ * @param foci_file input foci file
+ * @param coord_file_out output - the output coordinate text file
  * @param names_file_out output the foci names
 
 output - text file to put foci names in
- * @param foci_file input foci file
- * @param coord_file_out output - the output coordinate text file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FociListCoordsOutputs`).
  */
 function foci_list_coords(
-    names_file_out: string | null,
     foci_file: InputPathType,
     coord_file_out: string,
+    names_file_out: string | null = null,
     runner: Runner | null = null,
 ): FociListCoordsOutputs {
-    const params = foci_list_coords_params(names_file_out, foci_file, coord_file_out)
+    const params = foci_list_coords_params(foci_file, coord_file_out, names_file_out)
     return foci_list_coords_execute(params, runner);
 }
 

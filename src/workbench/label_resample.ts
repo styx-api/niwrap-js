@@ -150,18 +150,18 @@ interface LabelResampleOutputs {
  * Build parameters.
  *
  * @param label_out the output label file
- * @param roi_metric use an input roi on the current mesh to exclude non-data vertices
-
-the roi, as a metric file
- * @param roi_out output the ROI of vertices that got data from valid source vertices
-
-the output roi as a metric
  * @param label_in the label file to resample
  * @param current_sphere a sphere surface with the mesh that the label file is currently on
  * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
  * @param method the method name
  * @param area_surfs specify surfaces to do vertex area correction based on
  * @param area_metrics specify vertex area metrics to do area correction based on
+ * @param roi_metric use an input roi on the current mesh to exclude non-data vertices
+
+the roi, as a metric file
+ * @param roi_out output the ROI of vertices that got data from valid source vertices
+
+the output roi as a metric
  * @param largest use only the label of the vertex with the largest weight
  * @param bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
  *
@@ -169,14 +169,14 @@ the output roi as a metric
  */
 function label_resample_params(
     label_out: string,
-    roi_metric: InputPathType | null,
-    roi_out: string | null,
     label_in: InputPathType,
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     method: string,
     area_surfs: LabelResampleAreaSurfsParamsDict | null = null,
     area_metrics: LabelResampleAreaMetricsParamsDict | null = null,
+    roi_metric: InputPathType | null = null,
+    roi_out: string | null = null,
     largest: boolean = false,
     bypass_sphere_check: boolean = false,
 ): LabelResampleParamsDictTagged {
@@ -316,18 +316,18 @@ function label_resample_execute(
  * .
  *
  * @param label_out the output label file
- * @param roi_metric use an input roi on the current mesh to exclude non-data vertices
-
-the roi, as a metric file
- * @param roi_out output the ROI of vertices that got data from valid source vertices
-
-the output roi as a metric
  * @param label_in the label file to resample
  * @param current_sphere a sphere surface with the mesh that the label file is currently on
  * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
  * @param method the method name
  * @param area_surfs specify surfaces to do vertex area correction based on
  * @param area_metrics specify vertex area metrics to do area correction based on
+ * @param roi_metric use an input roi on the current mesh to exclude non-data vertices
+
+the roi, as a metric file
+ * @param roi_out output the ROI of vertices that got data from valid source vertices
+
+the output roi as a metric
  * @param largest use only the label of the vertex with the largest weight
  * @param bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
  * @param runner Command runner
@@ -336,19 +336,19 @@ the output roi as a metric
  */
 function label_resample(
     label_out: string,
-    roi_metric: InputPathType | null,
-    roi_out: string | null,
     label_in: InputPathType,
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     method: string,
     area_surfs: LabelResampleAreaSurfsParamsDict | null = null,
     area_metrics: LabelResampleAreaMetricsParamsDict | null = null,
+    roi_metric: InputPathType | null = null,
+    roi_out: string | null = null,
     largest: boolean = false,
     bypass_sphere_check: boolean = false,
     runner: Runner | null = null,
 ): LabelResampleOutputs {
-    const params = label_resample_params(label_out, roi_metric, roi_out, label_in, current_sphere, new_sphere, method, area_surfs, area_metrics, largest, bypass_sphere_check)
+    const params = label_resample_params(label_out, label_in, current_sphere, new_sphere, method, area_surfs, area_metrics, roi_metric, roi_out, largest, bypass_sphere_check)
     return label_resample_execute(params, runner);
 }
 

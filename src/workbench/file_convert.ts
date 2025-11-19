@@ -63,7 +63,7 @@ function file_convert_border_version_convert(
     border_in: InputPathType,
     out_version: number,
     border_out: string,
-    surface: InputPathType | null,
+    surface: InputPathType | null = null,
 ): FileConvertBorderVersionConvertParamsDictTagged {
     const params = {
         "@type": "border-version-convert" as const,

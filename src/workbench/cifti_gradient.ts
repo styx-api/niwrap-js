@@ -73,7 +73,7 @@ the corrected vertex areas, as a metric
  */
 function cifti_gradient_left_surface(
     surface: InputPathType,
-    area_metric: InputPathType | null,
+    area_metric: InputPathType | null = null,
 ): CiftiGradientLeftSurfaceParamsDictTagged {
     const params = {
         "@type": "left-surface" as const,
@@ -123,7 +123,7 @@ the corrected vertex areas, as a metric
  */
 function cifti_gradient_right_surface(
     surface: InputPathType,
-    area_metric: InputPathType | null,
+    area_metric: InputPathType | null = null,
 ): CiftiGradientRightSurfaceParamsDictTagged {
     const params = {
         "@type": "right-surface" as const,
@@ -173,7 +173,7 @@ the corrected vertex areas, as a metric
  */
 function cifti_gradient_cerebellum_surface(
     surface: InputPathType,
-    area_metric: InputPathType | null,
+    area_metric: InputPathType | null = null,
 ): CiftiGradientCerebellumSurfaceParamsDictTagged {
     const params = {
         "@type": "cerebellum-surface" as const,
@@ -225,7 +225,7 @@ the corrected vertex areas, as a metric
 function cifti_gradient_surface(
     structure: string,
     surface: InputPathType,
-    area_metric: InputPathType | null,
+    area_metric: InputPathType | null = null,
 ): CiftiGradientSurfaceParamsDictTagged {
     const params = {
         "@type": "surface" as const,
@@ -286,38 +286,38 @@ interface CiftiGradientOutputs {
  * Build parameters.
  *
  * @param cifti_out the output cifti
+ * @param cifti the input cifti
+ * @param direction which dimension to take the gradient along, ROW or COLUMN
+ * @param left_surface specify the left surface to use
+ * @param right_surface specify the right surface to use
+ * @param cerebellum_surface specify the cerebellum surface to use
  * @param surface_kernel smooth on the surface before computing the gradient
 
 the size of the gaussian surface smoothing kernel in mm, as sigma by default
  * @param volume_kernel smooth on the surface before computing the gradient
 
 the size of the gaussian volume smoothing kernel in mm, as sigma by default
+ * @param presmooth_fwhm smoothing kernel sizes are FWHM, not sigma
+ * @param average_output output the average of the gradient magnitude maps instead of each gradient map separately
  * @param vectors_out output gradient vectors
 
 the vectors, as a dscalar file
- * @param cifti the input cifti
- * @param direction which dimension to take the gradient along, ROW or COLUMN
- * @param left_surface specify the left surface to use
- * @param right_surface specify the right surface to use
- * @param cerebellum_surface specify the cerebellum surface to use
- * @param presmooth_fwhm smoothing kernel sizes are FWHM, not sigma
- * @param average_output output the average of the gradient magnitude maps instead of each gradient map separately
  * @param surface specify a surface by structure name
  *
  * @returns Parameter dictionary
  */
 function cifti_gradient_params(
     cifti_out: string,
-    surface_kernel: number | null,
-    volume_kernel: number | null,
-    vectors_out: string | null,
     cifti: InputPathType,
     direction: string,
     left_surface: CiftiGradientLeftSurfaceParamsDict | null = null,
     right_surface: CiftiGradientRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiGradientCerebellumSurfaceParamsDict | null = null,
+    surface_kernel: number | null = null,
+    volume_kernel: number | null = null,
     presmooth_fwhm: boolean = false,
     average_output: boolean = false,
+    vectors_out: string | null = null,
     surface: Array<CiftiGradientSurfaceParamsDict> | null = null,
 ): CiftiGradientParamsDictTagged {
     const params = {
@@ -517,22 +517,22 @@ function cifti_gradient_execute(
  * THALAMUS_RIGHT.
  *
  * @param cifti_out the output cifti
+ * @param cifti the input cifti
+ * @param direction which dimension to take the gradient along, ROW or COLUMN
+ * @param left_surface specify the left surface to use
+ * @param right_surface specify the right surface to use
+ * @param cerebellum_surface specify the cerebellum surface to use
  * @param surface_kernel smooth on the surface before computing the gradient
 
 the size of the gaussian surface smoothing kernel in mm, as sigma by default
  * @param volume_kernel smooth on the surface before computing the gradient
 
 the size of the gaussian volume smoothing kernel in mm, as sigma by default
+ * @param presmooth_fwhm smoothing kernel sizes are FWHM, not sigma
+ * @param average_output output the average of the gradient magnitude maps instead of each gradient map separately
  * @param vectors_out output gradient vectors
 
 the vectors, as a dscalar file
- * @param cifti the input cifti
- * @param direction which dimension to take the gradient along, ROW or COLUMN
- * @param left_surface specify the left surface to use
- * @param right_surface specify the right surface to use
- * @param cerebellum_surface specify the cerebellum surface to use
- * @param presmooth_fwhm smoothing kernel sizes are FWHM, not sigma
- * @param average_output output the average of the gradient magnitude maps instead of each gradient map separately
  * @param surface specify a surface by structure name
  * @param runner Command runner
  *
@@ -540,20 +540,20 @@ the vectors, as a dscalar file
  */
 function cifti_gradient(
     cifti_out: string,
-    surface_kernel: number | null,
-    volume_kernel: number | null,
-    vectors_out: string | null,
     cifti: InputPathType,
     direction: string,
     left_surface: CiftiGradientLeftSurfaceParamsDict | null = null,
     right_surface: CiftiGradientRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiGradientCerebellumSurfaceParamsDict | null = null,
+    surface_kernel: number | null = null,
+    volume_kernel: number | null = null,
     presmooth_fwhm: boolean = false,
     average_output: boolean = false,
+    vectors_out: string | null = null,
     surface: Array<CiftiGradientSurfaceParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiGradientOutputs {
-    const params = cifti_gradient_params(cifti_out, surface_kernel, volume_kernel, vectors_out, cifti, direction, left_surface, right_surface, cerebellum_surface, presmooth_fwhm, average_output, surface)
+    const params = cifti_gradient_params(cifti_out, cifti, direction, left_surface, right_surface, cerebellum_surface, surface_kernel, volume_kernel, presmooth_fwhm, average_output, vectors_out, surface)
     return cifti_gradient_execute(params, runner);
 }
 

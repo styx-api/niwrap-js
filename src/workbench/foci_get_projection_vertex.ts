@@ -41,19 +41,19 @@ interface FociGetProjectionVertexOutputs {
  * Build parameters.
  *
  * @param metric_out the output metric file
+ * @param foci the foci file
+ * @param surface the surface related to the foci file
  * @param name select a focus by name
 
 the name of the focus
- * @param foci the foci file
- * @param surface the surface related to the foci file
  *
  * @returns Parameter dictionary
  */
 function foci_get_projection_vertex_params(
     metric_out: string,
-    name: string | null,
     foci: InputPathType,
     surface: InputPathType,
+    name: string | null = null,
 ): FociGetProjectionVertexParamsDictTagged {
     const params = {
         "@type": "workbench/foci-get-projection-vertex" as const,
@@ -146,23 +146,23 @@ function foci_get_projection_vertex_execute(
  * For each focus, a column is created in <metric-out>, and the vertex with the most influence on its projection is assigned a value of 1 in that column, with all other vertices 0.  If -name is used, only one focus will be used.
  *
  * @param metric_out the output metric file
+ * @param foci the foci file
+ * @param surface the surface related to the foci file
  * @param name select a focus by name
 
 the name of the focus
- * @param foci the foci file
- * @param surface the surface related to the foci file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FociGetProjectionVertexOutputs`).
  */
 function foci_get_projection_vertex(
     metric_out: string,
-    name: string | null,
     foci: InputPathType,
     surface: InputPathType,
+    name: string | null = null,
     runner: Runner | null = null,
 ): FociGetProjectionVertexOutputs {
-    const params = foci_get_projection_vertex_params(metric_out, name, foci, surface)
+    const params = foci_get_projection_vertex_params(metric_out, foci, surface, name)
     return foci_get_projection_vertex_execute(params, runner);
 }
 

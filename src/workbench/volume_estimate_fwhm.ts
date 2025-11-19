@@ -36,13 +36,13 @@ interface VolumeEstimateFwhmOutputs {
 /**
  * Build parameters.
  *
+ * @param volume the input volume
  * @param roivol use only data within an ROI
 
 the volume to use as an ROI
  * @param subvol select a single subvolume to estimate smoothness of
 
 the subvolume number or name
- * @param volume the input volume
  * @param demean estimate for the whole file at once, not each subvolume separately
 
 subtract the mean image before estimating smoothness
@@ -50,10 +50,10 @@ subtract the mean image before estimating smoothness
  * @returns Parameter dictionary
  */
 function volume_estimate_fwhm_params(
-    roivol: InputPathType | null,
-    subvol: string | null,
     volume: InputPathType,
-    demean: boolean | null = false,
+    roivol: InputPathType | null = null,
+    subvol: string | null = null,
+    demean: boolean | null = null,
 ): VolumeEstimateFwhmParamsDictTagged {
     const params = {
         "@type": "workbench/volume-estimate-fwhm" as const,
@@ -85,7 +85,7 @@ function volume_estimate_fwhm_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["roivol"] ?? null) !== null || (params["subvol"] ?? null) !== null || (params["demean"] ?? false) !== null) {
+    if ((params["roivol"] ?? null) !== null || (params["subvol"] ?? null) !== null || (params["demean"] ?? null) !== null) {
         cargs.push(
             "wb_command",
             "-volume-estimate-fwhm",
@@ -94,7 +94,7 @@ function volume_estimate_fwhm_cargs(
             "-subvolume",
             (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : ""),
             "-whole-file",
-            (((params["demean"] ?? false) !== null) ? "-demean" : "")
+            (((params["demean"] ?? null) !== null) ? "-demean" : "")
         );
     }
     cargs.push(execution.inputFile((params["volume"] ?? null)));
@@ -150,13 +150,13 @@ function volume_estimate_fwhm_execute(
  *
  * Estimates the smoothness of the input volume in X, Y, and Z directions separately, printing the estimates to standard output, in mm as FWHM.  If -subvolume or -whole-file are not specified, each subvolume is estimated and displayed separately.
  *
+ * @param volume the input volume
  * @param roivol use only data within an ROI
 
 the volume to use as an ROI
  * @param subvol select a single subvolume to estimate smoothness of
 
 the subvolume number or name
- * @param volume the input volume
  * @param demean estimate for the whole file at once, not each subvolume separately
 
 subtract the mean image before estimating smoothness
@@ -165,13 +165,13 @@ subtract the mean image before estimating smoothness
  * @returns NamedTuple of outputs (described in `VolumeEstimateFwhmOutputs`).
  */
 function volume_estimate_fwhm(
-    roivol: InputPathType | null,
-    subvol: string | null,
     volume: InputPathType,
-    demean: boolean | null = false,
+    roivol: InputPathType | null = null,
+    subvol: string | null = null,
+    demean: boolean | null = null,
     runner: Runner | null = null,
 ): VolumeEstimateFwhmOutputs {
-    const params = volume_estimate_fwhm_params(roivol, subvol, volume, demean)
+    const params = volume_estimate_fwhm_params(volume, roivol, subvol, demean)
     return volume_estimate_fwhm_execute(params, runner);
 }
 

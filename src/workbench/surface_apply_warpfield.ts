@@ -41,19 +41,19 @@ interface SurfaceApplyWarpfieldOutputs {
  * Build parameters.
  *
  * @param out_surf the output transformed surface
+ * @param in_surf the surface to transform
+ * @param warpfield the INVERSE warpfield
  * @param forward_warp MUST be used if using a fnirt warpfield
 
 the forward warpfield
- * @param in_surf the surface to transform
- * @param warpfield the INVERSE warpfield
  *
  * @returns Parameter dictionary
  */
 function surface_apply_warpfield_params(
     out_surf: string,
-    forward_warp: string | null,
     in_surf: InputPathType,
     warpfield: string,
+    forward_warp: string | null = null,
 ): SurfaceApplyWarpfieldParamsDictTagged {
     const params = {
         "@type": "workbench/surface-apply-warpfield" as const,
@@ -150,23 +150,23 @@ function surface_apply_warpfield_execute(
  * If the -fnirt option is not present, the warpfield must be a nifti 'world' warpfield, which can be obtained with the -convert-warpfield command.
  *
  * @param out_surf the output transformed surface
+ * @param in_surf the surface to transform
+ * @param warpfield the INVERSE warpfield
  * @param forward_warp MUST be used if using a fnirt warpfield
 
 the forward warpfield
- * @param in_surf the surface to transform
- * @param warpfield the INVERSE warpfield
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceApplyWarpfieldOutputs`).
  */
 function surface_apply_warpfield(
     out_surf: string,
-    forward_warp: string | null,
     in_surf: InputPathType,
     warpfield: string,
+    forward_warp: string | null = null,
     runner: Runner | null = null,
 ): SurfaceApplyWarpfieldOutputs {
-    const params = surface_apply_warpfield_params(out_surf, forward_warp, in_surf, warpfield)
+    const params = surface_apply_warpfield_params(out_surf, in_surf, warpfield, forward_warp)
     return surface_apply_warpfield_execute(params, runner);
 }
 

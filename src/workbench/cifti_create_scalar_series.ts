@@ -98,20 +98,20 @@ interface CiftiCreateScalarSeriesOutputs {
  * Build parameters.
  *
  * @param cifti_out output cifti file
+ * @param input input file
+ * @param transpose use if the rows of the text file are along the scalar dimension
  * @param file use a text file to set names on scalar dimension
 
 text file containing names, one per line
- * @param input input file
- * @param transpose use if the rows of the text file are along the scalar dimension
  * @param series set the units and values of the series
  *
  * @returns Parameter dictionary
  */
 function cifti_create_scalar_series_params(
     cifti_out: string,
-    file: string | null,
     input: string,
     transpose: boolean = false,
+    file: string | null = null,
     series: CiftiCreateScalarSeriesSeriesParamsDict | null = null,
 ): CiftiCreateScalarSeriesParamsDictTagged {
     const params = {
@@ -223,11 +223,11 @@ function cifti_create_scalar_series_execute(
  * RADIAN.
  *
  * @param cifti_out output cifti file
+ * @param input input file
+ * @param transpose use if the rows of the text file are along the scalar dimension
  * @param file use a text file to set names on scalar dimension
 
 text file containing names, one per line
- * @param input input file
- * @param transpose use if the rows of the text file are along the scalar dimension
  * @param series set the units and values of the series
  * @param runner Command runner
  *
@@ -235,13 +235,13 @@ text file containing names, one per line
  */
 function cifti_create_scalar_series(
     cifti_out: string,
-    file: string | null,
     input: string,
     transpose: boolean = false,
+    file: string | null = null,
     series: CiftiCreateScalarSeriesSeriesParamsDict | null = null,
     runner: Runner | null = null,
 ): CiftiCreateScalarSeriesOutputs {
-    const params = cifti_create_scalar_series_params(cifti_out, file, input, transpose, series)
+    const params = cifti_create_scalar_series_params(cifti_out, input, transpose, file, series)
     return cifti_create_scalar_series_execute(params, runner);
 }
 

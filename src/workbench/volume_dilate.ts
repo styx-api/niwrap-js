@@ -150,6 +150,9 @@ interface VolumeDilateOutputs {
  * Build parameters.
  *
  * @param volume_out the output volume
+ * @param volume the volume to dilate
+ * @param distance distance in mm to dilate
+ * @param method dilation method to use
  * @param exponent use a different exponent in the weighting function
 
 exponent 'n' to use in (1 / (distance ^ n)) as the weighting function (default 7)
@@ -162,9 +165,6 @@ volume file, positive values denote voxels that have data
  * @param subvol select a single subvolume to dilate
 
 the subvolume number or name
- * @param volume the volume to dilate
- * @param distance distance in mm to dilate
- * @param method dilation method to use
  * @param legacy_cutoff use the v1.3.2 method of excluding voxels further than the dilation distance when calculating the dilated value
  * @param grad_extrapolate additionally use the gradient to extrapolate, intended to be used with WEIGHTED
  *
@@ -172,13 +172,13 @@ the subvolume number or name
  */
 function volume_dilate_params(
     volume_out: string,
-    exponent: number | null,
-    roi_volume: InputPathType | null,
-    roi_volume_: InputPathType | null,
-    subvol: string | null,
     volume: InputPathType,
     distance: number,
     method: string,
+    exponent: number | null = null,
+    roi_volume: InputPathType | null = null,
+    roi_volume_: InputPathType | null = null,
+    subvol: string | null = null,
     legacy_cutoff: boolean = false,
     grad_extrapolate: VolumeDilateGradExtrapolateParamsDict | null = null,
 ): VolumeDilateParamsDictTagged {
@@ -314,6 +314,9 @@ function volume_dilate_execute(
  * WEIGHTED - use a weighted average based on distance.
  *
  * @param volume_out the output volume
+ * @param volume the volume to dilate
+ * @param distance distance in mm to dilate
+ * @param method dilation method to use
  * @param exponent use a different exponent in the weighting function
 
 exponent 'n' to use in (1 / (distance ^ n)) as the weighting function (default 7)
@@ -326,9 +329,6 @@ volume file, positive values denote voxels that have data
  * @param subvol select a single subvolume to dilate
 
 the subvolume number or name
- * @param volume the volume to dilate
- * @param distance distance in mm to dilate
- * @param method dilation method to use
  * @param legacy_cutoff use the v1.3.2 method of excluding voxels further than the dilation distance when calculating the dilated value
  * @param grad_extrapolate additionally use the gradient to extrapolate, intended to be used with WEIGHTED
  * @param runner Command runner
@@ -337,18 +337,18 @@ the subvolume number or name
  */
 function volume_dilate(
     volume_out: string,
-    exponent: number | null,
-    roi_volume: InputPathType | null,
-    roi_volume_: InputPathType | null,
-    subvol: string | null,
     volume: InputPathType,
     distance: number,
     method: string,
+    exponent: number | null = null,
+    roi_volume: InputPathType | null = null,
+    roi_volume_: InputPathType | null = null,
+    subvol: string | null = null,
     legacy_cutoff: boolean = false,
     grad_extrapolate: VolumeDilateGradExtrapolateParamsDict | null = null,
     runner: Runner | null = null,
 ): VolumeDilateOutputs {
-    const params = volume_dilate_params(volume_out, exponent, roi_volume, roi_volume_, subvol, volume, distance, method, legacy_cutoff, grad_extrapolate)
+    const params = volume_dilate_params(volume_out, volume, distance, method, exponent, roi_volume, roi_volume_, subvol, legacy_cutoff, grad_extrapolate)
     return volume_dilate_execute(params, runner);
 }
 

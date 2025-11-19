@@ -88,7 +88,7 @@ unit identifier
 function cifti_create_dense_from_template_series(
     step: number,
     start: number,
-    unit: string | null,
+    unit: string | null = null,
 ): CiftiCreateDenseFromTemplateSeriesParamsDictTagged {
     const params = {
         "@type": "series" as const,
@@ -368,12 +368,12 @@ interface CiftiCreateDenseFromTemplateOutputs {
  * Build parameters.
  *
  * @param cifti_out the output cifti file
- * @param action how to handle conflicts between label keys
-
-'ERROR', 'SURFACES_FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
  * @param template_cifti file to match brainordinates of
  * @param series make a dtseries file instead of a dscalar
  * @param volume_all specify an input volume file for all voxel data
+ * @param action how to handle conflicts between label keys
+
+'ERROR', 'SURFACES_FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
  * @param cifti use input data from a cifti file
  * @param metric use input data from a metric file
  * @param label use input data from surface label files
@@ -383,10 +383,10 @@ interface CiftiCreateDenseFromTemplateOutputs {
  */
 function cifti_create_dense_from_template_params(
     cifti_out: string,
-    action: string | null,
     template_cifti: InputPathType,
     series: CiftiCreateDenseFromTemplateSeriesParamsDict | null = null,
     volume_all: CiftiCreateDenseFromTemplateVolumeAllParamsDict | null = null,
+    action: string | null = null,
     cifti: Array<CiftiCreateDenseFromTemplateCiftiParamsDict> | null = null,
     metric: Array<CiftiCreateDenseFromTemplateMetricParamsDict> | null = null,
     label: Array<CiftiCreateDenseFromTemplateLabelParamsDict> | null = null,
@@ -599,12 +599,12 @@ function cifti_create_dense_from_template_execute(
  * RADIAN.
  *
  * @param cifti_out the output cifti file
- * @param action how to handle conflicts between label keys
-
-'ERROR', 'SURFACES_FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
  * @param template_cifti file to match brainordinates of
  * @param series make a dtseries file instead of a dscalar
  * @param volume_all specify an input volume file for all voxel data
+ * @param action how to handle conflicts between label keys
+
+'ERROR', 'SURFACES_FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
  * @param cifti use input data from a cifti file
  * @param metric use input data from a metric file
  * @param label use input data from surface label files
@@ -615,17 +615,17 @@ function cifti_create_dense_from_template_execute(
  */
 function cifti_create_dense_from_template(
     cifti_out: string,
-    action: string | null,
     template_cifti: InputPathType,
     series: CiftiCreateDenseFromTemplateSeriesParamsDict | null = null,
     volume_all: CiftiCreateDenseFromTemplateVolumeAllParamsDict | null = null,
+    action: string | null = null,
     cifti: Array<CiftiCreateDenseFromTemplateCiftiParamsDict> | null = null,
     metric: Array<CiftiCreateDenseFromTemplateMetricParamsDict> | null = null,
     label: Array<CiftiCreateDenseFromTemplateLabelParamsDict> | null = null,
     volume: Array<CiftiCreateDenseFromTemplateVolumeParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiCreateDenseFromTemplateOutputs {
-    const params = cifti_create_dense_from_template_params(cifti_out, action, template_cifti, series, volume_all, cifti, metric, label, volume)
+    const params = cifti_create_dense_from_template_params(cifti_out, template_cifti, series, volume_all, action, cifti, metric, label, volume)
     return cifti_create_dense_from_template_execute(params, runner);
 }
 

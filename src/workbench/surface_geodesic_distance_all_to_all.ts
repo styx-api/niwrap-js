@@ -43,6 +43,7 @@ interface SurfaceGeodesicDistanceAllToAllOutputs {
  * Build parameters.
  *
  * @param cifti_out single-hemisphere dconn containing the distances
+ * @param surface the surface to compute on
  * @param roi_metric only output distances for vertices inside an ROI
 
 the ROI as a metric file
@@ -52,17 +53,16 @@ distance in mm to stop at
  * @param area_metric vertex areas to use to correct the distances on a group-average surface
 
 the corrected vertex areas, as a metric
- * @param surface the surface to compute on
  * @param naive use only neighbors, don't crawl triangles (not recommended)
  *
  * @returns Parameter dictionary
  */
 function surface_geodesic_distance_all_to_all_params(
     cifti_out: string,
-    roi_metric: InputPathType | null,
-    limit_mm: number | null,
-    area_metric: InputPathType | null,
     surface: InputPathType,
+    roi_metric: InputPathType | null = null,
+    limit_mm: number | null = null,
+    area_metric: InputPathType | null = null,
     naive: boolean = false,
 ): SurfaceGeodesicDistanceAllToAllParamsDictTagged {
     const params = {
@@ -178,6 +178,7 @@ function surface_geodesic_distance_all_to_all_execute(
  * If -naive is not specified, the algorithm uses not just immediate neighbors, but also neighbors derived from crawling across pairs of triangles that share an edge.
  *
  * @param cifti_out single-hemisphere dconn containing the distances
+ * @param surface the surface to compute on
  * @param roi_metric only output distances for vertices inside an ROI
 
 the ROI as a metric file
@@ -187,7 +188,6 @@ distance in mm to stop at
  * @param area_metric vertex areas to use to correct the distances on a group-average surface
 
 the corrected vertex areas, as a metric
- * @param surface the surface to compute on
  * @param naive use only neighbors, don't crawl triangles (not recommended)
  * @param runner Command runner
  *
@@ -195,14 +195,14 @@ the corrected vertex areas, as a metric
  */
 function surface_geodesic_distance_all_to_all(
     cifti_out: string,
-    roi_metric: InputPathType | null,
-    limit_mm: number | null,
-    area_metric: InputPathType | null,
     surface: InputPathType,
+    roi_metric: InputPathType | null = null,
+    limit_mm: number | null = null,
+    area_metric: InputPathType | null = null,
     naive: boolean = false,
     runner: Runner | null = null,
 ): SurfaceGeodesicDistanceAllToAllOutputs {
-    const params = surface_geodesic_distance_all_to_all_params(cifti_out, roi_metric, limit_mm, area_metric, surface, naive)
+    const params = surface_geodesic_distance_all_to_all_params(cifti_out, surface, roi_metric, limit_mm, area_metric, naive)
     return surface_geodesic_distance_all_to_all_execute(params, runner);
 }
 

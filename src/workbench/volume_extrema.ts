@@ -152,35 +152,35 @@ interface VolumeExtremaOutputs {
  * Build parameters.
  *
  * @param volume_out the output extrema volume
- * @param roi_volume ignore values outside the selected area
-
-the area to find extrema in
- * @param subvolume select a single subvolume to find extrema in
-
-the subvolume number or name
  * @param volume_in volume file to find the extrema of
  * @param distance the minimum distance between identified extrema of the same type
  * @param presmooth smooth the volume before finding extrema
+ * @param roi_volume ignore values outside the selected area
+
+the area to find extrema in
  * @param threshold ignore small extrema
  * @param sum_subvols output the sum of the extrema subvolumes instead of each subvolume separately
  * @param consolidate_mode use consolidation of local minima instead of a large neighborhood
  * @param only_maxima only find the maxima
  * @param only_minima only find the minima
+ * @param subvolume select a single subvolume to find extrema in
+
+the subvolume number or name
  *
  * @returns Parameter dictionary
  */
 function volume_extrema_params(
     volume_out: string,
-    roi_volume: InputPathType | null,
-    subvolume: string | null,
     volume_in: InputPathType,
     distance: number,
     presmooth: VolumeExtremaPresmoothParamsDict | null = null,
+    roi_volume: InputPathType | null = null,
     threshold: VolumeExtremaThresholdParamsDict | null = null,
     sum_subvols: boolean = false,
     consolidate_mode: boolean = false,
     only_maxima: boolean = false,
     only_minima: boolean = false,
+    subvolume: string | null = null,
 ): VolumeExtremaParamsDictTagged {
     const params = {
         "@type": "workbench/volume-extrema" as const,
@@ -306,39 +306,39 @@ function volume_extrema_execute(
  * By default, all input subvolumes are used with no smoothing, use -subvolume to specify a single subvolume to use, and -presmooth to smooth the input before finding the extrema.
  *
  * @param volume_out the output extrema volume
- * @param roi_volume ignore values outside the selected area
-
-the area to find extrema in
- * @param subvolume select a single subvolume to find extrema in
-
-the subvolume number or name
  * @param volume_in volume file to find the extrema of
  * @param distance the minimum distance between identified extrema of the same type
  * @param presmooth smooth the volume before finding extrema
+ * @param roi_volume ignore values outside the selected area
+
+the area to find extrema in
  * @param threshold ignore small extrema
  * @param sum_subvols output the sum of the extrema subvolumes instead of each subvolume separately
  * @param consolidate_mode use consolidation of local minima instead of a large neighborhood
  * @param only_maxima only find the maxima
  * @param only_minima only find the minima
+ * @param subvolume select a single subvolume to find extrema in
+
+the subvolume number or name
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeExtremaOutputs`).
  */
 function volume_extrema(
     volume_out: string,
-    roi_volume: InputPathType | null,
-    subvolume: string | null,
     volume_in: InputPathType,
     distance: number,
     presmooth: VolumeExtremaPresmoothParamsDict | null = null,
+    roi_volume: InputPathType | null = null,
     threshold: VolumeExtremaThresholdParamsDict | null = null,
     sum_subvols: boolean = false,
     consolidate_mode: boolean = false,
     only_maxima: boolean = false,
     only_minima: boolean = false,
+    subvolume: string | null = null,
     runner: Runner | null = null,
 ): VolumeExtremaOutputs {
-    const params = volume_extrema_params(volume_out, roi_volume, subvolume, volume_in, distance, presmooth, threshold, sum_subvols, consolidate_mode, only_maxima, only_minima)
+    const params = volume_extrema_params(volume_out, volume_in, distance, presmooth, roi_volume, threshold, sum_subvols, consolidate_mode, only_maxima, only_minima, subvolume)
     return volume_extrema_execute(params, runner);
 }
 

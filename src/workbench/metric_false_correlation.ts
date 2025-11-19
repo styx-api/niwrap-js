@@ -45,29 +45,29 @@ interface MetricFalseCorrelationOutputs {
  * Build parameters.
  *
  * @param metric_out the output metric
+ * @param surface the surface to compute geodesic and 3D distance with
+ * @param metric_in the metric to correlate
+ * @param v_3_d_dist maximum 3D distance to check around each vertex
+ * @param geo_outer maximum geodesic distance to use for neighboring correlation
+ * @param geo_inner minimum geodesic distance to use for neighboring correlation
  * @param roi_metric select a region of interest that has data
 
 the region, as a metric file
  * @param text_out dump the raw measures used to a text file
 
 the output text file
- * @param surface the surface to compute geodesic and 3D distance with
- * @param metric_in the metric to correlate
- * @param v_3_d_dist maximum 3D distance to check around each vertex
- * @param geo_outer maximum geodesic distance to use for neighboring correlation
- * @param geo_inner minimum geodesic distance to use for neighboring correlation
  *
  * @returns Parameter dictionary
  */
 function metric_false_correlation_params(
     metric_out: string,
-    roi_metric: InputPathType | null,
-    text_out: string | null,
     surface: InputPathType,
     metric_in: InputPathType,
     v_3_d_dist: number,
     geo_outer: number,
     geo_inner: number,
+    roi_metric: InputPathType | null = null,
+    text_out: string | null = null,
 ): MetricFalseCorrelationParamsDictTagged {
     const params = {
         "@type": "workbench/metric-false-correlation" as const,
@@ -171,33 +171,33 @@ function metric_false_correlation_execute(
  * For each vertex, compute the average correlation within a range of geodesic distances that don't cross a sulcus/gyrus, and the correlation to the closest vertex crossing a sulcus/gyrus.  A vertex is considered to cross a sulcus/gyrus if the 3D distance is less than a third of the geodesic distance.  The output file contains the ratio between these correlations, and some additional maps to help explain the ratio.
  *
  * @param metric_out the output metric
+ * @param surface the surface to compute geodesic and 3D distance with
+ * @param metric_in the metric to correlate
+ * @param v_3_d_dist maximum 3D distance to check around each vertex
+ * @param geo_outer maximum geodesic distance to use for neighboring correlation
+ * @param geo_inner minimum geodesic distance to use for neighboring correlation
  * @param roi_metric select a region of interest that has data
 
 the region, as a metric file
  * @param text_out dump the raw measures used to a text file
 
 the output text file
- * @param surface the surface to compute geodesic and 3D distance with
- * @param metric_in the metric to correlate
- * @param v_3_d_dist maximum 3D distance to check around each vertex
- * @param geo_outer maximum geodesic distance to use for neighboring correlation
- * @param geo_inner minimum geodesic distance to use for neighboring correlation
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricFalseCorrelationOutputs`).
  */
 function metric_false_correlation(
     metric_out: string,
-    roi_metric: InputPathType | null,
-    text_out: string | null,
     surface: InputPathType,
     metric_in: InputPathType,
     v_3_d_dist: number,
     geo_outer: number,
     geo_inner: number,
+    roi_metric: InputPathType | null = null,
+    text_out: string | null = null,
     runner: Runner | null = null,
 ): MetricFalseCorrelationOutputs {
-    const params = metric_false_correlation_params(metric_out, roi_metric, text_out, surface, metric_in, v_3_d_dist, geo_outer, geo_inner)
+    const params = metric_false_correlation_params(metric_out, surface, metric_in, v_3_d_dist, geo_outer, geo_inner, roi_metric, text_out)
     return metric_false_correlation_execute(params, runner);
 }
 

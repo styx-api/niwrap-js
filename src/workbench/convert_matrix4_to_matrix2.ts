@@ -148,18 +148,18 @@ interface ConvertMatrix4ToMatrix2Outputs {
  * Build parameters.
  *
  * @param counts_out the total fiber counts, as a cifti file
+ * @param matrix4_wbsparse a wbsparse matrix4 file
  * @param distance_out output average trajectory distance
 
 the distances, as a cifti file
- * @param matrix4_wbsparse a wbsparse matrix4 file
  * @param individual_fibers output files for each fiber direction
  *
  * @returns Parameter dictionary
  */
 function convert_matrix4_to_matrix2_params(
     counts_out: string,
-    distance_out: string | null,
     matrix4_wbsparse: string,
+    distance_out: string | null = null,
     individual_fibers: ConvertMatrix4ToMatrix2IndividualFibersParamsDict | null = null,
 ): ConvertMatrix4ToMatrix2ParamsDictTagged {
     const params = {
@@ -256,10 +256,10 @@ function convert_matrix4_to_matrix2_execute(
  * This command makes a cifti file from the fiber counts in a matrix4 wbsparse file, and optionally a second cifti file from the distances.  Note that while the total count is stored exactly, the per-fiber counts are stored as approximate fractions, so the output of -individual-fibers will contain nonintegers.
  *
  * @param counts_out the total fiber counts, as a cifti file
+ * @param matrix4_wbsparse a wbsparse matrix4 file
  * @param distance_out output average trajectory distance
 
 the distances, as a cifti file
- * @param matrix4_wbsparse a wbsparse matrix4 file
  * @param individual_fibers output files for each fiber direction
  * @param runner Command runner
  *
@@ -267,12 +267,12 @@ the distances, as a cifti file
  */
 function convert_matrix4_to_matrix2(
     counts_out: string,
-    distance_out: string | null,
     matrix4_wbsparse: string,
+    distance_out: string | null = null,
     individual_fibers: ConvertMatrix4ToMatrix2IndividualFibersParamsDict | null = null,
     runner: Runner | null = null,
 ): ConvertMatrix4ToMatrix2Outputs {
-    const params = convert_matrix4_to_matrix2_params(counts_out, distance_out, matrix4_wbsparse, individual_fibers)
+    const params = convert_matrix4_to_matrix2_params(counts_out, matrix4_wbsparse, distance_out, individual_fibers)
     return convert_matrix4_to_matrix2_execute(params, runner);
 }
 

@@ -44,27 +44,27 @@ interface CiftiLabelImportOutputs {
  * Build parameters.
  *
  * @param output the output cifti label file
- * @param value set the value that will be interpreted as unlabeled
-
-the numeric value for unlabeled (default 0)
- * @param file read label name hierarchy from a json file
-
-the input json file
  * @param input the input cifti file
  * @param label_list_file text file containing the values and names for labels
  * @param discard_others set any values not mentioned in the label list to the ??? label
+ * @param value set the value that will be interpreted as unlabeled
+
+the numeric value for unlabeled (default 0)
  * @param drop_unused_labels remove any unused label values from the label table
+ * @param file read label name hierarchy from a json file
+
+the input json file
  *
  * @returns Parameter dictionary
  */
 function cifti_label_import_params(
     output: string,
-    value: number | null,
-    file: string | null,
     input: InputPathType,
     label_list_file: string,
     discard_others: boolean = false,
+    value: number | null = null,
     drop_unused_labels: boolean = false,
+    file: string | null = null,
 ): CiftiLabelImportParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-label-import" as const,
@@ -182,31 +182,31 @@ function cifti_label_import_execute(
  * By default, it will create new label names with names like LABEL_5 for any values encountered that are not mentioned in the list file, specify -discard-others to instead set these values to the "unlabeled" key.
  *
  * @param output the output cifti label file
- * @param value set the value that will be interpreted as unlabeled
-
-the numeric value for unlabeled (default 0)
- * @param file read label name hierarchy from a json file
-
-the input json file
  * @param input the input cifti file
  * @param label_list_file text file containing the values and names for labels
  * @param discard_others set any values not mentioned in the label list to the ??? label
+ * @param value set the value that will be interpreted as unlabeled
+
+the numeric value for unlabeled (default 0)
  * @param drop_unused_labels remove any unused label values from the label table
+ * @param file read label name hierarchy from a json file
+
+the input json file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiLabelImportOutputs`).
  */
 function cifti_label_import(
     output: string,
-    value: number | null,
-    file: string | null,
     input: InputPathType,
     label_list_file: string,
     discard_others: boolean = false,
+    value: number | null = null,
     drop_unused_labels: boolean = false,
+    file: string | null = null,
     runner: Runner | null = null,
 ): CiftiLabelImportOutputs {
-    const params = cifti_label_import_params(output, value, file, input, label_list_file, discard_others, drop_unused_labels)
+    const params = cifti_label_import_params(output, input, label_list_file, discard_others, value, drop_unused_labels, file)
     return cifti_label_import_execute(params, runner);
 }
 

@@ -91,27 +91,27 @@ interface ConvertMatrix4ToWorkbenchSparseOutputs {
 /**
  * Build parameters.
  *
- * @param seed_roi specify the surface seed space
-
-metric roi file of all vertices used in the seed space
  * @param matrix4_1 the first matrix4 file
  * @param matrix4_2 the second matrix4 file
  * @param matrix4_3 the third matrix4 file
  * @param orientation_file the .fiberTEMP.nii file this trajectory file applies to
  * @param voxel_list list of white matter voxel index triplets as used in the trajectory matrix
  * @param wb_sparse_out output - the output workbench sparse file
+ * @param seed_roi specify the surface seed space
+
+metric roi file of all vertices used in the seed space
  * @param volume_seeds specify the volume seed space
  *
  * @returns Parameter dictionary
  */
 function convert_matrix4_to_workbench_sparse_params(
-    seed_roi: InputPathType | null,
     matrix4_1: string,
     matrix4_2: string,
     matrix4_3: string,
     orientation_file: InputPathType,
     voxel_list: string,
     wb_sparse_out: string,
+    seed_roi: InputPathType | null = null,
     volume_seeds: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParamsDict | null = null,
 ): ConvertMatrix4ToWorkbenchSparseParamsDictTagged {
     const params = {
@@ -213,32 +213,32 @@ function convert_matrix4_to_workbench_sparse_execute(
  *
  * Converts the matrix 4 output of probtrackx to workbench sparse file format.  Exactly one of -surface-seeds and -volume-seeds must be specified.
  *
- * @param seed_roi specify the surface seed space
-
-metric roi file of all vertices used in the seed space
  * @param matrix4_1 the first matrix4 file
  * @param matrix4_2 the second matrix4 file
  * @param matrix4_3 the third matrix4 file
  * @param orientation_file the .fiberTEMP.nii file this trajectory file applies to
  * @param voxel_list list of white matter voxel index triplets as used in the trajectory matrix
  * @param wb_sparse_out output - the output workbench sparse file
+ * @param seed_roi specify the surface seed space
+
+metric roi file of all vertices used in the seed space
  * @param volume_seeds specify the volume seed space
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConvertMatrix4ToWorkbenchSparseOutputs`).
  */
 function convert_matrix4_to_workbench_sparse(
-    seed_roi: InputPathType | null,
     matrix4_1: string,
     matrix4_2: string,
     matrix4_3: string,
     orientation_file: InputPathType,
     voxel_list: string,
     wb_sparse_out: string,
+    seed_roi: InputPathType | null = null,
     volume_seeds: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParamsDict | null = null,
     runner: Runner | null = null,
 ): ConvertMatrix4ToWorkbenchSparseOutputs {
-    const params = convert_matrix4_to_workbench_sparse_params(seed_roi, matrix4_1, matrix4_2, matrix4_3, orientation_file, voxel_list, wb_sparse_out, volume_seeds)
+    const params = convert_matrix4_to_workbench_sparse_params(matrix4_1, matrix4_2, matrix4_3, orientation_file, voxel_list, wb_sparse_out, seed_roi, volume_seeds)
     return convert_matrix4_to_workbench_sparse_execute(params, runner);
 }
 

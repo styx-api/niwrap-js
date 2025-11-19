@@ -149,31 +149,31 @@ interface MetricTfceOutputs {
  * Build parameters.
  *
  * @param metric_out the output metric
+ * @param surface the surface to compute on
+ * @param metric_in the metric to run TFCE on
+ * @param presmooth smooth the metric before running TFCE
  * @param roi_metric select a region of interest to run TFCE on
 
 the area to run TFCE on, as a metric
+ * @param parameters set parameters for TFCE integral
  * @param column select a single column
 
 the column number or name
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
- * @param surface the surface to compute on
- * @param metric_in the metric to run TFCE on
- * @param presmooth smooth the metric before running TFCE
- * @param parameters set parameters for TFCE integral
  *
  * @returns Parameter dictionary
  */
 function metric_tfce_params(
     metric_out: string,
-    roi_metric: InputPathType | null,
-    column: string | null,
-    area_metric: InputPathType | null,
     surface: InputPathType,
     metric_in: InputPathType,
     presmooth: MetricTfcePresmoothParamsDict | null = null,
+    roi_metric: InputPathType | null = null,
     parameters: MetricTfceParametersParamsDict | null = null,
+    column: string | null = null,
+    area_metric: InputPathType | null = null,
 ): MetricTfceParamsDictTagged {
     const params = {
         "@type": "workbench/metric-tfce" as const,
@@ -304,35 +304,35 @@ function metric_tfce_execute(
  * The TFCE method is explained in: Smith SM, Nichols TE., "Threshold-free cluster enhancement: addressing problems of smoothing, threshold dependence and localisation in cluster inference." Neuroimage. 2009 Jan 1;44(1):83-98. PMID: 18501637.
  *
  * @param metric_out the output metric
+ * @param surface the surface to compute on
+ * @param metric_in the metric to run TFCE on
+ * @param presmooth smooth the metric before running TFCE
  * @param roi_metric select a region of interest to run TFCE on
 
 the area to run TFCE on, as a metric
+ * @param parameters set parameters for TFCE integral
  * @param column select a single column
 
 the column number or name
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
- * @param surface the surface to compute on
- * @param metric_in the metric to run TFCE on
- * @param presmooth smooth the metric before running TFCE
- * @param parameters set parameters for TFCE integral
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricTfceOutputs`).
  */
 function metric_tfce(
     metric_out: string,
-    roi_metric: InputPathType | null,
-    column: string | null,
-    area_metric: InputPathType | null,
     surface: InputPathType,
     metric_in: InputPathType,
     presmooth: MetricTfcePresmoothParamsDict | null = null,
+    roi_metric: InputPathType | null = null,
     parameters: MetricTfceParametersParamsDict | null = null,
+    column: string | null = null,
+    area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricTfceOutputs {
-    const params = metric_tfce_params(metric_out, roi_metric, column, area_metric, surface, metric_in, presmooth, parameters)
+    const params = metric_tfce_params(metric_out, surface, metric_in, presmooth, roi_metric, parameters, column, area_metric)
     return metric_tfce_execute(params, runner);
 }
 

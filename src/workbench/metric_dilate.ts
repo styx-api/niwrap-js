@@ -49,6 +49,9 @@ interface MetricDilateOutputs {
  * Build parameters.
  *
  * @param metric_out the output metric
+ * @param metric the metric to dilate
+ * @param surface the surface to compute on
+ * @param distance distance in mm to dilate
  * @param roi_metric specify an roi of vertices to overwrite, rather than vertices with value zero
 
 metric file, positive values denote vertices to have their values replaced
@@ -58,33 +61,30 @@ metric file, positive values denote vertices that have data
  * @param column select a single column to dilate
 
 the column number or name
+ * @param nearest use the nearest good value instead of a weighted average
+ * @param linear fill in values with linear interpolation along strongest gradient
  * @param exponent use a different exponent in the weighting function
 
 exponent 'n' to use in (area / (distance ^ n)) as the weighting function (default 6)
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
- * @param metric the metric to dilate
- * @param surface the surface to compute on
- * @param distance distance in mm to dilate
- * @param nearest use the nearest good value instead of a weighted average
- * @param linear fill in values with linear interpolation along strongest gradient
  * @param legacy_cutoff use the v1.3.2 method of choosing how many vertices to use when calulating the dilated value with weighted method
  *
  * @returns Parameter dictionary
  */
 function metric_dilate_params(
     metric_out: string,
-    roi_metric: InputPathType | null,
-    roi_metric_: InputPathType | null,
-    column: string | null,
-    exponent: number | null,
-    area_metric: InputPathType | null,
     metric: InputPathType,
     surface: InputPathType,
     distance: number,
+    roi_metric: InputPathType | null = null,
+    roi_metric_: InputPathType | null = null,
+    column: string | null = null,
     nearest: boolean = false,
     linear: boolean = false,
+    exponent: number | null = null,
+    area_metric: InputPathType | null = null,
     legacy_cutoff: boolean = false,
 ): MetricDilateParamsDictTagged {
     const params = {
@@ -218,6 +218,9 @@ function metric_dilate_execute(
  * To get the behavior of version 1.3.2 or earlier, use '-legacy-cutoff -exponent 2'.
  *
  * @param metric_out the output metric
+ * @param metric the metric to dilate
+ * @param surface the surface to compute on
+ * @param distance distance in mm to dilate
  * @param roi_metric specify an roi of vertices to overwrite, rather than vertices with value zero
 
 metric file, positive values denote vertices to have their values replaced
@@ -227,17 +230,14 @@ metric file, positive values denote vertices that have data
  * @param column select a single column to dilate
 
 the column number or name
+ * @param nearest use the nearest good value instead of a weighted average
+ * @param linear fill in values with linear interpolation along strongest gradient
  * @param exponent use a different exponent in the weighting function
 
 exponent 'n' to use in (area / (distance ^ n)) as the weighting function (default 6)
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
- * @param metric the metric to dilate
- * @param surface the surface to compute on
- * @param distance distance in mm to dilate
- * @param nearest use the nearest good value instead of a weighted average
- * @param linear fill in values with linear interpolation along strongest gradient
  * @param legacy_cutoff use the v1.3.2 method of choosing how many vertices to use when calulating the dilated value with weighted method
  * @param runner Command runner
  *
@@ -245,20 +245,20 @@ the corrected vertex areas, as a metric
  */
 function metric_dilate(
     metric_out: string,
-    roi_metric: InputPathType | null,
-    roi_metric_: InputPathType | null,
-    column: string | null,
-    exponent: number | null,
-    area_metric: InputPathType | null,
     metric: InputPathType,
     surface: InputPathType,
     distance: number,
+    roi_metric: InputPathType | null = null,
+    roi_metric_: InputPathType | null = null,
+    column: string | null = null,
     nearest: boolean = false,
     linear: boolean = false,
+    exponent: number | null = null,
+    area_metric: InputPathType | null = null,
     legacy_cutoff: boolean = false,
     runner: Runner | null = null,
 ): MetricDilateOutputs {
-    const params = metric_dilate_params(metric_out, roi_metric, roi_metric_, column, exponent, area_metric, metric, surface, distance, nearest, linear, legacy_cutoff)
+    const params = metric_dilate_params(metric_out, metric, surface, distance, roi_metric, roi_metric_, column, nearest, linear, exponent, area_metric, legacy_cutoff)
     return metric_dilate_execute(params, runner);
 }
 

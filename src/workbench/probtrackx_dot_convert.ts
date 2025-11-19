@@ -251,16 +251,16 @@ interface ProbtrackxDotConvertOutputs {
  * Build parameters.
  *
  * @param cifti_out output cifti file
+ * @param dot_file input .dot file
+ * @param row_voxels the output mapping along a row will be voxels
  * @param roi_metric the output mapping along a row will be surface vertices
 
 a metric file with positive values on all vertices used
+ * @param row_cifti take the mapping along a row from a cifti file
+ * @param col_voxels the output mapping along a column will be voxels
  * @param roi_metric_ the output mapping along a column will be surface vertices
 
 a metric file with positive values on all vertices used
- * @param dot_file input .dot file
- * @param row_voxels the output mapping along a row will be voxels
- * @param row_cifti take the mapping along a row from a cifti file
- * @param col_voxels the output mapping along a column will be voxels
  * @param col_cifti take the mapping along a column from a cifti file
  * @param transpose transpose the input matrix
  * @param make_symmetric transform half-square input into full matrix output
@@ -269,12 +269,12 @@ a metric file with positive values on all vertices used
  */
 function probtrackx_dot_convert_params(
     cifti_out: string,
-    roi_metric: InputPathType | null,
-    roi_metric_: InputPathType | null,
     dot_file: string,
     row_voxels: ProbtrackxDotConvertRowVoxelsParamsDict | null = null,
+    roi_metric: InputPathType | null = null,
     row_cifti: ProbtrackxDotConvertRowCiftiParamsDict | null = null,
     col_voxels: ProbtrackxDotConvertColVoxelsParamsDict | null = null,
+    roi_metric_: InputPathType | null = null,
     col_cifti: ProbtrackxDotConvertColCiftiParamsDict | null = null,
     transpose: boolean = false,
     make_symmetric: boolean = false,
@@ -471,16 +471,16 @@ function probtrackx_dot_convert_execute(
  * THALAMUS_RIGHT.
  *
  * @param cifti_out output cifti file
+ * @param dot_file input .dot file
+ * @param row_voxels the output mapping along a row will be voxels
  * @param roi_metric the output mapping along a row will be surface vertices
 
 a metric file with positive values on all vertices used
+ * @param row_cifti take the mapping along a row from a cifti file
+ * @param col_voxels the output mapping along a column will be voxels
  * @param roi_metric_ the output mapping along a column will be surface vertices
 
 a metric file with positive values on all vertices used
- * @param dot_file input .dot file
- * @param row_voxels the output mapping along a row will be voxels
- * @param row_cifti take the mapping along a row from a cifti file
- * @param col_voxels the output mapping along a column will be voxels
  * @param col_cifti take the mapping along a column from a cifti file
  * @param transpose transpose the input matrix
  * @param make_symmetric transform half-square input into full matrix output
@@ -490,18 +490,18 @@ a metric file with positive values on all vertices used
  */
 function probtrackx_dot_convert(
     cifti_out: string,
-    roi_metric: InputPathType | null,
-    roi_metric_: InputPathType | null,
     dot_file: string,
     row_voxels: ProbtrackxDotConvertRowVoxelsParamsDict | null = null,
+    roi_metric: InputPathType | null = null,
     row_cifti: ProbtrackxDotConvertRowCiftiParamsDict | null = null,
     col_voxels: ProbtrackxDotConvertColVoxelsParamsDict | null = null,
+    roi_metric_: InputPathType | null = null,
     col_cifti: ProbtrackxDotConvertColCiftiParamsDict | null = null,
     transpose: boolean = false,
     make_symmetric: boolean = false,
     runner: Runner | null = null,
 ): ProbtrackxDotConvertOutputs {
-    const params = probtrackx_dot_convert_params(cifti_out, roi_metric, roi_metric_, dot_file, row_voxels, row_cifti, col_voxels, col_cifti, transpose, make_symmetric)
+    const params = probtrackx_dot_convert_params(cifti_out, dot_file, row_voxels, roi_metric, row_cifti, col_voxels, roi_metric_, col_cifti, transpose, make_symmetric)
     return probtrackx_dot_convert_execute(params, runner);
 }
 

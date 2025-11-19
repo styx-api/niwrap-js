@@ -37,20 +37,20 @@ interface BorderLengthOutputs {
 /**
  * Build parameters.
  *
+ * @param border the input border file
+ * @param surface the surface to measure the borders on
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
- * @param border the input border file
- * @param surface the surface to measure the borders on
  * @param separate_pieces report lengths for multi-part borders as separate numbers
  * @param hide_border_name don't print border name before each output
  *
  * @returns Parameter dictionary
  */
 function border_length_params(
-    area_metric: InputPathType | null,
     border: InputPathType,
     surface: InputPathType,
+    area_metric: InputPathType | null = null,
     separate_pieces: boolean = false,
     hide_border_name: boolean = false,
 ): BorderLengthParamsDictTagged {
@@ -149,11 +149,11 @@ function border_length_execute(
  *
  * The -corrected-areas option is intended for when the length is not meaningfully measurable on individual surfaces, it is only an approximate correction for the reduction in structure of a group average surface.
  *
+ * @param border the input border file
+ * @param surface the surface to measure the borders on
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
- * @param border the input border file
- * @param surface the surface to measure the borders on
  * @param separate_pieces report lengths for multi-part borders as separate numbers
  * @param hide_border_name don't print border name before each output
  * @param runner Command runner
@@ -161,14 +161,14 @@ the corrected vertex areas, as a metric
  * @returns NamedTuple of outputs (described in `BorderLengthOutputs`).
  */
 function border_length(
-    area_metric: InputPathType | null,
     border: InputPathType,
     surface: InputPathType,
+    area_metric: InputPathType | null = null,
     separate_pieces: boolean = false,
     hide_border_name: boolean = false,
     runner: Runner | null = null,
 ): BorderLengthOutputs {
-    const params = border_length_params(area_metric, border, surface, separate_pieces, hide_border_name)
+    const params = border_length_params(border, surface, area_metric, separate_pieces, hide_border_name)
     return border_length_execute(params, runner);
 }
 

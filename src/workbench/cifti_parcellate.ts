@@ -74,12 +74,12 @@ metric file containing cerebellum vertex weights
  * @returns Parameter dictionary
  */
 function cifti_parcellate_spatial_weights(
-    left_surf: InputPathType | null,
-    right_surf: InputPathType | null,
-    cerebellum_surf: InputPathType | null,
-    left_metric: InputPathType | null,
-    right_metric: InputPathType | null,
-    cerebellum_metric: InputPathType | null,
+    left_surf: InputPathType | null = null,
+    right_surf: InputPathType | null = null,
+    cerebellum_surf: InputPathType | null = null,
+    left_metric: InputPathType | null = null,
+    right_metric: InputPathType | null = null,
+    cerebellum_metric: InputPathType | null = null,
 ): CiftiParcellateSpatialWeightsParamsDictTagged {
     const params = {
         "@type": "spatial-weights" as const,
@@ -204,24 +204,24 @@ interface CiftiParcellateOutputs {
  * Build parameters.
  *
  * @param cifti_out output cifti file
+ * @param cifti_in the cifti file to parcellate
+ * @param cifti_label a cifti label file to use for the parcellation
+ * @param direction which mapping to parcellate (integer, ROW, or COLUMN)
+ * @param spatial_weights use voxel volume and either vertex areas or metric files as weights
  * @param weight_cifti use a cifti file containing weights
 
 the weights to use, as a cifti file
  * @param method specify method of parcellation (default MEAN, or MODE if label data)
 
 the method to use to assign parcel values from the values of member brainordinates
+ * @param exclude_outliers exclude non-numeric values and outliers from each parcel by standard deviation
+ * @param only_numeric exclude non-numeric values
  * @param value specify value to use in empty parcels (default 0)
 
 the value to fill empty parcels with
  * @param mask_out output a matching pscalar file that has 0s in empty parcels, and 1s elsewhere
 
 the output mask file
- * @param cifti_in the cifti file to parcellate
- * @param cifti_label a cifti label file to use for the parcellation
- * @param direction which mapping to parcellate (integer, ROW, or COLUMN)
- * @param spatial_weights use voxel volume and either vertex areas or metric files as weights
- * @param exclude_outliers exclude non-numeric values and outliers from each parcel by standard deviation
- * @param only_numeric exclude non-numeric values
  * @param legacy_mode use the old behavior, parcels are defined by the intersection between labels and valid data, and empty parcels are discarded
  * @param include_empty deprecated: now the default behavior
  *
@@ -229,16 +229,16 @@ the output mask file
  */
 function cifti_parcellate_params(
     cifti_out: string,
-    weight_cifti: InputPathType | null,
-    method: string | null,
-    value: number | null,
-    mask_out: string | null,
     cifti_in: InputPathType,
     cifti_label: InputPathType,
     direction: string,
     spatial_weights: CiftiParcellateSpatialWeightsParamsDict | null = null,
+    weight_cifti: InputPathType | null = null,
+    method: string | null = null,
     exclude_outliers: CiftiParcellateExcludeOutliersParamsDict | null = null,
     only_numeric: boolean = false,
+    value: number | null = null,
+    mask_out: string | null = null,
     legacy_mode: boolean = false,
     include_empty: boolean = false,
 ): CiftiParcellateParamsDictTagged {
@@ -410,24 +410,24 @@ function cifti_parcellate_execute(
  * The -*-weights options are mutually exclusive and may only be used with MEAN (default), SUM, STDEV, SAMPSTDEV, VARIANCE, MEDIAN, or MODE (default for label data).
  *
  * @param cifti_out output cifti file
+ * @param cifti_in the cifti file to parcellate
+ * @param cifti_label a cifti label file to use for the parcellation
+ * @param direction which mapping to parcellate (integer, ROW, or COLUMN)
+ * @param spatial_weights use voxel volume and either vertex areas or metric files as weights
  * @param weight_cifti use a cifti file containing weights
 
 the weights to use, as a cifti file
  * @param method specify method of parcellation (default MEAN, or MODE if label data)
 
 the method to use to assign parcel values from the values of member brainordinates
+ * @param exclude_outliers exclude non-numeric values and outliers from each parcel by standard deviation
+ * @param only_numeric exclude non-numeric values
  * @param value specify value to use in empty parcels (default 0)
 
 the value to fill empty parcels with
  * @param mask_out output a matching pscalar file that has 0s in empty parcels, and 1s elsewhere
 
 the output mask file
- * @param cifti_in the cifti file to parcellate
- * @param cifti_label a cifti label file to use for the parcellation
- * @param direction which mapping to parcellate (integer, ROW, or COLUMN)
- * @param spatial_weights use voxel volume and either vertex areas or metric files as weights
- * @param exclude_outliers exclude non-numeric values and outliers from each parcel by standard deviation
- * @param only_numeric exclude non-numeric values
  * @param legacy_mode use the old behavior, parcels are defined by the intersection between labels and valid data, and empty parcels are discarded
  * @param include_empty deprecated: now the default behavior
  * @param runner Command runner
@@ -436,21 +436,21 @@ the output mask file
  */
 function cifti_parcellate(
     cifti_out: string,
-    weight_cifti: InputPathType | null,
-    method: string | null,
-    value: number | null,
-    mask_out: string | null,
     cifti_in: InputPathType,
     cifti_label: InputPathType,
     direction: string,
     spatial_weights: CiftiParcellateSpatialWeightsParamsDict | null = null,
+    weight_cifti: InputPathType | null = null,
+    method: string | null = null,
     exclude_outliers: CiftiParcellateExcludeOutliersParamsDict | null = null,
     only_numeric: boolean = false,
+    value: number | null = null,
+    mask_out: string | null = null,
     legacy_mode: boolean = false,
     include_empty: boolean = false,
     runner: Runner | null = null,
 ): CiftiParcellateOutputs {
-    const params = cifti_parcellate_params(cifti_out, weight_cifti, method, value, mask_out, cifti_in, cifti_label, direction, spatial_weights, exclude_outliers, only_numeric, legacy_mode, include_empty)
+    const params = cifti_parcellate_params(cifti_out, cifti_in, cifti_label, direction, spatial_weights, weight_cifti, method, exclude_outliers, only_numeric, value, mask_out, legacy_mode, include_empty)
     return cifti_parcellate_execute(params, runner);
 }
 

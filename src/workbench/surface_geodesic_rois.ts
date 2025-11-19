@@ -45,6 +45,9 @@ interface SurfaceGeodesicRoisOutputs {
  * Build parameters.
  *
  * @param metric_out the output metric
+ * @param surface the surface to draw on
+ * @param limit geodesic distance limit from vertex, in mm
+ * @param vertex_list_file a text file containing the vertices to draw ROIs around
  * @param sigma generate a gaussian kernel instead of a flat ROI
 
 the sigma for the gaussian kernel, in mm
@@ -57,21 +60,18 @@ a text file containing column names, one per line
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
- * @param surface the surface to draw on
- * @param limit geodesic distance limit from vertex, in mm
- * @param vertex_list_file a text file containing the vertices to draw ROIs around
  *
  * @returns Parameter dictionary
  */
 function surface_geodesic_rois_params(
     metric_out: string,
-    sigma: number | null,
-    method: string | null,
-    name_list_file: string | null,
-    area_metric: InputPathType | null,
     surface: InputPathType,
     limit: number,
     vertex_list_file: string,
+    sigma: number | null = null,
+    method: string | null = null,
+    name_list_file: string | null = null,
+    area_metric: InputPathType | null = null,
 ): SurfaceGeodesicRoisParamsDictTagged {
     const params = {
         "@type": "workbench/surface-geodesic-rois" as const,
@@ -181,6 +181,9 @@ function surface_geodesic_rois_execute(
  * For each vertex in the list file, a column in the output metric is created, and an ROI around that vertex is drawn in that column.  Each metric column will have zeros outside the geodesic distance spacified by <limit>, and by default will have a value of 1.0 inside it.  If the -gaussian option is specified, the values inside the ROI will instead form a gaussian with the specified value of sigma, normalized so that the sum of the nonzero values in the metric column is 1.0.  The <method> argument to -overlap-logic must be one of ALLOW, CLOSEST, or EXCLUDE.  ALLOW is the default, and means that ROIs are treated independently and may overlap.  CLOSEST means that ROIs may not overlap, and that no ROI contains vertices that are closer to a different seed vertex.  EXCLUDE means that ROIs may not overlap, and that any vertex within range of more than one ROI does not belong to any ROI.
  *
  * @param metric_out the output metric
+ * @param surface the surface to draw on
+ * @param limit geodesic distance limit from vertex, in mm
+ * @param vertex_list_file a text file containing the vertices to draw ROIs around
  * @param sigma generate a gaussian kernel instead of a flat ROI
 
 the sigma for the gaussian kernel, in mm
@@ -193,25 +196,22 @@ a text file containing column names, one per line
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
- * @param surface the surface to draw on
- * @param limit geodesic distance limit from vertex, in mm
- * @param vertex_list_file a text file containing the vertices to draw ROIs around
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceGeodesicRoisOutputs`).
  */
 function surface_geodesic_rois(
     metric_out: string,
-    sigma: number | null,
-    method: string | null,
-    name_list_file: string | null,
-    area_metric: InputPathType | null,
     surface: InputPathType,
     limit: number,
     vertex_list_file: string,
+    sigma: number | null = null,
+    method: string | null = null,
+    name_list_file: string | null = null,
+    area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): SurfaceGeodesicRoisOutputs {
-    const params = surface_geodesic_rois_params(metric_out, sigma, method, name_list_file, area_metric, surface, limit, vertex_list_file)
+    const params = surface_geodesic_rois_params(metric_out, surface, limit, vertex_list_file, sigma, method, name_list_file, area_metric)
     return surface_geodesic_rois_execute(params, runner);
 }
 

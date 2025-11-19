@@ -41,19 +41,19 @@ interface SurfaceToSurface3dDistanceOutputs {
  * Build parameters.
  *
  * @param dists_out the output distances
+ * @param surface_comp the surface to compare to the reference
+ * @param surface_ref the surface to use as the reference
  * @param vectors_out output the displacement vectors
 
 the output vectors
- * @param surface_comp the surface to compare to the reference
- * @param surface_ref the surface to use as the reference
  *
  * @returns Parameter dictionary
  */
 function surface_to_surface_3d_distance_params(
     dists_out: string,
-    vectors_out: string | null,
     surface_comp: InputPathType,
     surface_ref: InputPathType,
+    vectors_out: string | null = null,
 ): SurfaceToSurface3dDistanceParamsDictTagged {
     const params = {
         "@type": "workbench/surface-to-surface-3d-distance" as const,
@@ -146,23 +146,23 @@ function surface_to_surface_3d_distance_execute(
  * Computes the vector difference between the vertices of each surface with the same index, as (comp - ref), and output the magnitudes, and optionally the displacement vectors.
  *
  * @param dists_out the output distances
+ * @param surface_comp the surface to compare to the reference
+ * @param surface_ref the surface to use as the reference
  * @param vectors_out output the displacement vectors
 
 the output vectors
- * @param surface_comp the surface to compare to the reference
- * @param surface_ref the surface to use as the reference
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceToSurface3dDistanceOutputs`).
  */
 function surface_to_surface_3d_distance(
     dists_out: string,
-    vectors_out: string | null,
     surface_comp: InputPathType,
     surface_ref: InputPathType,
+    vectors_out: string | null = null,
     runner: Runner | null = null,
 ): SurfaceToSurface3dDistanceOutputs {
-    const params = surface_to_surface_3d_distance_params(dists_out, vectors_out, surface_comp, surface_ref)
+    const params = surface_to_surface_3d_distance_params(dists_out, surface_comp, surface_ref, vectors_out)
     return surface_to_surface_3d_distance_execute(params, runner);
 }
 

@@ -258,6 +258,15 @@ interface SceneCaptureImageOutputs {
 /**
  * Build parameters.
  *
+ * @param scene_file scene file
+ * @param scene_name_or_number name or number (starting at one) of the scene in the scene file
+ * @param image_file_name output - image file name
+   The file name must end with a valid extension that identifies the image file format.  Valid extensions on this system are: (.bmp .jpeg .jpg .png .ppm).
+
+   If there is more than one window in the scene, multiple image files are output with the window's number inserted into the name of the image file immediately before the image file's extension.
+ * @param size_window Output image is size of window's graphics region from when scene was created.
+ * @param size_capture Output image uses size from Capture Dialog when scene was created
+ * @param size_width_height Width and height for output image
  * @param width Width for output image.  Height is computed using the aspect ratio from the window's width and height saved in the scene.
 
 Width for output image
@@ -274,51 +283,42 @@ Name of units for image width/height.  Valid units are:
    METERS
    PIXELS
 
+ * @param resolution Image resolution (number pixels per size unit)
+      Default is 300 PIXELS_PER_INCH
  * @param size Add a margin to sides of the image using the window's background color.
 
 size of margin, in pixels, added to all sides of output image
+ * @param no_scene_colors Do not use background and foreground colors in scene
+ * @param set_map_yoke Override selected map index for a map yoking group.
+ * @param conn_db_login Login for scenes with files in Connectome Database.  If this option is not specified, the login and password stored in the user's preferences is used.
+ * @param show_capture_settings Print settings from Capture Dialog only, DO NOT create image file(s)
  * @param renderer Select renderer for drawing image
 
 Name of renderer to use for drawing image
    Available renderers are (first is default):
    OSMesa - Mesa3D OSMesa software renderer
 
- * @param scene_file scene file
- * @param scene_name_or_number name or number (starting at one) of the scene in the scene file
- * @param image_file_name output - image file name
-   The file name must end with a valid extension that identifies the image file format.  Valid extensions on this system are: (.bmp .jpeg .jpg .png .ppm).
-
-   If there is more than one window in the scene, multiple image files are output with the window's number inserted into the name of the image file immediately before the image file's extension.
- * @param size_window Output image is size of window's graphics region from when scene was created.
- * @param size_capture Output image uses size from Capture Dialog when scene was created
- * @param size_width_height Width and height for output image
- * @param resolution Image resolution (number pixels per size unit)
-      Default is 300 PIXELS_PER_INCH
- * @param no_scene_colors Do not use background and foreground colors in scene
- * @param set_map_yoke Override selected map index for a map yoking group.
- * @param conn_db_login Login for scenes with files in Connectome Database.  If this option is not specified, the login and password stored in the user's preferences is used.
- * @param show_capture_settings Print settings from Capture Dialog only, DO NOT create image file(s)
  * @param print_image_info Print the size and other information about output images only and DO NOT create any output images
  *
  * @returns Parameter dictionary
  */
 function scene_capture_image_params(
-    width: number | null,
-    height: number | null,
-    units: string | null,
-    size: number | null,
-    renderer: string | null,
     scene_file: string,
     scene_name_or_number: string,
     image_file_name: string,
     size_window: boolean = false,
     size_capture: boolean = false,
     size_width_height: SceneCaptureImageSizeWidthHeightParamsDict | null = null,
+    width: number | null = null,
+    height: number | null = null,
+    units: string | null = null,
     resolution: SceneCaptureImageResolutionParamsDict | null = null,
+    size: number | null = null,
     no_scene_colors: boolean = false,
     set_map_yoke: SceneCaptureImageSetMapYokeParamsDict | null = null,
     conn_db_login: SceneCaptureImageConnDbLoginParamsDict | null = null,
     show_capture_settings: boolean = false,
+    renderer: string | null = null,
     print_image_info: boolean = false,
 ): SceneCaptureImageParamsDictTagged {
     const params = {
@@ -510,6 +510,15 @@ function scene_capture_image_execute(
  *
  * .
  *
+ * @param scene_file scene file
+ * @param scene_name_or_number name or number (starting at one) of the scene in the scene file
+ * @param image_file_name output - image file name
+   The file name must end with a valid extension that identifies the image file format.  Valid extensions on this system are: (.bmp .jpeg .jpg .png .ppm).
+
+   If there is more than one window in the scene, multiple image files are output with the window's number inserted into the name of the image file immediately before the image file's extension.
+ * @param size_window Output image is size of window's graphics region from when scene was created.
+ * @param size_capture Output image uses size from Capture Dialog when scene was created
+ * @param size_width_height Width and height for output image
  * @param width Width for output image.  Height is computed using the aspect ratio from the window's width and height saved in the scene.
 
 Width for output image
@@ -526,56 +535,47 @@ Name of units for image width/height.  Valid units are:
    METERS
    PIXELS
 
+ * @param resolution Image resolution (number pixels per size unit)
+      Default is 300 PIXELS_PER_INCH
  * @param size Add a margin to sides of the image using the window's background color.
 
 size of margin, in pixels, added to all sides of output image
+ * @param no_scene_colors Do not use background and foreground colors in scene
+ * @param set_map_yoke Override selected map index for a map yoking group.
+ * @param conn_db_login Login for scenes with files in Connectome Database.  If this option is not specified, the login and password stored in the user's preferences is used.
+ * @param show_capture_settings Print settings from Capture Dialog only, DO NOT create image file(s)
  * @param renderer Select renderer for drawing image
 
 Name of renderer to use for drawing image
    Available renderers are (first is default):
    OSMesa - Mesa3D OSMesa software renderer
 
- * @param scene_file scene file
- * @param scene_name_or_number name or number (starting at one) of the scene in the scene file
- * @param image_file_name output - image file name
-   The file name must end with a valid extension that identifies the image file format.  Valid extensions on this system are: (.bmp .jpeg .jpg .png .ppm).
-
-   If there is more than one window in the scene, multiple image files are output with the window's number inserted into the name of the image file immediately before the image file's extension.
- * @param size_window Output image is size of window's graphics region from when scene was created.
- * @param size_capture Output image uses size from Capture Dialog when scene was created
- * @param size_width_height Width and height for output image
- * @param resolution Image resolution (number pixels per size unit)
-      Default is 300 PIXELS_PER_INCH
- * @param no_scene_colors Do not use background and foreground colors in scene
- * @param set_map_yoke Override selected map index for a map yoking group.
- * @param conn_db_login Login for scenes with files in Connectome Database.  If this option is not specified, the login and password stored in the user's preferences is used.
- * @param show_capture_settings Print settings from Capture Dialog only, DO NOT create image file(s)
  * @param print_image_info Print the size and other information about output images only and DO NOT create any output images
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SceneCaptureImageOutputs`).
  */
 function scene_capture_image(
-    width: number | null,
-    height: number | null,
-    units: string | null,
-    size: number | null,
-    renderer: string | null,
     scene_file: string,
     scene_name_or_number: string,
     image_file_name: string,
     size_window: boolean = false,
     size_capture: boolean = false,
     size_width_height: SceneCaptureImageSizeWidthHeightParamsDict | null = null,
+    width: number | null = null,
+    height: number | null = null,
+    units: string | null = null,
     resolution: SceneCaptureImageResolutionParamsDict | null = null,
+    size: number | null = null,
     no_scene_colors: boolean = false,
     set_map_yoke: SceneCaptureImageSetMapYokeParamsDict | null = null,
     conn_db_login: SceneCaptureImageConnDbLoginParamsDict | null = null,
     show_capture_settings: boolean = false,
+    renderer: string | null = null,
     print_image_info: boolean = false,
     runner: Runner | null = null,
 ): SceneCaptureImageOutputs {
-    const params = scene_capture_image_params(width, height, units, size, renderer, scene_file, scene_name_or_number, image_file_name, size_window, size_capture, size_width_height, resolution, no_scene_colors, set_map_yoke, conn_db_login, show_capture_settings, print_image_info)
+    const params = scene_capture_image_params(scene_file, scene_name_or_number, image_file_name, size_window, size_capture, size_width_height, width, height, units, resolution, size, no_scene_colors, set_map_yoke, conn_db_login, show_capture_settings, renderer, print_image_info)
     return scene_capture_image_execute(params, runner);
 }
 

@@ -38,22 +38,22 @@ interface ZipSceneFileOutputs {
 /**
  * Build parameters.
  *
- * @param directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure
-
-the directory
  * @param scene_file the scene file to make the zip file from
  * @param extract_folder the name of the folder created when the zip file is unzipped
  * @param zip_file out - the zip file that will be created
+ * @param directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure
+
+the directory
  * @param skip_missing any missing files will generate only warnings, and the zip file will be created anyway
  * @param write_scene_file rewrite the scene file before zipping, to store a new base path or fix extra '..'s in paths that might break
  *
  * @returns Parameter dictionary
  */
 function zip_scene_file_params(
-    directory: string | null,
     scene_file: string,
     extract_folder: string,
     zip_file: string,
+    directory: string | null = null,
     skip_missing: boolean = false,
     write_scene_file: boolean = false,
 ): ZipSceneFileParamsDictTagged {
@@ -150,12 +150,12 @@ function zip_scene_file_execute(
  *
  * If zip-file already exists, it will be overwritten.  If -base-dir is not specified, the base directory will be automatically set to the lowest level directory containing all files.  The scene file must contain only relative paths, and no data files may be outside the base directory.
  *
- * @param directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure
-
-the directory
  * @param scene_file the scene file to make the zip file from
  * @param extract_folder the name of the folder created when the zip file is unzipped
  * @param zip_file out - the zip file that will be created
+ * @param directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure
+
+the directory
  * @param skip_missing any missing files will generate only warnings, and the zip file will be created anyway
  * @param write_scene_file rewrite the scene file before zipping, to store a new base path or fix extra '..'s in paths that might break
  * @param runner Command runner
@@ -163,15 +163,15 @@ the directory
  * @returns NamedTuple of outputs (described in `ZipSceneFileOutputs`).
  */
 function zip_scene_file(
-    directory: string | null,
     scene_file: string,
     extract_folder: string,
     zip_file: string,
+    directory: string | null = null,
     skip_missing: boolean = false,
     write_scene_file: boolean = false,
     runner: Runner | null = null,
 ): ZipSceneFileOutputs {
-    const params = zip_scene_file_params(directory, scene_file, extract_folder, zip_file, skip_missing, write_scene_file)
+    const params = zip_scene_file_params(scene_file, extract_folder, zip_file, directory, skip_missing, write_scene_file)
     return zip_scene_file_execute(params, runner);
 }
 

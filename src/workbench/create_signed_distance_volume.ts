@@ -46,6 +46,8 @@ interface CreateSignedDistanceVolumeOutputs {
  * Build parameters.
  *
  * @param outvol the output volume
+ * @param surface the input surface
+ * @param refspace a volume in the desired output space (dims, spacing, origin)
  * @param roi_vol output an roi volume of where the output has a computed value
 
 the output roi volume
@@ -64,21 +66,19 @@ size of neighborhood cube measured from center to face, in voxels (default 2 = 5
  * @param method winding method for point inside surface test
 
 name of the method (default EVEN_ODD)
- * @param surface the input surface
- * @param refspace a volume in the desired output space (dims, spacing, origin)
  *
  * @returns Parameter dictionary
  */
 function create_signed_distance_volume_params(
     outvol: string,
-    roi_vol: string | null,
-    value: number | null,
-    dist: number | null,
-    dist_: number | null,
-    num: number | null,
-    method: string | null,
     surface: InputPathType,
     refspace: string,
+    roi_vol: string | null = null,
+    value: number | null = null,
+    dist: number | null = null,
+    dist_: number | null = null,
+    num: number | null = null,
+    method: string | null = null,
 ): CreateSignedDistanceVolumeParamsDictTagged {
     const params = {
         "@type": "workbench/create-signed-distance-volume" as const,
@@ -210,6 +210,8 @@ function create_signed_distance_volume_execute(
  * The NORMALS method uses the normals of triangles and edges, or the closest triangle hit by a ray from the point.  This method may be slightly faster, but is only reliable for a closed surface that does not cross through itself.  All other methods count entry (positive) and exit (negative) crossings of a vertical ray from the point, then counts as inside if the total is odd, negative, or nonzero, respectively.
  *
  * @param outvol the output volume
+ * @param surface the input surface
+ * @param refspace a volume in the desired output space (dims, spacing, origin)
  * @param roi_vol output an roi volume of where the output has a computed value
 
 the output roi volume
@@ -228,25 +230,23 @@ size of neighborhood cube measured from center to face, in voxels (default 2 = 5
  * @param method winding method for point inside surface test
 
 name of the method (default EVEN_ODD)
- * @param surface the input surface
- * @param refspace a volume in the desired output space (dims, spacing, origin)
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CreateSignedDistanceVolumeOutputs`).
  */
 function create_signed_distance_volume(
     outvol: string,
-    roi_vol: string | null,
-    value: number | null,
-    dist: number | null,
-    dist_: number | null,
-    num: number | null,
-    method: string | null,
     surface: InputPathType,
     refspace: string,
+    roi_vol: string | null = null,
+    value: number | null = null,
+    dist: number | null = null,
+    dist_: number | null = null,
+    num: number | null = null,
+    method: string | null = null,
     runner: Runner | null = null,
 ): CreateSignedDistanceVolumeOutputs {
-    const params = create_signed_distance_volume_params(outvol, roi_vol, value, dist, dist_, num, method, surface, refspace)
+    const params = create_signed_distance_volume_params(outvol, surface, refspace, roi_vol, value, dist, dist_, num, method)
     return create_signed_distance_volume_execute(params, runner);
 }
 

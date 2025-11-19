@@ -45,27 +45,27 @@ interface VolumeParcelResamplingOutputs {
  * Build parameters.
  *
  * @param volume_out output volume
- * @param subvol select a single subvolume as input
-
-the subvolume number or name
  * @param volume_in the input data volume
  * @param cur_parcels label volume of where the parcels currently are
  * @param new_parcels label volume of where the parcels should be
  * @param kernel gaussian kernel size in mm to smooth by during resampling, as sigma by default
  * @param fix_zeros treat zero values as not being data
  * @param fwhm smoothing kernel size is FWHM, not sigma
+ * @param subvol select a single subvolume as input
+
+the subvolume number or name
  *
  * @returns Parameter dictionary
  */
 function volume_parcel_resampling_params(
     volume_out: string,
-    subvol: string | null,
     volume_in: InputPathType,
     cur_parcels: InputPathType,
     new_parcels: InputPathType,
     kernel: number,
     fix_zeros: boolean = false,
     fwhm: boolean = false,
+    subvol: string | null = null,
 ): VolumeParcelResamplingParamsDictTagged {
     const params = {
         "@type": "workbench/volume-parcel-resampling" as const,
@@ -170,31 +170,31 @@ function volume_parcel_resampling_execute(
  * Note: all volumes must have the same dimensions and spacing.  To use a different output space, see -volume-parcel-resampling-generic.
  *
  * @param volume_out output volume
- * @param subvol select a single subvolume as input
-
-the subvolume number or name
  * @param volume_in the input data volume
  * @param cur_parcels label volume of where the parcels currently are
  * @param new_parcels label volume of where the parcels should be
  * @param kernel gaussian kernel size in mm to smooth by during resampling, as sigma by default
  * @param fix_zeros treat zero values as not being data
  * @param fwhm smoothing kernel size is FWHM, not sigma
+ * @param subvol select a single subvolume as input
+
+the subvolume number or name
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeParcelResamplingOutputs`).
  */
 function volume_parcel_resampling(
     volume_out: string,
-    subvol: string | null,
     volume_in: InputPathType,
     cur_parcels: InputPathType,
     new_parcels: InputPathType,
     kernel: number,
     fix_zeros: boolean = false,
     fwhm: boolean = false,
+    subvol: string | null = null,
     runner: Runner | null = null,
 ): VolumeParcelResamplingOutputs {
-    const params = volume_parcel_resampling_params(volume_out, subvol, volume_in, cur_parcels, new_parcels, kernel, fix_zeros, fwhm)
+    const params = volume_parcel_resampling_params(volume_out, volume_in, cur_parcels, new_parcels, kernel, fix_zeros, fwhm, subvol)
     return volume_parcel_resampling_execute(params, runner);
 }
 

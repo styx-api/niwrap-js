@@ -41,19 +41,19 @@ interface SignedDistanceToSurfaceOutputs {
  * Build parameters.
  *
  * @param metric the output metric
+ * @param surface_comp the comparison surface to measure the signed distance on
+ * @param surface_ref the reference surface that defines the signed distance function
  * @param method winding method for point inside surface test
 
 name of the method (default EVEN_ODD)
- * @param surface_comp the comparison surface to measure the signed distance on
- * @param surface_ref the reference surface that defines the signed distance function
  *
  * @returns Parameter dictionary
  */
 function signed_distance_to_surface_params(
     metric: string,
-    method: string | null,
     surface_comp: InputPathType,
     surface_ref: InputPathType,
+    method: string | null = null,
 ): SignedDistanceToSurfaceParamsDictTagged {
     const params = {
         "@type": "workbench/signed-distance-to-surface" as const,
@@ -160,23 +160,23 @@ function signed_distance_to_surface_execute(
  * The NORMALS method uses the normals of triangles and edges, or the closest triangle hit by a ray from the point.  This method may be slightly faster, but is only reliable for a closed surface that does not cross through itself.  All other methods count entry (positive) and exit (negative) crossings of a vertical ray from the point, then counts as inside if the total is odd, negative, or nonzero, respectively.
  *
  * @param metric the output metric
+ * @param surface_comp the comparison surface to measure the signed distance on
+ * @param surface_ref the reference surface that defines the signed distance function
  * @param method winding method for point inside surface test
 
 name of the method (default EVEN_ODD)
- * @param surface_comp the comparison surface to measure the signed distance on
- * @param surface_ref the reference surface that defines the signed distance function
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SignedDistanceToSurfaceOutputs`).
  */
 function signed_distance_to_surface(
     metric: string,
-    method: string | null,
     surface_comp: InputPathType,
     surface_ref: InputPathType,
+    method: string | null = null,
     runner: Runner | null = null,
 ): SignedDistanceToSurfaceOutputs {
-    const params = signed_distance_to_surface_params(metric, method, surface_comp, surface_ref)
+    const params = signed_distance_to_surface_params(metric, surface_comp, surface_ref, method)
     return signed_distance_to_surface_execute(params, runner);
 }
 

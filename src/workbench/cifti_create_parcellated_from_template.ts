@@ -88,20 +88,20 @@ interface CiftiCreateParcellatedFromTemplateOutputs {
  * Build parameters.
  *
  * @param cifti_out the output cifti file
+ * @param cifti_template a cifti file with the template parcel mapping along column
+ * @param modify_direction which dimension of the output file should match the template (integer, 'ROW', or 'COLUMN')
  * @param value specify value to be used in parcels that don't match
 
 value to use (default 0)
- * @param cifti_template a cifti file with the template parcel mapping along column
- * @param modify_direction which dimension of the output file should match the template (integer, 'ROW', or 'COLUMN')
  * @param cifti specify an input cifti file
  *
  * @returns Parameter dictionary
  */
 function cifti_create_parcellated_from_template_params(
     cifti_out: string,
-    value: number | null,
     cifti_template: InputPathType,
     modify_direction: string,
+    value: number | null = null,
     cifti: Array<CiftiCreateParcellatedFromTemplateCiftiParamsDict> | null = null,
 ): CiftiCreateParcellatedFromTemplateParamsDictTagged {
     const params = {
@@ -199,11 +199,11 @@ function cifti_create_parcellated_from_template_execute(
  * For each parcel name in the template mapping, find that name in an input cifti file and use its data in the output file.  All input cifti files must have a parcels mapping along <modify-direction> and matching mappings along other dimensions.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.
  *
  * @param cifti_out the output cifti file
+ * @param cifti_template a cifti file with the template parcel mapping along column
+ * @param modify_direction which dimension of the output file should match the template (integer, 'ROW', or 'COLUMN')
  * @param value specify value to be used in parcels that don't match
 
 value to use (default 0)
- * @param cifti_template a cifti file with the template parcel mapping along column
- * @param modify_direction which dimension of the output file should match the template (integer, 'ROW', or 'COLUMN')
  * @param cifti specify an input cifti file
  * @param runner Command runner
  *
@@ -211,13 +211,13 @@ value to use (default 0)
  */
 function cifti_create_parcellated_from_template(
     cifti_out: string,
-    value: number | null,
     cifti_template: InputPathType,
     modify_direction: string,
+    value: number | null = null,
     cifti: Array<CiftiCreateParcellatedFromTemplateCiftiParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiCreateParcellatedFromTemplateOutputs {
-    const params = cifti_create_parcellated_from_template_params(cifti_out, value, cifti_template, modify_direction, cifti)
+    const params = cifti_create_parcellated_from_template_params(cifti_out, cifti_template, modify_direction, value, cifti)
     return cifti_create_parcellated_from_template_execute(params, runner);
 }
 

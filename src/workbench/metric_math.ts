@@ -45,7 +45,7 @@ the column number or name
 function metric_math_var(
     name: string,
     metric: InputPathType,
-    column: string | null,
+    column: string | null = null,
     repeat: boolean = false,
 ): MetricMathVarParamsDictTagged {
     const params = {
@@ -109,18 +109,18 @@ interface MetricMathOutputs {
  * Build parameters.
  *
  * @param metric_out the output metric
+ * @param expression the expression to evaluate, in quotes
  * @param replace replace NaN results with a value
 
 value to replace NaN with
- * @param expression the expression to evaluate, in quotes
  * @param var_ a metric to use as a variable
  *
  * @returns Parameter dictionary
  */
 function metric_math_params(
     metric_out: string,
-    replace: number | null,
     expression: string,
+    replace: number | null = null,
     var_: Array<MetricMathVarParamsDict> | null = null,
 ): MetricMathParamsDictTagged {
     const params = {
@@ -290,10 +290,10 @@ function metric_math_execute(
  * .
  *
  * @param metric_out the output metric
+ * @param expression the expression to evaluate, in quotes
  * @param replace replace NaN results with a value
 
 value to replace NaN with
- * @param expression the expression to evaluate, in quotes
  * @param var_ a metric to use as a variable
  * @param runner Command runner
  *
@@ -301,12 +301,12 @@ value to replace NaN with
  */
 function metric_math(
     metric_out: string,
-    replace: number | null,
     expression: string,
+    replace: number | null = null,
     var_: Array<MetricMathVarParamsDict> | null = null,
     runner: Runner | null = null,
 ): MetricMathOutputs {
-    const params = metric_math_params(metric_out, replace, expression, var_)
+    const params = metric_math_params(metric_out, expression, replace, var_)
     return metric_math_execute(params, runner);
 }
 

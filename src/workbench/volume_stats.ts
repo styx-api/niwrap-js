@@ -91,6 +91,7 @@ interface VolumeStatsOutputs {
 /**
  * Build parameters.
  *
+ * @param volume_in the input volume
  * @param operation use a reduction operation
 
 the reduction operation
@@ -100,17 +101,16 @@ the percentile to find, must be between 0 and 100
  * @param subvolume only display output for one subvolume
 
 the subvolume number or name
- * @param volume_in the input volume
  * @param roi only consider data inside an roi
  * @param show_map_name print map index and name before each output
  *
  * @returns Parameter dictionary
  */
 function volume_stats_params(
-    operation: string | null,
-    percent: number | null,
-    subvolume: string | null,
     volume_in: InputPathType,
+    operation: string | null = null,
+    percent: number | null = null,
+    subvolume: string | null = null,
     roi: VolumeStatsRoiParamsDict | null = null,
     show_map_name: boolean = false,
 ): VolumeStatsParamsDictTagged {
@@ -255,6 +255,7 @@ function volume_stats_execute(
  * COUNT_NONZERO: the number of nonzero elements in the data
  * .
  *
+ * @param volume_in the input volume
  * @param operation use a reduction operation
 
 the reduction operation
@@ -264,7 +265,6 @@ the percentile to find, must be between 0 and 100
  * @param subvolume only display output for one subvolume
 
 the subvolume number or name
- * @param volume_in the input volume
  * @param roi only consider data inside an roi
  * @param show_map_name print map index and name before each output
  * @param runner Command runner
@@ -272,15 +272,15 @@ the subvolume number or name
  * @returns NamedTuple of outputs (described in `VolumeStatsOutputs`).
  */
 function volume_stats(
-    operation: string | null,
-    percent: number | null,
-    subvolume: string | null,
     volume_in: InputPathType,
+    operation: string | null = null,
+    percent: number | null = null,
+    subvolume: string | null = null,
     roi: VolumeStatsRoiParamsDict | null = null,
     show_map_name: boolean = false,
     runner: Runner | null = null,
 ): VolumeStatsOutputs {
-    const params = volume_stats_params(operation, percent, subvolume, volume_in, roi, show_map_name)
+    const params = volume_stats_params(volume_in, operation, percent, subvolume, roi, show_map_name)
     return volume_stats_execute(params, runner);
 }
 

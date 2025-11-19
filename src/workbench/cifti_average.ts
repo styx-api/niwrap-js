@@ -91,7 +91,7 @@ the weight to use
  */
 function cifti_average_cifti(
     cifti_in: InputPathType,
-    weight: number | null,
+    weight: number | null = null,
 ): CiftiAverageCiftiParamsDictTagged {
     const params = {
         "@type": "cifti" as const,
@@ -150,18 +150,18 @@ interface CiftiAverageOutputs {
  * Build parameters.
  *
  * @param cifti_out output cifti file
+ * @param exclude_outliers exclude outliers by standard deviation of each element across files
  * @param limit_gb restrict memory used for file reading efficiency
 
 memory limit in gigabytes
- * @param exclude_outliers exclude outliers by standard deviation of each element across files
  * @param cifti specify an input file
  *
  * @returns Parameter dictionary
  */
 function cifti_average_params(
     cifti_out: string,
-    limit_gb: number | null,
     exclude_outliers: CiftiAverageExcludeOutliersParamsDict | null = null,
+    limit_gb: number | null = null,
     cifti: Array<CiftiAverageCiftiParamsDict> | null = null,
 ): CiftiAverageParamsDictTagged {
     const params = {
@@ -259,10 +259,10 @@ function cifti_average_execute(
  * Averages cifti files together.  Files without -weight specified are given a weight of 1.  If -exclude-outliers is specified, at each element, the data across all files is taken as a set, its unweighted mean and sample standard deviation are found, and values outside the specified number of standard deviations are excluded from the (potentially weighted) average at that element.
  *
  * @param cifti_out output cifti file
+ * @param exclude_outliers exclude outliers by standard deviation of each element across files
  * @param limit_gb restrict memory used for file reading efficiency
 
 memory limit in gigabytes
- * @param exclude_outliers exclude outliers by standard deviation of each element across files
  * @param cifti specify an input file
  * @param runner Command runner
  *
@@ -270,12 +270,12 @@ memory limit in gigabytes
  */
 function cifti_average(
     cifti_out: string,
-    limit_gb: number | null,
     exclude_outliers: CiftiAverageExcludeOutliersParamsDict | null = null,
+    limit_gb: number | null = null,
     cifti: Array<CiftiAverageCiftiParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiAverageOutputs {
-    const params = cifti_average_params(cifti_out, limit_gb, exclude_outliers, cifti)
+    const params = cifti_average_params(cifti_out, exclude_outliers, limit_gb, cifti)
     return cifti_average_execute(params, runner);
 }
 

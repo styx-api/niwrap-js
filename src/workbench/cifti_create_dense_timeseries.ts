@@ -121,7 +121,7 @@ the ROI as a metric file
  */
 function cifti_create_dense_timeseries_left_metric(
     metric: InputPathType,
-    roi_metric: InputPathType | null,
+    roi_metric: InputPathType | null = null,
 ): CiftiCreateDenseTimeseriesLeftMetricParamsDictTagged {
     const params = {
         "@type": "left-metric" as const,
@@ -171,7 +171,7 @@ the ROI as a metric file
  */
 function cifti_create_dense_timeseries_right_metric(
     metric: InputPathType,
-    roi_metric: InputPathType | null,
+    roi_metric: InputPathType | null = null,
 ): CiftiCreateDenseTimeseriesRightMetricParamsDictTagged {
     const params = {
         "@type": "right-metric" as const,
@@ -221,7 +221,7 @@ the ROI as a metric file
  */
 function cifti_create_dense_timeseries_cerebellum_metric(
     metric: InputPathType,
-    roi_metric: InputPathType | null,
+    roi_metric: InputPathType | null = null,
 ): CiftiCreateDenseTimeseriesCerebellumMetricParamsDictTagged {
     const params = {
         "@type": "cerebellum-metric" as const,
@@ -273,7 +273,7 @@ the ROI as a metric file
 function cifti_create_dense_timeseries_metric(
     structure: string,
     metric: InputPathType,
-    roi_metric: InputPathType | null,
+    roi_metric: InputPathType | null = null,
 ): CiftiCreateDenseTimeseriesMetricParamsDictTagged {
     const params = {
         "@type": "metric" as const,
@@ -334,6 +334,10 @@ interface CiftiCreateDenseTimeseriesOutputs {
  * Build parameters.
  *
  * @param cifti_out the output cifti file
+ * @param volume volume component
+ * @param left_metric metric for the left cortical surface
+ * @param right_metric metric for the right cortical surface
+ * @param cerebellum_metric metric for the cerebellum
  * @param interval set the timestep
 
 the timestep, in seconds (default 1.0)
@@ -343,23 +347,19 @@ the time at the first frame, in seconds (default 0.0)
  * @param unit use a unit other than time
 
 unit identifier (default SECOND)
- * @param volume volume component
- * @param left_metric metric for the left cortical surface
- * @param right_metric metric for the right cortical surface
- * @param cerebellum_metric metric for the cerebellum
  * @param metric metric for a specified surface structure
  *
  * @returns Parameter dictionary
  */
 function cifti_create_dense_timeseries_params(
     cifti_out: string,
-    interval: number | null,
-    start: number | null,
-    unit: string | null,
     volume: CiftiCreateDenseTimeseriesVolumeParamsDict | null = null,
     left_metric: CiftiCreateDenseTimeseriesLeftMetricParamsDict | null = null,
     right_metric: CiftiCreateDenseTimeseriesRightMetricParamsDict | null = null,
     cerebellum_metric: CiftiCreateDenseTimeseriesCerebellumMetricParamsDict | null = null,
+    interval: number | null = null,
+    start: number | null = null,
+    unit: string | null = null,
     metric: Array<CiftiCreateDenseTimeseriesMetricParamsDict> | null = null,
 ): CiftiCreateDenseTimeseriesParamsDictTagged {
     const params = {
@@ -569,6 +569,10 @@ function cifti_create_dense_timeseries_execute(
  * RADIAN.
  *
  * @param cifti_out the output cifti file
+ * @param volume volume component
+ * @param left_metric metric for the left cortical surface
+ * @param right_metric metric for the right cortical surface
+ * @param cerebellum_metric metric for the cerebellum
  * @param interval set the timestep
 
 the timestep, in seconds (default 1.0)
@@ -578,10 +582,6 @@ the time at the first frame, in seconds (default 0.0)
  * @param unit use a unit other than time
 
 unit identifier (default SECOND)
- * @param volume volume component
- * @param left_metric metric for the left cortical surface
- * @param right_metric metric for the right cortical surface
- * @param cerebellum_metric metric for the cerebellum
  * @param metric metric for a specified surface structure
  * @param runner Command runner
  *
@@ -589,17 +589,17 @@ unit identifier (default SECOND)
  */
 function cifti_create_dense_timeseries(
     cifti_out: string,
-    interval: number | null,
-    start: number | null,
-    unit: string | null,
     volume: CiftiCreateDenseTimeseriesVolumeParamsDict | null = null,
     left_metric: CiftiCreateDenseTimeseriesLeftMetricParamsDict | null = null,
     right_metric: CiftiCreateDenseTimeseriesRightMetricParamsDict | null = null,
     cerebellum_metric: CiftiCreateDenseTimeseriesCerebellumMetricParamsDict | null = null,
+    interval: number | null = null,
+    start: number | null = null,
+    unit: string | null = null,
     metric: Array<CiftiCreateDenseTimeseriesMetricParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiCreateDenseTimeseriesOutputs {
-    const params = cifti_create_dense_timeseries_params(cifti_out, interval, start, unit, volume, left_metric, right_metric, cerebellum_metric, metric)
+    const params = cifti_create_dense_timeseries_params(cifti_out, volume, left_metric, right_metric, cerebellum_metric, interval, start, unit, metric)
     return cifti_create_dense_timeseries_execute(params, runner);
 }
 

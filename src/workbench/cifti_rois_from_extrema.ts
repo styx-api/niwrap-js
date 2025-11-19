@@ -99,6 +99,10 @@ interface CiftiRoisFromExtremaOutputs {
  * Build parameters.
  *
  * @param cifti_out the output cifti
+ * @param cifti the input cifti
+ * @param surf_limit geodesic distance limit from vertex, in mm
+ * @param vol_limit euclidean distance limit from voxel center, in mm
+ * @param direction which dimension an extrema map is along, ROW or COLUMN
  * @param surface specify the left surface to use
 
 the left surface file
@@ -108,29 +112,25 @@ the right surface file
  * @param surface_2 specify the cerebellum surface to use
 
 the cerebellum surface file
+ * @param gaussian generate gaussian kernels instead of flat ROIs
  * @param method how to handle overlapping ROIs, default ALLOW
 
 the method of resolving overlaps
- * @param cifti the input cifti
- * @param surf_limit geodesic distance limit from vertex, in mm
- * @param vol_limit euclidean distance limit from voxel center, in mm
- * @param direction which dimension an extrema map is along, ROW or COLUMN
- * @param gaussian generate gaussian kernels instead of flat ROIs
  * @param merged_volume treat volume components as if they were a single component
  *
  * @returns Parameter dictionary
  */
 function cifti_rois_from_extrema_params(
     cifti_out: string,
-    surface: InputPathType | null,
-    surface_: InputPathType | null,
-    surface_2: InputPathType | null,
-    method: string | null,
     cifti: InputPathType,
     surf_limit: number,
     vol_limit: number,
     direction: string,
+    surface: InputPathType | null = null,
+    surface_: InputPathType | null = null,
+    surface_2: InputPathType | null = null,
     gaussian: CiftiRoisFromExtremaGaussianParamsDict | null = null,
+    method: string | null = null,
     merged_volume: boolean = false,
 ): CiftiRoisFromExtremaParamsDictTagged {
     const params = {
@@ -249,6 +249,10 @@ function cifti_rois_from_extrema_execute(
  * For each nonzero value in each map, make a map with an ROI around that location.  If the -gaussian option is specified, then normalized gaussian kernels are output instead of ROIs.  The <method> argument to -overlap-logic must be one of ALLOW, CLOSEST, or EXCLUDE.  ALLOW is the default, and means that ROIs are treated independently and may overlap.  CLOSEST means that ROIs may not overlap, and that no ROI contains vertices that are closer to a different seed vertex.  EXCLUDE means that ROIs may not overlap, and that any vertex within range of more than one ROI does not belong to any ROI.
  *
  * @param cifti_out the output cifti
+ * @param cifti the input cifti
+ * @param surf_limit geodesic distance limit from vertex, in mm
+ * @param vol_limit euclidean distance limit from voxel center, in mm
+ * @param direction which dimension an extrema map is along, ROW or COLUMN
  * @param surface specify the left surface to use
 
 the left surface file
@@ -258,14 +262,10 @@ the right surface file
  * @param surface_2 specify the cerebellum surface to use
 
 the cerebellum surface file
+ * @param gaussian generate gaussian kernels instead of flat ROIs
  * @param method how to handle overlapping ROIs, default ALLOW
 
 the method of resolving overlaps
- * @param cifti the input cifti
- * @param surf_limit geodesic distance limit from vertex, in mm
- * @param vol_limit euclidean distance limit from voxel center, in mm
- * @param direction which dimension an extrema map is along, ROW or COLUMN
- * @param gaussian generate gaussian kernels instead of flat ROIs
  * @param merged_volume treat volume components as if they were a single component
  * @param runner Command runner
  *
@@ -273,19 +273,19 @@ the method of resolving overlaps
  */
 function cifti_rois_from_extrema(
     cifti_out: string,
-    surface: InputPathType | null,
-    surface_: InputPathType | null,
-    surface_2: InputPathType | null,
-    method: string | null,
     cifti: InputPathType,
     surf_limit: number,
     vol_limit: number,
     direction: string,
+    surface: InputPathType | null = null,
+    surface_: InputPathType | null = null,
+    surface_2: InputPathType | null = null,
     gaussian: CiftiRoisFromExtremaGaussianParamsDict | null = null,
+    method: string | null = null,
     merged_volume: boolean = false,
     runner: Runner | null = null,
 ): CiftiRoisFromExtremaOutputs {
-    const params = cifti_rois_from_extrema_params(cifti_out, surface, surface_, surface_2, method, cifti, surf_limit, vol_limit, direction, gaussian, merged_volume)
+    const params = cifti_rois_from_extrema_params(cifti_out, cifti, surf_limit, vol_limit, direction, surface, surface_, surface_2, gaussian, method, merged_volume)
     return cifti_rois_from_extrema_execute(params, runner);
 }
 

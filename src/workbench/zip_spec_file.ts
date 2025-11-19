@@ -37,21 +37,21 @@ interface ZipSpecFileOutputs {
 /**
  * Build parameters.
  *
- * @param directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure
-
-the directory
  * @param spec_file the specification file to add to zip file
  * @param extract_folder the name of the folder created when the zip file is unzipped
  * @param zip_file out - the zip file that will be created
+ * @param directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure
+
+the directory
  * @param skip_missing any missing files will generate only warnings, and the zip file will be created anyway
  *
  * @returns Parameter dictionary
  */
 function zip_spec_file_params(
-    directory: string | null,
     spec_file: string,
     extract_folder: string,
     zip_file: string,
+    directory: string | null = null,
     skip_missing: boolean = false,
 ): ZipSpecFileParamsDictTagged {
     const params = {
@@ -145,26 +145,26 @@ function zip_spec_file_execute(
  *
  * If zip-file already exists, it will be overwritten.  If -base-dir is not specified, the directory containing the spec file is used for the base directory.  The spec file must contain only relative paths, and no data files may be outside the base directory.  Scene files inside spec files are not checked for what files they reference, ensure that all data files referenced by the scene files are also referenced by the spec file.
  *
- * @param directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure
-
-the directory
  * @param spec_file the specification file to add to zip file
  * @param extract_folder the name of the folder created when the zip file is unzipped
  * @param zip_file out - the zip file that will be created
+ * @param directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure
+
+the directory
  * @param skip_missing any missing files will generate only warnings, and the zip file will be created anyway
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ZipSpecFileOutputs`).
  */
 function zip_spec_file(
-    directory: string | null,
     spec_file: string,
     extract_folder: string,
     zip_file: string,
+    directory: string | null = null,
     skip_missing: boolean = false,
     runner: Runner | null = null,
 ): ZipSpecFileOutputs {
-    const params = zip_spec_file_params(directory, spec_file, extract_folder, zip_file, skip_missing)
+    const params = zip_spec_file_params(spec_file, extract_folder, zip_file, directory, skip_missing)
     return zip_spec_file_execute(params, runner);
 }
 

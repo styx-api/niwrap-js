@@ -35,20 +35,20 @@ interface SurfaceCurvatureOutputs {
 /**
  * Build parameters.
  *
+ * @param surface the surface to compute the curvature of
  * @param mean_out output mean curvature
 
 mean curvature metric
  * @param gauss_out output gaussian curvature
 
 gaussian curvature metric
- * @param surface the surface to compute the curvature of
  *
  * @returns Parameter dictionary
  */
 function surface_curvature_params(
-    mean_out: string | null,
-    gauss_out: string | null,
     surface: InputPathType,
+    mean_out: string | null = null,
+    gauss_out: string | null = null,
 ): SurfaceCurvatureParamsDictTagged {
     const params = {
         "@type": "workbench/surface-curvature" as const,
@@ -144,24 +144,24 @@ function surface_curvature_execute(
  * Interactive Texture Mapping by J. Maillot, Yahia, and Verroust, 1993.
  * ACM-0-98791-601-8/93/008.
  *
+ * @param surface the surface to compute the curvature of
  * @param mean_out output mean curvature
 
 mean curvature metric
  * @param gauss_out output gaussian curvature
 
 gaussian curvature metric
- * @param surface the surface to compute the curvature of
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceCurvatureOutputs`).
  */
 function surface_curvature(
-    mean_out: string | null,
-    gauss_out: string | null,
     surface: InputPathType,
+    mean_out: string | null = null,
+    gauss_out: string | null = null,
     runner: Runner | null = null,
 ): SurfaceCurvatureOutputs {
-    const params = surface_curvature_params(mean_out, gauss_out, surface)
+    const params = surface_curvature_params(surface, mean_out, gauss_out)
     return surface_curvature_execute(params, runner);
 }
 

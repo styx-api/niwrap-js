@@ -43,25 +43,25 @@ interface CiftiCrossCorrelationOutputs {
  * Build parameters.
  *
  * @param cifti_out output cifti file
+ * @param cifti_a first input cifti file
+ * @param cifti_b second input cifti file
  * @param weight_file specify column weights
 
 text file containing one weight per column
+ * @param fisher_z apply fisher small z transform (ie, artanh) to correlation
  * @param limit_gb restrict memory usage
 
 memory limit in gigabytes
- * @param cifti_a first input cifti file
- * @param cifti_b second input cifti file
- * @param fisher_z apply fisher small z transform (ie, artanh) to correlation
  *
  * @returns Parameter dictionary
  */
 function cifti_cross_correlation_params(
     cifti_out: string,
-    weight_file: string | null,
-    limit_gb: number | null,
     cifti_a: InputPathType,
     cifti_b: InputPathType,
+    weight_file: string | null = null,
     fisher_z: boolean = false,
+    limit_gb: number | null = null,
 ): CiftiCrossCorrelationParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-cross-correlation" as const,
@@ -169,29 +169,29 @@ function cifti_cross_correlation_execute(
  * Restricting the memory usage will make it calculate the output in chunks, by reading through <cifti-b> multiple times.
  *
  * @param cifti_out output cifti file
+ * @param cifti_a first input cifti file
+ * @param cifti_b second input cifti file
  * @param weight_file specify column weights
 
 text file containing one weight per column
+ * @param fisher_z apply fisher small z transform (ie, artanh) to correlation
  * @param limit_gb restrict memory usage
 
 memory limit in gigabytes
- * @param cifti_a first input cifti file
- * @param cifti_b second input cifti file
- * @param fisher_z apply fisher small z transform (ie, artanh) to correlation
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiCrossCorrelationOutputs`).
  */
 function cifti_cross_correlation(
     cifti_out: string,
-    weight_file: string | null,
-    limit_gb: number | null,
     cifti_a: InputPathType,
     cifti_b: InputPathType,
+    weight_file: string | null = null,
     fisher_z: boolean = false,
+    limit_gb: number | null = null,
     runner: Runner | null = null,
 ): CiftiCrossCorrelationOutputs {
-    const params = cifti_cross_correlation_params(cifti_out, weight_file, limit_gb, cifti_a, cifti_b, fisher_z)
+    const params = cifti_cross_correlation_params(cifti_out, cifti_a, cifti_b, weight_file, fisher_z, limit_gb)
     return cifti_cross_correlation_execute(params, runner);
 }
 

@@ -128,21 +128,21 @@ interface CiftiLabelToBorderOutputs {
 /**
  * Build parameters.
  *
+ * @param cifti_in the input cifti dlabel file
  * @param fraction set how far along the edge border points are drawn
 
 fraction along edge from inside vertex (default 0.33)
  * @param column select a single column
 
 the column number or name
- * @param cifti_in the input cifti dlabel file
  * @param border specify output file for a surface structure
  *
  * @returns Parameter dictionary
  */
 function cifti_label_to_border_params(
-    fraction: number | null,
-    column: string | null,
     cifti_in: InputPathType,
+    fraction: number | null = null,
+    column: string | null = null,
     border: Array<CiftiLabelToBorderBorderParamsDict> | null = null,
 ): CiftiLabelToBorderParamsDictTagged {
     const params = {
@@ -240,26 +240,26 @@ function cifti_label_to_border_execute(
  *
  * For each surface, takes the labels on the matching structure and draws borders around the labels.  Use -column to only draw borders around one label map.
  *
+ * @param cifti_in the input cifti dlabel file
  * @param fraction set how far along the edge border points are drawn
 
 fraction along edge from inside vertex (default 0.33)
  * @param column select a single column
 
 the column number or name
- * @param cifti_in the input cifti dlabel file
  * @param border specify output file for a surface structure
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiLabelToBorderOutputs`).
  */
 function cifti_label_to_border(
-    fraction: number | null,
-    column: string | null,
     cifti_in: InputPathType,
+    fraction: number | null = null,
+    column: string | null = null,
     border: Array<CiftiLabelToBorderBorderParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiLabelToBorderOutputs {
-    const params = cifti_label_to_border_params(fraction, column, cifti_in, border)
+    const params = cifti_label_to_border_params(cifti_in, fraction, column, border)
     return cifti_label_to_border_execute(params, runner);
 }
 

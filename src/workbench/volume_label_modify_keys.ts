@@ -41,19 +41,19 @@ interface VolumeLabelModifyKeysOutputs {
  * Build parameters.
  *
  * @param volume_out the output volume label file
+ * @param volume_in the input volume label file
+ * @param remap_file text file with old and new key values
  * @param subvolume select a single subvolume
 
 the subvolume number or name
- * @param volume_in the input volume label file
- * @param remap_file text file with old and new key values
  *
  * @returns Parameter dictionary
  */
 function volume_label_modify_keys_params(
     volume_out: string,
-    subvolume: string | null,
     volume_in: InputPathType,
     remap_file: string,
+    subvolume: string | null = null,
 ): VolumeLabelModifyKeysParamsDictTagged {
     const params = {
         "@type": "workbench/volume-label-modify-keys" as const,
@@ -158,23 +158,23 @@ function volume_label_modify_keys_execute(
  * This would change the current label with key '3' to use the key '5' instead, 5 would use 8, and 8 would use 2.  Any collision in key values results in the label that was not specified in the remap file getting remapped to an otherwise unused key.  Remapping more than one key to the same new key, or the same key to more than one new key, results in an error.  This will not change the appearance of the file when displayed, as it will change the key values in the data at the same time.
  *
  * @param volume_out the output volume label file
+ * @param volume_in the input volume label file
+ * @param remap_file text file with old and new key values
  * @param subvolume select a single subvolume
 
 the subvolume number or name
- * @param volume_in the input volume label file
- * @param remap_file text file with old and new key values
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeLabelModifyKeysOutputs`).
  */
 function volume_label_modify_keys(
     volume_out: string,
-    subvolume: string | null,
     volume_in: InputPathType,
     remap_file: string,
+    subvolume: string | null = null,
     runner: Runner | null = null,
 ): VolumeLabelModifyKeysOutputs {
-    const params = volume_label_modify_keys_params(volume_out, subvolume, volume_in, remap_file)
+    const params = volume_label_modify_keys_params(volume_out, volume_in, remap_file, subvolume)
     return volume_label_modify_keys_execute(params, runner);
 }
 

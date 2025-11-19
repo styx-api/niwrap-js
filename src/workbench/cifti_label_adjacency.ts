@@ -42,6 +42,7 @@ interface CiftiLabelAdjacencyOutputs {
  * Build parameters.
  *
  * @param adjacency_out the output cifti pconn adjacency matrix
+ * @param label_in the input cifti label file
  * @param surface specify the left surface to use
 
 the left surface file
@@ -51,16 +52,15 @@ the right surface file
  * @param surface_2 specify the cerebellum surface to use
 
 the cerebellum surface file
- * @param label_in the input cifti label file
  *
  * @returns Parameter dictionary
  */
 function cifti_label_adjacency_params(
     adjacency_out: string,
-    surface: InputPathType | null,
-    surface_: InputPathType | null,
-    surface_2: InputPathType | null,
     label_in: InputPathType,
+    surface: InputPathType | null = null,
+    surface_: InputPathType | null = null,
+    surface_2: InputPathType | null = null,
 ): CiftiLabelAdjacencyParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-label-adjacency" as const,
@@ -161,6 +161,7 @@ function cifti_label_adjacency_execute(
  * Find face-adjacent voxels and connected vertices that have different label values, and count them for each pair.  Put the resulting counts into a parcellated connectivity file, with the diagonal being zero.  This gives a rough estimate of how long or expansive the border between two labels is.
  *
  * @param adjacency_out the output cifti pconn adjacency matrix
+ * @param label_in the input cifti label file
  * @param surface specify the left surface to use
 
 the left surface file
@@ -170,20 +171,19 @@ the right surface file
  * @param surface_2 specify the cerebellum surface to use
 
 the cerebellum surface file
- * @param label_in the input cifti label file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiLabelAdjacencyOutputs`).
  */
 function cifti_label_adjacency(
     adjacency_out: string,
-    surface: InputPathType | null,
-    surface_: InputPathType | null,
-    surface_2: InputPathType | null,
     label_in: InputPathType,
+    surface: InputPathType | null = null,
+    surface_: InputPathType | null = null,
+    surface_2: InputPathType | null = null,
     runner: Runner | null = null,
 ): CiftiLabelAdjacencyOutputs {
-    const params = cifti_label_adjacency_params(adjacency_out, surface, surface_, surface_2, label_in)
+    const params = cifti_label_adjacency_params(adjacency_out, label_in, surface, surface_, surface_2)
     return cifti_label_adjacency_execute(params, runner);
 }
 

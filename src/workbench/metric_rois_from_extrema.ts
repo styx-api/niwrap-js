@@ -45,6 +45,9 @@ interface MetricRoisFromExtremaOutputs {
  * Build parameters.
  *
  * @param metric_out the output metric file
+ * @param surface the surface to use for geodesic distance
+ * @param metric the input metric file
+ * @param limit geodesic distance limit from vertex, in mm
  * @param sigma generate a gaussian kernel instead of a flat ROI
 
 the sigma for the gaussian kernel, in mm
@@ -57,21 +60,18 @@ the method of resolving overlaps
  * @param column select a single input column to use
 
 the column number or name
- * @param surface the surface to use for geodesic distance
- * @param metric the input metric file
- * @param limit geodesic distance limit from vertex, in mm
  *
  * @returns Parameter dictionary
  */
 function metric_rois_from_extrema_params(
     metric_out: string,
-    sigma: number | null,
-    roi_metric: InputPathType | null,
-    method: string | null,
-    column: string | null,
     surface: InputPathType,
     metric: InputPathType,
     limit: number,
+    sigma: number | null = null,
+    roi_metric: InputPathType | null = null,
+    method: string | null = null,
+    column: string | null = null,
 ): MetricRoisFromExtremaParamsDictTagged {
     const params = {
         "@type": "workbench/metric-rois-from-extrema" as const,
@@ -181,6 +181,9 @@ function metric_rois_from_extrema_execute(
  * For each nonzero value in each map, make a map with an ROI around that location.  If the -gaussian option is specified, then normalized gaussian kernels are output instead of ROIs.  The <method> argument to -overlap-logic must be one of ALLOW, CLOSEST, or EXCLUDE.  ALLOW is the default, and means that ROIs are treated independently and may overlap.  CLOSEST means that ROIs may not overlap, and that no ROI contains vertices that are closer to a different seed vertex.  EXCLUDE means that ROIs may not overlap, and that any vertex within range of more than one ROI does not belong to any ROI.
  *
  * @param metric_out the output metric file
+ * @param surface the surface to use for geodesic distance
+ * @param metric the input metric file
+ * @param limit geodesic distance limit from vertex, in mm
  * @param sigma generate a gaussian kernel instead of a flat ROI
 
 the sigma for the gaussian kernel, in mm
@@ -193,25 +196,22 @@ the method of resolving overlaps
  * @param column select a single input column to use
 
 the column number or name
- * @param surface the surface to use for geodesic distance
- * @param metric the input metric file
- * @param limit geodesic distance limit from vertex, in mm
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricRoisFromExtremaOutputs`).
  */
 function metric_rois_from_extrema(
     metric_out: string,
-    sigma: number | null,
-    roi_metric: InputPathType | null,
-    method: string | null,
-    column: string | null,
     surface: InputPathType,
     metric: InputPathType,
     limit: number,
+    sigma: number | null = null,
+    roi_metric: InputPathType | null = null,
+    method: string | null = null,
+    column: string | null = null,
     runner: Runner | null = null,
 ): MetricRoisFromExtremaOutputs {
-    const params = metric_rois_from_extrema_params(metric_out, sigma, roi_metric, method, column, surface, metric, limit)
+    const params = metric_rois_from_extrema_params(metric_out, surface, metric, limit, sigma, roi_metric, method, column)
     return metric_rois_from_extrema_execute(params, runner);
 }
 

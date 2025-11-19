@@ -35,18 +35,18 @@ interface LabelExportTableOutputs {
 /**
  * Build parameters.
  *
+ * @param label_in the input label file
+ * @param table_out output - the output text file
  * @param json_out export the hierarchy as json
 
 output - filename to write hierarchy to
- * @param label_in the input label file
- * @param table_out output - the output text file
  *
  * @returns Parameter dictionary
  */
 function label_export_table_params(
-    json_out: string | null,
     label_in: InputPathType,
     table_out: string,
+    json_out: string | null = null,
 ): LabelExportTableParamsDictTagged {
     const params = {
         "@type": "workbench/label-export-table" as const,
@@ -135,22 +135,22 @@ function label_export_table_execute(
  *
  * Takes the label table from the gifti label file, and writes it to a text format matching what is expected by -metric-label-import.
  *
+ * @param label_in the input label file
+ * @param table_out output - the output text file
  * @param json_out export the hierarchy as json
 
 output - filename to write hierarchy to
- * @param label_in the input label file
- * @param table_out output - the output text file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelExportTableOutputs`).
  */
 function label_export_table(
-    json_out: string | null,
     label_in: InputPathType,
     table_out: string,
+    json_out: string | null = null,
     runner: Runner | null = null,
 ): LabelExportTableOutputs {
-    const params = label_export_table_params(json_out, label_in, table_out)
+    const params = label_export_table_params(label_in, table_out, json_out)
     return label_export_table_execute(params, runner);
 }
 

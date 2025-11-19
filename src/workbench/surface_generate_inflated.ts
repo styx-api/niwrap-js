@@ -46,18 +46,18 @@ interface SurfaceGenerateInflatedOutputs {
  *
  * @param inflated_surface_out the output inflated surface
  * @param very_inflated_surface_out the output very inflated surface
+ * @param anatomical_surface_in the anatomical surface
  * @param iterations_scale_value optional iterations scaling
 
 iterations-scale value
- * @param anatomical_surface_in the anatomical surface
  *
  * @returns Parameter dictionary
  */
 function surface_generate_inflated_params(
     inflated_surface_out: string,
     very_inflated_surface_out: string,
-    iterations_scale_value: number | null,
     anatomical_surface_in: InputPathType,
+    iterations_scale_value: number | null = null,
 ): SurfaceGenerateInflatedParamsDictTagged {
     const params = {
         "@type": "workbench/surface-generate-inflated" as const,
@@ -152,10 +152,10 @@ function surface_generate_inflated_execute(
  *
  * @param inflated_surface_out the output inflated surface
  * @param very_inflated_surface_out the output very inflated surface
+ * @param anatomical_surface_in the anatomical surface
  * @param iterations_scale_value optional iterations scaling
 
 iterations-scale value
- * @param anatomical_surface_in the anatomical surface
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceGenerateInflatedOutputs`).
@@ -163,11 +163,11 @@ iterations-scale value
 function surface_generate_inflated(
     inflated_surface_out: string,
     very_inflated_surface_out: string,
-    iterations_scale_value: number | null,
     anatomical_surface_in: InputPathType,
+    iterations_scale_value: number | null = null,
     runner: Runner | null = null,
 ): SurfaceGenerateInflatedOutputs {
-    const params = surface_generate_inflated_params(inflated_surface_out, very_inflated_surface_out, iterations_scale_value, anatomical_surface_in)
+    const params = surface_generate_inflated_params(inflated_surface_out, very_inflated_surface_out, anatomical_surface_in, iterations_scale_value)
     return surface_generate_inflated_execute(params, runner);
 }
 

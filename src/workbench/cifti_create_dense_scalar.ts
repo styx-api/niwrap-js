@@ -119,7 +119,7 @@ the ROI as a metric file
  */
 function cifti_create_dense_scalar_left_metric(
     metric: InputPathType,
-    roi_metric: InputPathType | null,
+    roi_metric: InputPathType | null = null,
 ): CiftiCreateDenseScalarLeftMetricParamsDictTagged {
     const params = {
         "@type": "left-metric" as const,
@@ -169,7 +169,7 @@ the ROI as a metric file
  */
 function cifti_create_dense_scalar_right_metric(
     metric: InputPathType,
-    roi_metric: InputPathType | null,
+    roi_metric: InputPathType | null = null,
 ): CiftiCreateDenseScalarRightMetricParamsDictTagged {
     const params = {
         "@type": "right-metric" as const,
@@ -219,7 +219,7 @@ the ROI as a metric file
  */
 function cifti_create_dense_scalar_cerebellum_metric(
     metric: InputPathType,
-    roi_metric: InputPathType | null,
+    roi_metric: InputPathType | null = null,
 ): CiftiCreateDenseScalarCerebellumMetricParamsDictTagged {
     const params = {
         "@type": "cerebellum-metric" as const,
@@ -271,7 +271,7 @@ the ROI as a metric file
 function cifti_create_dense_scalar_metric(
     structure: string,
     metric: InputPathType,
-    roi_metric: InputPathType | null,
+    roi_metric: InputPathType | null = null,
 ): CiftiCreateDenseScalarMetricParamsDictTagged {
     const params = {
         "@type": "metric" as const,
@@ -332,24 +332,24 @@ interface CiftiCreateDenseScalarOutputs {
  * Build parameters.
  *
  * @param cifti_out the output cifti file
- * @param file use a text file to set all map names
-
-text file containing map names, one per line
  * @param volume volume component
  * @param left_metric metric for the left cortical surface
  * @param right_metric metric for the right cortical surface
  * @param cerebellum_metric metric for the cerebellum
+ * @param file use a text file to set all map names
+
+text file containing map names, one per line
  * @param metric metric for a specified surface structure
  *
  * @returns Parameter dictionary
  */
 function cifti_create_dense_scalar_params(
     cifti_out: string,
-    file: string | null,
     volume: CiftiCreateDenseScalarVolumeParamsDict | null = null,
     left_metric: CiftiCreateDenseScalarLeftMetricParamsDict | null = null,
     right_metric: CiftiCreateDenseScalarRightMetricParamsDict | null = null,
     cerebellum_metric: CiftiCreateDenseScalarCerebellumMetricParamsDict | null = null,
+    file: string | null = null,
     metric: Array<CiftiCreateDenseScalarMetricParamsDict> | null = null,
 ): CiftiCreateDenseScalarParamsDictTagged {
     const params = {
@@ -535,13 +535,13 @@ function cifti_create_dense_scalar_execute(
  * THALAMUS_RIGHT.
  *
  * @param cifti_out the output cifti file
- * @param file use a text file to set all map names
-
-text file containing map names, one per line
  * @param volume volume component
  * @param left_metric metric for the left cortical surface
  * @param right_metric metric for the right cortical surface
  * @param cerebellum_metric metric for the cerebellum
+ * @param file use a text file to set all map names
+
+text file containing map names, one per line
  * @param metric metric for a specified surface structure
  * @param runner Command runner
  *
@@ -549,15 +549,15 @@ text file containing map names, one per line
  */
 function cifti_create_dense_scalar(
     cifti_out: string,
-    file: string | null,
     volume: CiftiCreateDenseScalarVolumeParamsDict | null = null,
     left_metric: CiftiCreateDenseScalarLeftMetricParamsDict | null = null,
     right_metric: CiftiCreateDenseScalarRightMetricParamsDict | null = null,
     cerebellum_metric: CiftiCreateDenseScalarCerebellumMetricParamsDict | null = null,
+    file: string | null = null,
     metric: Array<CiftiCreateDenseScalarMetricParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiCreateDenseScalarOutputs {
-    const params = cifti_create_dense_scalar_params(cifti_out, file, volume, left_metric, right_metric, cerebellum_metric, metric)
+    const params = cifti_create_dense_scalar_params(cifti_out, volume, left_metric, right_metric, cerebellum_metric, file, metric)
     return cifti_create_dense_scalar_execute(params, runner);
 }
 

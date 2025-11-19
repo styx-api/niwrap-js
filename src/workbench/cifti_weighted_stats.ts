@@ -71,12 +71,12 @@ metric file containing cerebellum vertex areas
  * @returns Parameter dictionary
  */
 function cifti_weighted_stats_spatial_weights(
-    left_surf: InputPathType | null,
-    right_surf: InputPathType | null,
-    cerebellum_surf: InputPathType | null,
-    left_metric: InputPathType | null,
-    right_metric: InputPathType | null,
-    cerebellum_metric: InputPathType | null,
+    left_surf: InputPathType | null = null,
+    right_surf: InputPathType | null = null,
+    cerebellum_surf: InputPathType | null = null,
+    left_metric: InputPathType | null = null,
+    right_metric: InputPathType | null = null,
+    cerebellum_metric: InputPathType | null = null,
 ): CiftiWeightedStatsSpatialWeightsParamsDictTagged {
     const params = {
         "@type": "spatial-weights" as const,
@@ -198,36 +198,36 @@ interface CiftiWeightedStatsOutputs {
 /**
  * Build parameters.
  *
+ * @param cifti_in the input cifti
+ * @param spatial_weights use vertex area and voxel volume as weights
  * @param weight_cifti use a cifti file containing weights
 
 the weights to use, as a cifti file
  * @param column only display output for one column
 
 the column to use (1-based)
- * @param percent compute weighted percentile
-
-the percentile to find, must be between 0 and 100
- * @param cifti_in the input cifti
- * @param spatial_weights use vertex area and voxel volume as weights
  * @param roi only consider data inside an roi
  * @param mean compute weighted mean
  * @param sample compute weighted standard deviation
 
 estimate population stdev from the sample
+ * @param percent compute weighted percentile
+
+the percentile to find, must be between 0 and 100
  * @param sum compute weighted sum
  * @param show_map_name print map index and name before each output
  *
  * @returns Parameter dictionary
  */
 function cifti_weighted_stats_params(
-    weight_cifti: InputPathType | null,
-    column: number | null,
-    percent: number | null,
     cifti_in: InputPathType,
     spatial_weights: CiftiWeightedStatsSpatialWeightsParamsDict | null = null,
+    weight_cifti: InputPathType | null = null,
+    column: number | null = null,
     roi: CiftiWeightedStatsRoiParamsDict | null = null,
     mean: boolean = false,
-    sample: boolean | null = false,
+    sample: boolean | null = null,
+    percent: number | null = null,
     sum: boolean = false,
     show_map_name: boolean = false,
 ): CiftiWeightedStatsParamsDictTagged {
@@ -273,7 +273,7 @@ function cifti_weighted_stats_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["spatial-weights"] ?? null) !== null || (params["weight-cifti"] ?? null) !== null || (params["column"] ?? null) !== null || (params["roi"] ?? null) !== null || (params["mean"] ?? false) || (params["sample"] ?? false) !== null || (params["percent"] ?? null) !== null || (params["sum"] ?? false) || (params["show-map-name"] ?? false)) {
+    if ((params["spatial-weights"] ?? null) !== null || (params["weight-cifti"] ?? null) !== null || (params["column"] ?? null) !== null || (params["roi"] ?? null) !== null || (params["mean"] ?? false) || (params["sample"] ?? null) !== null || (params["percent"] ?? null) !== null || (params["sum"] ?? false) || (params["show-map-name"] ?? false)) {
         cargs.push(
             "wb_command",
             "-cifti-weighted-stats",
@@ -285,7 +285,7 @@ function cifti_weighted_stats_cargs(
             ...(((params["roi"] ?? null) !== null) ? cifti_weighted_stats_roi_cargs((params["roi"] ?? null), execution) : []),
             (((params["mean"] ?? false)) ? "-mean" : ""),
             "-stdev",
-            (((params["sample"] ?? false) !== null) ? "-sample" : ""),
+            (((params["sample"] ?? null) !== null) ? "-sample" : ""),
             "-percentile",
             (((params["percent"] ?? null) !== null) ? String((params["percent"] ?? null)) : ""),
             (((params["sum"] ?? false)) ? "-sum" : ""),
@@ -349,22 +349,22 @@ function cifti_weighted_stats_execute(
  *
  * Using -sum with -spatial-weights (or with -cifti-weights and a cifti containing weights of similar meaning) is equivalent to integrating with respect to area and volume.  When the input is binary ROIs, this will therefore output the area or volume of each ROI.
  *
+ * @param cifti_in the input cifti
+ * @param spatial_weights use vertex area and voxel volume as weights
  * @param weight_cifti use a cifti file containing weights
 
 the weights to use, as a cifti file
  * @param column only display output for one column
 
 the column to use (1-based)
- * @param percent compute weighted percentile
-
-the percentile to find, must be between 0 and 100
- * @param cifti_in the input cifti
- * @param spatial_weights use vertex area and voxel volume as weights
  * @param roi only consider data inside an roi
  * @param mean compute weighted mean
  * @param sample compute weighted standard deviation
 
 estimate population stdev from the sample
+ * @param percent compute weighted percentile
+
+the percentile to find, must be between 0 and 100
  * @param sum compute weighted sum
  * @param show_map_name print map index and name before each output
  * @param runner Command runner
@@ -372,19 +372,19 @@ estimate population stdev from the sample
  * @returns NamedTuple of outputs (described in `CiftiWeightedStatsOutputs`).
  */
 function cifti_weighted_stats(
-    weight_cifti: InputPathType | null,
-    column: number | null,
-    percent: number | null,
     cifti_in: InputPathType,
     spatial_weights: CiftiWeightedStatsSpatialWeightsParamsDict | null = null,
+    weight_cifti: InputPathType | null = null,
+    column: number | null = null,
     roi: CiftiWeightedStatsRoiParamsDict | null = null,
     mean: boolean = false,
-    sample: boolean | null = false,
+    sample: boolean | null = null,
+    percent: number | null = null,
     sum: boolean = false,
     show_map_name: boolean = false,
     runner: Runner | null = null,
 ): CiftiWeightedStatsOutputs {
-    const params = cifti_weighted_stats_params(weight_cifti, column, percent, cifti_in, spatial_weights, roi, mean, sample, sum, show_map_name)
+    const params = cifti_weighted_stats_params(cifti_in, spatial_weights, weight_cifti, column, roi, mean, sample, percent, sum, show_map_name)
     return cifti_weighted_stats_execute(params, runner);
 }
 

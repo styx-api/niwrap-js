@@ -41,19 +41,19 @@ interface MetricVectorTowardRoiOutputs {
  * Build parameters.
  *
  * @param metric_out the output metric
+ * @param surface the surface to compute on
+ * @param target_roi the roi to find the shortest path to
  * @param roi_metric don't compute for vertices outside an roi
 
 the region to compute inside, as a metric
- * @param surface the surface to compute on
- * @param target_roi the roi to find the shortest path to
  *
  * @returns Parameter dictionary
  */
 function metric_vector_toward_roi_params(
     metric_out: string,
-    roi_metric: InputPathType | null,
     surface: InputPathType,
     target_roi: InputPathType,
+    roi_metric: InputPathType | null = null,
 ): MetricVectorTowardRoiParamsDictTagged {
     const params = {
         "@type": "workbench/metric-vector-toward-roi" as const,
@@ -146,23 +146,23 @@ function metric_vector_toward_roi_execute(
  * At each vertex, compute the vector along the start of the shortest path to the ROI.
  *
  * @param metric_out the output metric
+ * @param surface the surface to compute on
+ * @param target_roi the roi to find the shortest path to
  * @param roi_metric don't compute for vertices outside an roi
 
 the region to compute inside, as a metric
- * @param surface the surface to compute on
- * @param target_roi the roi to find the shortest path to
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricVectorTowardRoiOutputs`).
  */
 function metric_vector_toward_roi(
     metric_out: string,
-    roi_metric: InputPathType | null,
     surface: InputPathType,
     target_roi: InputPathType,
+    roi_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricVectorTowardRoiOutputs {
-    const params = metric_vector_toward_roi_params(metric_out, roi_metric, surface, target_roi)
+    const params = metric_vector_toward_roi_params(metric_out, surface, target_roi, roi_metric)
     return metric_vector_toward_roi_execute(params, runner);
 }
 

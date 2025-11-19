@@ -41,19 +41,19 @@ interface LabelMaskOutputs {
  * Build parameters.
  *
  * @param label_out the output label file
+ * @param label the label file to mask
+ * @param mask the mask metric
  * @param column select a single column
 
 the column number or name
- * @param label the label file to mask
- * @param mask the mask metric
  *
  * @returns Parameter dictionary
  */
 function label_mask_params(
     label_out: string,
-    column: string | null,
     label: InputPathType,
     mask: InputPathType,
+    column: string | null = null,
 ): LabelMaskParamsDictTagged {
     const params = {
         "@type": "workbench/label-mask" as const,
@@ -146,23 +146,23 @@ function label_mask_execute(
  * By default, the output label is a copy of the input label, but with the 'unused' label wherever the mask metric is zero or negative.  if -column is specified, the output contains only one column, the masked version of the specified input column.
  *
  * @param label_out the output label file
+ * @param label the label file to mask
+ * @param mask the mask metric
  * @param column select a single column
 
 the column number or name
- * @param label the label file to mask
- * @param mask the mask metric
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelMaskOutputs`).
  */
 function label_mask(
     label_out: string,
-    column: string | null,
     label: InputPathType,
     mask: InputPathType,
+    column: string | null = null,
     runner: Runner | null = null,
 ): LabelMaskOutputs {
-    const params = label_mask_params(label_out, column, label, mask)
+    const params = label_mask_params(label_out, label, mask, column)
     return label_mask_execute(params, runner);
 }
 

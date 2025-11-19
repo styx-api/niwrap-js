@@ -44,6 +44,9 @@ interface LabelDilateOutputs {
  * Build parameters.
  *
  * @param label_out the output label file
+ * @param label the input label
+ * @param surface the surface to dilate on
+ * @param dilate_dist distance in mm to dilate the labels
  * @param roi_metric specify an roi of vertices to overwrite, rather than vertices with the unlabeled key
 
 metric file, positive values denote vertices to have their values replaced
@@ -53,20 +56,17 @@ the column number or name
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
- * @param label the input label
- * @param surface the surface to dilate on
- * @param dilate_dist distance in mm to dilate the labels
  *
  * @returns Parameter dictionary
  */
 function label_dilate_params(
     label_out: string,
-    roi_metric: InputPathType | null,
-    column: string | null,
-    area_metric: InputPathType | null,
     label: InputPathType,
     surface: InputPathType,
     dilate_dist: number,
+    roi_metric: InputPathType | null = null,
+    column: string | null = null,
+    area_metric: InputPathType | null = null,
 ): LabelDilateParamsDictTagged {
     const params = {
         "@type": "workbench/label-dilate" as const,
@@ -171,6 +171,9 @@ function label_dilate_execute(
  * Fills in label information for all vertices designated as bad, up to the specified distance away from other labels.  If -bad-vertex-roi is specified, all vertices, including those with the unlabeled key, are good, except for vertices with a positive value in the ROI.  If it is not specified, only vertices with the unlabeled key are bad.
  *
  * @param label_out the output label file
+ * @param label the input label
+ * @param surface the surface to dilate on
+ * @param dilate_dist distance in mm to dilate the labels
  * @param roi_metric specify an roi of vertices to overwrite, rather than vertices with the unlabeled key
 
 metric file, positive values denote vertices to have their values replaced
@@ -180,24 +183,21 @@ the column number or name
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
- * @param label the input label
- * @param surface the surface to dilate on
- * @param dilate_dist distance in mm to dilate the labels
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelDilateOutputs`).
  */
 function label_dilate(
     label_out: string,
-    roi_metric: InputPathType | null,
-    column: string | null,
-    area_metric: InputPathType | null,
     label: InputPathType,
     surface: InputPathType,
     dilate_dist: number,
+    roi_metric: InputPathType | null = null,
+    column: string | null = null,
+    area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): LabelDilateOutputs {
-    const params = label_dilate_params(label_out, roi_metric, column, area_metric, label, surface, dilate_dist)
+    const params = label_dilate_params(label_out, label, surface, dilate_dist, roi_metric, column, area_metric)
     return label_dilate_execute(params, runner);
 }
 

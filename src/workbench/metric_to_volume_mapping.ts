@@ -49,7 +49,7 @@ number of subdivisions, default 3
 function metric_to_volume_mapping_ribbon_constrained(
     inner_surf: InputPathType,
     outer_surf: InputPathType,
-    subdiv_num: number | null,
+    subdiv_num: number | null = null,
     greedy: boolean = false,
     thick_columns: boolean = false,
 ): MetricToVolumeMappingRibbonConstrainedParamsDictTagged {
@@ -116,22 +116,22 @@ interface MetricToVolumeMappingOutputs {
  * Build parameters.
  *
  * @param volume_out the output volume file
- * @param distance use the value from the vertex closest to the voxel center
-
-how far from the surface to map values to voxels, in mm
  * @param metric the input metric file
  * @param surface the surface to use coordinates from
  * @param volume_space a volume file in the desired output volume space
+ * @param distance use the value from the vertex closest to the voxel center
+
+how far from the surface to map values to voxels, in mm
  * @param ribbon_constrained use ribbon constrained mapping algorithm
  *
  * @returns Parameter dictionary
  */
 function metric_to_volume_mapping_params(
     volume_out: string,
-    distance: number | null,
     metric: InputPathType,
     surface: InputPathType,
     volume_space: InputPathType,
+    distance: number | null = null,
     ribbon_constrained: MetricToVolumeMappingRibbonConstrainedParamsDict | null = null,
 ): MetricToVolumeMappingParamsDictTagged {
     const params = {
@@ -231,12 +231,12 @@ function metric_to_volume_mapping_execute(
  * Maps values from a metric file into a volume file.  You must specify exactly one mapping method option.  The -nearest-vertex method uses the value from the vertex closest to the voxel center (useful for integer values).  The -ribbon-constrained method uses the same method as in -volume-to-surface-mapping, then uses the weights in reverse.  Mapping to lower resolutions than the mesh may require a larger -voxel-subdiv value in order to have all of the surface data participate.
  *
  * @param volume_out the output volume file
- * @param distance use the value from the vertex closest to the voxel center
-
-how far from the surface to map values to voxels, in mm
  * @param metric the input metric file
  * @param surface the surface to use coordinates from
  * @param volume_space a volume file in the desired output volume space
+ * @param distance use the value from the vertex closest to the voxel center
+
+how far from the surface to map values to voxels, in mm
  * @param ribbon_constrained use ribbon constrained mapping algorithm
  * @param runner Command runner
  *
@@ -244,14 +244,14 @@ how far from the surface to map values to voxels, in mm
  */
 function metric_to_volume_mapping(
     volume_out: string,
-    distance: number | null,
     metric: InputPathType,
     surface: InputPathType,
     volume_space: InputPathType,
+    distance: number | null = null,
     ribbon_constrained: MetricToVolumeMappingRibbonConstrainedParamsDict | null = null,
     runner: Runner | null = null,
 ): MetricToVolumeMappingOutputs {
-    const params = metric_to_volume_mapping_params(volume_out, distance, metric, surface, volume_space, ribbon_constrained)
+    const params = metric_to_volume_mapping_params(volume_out, metric, surface, volume_space, distance, ribbon_constrained)
     return metric_to_volume_mapping_execute(params, runner);
 }
 

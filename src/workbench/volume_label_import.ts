@@ -45,31 +45,31 @@ interface VolumeLabelImportOutputs {
  * Build parameters.
  *
  * @param output the output workbench label volume
+ * @param input the input volume file
+ * @param label_list_file text file containing the values and names for labels
+ * @param discard_others set any voxels with values not mentioned in the label list to the ??? label
  * @param value set the value that will be interpreted as unlabeled
 
 the numeric value for unlabeled (default 0)
  * @param subvol select a single subvolume to import
 
 the subvolume number or name
+ * @param drop_unused_labels remove any unused label values from the label table
  * @param file read label name hierarchy from a json file
 
 the input json file
- * @param input the input volume file
- * @param label_list_file text file containing the values and names for labels
- * @param discard_others set any voxels with values not mentioned in the label list to the ??? label
- * @param drop_unused_labels remove any unused label values from the label table
  *
  * @returns Parameter dictionary
  */
 function volume_label_import_params(
     output: string,
-    value: number | null,
-    subvol: string | null,
-    file: string | null,
     input: InputPathType,
     label_list_file: string,
     discard_others: boolean = false,
+    value: number | null = null,
+    subvol: string | null = null,
     drop_unused_labels: boolean = false,
+    file: string | null = null,
 ): VolumeLabelImportParamsDictTagged {
     const params = {
         "@type": "workbench/volume-label-import" as const,
@@ -192,35 +192,35 @@ function volume_label_import_execute(
  * By default, it will create new label names with names like LABEL_5 for any values encountered that are not mentioned in the list file, specify -discard-others to instead set these values to the "unlabeled" key.
  *
  * @param output the output workbench label volume
+ * @param input the input volume file
+ * @param label_list_file text file containing the values and names for labels
+ * @param discard_others set any voxels with values not mentioned in the label list to the ??? label
  * @param value set the value that will be interpreted as unlabeled
 
 the numeric value for unlabeled (default 0)
  * @param subvol select a single subvolume to import
 
 the subvolume number or name
+ * @param drop_unused_labels remove any unused label values from the label table
  * @param file read label name hierarchy from a json file
 
 the input json file
- * @param input the input volume file
- * @param label_list_file text file containing the values and names for labels
- * @param discard_others set any voxels with values not mentioned in the label list to the ??? label
- * @param drop_unused_labels remove any unused label values from the label table
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeLabelImportOutputs`).
  */
 function volume_label_import(
     output: string,
-    value: number | null,
-    subvol: string | null,
-    file: string | null,
     input: InputPathType,
     label_list_file: string,
     discard_others: boolean = false,
+    value: number | null = null,
+    subvol: string | null = null,
     drop_unused_labels: boolean = false,
+    file: string | null = null,
     runner: Runner | null = null,
 ): VolumeLabelImportOutputs {
-    const params = volume_label_import_params(output, value, subvol, file, input, label_list_file, discard_others, drop_unused_labels)
+    const params = volume_label_import_params(output, input, label_list_file, discard_others, value, subvol, drop_unused_labels, file)
     return volume_label_import_execute(params, runner);
 }
 

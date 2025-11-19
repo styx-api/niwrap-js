@@ -152,6 +152,10 @@ interface MetricGradientOutputs {
  * Build parameters.
  *
  * @param metric_out the magnitude of the gradient
+ * @param surface the surface to compute the gradient on
+ * @param metric_in the metric to compute the gradient of
+ * @param presmooth smooth the metric before computing the gradient
+ * @param roi select a region of interest to take the gradient of
  * @param vector_metric_out output gradient vectors
 
 the vectors as a metric file
@@ -161,23 +165,19 @@ the column number or name
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
- * @param surface the surface to compute the gradient on
- * @param metric_in the metric to compute the gradient of
- * @param presmooth smooth the metric before computing the gradient
- * @param roi select a region of interest to take the gradient of
  * @param average_normals average the normals of each vertex with its neighbors before using them to compute the gradient
  *
  * @returns Parameter dictionary
  */
 function metric_gradient_params(
     metric_out: string,
-    vector_metric_out: string | null,
-    column: string | null,
-    area_metric: InputPathType | null,
     surface: InputPathType,
     metric_in: InputPathType,
     presmooth: MetricGradientPresmoothParamsDict | null = null,
     roi: MetricGradientRoiParamsDict | null = null,
+    vector_metric_out: string | null = null,
+    column: string | null = null,
+    area_metric: InputPathType | null = null,
     average_normals: boolean = false,
 ): MetricGradientParamsDictTagged {
     const params = {
@@ -307,6 +307,10 @@ function metric_gradient_execute(
  * The vector output metric is organized such that the X, Y, and Z components from a single input column are consecutive columns.
  *
  * @param metric_out the magnitude of the gradient
+ * @param surface the surface to compute the gradient on
+ * @param metric_in the metric to compute the gradient of
+ * @param presmooth smooth the metric before computing the gradient
+ * @param roi select a region of interest to take the gradient of
  * @param vector_metric_out output gradient vectors
 
 the vectors as a metric file
@@ -316,10 +320,6 @@ the column number or name
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
- * @param surface the surface to compute the gradient on
- * @param metric_in the metric to compute the gradient of
- * @param presmooth smooth the metric before computing the gradient
- * @param roi select a region of interest to take the gradient of
  * @param average_normals average the normals of each vertex with its neighbors before using them to compute the gradient
  * @param runner Command runner
  *
@@ -327,17 +327,17 @@ the corrected vertex areas, as a metric
  */
 function metric_gradient(
     metric_out: string,
-    vector_metric_out: string | null,
-    column: string | null,
-    area_metric: InputPathType | null,
     surface: InputPathType,
     metric_in: InputPathType,
     presmooth: MetricGradientPresmoothParamsDict | null = null,
     roi: MetricGradientRoiParamsDict | null = null,
+    vector_metric_out: string | null = null,
+    column: string | null = null,
+    area_metric: InputPathType | null = null,
     average_normals: boolean = false,
     runner: Runner | null = null,
 ): MetricGradientOutputs {
-    const params = metric_gradient_params(metric_out, vector_metric_out, column, area_metric, surface, metric_in, presmooth, roi, average_normals)
+    const params = metric_gradient_params(metric_out, surface, metric_in, presmooth, roi, vector_metric_out, column, area_metric, average_normals)
     return metric_gradient_execute(params, runner);
 }
 

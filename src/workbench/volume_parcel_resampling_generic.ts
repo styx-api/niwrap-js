@@ -45,27 +45,27 @@ interface VolumeParcelResamplingGenericOutputs {
  * Build parameters.
  *
  * @param volume_out output volume
- * @param subvol select a single subvolume as input
-
-the subvolume number or name
  * @param volume_in the input data volume
  * @param cur_parcels label volume of where the parcels currently are
  * @param new_parcels label volume of where the parcels should be
  * @param kernel gaussian kernel size in mm to smooth by during resampling, as sigma by default
  * @param fwhm smoothing kernel size is FWHM, not sigma
  * @param fix_zeros treat zero values as not being data
+ * @param subvol select a single subvolume as input
+
+the subvolume number or name
  *
  * @returns Parameter dictionary
  */
 function volume_parcel_resampling_generic_params(
     volume_out: string,
-    subvol: string | null,
     volume_in: InputPathType,
     cur_parcels: InputPathType,
     new_parcels: InputPathType,
     kernel: number,
     fwhm: boolean = false,
     fix_zeros: boolean = false,
+    subvol: string | null = null,
 ): VolumeParcelResamplingGenericParamsDictTagged {
     const params = {
         "@type": "workbench/volume-parcel-resampling-generic" as const,
@@ -166,31 +166,31 @@ function volume_parcel_resampling_generic_execute(
  * Smooths and resamples the region inside each label in cur-parcels to the region of the same label name in new-parcels.  Any voxels in the output label region but outside the input label region will be extrapolated from nearby data.  The -fix-zeros option causes the smoothing to not use an input value if it is zero, but still write a smoothed value to the voxel, and after smoothing is complete, it will check for any remaining values of zero, and fill them in with extrapolated values.  The output volume will use the volume space of new-parcels, which does not need to be in the same volume space as the input.
  *
  * @param volume_out output volume
- * @param subvol select a single subvolume as input
-
-the subvolume number or name
  * @param volume_in the input data volume
  * @param cur_parcels label volume of where the parcels currently are
  * @param new_parcels label volume of where the parcels should be
  * @param kernel gaussian kernel size in mm to smooth by during resampling, as sigma by default
  * @param fwhm smoothing kernel size is FWHM, not sigma
  * @param fix_zeros treat zero values as not being data
+ * @param subvol select a single subvolume as input
+
+the subvolume number or name
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeParcelResamplingGenericOutputs`).
  */
 function volume_parcel_resampling_generic(
     volume_out: string,
-    subvol: string | null,
     volume_in: InputPathType,
     cur_parcels: InputPathType,
     new_parcels: InputPathType,
     kernel: number,
     fwhm: boolean = false,
     fix_zeros: boolean = false,
+    subvol: string | null = null,
     runner: Runner | null = null,
 ): VolumeParcelResamplingGenericOutputs {
-    const params = volume_parcel_resampling_generic_params(volume_out, subvol, volume_in, cur_parcels, new_parcels, kernel, fwhm, fix_zeros)
+    const params = volume_parcel_resampling_generic_params(volume_out, volume_in, cur_parcels, new_parcels, kernel, fwhm, fix_zeros, subvol)
     return volume_parcel_resampling_generic_execute(params, runner);
 }
 

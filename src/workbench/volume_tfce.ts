@@ -147,25 +147,25 @@ interface VolumeTfceOutputs {
  * Build parameters.
  *
  * @param volume_out the output volume
+ * @param volume_in the volume to run TFCE on
+ * @param presmooth smooth the volume before running TFCE
  * @param roi_volume select a region of interest to run TFCE on
 
 the area to run TFCE on, as a volume
+ * @param parameters set parameters for TFCE integral
  * @param subvolume select a single subvolume
 
 the subvolume number or name
- * @param volume_in the volume to run TFCE on
- * @param presmooth smooth the volume before running TFCE
- * @param parameters set parameters for TFCE integral
  *
  * @returns Parameter dictionary
  */
 function volume_tfce_params(
     volume_out: string,
-    roi_volume: InputPathType | null,
-    subvolume: string | null,
     volume_in: InputPathType,
     presmooth: VolumeTfcePresmoothParamsDict | null = null,
+    roi_volume: InputPathType | null = null,
     parameters: VolumeTfceParametersParamsDict | null = null,
+    subvolume: string | null = null,
 ): VolumeTfceParamsDictTagged {
     const params = {
         "@type": "workbench/volume-tfce" as const,
@@ -285,29 +285,29 @@ function volume_tfce_execute(
  * This method is explained in: Smith SM, Nichols TE., "Threshold-free cluster enhancement: addressing problems of smoothing, threshold dependence and localisation in cluster inference." Neuroimage. 2009 Jan 1;44(1):83-98. PMID: 18501637.
  *
  * @param volume_out the output volume
+ * @param volume_in the volume to run TFCE on
+ * @param presmooth smooth the volume before running TFCE
  * @param roi_volume select a region of interest to run TFCE on
 
 the area to run TFCE on, as a volume
+ * @param parameters set parameters for TFCE integral
  * @param subvolume select a single subvolume
 
 the subvolume number or name
- * @param volume_in the volume to run TFCE on
- * @param presmooth smooth the volume before running TFCE
- * @param parameters set parameters for TFCE integral
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeTfceOutputs`).
  */
 function volume_tfce(
     volume_out: string,
-    roi_volume: InputPathType | null,
-    subvolume: string | null,
     volume_in: InputPathType,
     presmooth: VolumeTfcePresmoothParamsDict | null = null,
+    roi_volume: InputPathType | null = null,
     parameters: VolumeTfceParametersParamsDict | null = null,
+    subvolume: string | null = null,
     runner: Runner | null = null,
 ): VolumeTfceOutputs {
-    const params = volume_tfce_params(volume_out, roi_volume, subvolume, volume_in, presmooth, parameters)
+    const params = volume_tfce_params(volume_out, volume_in, presmooth, roi_volume, parameters, subvolume)
     return volume_tfce_execute(params, runner);
 }
 

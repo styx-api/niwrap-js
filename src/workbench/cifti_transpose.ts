@@ -40,17 +40,17 @@ interface CiftiTransposeOutputs {
  * Build parameters.
  *
  * @param cifti_out the output cifti file
+ * @param cifti_in the input cifti file
  * @param limit_gb restrict memory usage
 
 memory limit in gigabytes
- * @param cifti_in the input cifti file
  *
  * @returns Parameter dictionary
  */
 function cifti_transpose_params(
     cifti_out: string,
-    limit_gb: number | null,
     cifti_in: InputPathType,
+    limit_gb: number | null = null,
 ): CiftiTransposeParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-transpose" as const,
@@ -141,21 +141,21 @@ function cifti_transpose_execute(
  * The input must be a 2-dimensional cifti file.  The output is a cifti file where every row in the input is a column in the output.
  *
  * @param cifti_out the output cifti file
+ * @param cifti_in the input cifti file
  * @param limit_gb restrict memory usage
 
 memory limit in gigabytes
- * @param cifti_in the input cifti file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiTransposeOutputs`).
  */
 function cifti_transpose(
     cifti_out: string,
-    limit_gb: number | null,
     cifti_in: InputPathType,
+    limit_gb: number | null = null,
     runner: Runner | null = null,
 ): CiftiTransposeOutputs {
-    const params = cifti_transpose_params(cifti_out, limit_gb, cifti_in)
+    const params = cifti_transpose_params(cifti_out, cifti_in, limit_gb)
     return cifti_transpose_execute(params, runner);
 }
 

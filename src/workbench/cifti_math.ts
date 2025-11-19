@@ -160,10 +160,10 @@ interface CiftiMathOutputs {
  * Build parameters.
  *
  * @param cifti_out the output cifti file
+ * @param expression the expression to evaluate, in quotes
  * @param replace replace NaN results with a value
 
 value to replace NaN with
- * @param expression the expression to evaluate, in quotes
  * @param override_mapping_check don't check the mappings for compatibility, only check length
  * @param var_ a cifti file to use as a variable
  *
@@ -171,8 +171,8 @@ value to replace NaN with
  */
 function cifti_math_params(
     cifti_out: string,
-    replace: number | null,
     expression: string,
+    replace: number | null = null,
     override_mapping_check: boolean = false,
     var_: Array<CiftiMathVarParamsDict> | null = null,
 ): CiftiMathParamsDictTagged {
@@ -353,10 +353,10 @@ function cifti_math_execute(
  * .
  *
  * @param cifti_out the output cifti file
+ * @param expression the expression to evaluate, in quotes
  * @param replace replace NaN results with a value
 
 value to replace NaN with
- * @param expression the expression to evaluate, in quotes
  * @param override_mapping_check don't check the mappings for compatibility, only check length
  * @param var_ a cifti file to use as a variable
  * @param runner Command runner
@@ -365,13 +365,13 @@ value to replace NaN with
  */
 function cifti_math(
     cifti_out: string,
-    replace: number | null,
     expression: string,
+    replace: number | null = null,
     override_mapping_check: boolean = false,
     var_: Array<CiftiMathVarParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiMathOutputs {
-    const params = cifti_math_params(cifti_out, replace, expression, override_mapping_check, var_)
+    const params = cifti_math_params(cifti_out, expression, replace, override_mapping_check, var_)
     return cifti_math_execute(params, runner);
 }
 

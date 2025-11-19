@@ -43,25 +43,25 @@ interface SurfaceGeodesicDistanceOutputs {
  * Build parameters.
  *
  * @param metric_out the output metric
+ * @param surface the surface to compute on
+ * @param vertex the vertex to compute geodesic distance from
+ * @param naive use only neighbors, don't crawl triangles (not recommended)
  * @param limit_mm stop at a certain distance
 
 distance in mm to stop at
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
- * @param surface the surface to compute on
- * @param vertex the vertex to compute geodesic distance from
- * @param naive use only neighbors, don't crawl triangles (not recommended)
  *
  * @returns Parameter dictionary
  */
 function surface_geodesic_distance_params(
     metric_out: string,
-    limit_mm: number | null,
-    area_metric: InputPathType | null,
     surface: InputPathType,
     vertex: number,
     naive: boolean = false,
+    limit_mm: number | null = null,
+    area_metric: InputPathType | null = null,
 ): SurfaceGeodesicDistanceParamsDictTagged {
     const params = {
         "@type": "workbench/surface-geodesic-distance" as const,
@@ -169,29 +169,29 @@ function surface_geodesic_distance_execute(
  * If -naive is not specified, the algorithm uses not just immediate neighbors, but also neighbors derived from crawling across pairs of triangles that share an edge.
  *
  * @param metric_out the output metric
+ * @param surface the surface to compute on
+ * @param vertex the vertex to compute geodesic distance from
+ * @param naive use only neighbors, don't crawl triangles (not recommended)
  * @param limit_mm stop at a certain distance
 
 distance in mm to stop at
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
- * @param surface the surface to compute on
- * @param vertex the vertex to compute geodesic distance from
- * @param naive use only neighbors, don't crawl triangles (not recommended)
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceGeodesicDistanceOutputs`).
  */
 function surface_geodesic_distance(
     metric_out: string,
-    limit_mm: number | null,
-    area_metric: InputPathType | null,
     surface: InputPathType,
     vertex: number,
     naive: boolean = false,
+    limit_mm: number | null = null,
+    area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): SurfaceGeodesicDistanceOutputs {
-    const params = surface_geodesic_distance_params(metric_out, limit_mm, area_metric, surface, vertex, naive)
+    const params = surface_geodesic_distance_params(metric_out, surface, vertex, naive, limit_mm, area_metric)
     return surface_geodesic_distance_execute(params, runner);
 }
 

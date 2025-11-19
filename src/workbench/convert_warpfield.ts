@@ -200,27 +200,27 @@ interface ConvertWarpfieldOutputs {
 /**
  * Build parameters.
  *
+ * @param from_world input is a NIFTI 'world' warpfield
  * @param input input is an ITK warpfield
 
 the input warpfield
+ * @param from_fnirt input is a fnirt warpfield
  * @param output write output as a NIFTI 'world' warpfield
 
 output - the output warpfield
  * @param output_ write output as an ITK warpfield
 
 output - the output warpfield
- * @param from_world input is a NIFTI 'world' warpfield
- * @param from_fnirt input is a fnirt warpfield
  * @param to_fnirt write output as a fnirt warpfield
  *
  * @returns Parameter dictionary
  */
 function convert_warpfield_params(
-    input: string | null,
-    output: string | null,
-    output_: string | null,
     from_world: ConvertWarpfieldFromWorldParamsDict | null = null,
+    input: string | null = null,
     from_fnirt: ConvertWarpfieldFromFnirtParamsDict | null = null,
+    output: string | null = null,
+    output_: string | null = null,
     to_fnirt: Array<ConvertWarpfieldToFnirtParamsDict> | null = null,
 ): ConvertWarpfieldParamsDictTagged {
     const params = {
@@ -340,32 +340,32 @@ function convert_warpfield_execute(
  *
  * You must specify exactly one -from option, but you may specify multiple -to options, and -to-fnirt may be specified more than once.
  *
+ * @param from_world input is a NIFTI 'world' warpfield
  * @param input input is an ITK warpfield
 
 the input warpfield
+ * @param from_fnirt input is a fnirt warpfield
  * @param output write output as a NIFTI 'world' warpfield
 
 output - the output warpfield
  * @param output_ write output as an ITK warpfield
 
 output - the output warpfield
- * @param from_world input is a NIFTI 'world' warpfield
- * @param from_fnirt input is a fnirt warpfield
  * @param to_fnirt write output as a fnirt warpfield
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConvertWarpfieldOutputs`).
  */
 function convert_warpfield(
-    input: string | null,
-    output: string | null,
-    output_: string | null,
     from_world: ConvertWarpfieldFromWorldParamsDict | null = null,
+    input: string | null = null,
     from_fnirt: ConvertWarpfieldFromFnirtParamsDict | null = null,
+    output: string | null = null,
+    output_: string | null = null,
     to_fnirt: Array<ConvertWarpfieldToFnirtParamsDict> | null = null,
     runner: Runner | null = null,
 ): ConvertWarpfieldOutputs {
-    const params = convert_warpfield_params(input, output, output_, from_world, from_fnirt, to_fnirt)
+    const params = convert_warpfield_params(from_world, input, from_fnirt, output, output_, to_fnirt)
     return convert_warpfield_execute(params, runner);
 }
 

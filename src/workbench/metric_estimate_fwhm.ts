@@ -37,14 +37,14 @@ interface MetricEstimateFwhmOutputs {
 /**
  * Build parameters.
  *
+ * @param surface the surface to use for distance and neighbor information
+ * @param metric_in the input metric
  * @param roi_metric use only data within an ROI
 
 the metric file to use as an ROI
  * @param column select a single column to estimate smoothness of
 
 the column number or name
- * @param surface the surface to use for distance and neighbor information
- * @param metric_in the input metric
  * @param demean estimate for the whole file at once, not each column separately
 
 subtract the mean image before estimating smoothness
@@ -52,11 +52,11 @@ subtract the mean image before estimating smoothness
  * @returns Parameter dictionary
  */
 function metric_estimate_fwhm_params(
-    roi_metric: InputPathType | null,
-    column: string | null,
     surface: InputPathType,
     metric_in: InputPathType,
-    demean: boolean | null = false,
+    roi_metric: InputPathType | null = null,
+    column: string | null = null,
+    demean: boolean | null = null,
 ): MetricEstimateFwhmParamsDictTagged {
     const params = {
         "@type": "workbench/metric-estimate-fwhm" as const,
@@ -89,7 +89,7 @@ function metric_estimate_fwhm_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["roi-metric"] ?? null) !== null || (params["column"] ?? null) !== null || (params["demean"] ?? false) !== null) {
+    if ((params["roi-metric"] ?? null) !== null || (params["column"] ?? null) !== null || (params["demean"] ?? null) !== null) {
         cargs.push(
             "wb_command",
             "-metric-estimate-fwhm",
@@ -98,7 +98,7 @@ function metric_estimate_fwhm_cargs(
             "-column",
             (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
             "-whole-file",
-            (((params["demean"] ?? false) !== null) ? "-demean" : "")
+            (((params["demean"] ?? null) !== null) ? "-demean" : "")
         );
     }
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -155,14 +155,14 @@ function metric_estimate_fwhm_execute(
  *
  * Estimates the smoothness of the metric columns, printing the estimates to standard output.  These estimates ignore variation in vertex spacing.
  *
+ * @param surface the surface to use for distance and neighbor information
+ * @param metric_in the input metric
  * @param roi_metric use only data within an ROI
 
 the metric file to use as an ROI
  * @param column select a single column to estimate smoothness of
 
 the column number or name
- * @param surface the surface to use for distance and neighbor information
- * @param metric_in the input metric
  * @param demean estimate for the whole file at once, not each column separately
 
 subtract the mean image before estimating smoothness
@@ -171,14 +171,14 @@ subtract the mean image before estimating smoothness
  * @returns NamedTuple of outputs (described in `MetricEstimateFwhmOutputs`).
  */
 function metric_estimate_fwhm(
-    roi_metric: InputPathType | null,
-    column: string | null,
     surface: InputPathType,
     metric_in: InputPathType,
-    demean: boolean | null = false,
+    roi_metric: InputPathType | null = null,
+    column: string | null = null,
+    demean: boolean | null = null,
     runner: Runner | null = null,
 ): MetricEstimateFwhmOutputs {
-    const params = metric_estimate_fwhm_params(roi_metric, column, surface, metric_in, demean)
+    const params = metric_estimate_fwhm_params(surface, metric_in, roi_metric, column, demean)
     return metric_estimate_fwhm_execute(params, runner);
 }
 

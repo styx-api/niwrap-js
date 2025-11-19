@@ -93,8 +93,8 @@ the label output volume
  */
 function cifti_separate_volume_all(
     volume_out: string,
-    roi_out: string | null,
-    label_out: string | null,
+    roi_out: string | null = null,
+    label_out: string | null = null,
     crop: boolean = false,
 ): CiftiSeparateVolumeAllParamsDictTagged {
     const params = {
@@ -191,7 +191,7 @@ the roi output metric
 function cifti_separate_label(
     structure: string,
     label_out: string,
-    roi_out: string | null,
+    roi_out: string | null = null,
 ): CiftiSeparateLabelParamsDictTagged {
     const params = {
         "@type": "label" as const,
@@ -282,7 +282,7 @@ the roi output metric
 function cifti_separate_metric(
     structure: string,
     metric_out: string,
-    roi_out: string | null,
+    roi_out: string | null = null,
 ): CiftiSeparateMetricParamsDictTagged {
     const params = {
         "@type": "metric" as const,
@@ -374,7 +374,7 @@ the roi output volume
 function cifti_separate_volume(
     structure: string,
     volume_out: string,
-    roi_out: string | null,
+    roi_out: string | null = null,
     crop: boolean = false,
 ): CiftiSeparateVolumeParamsDictTagged {
     const params = {

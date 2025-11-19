@@ -147,32 +147,32 @@ interface VolumeWeightedStatsOutputs {
 /**
  * Build parameters.
  *
+ * @param volume_in the input volume
+ * @param weight_volume use weights from a volume file
  * @param subvolume only display output for one subvolume
 
 the subvolume number or name
- * @param percent compute weighted percentile
-
-the percentile to find, must be between 0 and 100
- * @param volume_in the input volume
- * @param weight_volume use weights from a volume file
  * @param roi only consider data inside an roi
  * @param mean compute weighted mean
  * @param sample compute weighted standard deviation
 
 estimate population stdev from the sample
+ * @param percent compute weighted percentile
+
+the percentile to find, must be between 0 and 100
  * @param sum compute weighted sum
  * @param show_map_name print map index and name before each output
  *
  * @returns Parameter dictionary
  */
 function volume_weighted_stats_params(
-    subvolume: string | null,
-    percent: number | null,
     volume_in: InputPathType,
     weight_volume: VolumeWeightedStatsWeightVolumeParamsDict | null = null,
+    subvolume: string | null = null,
     roi: VolumeWeightedStatsRoiParamsDict | null = null,
     mean: boolean = false,
-    sample: boolean | null = false,
+    sample: boolean | null = null,
+    percent: number | null = null,
     sum: boolean = false,
     show_map_name: boolean = false,
 ): VolumeWeightedStatsParamsDictTagged {
@@ -215,7 +215,7 @@ function volume_weighted_stats_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["weight-volume"] ?? null) !== null || (params["subvolume"] ?? null) !== null || (params["roi"] ?? null) !== null || (params["mean"] ?? false) || (params["sample"] ?? false) !== null || (params["percent"] ?? null) !== null || (params["sum"] ?? false) || (params["show-map-name"] ?? false)) {
+    if ((params["weight-volume"] ?? null) !== null || (params["subvolume"] ?? null) !== null || (params["roi"] ?? null) !== null || (params["mean"] ?? false) || (params["sample"] ?? null) !== null || (params["percent"] ?? null) !== null || (params["sum"] ?? false) || (params["show-map-name"] ?? false)) {
         cargs.push(
             "wb_command",
             "-volume-weighted-stats",
@@ -225,7 +225,7 @@ function volume_weighted_stats_cargs(
             ...(((params["roi"] ?? null) !== null) ? volume_weighted_stats_roi_cargs((params["roi"] ?? null), execution) : []),
             (((params["mean"] ?? false)) ? "-mean" : ""),
             "-stdev",
-            (((params["sample"] ?? false) !== null) ? "-sample" : ""),
+            (((params["sample"] ?? null) !== null) ? "-sample" : ""),
             "-percentile",
             (((params["percent"] ?? null) !== null) ? String((params["percent"] ?? null)) : ""),
             (((params["sum"] ?? false)) ? "-sum" : ""),
@@ -289,19 +289,19 @@ function volume_weighted_stats_execute(
  *
  * Using -sum without -weight-volume is equivalent to integrating with respect to volume.
  *
+ * @param volume_in the input volume
+ * @param weight_volume use weights from a volume file
  * @param subvolume only display output for one subvolume
 
 the subvolume number or name
- * @param percent compute weighted percentile
-
-the percentile to find, must be between 0 and 100
- * @param volume_in the input volume
- * @param weight_volume use weights from a volume file
  * @param roi only consider data inside an roi
  * @param mean compute weighted mean
  * @param sample compute weighted standard deviation
 
 estimate population stdev from the sample
+ * @param percent compute weighted percentile
+
+the percentile to find, must be between 0 and 100
  * @param sum compute weighted sum
  * @param show_map_name print map index and name before each output
  * @param runner Command runner
@@ -309,18 +309,18 @@ estimate population stdev from the sample
  * @returns NamedTuple of outputs (described in `VolumeWeightedStatsOutputs`).
  */
 function volume_weighted_stats(
-    subvolume: string | null,
-    percent: number | null,
     volume_in: InputPathType,
     weight_volume: VolumeWeightedStatsWeightVolumeParamsDict | null = null,
+    subvolume: string | null = null,
     roi: VolumeWeightedStatsRoiParamsDict | null = null,
     mean: boolean = false,
-    sample: boolean | null = false,
+    sample: boolean | null = null,
+    percent: number | null = null,
     sum: boolean = false,
     show_map_name: boolean = false,
     runner: Runner | null = null,
 ): VolumeWeightedStatsOutputs {
-    const params = volume_weighted_stats_params(subvolume, percent, volume_in, weight_volume, roi, mean, sample, sum, show_map_name)
+    const params = volume_weighted_stats_params(volume_in, weight_volume, subvolume, roi, mean, sample, percent, sum, show_map_name)
     return volume_weighted_stats_execute(params, runner);
 }
 

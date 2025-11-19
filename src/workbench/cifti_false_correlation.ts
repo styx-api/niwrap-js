@@ -60,7 +60,7 @@ the output text file
  */
 function cifti_false_correlation_left_surface(
     surface: InputPathType,
-    text_out: string | null,
+    text_out: string | null = null,
 ): CiftiFalseCorrelationLeftSurfaceParamsDictTagged {
     const params = {
         "@type": "left-surface" as const,
@@ -110,7 +110,7 @@ the output text file
  */
 function cifti_false_correlation_right_surface(
     surface: InputPathType,
-    text_out: string | null,
+    text_out: string | null = null,
 ): CiftiFalseCorrelationRightSurfaceParamsDictTagged {
     const params = {
         "@type": "right-surface" as const,
@@ -160,7 +160,7 @@ the output text file
  */
 function cifti_false_correlation_cerebellum_surface(
     surface: InputPathType,
-    text_out: string | null,
+    text_out: string | null = null,
 ): CiftiFalseCorrelationCerebellumSurfaceParamsDictTagged {
     const params = {
         "@type": "cerebellum-surface" as const,

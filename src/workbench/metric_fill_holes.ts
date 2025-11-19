@@ -41,19 +41,19 @@ interface MetricFillHolesOutputs {
  * Build parameters.
  *
  * @param metric_out the output ROI metric
+ * @param surface the surface to use for neighbor information
+ * @param metric_in the input ROI metric
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
- * @param surface the surface to use for neighbor information
- * @param metric_in the input ROI metric
  *
  * @returns Parameter dictionary
  */
 function metric_fill_holes_params(
     metric_out: string,
-    area_metric: InputPathType | null,
     surface: InputPathType,
     metric_in: InputPathType,
+    area_metric: InputPathType | null = null,
 ): MetricFillHolesParamsDictTagged {
     const params = {
         "@type": "workbench/metric-fill-holes" as const,
@@ -146,23 +146,23 @@ function metric_fill_holes_execute(
  * Finds all connected areas that are not included in the ROI, and writes ones into all but the largest one, in terms of surface area.
  *
  * @param metric_out the output ROI metric
+ * @param surface the surface to use for neighbor information
+ * @param metric_in the input ROI metric
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
- * @param surface the surface to use for neighbor information
- * @param metric_in the input ROI metric
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricFillHolesOutputs`).
  */
 function metric_fill_holes(
     metric_out: string,
-    area_metric: InputPathType | null,
     surface: InputPathType,
     metric_in: InputPathType,
+    area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricFillHolesOutputs {
-    const params = metric_fill_holes_params(metric_out, area_metric, surface, metric_in)
+    const params = metric_fill_holes_params(metric_out, surface, metric_in, area_metric)
     return metric_fill_holes_execute(params, runner);
 }
 

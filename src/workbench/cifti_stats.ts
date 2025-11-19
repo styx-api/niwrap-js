@@ -91,6 +91,7 @@ interface CiftiStatsOutputs {
 /**
  * Build parameters.
  *
+ * @param cifti_in the input cifti
  * @param operation use a reduction operation
 
 the reduction operation
@@ -100,17 +101,16 @@ the percentile to find, must be between 0 and 100
  * @param column only display output for one column
 
 the column index (starting from 1)
- * @param cifti_in the input cifti
  * @param roi only consider data inside an roi
  * @param show_map_name print column index and name before each output
  *
  * @returns Parameter dictionary
  */
 function cifti_stats_params(
-    operation: string | null,
-    percent: number | null,
-    column: number | null,
     cifti_in: InputPathType,
+    operation: string | null = null,
+    percent: number | null = null,
+    column: number | null = null,
     roi: CiftiStatsRoiParamsDict | null = null,
     show_map_name: boolean = false,
 ): CiftiStatsParamsDictTagged {
@@ -255,6 +255,7 @@ function cifti_stats_execute(
  * COUNT_NONZERO: the number of nonzero elements in the data
  * .
  *
+ * @param cifti_in the input cifti
  * @param operation use a reduction operation
 
 the reduction operation
@@ -264,7 +265,6 @@ the percentile to find, must be between 0 and 100
  * @param column only display output for one column
 
 the column index (starting from 1)
- * @param cifti_in the input cifti
  * @param roi only consider data inside an roi
  * @param show_map_name print column index and name before each output
  * @param runner Command runner
@@ -272,15 +272,15 @@ the column index (starting from 1)
  * @returns NamedTuple of outputs (described in `CiftiStatsOutputs`).
  */
 function cifti_stats(
-    operation: string | null,
-    percent: number | null,
-    column: number | null,
     cifti_in: InputPathType,
+    operation: string | null = null,
+    percent: number | null = null,
+    column: number | null = null,
     roi: CiftiStatsRoiParamsDict | null = null,
     show_map_name: boolean = false,
     runner: Runner | null = null,
 ): CiftiStatsOutputs {
-    const params = cifti_stats_params(operation, percent, column, cifti_in, roi, show_map_name)
+    const params = cifti_stats_params(cifti_in, operation, percent, column, roi, show_map_name)
     return cifti_stats_execute(params, runner);
 }
 

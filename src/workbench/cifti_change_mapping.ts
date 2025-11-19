@@ -60,7 +60,7 @@ unit identifier
 function cifti_change_mapping_series(
     step: number,
     start: number,
-    unit: string | null,
+    unit: string | null = null,
 ): CiftiChangeMappingSeriesParamsDictTagged {
     const params = {
         "@type": "series" as const,
@@ -110,7 +110,7 @@ text file containing map names, one per line
  * @returns Parameter dictionary
  */
 function cifti_change_mapping_scalar(
-    file: string | null,
+    file: string | null = null,
 ): CiftiChangeMappingScalarParamsDictTagged {
     const params = {
         "@type": "scalar" as const,

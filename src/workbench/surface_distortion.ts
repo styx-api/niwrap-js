@@ -94,7 +94,7 @@ the ROI to use, as a metric file
  * @returns Parameter dictionary
  */
 function surface_distortion_match_surface_area(
-    roi_metric: InputPathType | null,
+    roi_metric: InputPathType | null = null,
 ): SurfaceDistortionMatchSurfaceAreaParamsDictTagged {
     const params = {
         "@type": "match-surface-area" as const,
@@ -171,7 +171,7 @@ function surface_distortion_params(
     match_surface_area: SurfaceDistortionMatchSurfaceAreaParamsDict | null = null,
     caret5_method: boolean = false,
     edge_method: boolean = false,
-    log2: boolean | null = false,
+    log2: boolean | null = null,
 ): SurfaceDistortionParamsDictTagged {
     const params = {
         "@type": "workbench/surface-distortion" as const,
@@ -207,7 +207,7 @@ function surface_distortion_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["smooth"] ?? null) !== null || (params["match-surface-area"] ?? null) !== null || (params["caret5-method"] ?? false) || (params["edge-method"] ?? false) || (params["log2"] ?? false) !== null) {
+    if ((params["smooth"] ?? null) !== null || (params["match-surface-area"] ?? null) !== null || (params["caret5-method"] ?? false) || (params["edge-method"] ?? false) || (params["log2"] ?? null) !== null) {
         cargs.push(
             "wb_command",
             "-surface-distortion",
@@ -217,7 +217,7 @@ function surface_distortion_cargs(
             (((params["caret5-method"] ?? false)) ? "-caret5-method" : ""),
             (((params["edge-method"] ?? false)) ? "-edge-method" : ""),
             "-local-affine-method",
-            (((params["log2"] ?? false) !== null) ? "-log2" : "")
+            (((params["log2"] ?? null) !== null) ? "-log2" : "")
         );
     }
     cargs.push(execution.inputFile((params["surface-reference"] ?? null)));
@@ -309,7 +309,7 @@ function surface_distortion(
     match_surface_area: SurfaceDistortionMatchSurfaceAreaParamsDict | null = null,
     caret5_method: boolean = false,
     edge_method: boolean = false,
-    log2: boolean | null = false,
+    log2: boolean | null = null,
     runner: Runner | null = null,
 ): SurfaceDistortionOutputs {
     const params = surface_distortion_params(metric_out, surface_reference, surface_distorted, smooth, match_surface_area, caret5_method, edge_method, log2)

@@ -177,7 +177,7 @@ unit identifier (default SECOND)
 function cifti_convert_reset_timepoints(
     timestep: number,
     timestart: number,
-    unit: string | null,
+    unit: string | null = null,
 ): CiftiConvertResetTimepointsParamsDictTagged {
     const params = {
         "@type": "reset-timepoints" as const,
@@ -472,7 +472,7 @@ unit identifier (default SECOND)
 function cifti_convert_reset_timepoints_(
     timestep: number,
     timestart: number,
-    unit: string | null,
+    unit: string | null = null,
 ): CiftiConvertResetTimepointsParamsDictTagged_ {
     const params = {
         "@type": "reset-timepoints" as const,
@@ -622,7 +622,7 @@ the string to use (default is a tab character)
 function cifti_convert_to_text(
     cifti_in: InputPathType,
     text_out: string,
-    delim_string: string | null,
+    delim_string: string | null = null,
 ): CiftiConvertToTextParamsDictTagged {
     const params = {
         "@type": "to-text" as const,
@@ -676,7 +676,7 @@ unit identifier (default SECOND)
 function cifti_convert_reset_timepoints_2(
     timestep: number,
     timestart: number,
-    unit: string | null,
+    unit: string | null = null,
 ): CiftiConvertResetTimepointsParamsDictTagged_2 {
     const params = {
         "@type": "reset-timepoints" as const,
@@ -751,7 +751,7 @@ function cifti_convert_from_text(
     text_in: string,
     cifti_template: InputPathType,
     cifti_out: string,
-    delim_string: string | null,
+    delim_string: string | null = null,
     reset_timepoints: CiftiConvertResetTimepointsParamsDict_2 | null = null,
     reset_scalars: boolean = false,
 ): CiftiConvertFromTextParamsDictTagged {

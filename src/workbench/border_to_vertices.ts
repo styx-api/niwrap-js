@@ -41,19 +41,19 @@ interface BorderToVerticesOutputs {
  * Build parameters.
  *
  * @param metric_out the output metric file
+ * @param surface the surface the borders are drawn on
+ * @param border_file the border file
  * @param name create ROI for only one border
 
 the name of the border
- * @param surface the surface the borders are drawn on
- * @param border_file the border file
  *
  * @returns Parameter dictionary
  */
 function border_to_vertices_params(
     metric_out: string,
-    name: string | null,
     surface: InputPathType,
     border_file: InputPathType,
+    name: string | null = null,
 ): BorderToVerticesParamsDictTagged {
     const params = {
         "@type": "workbench/border-to-vertices" as const,
@@ -146,23 +146,23 @@ function border_to_vertices_execute(
  * Outputs a metric with 1s on vertices that follow a border, and 0s elsewhere.  By default, a separate metric column is created for each border.
  *
  * @param metric_out the output metric file
+ * @param surface the surface the borders are drawn on
+ * @param border_file the border file
  * @param name create ROI for only one border
 
 the name of the border
- * @param surface the surface the borders are drawn on
- * @param border_file the border file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BorderToVerticesOutputs`).
  */
 function border_to_vertices(
     metric_out: string,
-    name: string | null,
     surface: InputPathType,
     border_file: InputPathType,
+    name: string | null = null,
     runner: Runner | null = null,
 ): BorderToVerticesOutputs {
-    const params = border_to_vertices_params(metric_out, name, surface, border_file)
+    const params = border_to_vertices_params(metric_out, surface, border_file, name)
     return border_to_vertices_execute(params, runner);
 }
 

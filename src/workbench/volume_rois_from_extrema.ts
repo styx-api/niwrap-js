@@ -44,6 +44,8 @@ interface VolumeRoisFromExtremaOutputs {
  * Build parameters.
  *
  * @param volume_out the output volume
+ * @param volume_in the input volume
+ * @param limit distance limit from voxel center, in mm
  * @param sigma generate a gaussian kernel instead of a flat ROI
 
 the sigma for the gaussian kernel, in mm
@@ -56,19 +58,17 @@ the method of resolving overlaps
  * @param subvol select a single subvolume to take the gradient of
 
 the subvolume number or name
- * @param volume_in the input volume
- * @param limit distance limit from voxel center, in mm
  *
  * @returns Parameter dictionary
  */
 function volume_rois_from_extrema_params(
     volume_out: string,
-    sigma: number | null,
-    roi_volume: InputPathType | null,
-    method: string | null,
-    subvol: string | null,
     volume_in: InputPathType,
     limit: number,
+    sigma: number | null = null,
+    roi_volume: InputPathType | null = null,
+    method: string | null = null,
+    subvol: string | null = null,
 ): VolumeRoisFromExtremaParamsDictTagged {
     const params = {
         "@type": "workbench/volume-rois-from-extrema" as const,
@@ -176,6 +176,8 @@ function volume_rois_from_extrema_execute(
  * For each nonzero value in each map, make a map with an ROI around that location.  If the -gaussian option is specified, then normalized gaussian kernels are output instead of ROIs.  The <method> argument to -overlap-logic must be one of ALLOW, CLOSEST, or EXCLUDE.  ALLOW is the default, and means that ROIs are treated independently and may overlap.  CLOSEST means that ROIs may not overlap, and that no ROI contains vertices that are closer to a different seed vertex.  EXCLUDE means that ROIs may not overlap, and that any vertex within range of more than one ROI does not belong to any ROI.
  *
  * @param volume_out the output volume
+ * @param volume_in the input volume
+ * @param limit distance limit from voxel center, in mm
  * @param sigma generate a gaussian kernel instead of a flat ROI
 
 the sigma for the gaussian kernel, in mm
@@ -188,23 +190,21 @@ the method of resolving overlaps
  * @param subvol select a single subvolume to take the gradient of
 
 the subvolume number or name
- * @param volume_in the input volume
- * @param limit distance limit from voxel center, in mm
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeRoisFromExtremaOutputs`).
  */
 function volume_rois_from_extrema(
     volume_out: string,
-    sigma: number | null,
-    roi_volume: InputPathType | null,
-    method: string | null,
-    subvol: string | null,
     volume_in: InputPathType,
     limit: number,
+    sigma: number | null = null,
+    roi_volume: InputPathType | null = null,
+    method: string | null = null,
+    subvol: string | null = null,
     runner: Runner | null = null,
 ): VolumeRoisFromExtremaOutputs {
-    const params = volume_rois_from_extrema_params(volume_out, sigma, roi_volume, method, subvol, volume_in, limit)
+    const params = volume_rois_from_extrema_params(volume_out, volume_in, limit, sigma, roi_volume, method, subvol)
     return volume_rois_from_extrema_execute(params, runner);
 }
 

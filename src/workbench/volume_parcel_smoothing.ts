@@ -44,25 +44,25 @@ interface VolumeParcelSmoothingOutputs {
  * Build parameters.
  *
  * @param volume_out the output volume
- * @param subvol select a single subvolume to smooth
-
-the subvolume number or name
  * @param data_volume the volume to smooth
  * @param label_volume a label volume containing the parcels to smooth
  * @param kernel the size of the gaussian smoothing kernel in mm, as sigma by default
  * @param fwhm smoothing kernel size is FWHM, not sigma
  * @param fix_zeros treat zero values as not being data
+ * @param subvol select a single subvolume to smooth
+
+the subvolume number or name
  *
  * @returns Parameter dictionary
  */
 function volume_parcel_smoothing_params(
     volume_out: string,
-    subvol: string | null,
     data_volume: InputPathType,
     label_volume: InputPathType,
     kernel: number,
     fwhm: boolean = false,
     fix_zeros: boolean = false,
+    subvol: string | null = null,
 ): VolumeParcelSmoothingParamsDictTagged {
     const params = {
         "@type": "workbench/volume-parcel-smoothing" as const,
@@ -161,29 +161,29 @@ function volume_parcel_smoothing_execute(
  * The volume is smoothed within each label in the label volume using data only from within the label.  Equivalent to running volume smoothing with ROIs matching each label separately, then adding the resulting volumes, but faster.
  *
  * @param volume_out the output volume
- * @param subvol select a single subvolume to smooth
-
-the subvolume number or name
  * @param data_volume the volume to smooth
  * @param label_volume a label volume containing the parcels to smooth
  * @param kernel the size of the gaussian smoothing kernel in mm, as sigma by default
  * @param fwhm smoothing kernel size is FWHM, not sigma
  * @param fix_zeros treat zero values as not being data
+ * @param subvol select a single subvolume to smooth
+
+the subvolume number or name
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeParcelSmoothingOutputs`).
  */
 function volume_parcel_smoothing(
     volume_out: string,
-    subvol: string | null,
     data_volume: InputPathType,
     label_volume: InputPathType,
     kernel: number,
     fwhm: boolean = false,
     fix_zeros: boolean = false,
+    subvol: string | null = null,
     runner: Runner | null = null,
 ): VolumeParcelSmoothingOutputs {
-    const params = volume_parcel_smoothing_params(volume_out, subvol, data_volume, label_volume, kernel, fwhm, fix_zeros)
+    const params = volume_parcel_smoothing_params(volume_out, data_volume, label_volume, kernel, fwhm, fix_zeros, subvol)
     return volume_parcel_smoothing_execute(params, runner);
 }
 

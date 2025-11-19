@@ -88,11 +88,11 @@ interface CiftiEstimateFwhmOutputs {
 /**
  * Build parameters.
  *
+ * @param cifti the input cifti file
+ * @param merged_volume treat volume components as if they were a single component
  * @param column only output estimates for one column
 
 the column number
- * @param cifti the input cifti file
- * @param merged_volume treat volume components as if they were a single component
  * @param demean estimate for the whole file at once, not each column separately
 
 subtract the mean image before estimating smoothness
@@ -101,10 +101,10 @@ subtract the mean image before estimating smoothness
  * @returns Parameter dictionary
  */
 function cifti_estimate_fwhm_params(
-    column: number | null,
     cifti: InputPathType,
     merged_volume: boolean = false,
-    demean: boolean | null = false,
+    column: number | null = null,
+    demean: boolean | null = null,
     surface: Array<CiftiEstimateFwhmSurfaceParamsDict> | null = null,
 ): CiftiEstimateFwhmParamsDictTagged {
     const params = {
@@ -138,7 +138,7 @@ function cifti_estimate_fwhm_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["merged-volume"] ?? false) || (params["column"] ?? null) !== null || (params["demean"] ?? false) !== null || (params["surface"] ?? null) !== null) {
+    if ((params["merged-volume"] ?? false) || (params["column"] ?? null) !== null || (params["demean"] ?? null) !== null || (params["surface"] ?? null) !== null) {
         cargs.push(
             "wb_command",
             "-cifti-estimate-fwhm",
@@ -146,7 +146,7 @@ function cifti_estimate_fwhm_cargs(
             "-column",
             (((params["column"] ?? null) !== null) ? String((params["column"] ?? null)) : ""),
             "-whole-file",
-            (((params["demean"] ?? false) !== null) ? "-demean" : ""),
+            (((params["demean"] ?? null) !== null) ? "-demean" : ""),
             ...(((params["surface"] ?? null) !== null) ? (params["surface"] ?? null).map(s => cifti_estimate_fwhm_surface_cargs(s, execution)).flat() : [])
         );
     }
@@ -279,11 +279,11 @@ function cifti_estimate_fwhm_execute(
  * THALAMUS_LEFT
  * THALAMUS_RIGHT.
  *
+ * @param cifti the input cifti file
+ * @param merged_volume treat volume components as if they were a single component
  * @param column only output estimates for one column
 
 the column number
- * @param cifti the input cifti file
- * @param merged_volume treat volume components as if they were a single component
  * @param demean estimate for the whole file at once, not each column separately
 
 subtract the mean image before estimating smoothness
@@ -293,14 +293,14 @@ subtract the mean image before estimating smoothness
  * @returns NamedTuple of outputs (described in `CiftiEstimateFwhmOutputs`).
  */
 function cifti_estimate_fwhm(
-    column: number | null,
     cifti: InputPathType,
     merged_volume: boolean = false,
-    demean: boolean | null = false,
+    column: number | null = null,
+    demean: boolean | null = null,
     surface: Array<CiftiEstimateFwhmSurfaceParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiEstimateFwhmOutputs {
-    const params = cifti_estimate_fwhm_params(column, cifti, merged_volume, demean, surface)
+    const params = cifti_estimate_fwhm_params(cifti, merged_volume, column, demean, surface)
     return cifti_estimate_fwhm_execute(params, runner);
 }
 

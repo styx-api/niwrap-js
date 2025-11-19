@@ -94,11 +94,11 @@ interface CiftiReduceOutputs {
  * Build parameters.
  *
  * @param cifti_out the output cifti file
+ * @param cifti_in the cifti file to reduce
+ * @param operation the reduction operator to use
  * @param direction specify what direction to reduce along
 
 the direction (default ROW)
- * @param cifti_in the cifti file to reduce
- * @param operation the reduction operator to use
  * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
  * @param only_numeric exclude non-numeric values
  *
@@ -106,9 +106,9 @@ the direction (default ROW)
  */
 function cifti_reduce_params(
     cifti_out: string,
-    direction: string | null,
     cifti_in: InputPathType,
     operation: string,
+    direction: string | null = null,
     exclude_outliers: CiftiReduceExcludeOutliersParamsDict | null = null,
     only_numeric: boolean = false,
 ): CiftiReduceParamsDictTagged {
@@ -245,11 +245,11 @@ function cifti_reduce_execute(
  * .
  *
  * @param cifti_out the output cifti file
+ * @param cifti_in the cifti file to reduce
+ * @param operation the reduction operator to use
  * @param direction specify what direction to reduce along
 
 the direction (default ROW)
- * @param cifti_in the cifti file to reduce
- * @param operation the reduction operator to use
  * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
  * @param only_numeric exclude non-numeric values
  * @param runner Command runner
@@ -258,14 +258,14 @@ the direction (default ROW)
  */
 function cifti_reduce(
     cifti_out: string,
-    direction: string | null,
     cifti_in: InputPathType,
     operation: string,
+    direction: string | null = null,
     exclude_outliers: CiftiReduceExcludeOutliersParamsDict | null = null,
     only_numeric: boolean = false,
     runner: Runner | null = null,
 ): CiftiReduceOutputs {
-    const params = cifti_reduce_params(cifti_out, direction, cifti_in, operation, exclude_outliers, only_numeric)
+    const params = cifti_reduce_params(cifti_out, cifti_in, operation, direction, exclude_outliers, only_numeric)
     return cifti_reduce_execute(params, runner);
 }
 
